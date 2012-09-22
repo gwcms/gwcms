@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	
+	<i id="ROOT">
+		<en>Root</en>
+		<lt>Šakninis</lt>
+		<no>Rot</no>
+	</i>
+	
+	<i id="PATH">
+		<en>Path</en>
+		<lt>Kelias</lt>
+		<no>Bane</no>
+	</i>
+
+	<i id="FIELDS">
+		<i id="meta_description">
+			<en>Meta description</en>
+			<lt>Meta aprašas</lt>
+			<no>Meta beskrivelse</no>
+		</i>
+		<i id="priority">
+			<en>Priority</en>
+			<no>Prioritet</no>
+			<lt>Svarbumas</lt>
+		</i>
+		<i id="pathname">
+			<en>URL name</en>
+			<lt>URL pavadinimas</lt>
+			<no>Url bane</no>
+		</i>
+		<i id="in_menu">
+			<en>Show in menu</en>
+			<lt>Įtraukti į meniu</lt>
+			<no>Legg til i meny</no>
+		</i>
+		<i id="parent_id">
+			<en>Parent page</en>
+			<lt>Puslapio tėvas</lt>
+			<no>Overordnede siden</no>
+		</i>
+		<i id="path">
+			<en>Path</en>
+			<lt>Kelias</lt>
+			<no>Bane</no>
+		</i>		
+		<i id="note">
+			<en>Note</en>
+			<lt>Pastaba</lt>
+			<no>OBS</no>
+		</i>
+		<i id="template_id">
+			<en>Template</en>
+			<lt>Šablonas</lt>
+			<no>Mal</no>
+		</i>
+	</i>
+	
+	<i id="TYPE_OPT">
+		<i id="0">
+			<en>Page</en>
+			<lt>Puslapis</lt>
+			<no>Side</no>
+		</i>
+		<i id="1">
+			<en>Link to first child</en>
+			<lt>Nuoroda į žemesnį lygį</lt>
+			<no>Link til første barn</no>
+		</i>
+		<i id="2">
+			<en>Link</en>
+			<lt>Nuoroda</lt>
+			<no>Link</no>
+		</i>
+	</i>
+	
+	<i id="VAR_TYPE_OPT">
+		<i id="text">
+			<lt>Teksto eilutė</lt>
+			<en>Text line</en>
+			<no>Text linje</no>
+		</i>
+		<i id="textarea">
+			<lt>Teksto laukas</lt>
+			<en>Text area</en>
+			<no>Tekst området</no>
+		</i>
+		<i id="htmlarea">
+			<lt>HTML teksto laukas</lt>
+			<en>HTML text area</en>
+			<no>HTML teks området</no>
+		</i>		
+		<i id="image">
+			<lt>Paveiksliukas</lt>
+			<en>Image</en>
+			<no>Bilde</no>
+		</i>
+		<i id="gallery_folder">
+			<en>Gallery folder</en>
+			<lt>Galerijos katalogas</lt>
+			<no>Galleri mappe</no>
+		</i>
+		
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>Structure &amp; Content</en>
+			<lt>Struktūra ir tekstai</lt>
+			<no>Struktur og Innhold</no>
+		</i>
+		
+		<i id="childs">
+			<i id="pages">
+				<i id="title">
+					<en>Sitemap</en>
+					<lt>Svetainės medis</lt>
+					<no>Sitemap</no>
+				</i>
+				<i id="info">
+					<i id="model">GW_Page</i>
+				</i>				
+			</i>
+			
+			<i id="templates">
+				<i id="title">
+					<en>Templates</en>
+					<lt>Šablonai</lt>
+					<no>Mal</no>
+				</i>
+
+				<i id="info">
+					<i id="model">GW_Template</i>
+				</i>
+
+				<i id="childs">
+					<i id="tplvars">
+						<i id="info"><i id="model">GW_TplVar</i></i>
+						<i id="title">
+							<en>Template vars</en>
+							<lt>Šablono įvestys</lt>
+							<no>Mal variabler</no>
+						</i>
+					</i>
+				</i>
+			</i>
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

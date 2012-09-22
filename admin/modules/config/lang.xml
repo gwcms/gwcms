@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="FIELDS">
+		<i id="name">Name</i>
+		<i id="sql">SQL</i>
+		<i id="time_match">Time match</i>
+		<i id="path">Path</i>
+		<i id="actions">Actions</i>
+	</i>
+	
+	<i id="TASK_NAME">
+		Task name
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>Configuration</en>
+			<lt>Configuration</lt>
+			<no>Configuration</no>	
+		</i>	
+		<i id="childs">
+			<i id="modules">
+				<i id="title">Module Configuration</i>
+			</i>
+			<i id="tools">
+				<i id="title">Tools</i>
+			</i>
+			<i id="dbqueries">
+				<i id="title">DB Queries</i>
+				<i id="info"><i id="model">GW_DB_Queries</i></i>
+			</i>	
+			<i id="logwatch">
+				<i id="title">Log Watch</i>
+				<i id="info"><i id="model">GW_Log_Watch</i></i>				
+			</i>
+			<i id="tasks">
+				<i id="title">Tasks</i>
+				<i id="info"><i id="model">GW_Task</i></i>				
+			</i>
+			<i id="crontasks">
+				<i id="title">Cron Tasks</i>
+				<i id="info"><i id="model">GW_CronTask</i></i>
+			</i>				
+			
+					
+		</i>
+					
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

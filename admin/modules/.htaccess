@@ -1,0 +1,9 @@
+Order allow,deny
+deny from all
+
+
+# exceptions
+<Files ~ "\\.(htm|html|css|js|gif|jpg|png|swf)$">
+	Satisfy Any
+	Allow from All
+</Files>

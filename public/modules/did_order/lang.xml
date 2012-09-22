@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<i id="order_accepted">
+	<en>Your order was added.</en>
+	<no>Order ble bestilt.</no>
+</i>
+<i id="missing_delivery_fields">
+	<en>All delivery address fields must be filled out</en>
+	<no>Alle leveringsadresse felter må være fylt ut</no>
+</i>
+
+</xml>

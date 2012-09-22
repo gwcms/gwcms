@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="PROFILE">
+		<en>Profile</en>
+		<lt>Profilis</lt>
+		<no>Profil</no>
+	</i>
+	<i id="CHANGE_PROFILE_DATA">
+		<en>Change profile data</en>
+		<lt>Keisti profilio duomenis</lt>
+		<no>Endre profil data</no>
+	</i>
+	<i id="CHANGE_PASS">
+		<en>Change password</en>
+		<lt>Pakeisti slaptažodį</lt>
+		<no>Endre passord</no>
+	</i>
+	
+	<i id="FIELDS">
+		<i id="email">
+			<en>E-mail</en>
+			<lt>El. pašto adresas</lt>
+			<no>E-mail</no>
+		</i>
+		<i id="name">
+			<en>Name, surname</en>
+			<lt>Vardas, pavardė</lt>
+			<no>Navn, etternavn</no>
+		</i>
+		<i id="pass_old">
+			<en>Old password</en>
+			<lt>Senas slaptažodis</lt>
+			<no>Gammel passord</no>
+		</i>
+		<i id="pass_new">
+			<en>New password</en>
+			<lt>Naujas slaptažodis</lt>
+			<no>Ny passord</no>
+		</i>
+		<i id="pass_new_repeat">
+			<en>New password (repeat)</en>
+			<lt>Naujas slaptažodis (pakartoti)</lt>
+			<no>Ny passord (gjenta)</no>
+		</i>
+		<i id="username">
+			<en>Username</en>
+			<lt>Vartotojas</lt>
+			<no>Brukenavn</no>
+		</i>
+		<i id="pass">
+			<en>Password</en>
+			<lt>Slaptažodis</lt>
+			<no>Passord</no>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+			<no>Aktiv</no>
+		</i>
+		
+		<i id="id">Id</i>
+		<i id="rights">
+			<en>Rights</en>
+			<lt>Teisės</lt>
+			<no>Retigheter</no>
+		</i>
+		<i id="login_time">
+			<en>Last login</en>
+			<lt>Paskutinis prisijungimas</lt>
+			<no>Siste login</no>
+		</i>
+		<i id="login_count">
+			<en>Login count</en>
+			<lt>Prisijungimų skaičius</lt>
+			<no>Logins</no>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+			<no>Tittel</no>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+			<no>Beskrivelse</no>
+		</i>
+		<i id="public">
+			<en>Public</en>
+			<lt>Vieša</lt>
+			<no>Public</no>
+		</i>
+		<i id="link_groups">
+			<en>In groups</en>
+			<lt>Grupės</lt>			
+		</i>
+		<i id="session_validity">
+			<en>Session validity time</en>
+			<lt>Maksimalus neaktyvumo laikas</lt>
+			<no>Sesjons validerings tid</no>
+		</i>
+		<i id="last_ip">
+			<en>Last ip address</en>
+			<lt>Paskutinio prisijungimo ip adresas</lt>
+			<no>Siste ip addresse</no>
+		</i>
+		
+		<i id="autologin">
+			<en>Enable cms autologin</en>
+			<lt>Automatinis prisijungimas prie sistemos</lt>
+			<no>Automatisk login</no>
+		</i>
+		
+	</i>
+
+	<i id="PASS_UPDATED">
+		<en>Password successfully updated</en>
+		<lt>Slaptažodis sėkmingai atnaujintas</lt>
+		<no>Passord ble updatert</no>
+	</i>
+	
+	<i id="ERR_DELETE_SELF">
+		<en>You can't delete yourself here</en>
+		<lt>Veiksmas ribojamas</lt>
+		<no>Kan ikke slette seg selv</no>
+	</i>
+	<i id="ERR_DEACTIVATE_SELF">
+		<en>You can't deactivate yourself here</en>
+		<lt>Veiksmas ribojamas</lt>
+		<no>Du kan ikke deaktivere deg selv her</no>
+	</i>
+	
+	<i id="PERMISSIONS">
+		<en>Permissions</en>
+		<lt>Teisės</lt>
+		<no>Tillatelser</no>
+	</i>
+	<i id="CHANGE_GROUP_PERMISSIONS">
+		<en>Change group "%s" permissions</en>
+		<lt>Keisti grupės "%s" teises</lt>
+		<no>Endre gruppes "%s" tillatelser</no>
+	</i>
+	
+	<i id="SESSION_VALIDITY_OPT">
+		<i id="30">30 min</i>
+		<i id="60">60 min</i>
+		<i id="90">1h 30 min</i>
+		<i id="120">2h</i>
+		<i id="180">3h</i>
+		<i id="240">4h</i>
+		<i id="-1">
+			<en>Infinite</en>
+			<lt>Neribojamas</lt>
+			<no>Uendelig</no>
+		</i>
+	</i>	
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>Users</en>
+			<lt>Vartotojai</lt>
+			<no>Brukera</no>	
+		</i>
+		
+		<i id="info"><i id="model">GW_Adm_User</i></i>
+		
+		<i id="childs">
+			<i id="profile">
+				<i id="title">
+					<en>My profile</en>
+					<lt>Mano profilis</lt>
+					<no>Min Profil</no>
+				</i>
+				<i id="in_menu">0</i>
+			</i>
+			<i id="login">
+				<i id="title">
+					<en>User identification</en>
+					<lt>Vartotojo identifikavimas</lt>
+					<no>Bruker identifisering</no>
+				</i>
+				<i id="in_menu">0</i>
+				<i id="public">1</i>			
+			</i>
+			<i id="groups">
+				<i id="title">
+					<en>Groups</en>
+					<lt>Grupės</lt>
+					<no>Grupper</no>
+				</i>
+				<i id="info"><i id="model">GW_Adm_Users_Group</i></i>
+			</i>
+			<i id="config">
+				<i id="title">
+					<en>Configuration</en>
+					<lt>Nustatymai</lt>
+					<no>Konfigurasjon</no>		
+				</i>
+			</i>			
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

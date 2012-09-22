@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="ROOT">
+		<en>Root</en>
+		<lt>Šakninis</lt>
+		<no>Hoved</no>
+	</i>
+	
+
+	<i id="GALLERY_ITEM_TYPE_OPT">
+		<i id="0">
+			<lt>Įrašas</lt>
+			<en>Record</en>
+			<no>Innlegg</no>
+		</i>
+		<i id="1">
+			<lt>Kategorija</lt>
+			<en>Category</en>
+			<no>Kategori</no>
+		</i>
+	</i>
+	
+
+
+	<i id="FIELDS">
+		<i id="description">
+			<lt>Aprašymas</lt>
+			<en>Description</en>
+			<no>Beskrivelse</no>
+		</i>
+		<i id="state">
+			<lt>Būklė</lt>
+			<en>State</en>
+			<no>Tilstand</no>
+		</i>
+		<i id="parent_id">
+			<lt>Kategorija</lt>
+			<en>Category</en>
+			<no>Kategori</no>
+		</i>
+		<i id="priority">
+			<lt>Svarba</lt>
+			<en>Impotance</en>
+			<no>Viktighet</no>
+		</i>
+		<i id="deadline">
+			<lt>Terminas</lt>
+			<en>Deadline</en>
+			<no>Tidsfrist</no>
+		</i>
+		<i id="job_type">
+			<lt>Tipas</lt>
+			<en>Type</en>
+			<no>Type</no>
+		</i>
+		<i id="user_create">
+			<lt>Sukūrė</lt>
+			<en>Created by</en>
+			<no>Laget av</no>
+		</i>
+		<i id="user_exec">
+			<lt>Egzekutorius</lt>
+			<en>Executor</en>
+			<no>Utfører</no>
+		</i>
+	</i>
+	
+	
+	<i id="PRIORITY_OPT">
+		<i id="1">
+			<lt>1 - Svarstymas</lt>
+			<en>1 - Uncertain</en>
+			<no>1 - Kanskje</no>
+		</i>
+		<i id="2">
+			<lt>2 - Laukiantis prioriteto pakėlimo</lt>
+			<en>2 - Waiting to be approved</en>
+			<no>2 - Venter på godkjenning</no>
+		</i>
+		<i id="3">
+			<lt>3 - Patvirtintas, zemo prioriteto</lt>
+			<en>3 - Approved, low priority</en>
+			<no>3 - Godkjent, lav prioritet</no>
+		</i>
+		<i id="4">
+			<lt>4</lt>
+			<en>4</en>
+			<no>4</no>
+		</i>
+		<i id="5">
+			<lt>5 - Vidutinis</lt>
+			<en>5 - Average</en>
+			<no>5 - Middels</no>
+		</i>
+		<i id="6">
+			<lt>6</lt>
+			<en>6</en>
+			<no>6</no>
+		</i>
+		<i id="7">
+			<lt>7</lt>
+			<en>7</en>
+			<no>7</no>
+		</i>
+		<i id="8">
+			<lt>8 - Skubus</lt>
+			<en>8 - Important</en>
+			<no>8 - Viktig</no>
+		</i>
+		<i id="9">
+			<lt>9 - Labai skubus!</lt>
+			<en>9 - Very important!</en>
+			<no>9 - Veldig viktig!</no>
+		</i>
+		<i id="10">
+			<lt>10 - Kritinis!, negalima dirbti</lt>
+			<en>10 - Critical! blocker</en>
+			<no>10 - Kritisk! blokkerer</no>
+		</i>
+	</i>
+	
+	<i id="STATE_OPT">
+		<i id="5">
+			<lt><![CDATA[<font color="silver">Naujas</font>]]></lt>
+			<en><![CDATA[<font color="silver">New</font>]]></en>
+			<no><![CDATA[<font color="silver">Ny</font>]]></no>
+		</i>	
+		<i id="10">
+			<lt><![CDATA[<font color="blue">Priimtas</font>]]></lt>
+			<en><![CDATA[<font color="blue">Accepted</font>]]></en>
+			<no><![CDATA[<font color="blue">Akseptert</font>]]></no>
+		</i>
+		<i id="15">
+			<lt><![CDATA[<font color="green"><b>Vykdomas</b></font>]]></lt>
+			<en><![CDATA[<font color="green"><b>Working</b></font>]]></en>
+			<no><![CDATA[<font color="green"><b>Under arbeid</b></font>]]></no>
+		</i>
+		<i id="100">
+			<lt><![CDATA[<font color="green">Atliktas</font>]]></lt>
+			<en><![CDATA[<font color="green">Done</font>]]></en>
+			<no><![CDATA[<font color="green">Utført</font>]]></no>
+		</i>
+		<i id="110">
+			<lt><![CDATA[<font color="red">Atliktas. Nepilnai.</font>]]></lt>
+			<en><![CDATA[<font color="red">Done. Incomplete.</font>]]></en>
+			<no><![CDATA[<font color="red">Utført. Ufullstendig.</font>]]></no>
+		</i>
+		<i id="200">
+			<lt><![CDATA[<font color="red">Atmestas</font>]]></lt>
+			<en><![CDATA[<font color="red">Canceled</font>]]></en>
+			<no><![CDATA[<font color="red">Avbrutt</font>]]></no>
+		</i>
+	</i>
+	
+	<i id="TODO_ITEM_TYPE_OPT">
+		<i id="0">
+			<lt>Įrašas</lt>
+			<en>Record</en>
+			<no>Innlegg</no>
+		</i>
+		<i id="1">
+			<lt>Katalogas</lt>
+			<en>Folder</en>
+			<no>Mappe</no>
+		</i>
+	</i>	
+
+
+	<i id="TODO_ITEM_JOB_TYPE_OPT">
+		<i id="10">
+			<lt>Naujas</lt>
+			<en>New</en>
+			<no>Ny</no>
+		</i>
+		<i id="50">
+			<lt>Pataisymas</lt>
+			<en>Bugfix</en>
+			<no>Bugfix</no></i>
+	</i>		
+	
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+
+			
+			<lt>Darbai</lt>
+			<en>Todo</en>
+			<no>Jobb boka</no>
+
+		</i>	
+		<i id="childs">
+			<i id="items">
+				<i id="title">
+					<lt>Darbų sąrašas</lt>
+					<en>Todo list</en>
+					<no>Jobb liste</no>
+				</i>
+				<i id="info">
+					<i id="model">todo_item</i>
+				</i>
+			</i>			
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<i id="FIELDS">
+	<i id="first_name">
+		<en>Name</en>
+		<no>Navn</no>
+	</i>
+	<i id="mob_phone">
+		<en>Mobile Phone</en>
+		<no>Mobil Telefon</no>
+	</i>
+	<i id="phone">
+		<en>Phone</en>
+		<no>Telefon</no>
+	</i>
+	<i id="news">
+		<en>Recieve Newspost</en>
+		<no>Motta Nyhetsbrev</no></i>
+	<i id="post_index">
+		<en>Post Index</en>
+		<no>Post Nummer</no>
+	</i>
+	<i id="banned">
+		<en>Banned</en>
+		<no>Blokert</no>
+	</i>
+	<i id="address">
+		<en>Address</en>
+		<no>Adresse</no>
+	</i>
+	<i id="city">
+		<en>City</en>
+		<no>By / Sted</no>
+	</i>
+	<i id="second_name">
+		<en>Surname</en>
+		<no>Etternavn</no>
+	</i>
+	<i id="username">
+		<en>Username</en>
+		<no>Brukernavn</no>
+	</i>
+	<i id="email">
+		<en>E-mail</en>
+		<no>E-post</no>
+	</i>
+	<i id="pass_new">
+		<en>New password</en>
+		<lt>Naujas slaptažodis</lt>
+		<no>Ny passord</no>
+	</i>
+	<i id="session_validity">
+		<en>Session validity time</en>
+		<lt>Maksimalus neaktyvumo laikas</lt>
+		<no>Sesjons validerings tid</no>
+	</i>
+	<i id="pass">
+		<en>Password</en>
+		<lt>Slaptažodis</lt>
+		<no>Passord</no>
+	</i>
+	<i id="desc">
+		<en>Information</en>
+		<no>Informasjon</no>
+	</i>
+</i>
+
+<i id="SESSION_VALIDITY_OPT">
+	<i id="30">30 min</i>
+	<i id="60">60 min</i>
+	<i id="90">1h 30 min</i>
+	<i id="120">2h</i>
+	<i id="180">3h</i>
+	<i id="240">4h</i>
+	<i id="-1">
+		<en>Infinite</en>
+		<lt>Neribojamas</lt>
+		<no>Uendelig</no>
+	</i>
+</i>
+
+
+<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>Customer Database</en>
+			<no>Kunde Database</no>	
+		</i>	
+		<i id="childs">
+		
+			<i id="users">
+				<i id="title">
+					<en>Users</en>
+					<no>Kunder</no>
+				</i>		
+				<i id="info">
+					<i id="model">GW_User</i>
+				</i>
+			</i>
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+</xml>

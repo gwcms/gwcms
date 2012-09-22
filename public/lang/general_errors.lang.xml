@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="VALIDATION_FAIL">
+		<en>Validation failed</en>
+		<lt>Klaida, validuojant</lt>
+		<no>Validering feilet</no>
+	</i>
+	
+</xml>

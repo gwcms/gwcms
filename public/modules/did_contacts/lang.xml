@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<i id="must_login_to_view">
+	<en>Login to access this page</en>
+	<no>Logg inn for å se denne siden</no>
+</i>
+
+<i id="tech">
+	<en>Technical</en>
+	<no>Teknisk</no>
+</i>
+
+<i id="order">
+	<en>Order</en>
+	<no>Bestilling</no>
+</i>
+
+<i id="invoice">
+	<en>Invoice</en>
+	<no>Faktura</no>
+</i>
+<i id="bug">
+	<en>Bug</en>
+	<no>Feil</no>
+</i>
+<i id="other">
+	<en>Other</en>
+	<no>Annet</no>
+</i>
+</xml>

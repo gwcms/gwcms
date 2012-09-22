@@ -1,0 +1,158 @@
+<?php
+define("AUTH_SESSION_KEY", "cms_auth");
+define("PUBLIC_AUTH_SESSION_KEY", "auth");
+
+class GW_Auth
+{
+	/**
+	 * 
+	 * @var GW_ADM_User or GW_User
+	 */
+	var $user0;
+	var $session;
+	var $error;
+	
+	function __construct( &$user0)
+	{
+		$this->user0 =& $user0;
+		
+		if (get_class($this->user0) == "GW_ADM_User")
+			$this->session =& $_SESSION[AUTH_SESSION_KEY];
+		else
+			$this->session =& $_SESSION[PUBLIC_AUTH_SESSION_KEY];
+		
+	}
+
+	function getUserByUserID($id)
+	{
+		return $this->user0->find(Array('id=?',$id));
+	}
+	
+	function setError($err_str)
+	{
+		$this->error = $err_str;
+		return false;
+	}
+
+
+	
+	/**
+	 * if user is logged returns user object
+	 * else - false
+	 */
+	function isLogged()
+	{	
+		$cookiePass = $_COOKIE['login_7'];// is autologin pass
+		$cookieUsername = $_COOKIE['login_0']; // is username
+		$autologin = $_COOKIE['login_7'] && self::isAutologinEnabled();
+
+				
+		$logedin=($this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int)$this->session["user_id"]);
+		
+		if($logedin) {
+			$user = $this->getUserByUserID($user_id);
+		} elseif($autologin) {
+			$user = $this->loginAuto($cookieUsername, $cookiePass);
+		} elseif($tmp = $_GET['GW_CMS_API_AUTH']) {
+			
+			$autologin=1;//session expired kad neziuretu
+			$user = $this->loginApi($tmp);
+			
+			unset($_GET['GW_CMS_API_AUTH']);
+		}
+		
+		
+		if(! $user)
+			return $this->setError('/GENERAL/NOT_LOGGEDIN');
+		
+		if(!$autologin && !$user->isSessionNotExpired() ){ //jei autologin neveikia tai sesijos galiojimas yra
+			$this->logout();
+			$_SESSION['messages'][]=Array(1,'/GENERAL/SESSION_EXPIRED');
+			return $this->setError('/GENERAL/SESSION_EXPIRED');
+		}
+		
+		if($this->session['autologin'])
+			$user->autologgedin=true;
+
+		if($user->banned == 1)
+			return $this->setError('/GENERAL/USER_BANNED');
+		if($user->active == 0)
+			return $this->setError('/GENERAL/USER_INNACTIVE');
+			
+		return $user;
+	}
+	
+	function loginPass($username, $password)
+	{
+		if (! $user=$this->user0->getByUsernamePass($username, $password) )
+		{
+			$this->logout();
+			return $this->setError('/GENERAL/LOGIN_FAIL');
+		}
+		if($user->banned == 1){
+			return $this->setError('/GENERAL/USER_BANNED');
+		}
+		if($user->active == 0){
+			return $this->setError('/GENERAL/USER_INNACTIVE');
+		}
+		return $this->login($user);
+	}
+	
+	function loginAuto($username,$pass)
+	{
+		if(! $user=$this->user0->getUserByAutologinPass($username,$pass) )
+			return false;
+		
+		$this->session['autologin']=1;
+		
+		return $this->login($user);
+	}
+	
+	function loginApi($param)
+	{
+		list($username,$api_key) = explode(':',$param,2);
+		return $this->user0->getUserByApiKey($username, $api_key);
+	}
+	
+	function login($user)
+	{
+		$this->session["user_id"]=$user->get('id');
+		$this->session['ip_address']=$_SERVER['REMOTE_ADDR'];
+
+		$user->onLogin();
+
+		return $user;
+	}
+
+	function logout()
+	{
+		//dump("logging out");
+		$this->session = array();
+		$_SESSION=Array();
+	}
+	
+	function isAutologinEnabled()
+	{
+		static $cache;
+		
+		if(!$cache)
+			$cache = GW::getInstance('GW_Config')->get('gw_adm_users/autologin');
+			
+		return $cache;
+	}
+	
+	function switchUser($id)
+	{
+		if(!$this->session['switchUser'])
+			$this->session['switchUser']=$this->session['user_id'];
+			
+		$this->session['user_id']=$id;
+	}
+	
+	function switchUserReturn()
+	{
+		$this->session['user_id']=$this->session['switchUser'];
+		unset($this->session['switchUser']);
+	}
+}
+?>

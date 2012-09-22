@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<i id="delete">
+	<en>Delete</en>
+	<no>Slett</no>
+</i>
+<i id="must_login_to_view_cart">
+	<en>Login to use shopping cart</en>
+	<no>Logg inn for å bruke handlekurven</no>
+</i>
+<i id="shopping_cart_empty">
+	<no>Handlevognen er tom.</no>
+	<en>Shopping cart is empty.</en>
+</i>
+<i id="shopping_cart_items">
+	<en>Items in shopping cart</en>
+	<no>Varer i handlevognen</no>
+</i>
+<i id="quantity">
+	<en>Quantity</en>
+	<no>Antall</no>
+</i>
+<i id="price_per_unit">
+	<en>Unit Price</en>
+	<no>Stk Pris</no>
+</i>
+<i id="total">
+	<en>Total</en>
+	<no>Totalt</no>
+</i>
+<i id="confirm_delete">
+	<en>Are you sure you want to delete?</en>
+	<no>Er du sikker på at du vil slette?</no>
+</i>
+<i id="product_added">
+	<en>A product has been added to your shopping cart</en>
+	<no>Vare ble lagt til i handlekurven</no>
+</i>
+<i id="product_deleted">
+	<en>Product was deleted</en>
+	<no>Varen ble slettet</no>
+</i>
+<i id="delete_fail_no_product">
+	<en>Product that you are trying to delete does not exist</en>
+	<no>Varen kunne ikke slettes</no>
+</i>
+
+
+</xml>

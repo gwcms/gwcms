@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="VALIDATION_FAIL">
+		<en>Validation failed</en>
+		<lt>Klaida, validuojant</lt>
+		<no>Validering feilet</no>
+	</i>
+	<i id="REMOVE_FAIL">
+		<en>Failed to remove</en>
+		<lt>Nepasisekė pašalinti</lt>
+		<no>Fjerning feilet</no>
+	</i>
+	<i id="BAD_ARGUMENTS">
+		<en>Bad arguments</en>
+		<lt>Neteisingi argumentai</lt>
+		<no>Dårlig argumenter</no>
+	</i>
+	<i id="ACTION_FAIL">
+		<en>Action failed</en>
+		<lt>Klaida atliekant veiksmą</lt>
+		<no>Hendelse feilet</no>
+	</i>
+	<i id="MISSING_ARGUMENTS">
+		<en>Missing arguments</en>
+		<lt>Trūksta argumentų</lt>
+		<no>Mangler argumenter</no>
+	</i>
+	
+
+	<i id="IMAGE">
+		<i id="ERR_DIMENSIONS_MAX">Image dimensions exceeds the maximum dimensions</i>
+		<i id="ERR_DIMENSIONS_MIN">Image dimensions does not meet the minimum dimensions condition</i>
+	</i>
+	
+	<i id="FILE">
+		<i id="DOESNT_EXIST">File doesn't exist</i>
+		<i id="TOO_LARGE">File too large</i>
+	</i>
+	
+	<i id="ACTION_RESTRICTED">
+		<en>Action restricted</en>
+		<lt>Veiksmas ribojamas</lt>
+		<no>Ulovlig funksjon</no>
+	</i>
+	
+	<i id="SESSION_EXPIRED">
+		<en>Session expired, please login again</en>
+		<lt>Bagėsi sesijos galiojimo laikas</lt>
+		<no>Sesjon har gått ut, login på nytt</no>
+	</i>	
+	<i id="USER_BANNED">
+		<en>This user is banned.</en>
+		<no>Denne brukeren er blokert.</no>
+		<lt>Šis vartotojas yra užblokuotas.</lt>
+	</i>
+	<i id="USER_INNACTIVE">
+		<en>This user has not been activated yet, follow instructions in your email.</en>
+		<no>Denne brukeren er ikke aktiv, sjekk email for instruksjoner for aktivering.</no>
+		<lt>Šis vartotojas yra neaktyvus, aktyvacijai sekite instrukcijas nurodytas e-pašte.</lt>
+	</i>
+	<i id="NOT_LOGGEDIN">
+		<en>Not logged in</en>
+		<lt>Nesate prisijungęs</lt>
+		<no>Ikke logget inn</no>
+	</i>
+	<i id="NOT_VALID_USER_OR_PASS">
+		<en>Not logged in</en>
+		<lt>Nesate prisijungęs</lt>
+		<no>Feil brukernavn og/eller passord</no>
+	</i>
+	<i id="LOGIN_FAIL">
+		<en>Wrong username or password</en>
+		<lt>Neteisingas vartotojo vardas arba slaptažodis</lt>
+		<no>Feil brukenavn eller passord</no>
+	</i>
+	
+</xml>

@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+<i id="LANG">
+	<i id="lt">Lietuvių</i>
+	<i id="en">English</i>
+	<i id="no">Norwegian</i>	
+</i>
+
+<i id="LANGUAGE">
+	<en>Language</en>
+	<lt>Kalba</lt>
+	<no>Språk</no>
+</i>	
+
+
+<i id="SAVE">
+	<en>Save</en>
+	<lt>Išsaugoti</lt>
+	<no>Lagre</no>
+</i>
+
+<i id="APPLY">
+	<en>Apply</en>
+	<lt>Išsaugoti liekant</lt>
+	<no>Utfør</no>
+</i>
+
+<i id="UPDATE">
+	<en>Refresh</en>
+	<lt>Atnaujinti</lt>
+	<no>Oppdater</no>
+</i>
+<i id="CANCEL">
+	<en>Cancel</en>
+	<lt>Atšaukti</lt>
+	<no>Avbryt</no>
+</i>
+<i id="CONTINUE">
+	<en>Continue</en>
+	<lt>Tęsti</lt>
+	<no>Fortsett</no>
+</i>
+
+<i id="BACK">
+	<en>&amp;laquo; Back</en>
+	<lt>&amp;laquo; Atgal</lt>
+	<no>&amp;laquo; Tilbake</no>
+</i>
+
+
+<i id="EDIT">
+	<en>Edit</en>
+	<lt>Redaguoti</lt>
+	<no>Rediger</no>
+</i>
+<i id="REMOVE">
+	<en>Remove</en>
+	<lt>Panaikinti</lt>
+	<no>Fjern</no>
+</i>
+<i id="LOGOUT">
+	<en>Logout</en>
+	<lt>Atsijungti</lt>
+	<no>Logg ut</no>
+</i>
+<i id="USER">
+	<en>Username</en>
+	<lt>Vartotojas</lt>
+	<no>Bruker</no>
+</i>
+<i id="PASS">
+	<en>Password</en>
+	<lt>Slaptažodis</lt>
+	<no>Passord</no>
+</i>
+<i id="CHANGE_PASS">
+	<en>Change password</en>
+	<lt>Keisti slaptažodį</lt>
+	<no>Endre passord</no>
+</i>
+<i id="DOLOGIN">
+	<en>Login</en>
+	<lt>Prisijungti</lt>
+	<no>Login</no>
+</i>
+
+<i id="AUTOLOGIN">
+	<en>Autologin on this browser</en>
+	<lt>Prisiminti šioje naršyklėje</lt>
+	<no>Automatisk login på denne nettleser</no>
+</i>
+
+<i id="CREATE_NEW">
+	<en>Create new</en>
+	<lt>Sukurti naują</lt>
+	<no>Lag ny</no>
+</i>
+<i id="ACTION_CONFIRM_REQUIRED">
+	<en>Action confirm required. Continue?</en>
+	<lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
+	<no>Bekreft </no>
+</i>
+
+
+<i id="LOGGED_AS">
+	<en>Logged as</en>
+	<lt>Prisijungęs kaip</lt>
+	<no>Logget inn som</no>
+</i>
+
+<i id="SWITCH_USER_RETURN">
+	<en><![CDATA[Return to <b>%s</b> account]]></en>
+	<lt><![CDATA[Sugrįžti į <b>%s</b> paskyrą]]></lt>
+</i>
+
+<i id="UPDATE_SUCCESS">
+	<en>Data successfully updated</en>
+	<lt>Duomenys atnaujinti</lt>
+	<no>Informasjon oppgradert</no>
+</i>
+<i id="SAVE_SUCCESS">
+	<en>Data successfully saved</en>
+	<lt>Duomenys išsaugoti</lt>
+	<no>Informasjon lagret</no>
+</i>
+<i id="ITEM_REMOVE_SUCCESS">
+	<en>Item removed</en>
+	<lt>Įrašas panaikintas</lt>
+	<no>Gjenstand slettet</no>
+</i>
+<i id="ITEM_ADD_SUCCESS">
+	<en>Item added</en>
+	<lt>Įrašas idetas</lt>
+	<no>Gjenstand lagt til</no>
+</i>
+
+<i id="FIELDS">
+	<i id="insert_time">
+		<en>Creation time</en>
+		<lt>Sukūrimo laikas</lt>
+		<no>Opprettelses dato</no>
+	</i>
+	<i id="update_time">
+		<en>Last edited</en>
+		<lt>Pask. redagavimas</lt>
+		<no>Sist redigert</no>
+	</i>
+	<i id="title">
+		<en>Title</en>
+		<lt>Pavadinimas</lt>
+		<no>Titel</no>
+	</i>
+	<i id="active">
+		<en>Active</en>
+		<lt>Aktyvus</lt>
+		<no>Aktiv</no>
+	</i>
+	<i id="image">
+		<en>Image</en>
+		<lt>Atvaizdas</lt>
+		<no>Bilde</no>
+	</i>
+	<i id="type">
+		<en>Type</en>
+		<lt>Tipas</lt>
+		<no>Type</no>
+	</i>
+	<i id="group">
+		<en>Group</en>
+		<lt>Grupė</lt>
+		<no>Gruppe</no>
+	</i>
+	<i id="category">
+		<en>Category</en>
+		<lt>Kategorija</lt>
+		<no>Kategori</no>
+	</i>
+	<i id="text">
+		<en>Text</en>
+		<lt>Tekstas</lt>
+		<no>Tekst</no>
+	</i>
+	
+	<i id="id">
+		<en>Id. num.</en>
+		<lt>Id. num.</lt>
+		<no>Id. num.</no>
+	</i>
+	<i id="description">
+		<en>Description</en>
+		<lt>Aprašymas</lt>
+		<no>Beskrivelse</no>
+	</i>
+</i>
+
+<i id="FIELD_NOTES">
+	<i id="image_dimensions">
+		<en>Width x Height. exmpl: 640x480</en>
+		<lt>Plotis x Aukštis. pvz: 640x480</lt>
+		<no>Bredde x Vidde f.e. 640x480</no>
+	</i>
+</i>
+
+<i id="VIEWS">
+	<i id="form">
+		<en>Create new / Edit</en>
+		<lt>Kurti naują / Redaguoti</lt>
+		<no>Lag ny / Rediger</no>
+	</i>
+	<i id="print">
+		<en>Print</en>
+		<lt>Spauzdinti</lt>
+		<no>Print ut</no>
+	</i>
+	<i id="export">
+		<en>Export</en>
+		<lt>Eksportuoti</lt>
+		<no>Eksporter</no>
+	</i>
+</i>
+
+<i id="NO_ITEMS">
+	<en>No items</en>
+	<lt>Nėra įrašų</lt>
+	<no>Ingen data</no>
+</i>
+
+<i id="ITEM_COUNT">
+	<lt>Įrašų skaičius</lt>
+	<en>Item count</en>
+	<no>Antall data</no>
+</i>
+
+<i id="ACTIONS">
+	<en>Actions</en>
+	<lt>Veiksmai</lt>
+	<no>Handlinger</no>
+</i>
+
+<i id="IMAGE">
+	<en>Image</en>
+	<lt>Paveikslas</lt>
+	<no>Bildet</no>
+</i>
+
+<i id="FIELD">
+	<en>Field</en>
+	<lt>Laukelis</lt>
+	<no>Felt</no>
+</i>
+
+<i id="FILTER_VALUE">
+	<en>Value</en>
+	<lt>Filtras</lt>
+	<no>Filter</no>
+</i>
+
+<i id="APPLY_FILTER">
+	<en>Apply filters</en>
+	<lt>Filtruoti</lt>
+	<no>Filtrer</no>	
+</i>
+
+<i id="REMOVE_FILTER">
+	<en>Remove filters</en>
+	<lt>Nuimti filtrus</lt>	
+	<no>Fjern filtrer</no>
+</i>
+
+<i id="COMPARE_TYPE">
+	<i id="SHORT">
+		<en>C. t.</en>
+		<lt>P. m.</lt>
+		<no>S. t.</no>
+	</i>
+	<i id="FULL">
+		<en>Compare type</en>
+		<lt>Palyginimo metodas</lt>
+		<no>Sammenlign type</no>
+	</i>
+</i>
+
+<i id="FILTER_FROM">
+	<en>from</en>
+	<lt>nuo</lt>
+	<no>fra</no>
+</i>
+<i id="FILTER_TO">
+	<en>to</en>
+	<lt>iki</lt>
+	<no>til</no>
+</i>
+
+<i id="FILTER_EMPTY_OPTION">
+	<i id=''>
+		<lt>-- Nefiltruoti --</lt>
+		<en>-- Any --</en>
+		<no>-- Uten filter --</no>
+	</i>
+</i>
+
+<i id="ACTIVE_OPT">
+	<i id="0">Not active</i>
+	<i id="1">Active</i>	
+</i>
+
+<i id="SEARCH">
+	<en>Search</en>
+	<lt>Paieška</lt>
+	<no>Søk</no>
+</i>
+
+<i id="ORDER_BY">
+	<en>Order by</en>
+	<lt>Rikiuoti pagal</lt>
+	<no>Sorter etter</no>
+</i>
+
+
+<i id="ICON_TITLES">
+	<i id="active_0">Enable</i>
+	<i id="active_1">Disable</i>
+	<i id="action_move_up">Move up</i>
+	<i id="action_move_down">Move down</i>
+	<i id="action_edit">Edit</i>
+	<i id="action_file_delete">Delete</i>	
+	<i id="print">
+		<en>Print</en>
+		<lt>Spauzdinti</lt>
+		<no>Print ut</no>
+	</i>
+	<i id="switch_user">
+		<en>Login to user account</en>
+		<lt>Prisijungti į vartotojo paskyrą</lt>
+	</i>
+</i>
+
+<i id="EXTRA_INFO">
+	<en>Extra information</en>
+	<lt>Papildoma informacija</lt>
+	<no>Ekstra informasjon</no>
+</i>
+
+<i id="SESSION_VALIDITY">
+	<lt>Sesijos galiojimo laikas</lt>
+	<en>Session validity</en>
+	<no>Sesjon validering om</no>
+</i>
+
+<i id="LOGIN_TO_EXTEND_SESSION">
+	<lt>Neaktyvumo limitas pasiektas. Tęsti sesiją?</lt>
+	<en>Session expired. Continue session?</en>
+	<no>Sesjon har gått ut. Fornye sesjon?</no>
+</i>
+
+<i id="SESSION_EXTEND_SUCCESS">
+	OK
+</i>
+
+<i id="SERVER_TIME">
+	<lt>Serverio laikas</lt>
+	<en>Server time</en>
+	<no>Server tid</no>
+</i>
+
+<i id="YOUR_IP">
+	<lt>Jūsų ip adresas</lt>
+	<en>Your ip</en>
+	<no>Din IP adresse</no>
+</i>
+
+
+<i id="PAGE_BY">
+	<lt>Įrašų per puslapį</lt>
+	<en>Page by</en>
+	<no>Antall per side</no>
+</i>
+
+<i id="NEXT">
+	<lt>Sekantis</lt>
+	<en>Next</en>
+	<no>Neste</no>
+</i>
+
+<i id="PREVIOUS">
+	<lt>Ankstesnis</lt>
+	<en>Previuos</en>
+	<no>Førige</no>
+</i>
+
+<i id="FIRST">
+	<lt>Pirmas</lt>
+	<en>First</en>
+	<no>Først</no>
+</i>
+
+<i id="LAST">
+	<lt>Paskutinis</lt>
+	<en>Last</en>
+	<no>Siste</no>
+</i>
+
+<i id="PAGE">
+	<lt>Puslapis</lt>
+	<en>Page</en>
+	<no>Side</no>
+</i>
+
+<i id="GALLERY_FOLDER">
+	<en>Gallery folder</en>
+	<lt>Galerijos katalogas</lt>
+	<no>Galleri mappe</no>
+</i>
+
+
+<i id="EMPTY_OPTION">
+	<i id="0">
+		<en>-- Not selected --</en>
+		<lt>-- Nepasirinkta --</lt>
+		<no>-- Ikke valgt --</no>
+	</i>
+</i>
+
+
+<i id="SITE_TITLE">GateWay Content Management System</i>
+
+
+<i id="FOOTER">
+	<![CDATA[
+		<a href="http://cms.gw.lt/">Gateway CMS</a><br />%year% ©	
+	]]>
+</i>
+
+<i id="GW_CMS_DESCRIPTION">
+	<en>Gateway content management system</en>
+	<lt>Gateway turinio valdymo sistema</lt>
+	<no>Gateway Admin Controll System</no>
+</i>
+
+<i id="DIMENSIONS">
+	<lt>Dydis</lt>
+	<en>Dimensions</en>
+	<no>Dimensjon</no>
+</i>
+<i id="FILE_SIZE">
+	<lt>Rinkmenos dydis</lt>
+	<en>File size</en>
+	<no>Fil størrelse</no>
+</i>
+
+<i id="MAX_UPLOAD_SIZE">
+	<lt>Maksimalus įkėlimo dydis %s</lt>
+	<en>Max upload size %s</en>
+	<no>Max opplastningsstørelse %s</no>
+</i>
+
+<i id="APPLY_SORT">
+	<lt>Saugoti rikiavimo pakeitimus</lt>
+	<en>Apply sort</en>
+	<no>Utføre sortering</no>
+</i>
+
+<i id="CHECKLIST_SELECT_ACTION">
+	<lt>Veiksmai su pasirinktais įrašais</lt>
+	<en>Actions with selected items</en>
+	<no>Handlinger med valgte elementer</no>
+</i>
+
+<i id="LIST_DISPLAY_SETTINGS">
+	<lt>Rodymo parinktys</lt>
+	<en>Display settings</en>
+	<no>Display settings</no>	
+</i>
+
+<i id="LDS_FIELD_PRIORITY_VISIBILITY">
+	<lt>Laukelių eiliškumas ir rodymas</lt>
+	<en>Column priority &amp; visibility</en>
+	<no>Column priority &amp; visibility</no>	
+</i>
+
+
+<i id="RESET_TO_DEFAULTS">
+	<lt>Atstatyti numatytuosius</lt>
+	<en>Reset to defaults</en>
+	<no>Reset to defaults</no>	
+</i>
+
+<i id="MONTHS_SHORT">
+	<i id="0">Jan</i>
+	<i id="1">Feb</i>
+	<i id="2">Mar</i>
+	<i id="3">Apr</i>
+	<i id="4">May</i>
+	<i id="5">Jun</i>
+	<i id="6">Jul</i>
+	<i id="7">Aug</i>
+	<i id="8">Sep</i>
+	<i id="9">Oct</i>
+	<i id="10">Nov</i>
+	<i id="11">Dec</i>
+</i>
+
+<i id="VIEWS_LABEL">
+	Views
+</i>
+
+<i id="GO_BACK">
+	<lt>Atgal</lt>
+	<en>Back</en>	
+</i>
+
+<i id="ABOUT">
+	<lt>Apie</lt>
+	<en>About</en>	
+</i>
+
+
+</xml>

@@ -1,0 +1,1 @@
+<th colspan="2" class="th_h3 th_single">{$title}</th>
