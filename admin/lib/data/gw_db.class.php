@@ -171,9 +171,9 @@ class GW_DB
 		return $result;		
 	}
 
-	function fetch_one_column($cmd, $column, $nodie=false)
+	function fetch_one_column($cmd, $nodie=false)
 	{
-		if(!$cmd || !$column)die('unspecified sql or key');
+		if(!$cmd)die('unspecified sql');
 
 		$cmd=self::prepare_query($cmd);
 
@@ -181,8 +181,8 @@ class GW_DB
 
 		$result=Array();
 
-		while($row=mysql_fetch_assoc($this->result))
-			$result[]=$row[$column];
+		while($row=mysql_fetch_array($this->result))
+			$result[]=$row[0];
 
 		return $result;			
 	}
