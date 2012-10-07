@@ -321,7 +321,9 @@ class GW_Common_Module extends GW_Module
 		
 		if($this->list_params['page_by'])
 			$this->smarty->assign('query_info', $this->model->lastRequestInfo());
-
+			
+			
+		return $list;
 	}
 	
 	function common_doMove($params=false)
