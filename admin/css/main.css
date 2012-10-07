@@ -393,3 +393,4 @@ p{}
 .change_lang a.selected{ font-weight:bold;color:#000 }
 .change_lang a{ color:#555; }
 .change_lang a:hover{ color:#000; }
+.nowrap{ white-space: nowrap }
