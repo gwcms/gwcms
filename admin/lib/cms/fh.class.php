@@ -157,38 +157,40 @@ class FH
 	function gw_link($params)
 	{
 		if(!isset($params['show_title']))
-		$params['show_title']=1;
+			$params['show_title']=1;
 
 		if(!$params['title'])
-		$params['title']=GW::$lang['ICON_TITLES'][$params['icon']];
+			$params['title']=GW::$lang['ICON_TITLES'][$params['icon']];
 
 		if(!isset($params['html']))
-		$params['html']=1;
+			$params['html']=1;
 			
 
 		self::gw_link_po($params);
 
 		if(isset($params['path_only']))
-		return $params['path'];
+			return $params['path'];
 			
 
 		$params['img']='img/icons/'.$params['icon'].'.png';
 			
 		if(!$params['html'])
-		return Array('link'=>$params['path'], 'img'=>$params['img'], 'title'=>$params['title']);
+			return Array('link'=>$params['path'], 'img'=>$params['img'], 'title'=>$params['title']);
 
 		$img = ($params['icon']?'<img align="absmiddle" src="'.$params['img'].'" title="'.$params['title'].'" />':'');
 
 
 		if($params['confirm'])
-		$params['tag_params']['onclick']='return confirm(\''.GW::$lang['ACTION_CONFIRM_REQUIRED'].'\')';
+		{
+			$params['tag_params']['onclick']="return confirm('".GW::$lang['ACTION_CONFIRM_REQUIRED']."')";
+		}
 
 
 		$tag_params="";
 
 		if($params['tag_params'])
-		foreach($params['tag_params'] as $param_name => $value)
-		$tag_params.=' '.$param_name.'="'.addslashes($value).'"';
+			foreach($params['tag_params'] as $param_name => $value)
+				$tag_params.=' '.$param_name.'="'.$value.'"';
 			
 
 
