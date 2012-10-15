@@ -111,6 +111,8 @@ class GW_Common_Module extends GW_Module
 			$item->insert();
 		else
 			$item->save();
+			
+		$this->fireEvent('AFTER_SAVE', $item);	
 		
 		//jeigu saugome tai reiskia kad validacija praejo
 		GW::$request->setMessage(GW::$lang['SAVE_SUCCESS']);		
