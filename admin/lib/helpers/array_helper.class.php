@@ -64,7 +64,24 @@ class Array_Helper
 		}
 
 		return $result;
-	}	
+	}
+
+	/**
+	 * Build associative array
+	 * $names=Array('a','b')
+	 * $values=Array('test','best');
+	 * 
+	 * result = Array('a'=>'test','b'=>'best')
+	 */
+	function buildAssociative($names, $values)
+	{
+		$new = Array();
+		
+		foreach($names as $i => $key)
+			$new[$key]=$values[$i];
+			
+		return $new;
+	}
 
 
 }
