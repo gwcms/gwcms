@@ -394,3 +394,21 @@ p{}
 .change_lang a{ color:#555; }
 .change_lang a:hover{ color:#000; }
 .nowrap{ white-space: nowrap }
+
+
+.unhideroot{ position:relative; display:inline;}
+.unhideroot .visible{ padding:5px; opacity: 0.6; }
+.unhideroot:hover .visible{ background-color:#eee; opacity: 1; }
+.unhideroot:hover .dropdown{ display:block;}
+.unhideroot .dropdown{ 
+	display: none;position:absolute;
+	background-color: white;white-space:nowrap;padding:5px;border:1px solid silver
+}
+.unhideroot .menuitem{
+	padding: 2px 4px 2px 4px;
+}
+
+.unhideroot .menuitem:hover{
+	background-color:#eee;
+}
+

@@ -33,6 +33,26 @@
 	<a href="#" onclick="lds_config();return false">{$lang.LIST_DISPLAY_SETTINGS}</a>	
 	&nbsp;&nbsp;&nbsp;
 {/function}	
+
+{function name=dl_toolbar_buttons_hidden}
+
+<div class="unhideroot" style="">
+	<img class="visible" align="absmiddle" src="img/icons/action_down24.png" onmouseover="$(this).next().offset({ left: $(this).offset().left})">
+	
+	<div class="dropdown">
+		{foreach $dl_toolbar_buttons_hidden as $button_func}
+			<div class="menuitem">
+				{call name="dl_toolbar_buttons_`$button_func`"}
+			</div>
+		{/foreach}	
+	</div>
+</div>
+
+
+{/function}
+
+
+
 	
 {function name=dl_display_toolbar_buttons}
 	{foreach $dl_toolbar_buttons as $button_func}
