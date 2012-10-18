@@ -394,10 +394,12 @@ class GW_Data_Object
 		return $rez;
 	}
 	
-	function increase($field)
+	function increase($field, $amount=1)
 	{
 		$db =& $this->getDB();
-		$db->increase($this->table, $this->getIdCondition());
+		$db->increase($this->table, $this->getIdCondition(), $field, $amount);
+		
+		$this->set($field, (float)$this->get($field) + $amount);
 	}
 
 	function save()
