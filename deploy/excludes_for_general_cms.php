@@ -8,5 +8,6 @@ $excludes[]='public/*';
 $excludes[]='/.htaccess';
 $excludes[]='/.project';
 $excludes[]='/.buildpath';
+$excludes[]='/.git';
 $excludes[]='/deploy';
 
