@@ -69,9 +69,13 @@ class GW_Common_Module extends GW_Module
 			return false;
 			
 		$this->canBeAccessed($item, true);	
+		
+		$this->fireEvent('BEFORE_DELETE', $item);
 			
 		$item->delete();
 		GW::$request->setMessage(GW::$lang['ITEM_REMOVE_SUCCESS']);
+		
+		$this->fireEvent('AFTER_DELETE', $item);
 		
 		$this->jump();
 	}
