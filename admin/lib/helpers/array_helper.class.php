@@ -66,21 +66,18 @@ class Array_Helper
 		return $result;
 	}
 
-	/**
-	 * Build associative array
-	 * $names=Array('a','b')
-	 * $values=Array('test','best');
+	/*
+	 *  $source = Array('a'=>123,'b'=>'abc','c'=>'nothing')
+	 *  $destination=Array();
+	 *  Array_Helper::copy($source, $destination, Array('a','c')); 
+	 *  $destination = Array('a'=>123,'c'=>'nothing')
 	 * 
-	 * result = Array('a'=>'test','b'=>'best')
-	 */
-	function buildAssociative($names, $values)
+	 * */
+	
+	function copy($source, &$destination, $keys)
 	{
-		$new = Array();
-		
-		foreach($names as $i => $key)
-			$new[$key]=$values[$i];
-			
-		return $new;
+		foreach($keys as $key)
+			$destination[$key]=$source[$key];
 	}
 
 
