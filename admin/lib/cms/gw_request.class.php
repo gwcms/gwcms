@@ -21,7 +21,8 @@ class GW_Request
 	
 	//argumentai kurie bus išlaikomi jumpinant, sudarinėjant linkus, perduodami per formas
 	//pvz jei bus Array('pid'=>1), visad bus pernesama pid reiksme
-	var $carry_params = Array();	
+	var $carry_params = Array();
+	var $inner_request = false;	
 	
 
 	function __construct()
@@ -131,30 +132,21 @@ class GW_Request
 	*/
 
 	
-	function requestInfo()
+	//returns url
+	function requestInfoInner($path)
 	{
-		$this->uri = Navigator::getUri();
-		$this->base = Navigator::getBase();
-		$path_arr = explode('/', $_GET['url']);
-		unset($_GET['url']);
+		$parr = explode('/', $path);
+		$ln = array_shift($parr);
+		
+		$path = implode('/', $parr);
 		
 		
-		$ln = array_shift($path_arr);
-		$this->ln = in_array($ln, GW::$static_conf['LANGS']) ? $ln : GW::$static_conf['LANGS'][0];
-	
-		$_SESSION['GW']['cms_ln']=$this->ln;		
-		
-		
-		$this->path=implode('/', $path_arr);
-		
-		
-		
-		$this->path_arr = Array();
+
 		$path_clean = '';
 		$path='';
 		$item=false;
 		
-		foreach($path_arr as $i => $name)
+		foreach($parr as $i => $name)
 		{
 			
 			$path.=($path ? '/':'').$name;
@@ -162,7 +154,7 @@ class GW_Request
 			if(is_numeric($name) && $item)
 			{
 				$item['data_object_id']=(int)$name;
-				$this->data_object_id = $item['data_object_id'];
+				$data_object_id = $item['data_object_id'];
 				$item['path'].='/'.$name;
 				continue;
 			}
@@ -170,22 +162,15 @@ class GW_Request
 			
 			$path_clean.=($path_clean ? '/':'').$name;
 			
-			$item =& $this->path_arr[];
+			$item =& $path_arr[]; //prideti item i $path_arr
 			$item=Array('name'=>$name, 'path'=>$path, 'path_clean'=>$path_clean);
 		}
-		
 
 		
-		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
-		if($item['data_object_id'])
-			$_GET['id']=$item['data_object_id'];
-			
-		$this->path_clean = $path_clean;
-		
 
-		$this->path_arr_parent = 
-			count($this->path_arr) >= 2 ? 
-				$this->path_arr[count($this->path_arr)-2] : Array();
+		$path_arr_parent = 
+			count($path_arr) >= 2 ? 
+				$path_arr[count($path_arr)-2] : Array();
 		
 
 		//jeigu bus path articles/items/132
@@ -193,8 +178,40 @@ class GW_Request
 		//kad galetu sudarinet teisingus linkus
 				
 		if(is_numeric($path_arr[count($path_arr)-1]))
-			$this->path = dirname($this->path);
+			$path = dirname($path);
+					
 		
+		
+		return compact('ln','path','path_arr','path_clean','data_object_id','path_arr_parent');
+		
+	}
+	
+	
+	function requestInfo()
+	{
+		$this->uri = Navigator::getUri();
+		$this->base = Navigator::getBase();
+		
+		
+		$pack = $this->requestInfoInner($_GET['url']);
+		
+		extract($pack);
+		
+		unset($_GET['url']);
+		
+		$this->path=$path;
+		$this->path_arr=$path_arr;		
+		$this->path_arr_parent=$path_arr_parent;
+		$this->path_clean=$path_clean;
+		
+		
+		$this->ln = in_array($ln, GW::$static_conf['LANGS']) ? $ln : GW::$static_conf['LANGS'][0];
+		$_SESSION['GW']['cms_ln']=$this->ln;		
+		
+		
+		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
+		if($data_object_id)
+			$_GET['id']=$data_object_id;
 		
 	}
 
@@ -238,23 +255,68 @@ class GW_Request
 		return $obj;
 	}
 	
-	
-	function processModule($path_info)
+	function constructModule1($path_info)
 	{
-		if(!$path_info['module'])// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
-			$this->jumpToFirstChild();
-		
-		$module =& $this->module;
 		$module = $this->constructModule($path_info['dirname'], $path_info['module']);
 		
 		$module->module_name = $path_info['module'];
 		$module->module_path = $path_info['path'];
 		$module->module_dir = GW::$dir['MODULES'].$path_info['dirname'].'/';
 
+		return $module;
+	}
+	
+	
+	function processModule($path_info, $request_params)
+	{
+		if(!$path_info['module'])// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
+			$this->jumpToFirstChild();
+		
+		$module = $this->constructModule1($path_info);
+		
+		$this->module =& $module;
+
 		$module->init();
 		
-		$module->process((array)$path_info['params']);		
+		if(GW::$request->inner_request)
+			$module->ob_collect = false;
+		
+		$module->process((array)$path_info['params'], $request_params);		
 	}
+	
+	
+	
+	/*
+	 * sms/mass?act=update
+	 * */
+	function innerProcess($path)
+	{
+		$path_e=explode('?', $path, 2);
+		
+		if(count($path_e)>1) {
+			list($path, $request_args)=$path_e;
+			parse_str($request_args, $request_args);
+		}
+		
+		$path_info=$this->getModulePathInfo($path);
+				
+		return $this->processModule($path_info, $request_args);		
+	}
+	
+	function innerProcessStatic($path)
+	{
+		if(!GW::$request)
+			GW::$request=new GW_Request;
+			
+			
+		if(!GW::$user)
+			GW::$user = new GW_ADM_User(1);
+			
+		GW::$request->inner_request=true;
+			
+		return GW::$request->innerProcess($path);
+	}
+	
 	
 	function setMessage($msg,$status_id=0)
 	{
@@ -309,7 +371,7 @@ class GW_Request
 				
 		$path_info=$this->getModulePathInfo($this->path_clean);
 		
-		$this->processModule($path_info);
+		$this->processModule($path_info, $_REQUEST);
 	}
 	
 }

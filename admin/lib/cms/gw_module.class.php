@@ -150,13 +150,13 @@ class GW_Module
 	}
 	
 	
-	function process($params=Array())
+	function process($params=Array(), $request_params=Array())
 	{
-		if($act=$_REQUEST['act'])
+		if($act=$request_params['act'])
 			$this->process_act($act);
 		
 		$params=(array)$params;
-		$this->processView(self::__funcVN($params[0]),array_splice($params,1));
+		$this->processView(self::__funcVN($params[0]), array_splice($params,1));
 	}
 	
 	
