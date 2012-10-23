@@ -137,10 +137,17 @@ class GW_Request
 	{
 		$parr = explode('/', $path);
 		$ln = array_shift($parr);
+<<<<<<< HEAD
 		
 		$path = implode('/', $parr);
 		
 		
+=======
+		
+		$path = implode('/', $parr);
+		
+		
+>>>>>>> bb2b825498f8836ed4b9d724215b303669bfe637
 
 		$path_clean = '';
 		$path='';
@@ -180,7 +187,41 @@ class GW_Request
 		if(is_numeric($path_arr[count($path_arr)-1]))
 			$path = dirname($path);
 					
+<<<<<<< HEAD
 		
+		
+		return compact('ln','path','path_arr','path_clean','data_object_id','path_arr_parent');
+		
+	}
+	
+	
+	function requestInfo()
+	{
+		$this->uri = Navigator::getUri();
+		$this->base = Navigator::getBase();
+		
+		
+		$pack = $this->requestInfoInner($_GET['url']);
+		
+		extract($pack);
+		
+		unset($_GET['url']);
+		
+		$this->path=$path;
+		$this->path_arr=$path_arr;		
+		$this->path_arr_parent=$path_arr_parent;
+		$this->path_clean=$path_clean;
+		
+		
+		$this->ln = in_array($ln, GW::$static_conf['LANGS']) ? $ln : GW::$static_conf['LANGS'][0];
+		$_SESSION['GW']['cms_ln']=$this->ln;		
+		
+=======
+>>>>>>> bb2b825498f8836ed4b9d724215b303669bfe637
+		
+		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
+		if($data_object_id)
+			$_GET['id']=$data_object_id;
 		
 		return compact('ln','path','path_arr','path_clean','data_object_id','path_arr_parent');
 		
@@ -255,7 +296,12 @@ class GW_Request
 		return $obj;
 	}
 	
+<<<<<<< HEAD
 	function constructModule1($path_info)
+=======
+	
+	function processModule($path_info, $request_params)
+>>>>>>> bb2b825498f8836ed4b9d724215b303669bfe637
 	{
 		$module = $this->constructModule($path_info['dirname'], $path_info['module']);
 		
@@ -278,6 +324,7 @@ class GW_Request
 
 		$module->init();
 		
+<<<<<<< HEAD
 		if(GW::$request->inner_request)
 			$module->ob_collect = false;
 		
@@ -303,17 +350,44 @@ class GW_Request
 		return $this->processModule($path_info, $request_args);		
 	}
 	
+=======
+		$module->process((array)$path_info['params'], $request_params);		
+	}
+	
+	
+	
+	/*
+	 * sms/mass?act=update
+	 * */
+	function innerProcess($path)
+	{
+		$path_e=explode('?', $path, 2);
+		
+		if(count($path_e)>1) {
+			list($path, $request_args)=$path_e;
+			parse_str($request_args, $request_args);
+		}
+		
+		$path_info=$this->getModulePathInfo($path);
+				
+		return $this->processModule($path_info, $request_args);		
+	}
+	
+>>>>>>> bb2b825498f8836ed4b9d724215b303669bfe637
 	function innerProcessStatic($path)
 	{
 		if(!GW::$request)
 			GW::$request=new GW_Request;
 			
+<<<<<<< HEAD
 			
 		if(!GW::$user)
 			GW::$user = new GW_ADM_User(1);
 			
 		GW::$request->inner_request=true;
 			
+=======
+>>>>>>> bb2b825498f8836ed4b9d724215b303669bfe637
 		return GW::$request->innerProcess($path);
 	}
 	
