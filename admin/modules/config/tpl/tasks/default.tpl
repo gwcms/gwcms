@@ -69,7 +69,9 @@
 	{foreach $tasks as $task}
 		<tr>
 			<td>{$task}</td>
-			<td>{gw_link do=run_task params=[task=>$task] title="DebugRun!"}
+			<td>
+				{gw_link do=show_logs params=[task=>$task] title="Show logs"}
+				{gw_link do=run_task params=[task=>$task] title="DebugRun!"}
 				{gw_link do=run_task_direct params=[task=>$task] title="DirectRun"}
 			</td>
 		</tr>	

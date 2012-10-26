@@ -1,5 +1,12 @@
 <?php
 
+
+//running > 0 - pid
+//running = 601 // sistema identifikavo proceso luzima
+//running = -1 // paruosti vykdimui
+//running = -2 // paimti vykdymui
+
+
 class GW_Task extends GW_Data_Object
 {
 	var $table = 'gw_tasks';

@@ -5,6 +5,7 @@ class GW_CronTask extends GW_Data_Object
 {
 	var $table = 'gw_crontasks';
 	
+	var $validators = Array('params'=>'gw_json');	
 
 	function getAllTimeMatches()
 	{
@@ -20,7 +21,7 @@ class GW_CronTask extends GW_Data_Object
 	
 	function execute()
 	{
-		GW_Task::addStatic($this->name);
+		GW_Task::addStatic($this->name, json_decode($this->params, true));
 	}
 	
 	function getByTimeMatchExecute($tm)

@@ -33,12 +33,16 @@ class Module_Tasks extends GW_Common_Module
 		$this->smarty->assign('tasks', $tasks);	
 	}	
 
+	/*Nusiusti signala system procesui vykdyti uzduoti*/
+	
 	function doRunTask()
 	{
 		GW_Task::addSingleStatic($_REQUEST['task'], Array('debug'=>1));
 
 		$this->jump();
 	}
+	
+	/* Paleisti uzduoti ir gauti atsakyma narsykleje*/
 	
 	function doRunTaskDirect()
 	{
@@ -47,12 +51,15 @@ class Module_Tasks extends GW_Common_Module
 
 	function doRemoveAll()
 	{
-		$list = $this->model->findAll('running=0');
-		
-		foreach($list as $item)
-			$item->delete();
+		while($list = $this->model->findAll('running=0',Array('limit'=>1000)))
+		{
+			foreach($list as $item)
+				$item->delete();
+				
+			$count +=count($list);
+		}
 			
-		GW::$request->setMessage("Removed items: ".count($list));
+		GW::$request->setMessage("Removed items: ".$count);
 		$this->jump();
 	}
 	
@@ -81,7 +88,7 @@ class Module_Tasks extends GW_Common_Module
 		return Array('list'=>$list);
 	}
 	
-	function dohaltProc()
+	function doHaltProc()
 	{
 		$pid=$_REQUEST['id'];
 		
@@ -94,12 +101,22 @@ class Module_Tasks extends GW_Common_Module
 		}
 		
 		if($_REQUEST['sigkill'])
-			$return=posix_kill($pid, 9);
+			$return=posix_kill($pid, 9); //hard
 		else
-			$return=posix_kill($pid, 15);
+			$return=posix_kill($pid, 15); //soft
 			
 			
 		GW::$request->setMessage("Task done: ".$return);
+		
+		$this->jump();
+	}
+	
+	
+	function doShowLogs()
+	{
+		$taskname=$_REQUEST['task'];
+		
+		$this->list_params['filters']['name']=Array('=',$taskname);
 		
 		$this->jump();
 	}

@@ -2,12 +2,16 @@
 
 <xml>
 
+	<i id="READ_ALL">Read all</i>
+	
+
 	<i id="FIELDS">
 		<i id="name">Name</i>
 		<i id="sql">SQL</i>
 		<i id="time_match">Time match</i>
 		<i id="path">Path</i>
 		<i id="actions">Actions</i>
+		<i id="params">Parameters</i>
 	</i>
 	
 	<i id="TASK_NAME">
@@ -44,7 +48,10 @@
 				<i id="title">Cron Tasks</i>
 				<i id="info"><i id="model">GW_CronTask</i></i>
 			</i>				
-			
+			<i id="messages">
+				<i id="title">Messages</i>
+				<i id="info"><i id="model">GW_Adm_Message</i></i>				
+			</i>			
 					
 		</i>
 					
