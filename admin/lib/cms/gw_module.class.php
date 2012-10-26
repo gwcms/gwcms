@@ -153,7 +153,12 @@ class GW_Module
 	function process($params=Array(), $request_params=Array())
 	{
 		if($act=$request_params['act'])
+		{
 			$this->process_act($act);
+			
+			if(isset($request_params['just_action'])) //prevent from displaying view
+				return true;
+		}
 		
 		$params=(array)$params;
 		$this->processView(self::__funcVN($params[0]), array_splice($params,1));
@@ -262,5 +267,3 @@ class GW_Module
 	
 }
 
-
-?>
