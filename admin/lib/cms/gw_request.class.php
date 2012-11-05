@@ -124,6 +124,17 @@ class GW_Request
 		$this->processModule($path_info);
 	}	
 
+	function requestInfoInnerDataObject(&$name, &$item)
+	{
+			if(is_numeric($name) && $item)
+			{
+				$item['data_object_id']=(int)$name;
+				$data_object_id = $item['data_object_id'];
+				$item['path'].='/'.$name;
+				return true;
+			}
+	}
+	
 	/**
 	* modulio vardas gali buti pvz: a) users/register arba tik  b) users
 	* klases failas gules:
@@ -131,7 +142,6 @@ class GW_Request
 	* b - users/users.class.php
 	*/
 
-	
 	//returns url
 	function requestInfoInner($path)
 	{
@@ -151,22 +161,14 @@ class GW_Request
 			
 			$path.=($path ? '/':'').$name;
 			
-			if(is_numeric($name) && $item)
-			{
-				$item['data_object_id']=(int)$name;
-				$data_object_id = $item['data_object_id'];
-				$item['path'].='/'.$name;
-				continue;
-			}
-			
+			if($this->requestInfoInnerDataObject($name, $item))
+				continue;			
 			
 			$path_clean.=($path_clean ? '/':'').$name;
 			
 			$item =& $path_arr[]; //prideti item i $path_arr
 			$item=Array('name'=>$name, 'path'=>$path, 'path_clean'=>$path_clean);
-		}
-
-		
+		}				
 
 		$path_arr_parent = 
 			count($path_arr) >= 2 ? 
