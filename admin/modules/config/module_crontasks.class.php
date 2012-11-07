@@ -71,4 +71,12 @@ class Module_CronTasks extends GW_Common_Module
 	function viewInfo()
 	{
 	}
+	
+	function doRun()
+	{
+		if(! $item = $this->getDataObjectById())
+			return false;
+
+		GW_Tasks_App::runDirect($item->name, Array('debug'=>1)+(array)json_decode($item->params, true));
+	}
 }

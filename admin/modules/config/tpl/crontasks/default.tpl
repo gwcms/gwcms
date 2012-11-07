@@ -15,6 +15,7 @@
 	
 	{function dl_actions_timematch}
 		{gw_link do=test_time_match params=[id=>$item->id] title="timeTest"}
+		{gw_link do=run params=[id=>$item->id] title="Run!"}
 	{/function}	
 	
 {/block}
