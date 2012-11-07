@@ -12,15 +12,24 @@
 	{include file="submenu.tpl"}
 	
         <div id="login-info">
-        	<b>{$lang.LOGGED_AS}:</b> <a href="{$request->ln}/users/profile">{GW::$user->get('name')|default:GW::$user->get('username')}</a> 
+        	<b>{$lang.LOGGED_AS}:</b> 
+        	<a href="{$request->ln}/adm_users/profile">{GW::$user->get('name')|default:GW::$user->get('username')} 
+        	 
+        	</a> 
         	{if $smarty.session.cms_auth.switchUser}
-        	<a href="{$request->ln}/users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+        	<a href="{$request->ln}/adm_users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		{$sw_usr_return=GW::$user->find(['id=?',$smarty.session.cms_auth.switchUser])}
         		({$lang.SWITCH_USER_RETURN|sprintf:$sw_usr_return->name})
         	</a>
         	{/if}
         	| 
-            	<a href="{$request->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
+            	<a href="{$request->ln}/adm_users/login/logout" id="logout">{$lang.LOGOUT}</a>
+            	
+            	{$new_messages=GW::$user->countNewMessages()}
+            	{if $new_messages}
+	            	<br>
+	            	<a href="{$ln}/config/messages"><font color="#ffff99">{$new_messages}</font> new messages</a>
+            	{/if}
 		</div>
     </div>
 

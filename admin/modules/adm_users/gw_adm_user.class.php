@@ -323,4 +323,9 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		
 		return $this->getAssoc(Array('id','username'), $cond);
 	}
+	
+	function countNewMessages()
+	{
+		return GW_Adm_Message::countStatic(Array('user_id=? AND seen=0',$this->id));
+	}
 }

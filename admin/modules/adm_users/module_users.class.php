@@ -1,6 +1,5 @@
 <?
 
-include GW::$dir['MODULES'].'users/gw_adm_users_group.class.php';
 
 class Module_Users extends GW_Common_Module
 {	

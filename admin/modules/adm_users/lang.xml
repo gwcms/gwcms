@@ -161,12 +161,16 @@
 		<i id="title">
 			<en>Users</en>
 			<lt>Vartotojai</lt>
-			<no>Brukera</no>	
 		</i>
-		
-		<i id="info"><i id="model">GW_Adm_User</i></i>
-		
+				
 		<i id="childs">
+			<i id="users">
+				<i id="title">
+					<en>Users</en>
+					<lt>Vartotojai</lt>				
+				</i>
+				<i id="info"><i id="model">GW_Adm_User</i></i>
+			</i>
 			<i id="profile">
 				<i id="title">
 					<en>My profile</en>
@@ -179,7 +183,6 @@
 				<i id="title">
 					<en>User identification</en>
 					<lt>Vartotojo identifikavimas</lt>
-					<no>Bruker identifisering</no>
 				</i>
 				<i id="in_menu">0</i>
 				<i id="public">1</i>			
@@ -188,15 +191,13 @@
 				<i id="title">
 					<en>Groups</en>
 					<lt>Grupės</lt>
-					<no>Grupper</no>
 				</i>
 				<i id="info"><i id="model">GW_Adm_Users_Group</i></i>
 			</i>
 			<i id="config">
 				<i id="title">
 					<en>Configuration</en>
-					<lt>Nustatymai</lt>
-					<no>Konfigurasjon</no>		
+					<lt>Nustatymai</lt>	
 				</i>
 			</i>			
 		</i>
