@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:35
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:19:42
          compiled from "/var/www/gw_cms/admin/templates/list/toolbar_buttons.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:20827557095056a7e369e204-58759460%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:1389856180509a8a1e0c78b4-88660917%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     'd4ca3228dbf2e2dae648ebda9035901ba94bc8ce' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/list/toolbar_buttons.tpl',
-      1 => 1336700913,
+      1 => 1350388662,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '20827557095056a7e369e204-58759460',
+  'nocache_hash' => '1389856180509a8a1e0c78b4-88660917',
   'function' => 
   array (
     'dl_toolbar_buttons_addnew' => 
@@ -36,6 +36,13 @@ $_smarty_tpl->decodeProperties(array (
       'compiled' => '',
     ),
     'dl_toolbar_buttons_dialogconf' => 
+    array (
+      'parameter' => 
+      array (
+      ),
+      'compiled' => '',
+    ),
+    'dl_toolbar_buttons_hidden' => 
     array (
       'parameter' => 
       array (
@@ -113,6 +120,33 @@ $_smarty_tpl->decodeProperties(array (
 </a>	
 	&nbsp;&nbsp;&nbsp;<?php $_smarty_tpl->tpl_vars = $saved_tpl_vars;}}?>
 	
+
+<?php if (!function_exists('smarty_template_function_dl_toolbar_buttons_hidden')) {
+    function smarty_template_function_dl_toolbar_buttons_hidden($_smarty_tpl,$params) {
+    $saved_tpl_vars = $_smarty_tpl->tpl_vars;
+    foreach ($_smarty_tpl->template_functions['dl_toolbar_buttons_hidden']['parameter'] as $key => $value) {$_smarty_tpl->tpl_vars[$key] = new Smarty_variable($value);};
+    foreach ($params as $key => $value) {$_smarty_tpl->tpl_vars[$key] = new Smarty_variable($value);}?>
+
+<div class="unhideroot" style="">
+	<img class="visible" align="absmiddle" src="img/icons/action_down24.png" onmouseover="$(this).next().offset({ left: $(this).offset().left})">
+	
+	<div class="dropdown">
+		<?php  $_smarty_tpl->tpl_vars['button_func'] = new Smarty_Variable;
+ $_from = $_smarty_tpl->getVariable('dl_toolbar_buttons_hidden')->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+if ($_smarty_tpl->_count($_from) > 0){
+    foreach ($_from as $_smarty_tpl->tpl_vars['button_func']->key => $_smarty_tpl->tpl_vars['button_func']->value){
+?>
+			<div class="menuitem">
+				<?php $tmp = "smarty_template_function_"."dl_toolbar_buttons_".($_smarty_tpl->tpl_vars['button_func']->value); $tmp($_smarty_tpl,array());?>
+
+			</div>
+		<?php }} ?>	
+	</div>
+</div><?php $_smarty_tpl->tpl_vars = $saved_tpl_vars;}}?>
+
+
+
+
 	
 <?php if (!function_exists('smarty_template_function_dl_display_toolbar_buttons')) {
     function smarty_template_function_dl_display_toolbar_buttons($_smarty_tpl,$params) {

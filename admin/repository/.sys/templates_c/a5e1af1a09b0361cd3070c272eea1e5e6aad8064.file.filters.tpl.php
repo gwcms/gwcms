@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:35
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:19:42
          compiled from "/var/www/gw_cms/admin/templates/list/filters.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:21049196515056a7e37bc866-50260747%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_smarty_tpl->decodeProperties(array (
     'a5e1af1a09b0361cd3070c272eea1e5e6aad8064' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/list/filters.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
   ),
@@ -17,7 +17,9 @@ $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 )); /*/%%SmartyHeaderCode%%*/?>
-<div id="filters" <?php if (!$_smarty_tpl->getVariable('m')->value->list_params['filters']){?>style="display:none"<?php }?>>
+<?php if (!is_callable('smarty_modifier_escape')) include '/var/www/gw_cms/admin/lib/smarty/plugins/modifier.escape.php';
+if (!is_callable('smarty_function_html_options')) include '/var/www/gw_cms/admin/lib/smarty/plugins/function.html_options.php';
+?><div id="filters" <?php if (!$_smarty_tpl->getVariable('m')->value->list_params['filters']){?>style="display:none"<?php }?>>
 
 
 <form method="POST" action="<?php echo $_SERVER['REQUEST_URI'];?>
