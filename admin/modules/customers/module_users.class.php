@@ -1,26 +1,28 @@
 <?
 
-include GW::$dir['MODULES'] . 'customers/gw_user.class.php';
-
 class Module_Users extends GW_Common_Module {
 
-    function init() {
+    function init() 
+    {
         $this->model = new GW_User();
         $this->filters['id'] = GW::$request->path_arr[1]['data_object_id'];
         parent::init();
     }
 
-    function viewDefault() {
+    function viewDefault() 
+    {
         $this->viewList();
     }
 
-    function viewList() {
+    function viewList() 
+    {
         $list = $this->model->findAll('! removed');
 
         $this->smarty->assign('list', $list);
     }
 
-    function doLogin() {
+    function doLogin() 
+    {
         $keep_username = strtotime(GW::$static_conf['GW_LOGIN_NAME_EXPIRATION']);
 
         list($user, $pass) = $_POST['login'];
@@ -52,7 +54,8 @@ class Module_Users extends GW_Common_Module {
             GW::$request->jump('', Array('ln' => $ln));
     }
 
-    function viewForm() {
+    function viewForm() 
+    {
 
         $item = $this->model->createNewObject();
         if ($id = $this->filters['id']) {
@@ -71,13 +74,9 @@ class Module_Users extends GW_Common_Module {
         $this->smarty->assign('item', $item);
     }
 
-    function doLogout() {
-        GW::$user->onLogout();
-        GW::$auth->logout();
-        GW::$request->jump(GW::$static_conf['GW_SITE_PATH_LOGIN']);
-    }
 
-    function doSave() {
+    function doSave() 
+    {
         $vals = $_REQUEST['item'];
 
         $item = $this->model->createNewObject();
@@ -103,7 +102,8 @@ class Module_Users extends GW_Common_Module {
         $this->jumpAfterSave($item);
     }
 
-    function doDelete() {
+    function doDelete() 
+    {
         if (!$item = $this->getDataObjectById())
             return;
 
@@ -117,7 +117,8 @@ class Module_Users extends GW_Common_Module {
         $this->jump();
     }
 
-    function doInvertActive() {
+    function doInvertActive() 
+    {
         if (!$item = $this->getDataObjectById())
             return;
 
