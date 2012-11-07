@@ -104,7 +104,7 @@ var gw_navigator =
 		return arr;
 	},
 	
-	jump: function(url, params)
+	url: function(url, params)
 	{
 		if(!url)
 			url=window.location.href;
@@ -116,8 +116,13 @@ var gw_navigator =
 			$.extend(url.query, params);
 			url = gw_navigator.implode_url(url);
 		}
-
-		window.location = url;
+		
+		return url
+	},
+	
+	jump: function(url, params)
+	{
+		window.location = gw_navigator.url(url, params);
 		return false;
 	},
 	
@@ -263,7 +268,7 @@ var gw_checklist =
 
 var gw_login_dialog = 
 {
-	page_path: '/users/login/dialog',
+	page_path: '/adm_users/login/dialog',
 		
 	is_open: function()
 	{

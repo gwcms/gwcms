@@ -15,7 +15,7 @@ if(file_exists(__DIR__.'/GW_ENV_PROD')){
 }
 
 
-GW::$static_conf['GW_SITE_PATH_LOGIN']='users/login';
+GW::$static_conf['GW_SITE_PATH_LOGIN']='adm_users/login';
 GW::$static_conf['GW_LOGIN_NAME_EXPIRATION']= '+1 month'; //strtotime format
 GW::$static_conf['GW_AUTOLOGIN_EXPIRATION']= '+2 week'; //strtotime format
 
