@@ -33,7 +33,7 @@ class FH
 	//if no value in module lang file, take it from main lang file
 	function altLang($key_arr)
 	{
-		return Array_Helper::altValue($key_arr, GW::$request->module->lang, GW::$lang);
+		return GW_Array_Helper::altValue($key_arr, GW::$request->module->lang, GW::$lang);
 	}
 	
 	//to use in javascript

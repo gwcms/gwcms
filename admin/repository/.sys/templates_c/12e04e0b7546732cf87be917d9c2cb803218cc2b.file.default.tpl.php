@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:14
          compiled from "/var/www/gw_cms/admin/modules/sitemap/tpl/pages/default.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:14486228875056a7e6479bb8-22662409%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_smarty_tpl->decodeProperties(array (
@@ -7,79 +7,79 @@ $_smarty_tpl->decodeProperties(array (
     '12e04e0b7546732cf87be917d9c2cb803218cc2b' => 
     array (
       0 => '/var/www/gw_cms/admin/modules/sitemap/tpl/pages/default.tpl',
-      1 => 1347848830,
+      1 => 1349098715,
       2 => 'file',
     ),
     '0b170a821b056d972af5f48b04cf7740d59de6f7' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/default_list.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '1d7e0c025a0e487299f887a03f1f879c92cbcd97' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/default_open.tpl',
-      1 => 1336700913,
+      1 => 1352303821,
       2 => 'file',
     ),
     'd8a21e5610e678242dc26f988e0808985e7a4cf5' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/head.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '8c20bd38485ec4c30c0f48cd6f90984e0cd2202f' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/submenu.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     'daa6800c06674c0ffcb75a79577911b9fa125bcc' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/menu.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '30b19fc9151db3227c62488b62d3dbd9bc26f772' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/breadcrumbs.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '65f7bcd5989888e29d4afac7d823cae913ffabe0' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/toolbar.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     'c3bc32a853c308f45049d343bd575557e6446278' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/messages.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '65d05b43f7df9cca48e781a5613e8d609e57e863' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/list/page_by.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '9c1ef86bf7b37eb95f7d110ced5a8f9e3b9371cb' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/list/paging.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '2d7024ba003ca3fa6796bc5f651044d32aa90556' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/default_close.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
     '156f1e9752f8c14884ebd969b6317c1f83493c7e' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/footer.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
   ),
@@ -118,13 +118,13 @@ $_smarty_tpl->decodeProperties(array (
 		<?php $_template = new Smarty_Internal_Template_Custom("default_open.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
 $_template->properties['nocache_hash']  = '14486228875056a7e6479bb8-22662409';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:14
          compiled from "/var/www/gw_cms/admin/templates/default_open.tpl" */ ?>
 <?php if (!is_callable('smarty_function_gw_display_plugins')) include '/var/www/gw_cms/admin/lib/smarty/plugins/function.gw_display_plugins.php';
 ?><?php $_template = new Smarty_Internal_Template_Custom("head.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:14
          compiled from "/var/www/gw_cms/admin/templates/head.tpl" */ ?>
 <?php if (!is_callable('smarty_block_php')) include '/var/www/gw_cms/admin/lib/smarty/plugins/block.php.php';
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -184,9 +184,9 @@ $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
         </div>
         
 	<?php $_template = new Smarty_Internal_Template_Custom("submenu.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:14
          compiled from "/var/www/gw_cms/admin/templates/submenu.tpl" */ ?>
 <?php $_smarty_tpl->tpl_vars['first_pageid'] = new Smarty_variable($_smarty_tpl->getVariable('request')->value->path_arr[0], null, null);?>
 
@@ -211,12 +211,15 @@ if ($_smarty_tpl->_count($_from) > 0){
 	
         <div id="login-info">
         	<b><?php echo $_smarty_tpl->getVariable('lang')->value['LOGGED_AS'];?>
-:</b> <a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users/profile"><?php echo (($tmp = @GW::$user->get('name'))===null||$tmp==='' ? GW::$user->get('username') : $tmp);?>
-</a> 
+:</b> 
+        	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
+/adm_users/profile"><?php echo (($tmp = @GW::$user->get('name'))===null||$tmp==='' ? GW::$user->get('username') : $tmp);?>
+ 
+        	 
+        	</a> 
         	<?php if ($_SESSION['cms_auth']['switchUser']){?>
         	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+/adm_users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		<?php $_smarty_tpl->tpl_vars['sw_usr_return'] = new Smarty_variable(GW::$user->find(array('id=?',$_SESSION['cms_auth']['switchUser'])), null, null);?>
         		(<?php echo sprintf($_smarty_tpl->getVariable('lang')->value['SWITCH_USER_RETURN'],$_smarty_tpl->getVariable('sw_usr_return')->value->name);?>
 )
@@ -224,16 +227,24 @@ if ($_smarty_tpl->_count($_from) > 0){
         	<?php }?>
         	| 
             	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users/login/logout" id="logout"><?php echo $_smarty_tpl->getVariable('lang')->value['LOGOUT'];?>
+/adm_users/login/logout" id="logout"><?php echo $_smarty_tpl->getVariable('lang')->value['LOGOUT'];?>
 </a>
+            	
+            	<?php $_smarty_tpl->tpl_vars['new_messages'] = new Smarty_variable(GW::$user->countNewMessages(), null, null);?>
+            	<?php if ($_smarty_tpl->getVariable('new_messages')->value){?>
+	            	<br>
+	            	<a href="<?php echo $_smarty_tpl->getVariable('ln')->value;?>
+/config/messages"><font color="#ffff99"><?php echo $_smarty_tpl->getVariable('new_messages')->value;?>
+</font> new messages</a>
+            	<?php }?>
 		</div>
     </div>
 
     <div id="sidebar">
 		<?php $_template = new Smarty_Internal_Template_Custom("menu.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/menu.tpl" */ ?>
 <div id="firstpane" class="menu_list"> <!--Code for menu starts here-->
 
@@ -284,9 +295,9 @@ if ($_smarty_tpl->_count($_from) > 0){
     </div>
 
 	<?php $_template = new Smarty_Internal_Template_Custom("breadcrumbs.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/breadcrumbs.tpl" */ ?>
 
 <?php $_smarty_tpl->tpl_vars['list'] = new Smarty_variable($_smarty_tpl->getVariable('request')->value->path_arr, null, null);?>
@@ -362,9 +373,9 @@ if ($_smarty_tpl->tpl_vars['path']->total > 0){
 <?php /*  End of included template "/var/www/gw_cms/admin/templates/breadcrumbs.tpl" */ ?>
 <?php $_smarty_tpl = array_pop($_tpl_stack);?><?php unset($_template);?>
 	<?php if ($_smarty_tpl->getVariable('toolbar')->value){?><?php $_template = new Smarty_Internal_Template_Custom("toolbar.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/toolbar.tpl" */ ?>
 <div class="gw_toolbar">
 	<table cellpadding=2px cellspacing=0>
@@ -404,9 +415,9 @@ if ($_smarty_tpl->_count($_from) > 0){
 <?php }?>
 
 <?php $_template = new Smarty_Internal_Template_Custom("messages.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14586061925056a7e64b2f23-38547531';
+$_template->properties['nocache_hash']  = '882311220509a8b2eebaec9-75604494';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/messages.tpl" */ ?>
 <?php if ($_SESSION['messages']){?>
 
@@ -563,7 +574,7 @@ $_smarty_tpl->tpl_vars['dl_toolbar_buttons']->value[] = 'dialogconf';?>
 			<?php $_template = new Smarty_Internal_Template_Custom("list/page_by.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
 $_template->properties['nocache_hash']  = '14486228875056a7e6479bb8-22662409';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/list/page_by.tpl" */ ?>
 <table class="gwTable" cellspacing="0" cellpadding="0">
 	<tr>
@@ -723,7 +734,7 @@ if ($_smarty_tpl->_count($_from) > 0){
 		<?php $_template = new Smarty_Internal_Template_Custom("default_close.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
 $_template->properties['nocache_hash']  = '14486228875056a7e6479bb8-22662409';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/default_close.tpl" */ ?>
 <?php if (!$_GET['clean']){?>
 <br /><br />
@@ -735,9 +746,9 @@ $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
 
 <div id="footer">
     <?php $_template = new Smarty_Internal_Template_Custom("footer.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
-$_template->properties['nocache_hash']  = '14350981805056a7e69df908-56158611';
+$_template->properties['nocache_hash']  = '474467671509a8b2f593ea3-37321654';
 $_tpl_stack[] = $_smarty_tpl; $_smarty_tpl = $_template;?>
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:38
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:15
          compiled from "/var/www/gw_cms/admin/templates/footer.tpl" */ ?>
 
 <div style="float:left">

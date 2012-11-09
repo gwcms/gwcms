@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:41
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:05
          compiled from "/var/www/gw_cms/admin/templates/default_open.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4829174145056a7e936a2a5-73656285%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_smarty_tpl->decodeProperties(array (
     '1d7e0c025a0e487299f887a03f1f879c92cbcd97' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/default_open.tpl',
-      1 => 1336700913,
+      1 => 1352303821,
       2 => 'file',
     ),
   ),
@@ -36,12 +36,15 @@ $_smarty_tpl->decodeProperties(array (
 	
         <div id="login-info">
         	<b><?php echo $_smarty_tpl->getVariable('lang')->value['LOGGED_AS'];?>
-:</b> <a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users/profile"><?php echo (($tmp = @GW::$user->get('name'))===null||$tmp==='' ? GW::$user->get('username') : $tmp);?>
-</a> 
+:</b> 
+        	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
+/adm_users/profile"><?php echo (($tmp = @GW::$user->get('name'))===null||$tmp==='' ? GW::$user->get('username') : $tmp);?>
+ 
+        	 
+        	</a> 
         	<?php if ($_SESSION['cms_auth']['switchUser']){?>
         	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+/adm_users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		<?php $_smarty_tpl->tpl_vars['sw_usr_return'] = new Smarty_variable(GW::$user->find(array('id=?',$_SESSION['cms_auth']['switchUser'])), null, null);?>
         		(<?php echo sprintf($_smarty_tpl->getVariable('lang')->value['SWITCH_USER_RETURN'],$_smarty_tpl->getVariable('sw_usr_return')->value->name);?>
 )
@@ -49,8 +52,16 @@ $_smarty_tpl->decodeProperties(array (
         	<?php }?>
         	| 
             	<a href="<?php echo $_smarty_tpl->getVariable('request')->value->ln;?>
-/users/login/logout" id="logout"><?php echo $_smarty_tpl->getVariable('lang')->value['LOGOUT'];?>
+/adm_users/login/logout" id="logout"><?php echo $_smarty_tpl->getVariable('lang')->value['LOGOUT'];?>
 </a>
+            	
+            	<?php $_smarty_tpl->tpl_vars['new_messages'] = new Smarty_variable(GW::$user->countNewMessages(), null, null);?>
+            	<?php if ($_smarty_tpl->getVariable('new_messages')->value){?>
+	            	<br>
+	            	<a href="<?php echo $_smarty_tpl->getVariable('ln')->value;?>
+/config/messages"><font color="#ffff99"><?php echo $_smarty_tpl->getVariable('new_messages')->value;?>
+</font> new messages</a>
+            	<?php }?>
 		</div>
     </div>
 

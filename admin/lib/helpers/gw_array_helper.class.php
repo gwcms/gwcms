@@ -1,6 +1,6 @@
 <?php
 
-class Array_Helper
+class GW_Array_Helper
 {
 	/**
 	 * access value in array by key array

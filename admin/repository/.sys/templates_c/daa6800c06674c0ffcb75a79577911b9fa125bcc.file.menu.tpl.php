@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.0.7, created on 2012-09-17 07:32:41
+<?php /* Smarty version Smarty-3.0.7, created on 2012-11-07 18:24:01
          compiled from "/var/www/gw_cms/admin/templates/menu.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:20513426575056a7e9464317-61303590%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_smarty_tpl->decodeProperties(array (
     'daa6800c06674c0ffcb75a79577911b9fa125bcc' => 
     array (
       0 => '/var/www/gw_cms/admin/templates/menu.tpl',
-      1 => 1336700913,
+      1 => 1349098715,
       2 => 'file',
     ),
   ),

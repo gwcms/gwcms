@@ -62,7 +62,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 				$this->errors['pass_new_repeat']='/USER/PASS_REPEAT';	
 		
 		if($this->validators['unique_username'])
-			if($this->count(Array('username=? AND !removed', $this->get('username'))))
+			if($this->count(Array('username=? AND removed!=0', $this->get('username'))))
 				$this->errors['username']='/USER/USERNAME_TAKEN';		
 				
 		return $this->errors ? false : true;	
