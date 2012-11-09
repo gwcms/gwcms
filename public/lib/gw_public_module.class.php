@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 class GW_Public_Module
 {
 	var $module_file;
@@ -10,6 +7,7 @@ class GW_Public_Module
 	var $module_dir;
 	var $lang;
 	var $smarty;
+	var $errors;
 
 
 	function __construct($variables=Array())
@@ -119,5 +117,24 @@ class GW_Public_Module
 
 		$this->processView($view_name, $params);
 	}
+	
+	function setErrors($errors, $level=2)
+	{
+		GW::$request->setErrors($errors, $level);	
+
+		$this->errors = array_merge($this->errors, (array)$errors);		
+		
+		$this->loadErrorFields();
+	}
+	
+	function loadErrorFields()
+	{		
+		foreach((array)$_SESSION['messages'] as $field => $error)
+		{
+			if($error[0]===2)
+				$this->error_fields[$field]=$field;
+		}
+	}	
+		
 	
 }
