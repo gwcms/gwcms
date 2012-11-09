@@ -21,8 +21,10 @@
 	
 {/if}
 
+
+
 <tr id="gw_input_{$name}">
-	<td class="input_label_td" width="{$width_title}" {if $m->error_fields.$name}class="error_label"{/if}{if $nowrap} nowrap{/if}>
+	<td class="input_label_td {if $m->error_fields.$name}error_label{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if $hidden_note}<span class="tooltip" title="{$hidden_note}">{$title}</span>{else}{$title}{/if}
 			{if $i18n || $item->i18n_fields.$name}<sup title="International" class="i18n_tag">(Int)</sup>{/if}

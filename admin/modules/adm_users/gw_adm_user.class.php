@@ -3,6 +3,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 {
 	var $table = 'gw_adm_users';
 	var $min_pass_length=4;
+	var $max_pass_length=200;	
 	var $validators = Array();
 	var $calculate_fields = Array('group_ids'=>1,'title'=>1, 'api_key'=>1);
 	var $ignore_fields = Array('pass_old'=>1, 'pass_new'=>1, 'pass_new_repeat'=>1);
@@ -12,50 +13,55 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		'link_groups' => Array('gw_links', Array('table'=>'gw_link_user_groups')),
 	);
 	var $autologgedin=false;
+	var $validators_def;
+	var $validators_set;
 	
-	
-	function setValidators($set)
+
+	function loadValidators()
 	{
-		if(!$set)
-			return $this->validators=Array(); //remove validators
-		
-		$validators_def = 
+		$this->validators_def = 
 			Array(
-				'username' => Array('gw_string', Array('min_length'=>3, 'max_length'=>20)),
-				'email'=>'gw_email',
+				'username' => Array('gw_string', Array('min_length'=>3, 'max_length'=>20, 'required'=>1)),
+				'email'=>Array('gw_email', Array('required'=>1)),
 				'pass_old'=>1,
-				'pass_new'=>1,
+				'pass_new'=>Array('gw_string', Array('min_length'=>6, 'max_length'=>200)),
 				'pass_new_repeat'=>1,
 				'unique_username'=>1,
 			);
 
-		$validators_set = Array
+		$this->validators_set = Array
 		(
 			'change_pass_check_old'=> Array('pass_old', 'pass_new', 'pass_new_repeat'),
 			'change_pass' => Array('pass_new'),
 			'insert' => Array('username', 'unique_username', 'email','pass_new'),
 			'update' => Array('username', 'email', 'pass_new')
-		);		
+		);
+	}
+	
+	function setValidators($set)
+	{
+		if(!$set)
+			return $this->validators=Array(); //remove validators
+			
+		$this->loadValidators();
 		
 		$this->validators = Array();
 		
-		foreach($validators_set[$set] as $key)
-			$this->validators[$key] = $validators_def[$key];
-		
+		foreach($this->validators_set[$set] as $key)
+			$this->validators[$key] = $this->validators_def[$key];
+			
+			
+		if($set=='insert')
+			$this->validators['pass_new'][1]['required']=1;
 	}
 	
 	function validate()
 	{
-		if(!parent::validate())
-			return false;
-		
+		parent::validate();
+						
 		if($this->validators['pass_old'])
 			if(!$this->checkPass($this->get('pass_old')))
-				$this->errors['pass_old']='/USER/PASS_OLD';
-		
-		if($this->validators['pass_new'] && $this->get('pass_new'))
-			if(mb_strlen($this->get('pass_new')) < $this->min_pass_length)
-				$this->errors['pass_new']='/USER/PASS_TOO_SHORT';	
+				$this->errors['pass_old']='/USER/PASS_OLD';				
 		
 		if($this->validators['pass_new_repeat'])
 			if($this->get('pass_new')!=$this->get('pass_new_repeat'))
@@ -63,10 +69,11 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		
 		if($this->validators['unique_username'])
 			if($this->count(Array('username=? AND removed!=0', $this->get('username'))))
-				$this->errors['username']='/USER/USERNAME_TAKEN';		
+				$this->errors['username']='/USER/USERNAME_TAKEN';
 				
 		return $this->errors ? false : true;	
 	}
+	
 	
 	
 	function logLogin()
@@ -103,7 +110,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		return (strpos($has_keys,";$key;")!==false) || (strpos($has_keys,';su;')!==false);
 	}
 
-	static function cryptPass($pass, $salt=null)
+	function cryptPass($pass, $salt=null)
 	{
 		if($pass){//cant be empty
 			return $salt ? crypt($pass, $salt) : crypt($pass);
@@ -118,7 +125,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 			
 		$tmp = $this->get('pass');
 				
-		return $tmp == self::cryptPass($pass,$tmp);
+		return $tmp == $this->cryptPass($pass,$tmp);
 	}
 	
 	function EventHandler($event)
@@ -127,7 +134,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		{
 			case 'BEFORE_SAVE':
 				if($this->content_base['pass_new'])
-					$this->set('pass', self::cryptPass($this->get('pass_new')));
+					$this->set('pass', $this->cryptPass($this->get('pass_new')));
 
 			break;	
 		}
@@ -197,6 +204,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	function getByUsernamePass($username, $pass)
 	{
 		$user = $this->getByUsername($username);
+		
 		if($user && $user->checkPass($pass))
 			return $user;	
 	}
@@ -304,7 +312,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 			die("BAD API KEY");
 		
 		
-			return $user;
+		return $user;
 	}
 	
 	function onLogout()

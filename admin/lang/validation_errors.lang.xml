@@ -4,57 +4,34 @@
 	<i id="EMAIL">
 		<i id="INVALID_EMAIL">
 			<en>Invalid e-mail address format.</en>
-			<no>Ugyldig e-post adresse.</no></i>
+			<lt>Neteisingas el. pašto adresas</lt>
+		</i>
 	</i>
 	
 	<i id="STRING">
 		<i id="MIN_LENGTH">
 			<en>Too short</en>
-			<no>For kort</no>
+			<lt>Per trumpas</lt>
 		</i>
 		<i id="MAX_LENGTH">
 			<en>Too long</en>
-			<no>For lang</no>
+			<lt>Per ilgas</lt>
 		</i>
 	</i>
 
 	<i id="REQUIRED">
 		<en>Required</en>
-		<no>Må fylles ut</no>
+		<lt>Būtina užpildyti</lt>
 	</i>
 
 	<i id="UNIQUE">
 		<en>Not unique</en>
-		<no>Ikke unik</no>
+		<lt>Ne unikalus</lt>
 	</i>
-	
-	<i id="PHONE">
-		<i id="ILLEGAL_NAME_FORMAT">
-			<en>Illegal phone format.</en>
-			<no>Ugyldig telefon nummer.</no>
-		</i>
-		<i id="MIN_LENGTH">
-			<en>Phone is too short.</en>
-			<no>Telefon nummer er for kort.</no>
-		</i>
-		<i id="MAX_LENGTH">
-			<en>Phone number is too long.</en>
-			<no>Telefon nummer er for lang.</no>
-		</i>
-	</i>
-	<i id="NAME">
-		<i id="ILLEGAL_NAME_FORMAT">
-			<en>Illegal name format.</en>
-			<no>Ugyldig navn.</no>
-		</i>
-		<i id="MIN_LENGTH">
-			<en>Name is too short.</en>
-			<no>Navn er for kort.</no>
-		</i>
-		<i id="MAX_LENGTH">
-			<en>Name is too long.</en>
-			<no>Navn er for lang.</no>
-		</i>
+
+	<i id="ILLEGAL_PHONE">
+		<en>Invalid phone number</en>
+		<lt>Neteisingas tel. numeris</lt>
 	</i>
 
 </xml>

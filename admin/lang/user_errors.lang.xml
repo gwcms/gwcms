@@ -4,30 +4,21 @@
 	<i id="PASS_OLD">
 		<en>Wrong current password</en>
 		<lt>Neteisingas dabartinis slaptažodis</lt>
-		<no>Feil gammel passord</no>
 	</i>
 	<i id="PASS_TOO_SHORT">
 		<en>Password too short</en>
 		<lt>Per trumpas slaptažodis</lt>
-		<no>Passord for kort</no>
 	</i>
 	<i id="PASS_REPEAT">
 		<en>Passwords do not match</en>
 		<lt>Nesutampa slaptažodžiai</lt>
-		<no>Passordene er ikke like</no>
 	</i>
 	<i id="USERNAME_TAKEN">
 		<en>Username already taken</en>
 		<lt>Vartotojo vardas jau užimtas</lt>
-		<no>Brukenavn alerede i bruk</no>
 	</i>
 	<i id="EMAIL_TAKEN">
 		<en>Email already taken</en>
 		<lt>Vartotojo e-pastas jau užimtas</lt>
-		<no>Epost alerede i bruk</no>
-	</i>
-	<i id="LICENSE">
-		<en>You must agree to our Terms and Conditions.</en>
-		<no>Du må akseptere kjøpebetingelser.</no>
 	</i>
 </xml>
