@@ -7,7 +7,7 @@ class GW_Public_Module
 	var $module_dir;
 	var $lang;
 	var $smarty;
-	var $errors;
+	var $errors=Array();
 
 
 	function __construct($variables=Array())
