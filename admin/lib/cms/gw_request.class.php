@@ -24,6 +24,12 @@ class GW_Request
 	var $carry_params = Array();
 	var $inner_request = false;	
 	
+	
+	/*
+	 * loaded from session!
+	 * */
+	var $errors;
+	
 
 	function __construct()
 	{	
@@ -331,18 +337,30 @@ class GW_Request
 			$_SESSION['messages'][$field]=Array(0,$msg);	
 	}
 	
-	function removeMessages()
+	function acceptMessages()
 	{
+		$data = $_SESSION['messages'];
+		
 		$_SESSION['messages']=Null;
+		
+		//copy errors
+		foreach($data as $key => $item)
+			if($item[0]==2)
+				$this->errors[$key] = $item;
+						
+		return $data;
 	}
 	
 	/**
 	 * level 2=error, 1=warning, 3=info
 	 */
 	function setErrors($errors=Array(), $level=2)
-	{
+	{		
 		foreach((array)$errors as $field => $error_str)
-			$_SESSION['messages'][$field]=Array($level,$error_str);	
+			if(is_numeric($field))
+				$_SESSION['messages'][]=Array($level,$error_str);	
+			else
+				$_SESSION['messages'][$field]=Array($level,$error_str);		
 	}
 	
 	

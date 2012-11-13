@@ -107,6 +107,9 @@ class GW_Public_Request extends GW_Request
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 
 		$m = new $classname(Array('module_file'=>$file));
+		
+		$this->module =& $m;
+		
 		$m->process($this->path_arg);
 
 		exit;
