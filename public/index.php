@@ -27,13 +27,9 @@ GW_Error_Message::$langf_dir = GW::$dir['PUB_LANG'];
 
 GW::$lang=GW_Lang_XML::load(GW::$dir['PUB']."lang/lang.xml", GW::$request->ln);
 
-/*padangu-arsenalas.lt specific*/
+
 
 include GW::$dir['ADMIN'].'init_smarty.php';
-
-$lang = GW_Lang_XML::load(GW::$dir['MODULES'].'products/lang.xml',GW::$request->ln);
-GW::$smarty->assign('lang_products', $lang);
-
 include_once __DIR__.'/init_auth.php';
 
 GW::$request->process();
