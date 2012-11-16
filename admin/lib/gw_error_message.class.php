@@ -4,10 +4,12 @@ class GW_Error_Message
 {
 	static $cache;
 	static $ln;
+	static $langf_dir;
+	
 	
 	function getLangFile($file_id)
 	{
-		return GW::$dir['ADMIN']."lang/{$file_id}_errors.lang.xml";
+		return (self::$langf_dir ? self::$langf_dir : GW::$dir['ADMIN'].'lang/') ."{$file_id}_errors.lang.xml";
 	}
 	
 	

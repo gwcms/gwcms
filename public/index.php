@@ -8,7 +8,7 @@ include_once __DIR__.'/init.php';
 
 
 if(!is_array(GW::$static_conf['PUB_LANGS']))
-	die('no public');
+die('no public');
 
 include GW::$dir['MODULES'].'sitemap/gw_page.class.php';
 
@@ -17,14 +17,22 @@ $GLOBALS['proc_timer']=new GW_Timer();
 
 GW::$request=new GW_Public_Request();
 
+
 GW::$request->ifAjaxCallProcess();
 GW::$request->init();
 
-include GW::$dir['PUB_LIB'].'gw_public_error_message.class.php';
 
-GW_Public_Error_Message::$ln = GW::$request->ln;
-GW::$lang=GW_Lang_XML::load(GW::$dir['PUB']."lang/lang.xml", GW::$request->ln);	
+GW_Error_Message::$ln = GW::$request->ln;
+GW_Error_Message::$langf_dir = GW::$dir['PUB_LANG'];
+
+GW::$lang=GW_Lang_XML::load(GW::$dir['PUB']."lang/lang.xml", GW::$request->ln);
+
+/*padangu-arsenalas.lt specific*/
+
 include GW::$dir['ADMIN'].'init_smarty.php';
+
+$lang = GW_Lang_XML::load(GW::$dir['MODULES'].'products/lang.xml',GW::$request->ln);
+GW::$smarty->assign('lang_products', $lang);
 
 include_once __DIR__.'/init_auth.php';
 
