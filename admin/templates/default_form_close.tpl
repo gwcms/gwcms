@@ -7,7 +7,7 @@
 
 
 {if GW::$smarty->template_functions.df_after_form}
-	{df_after_form}
+	{call name="df_after_form"}
 {/if}
 
 {if $update}

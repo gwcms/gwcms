@@ -43,6 +43,9 @@ class GW_Public_Module
 
 	function processView($name, $params=Array())
 	{
+		if($name=='')
+			$name="default";
+	
 		$methodname="view".$name;
 		$this->$methodname($params);
 
