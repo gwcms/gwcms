@@ -55,7 +55,7 @@ class GW_Json_Format_Helper
 		return $result;
 	}
 	
-	function f($arr)
+	static function f($arr)
 	{
 		return self::format(json_encode($arr));
 	}

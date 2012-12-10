@@ -16,7 +16,6 @@ $rsync_params=array(
 $rsync_params += GW_App_Base::parseParams();
 
 
-
 if($rsync_params['run'])
 {
 	unset($rsync_params['run']);

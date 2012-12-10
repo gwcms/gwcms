@@ -12,7 +12,7 @@ class Rsync_Helper
 	 *   dry_run
 	 *   excludes example "Array('.svn','repository/*')"
 	 */
-	function exec($params)
+	static function exec($params)
 	{
 		$rsync_params = "Ovrtgoz";
 	

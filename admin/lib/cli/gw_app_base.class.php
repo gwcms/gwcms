@@ -80,7 +80,7 @@ class GW_App_Base
 	}
 
 
-	function parseParams()
+	static function parseParams()
 	{
 		$params = array();
 		foreach ($GLOBALS['argv'] as $arg) 
