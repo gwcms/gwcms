@@ -7,7 +7,7 @@ include dirname(__DIR__).'/admin/init.php';
 
 $source=dirname(__DIR__).'/';
 $dest_dir="/home/www/gw_cms";
-$dest_userdomain="root@uostas.net";
+$dest_userdomain="root@gw.lt";
 $dest_ssh_port="63842";//default 22
 
 include __DIR__.'/excludes_for_general_cms.php';
