@@ -158,3 +158,46 @@ Backtrace:
 #12 /var/www/gw_cms/admin/lib/cms/gw_request.class.php:312, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]}]
 #13 /var/www/gw_cms/admin/index.php:23, $GW_Request->process, ARGS: []
 --------------
+121210 21:45:07 #2048: Non-static method GW_App_Base::parseParams() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:16 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:16, function parseParams, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:46:21 #2048: Non-static method GW_App_Base::parseParams() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:16 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:16, function parseParams, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:47:44 #2048: Non-static method GW_App_Base::parseParams() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:16 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:16, function parseParams, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:47:56 #2048: Non-static method GW_App_Base::parseParams() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:16 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:16, function parseParams, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:50:06 #2048: Non-static method GW_App_Base::parseParams() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:16 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:16, function parseParams, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:50:45 #2048: Non-static method GW_Json_Format_Helper::f() should not be called statically. File: /var/www/gw_cms/admin/lib/sys_common.php:21 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/admin/lib/sys_common.php:21, function f, ARGS: null
+#1 /var/www/gw_cms/deploy/general_rsync.php:18, function dump, ARGS: [{"destination":"root@gw.lt:\/home\/www\/gw_cms","remote_ssh_port":"63842","source":"\/var\/www\/gw_cms\/","excludes":[".svn","modules\/dropindesign\/*","modules\/tometa\/*","modules\/customers\/*","project_name.php","repository\/*","public\/*","\/.htaccess","\/.project","\/.buildpath","\/.git","\/deploy"]}]
+#2 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
+121210 21:52:19 #2048: Non-static method Rsync_Helper::exec() should not be called statically. File: /var/www/gw_cms/deploy/general_rsync.php:32 remote_addr: 
+Backtrace:
+--------------
+#0 /var/www/gw_cms/deploy/general_rsync.php:32, function exec, ARGS: null
+#1 /var/www/gw_cms/deploy/cms.gw.lt.php:14, function include, ARGS: ["\/var\/www\/gw_cms\/deploy\/general_rsync.php"]
+--------------
