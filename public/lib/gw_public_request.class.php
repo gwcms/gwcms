@@ -16,7 +16,7 @@ class GW_Public_Request extends GW_Request
 	var $page;
 	var $module;
 	var $base;
-	var $path_arg=Array();
+	var $path_arg;
 
 	function __construct()
 	{
@@ -41,16 +41,66 @@ class GW_Public_Request extends GW_Request
 				return true;
 			}
 				
-			array_unshift($this->path_arg, $this->path_arr[$i]['name']);
+			$this->path_arg= $this->path_arr[$i]['name'].($this->path_arg?'/':'').$this->path_arg;
 		}
 
 		return false;
 	}
-	
-	//no data objects catching
-	function requestInfoInnerDataObject()
+
+
+	function requestInfo()
 	{
-	}	
+		$this->uri = Navigator::getUri();
+		$this->base = Navigator::getBase();
+
+		$path_arr = explode('/', $_GET['url']);
+		unset($_GET['url']);
+
+
+		$ln = array_shift($path_arr);
+		$this->ln = in_array($ln, GW::$static_conf['PUB_LANGS']) ? $ln : GW::$static_conf['PUB_LANGS'][0];
+
+		$_SESSION['GW']['ln']=$this->ln;
+
+
+		$this->path=implode('/', $path_arr);
+
+		$this->path_arr = Array();
+		$path_clean = '';
+		$path='';
+		$item=false;
+
+		foreach($path_arr as $i => $name)
+		{
+				
+			$path.=($path ? '/':'').$name;
+				
+			/*
+			 if(is_numeric($name) && $item)
+			 {
+				$item['data_object_id']=(int)$name;
+				$item['path'].='/'.$name;
+				continue;
+				}
+				*/
+				
+			$path_clean.=($path_clean ? '/':'').$name;
+				
+			$item =& $this->path_arr[];
+			$item=Array('name'=>$name, 'path'=>$path, 'path_clean'=>$path_clean);
+		}
+
+
+
+		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
+		if($item['data_object_id'])
+		$_GET['id']=$item['data_object_id'];
+			
+		$this->path_clean = $path_clean;
+	}
+
+
+
 
 	function _jmpFrst($cp=true)
 	{
@@ -59,7 +109,7 @@ class GW_Public_Request extends GW_Request
 		$page = $item0->getChilds(Array('in_menu'=>1,'return_first_only'=>1));
 
 		if(!$page)
-			die('No active pages');
+		die('No active pages');
 
 			
 		$this->jump($page->path);
@@ -88,7 +138,7 @@ class GW_Public_Request extends GW_Request
 	function ifAjaxCallProcess()
 	{
 		if($_GET['act']!='do:json')
-			return;
+		return;
 
 		$this->processModule(GW::$dir["PUB_MODULES"].$_GET['module']);
 	}
@@ -107,9 +157,6 @@ class GW_Public_Request extends GW_Request
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 
 		$m = new $classname(Array('module_file'=>$file));
-		
-		$this->module =& $m;
-		
 		$m->process($this->path_arg);
 
 		exit;
@@ -137,7 +184,7 @@ class GW_Public_Request extends GW_Request
 	function processPage()
 	{
 		if(!$template=$this->page->getTemplate())
-			die('Template not set');
+		die('Template not set');
 			
 		$file = GW::$dir['PUB'].$template->path;
 
@@ -155,7 +202,7 @@ class GW_Public_Request extends GW_Request
 	function process()
 	{
 		if(!$this->page->id)
-			$this->jumpToFirstPage();
+		$this->jumpToFirstPage();
 
 		switch($this->page->type)
 		{
