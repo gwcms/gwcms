@@ -11,7 +11,7 @@ include_once __DIR__.'/gw_template.class.php';
 
 
 
-class GW_Page extends GW_i18n_Data_Object
+class GW_Page extends GW_Composite_Data_Object
 {
 	var $table = 'gw_sitemap';
 	var $i18n_fields = Array('title'=>1, 'in_menu'=>1);
@@ -184,6 +184,22 @@ class GW_Page extends GW_i18n_Data_Object
 			return $this->_lang;
 		
 		return GW::$request->ln;
+	}
+	
+	function addImageSettings()
+	{
+		foreach($this->getInputs() as $input){
+			if($input->type=='image')
+				$this->composite_map[$input->title] = Array('gw_image', $input->params);
+		}
+	}	
+	
+	function getImage($name)
+	{
+		if(!$this->composite_map)
+			$this->addImageSettings();
+			
+		return $this->get($name);
 	}
 
 }

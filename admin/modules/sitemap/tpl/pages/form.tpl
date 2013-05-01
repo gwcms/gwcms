@@ -27,9 +27,7 @@
 	
 	{$input_name_pattern="item[input_data][%s]"}
 	{foreach $item->getInputs() as $input}
-	
 		{include file="elements/input.tpl" name=$input->get(title) type=$input->get(type) note=$input->get(note) title=$input->get(title) value=$item->getContent($input->get(title)) i18n=true}
-	
 	{/foreach}
 	
 {/if}

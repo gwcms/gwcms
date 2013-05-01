@@ -17,15 +17,7 @@
 
 {include file="elements/input.tpl" type=bool name=active}
 
-</table>
 
-	{include file="tools/form_submit_buttons.tpl"}
 
-</form>
-{if $update}
-	{include file="extra_info.tpl" extra_fields=[insert_time,update_time]}
-{/if}
 
-</div>
-
-{include file="default_close.tpl"}
+{include file="default_form_close.tpl"}

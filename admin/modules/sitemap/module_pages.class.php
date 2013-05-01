@@ -63,11 +63,17 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$item->pathname = GW_Validation_Helper::pagePathName($item->pathname);
 		$item->fixPath();
 	}
+		
 	
 	function eventHandler($event, $context)
 	{
 		switch($event)
 		{
+			case 'BEFORE_SAVE_0':			
+			case 'AFTER_FORM':
+				$context->addImageSettings();
+			break;
+			
 			case 'BEFORE_SAVE':
 				if(GW::$static_conf['LANGS'][0] == $this->lang())
 					$this->preparePage($context);

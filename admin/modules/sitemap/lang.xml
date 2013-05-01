@@ -20,6 +20,10 @@
 			<lt>Meta aprašas</lt>
 			<no>Meta beskrivelse</no>
 		</i>
+		<i id="params">
+			<en>Parameters (json)</en>
+			<lt>Parametrai (json)</lt>
+		</i>		
 		<i id="priority">
 			<en>Priority</en>
 			<no>Prioritet</no>

@@ -8,10 +8,13 @@
  */
 
 
-class GW_TplVar extends GW_Data_Object
+class GW_TplVar extends GW_Composite_Data_Object
 {
 	var $table = 'gw_template_vars';
 	var $default_order = 'id ASC';
+	
+	var $validators = Array('params'=>'gw_json');
+	var $encode_fields=Array('params'=>'json');		
 	
 	
 	function validate()
@@ -35,7 +38,18 @@ class GW_TplVar extends GW_Data_Object
 			
 		return !(bool)count($this->errors);
 	}
-	
 
 	
+	function eventHandler($event)
+	{
+		switch($event)
+		{
+			case 'BEFORE_SAVE':				
+				if(!is_array($this->params))
+					$this->params = json_decode($this->params, true);
+			break;
+		}	
+			
+		return parent::eventHandler($event);
+	}
 }
