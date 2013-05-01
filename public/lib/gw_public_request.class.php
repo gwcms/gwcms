@@ -16,7 +16,7 @@ class GW_Public_Request extends GW_Request
 	var $page;
 	var $module;
 	var $base;
-	var $path_arg;
+	var $path_arg=Array();
 
 	function __construct()
 	{
@@ -41,66 +41,16 @@ class GW_Public_Request extends GW_Request
 				return true;
 			}
 				
-			$this->path_arg= $this->path_arr[$i]['name'].($this->path_arg?'/':'').$this->path_arg;
+			array_unshift($this->path_arg, $this->path_arr[$i]['name']);
 		}
 
 		return false;
 	}
-
-
-	function requestInfo()
+	
+	//no data objects catching
+	function requestInfoInnerDataObject()
 	{
-		$this->uri = Navigator::getUri();
-		$this->base = Navigator::getBase();
-
-		$path_arr = explode('/', $_GET['url']);
-		unset($_GET['url']);
-
-
-		$ln = array_shift($path_arr);
-		$this->ln = in_array($ln, GW::$static_conf['PUB_LANGS']) ? $ln : GW::$static_conf['PUB_LANGS'][0];
-
-		$_SESSION['GW']['ln']=$this->ln;
-
-
-		$this->path=implode('/', $path_arr);
-
-		$this->path_arr = Array();
-		$path_clean = '';
-		$path='';
-		$item=false;
-
-		foreach($path_arr as $i => $name)
-		{
-				
-			$path.=($path ? '/':'').$name;
-				
-			/*
-			 if(is_numeric($name) && $item)
-			 {
-				$item['data_object_id']=(int)$name;
-				$item['path'].='/'.$name;
-				continue;
-				}
-				*/
-				
-			$path_clean.=($path_clean ? '/':'').$name;
-				
-			$item =& $this->path_arr[];
-			$item=Array('name'=>$name, 'path'=>$path, 'path_clean'=>$path_clean);
-		}
-
-
-
-		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
-		if($item['data_object_id'])
-		$_GET['id']=$item['data_object_id'];
-			
-		$this->path_clean = $path_clean;
-	}
-
-
-
+	}	
 
 	function _jmpFrst($cp=true)
 	{
@@ -109,7 +59,7 @@ class GW_Public_Request extends GW_Request
 		$page = $item0->getChilds(Array('in_menu'=>1,'return_first_only'=>1));
 
 		if(!$page)
-		die('No active pages');
+			die('No active pages');
 
 			
 		$this->jump($page->path);
@@ -138,13 +88,28 @@ class GW_Public_Request extends GW_Request
 	function ifAjaxCallProcess()
 	{
 		if($_GET['act']!='do:json')
-		return;
+			return;
 
 		$this->processModule(GW::$dir["PUB_MODULES"].$_GET['module']);
 	}
 
-
-	function processModule($file, $exit=true)
+	
+	function processPath($path)
+	{
+		$path = explode('/',$path);
+		
+		$dir = array_shift($path);
+		$name = array_shift($path);
+		
+		if(!$this->moduleExists($dir, $name))
+			die("Failed locating module $dir/$name");
+		
+		$fname = $this->moduleFileName($dir, $name);
+				
+		$this->processModule($fname, $path);
+	}
+	
+	function processModule($file, $params, $exit=true)
 	{
 		//prevent hacking via ajax request
 		$file=str_replace('..','',$file);
@@ -157,15 +122,24 @@ class GW_Public_Request extends GW_Request
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 
 		$m = new $classname(Array('module_file'=>$file));
-		$m->process($this->path_arg);
+		
+		$this->module =& $m;
+		
+		$params = array_merge($params, $this->path_arg);
+		
+		$m->process($params);
 
-		exit;
 	}
 
+	
+	function moduleFileName($dirname, $name='')
+	{
+		return GW::$dir['PUB_MODULES']."$dirname/module_".($name?$name:$dirname).".class.php";
+	}
 
 	function moduleExists($dirname, $name='')
 	{
-		return file_exists(GW::$dir['PUB_MODULES']."$dirname/module_".($name?$name:$dirname).".class.php");
+		return file_exists($this->moduleFileName($dirname, $name));
 	}
 
 	function processModuleView($file, $view)
@@ -173,36 +147,50 @@ class GW_Public_Request extends GW_Request
 		$file = GW::$dir['PUB_MODULES'].$file;
 		require_once $file;
 
+		$restore_vars=GW::$smarty->getTemplateVars(); 
+
+		
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 
 		$m = new $classname(Array('module_file'=>$file));
 		$m->init();
 
 		$m->processView($view);
+		
+		GW::$smarty->assign($restore_vars); 
 	}
 
 	function processPage()
 	{
 		if(!$template=$this->page->getTemplate())
-		die('Template not set');
+			die('Template not set');
 			
-		$file = GW::$dir['PUB'].$template->path;
 
-		if(strpos($file,'/../')!==false || !file_exists($file))
-			die('Illegal template filename');
-			
-		switch(strtolower(pathinfo($file, PATHINFO_EXTENSION)))
+		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
 		{
-			case 'tpl': $this->processTemplate($file);break;
-			case 'php': $this->processModule($file);break;
+			$this->processTemplate(GW::$dir['PUB'].$template->path);
+		}else{
+			$this->processPath($template->path);
 		}
+		
+	}
+	
+	function userzoneAccess()
+	{
+		if(strpos($this->page->path,'userzone')===0 && !GW::$user)
+		{
+			$this->jump(GW::$static_conf['USER_LOGIN_PAGE']);
+			exit;
+		}	
 	}
 
 
 	function process()
 	{
 		if(!$this->page->id)
-		$this->jumpToFirstPage();
+			$this->jumpToFirstPage();
+			
+		$this->userzoneAccess();
 
 		switch($this->page->type)
 		{

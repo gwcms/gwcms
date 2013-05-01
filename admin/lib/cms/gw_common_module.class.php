@@ -80,18 +80,26 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 	}
 
+	
+	
+	public $auto_images = 1;
+	
 	/**
 	 * common doSave action override this if diferent functionality needed
 	 */
 	function common_doSave()
 	{
-		
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 		$item = $this->model->createNewObject($vals, false, $this->lang());
+		
+		$this->fireEvent('BEFORE_SAVE_0', $item);		
+		
+		
 		$this->canBeAccessed($item, true);
 		
-		if(count($_FILES))
+		
+		if($this->auto_images && count($_FILES))
 			GW_Image_Helper::__setFiles($item);
 		
 		if(!$item->validate())
@@ -177,6 +185,7 @@ class GW_Common_Module extends GW_Module
 			
 		}
 		
+		$this->fireEvent("AFTER_FORM", $item);
 		
 		
 		$this->smarty->assign('update', (int)$item->get('id'));

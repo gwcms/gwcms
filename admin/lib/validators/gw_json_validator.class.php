@@ -19,11 +19,9 @@ class GW_Json_Validator extends GW_Validator
 	{
 		$value = $this->validation_object;	
 			
-		if(is_string($value) && !json_decode($value))
+		if(is_string($value) && strlen($value) && !json_decode($value))
 			return $this->setErrorMessage($this->getParam('error_invalid'));
 			
 		return true;
 	}
 }
-
-?>

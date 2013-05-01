@@ -18,7 +18,10 @@
 	{else}
 		{$value=$value|default:$default}
 	{/if}
-	
+{/if}
+
+{if is_array($value)}
+	{$value=GW_Json_Format_Helper::f($value)}
 {/if}
 
 
