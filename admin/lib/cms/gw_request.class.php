@@ -218,7 +218,7 @@ class GW_Request
 		
 		
 		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
-		if($data_object_id)
+		if(isset($data_object_id) && $data_object_id)
 			$_GET['id']=$data_object_id;
 		
 	}

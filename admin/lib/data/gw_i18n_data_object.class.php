@@ -23,7 +23,7 @@ class GW_i18n_Data_Object extends GW_Data_Object
 		
 	function isI18NField($name)
 	{
-		return (bool)$this->i18n_fields[$name];
+		return isset($this->i18n_fields[$name]) ;
 	}		
 		
 	function getDefaultLn()
@@ -50,11 +50,12 @@ class GW_i18n_Data_Object extends GW_Data_Object
 
 	function set($name, $value, $ln=false)
 	{
+		/*
 		if($key=='_lang')
 		{
 			$this->_lang = $val;
 			return false;
-		}		
+		}*/		
 		
 		return parent::set($this->getI18NFieldName($name, $ln), $value);
 	}

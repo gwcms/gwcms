@@ -14,14 +14,14 @@ class GW_Validation_Helper
 	}
 	
 	
-	function className($str)
+	static function className($str)
 	{
 		$str=preg_replace('/^\d+/','',$str);
 		$str=preg_replace('/[^a-z0-9]$/','',$str);
 		return preg_replace('/[^a-z0-9-_\/]/i','',$str);
 	}
 	
-	function classFileName($str)
+	static function classFileName($str)
 	{
 		return strtolower(self::className($str));
 	}

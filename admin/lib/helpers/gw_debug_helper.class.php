@@ -26,7 +26,7 @@ class GW_Debug_Helper
 		return $str;
 	}
 	
-	function show_debug_info()
+	static function show_debug_info()
 	{
 		$test = GW::$db->query_times;
 

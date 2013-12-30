@@ -59,13 +59,13 @@ class GW_Module
 		
 		$this->list_params = array_merge($this->list_params, $sess_store);
 						
-		if($tmp = $_GET['list_params'])
+		if(isset($_GET['list_params']) && ($tmp = $_GET['list_params']))
 			$this->list_params = array_merge($this->list_params, $tmp);
 			
 		$sess_store = $this->list_params;
 		$this->list_params =& $sess_store;
 		
-		if($_GET['list_params'])
+		if(isset($_GET['list_params']) && $_GET['list_params'])
 		{
 			unset($_GET['list_params']);
 			$this->jump();
@@ -138,7 +138,7 @@ class GW_Module
 		$this->isPublic($name="view$name") ||	$name='viewDefault';
 		$this->action_name=$name;
 
-		$vars =& $this->$name($params);
+		$vars = $this->$name($params);
 		
 		if(is_array($vars))
 			foreach($vars as $i => $var)
@@ -152,7 +152,7 @@ class GW_Module
 	
 	function process($params=Array(), $request_params=Array())
 	{
-		if($act=$request_params['act'])
+		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
 			$this->process_act($act);
 			
@@ -161,7 +161,10 @@ class GW_Module
 		}
 		
 		$params=(array)$params;
-		$this->processView(self::__funcVN($params[0]), array_splice($params,1));
+		$this->processView(self::__funcVN(
+			isset($params[0]) ? $params[0] : false), 
+			array_splice($params,1)
+			);
 	}
 	
 	

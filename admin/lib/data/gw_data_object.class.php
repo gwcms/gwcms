@@ -76,7 +76,7 @@ class GW_Data_Object
 			return $this->$func($key);
 		}
 		
-		return $this->content_base[$key];
+		return isset($this->content_base[$key]) ? $this->content_base[$key] : false;
 	}
 	
 	function setValues($vals)
@@ -156,8 +156,8 @@ class GW_Data_Object
 		if($conditions)
 			$sql.= ' WHERE ' . GW_DB::prepare_query($conditions);
 
-		if ($group_by = $options['group_by'])
-			$sql.= ' GROUP BY ' . $group_by;
+		if (isset($options['group_by']) && $options['group_by'])
+			$sql.= ' GROUP BY ' . $options['group_by'];
 			
 		if ($order)
 			$sql.= ' ORDER BY ' . $order;
@@ -184,9 +184,12 @@ class GW_Data_Object
 		
 		$db =& $this->getDB();
 		
-		if($options['assoc_fields'] && $options['return_simple']){
+		if(
+			isset($options['assoc_fields']) && $options['assoc_fields'] && 
+			isset($options['return_simple']) && $options['return_simple']
+		){
 			$entries = $db->fetch_assoc($sql, true);
-		}elseif($options['key_field'])
+		}elseif(isset($options['key_field']))
 			$entries = $db->fetch_rows_key($sql, $options['key_field'], true);
 		else
 			$entries = $db->fetch_rows($sql,1,true);
@@ -197,7 +200,7 @@ class GW_Data_Object
 			return false;
 		}
 			
-		if($options['return_simple'])
+		if(isset($options['return_simple']))
 			return $entries;
 			
 		$entries = $this->objResult($entries);
@@ -301,7 +304,7 @@ class GW_Data_Object
 		unset($entry[$idfield]);
 
 		$db =& $this->getDB();
-		$rez =& $db->update($this->table, $this->getIdCondition(), $entry);
+		$rez = $db->update($this->table, $this->getIdCondition(), $entry);
 		
 		$this->fireEvent(Array('AFTER_UPDATE','AFTER_SAVE'));
 		

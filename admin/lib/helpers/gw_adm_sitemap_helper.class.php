@@ -2,12 +2,12 @@
 
 class GW_ADM_Sitemap_Helper
 {
-	function __listModules($search='*')
+	static function __listModules($search='*')
 	{
 		return glob(GW::$dir['MODULES'].$search.'/lang.xml');
 	}
 	
-	function listModules()
+	static function listModules()
 	{
 		foreach(self::__listModules() as $mapfile)
 		{
@@ -19,7 +19,7 @@ class GW_ADM_Sitemap_Helper
 	}
 	
 	
-	function treeToArray(&$tree)
+	static function treeToArray(&$tree)
 	{
 		$rez = Array();
 		self::__treeToArray($tree,$rez, '');
@@ -27,7 +27,7 @@ class GW_ADM_Sitemap_Helper
 		return $rez;
 	}
 	
-	function __treeToArray(&$tree,&$array,$path)
+	static function __treeToArray(&$tree,&$array,$path)
 	{
 		$item = $tree;
 		unset($item['childs']);
@@ -38,7 +38,7 @@ class GW_ADM_Sitemap_Helper
 			self::__treeToArray($child, $array, $path.'/'.$key);
 	}
 	
-	function loadModuleMap($pathname)
+	static function loadModuleMap($pathname)
 	{
 		$tmp = GW_Lang_XML::getAllLn(GW::$dir['MODULES'].$pathname.'/lang.xml');
 		
@@ -52,7 +52,7 @@ class GW_ADM_Sitemap_Helper
 	}
 	
 	
-	function syncModule($pathname)
+	static function syncModule($pathname)
 	{
 		if(!$all_ln_tree = self::loadModuleMap($pathname))
 			return false;
@@ -100,7 +100,7 @@ class GW_ADM_Sitemap_Helper
 		//-----------------------------------
 	}
 	
-	function updateSitemap($force = false)
+	static function updateSitemap($force = false)
 	{
 		$page0 = new GW_ADM_Page;
 		$root_pages = $page0->getChilds(Array('check_permissions'=>false,'menu'=>false));

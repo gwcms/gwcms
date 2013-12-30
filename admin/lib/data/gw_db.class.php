@@ -391,7 +391,7 @@ class GW_DB
 		}
 	}
 
-	function prepare_query($params)
+	static function prepare_query($params)
 	{
 		if(!$params || !is_array($params)) return $params;
 
@@ -402,7 +402,7 @@ class GW_DB
 		return preg_replace_callback('/(\?)/',Array(&$ho,'replace'), $query);
 	}
 	
-	function escape($mixed)
+	static function escape($mixed)
 	{
 		return addslashes($mixed);
 	}

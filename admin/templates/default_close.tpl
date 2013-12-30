@@ -1,4 +1,4 @@
-{if !$smarty.get.clean}
+{if !isset($smarty.get.clean) || !$smarty.get.clean}
 <br /><br />
 
         <span class="cleaner"></span>

@@ -42,9 +42,9 @@ class GW_Auth
 	 */
 	function isLogged()
 	{	
-		$cookiePass = $_COOKIE['login_7'];// is autologin pass
-		$cookieUsername = $_COOKIE['login_0']; // is username
-		$autologin = $_COOKIE['login_7'] && self::isAutologinEnabled();
+		$cookiePass = isset($_COOKIE['login_7']) ? $_COOKIE['login_7'] : false;// is autologin pass
+		$cookieUsername = isset($_COOKIE['login_0']) ? $_COOKIE['login_0'] : false; // is username
+		$autologin = isset($_COOKIE['login_7']) && $_COOKIE['login_7'] && self::isAutologinEnabled();
 
 				
 		$logedin=($this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int)$this->session["user_id"]);
@@ -53,7 +53,7 @@ class GW_Auth
 			$user = $this->getUserByUserID($user_id);
 		} elseif($autologin) {
 			$user = $this->loginAuto($cookieUsername, $cookiePass);
-		} elseif($tmp = $_GET['GW_CMS_API_AUTH']) {
+		} elseif($tmp = @$_GET['GW_CMS_API_AUTH']) {
 			
 			$autologin=1;//session expired kad neziuretu
 			$user = $this->loginApi($tmp);
@@ -62,7 +62,7 @@ class GW_Auth
 		}
 		
 		
-		if(! $user)
+		if(!isset($user) || !$user)
 			return $this->setError('/GENERAL/NOT_LOGGEDIN');
 		
 		if(!$autologin && !$user->isSessionNotExpired() ){ //jei autologin neveikia tai sesijos galiojimas yra
@@ -131,7 +131,7 @@ class GW_Auth
 		$_SESSION=Array();
 	}
 	
-	function isAutologinEnabled()
+	static function isAutologinEnabled()
 	{
 		static $cache;
 		

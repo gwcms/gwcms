@@ -9,7 +9,7 @@ class Navigator
 		$arr =& $_SERVER;
 
 		$HTTP_HOST = $arr['HTTP_HOST'];
-		$HTTPS = $arr['HTTPS'];
+		$HTTPS = isset($arr['HTTPS']) ? $arr['HTTPS'] : false;
 		$SERVER_PORT = $arr['SERVER_PORT'];
 		$REQUEST_URI = $arr['REQUEST_URI'];
 	    
@@ -18,7 +18,7 @@ class Navigator
 		elseif(isset($arr['PATH_INFO']))
 			$PATH_INFO = $arr['PATH_INFO'];
 
-		$HTTP_SCHEME = $arr['HTTP_SCHEME'];
+		$HTTP_SCHEME = isset($arr['HTTP_SCHEME']) ? $arr['HTTP_SCHEME'] : false;
 
 		if (!empty($HTTP_SCHEME))
 			$base=$HTTP_SCHEME. '://';
@@ -59,6 +59,7 @@ class Navigator
 	static function getBase($absolute=false)
 	{
 		$arr =& $_SERVER;
+		$base = '';
 		
 		if($absolute)
 			$base=self::__getAbsBase();

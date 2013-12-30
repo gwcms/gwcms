@@ -38,7 +38,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		foreach($list_0 as $i => $item)
 			if(!$check_perm || $item->canAccess() || $item->getChilds($params))
 			{
-				if($params['return_first_only']) 
+				if(isset($params['return_first_only']) && $params['return_first_only']) 
 					return $item;
 						
 				$list[] = $item; 

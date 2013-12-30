@@ -21,7 +21,7 @@ file="messages.tpl"} <br />
 	<tr>
 		<td style="padding-right: 10px">{$lang.USER}</td>
 		<td><input class="lgn_inpt_vart{if $login_error}err{/if}"
-			name="login[0]" value="{$smarty.cookies.login_0}" /></td>
+			name="login[0]" value="{if isset($smarty.cookies.login_0)}{$smarty.cookies.login_0}{/if}" /></td>
 	</tr>
 	<tr>
 		<td style="padding-right: 10px">{$lang.PASS}</td>
@@ -40,7 +40,7 @@ file="messages.tpl"} <br />
 		<td><select name="ln">
 			{foreach GW::$static_conf.ADMIN_LANGS as $ln_code}
 			<option value="{$ln_code}"
-				{if $smarty.cookies.login_ln==$ln_code}SELECTED{/if}>
+				{if isset($smarty.cookies.login_ln) && $smarty.cookies.login_ln==$ln_code}SELECTED{/if}>
 			{$lang.LANG.$ln_code}</option>
 			{/foreach}
 		</select></td>

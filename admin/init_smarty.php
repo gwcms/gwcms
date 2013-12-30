@@ -1,7 +1,7 @@
 <?
 
 
-require GW::$dir['LIB'].'smarty/Smarty.class.php';
+require GW::$dir['LIB'].'smarty/SmartyBC.class.php';
 $s =& GW::$smarty;
 
 $s = new Smarty;

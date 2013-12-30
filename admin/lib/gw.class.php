@@ -43,7 +43,7 @@ class GW
 	static $public=false;
 	static $error_log;
 	
-	function getInstance($class, $file=false) 
+	static function getInstance($class, $file=false) 
 	{
 		static $cache;
 		

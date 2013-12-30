@@ -13,7 +13,7 @@ if(GW::$static_conf['PROJECT_ENVIRONMENT']==GW_ENV_PROD && !MASTER_REQUEST){
 }else{
 	define('_DEBUGING_', 1);
 	ini_set("display_errors", 1);
-	error_reporting(E_ALL ^ E_NOTICE);	
+	error_reporting(E_ALL ^  E_STRICT);	
 }
 
 
