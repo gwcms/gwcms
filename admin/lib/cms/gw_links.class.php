@@ -8,6 +8,8 @@ class GW_Links
 	var $params;
 	var $table;
 	var $owner_obj_id;
+	var $id1="id"; //owner_object_id
+	var $id2="id1"; //dest_object_id
 	
 	
 	/**
@@ -49,6 +51,10 @@ class GW_Links
 			
 		$this->table=$this->params['table'];
 		
+		if(isset($this->params['fieldnames']))
+			list($this->id1,$this->id2)=$this->params['fieldnames'];
+	
+		
 	}
 	
 	
@@ -60,7 +66,7 @@ class GW_Links
 	function getBinds()
 	{
 		$db = $this->getDB();
-		$list = $db->fetch_rows(Array("SELECT id1 FROM $this->table WHERE id=?",$this->owner_obj_id), false);
+		$list = $db->fetch_rows(Array("SELECT {$this->id2} FROM $this->table WHERE $this->id1=?",$this->owner_obj_id), false);
 		
 		foreach($list as $i => $rec)
 			$list1[]=$rec[0];
@@ -77,10 +83,10 @@ class GW_Links
 				
 		$db=$this->getDB();
 		
-		$cond="id=? AND (";
+		$cond="{$this->id1}=? AND (";
 		
 		foreach($binds as $i => $id1)
-			$cond.="id1=? OR ";	
+			$cond.="{$this->id2}=? OR ";	
 			
 		$cond=substr($cond,0,-4).')';
 		
@@ -98,7 +104,7 @@ class GW_Links
 		$list = Array();
 		
 		foreach($binds as $id1)
-			$list[]=Array('id'=> $this->owner_obj_id, 'id1'=>$id1);	
+			$list[]=Array($this->id1=> $this->owner_obj_id, $this->id2=>$id1);	
 		
 		$db->multi_insert($this->table, $list);
 	}	
@@ -118,6 +124,6 @@ class GW_Links
 	function delete()
 	{
 		$db = $this->getDB();
-		$db->delete($this->table, Array('id=?', $this->owner_obj_id));
+		$db->delete($this->table, Array($this->id1.'=?', $this->owner_obj_id));
 	}
 }
