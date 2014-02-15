@@ -4,7 +4,7 @@
 
 
 
-<table style="width:{if $form_width}{$form_width}{else}600{/if}px">
+<table style="width:600px">
 <tr>
 <td>
 
