@@ -3,7 +3,7 @@
 class GW_Math_Helper
 {
 
-	function cFileSize($bytes,$prec=2)
+	static function cFileSize($bytes,$prec=2)
 	{
 		if(!$bytes) return '0';
 		$m = array('','K','M','G','T','P','E','Z','Y');
@@ -17,7 +17,7 @@ class GW_Math_Helper
 	precision M-menesiais d-dienomis h-valandomis  m-minutemis s-sekundemis
 	*/
 		
-	function uptime($secs,$precision='s')
+	static function uptime($secs,$precision='s')
 	{
 		$y=floor($secs/31514400);$secs-=$y*31514400;
 		$M=floor($secs/2592000);$secs-=$M*2592000;

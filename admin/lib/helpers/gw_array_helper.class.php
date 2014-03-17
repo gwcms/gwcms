@@ -7,7 +7,7 @@ class GW_Array_Helper
 	 * exmpl: $x[a][b][c] = array_key($x, [a,b,c])
 	 * @return mixed
 	 */
-	function valByArrKey($arr, $key_arr)
+	static function valByArrKey($arr, $key_arr)
 	{
 		$x =& $arr;
 		
@@ -28,7 +28,7 @@ class GW_Array_Helper
 	/**
 	 * get value from array1 if is empty - array2
 	 */
-	function altValue($key_arr, &$arr1, &$arr2)
+	static function altValue($key_arr, &$arr1, &$arr2)
 	{
 		if($tmp = self::valByArrKey($arr1, $key_arr))
 			return $tmp;
@@ -36,13 +36,13 @@ class GW_Array_Helper
 		return self::valByArrKey($arr2, $key_arr);
 	}
 	
-	function strKeyToArrKey($str)
+	static function strKeyToArrKey($str)
 	{
 		return explode('/', $str);
 	}
 	
 	
-	function arrayFlattenSep($sep, $array)
+	static function arrayFlattenSep($sep, $array)
 	{
 		$result = array();
 		$stack = array();
@@ -74,11 +74,28 @@ class GW_Array_Helper
 	 * 
 	 * */
 	
-	function copy($source, &$destination, $keys)
+	static function copy($source, &$destination, $keys)
 	{
 		foreach($keys as $key)
 			$destination[$key]=$source[$key];
 	}
+	
+	/**
+	 * Build associative array
+	 * $names=Array('a','b')
+	 * $values=Array('test','best');
+	 * 
+	 * result = Array('a'=>'test','b'=>'best')
+	 */
+	static function buildAssociative($names, $values)
+	{
+		$new = Array();
+		
+		foreach($names as $i => $key)
+			$new[$key]=$values[$i];
+			
+		return $new;
+	}	
 
 
 }

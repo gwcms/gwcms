@@ -9,7 +9,7 @@ $GLOBALS['smarty_vars_store']=Array();
  */
 class FH
 {
-	function getTplVars(&$template_obj, $vars_arr)
+	static function getTplVars(&$template_obj, $vars_arr)
 	{
 		$res=Array();
 		
@@ -31,7 +31,7 @@ class FH
 	
 	//alternative lang files use
 	//if no value in module lang file, take it from main lang file
-	function altLang($key_arr)
+	static function altLang($key_arr)
 	{
 		return GW_Array_Helper::altValue($key_arr, GW::$request->module->lang, GW::$lang);
 	}
@@ -39,7 +39,7 @@ class FH
 	//to use in javascript
 	//get lang strings
 	//var lang={FH::printLangStrings('FIELDS/title','BUTTONS/OK','BUTTONS/CANCEL')}
-	function printLangStrings()
+	static function printLangStrings()
 	{
 		$arr=Array();
 
@@ -49,14 +49,14 @@ class FH
 		echo json_encode($arr);
 	}
 	
-	function fieldTitle($key)
+	static function fieldTitle($key)
 	{	
 		$title = self::altLang(Array('FIELDS',$key));
 		
 		return $title ? $title : $key;
 	}
 	
-	function shortFieldTitle($key)
+	static function shortFieldTitle($key)
 	{
 		$title = self::fieldTitle($key);
 		
@@ -66,7 +66,7 @@ class FH
 		return $title;
 	}
 	
-	function viewTitle($key)
+	static function viewTitle($key)
 	{	
 		$title=self::altLang(Array('VIEWS',$key));
 		
@@ -84,7 +84,7 @@ class FH
 	/**
 	 * should be called in smarty only
 	 */
-	function smarty_vars_push($keys)
+	static function smarty_vars_push($keys)
 	{
 		$vars = explode(',',$keys);
 		foreach($vars as $key)
@@ -94,7 +94,7 @@ class FH
 	/**
 	 * should be called in smarty only
 	 */
-	function smarty_vars_pull($keys)
+	static function smarty_vars_pull($keys)
 	{
 		$vars = explode(',',$keys);
 		foreach($vars as $key)
@@ -104,7 +104,7 @@ class FH
 		}
 	}
 	
-	function maxUploadSize()
+	static function maxUploadSize()
 	{
 		static $cache;if($cache)return $cache;
 		
@@ -113,7 +113,7 @@ class FH
 	
 
 	
-	function gw_path($params)
+	static function gw_path($params)
 	{
 		self::gw_link_po($params);
 		
@@ -121,7 +121,7 @@ class FH
 	}
 	
 	//path only
-	function gw_link_po(&$params)
+	static function gw_link_po(&$params)
 	{
 		
 		$params['params'] = (array)$params['params'] + GW::$request->carryParams();		
@@ -154,7 +154,7 @@ class FH
 	}	
 	
 	
-	function gw_link($params)
+	static function gw_link($params)
 	{
 		if(!isset($params['show_title']))
 			$params['show_title']=1;
@@ -218,7 +218,7 @@ class FH
 	 * "2005 Oct 10" if else 
 	 */
 	
-	function shortTime($time)
+	static function shortTime($time)
 	{
 		if($time=='0000-00-00 00:00:00')
 			return '';
@@ -234,7 +234,7 @@ class FH
 		return (date('Y') != $y ? $y.' ':'').$lang['MONTHS_SHORT'][$m-1].' '.$d;
 	}
 
-	function dateFormate($date, $format)
+	static function dateFormate($date, $format)
 	{
 		return date($format, strtotime($date));
 	}

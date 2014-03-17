@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * used as GW_Composite_Data_Object attachment
@@ -161,7 +161,7 @@ class GW_Image extends GW_Data_Object
 		$this->validators['image_file']=$arr;
 	}
 	
-	function parseDimensions($str)
+	static function parseDimensions($str)
 	{
 		$dim=Array();
 		$str=explode('x',$str);

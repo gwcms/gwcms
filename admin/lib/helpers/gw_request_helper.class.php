@@ -4,7 +4,7 @@
 class GW_Request_Helper
 {
 
-	function visitorInfo()
+	static function visitorInfo()
 	{	
 		static $info;
 		

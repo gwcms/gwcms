@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_i18n_Data_Object extends GW_Data_Object

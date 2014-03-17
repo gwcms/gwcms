@@ -3,7 +3,7 @@
 
 class GW_Debug_Helper
 {
-	function backtrace_soft($level_cut = 1)
+	static function backtrace_soft($level_cut = 1)
 	{
 		$str='';
 		$backtrace = debug_backtrace();

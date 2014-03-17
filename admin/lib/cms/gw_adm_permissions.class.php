@@ -17,12 +17,12 @@ class GW_ADM_Permissions
 	 * 
 	 * @return DB
 	 */
-	function &getDB()
+	static function &getDB()
 	{
 		return GW::$db;
 	}
 	
-	function save($group_id, $path_access)
+	static function save($group_id, $path_access)
 	{
 		$group_id=(int)$group_id;
 		$db = self::getDB();
@@ -36,17 +36,17 @@ class GW_ADM_Permissions
 		$db->_multi_insert(self::$table, $list);
 	}
 	
-	function deleteAll($group_id)
+	static function deleteAll($group_id)
 	{
 		self::getDB()->delete(self::$table, Array('group_id=?',$group_id));
 	}
 	
-	function getByGroupId($group_id)
+	static function getByGroupId($group_id)
 	{
 		return self::getDB()->fetch_assoc("SELECT path,access_level FROM `".self::$table."` WHERE group_id=".(int)$group_id);
 	}
 	
-	function &__getPrmByMltGrpIds($gids, $path=false)
+	static function &__getPrmByMltGrpIds($gids, $path=false)
 	{
 		if(!count($gids))
 			return Array();
@@ -64,7 +64,7 @@ class GW_ADM_Permissions
 		return self::getDB()->fetch_assoc($sql);	
 	}
 	
-	function &getPrmByMltGrpIds($gids)
+	static function &getPrmByMltGrpIds($gids)
 	{
 		$cache_id = implode(',', (array)$gids);
 		if($cache_var =& self::$cache[$cache_id])
@@ -73,7 +73,7 @@ class GW_ADM_Permissions
 		return $cache_var = self::__getPrmByMltGrpIds($gids);
 	}
 
-	function canAccess($path, $gids, $load_once=true)
+	static function canAccess($path, $gids, $load_once=true)
 	{
 		if(self::isRoot($gids))
 			return true;
@@ -86,20 +86,20 @@ class GW_ADM_Permissions
 		return isset($paths[$path]);
 	}
 	
-	function isRoot($gids)
+	static function isRoot($gids)
 	{
 		if(in_array(self::$root_group_id, (array)$gids)) // root group has access to anything
 			return true;				
 	}
 	
-	function checkPages(&$list, $user)
+	static function checkPages(&$list, $user)
 	{
 		foreach($list as $i => $item)
 			if(! self::canAccess($item->path, $user->group_ids))
 				unset($list[$i]);
 	}
 	
-	function deleteByPath($path)
+	static function deleteByPath($path)
 	{
 		self::getDB()->delete(self::$table, Array('path=?',$path));
 	}

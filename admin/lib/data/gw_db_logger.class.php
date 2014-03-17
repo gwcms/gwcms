@@ -1,4 +1,5 @@
-<?
+<?php
+
 class GW_DB_Logger
 {
 	
@@ -9,7 +10,7 @@ class GW_DB_Logger
 	 * to define log entry
 	 * type = modem | user | proc.ctrl | mysql | frontend | backend
 	 */
-	function msg($entry=Array(),$type='',$action='',$status='',$add_info){
+	static function msg($entry=Array(),$type='',$action='',$status='',$add_info){
 		
 		
 		if(!is_array($entry))

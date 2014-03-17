@@ -1,4 +1,5 @@
 <?php
+
 class GW_Logger
 {
 	var $file;

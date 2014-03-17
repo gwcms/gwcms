@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_Image_Validator Extends GW_Validator

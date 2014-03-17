@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GW_Data_Object
 {
@@ -14,8 +14,8 @@ class GW_Data_Object
 	var $ignore_fields=Array();
 	var $encode_fields=Array();
 	var $calculate_fields=Array();	
-    static $_instance;
-    var $cache;
+	static $_instance;
+	var $cache;
     
     
     
@@ -390,7 +390,7 @@ class GW_Data_Object
 		$db->insert($this->table, $entry);
 		$this->set($idfield, $db->insert_id());
 
-		$rez =& $this->get($idfield);
+		$rez = $this->get($idfield);
 		
 		$this->fireEvent(Array('AFTER_INSERT','AFTER_SAVE'));
 		

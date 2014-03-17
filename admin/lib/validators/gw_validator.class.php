@@ -51,7 +51,7 @@ class GW_Validator
 	 * 
 	 * @return mixed
 	 */
-	function getErrors($validator, $validation_object, $params=Array())
+	static function getErrors($validator, $validation_object, $params=Array())
 	{
 		$class = $validator.'_Validator';
 		$vld = new $class($validation_object, $params);

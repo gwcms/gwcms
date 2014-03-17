@@ -66,12 +66,12 @@ class GW_Cache_Control_File
 
 class GW_Cache_Control
 {
-	function gmttime($time)
+	static function gmttime($time)
 	{
 		return gmdate('D, d M Y H:i:s', $time).' GMT';
 	}
 		
-	function checkFile($file, $etag=false)
+	static function checkFile($file, $etag=false)
 	{
 		$cc = new GW_Cache_Control_File($file, $etag);
 		$cc->setHeaders();
@@ -79,7 +79,7 @@ class GW_Cache_Control
 		$cc->check();
 	}
 	
-	function setExpires($diff='+1 hour')
+	static function setExpires($diff='+1 hour')
 	{
 		header('Cache-Control: public');
 		header('Pragma: cache');

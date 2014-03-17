@@ -7,13 +7,13 @@ class GW_Error_Message
 	static $langf_dir;
 	
 	
-	function getLangFile($file_id)
+	static function getLangFile($file_id)
 	{
 		return (self::$langf_dir ? self::$langf_dir : GW::$dir['ADMIN'].'lang/') ."{$file_id}_errors.lang.xml";
 	}
 	
 	
-	function loadFile($file_id)
+	static function loadFile($file_id)
 	{
 		//$file_id=strtolower($file_id);
 		
@@ -33,7 +33,7 @@ class GW_Error_Message
 		return true;
 	}
 	
-	function getFromCache($file_id, $path)
+	static function getFromCache($file_id, $path)
 	{
 		$var =& self::$cache[$file_id]; 
 		
@@ -56,7 +56,7 @@ class GW_Error_Message
 	 * file stored in:
 	 * ADMIN_DIR/lang/strtolower(ERROR_FILE)_error.lang.Error_Message::$ln.xml
 	 */
-	function read($key)
+	static function read($key)
 	{	
 			if($key[0]!='/')
 				return $key;

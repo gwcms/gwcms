@@ -13,7 +13,7 @@ class GW_Image_Resize_Helper
 	
 
 	
-	function getCacheFileName($filename, $params)
+	static function getCacheFileName($filename, $params)
 	{
 		return 
 			GW::$dir['SYS_IMAGES_CACHE'].
@@ -23,7 +23,7 @@ class GW_Image_Resize_Helper
 			'.jpg';	// use jpg extension to all types
 	}
 	
-	function formatResult(&$image_obj, $file)
+	static function formatResult(&$image_obj, $file)
 	{
 		
 		$original = clone $image_obj;
@@ -49,7 +49,7 @@ class GW_Image_Resize_Helper
 	 * @return unknown_type
 	 */
 	
-	function validateSaveFormats($str)
+	static function validateSaveFormats($str)
 	{
 		$formats=Array('jpg'=>1,'png'=>1,'gif'=>1);
 		$default='jpg';
@@ -57,12 +57,12 @@ class GW_Image_Resize_Helper
 		return $formats[$str] ? $str : $default;
 	}	
 	
-	function checkSaveFormat(&$params)
+	static function checkSaveFormat(&$params)
 	{
 		$params['save_format']=self::validateSaveFormats($params['save_format']);		
 	}
 	
-	function resizeAndCache(&$item, $params)
+	static function resizeAndCache(&$item, $params)
 	{
 		self::checkSaveFormat($params);
 		

@@ -3,7 +3,7 @@
 
 class Mime_Type_Helper
 {
-    function getByFilename($filename) {
+    static function getByFilename($filename) {
 
         $mime_types = array(
 
@@ -61,7 +61,8 @@ class Mime_Type_Helper
             'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
         );
 
-        $ext = strtolower(array_pop(explode('.',$filename)));
+	
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
         if (array_key_exists($ext, $mime_types)) {
             return $mime_types[$ext];
         }
