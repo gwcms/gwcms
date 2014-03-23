@@ -130,7 +130,7 @@ class GW_ADM_Sitemap_Helper
 		self::updateParentIds();
 	}
 		
-	function updateParentIds($force = false)
+	static function updateParentIds($force = false)
 	{
 		$page = new GW_ADM_Page();
 		$cond = $force ? '': 'parent_id = -1';

@@ -407,7 +407,7 @@ class GW_DB
 		return addslashes($mixed);
 	}
 	
-	function timeString($time=false)
+	static function timeString($time=false)
 	{
 		return date(self::$datetime_format, $time ? $time : time());
 	}
