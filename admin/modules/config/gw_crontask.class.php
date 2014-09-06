@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_CronTask extends GW_Data_Object

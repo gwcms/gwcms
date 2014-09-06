@@ -1,4 +1,4 @@
-<?
+<?php
 
 include_once GW::$dir['MODULES'].'articles/gw_articles_group.class.php';
 

@@ -56,12 +56,12 @@ function sErrorHandler($errno, $errstr, $errfile, $errline, $errcontext)
 	
 	include_once GW::$dir['LIB'].'helpers/gw_debug_helper.class.php';
 	
-	$msg .= "\nBacktrace:\n--------------\n". GW_Debug_Helper::backtrace_soft(2)."--------------";
+	
 	
 	GW::$error_log->msg($msg);
 	
 	if (_DEBUGING_){
-		dump($msg);
+                d::dump($msg);
 	}else{
 		mail
 		(

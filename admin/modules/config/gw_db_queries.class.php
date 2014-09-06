@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_DB_Queries extends GW_Data_Object

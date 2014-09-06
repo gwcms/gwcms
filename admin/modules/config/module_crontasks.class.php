@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_CronTasks extends GW_Common_Module

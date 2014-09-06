@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_Articles_Group extends GW_Data_Object

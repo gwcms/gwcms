@@ -1,27 +1,5 @@
 <?php
 
-function dump($var)
-{
-	if($_GET['dump_backtrace'])
-		backtrace();
-		
-	static $html;
-	
-	if(!$html)
-		// 1st if calling from apache? php-cli does not give this , 2nd text/plain format
-		$html = ($_SERVER["SERVER_SOFTWARE"] && stripos(implode('',headers_list()),'text/plain')===false) ? 1 : 2;
-	
-	echo $html==1 ? "<pre>" : '';
-	
-	$var = func_num_args() > 1 ? func_get_args() : $var;
-	
-	if(is_object($var))
-		print_r($var);
-	else
-		print(is_array($var) ? GW_Json_Format_Helper::f($var) : $var);	
-	
-	echo $html==1 ? "</pre>" : "\n";
-}
 
 class GW_Timer
 {
@@ -112,5 +90,11 @@ class GW_Autoload
 		
 		self::$search_timer=new GW_Timer;
 	}
+}
+
+function dump()
+{
+    $args = func_get_args();
+    call_user_func_array(Array('d','dump'),$args);
 }
 

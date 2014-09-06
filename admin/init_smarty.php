@@ -1,12 +1,13 @@
-<?
+<?php
 
 
 require GW::$dir['LIB'].'smarty/SmartyBC.class.php';
 $s =& GW::$smarty;
 
-$s = new Smarty;
+$s = new SmartyBC;
 $s->compile_check = true;
 $s->allow_php_tag=true;
+$s->error_reporting = E_ALL & ~E_NOTICE;
 
 if(GW::$public){
 	$s->compile_dir =GW::$dir['PUB_TEMPLATES_C'];

@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_Tasks extends GW_Common_Module

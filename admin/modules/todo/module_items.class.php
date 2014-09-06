@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_Items extends GW_Common_Module_Tree_Data

@@ -1,4 +1,4 @@
-<?
+<?php
 
 //NO MSIE 6
 if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 6')!==false)

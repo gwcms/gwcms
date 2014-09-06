@@ -1,4 +1,4 @@
-<?
+<?php
 
 $debug=Array('mem_use'=>Array(memory_get_usage(true)));
 

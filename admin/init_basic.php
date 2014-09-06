@@ -1,4 +1,4 @@
-<?
+<?php
 
 include_once __DIR__.'/lib/gw.class.php';
 include_once __DIR__.'/config/main.php';

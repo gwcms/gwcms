@@ -1,4 +1,4 @@
-<?
+<?php
 
 define('GW_GALLERY_ITEM_FOLDER', 1);
 define('GW_GALLERY_ITEM_IMAGE', 0);

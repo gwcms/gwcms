@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_Articles extends GW_Common_Module
@@ -18,5 +18,3 @@ class Module_Articles extends GW_Common_Module
 		$this->viewList();
 	}
 }
-
-?>

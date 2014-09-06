@@ -1,4 +1,4 @@
-<?
+<?php
 
 include_once __DIR__.'/gw_template.class.php';
 

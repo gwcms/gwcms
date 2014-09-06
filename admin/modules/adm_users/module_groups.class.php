@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Module_Groups extends GW_Common_Module
 {	

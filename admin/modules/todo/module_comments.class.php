@@ -1,4 +1,4 @@
-<?
+<?php
 
 include __DIR__.'/module_items.class.php';
 

@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_LogWatch extends GW_Common_Module

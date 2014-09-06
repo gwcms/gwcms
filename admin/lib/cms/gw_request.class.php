@@ -44,7 +44,7 @@ class GW_Request
 
 	function buildUri($path=false, $params=Array())
 	{
-		$ln =  $params['ln'] ? $params['ln'] : $this->ln;
+		$ln =  isset($params['ln']) ? $params['ln'] : $this->ln;
 		unset($params['url']);
 		unset($params['ln']);
 
@@ -289,7 +289,9 @@ class GW_Request
 		if(GW::$request->inner_request)
 			$module->ob_collect = false;
 		
-		$module->process((array)$path_info['params'], $request_params);		
+                $path_info['params'] = isset($path_info['params']) ? $path_info['params'] : Array();
+                
+		$module->process($path_info['params'], $request_params);		
 	}
 	
 	

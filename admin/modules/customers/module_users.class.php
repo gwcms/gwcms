@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Module_Users extends GW_Common_Module {
 

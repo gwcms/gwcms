@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_Tools extends GW_Module

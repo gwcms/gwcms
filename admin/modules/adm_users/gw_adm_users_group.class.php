@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class GW_ADM_Users_Group extends GW_Data_Object

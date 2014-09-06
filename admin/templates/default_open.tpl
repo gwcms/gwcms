@@ -1,7 +1,7 @@
 {include file="head.tpl"}
 <body>
-
-{if !$smarty.get.clean}
+    
+{if !isset($smarty.get.clean)}
 
 <div id="wrap">
     <div id="header">

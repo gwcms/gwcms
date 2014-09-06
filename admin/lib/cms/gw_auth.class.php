@@ -71,7 +71,7 @@ class GW_Auth
 			return $this->setError('/GENERAL/SESSION_EXPIRED');
 		}
 		
-		if($this->session['autologin'])
+		if(isset($this->session['autologin']) && $this->session['autologin'])
 			$user->autologgedin=true;
 
 		if($user->banned == 1)

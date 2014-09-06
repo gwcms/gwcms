@@ -10,12 +10,13 @@ class GW_Debug_Helper
 		$backtrace = array_slice($backtrace,$level_cut);
 		$i=0;
 		
-		
+		//echo "<pre>";
+                //echo print_R($backtrace);;
 		
 		foreach($backtrace as $i => $trace)
 		{
 			$str.="#$i $trace[file]:$trace[line], ";
-			$str.=$trace[object]?'$'.get_class($trace[object])."{$trace[type]}{$trace['function']}":"function $trace[function]";
+			$str.=@$trace['object']?'$'.get_class($trace['object'])."{$trace[type]}{$trace['function']}":"function $trace[function]";
 	
 			if($_REQUEST['showargs'] || 1)
 				$str.=', ARGS: '.@json_encode($trace['args']);
@@ -31,7 +32,7 @@ class GW_Debug_Helper
 		$test = GW::$db->query_times;
 
 
-		if($_SESSION['debug'] && GW::$user->isRoot())
+		if(isset($_SESSION['debug']) && GW::$user->isRoot())
 		{
 			$info = $GLOBALS['debug'];
 			$info['mem_use'][]=memory_get_usage(true);

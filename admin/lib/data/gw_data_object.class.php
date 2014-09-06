@@ -53,7 +53,7 @@ class GW_Data_Object
 	
 	function getStoreVal($key)
 	{
-		if($this->encode_fields[$key])
+		if(isset($this->encode_fields[$key]))
 		{
 			$func = "encode".$this->encode_fields[$key];
 			return $this->$func($key, $this->content_base[$key], false);
@@ -298,7 +298,7 @@ class GW_Data_Object
 		$field_names = count($field_names) ? $field_names : array_keys($this->content_base);
 					
 		foreach($field_names as $field)
-			if(!$this->ignore_fields[$field])
+			if(!isset($this->ignore_fields[$field]))
 				$entry[$field] = $this->getStoreVal($field);
 				
 		unset($entry[$idfield]);
@@ -382,7 +382,7 @@ class GW_Data_Object
 		$idfield = $this->primary_fields[0];
 
 		foreach($this->content_base as $field => $x)
-			if(!$this->ignore_fields[$field])		
+			if(!isset($this->ignore_fields[$field]))		
 				$entry[$field]=$this->getStoreVal($field);
 		
 		$db =& $this->getDB();

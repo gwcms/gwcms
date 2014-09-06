@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class Module_Messages extends GW_Common_Module

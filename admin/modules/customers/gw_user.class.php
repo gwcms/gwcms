@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GW_User extends GW_Data_Object {
 

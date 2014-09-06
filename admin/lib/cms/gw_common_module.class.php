@@ -405,7 +405,7 @@ class GW_Common_Module extends GW_Module
 	
 	function methodExists($name)
 	{
-		return method_exists($this,$name) || $this->allow_auto_actions[$name];
+		return method_exists($this,$name) || isset($this->allow_auto_actions[$name]);
 	}
 	
 	function canBeAccessed($item, $die=true)

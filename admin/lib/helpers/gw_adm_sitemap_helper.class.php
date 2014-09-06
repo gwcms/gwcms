@@ -33,8 +33,8 @@ class GW_ADM_Sitemap_Helper
 		unset($item['childs']);
 		$array[$path] = $item;
 		
-		if($tree['childs'])
-		foreach($tree['childs'] as $key => $child)
+		if(isset($tree['childs']) && $tree['childs'])
+                    foreach($tree['childs'] as $key => $child)
 			self::__treeToArray($child, $array, $path.'/'.$key);
 	}
 	
@@ -68,7 +68,7 @@ class GW_ADM_Sitemap_Helper
 			{
 				$path = $pathname. $path;
 	
-				if(! ($item = $list[$path]) )
+				if(! ($item = @$list[$path]) )
 					if(! ($item = $page0->getByPath($path)))
 					{
 						$item = new GW_ADM_Page();

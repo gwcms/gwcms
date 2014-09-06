@@ -1,4 +1,4 @@
-<?
+<?php
 class GW_ADM_User extends GW_Composite_Data_Object
 {
 	var $table = 'gw_adm_users';
@@ -133,7 +133,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		switch($event)
 		{
 			case 'BEFORE_SAVE':
-				if($this->content_base['pass_new'])
+				if(isset($this->content_base['pass_new']) && $this->content_base['pass_new'])
 					$this->set('pass', $this->cryptPass($this->get('pass_new')));
 
 			break;	
