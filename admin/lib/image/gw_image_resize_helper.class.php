@@ -19,7 +19,7 @@ class GW_Image_Resize_Helper
 			GW::$dir['SYS_IMAGES_CACHE'].
 			''.(int)$params['width'].'x'.(int)$params['height'].
 			'__'.pathinfo($filename,PATHINFO_FILENAME).'__'.
-			$params['method'].
+			(isset($params['method'])?$params['method']:'').
 			'.jpg';	// use jpg extension to all types
 	}
 	
@@ -38,7 +38,7 @@ class GW_Image_Resize_Helper
 		$image_obj->dir = GW::$dir['SYS_IMAGES_CACHE'];
 		$image_obj->original = $original;
 		
-		return $item;
+		return $image_obj;
 	}
 	
 	/**
@@ -54,12 +54,12 @@ class GW_Image_Resize_Helper
 		$formats=Array('jpg'=>1,'png'=>1,'gif'=>1);
 		$default='jpg';
 				
-		return $formats[$str] ? $str : $default;
+		return isset($formats[$str]) ? $str : $default;
 	}	
 	
 	static function checkSaveFormat(&$params)
 	{
-		$params['save_format']=self::validateSaveFormats($params['save_format']);		
+		$params['save_format']=self::validateSaveFormats(isset($params['save_format'])?$params['save_format']:false);		
 	}
 	
 	static function resizeAndCache(&$item, $params)
@@ -76,7 +76,7 @@ class GW_Image_Resize_Helper
 		
 	}
 	
-	function resize(&$item, $params, $destination)
+	static function resize(&$item, $params, $destination)
 	{
 		self::checkSaveFormat($params);
 		
@@ -110,7 +110,7 @@ class GW_Image_Resize_Helper
 	 * 
 	 * @param $item GW_Image
 	 */	 		
-	function getCacheFiles($item)
+	static function getCacheFiles($item)
 	{
 		$file = $item->original_file ? $item->original_file : $item->getFilename();
 		
@@ -121,7 +121,7 @@ class GW_Image_Resize_Helper
 	 * 
 	 * @param $image_obj GW_Image
 	 */	 	
-	function deleteCached(&$image_obj)
+	static function deleteCached(&$image_obj)
 	{
 		foreach(self::getCacheFiles($image_obj) as $file)
 			unlink($file);

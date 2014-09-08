@@ -59,15 +59,15 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	{
 		parent::validate();
 						
-		if($this->validators['pass_old'])
+		if(isset($this->validators['pass_old']))
 			if(!$this->checkPass($this->get('pass_old')))
 				$this->errors['pass_old']='/USER/PASS_OLD';				
 		
-		if($this->validators['pass_new_repeat'])
+		if(isset($this->validators['pass_new_repeat']))
 			if($this->get('pass_new')!=$this->get('pass_new_repeat'))
 				$this->errors['pass_new_repeat']='/USER/PASS_REPEAT';	
 		
-		if($this->validators['unique_username'])
+		if(isset($this->validators['unique_username']))
 			if($this->count(Array('username=? AND removed!=0', $this->get('username'))))
 				$this->errors['username']='/USER/USERNAME_TAKEN';
 				

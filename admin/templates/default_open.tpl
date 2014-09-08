@@ -55,7 +55,7 @@
 {* SHOW OUTPUT FROM MODULE *}
 {foreach $log as $item}
 	{if $item}
-		{dump($item)}
+		{d::ldump($item)}
 	{/if}
 {/foreach}
 

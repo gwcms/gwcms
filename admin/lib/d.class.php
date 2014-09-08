@@ -72,7 +72,7 @@ class d
 		$backtracestr="";
 		foreach($bt as $point){
 				
-			$data = print_r($point["args"], true);
+			$data = isset($point["args"]) ? print_r($point["args"], true) : false;
 	
 			if(strlen($data)>1000)
 				$data=substr($data,0,1000)."...";

@@ -127,17 +127,17 @@ class FH
 		$params['params'] = (array)$params['params'] + GW::$request->carryParams();		
 		$params['params']=http_build_query($params['params']);	
 			
-		if($params['do'])
+		if(isset($params['do']))
 			$params['params']= 'act=do:'.$params['do'].($params['params']?'&':'').$params['params'];
 			
 
 		$path_start = GW::$request->ln.'/' ;
 		$path = GW::$request->path;
 			
-		if($params['levelup']){ 
+		if(isset($params['levelup'])){ 
 			// back to upper level
 			$params['path'] = $path_start. dirname($path);
-		}elseif($params['relative_path']){ 
+		}elseif(isset($params['relative_path'])){ 
 			
 			//pvz jeigu path = sitemap/pages/15 o relative_path = 10/form
 			//padaryt sitemap/pages/10/form
@@ -145,7 +145,7 @@ class FH
 			
 			// extend path
 			$params['path']= $path_start .$tmp . '/' . $params['relative_path'];
-		}elseif(!$params['path']){ 
+		}elseif(!isset($params['path'])){ 
 			// refresh 
 			$params['path'] = $path_start . $path;
 		}
@@ -229,7 +229,7 @@ class FH
 		if(date('Y-m-d') == "$y-$m-$d")
 			return "$h:$i";
 		
-		$lang =& GW::$smarty->getTemplateVars('lang');
+		$lang = GW::$smarty->getTemplateVars('lang');
 
 		return (date('Y') != $y ? $y.' ':'').$lang['MONTHS_SHORT'][$m-1].' '.$d;
 	}

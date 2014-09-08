@@ -1,4 +1,4 @@
-<?
+<?php
 class GW_App_Base
 {
 	var $proc_name;

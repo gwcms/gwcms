@@ -40,7 +40,7 @@ class GW_Validator
 
 	function getParam($name)
 	{
-		return $this->params[$name];
+		return isset($this->params[$name]) ? $this->params[$name] : false;
 	}
 	
 

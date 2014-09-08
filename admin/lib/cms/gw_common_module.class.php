@@ -35,7 +35,7 @@ class GW_Common_Module extends GW_Module
 		$this->list_params['paging_enabled']=false;
 		
 		//specifu model name in lang file
-		if(! $this->model && ($tmp = GW::$request->page->getDataObject()))
+		if(! isset($this->model) && ($tmp = GW::$request->page->getDataObject()))
 			$this->model = $tmp;
 	}
 	
@@ -119,7 +119,7 @@ class GW_Common_Module extends GW_Module
 		//{/if}
 		//isvengsime sio nesklandumo
 		
-		if($_REQUEST['SAVE-TYPE']=="INSERT")
+		if(isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE']=="INSERT")
 			$item->insert();
 		else
 			$item->save();
@@ -154,20 +154,20 @@ class GW_Common_Module extends GW_Module
 	{
 		$item = $this->model->createNewObject();
 		
-		$id = $_REQUEST['id'];
+		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
 		
 		//only form i18n objects
-		if($this->i18n_fields)
+		if(isset($this->i18n_fields) && $this->i18n_fields)
 			$item->_lang = $this->lang();		
 		
 		//pvz kelias: articles/77/form
 		//istrauks 77
-		if($tmp = GW::$request->path_arr_parent['data_object_id'])
+		if(isset(GW::$request->path_arr_parent['data_object_id']) && $tmp = GW::$request->path_arr_parent['data_object_id'])
 			$id = $tmp;
 		
 		//if we encounter error during the submit
 		//fill out form with values that user submited
-		if($vals=$_REQUEST['item']){
+		if(isset($_REQUEST['item']) && $vals=$_REQUEST['item']){
 
 			$item->set('id', $vals['id']);
 			$item->load();
@@ -217,8 +217,8 @@ class GW_Common_Module extends GW_Module
 	{		
 		if($this->list_params['views']['conditions'])
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
-				
-		$tmp1=(array)$this->list_params['filters'];
+			
+		$tmp1=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
 		
 		foreach($this->filters as $key => $val)
 			$tmp1[$key]=Array('=',$val);
@@ -245,17 +245,19 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 		
-				
-		if($ord=$this->list_params['order'])
+		
+		
+		
+		if(isset($this->list_params['order']) && $ord=$this->list_params['order'])
 			$params['order']=$ord;
 			
-		if($ord=$this->list_params['views']['order'])
+		if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
 			$params['order']=$ord;
 	}
 	
 	function setDefaultOrder()
 	{
-		if(!$this->list_params['order'])
+		if(!isset($this->list_params['order']) || !$this->list_params['order'])
 			$this->list_params['order']=$this->model->getDefaultOrderBy();
 	}
 	
@@ -311,13 +313,13 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->loadViews();
 		
-		$cond=$params['conditions'];
+		$cond=isset($params['conditions']) ? $params['conditions'] : false;
 		
 		$this->setListParams($cond, $params);
 		
 		if($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by'])
 		{
-			$page = $this->list_params['page']?$this->list_params['page']-1: 0;
+			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page']-1 : 0;
 			$params['offset']=$this->list_params['page_by']*$page;
 			$params['limit']=$this->list_params['page_by'];
 		}

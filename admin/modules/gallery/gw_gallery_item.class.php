@@ -105,7 +105,7 @@ class GW_Gallery_Item extends GW_Composite_Data_Object
 	
 	function &getParentOpt()
 	{
-		$list =& $this->getFoldersTree();
+		$list = $this->getFoldersTree();
 		
 		unset($list[$this->get('id')]);
 		

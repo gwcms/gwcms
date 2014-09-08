@@ -2,49 +2,49 @@
 
 class GW_Image_Helper
 {
-	function formFromPhpInfoArr($php_info_arr)
-    {
-    	$vals = Array
-    	(
-    		'new_file'=>$php_info_arr['tmp_name'],
-    		'size'=>$php_info_arr['size'],
-    		'original_filename'=> $php_info_arr['name'],
-    	);
-    	
-    	return $vals;
-    }
+	static function formFromPhpInfoArr($php_info_arr)
+	{
+		$vals = Array
+		(
+			'new_file'=>$php_info_arr['tmp_name'],
+			'size'=>$php_info_arr['size'],
+			'original_filename'=> $php_info_arr['name'],
+		);
+
+		return $vals;
+	}
     
-    function formFromFile($file)
-    {
-    	$vals = Array
-    	(
-    		'new_file'=>$file,
-    		'size'=>filesize($file),
-    		'original_filename'=> pathinfo($file, PATHINFO_BASENAME),
-    	);
-    	
-    	return $vals;    
-    }
+	static function formFromFile($file)
+	{
+		$vals = Array
+		(
+			'new_file'=>$file,
+			'size'=>filesize($file),
+			'original_filename'=> pathinfo($file, PATHINFO_BASENAME),
+		);
+
+		return $vals;    
+	}
     
-    function __setFiles(&$item) 
-    {                                                                                                                                                      
-        foreach ($_FILES as $name => $value)
-        	//dump($name + "=>" + $value);                                                                                                                   
-    		if($item->isCompositeField($name))                                                                                                  
-            	self::__setFile($item, $name);
-                                                                                             
-    }
+	static function __setFiles(&$item) 
+	{                                                                                                                                                      
+	    foreach ($_FILES as $name => $value)
+		    //dump($name + "=>" + $value);                                                                                                                   
+		    if($item->isCompositeField($name))                                                                                                  
+			    self::__setFile($item, $name);
+
+	}
     	
-    function __setFile(&$item, $fieldname) 
-    { 
-    	if(($file = $_FILES[$fieldname]) && ($file['error'] != UPLOAD_ERR_NO_FILE))                                                                              
-			return $item->set($fieldname, self::formFromPhpInfoArr($_FILES[$fieldname]));                                                          
-    }
+	static function __setFile(&$item, $fieldname) 
+	{ 
+		if(($file = $_FILES[$fieldname]) && ($file['error'] != UPLOAD_ERR_NO_FILE))                                                                              
+				return $item->set($fieldname, self::formFromPhpInfoArr($_FILES[$fieldname]));                                                          
+	}
 
     
     
-    function setFileFromURL(&$item, $name, $url, $dim = NULL)
-    {
+	static function setFileFromURL(&$item, $name, $url, $dim = NULL)
+	{
 		if ($url == 'http://') return;
 
 		$file = array(
@@ -64,10 +64,10 @@ class GW_Image_Helper
 
 		$file['size'] = (int)@filesize($file['tmp_name']);
 
-    	return self::checkAndSetFile($item, $name, $file, $dim);
-    }
+		return self::checkAndSetFile($item, $name, $file, $dim);
+	}
     
-	function __RemoteFileExists( $url ) 
+	static function __RemoteFileExists( $url ) 
 	{
 		  $url_info = parse_url( $url );
 		

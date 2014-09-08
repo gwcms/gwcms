@@ -74,7 +74,7 @@ class Module_Users extends GW_Common_Module
 		//do not allow assign to root group if user is not in root group
 		if(!GW::$user->isRoot())
 			$index = array_search($this->group0->root_group_id, (array)$vals['link_groups']);
-			if($index!==false)
+			if(isset($index) && $index!==false)
 				unset($vals['link_groups'][$index]);
 				
 		$item = $this->model->createNewObject();

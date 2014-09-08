@@ -44,7 +44,7 @@ class GW_Page extends GW_Composite_Data_Object
 			return $tmp;
 
 			if(!$check_parent)
-			return false;
+				return false;
 
 			$path = dirname($path);
 				
@@ -57,7 +57,7 @@ class GW_Page extends GW_Composite_Data_Object
 	function getFirstChild()
 	{
 		if($item = $this->getChilds(Array('return_first_only'=>1)))
-		return $item;
+			return $item;
 			
 		return false;
 	}
@@ -73,7 +73,7 @@ class GW_Page extends GW_Composite_Data_Object
 		$item =& $this;
 
 		while($item = $item->getParent())
-		$arr[]=$item;
+			$arr[]=$item;
 			
 		return $arr;
 	}
@@ -110,7 +110,7 @@ class GW_Page extends GW_Composite_Data_Object
 		$cache =& $this->cache['calcf'];
 
 		if(isset($cache[$key]))
-		return $cache[$key];
+			return $cache[$key];
 
 		switch($key)
 		{

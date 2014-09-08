@@ -44,7 +44,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	
 	function &getParentOpt($current_id)
 	{
-		$list =& $this->__getParentOpt();
+		$list = $this->__getParentOpt();
 		unset($list[$current_id]);
 		
 		return $list;
@@ -65,7 +65,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	}
 		
 	
-	function eventHandler($event, $context)
+	function eventHandler($event, &$context)
 	{
 		switch($event)
 		{

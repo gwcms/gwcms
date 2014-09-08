@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 
@@ -95,11 +95,11 @@ class GW_App_System Extends GW_App_Base
 	}
 	
 
-	function quit()
+	function quit($exit = 1)
 	{
 		//$this->interface->shutdown();
 		
-		parent::quit();
+		parent::quit($exit);
 	}
 
 

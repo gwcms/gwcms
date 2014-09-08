@@ -10,11 +10,11 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		//pernesti $_GET[pid] per jump'us ir per FH::gw_link generuojamus linkus
 		GW::$request->carry_params['pid']=1;
 		
-		$this->filters['parent_id']=(int)$_GET['pid']?(int)$_GET['pid']:-1;	
+		$this->filters['parent_id']=isset($_GET['pid']) && (int)$_GET['pid']?(int)$_GET['pid']:-1;	
 		
 		
 		//jeigu vykdomas filtravimas rodyti visus elementus
-		if($this->list_params['filters'])
+		if(isset($this->list_params['filters']))
 			unset($this->filters['parent_id']);		
 		
 		//uzloadinti tevini irasa

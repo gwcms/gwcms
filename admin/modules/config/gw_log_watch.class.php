@@ -70,10 +70,10 @@ class GW_Log_Watch extends GW_Data_Object
 		static $data;
 		
 		if(!$data)
-				$data=self::getData();
+			$data=self::getData();
 
-		
-		$this->setValues((array)$data[$this->id]);			
+		if(isset($data[$this->id]))
+			$this->setValues((array)$data[$this->id]);			
 	}
 		
 	function saveData()
@@ -112,7 +112,7 @@ class GW_Log_Watch extends GW_Data_Object
 	}
 	
 	
-	function findAll()
+	function findAll($conditions = NULL, $options = Array())
 	{
 		$files = glob(GW::$dir['LOGS'].'*.log');
 		$list = Array();

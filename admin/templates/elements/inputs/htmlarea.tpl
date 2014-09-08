@@ -1,9 +1,7 @@
 
 
-{include_php "ckeditor/ckeditor_php5.php"}
-{php}
-	GW::$smarty->assign('ck', new CKEditor);
-{/php}
+{$ck = GW::getInstance('ckeditor','ckeditor/ckeditor_php5.php')}
+
 
 {$width=$width|default:"800"}
 {$ck->editor($input_name, $value, ['width'=>$width, 'language'=>GW::$request->ln])}

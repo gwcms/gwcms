@@ -99,6 +99,9 @@ class GW_Module
 	
 	function loadErrorFields()
 	{		
+                if(!isset($_SESSION['messages']))
+                    return;
+                
 		foreach((array)$_SESSION['messages'] as $field => $error)
 		{
 			if($error[0]===2)
@@ -263,7 +266,7 @@ class GW_Module
 	function lang()
 	{
 		if(isset($_REQUEST['lang']))
-		return $_REQUEST['lang'];
+			return $_REQUEST['lang'];
 			
 		return GW::$request->ln;
 	}	

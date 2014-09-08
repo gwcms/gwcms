@@ -1,4 +1,4 @@
-<?
+<?php
 
 if(class_exists("GW") && GW::$public){
 	//
@@ -27,21 +27,21 @@ if(!$item)
 	die('File doesn\'t exist');
 	
 
-if($params['size'])
+if(isset($params['size']))
 {
 	$params+=GW_Image::parseDimensions($params['size']);
 	unset($params['size']);
 }
 
 	
-if($params['width'] || $params['height'])
+if(isset($params['width']) || isset($params['height']))
 	$item->resize($params);
 
 
 GW_Cache_Control::setExpires('+24 hour');
 //GW_Cache_Control::checkFile($item->getFilename());
 
-if($params['debug'])
+if(isset($params['debug']))
 {
 	dump(Array
 	(
@@ -53,7 +53,7 @@ if($params['debug'])
 }	
 
 	
-if($_REQUEST['download']){
+if(isset($_REQUEST['download'])){
 	header("Content-Type: application/x-download");	
 	header('Content-Disposition: attachment; filename="'.$item->get('original_filename').'";');
 	header("Accept-Ranges: bytes");

@@ -46,6 +46,9 @@ class GW_Data_Object
 	{
 		foreach($this->encode_fields as $key => $val)
 		{
+			if(!isset($this->content_base[$key]))
+				continue;
+			
 			$func = "encode".$this->encode_fields[$key];
 			$this->content_base[$key] = $this->$func($key, $this->content_base[$key], true);
 		}

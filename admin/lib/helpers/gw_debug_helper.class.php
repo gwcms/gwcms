@@ -15,10 +15,11 @@ class GW_Debug_Helper
 		
 		foreach($backtrace as $i => $trace)
 		{
-			$str.="#$i $trace[file]:$trace[line], ";
-			$str.=@$trace['object']?'$'.get_class($trace['object'])."{$trace[type]}{$trace['function']}":"function $trace[function]";
+			$str.="#$i ".(isset($trace['file'])?$trace['file']:'-').':'.
+				(isset($trace['line']) ? $trace['line'] : '-').", ";
+			$str.=@$trace['object']?'$'.get_class(@$trace['object']).$trace['type']."{$trace['function']}":"function $trace[function]";
 	
-			if($_REQUEST['showargs'] || 1)
+			if(isset($_REQUEST['showargs']) || 1)
 				$str.=', ARGS: '.@json_encode($trace['args']);
 	
 			$str.="\n";

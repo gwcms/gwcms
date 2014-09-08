@@ -37,8 +37,8 @@ class Module_CronTasks extends GW_Common_Module
 		
 		list($time_match, $interval) = explode('#', $time_match);
 		
-		dump("Simulating time from 00:00:00 to 23:59:59");
-		dump("TimeMatch: ".$time_match.' Interval: '.$interval);
+		d::ldump("Simulating time from 00:00:00 to 23:59:59");
+		d::ldump("TimeMatch: ".$time_match.' Interval: '.$interval);
 		
 		$lastrun=-100000000;
 		$runcnt=0;
@@ -55,7 +55,7 @@ class Module_CronTasks extends GW_Common_Module
 						
 						if($secs - $lastrun > $interval*60)
 						{
-							dump("$time Run! ");
+							d::ldump("$time Run! ");
 							$lastrun=$secs;
 							$runcnt++;
 						}
@@ -64,7 +64,7 @@ class Module_CronTasks extends GW_Common_Module
 				
 				}
 				
-		dump("Run count: $runcnt");
+		d::ldump("Run count: $runcnt");
 		
 	}
 	
