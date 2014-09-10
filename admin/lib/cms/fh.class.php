@@ -9,7 +9,7 @@ $GLOBALS['smarty_vars_store']=Array();
  */
 class FH
 {
-	static function getTplVars(&$template_obj, $vars_arr)
+	static function &getTplVars(&$template_obj, $vars_arr)
 	{
 		$res=Array();
 		

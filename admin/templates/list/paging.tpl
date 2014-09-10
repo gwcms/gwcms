@@ -1,6 +1,6 @@
 {if $m->list_params['page_by']}
 {php}
-	$vars =& FH::getTplVars($template, Array('m','query_info'));
+	$vars = FH::getTplVars($template, Array('m','query_info'));
 	
 	$params =& $vars['m']->list_params;
 
