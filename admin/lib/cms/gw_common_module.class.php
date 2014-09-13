@@ -425,7 +425,7 @@ class GW_Common_Module extends GW_Module
 	{	
 		$name = strtolower($name);
 		
-		if($this->allow_auto_actions[$name])
+		if(isset($this->allow_auto_actions[$name]))
 			return call_user_func_array(Array($this, "common_$name"), $arguments);
 		else
 			trigger_error('method "'.$name.'" not exists', E_USER_NOTICE);
