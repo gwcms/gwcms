@@ -1,44 +1,32 @@
-{include file="default_open.tpl"}
+{extends file="default_list.tpl"}
 
-<div style="max-width:600px;">
+{block name="init"}
 
-<p>
-{gw_link relative_path=form title=$lang.CREATE_NEW icon="action_file_add" params=[id=>0]}
-</p>
-<br />
-
-{if !count($list)}
-	<p>{$lang.NO_ITEMS}</p>
-{else}
-
-<table class="gwTable gwActiveTable">
-<tr>
-	<th width="40%">{$m->lang.FIELDS.second_name}, {$m->lang.FIELDS.first_name}</th>
-	<th width="20%">{$m->lang.FIELDS.email}</th>
-	<th width="1%">{$lang.ACTIONS}</th>
-</tr>
-
-
-
-{foreach from=$list item=item}
-	{$id=$item->id}
-
+	{*function dl_actions_switchtouser}
+		{gw_link do="switch_user" icon="switch_user" params=[id=>$item->id] show_title=0}
+	{/function*}
 	
-<tr {if $smarty.get.id==$item->id}class="gw_active_row"{/if}>
-	<td>{$item->second_name}, {$item->first_name}</td>
-	<td><a href="mailto:{$item->email}">{$item->email}</a></td>
-
-	<td nowrap>
-		{include file="tools/list_actions.tpl" actions=[invert_active,invert_banned,edit,delete]}
-	</td>
-</tr>
-
-{/foreach}
-
-</table>
-
-{/if}
-
-</div>
-
-{include file="default_close.tpl"}
+	{$display_fields = [
+		id=>1,
+		username=>1,
+		name=>1,
+                email=>1,
+		insert_time=>0,
+		update_time=>0
+	]}
+	
+	{$dl_fields=$m->getDisplayFields($display_fields)}
+	
+	{function dl_cell_name}
+                {$item->first_name} {$item->second_name}
+	{/function}
+	
+	{$dl_smart_fields=[name]}
+	{$dl_toolbar_buttons[] = dialogconf}	
+	
+	{$dl_actions=[invert_active,edit,delete]}
+	
+	{$dl_filters=$display_fields}
+	
+	{$order_enabled_fields = array_keys($display_fields)}
+{/block}

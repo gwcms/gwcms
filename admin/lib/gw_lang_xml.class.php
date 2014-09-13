@@ -77,7 +77,7 @@ class GW_Lang_XML
 		{
 
 			$tree[ $item['attributes']['ID'] ] = 
-				$item['childs'] ?
+				isset($item['childs']) ?
 				(
 					$item['childs'][0]['tag']=='I' ? 
 					self::___multiLangStruct($item['childs'], $ln) :

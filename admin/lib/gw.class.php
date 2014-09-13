@@ -47,7 +47,7 @@ class GW
 	{
 		static $cache;
 		
-		if( $cache[$class])
+		if( isset($cache[$class]) )
 			return $cache[$class];
 			
 		if($file)
