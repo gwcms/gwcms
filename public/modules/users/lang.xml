@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+
+	<i id="CANT_BE_EMPTY"></i>
+
+	<i id="FIELDS">
+	
+		<i id="company_name">Įmonės pavadinimas</i>
+		<i id="company_code">Įmonės kodas</i>
+		<i id="company_vat_code">Įmonės pvm kodas</i>
+		<i id="phone">Telefono nr.</i>		
+		<i id="mob_phone">Mob. tel. nr</i>				
+
+		<i id="address">Adresas</i>
+		<i id="city">Miestas</i>
+		<i id="email">E-paštas</i>
+		<i id="name">Kontaktinio asmens vardas, pavardė</i>
+
+	</i>
+
+</xml>

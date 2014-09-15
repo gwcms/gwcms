@@ -47,12 +47,14 @@ class Navigator
 		
 		$base='';
 		
-		for($i=0;$i<strlen($tmp1)-1;$i++)
+		$len = min(strlen($tmp1), strlen($tmp2));
+		
+		for($i=0;$i<$len;$i++)
 			if($tmp1[$i]==$tmp2[$i])	
 				$base.=$tmp1[$i];
 			else
 				break;
-				
+		
 		return $base;
 	}
 	

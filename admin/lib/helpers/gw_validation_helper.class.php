@@ -6,7 +6,7 @@ class GW_Validation_Helper
 	/**
 	 * removes not expected keys
 	 */
-	function removeUnexpected(&$arr, $expected_keys=Array())
+	static function removeUnexpected(&$arr, $expected_keys=Array())
 	{	
 		foreach($arr as $key => $val)
 			if(!in_array($key, $expected_keys))
@@ -26,7 +26,7 @@ class GW_Validation_Helper
 		return strtolower(self::className($str));
 	}
 	
-	function pagePathName($str)
+	static function pagePathName($str)
 	{
 		$str=mb_strtolower($str);
 		$current=Array('ą','č','ę','ė','į','š','ų','ū','ž');

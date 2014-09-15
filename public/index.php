@@ -16,10 +16,15 @@ $GLOBALS['proc_timer']=new GW_Timer();
 
 
 GW::$request=new GW_Public_Request();
+	
 
 
 GW::$request->ifAjaxCallProcess();
+
 GW::$request->init();
+
+
+
 
 
 GW_Error_Message::$ln = GW::$request->ln;

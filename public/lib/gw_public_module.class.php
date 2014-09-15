@@ -106,7 +106,7 @@ class GW_Public_Module
 		$this->init();
 
 
-		$act_name = self::__funcVN($_REQUEST['act']);
+		$act_name = self::__funcVN(isset($_REQUEST['act']) ? $_REQUEST['act'] : false);
 
 		
 		if(isset($params[0])){
@@ -118,6 +118,8 @@ class GW_Public_Module
 			}else{
 				array_shift($params);
 			}
+		}else{
+			$view_name = 'default';
 		}
 		
 		if($act_name)
@@ -137,6 +139,9 @@ class GW_Public_Module
 	
 	function loadErrorFields()
 	{		
+		if(!isset($_SESSION['messages']))
+			return false;
+		
 		foreach((array)$_SESSION['messages'] as $field => $error)
 		{
 			if($error[0]===2)

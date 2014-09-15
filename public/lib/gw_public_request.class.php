@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GW_Public_Request extends GW_Request
 {
@@ -25,6 +25,9 @@ class GW_Public_Request extends GW_Request
 
 	function init()
 	{
+		
+	
+		
 		$this->requestInfo();
 		$this->getPage();
 	}
@@ -43,12 +46,14 @@ class GW_Public_Request extends GW_Request
 				
 			array_unshift($this->path_arg, $this->path_arr[$i]['name']);
 		}
+		
+		
 
 		return false;
 	}
 	
 	//no data objects catching
-	function requestInfoInnerDataObject()
+	function requestInfoInnerDataObject(&$name, &$item)
 	{
 	}	
 
@@ -87,10 +92,10 @@ class GW_Public_Request extends GW_Request
 
 	function ifAjaxCallProcess()
 	{
-		if($_GET['act']!='do:json')
+		if(!isset($_GET['act']) || $_GET['act']!='do:json')
 			return;
 
-		$this->processModule(GW::$dir["PUB_MODULES"].$_GET['module']);
+		$this->processModule(GW::$dir["PUB_MODULES"].(isset($_GET['module'])?$_GET['module']:'default'), Array());
 	}
 
 	

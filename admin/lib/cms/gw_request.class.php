@@ -132,13 +132,13 @@ class GW_Request
 
 	function requestInfoInnerDataObject(&$name, &$item)
 	{
-			if(is_numeric($name) && $item)
-			{
-				$item['data_object_id']=(int)$name;
-				$data_object_id = $item['data_object_id'];
-				$item['path'].='/'.$name;
-				return true;
-			}
+		if(is_numeric($name) && $item)
+		{
+			$item['data_object_id']=(int)$name;
+			$data_object_id = $item['data_object_id'];
+			$item['path'].='/'.$name;
+			return true;
+		}
 	}
 	
 	/**
@@ -161,6 +161,7 @@ class GW_Request
 		$path_clean = '';
 		$path='';
 		$item=false;
+		$path_arr = Array();
 		
 		foreach($parr as $i => $name)
 		{
@@ -185,7 +186,7 @@ class GW_Request
 		//nuimti id - articles/items
 		//kad galetu sudarinet teisingus linkus
 				
-		if(is_numeric($path_arr[count($path_arr)-1]))
+		if(count($path_arr) && is_numeric($path_arr[count($path_arr)-1]))
 			$path = dirname($path);
 					
 		
@@ -201,7 +202,7 @@ class GW_Request
 		$this->base = Navigator::getBase();
 		
 		
-		$pack = $this->requestInfoInner($_GET['url']);
+		$pack = $this->requestInfoInner(isset($_GET['url'])?$_GET['url']:'');
 		
 		extract($pack);
 		

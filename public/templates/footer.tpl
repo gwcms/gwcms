@@ -1,8 +1,11 @@
-<!--Start Footer-->
-<div class="copyright">
-  Copyright © 2011 Dropindesign. All rights reserved. www.dropindesign.no
+<div id="footer">
+{include "menu_bottom.tpl"}
+<div id="footer_middle">
 </div>
-<!-- slutt footer -->
-  
+</div>
+
 </body>
+
+
+
 </html>
