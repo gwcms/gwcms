@@ -272,7 +272,7 @@ class GW_Common_Module extends GW_Module
 		foreach($views as $i => $view)
 		{		
 
-			if($view['default'])
+			if(isset($view['default']) && $view['default'])
 				$default=$view;
 				
 			if($store['name']==$view['name'])

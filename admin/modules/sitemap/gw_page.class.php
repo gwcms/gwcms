@@ -11,7 +11,7 @@ include_once __DIR__.'/gw_template.class.php';
 
 
 
-class GW_Page extends GW_Composite_Data_Object
+class GW_Page extends GW_i18n_Data_Object
 {
 	var $table = 'gw_sitemap';
 	var $i18n_fields = Array('title'=>1, 'in_menu'=>1);
