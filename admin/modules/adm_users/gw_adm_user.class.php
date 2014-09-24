@@ -79,8 +79,8 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	function logLogin()
 	{
 		$inf = GW_Request_Helper::visitorInfo();
-		$msg="ip: $inf[ip]".($inf['proxy']?" | $inf[proxy]":'').($inf['referer']?" | $inf[referer]":'');
-		GW_DB_Logger::msg($msg,'user','login',$user['id'],$inf['browser']);
+		$msg="ip: $inf[ip]".(isset($inf['proxy'])?" | $inf[proxy]":'').($inf['referer']?" | $inf[referer]":'');
+		GW_DB_Logger::msg($msg,'user','login',GW::$user->id,$inf['browser']);
 	}
 
 	function onLogin()

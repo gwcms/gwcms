@@ -104,16 +104,6 @@ class FH
 		}
 	}
 	
-	static $tpl_var_base = Array();
-	
-	static function global_var($key, $value=null)
-	{
-		if($value===null)
-			return self::$tpl_var_base[$key];
-		else
-			self::$tpl_var_base[$key] = $value;
-	}
-	
 	static function maxUploadSize()
 	{
 		static $cache;if($cache)return $cache;

@@ -16,12 +16,12 @@ class GW_DB_Logger
 		if(!is_array($entry))
 			$entry=Array('msg'=>$entry);
 		
-		if(!$entry['time'])$entry['time']=date('Y-m-d H:i:s');
-		if(!$entry['type'])$entry['type']=$type;
-		if(!$entry['action'])$entry['action']=$action;
-		if(!$entry['status'])$entry['status']=$status;
+		if(!isset($entry['time']))$entry['time']=date('Y-m-d H:i:s');
+		if(!isset($entry['type']))$entry['type']=$type;
+		if(!isset($entry['action']))$entry['action']=$action;
+		if(!isset($entry['status']))$entry['status']=$status;
 		
-		if(!$entry['add_info'])$entry['add_info']=$add_info;
+		if(!isset($entry['add_info']))$entry['add_info']=$add_info;
 		if(is_array($entry['add_info']))$entry['add_info']=serialize($entry['add_info']);
 			
 		GW::$db->insert(self::$table,$entry);

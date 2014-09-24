@@ -86,13 +86,10 @@ class Module_Users extends GW_Public_Module
 		$login = $_POST['login'];
 		
 		list($user, $pass) = $login;
-		
-		
-
-		
+				
 		if(GW::$auth->loginPass($user, $pass)) {
-			 GW::$request->setMessage("/VALIDATION/USER/LOGIN_WELCOME");
-			 GW::$request->jump('userzone');
+			//GW::$request->setMessage("/VALIDATION/USER/LOGIN_WELCOME");
+			GW::$request->jump(GW::$static_conf['GW_USERZONE_PATH']);
 		} else {
 			GW::$request->setErrors("/VALIDATION/USER/LOGIN_FAIL");
 		}

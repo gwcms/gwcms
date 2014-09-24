@@ -3,17 +3,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>stile.lt</title>
+<title>{GW::$static_conf.GW_SITE_TITLE}</title>
 <base href="{Navigator::getBase(1)}" />
 
-<link rel="stylesheet" type="text/css" href="/css/style.css" />
-<script type="text/javascript" src="/scripts/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<script type="text/javascript" src="js/jquery-2.1.1.js"></script>
 
 
 
-        <link rel="stylesheet" href="/css/jbclock.css" type="text/css" media="all" />
-        <script type="text/javascript" src="/scripts/jbclock.js"></script>
-        
 
 
 </head>

@@ -14,8 +14,10 @@ if(file_exists(__DIR__.'/GW_ENV_PROD')){
 	GW::$static_conf['PROJECT_ENVIRONMENT']=GW_ENV_DEV;
 }
 
+GW::$static_conf['GW_USERZONE_PATH']="usr/";
+GW::$static_conf['GW_SITE_PATH_LOGIN']='sys/login';
+GW::$static_conf['GW_SITE_PATH_LOGOUT']='usr/user/logout';
 
-GW::$static_conf['GW_SITE_PATH_LOGIN']='adm_users/login';
 GW::$static_conf['GW_LOGIN_NAME_EXPIRATION']= '+1 month'; //strtotime format
 GW::$static_conf['GW_AUTOLOGIN_EXPIRATION']= '+2 week'; //strtotime format
 
@@ -56,3 +58,7 @@ $tmp2 =& GW::$static_conf['ENVVARS'][$tmp1];
 
 if($tmp1 > 1 && is_array($tmp2))
 	GW::$static_conf=array_merge(GW::$static_conf, $tmp2);
+
+
+
+GW::$static_conf['GW_SITE_TITLE']="Masinės žinutės";

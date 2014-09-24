@@ -9,7 +9,7 @@
 	</i>
 	<i id="USER">
 		<i id="LOGIN_WELCOME">Prisijungėte</i>
-		<i id="LOGIN_FAIL">Patikrinkite vartotojo vardą/slaptažodį</i>
+		<i id="LOGIN_FAIL">Patikrinkite vartotojo vardą/slaptažodį</i>		
 	</i>
 	
 	<i id="STRING">

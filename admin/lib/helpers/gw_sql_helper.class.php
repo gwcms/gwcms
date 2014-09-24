@@ -2,7 +2,7 @@
 
 class GW_SQL_Helper
 {
-	function condition_str($array, $implode=' AND ')
+	static function condition_str($array, $implode=' AND ')
 	{
 		$str = '';
 		

@@ -25,9 +25,6 @@ class GW_Public_Request extends GW_Request
 
 	function init()
 	{
-		
-	
-		
 		$this->requestInfo();
 		$this->getPage();
 	}
@@ -46,7 +43,7 @@ class GW_Public_Request extends GW_Request
 				
 			array_unshift($this->path_arg, $this->path_arr[$i]['name']);
 		}
-		
+
 		
 
 		return false;
@@ -181,10 +178,11 @@ class GW_Public_Request extends GW_Request
 	}
 	
 	function userzoneAccess()
-	{
-		if(strpos($this->page->path,'userzone')===0 && !GW::$user)
+	{		
+		if(strpos($this->page->path, GW::$static_conf['GW_USERZONE_PATH'])===0 && !GW::$user)
 		{
-			$this->jump(GW::$static_conf['USER_LOGIN_PAGE']);
+
+			$this->jump(GW::$static_conf['GW_SITE_PATH_LOGIN']);
 			exit;
 		}	
 	}

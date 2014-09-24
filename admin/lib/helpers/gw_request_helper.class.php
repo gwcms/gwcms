@@ -35,10 +35,12 @@ class GW_Request_Helper
 		(
 			'ip'=>$IP,
 			'host'=>$HOST,
-			'proxy'=>$PROXY,
 			'browser'=>$_SERVER['HTTP_USER_AGENT'],
 			'referer'=>$_SERVER['HTTP_REFERER']
 		);
+		
+		if(isset($PROXY))
+			$info['proxy']=$PROXY;
 	
 		return $info;
 	}

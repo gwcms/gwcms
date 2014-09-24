@@ -26,7 +26,7 @@ class GW_Page extends GW_i18n_Data_Object
 		$cond = Array('parent_id=?'.($params['in_menu']?' AND active AND in_menu_'.$this->lang():''), $id);
 
 		$list = $this->findAll($cond);
-
+		
 		if($params['return_first_only'])
 		return $list[0];
 			

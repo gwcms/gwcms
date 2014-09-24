@@ -1,10 +1,8 @@
 <table class="gwTable" cellspacing="0" cellpadding="0">
 	<tr>
-		
-		
 		{include file="list/paging.tpl" assign=pages}
-		
-		{if FH::global_var('paging_tpl_page_count')>1}
+						
+		{if $paging_tpl_page_count>1}
 			<td>{$pages}</td>
 		{/if}
 		<td>

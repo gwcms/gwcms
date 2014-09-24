@@ -47,7 +47,7 @@ class GW_Auth
 		$autologin = isset($_COOKIE['login_7']) && $_COOKIE['login_7'] && self::isAutologinEnabled();
 
 				
-		$logedin=($this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int)$this->session["user_id"]);
+		$logedin=(isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int)$this->session["user_id"]);
 		
 		if($logedin) {
 			$user = $this->getUserByUserID($user_id);

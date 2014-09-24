@@ -1,16 +1,18 @@
 <?php
 
-class GW_User extends GW_Data_Object {
+class GW_User extends GW_Data_Object 
+{
 
 	var $table = 'gw_users';
 	var $min_pass_length = 6;
 	var $max_pass_length = 16;
 	var $validators = Array();
-	var $calculate_fields = Array('title' => 1, 'username' => 1/* did project specified */);
+	var $calculate_fields = Array('title' => 1, 'name' => 1/* did project specified */);
 	var $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1);
 	var $autologgedin = false;
 
-	function setValidators($set) {
+	function setValidators($set) 
+	{
 		if (!$set)
 			return $this->validators = Array(); //remove validators
 
@@ -42,7 +44,8 @@ class GW_User extends GW_Data_Object {
 			$this->validators[$key] = $validators_def[$key];
 	}
 
-	function validate() {
+	function validate() 
+	{
 		if (!parent::validate())
 			return false;
 
@@ -73,13 +76,15 @@ class GW_User extends GW_Data_Object {
 		return $this->errors ? false : true;
 	}
 
-	function logLogin() {
+	function logLogin() 
+	{
 		$inf = GW_Request_Helper::visitorInfo();
 		$msg = "ip: $inf[ip]" . ($inf['proxy'] ? " | $inf[proxy]" : '') . ($inf['referer'] ? " | $inf[referer]" : '');
 		GW_DB_Logger::msg($msg, 'user', 'login', $user['id'], $inf['browser']);
 	}
 
-	function onLogin() {
+	function onLogin() 
+	{
 		$this->set('login_time', date('Y-m-d H:i:s'));
 		$this->set('login_count', $this->get('login_count') + 1);
 		$this->set('last_ip', $_SERVER['REMOTE_ADDR']);
@@ -90,7 +95,8 @@ class GW_User extends GW_Data_Object {
 		$this->logLogin();
 	}
 
-	function onRequest($db_update = true) {
+	function onRequest($db_update = true) 
+	{
 		$_SESSION[AUTH_SESSION_KEY]['last_request'] = time();
 		$this->set('last_request_time', date('Y-m-d H:i:s'));
 
@@ -98,14 +104,16 @@ class GW_User extends GW_Data_Object {
 			$this->update(Array('last_request_time'));
 	}
 
-	static function cryptPass($pass, $salt = null) {
+	static function cryptPass($pass, $salt = null) 
+	{
 		if ($pass) {//cant be empty
 			return $salt ? crypt($pass, $salt) : crypt($pass);
 		} else
 			die('Password cant be empty');
 	}
 
-	function checkPass($pass) {
+	function checkPass($pass) 
+	{
 		if (!$pass)
 			return false;
 
@@ -114,14 +122,16 @@ class GW_User extends GW_Data_Object {
 		return $tmp == self::cryptPass($pass, $tmp);
 	}
 
-	function cryptPassword() {
+	function cryptPassword() 
+	{
 		$this->set('pass', self::cryptPass($this->get('pass')));
 	}
 
-	function EventHandler($event) {
+	function eventHandler($event) 
+	{
 		switch ($event) {
 			case 'BEFORE_SAVE':
-				if ($this->content_base['pass_new'])
+				if (isset($this->content_base['pass_new']))
 					$this->set('pass', self::cryptPass($this->get('pass_new')));
 
 				break;
@@ -130,11 +140,14 @@ class GW_User extends GW_Data_Object {
 		parent::EventHandler($event);
 	}
 
-	function isRoot() {
+	function isRoot() 
+	{
 		return GW_ADM_Permissions::isRoot($this->group_ids);
 	}
 
-	function delete() {
+	/*
+	function delete() 
+	{
 		$this->fireEvent('BEFORE_DELETE');
 		$this->set('removed', 1);
 		$this->set('active', 0);
@@ -142,26 +155,32 @@ class GW_User extends GW_Data_Object {
 
 		$this->fireEvent('AFTER_DELETE');
 	}
-
-	function getById($id) {
+	*/
+	
+	function getById($id) 
+	{
 		return $this->find(Array('id=?', $id));
 	}
 
-	function getByUsername($username) {
+	function getByUsername($username) 
+	{
 		return $this->find(Array('email=?', $username));
 	}
 
-	function getForActivationById($id) {
+	function getForActivationById($id) 
+	{
 		return $this->find(Array('id=? AND ! banned AND ! removed', $id));
 	}
 
-	function getByUsernamePass($username, $pass) {
+	function getByUsernamePass($username, $pass) 
+	{
 		$user = $this->getByUsername($username);
 		if ($user && $user->checkPass($pass))
 			return $user;
 	}
 
-	function generateKey() {
+	function generateKey() 
+	{
 		$this->key = md5(time() . rand(0, 1000) . $this->name);
 	}
 
@@ -175,20 +194,22 @@ class GW_User extends GW_Data_Object {
 			case 'title':
 				$val = $this->get('email');
 				break;
-			case 'username':
-				$val = $this->get('email');
+			case 'name':
+				$val = $this->get('first_name').' '.$this->get('second_name');
 				break;
 		}
 
 		return $cache[$key] = $val;
 	}
 
-	function onLogout() {
+	function onLogout() 
+	{
 		//dump("Logging out");
 		//exit;
 	}
 
-	function isSessionNotExpired() {
+	function isSessionNotExpired() 
+	{
 		$tmp = $this->remainingSessionTime();
 		return $tmp > -2;
 	}
@@ -196,7 +217,8 @@ class GW_User extends GW_Data_Object {
 	/**
 	 * returns seconds
 	 */
-	function remainingSessionTime() {
+	function remainingSessionTime() 
+	{
 		$session_validity = (int) $this->get('session_validity');
 
 		if ($session_validity == -1 || $this->autologgedin)

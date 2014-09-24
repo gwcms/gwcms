@@ -1,7 +1,4 @@
 {if $m->list_params['page_by']}
-	
-	
-	
 {php}
 	$vars = FH::getTplVars($template, Array('m','query_info'));
 	
@@ -10,9 +7,7 @@
 	$current=(int)$params['page'] ? (int)$params['page'] : 1;
 	$length=ceil($vars['query_info']['item_count'] / $params['page_by']);
 
-	
-	FH::global_var('paging_tpl_page_count', $length);
-	
+	GW::$smarty->assign('paging_tpl_page_count',$length);
 
 	if($length<2)
 		return;
