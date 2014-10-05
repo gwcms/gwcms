@@ -530,3 +530,87 @@ Backtrace:
 #7 /var/www/linkejimaivaldziai/admin/lib/cms/gw_request.class.php:394, $GW_Request->processModule, ARGS: [{"dirname":"adm_users","path":["adm_users","login"],"module":"login","params":[]},{"url":"en\/adm_users\/login","act":"do_login","login":["wdm","test"],"ln":"lt"}]
 #8 /var/www/linkejimaivaldziai/admin/index.php:23, $GW_Request->process, ARGS: []
 --------------
+140907 00:14:55 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:08 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:08 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:09 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:09 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:10 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:10 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:10 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:10 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:11 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:11 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:39 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:39 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:40 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:40 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:40 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:40 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:41 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:42 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:42 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:42 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:43 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:16:43 #256: MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 00:48:16 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:49:51 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:50:29 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:50:34 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:50:37 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:50:40 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:50:42 #2048: Only variables should be passed by reference. File: /var/www/gwcms/admin/lib/sys_common.php:96 remote_addr: 127.0.0.1
+140907 00:51:59 #2: call_user_method_array() expects exactly 3 parameters, 2 given. File: /var/www/gwcms/admin/lib/sys_common.php:98 remote_addr: 127.0.0.1
+140907 20:43:41 #4096: Object of class CKEditor could not be converted to string. File: /var/www/gwcms/admin/lib/smarty/sysplugins/smarty_internal_templatebase.php(171) : eval()'d code:31 remote_addr: 127.0.0.1
+140907 20:47:52 #2048: Non-static method GW_Image_Helper::__setFiles() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:103 remote_addr: 127.0.0.1
+140907 20:50:08 #2048: Non-static method GW_Image_Helper::__setFiles() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:103 remote_addr: 127.0.0.1
+140907 20:50:10 #2048: Non-static method GW_Image_Helper::__setFiles() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:103 remote_addr: 127.0.0.1
+140907 20:52:33 #2048: Non-static method GW_Image_Resize_Helper::resize() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/lib/image/gw_image.class.php:106 remote_addr: 127.0.0.1
+140907 20:53:22 #2048: Non-static method GW_Image_Resize_Helper::resize() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/lib/image/gw_image.class.php:106 remote_addr: 127.0.0.1
+140907 20:54:13 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140907 20:54:39 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140907 20:56:59 #2048: Declaration of GW_Log_Watch::findAll() should be compatible with GW_Data_Object::findAll($conditions = NULL, $options = Array). File: /var/www/gwcms/admin/modules/config/gw_log_watch.class.php:0 remote_addr: 127.0.0.1
+140907 20:59:05 #2048: Declaration of GW_Log_Watch::findAll() should be compatible with GW_Data_Object::findAll($conditions = NULL, $options = Array). File: /var/www/gwcms/admin/modules/config/gw_log_watch.class.php:0 remote_addr: 127.0.0.1
+140907 21:04:34 #2048: Declaration of GW_App_System::quit() should be compatible with GW_App_Base::quit($exit = 1). File: /var/www/gwcms/admin/lib/cli/gw_app_system.class.php:6 remote_addr: 127.0.0.1
+140907 21:06:19 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140907 21:06:30 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140907 21:21:58 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/modules/gallery/gw_gallery_item.class.php:108 remote_addr: 127.0.0.1
+140907 21:25:04 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140907 21:37:18 #2048: Declaration of Module_Pages::eventHandler() should be compatible with GW_Module::eventHandler($event, &$context). File: /var/www/gwcms/admin/modules/sitemap/module_pages.class.php:5 remote_addr: 127.0.0.1
+140907 21:47:20 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/cms/fh.class.php:232 remote_addr: 127.0.0.1
+140907 21:47:21 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/cms/fh.class.php:232 remote_addr: 127.0.0.1
+140907 21:49:11 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/modules/sitemap/module_pages.class.php:47 remote_addr: 127.0.0.1
+140907 21:50:25 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/modules/sitemap/module_pages.class.php:47 remote_addr: 127.0.0.1
+140907 21:50:47 #256: MySQL_ERROR: Unknown column 'ln' in 'where clause' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:52:56 #256: MySQL_ERROR: Unknown column 'ln' in 'where clause' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:54:53 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:57:11 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:57:52 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:58:11 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 21:59:55 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 22:00:12 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140907 22:01:01 #256: MySQL_ERROR: Unknown column 'title' in 'field list' (1054). File: /var/www/gwcms/admin/lib/data/gw_db.class.php:65 remote_addr: 127.0.0.1
+140908 06:49:09 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140908 06:51:46 #2048: Only variables should be assigned by reference. File: /var/www/gwcms/admin/lib/smarty/SmartyBC.class.php(464) : eval()'d code:2 remote_addr: 127.0.0.1
+140908 07:00:03 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:00:18 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:00:19 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:01:09 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:01:11 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:02:03 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:02:42 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:02:51 #2: Missing argument 2 for GW_Request::processModule(), called in /var/www/gwcms/admin/lib/cms/gw_request.class.php on line 379 and defined. File: /var/www/gwcms/admin/lib/cms/gw_request.class.php:278 remote_addr: 127.0.0.1
+140908 07:32:13 #2: require(/var/www/gwcms/admin/modules/mass_messages/routesms_account.class.php): failed to open stream: Permission denied. File: /var/www/gwcms/admin/lib/sys_common.php:26 remote_addr: 127.0.0.1
+140908 07:32:33 #2: file_get_contents(http://smsplus1.routesms.com:8080/sendsms?username=gwlt&amp;password=plk9uhj&amp;type=0&amp;dlr=0&amp;message=Sveiki&amp;source=LABAS): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+. File: /var/www/gwcms/admin/modules/mass_messages/routesms_account.class.php:54 remote_addr: 127.0.0.1
+140908 07:33:06 #2: file_get_contents(http://smsplus1.routesms.com:8080/sendsms?username=gwlt&amp;password=plk9uhj&amp;type=0&amp;dlr=0&amp;message=Sveiki&amp;source=LABAS): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+. File: /var/www/gwcms/admin/modules/mass_messages/routesms_account.class.php:54 remote_addr: 127.0.0.1
+140908 07:46:19 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:06 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:07 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:07 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:08 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:08 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:09 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 07:47:09 #256: Unhandled static call. File: /var/www/gwcms/admin/lib/data/gw_data_object.class.php:648 remote_addr: 127.0.0.1
+140908 08:22:47 #2048: Non-static method pdu::msg_info() should not be called statically, assuming $this from incompatible context. File: /var/www/gwcms/admin/modules/mass_messages/gw_mass_message.class.php:98 remote_addr: 127.0.0.1

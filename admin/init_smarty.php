@@ -29,6 +29,7 @@ $s->assignByRef('lang', GW::$lang);
 $s->assignByRef('page', GW::$request->page);
 
 
+d::dumpas($s);
 
 class Smarty_Internal_Template_Custom extends Smarty_Internal_Template
 {

@@ -752,8 +752,12 @@ class Smarty extends Smarty_Internal_TemplateBase
         if (isset($allowed[$name])) {
             $this->{$allowed[$name]}($value);
         } else {
-            trigger_error('Undefined property: ' . get_class($this) . '::$' . $name, E_USER_NOTICE);
+            trigger_error($msg='Undefined property: ' . get_class($this) . '::$' . $name, E_USER_NOTICE);
+	    d::ldump($msg);
         }
+	
+	
+	d::Dumpas("ABC");
     }
 
     /**
@@ -1189,7 +1193,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      * Set autoload filters
      *
      * @param  array  $filters filters to load automatically
-     * @param  string $type    "pre", "output", … specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
+     * @param  string $type    "pre", "output", ? specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
      *
      * @return Smarty current Smarty instance for chaining
      */
@@ -1208,7 +1212,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      * Add autoload filters
      *
      * @param  array  $filters filters to load automatically
-     * @param  string $type    "pre", "output", … specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
+     * @param  string $type    "pre", "output", ? specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
      *
      * @return Smarty current Smarty instance for chaining
      */
@@ -1238,7 +1242,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      *
      * @param  string $type type of filter to get autoloads for. Defaults to all autoload filters
      *
-     * @return array  array( 'type1' => array( 'filter1', 'filter2', … ) ) or array( 'filter1', 'filter2', …) if $type was specified
+     * @return array  array( 'type1' => array( 'filter1', 'filter2', ? ) ) or array( 'filter1', 'filter2', ?) if $type was specified
      */
     public function getAutoloadFilters($type = null)
     {

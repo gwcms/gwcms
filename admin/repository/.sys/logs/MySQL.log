@@ -101,3 +101,489 @@
 
 --------------------------------
 
+[14-09-07 00:14:55] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:14:55] MySQL_QUERY: 
+[14-09-07 00:14:55] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:08] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:08] MySQL_QUERY: 
+[14-09-07 00:16:08] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:08] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:08] MySQL_QUERY: 
+[14-09-07 00:16:08] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:09] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:09] MySQL_QUERY: 
+[14-09-07 00:16:09] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:09] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:09] MySQL_QUERY: 
+[14-09-07 00:16:09] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:10] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:10] MySQL_QUERY: 
+[14-09-07 00:16:10] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:10] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:10] MySQL_QUERY: 
+[14-09-07 00:16:10] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:10] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:10] MySQL_QUERY: 
+[14-09-07 00:16:10] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:10] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:10] MySQL_QUERY: 
+[14-09-07 00:16:10] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:11] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:11] MySQL_QUERY: 
+[14-09-07 00:16:11] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:11] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:11] MySQL_QUERY: 
+[14-09-07 00:16:11] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:39] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:39] MySQL_QUERY: 
+[14-09-07 00:16:39] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:39] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:39] MySQL_QUERY: 
+[14-09-07 00:16:39] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:40] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:40] MySQL_QUERY: 
+[14-09-07 00:16:40] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:40] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:40] MySQL_QUERY: 
+[14-09-07 00:16:40] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:40] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:40] MySQL_QUERY: 
+[14-09-07 00:16:40] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:40] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:40] MySQL_QUERY: 
+[14-09-07 00:16:40] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:41] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:41] MySQL_QUERY: 
+[14-09-07 00:16:41] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:42] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:42] MySQL_QUERY: 
+[14-09-07 00:16:42] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:42] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:42] MySQL_QUERY: 
+[14-09-07 00:16:42] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:42] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:42] MySQL_QUERY: 
+[14-09-07 00:16:42] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:43] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:43] MySQL_QUERY: 
+[14-09-07 00:16:43] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 00:16:43] MySQL_ERROR: Access denied for user 'admin'@'localhost' (using password: YES) (1045)
+[14-09-07 00:16:43] MySQL_QUERY: 
+[14-09-07 00:16:43] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: [""]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:37, $GW_DB->trigger_error, ARGS: []
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:53, $GW_DB->connect, ARGS: [["admin","admin","localhost","linkejimaivaldziai"]]
+#3 /var/www/gwcms/admin/init_basic.php:14, $GW_DB->__construct, ARGS: []
+#4 /var/www/gwcms/admin/init.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init_basic.php"]
+#5 /var/www/gwcms/admin/index.php:6, function include, ARGS: ["\/var\/www\/gwcms\/admin\/init.php"]
+
+--------------------------------
+
+[14-09-07 21:50:47] MySQL_ERROR: Unknown column 'ln' in 'where clause' (1054)
+[14-09-07 21:50:47] MySQL_QUERY: SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'
+[14-09-07 21:50:47] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:123, $GW_DB->query, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'",false]
+#3 /var/www/gwcms/admin/modules/sitemap/gw_page.class.php:146, $GW_DB->fetch_rows, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#4 /var/www/gwcms/admin/repository/.sys/templates_c/ea07a819f14b88ad12bb3b5369fa48994f1c0080.file.form.tpl.php:73, $GW_Page->getContent, ARGS: ["tekstas"]
+#5 /var/www/gwcms/admin/lib/smarty/sysplugins/smarty_internal_templatebase.php:188, function content_540ca8a78231d0_92041916, ARGS: 
+#6 /var/www/gwcms/admin/lib/smarty/sysplugins/smarty_internal_templatebase.php:394, $SmartyBC->fetch, ARGS: ["\/var\/www\/gwcms\/admin\/modules\/sitemap\/tpl\/pages\/form.tpl",null,null,null,true]
+#7 /var/www/gwcms/admin/lib/cms/gw_module.class.php:196, $SmartyBC->display, ARGS: ["\/var\/www\/gwcms\/admin\/modules\/sitemap\/tpl\/pages\/form.tpl"]
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:152, $Module_Pages->processTemplate, ARGS: []
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:170, $Module_Pages->processView, ARGS: ["form",[]]
+#10 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form"}]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form"}]
+#12 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:52:56] MySQL_ERROR: Unknown column 'ln' in 'where clause' (1054)
+[14-09-07 21:52:56] MySQL_QUERY: SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'
+[14-09-07 21:52:56] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:123, $GW_DB->query, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'",false]
+#3 /var/www/gwcms/admin/modules/sitemap/gw_page.class.php:146, $GW_DB->fetch_rows, ARGS: ["SELECT * FROM gw_sitemap_data WHERE page_id=45 AND ln='lt'"]
+#4 /var/www/gwcms/admin/repository/.sys/templates_c/ea07a819f14b88ad12bb3b5369fa48994f1c0080.file.form.tpl.php:73, $GW_Page->getContent, ARGS: ["tekstas"]
+#5 /var/www/gwcms/admin/lib/smarty/sysplugins/smarty_internal_templatebase.php:188, function content_540ca8a78231d0_92041916, ARGS: 
+#6 /var/www/gwcms/admin/lib/smarty/sysplugins/smarty_internal_templatebase.php:394, $SmartyBC->fetch, ARGS: ["\/var\/www\/gwcms\/admin\/modules\/sitemap\/tpl\/pages\/form.tpl",null,null,null,true]
+#7 /var/www/gwcms/admin/lib/cms/gw_module.class.php:196, $SmartyBC->display, ARGS: ["\/var\/www\/gwcms\/admin\/modules\/sitemap\/tpl\/pages\/form.tpl"]
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:152, $Module_Pages->processTemplate, ARGS: []
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:170, $Module_Pages->processView, ARGS: ["form",[]]
+#10 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form"}]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form"}]
+#12 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:54:53] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 21:54:53] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 21:54:53" WHERE `id`=45;
+[14-09-07 21:54:53] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:54:53\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:54:53\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:54:53\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 21:54:53"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 :, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:57:11] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 21:57:11] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 21:57:11" WHERE `id`=45;
+[14-09-07 21:57:11] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:11\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:11\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:11\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 21:57:11"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 :, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:57:52] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 21:57:52] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 21:57:52" WHERE `id`=45;
+[14-09-07 21:57:52] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:52\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:52\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:57:52\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 21:57:52"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 :, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:58:11] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 21:58:11] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 21:58:11" WHERE `id`=45;
+[14-09-07 21:58:11] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:58:11\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:58:11\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:58:11\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 21:58:11"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 :, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 21:59:55] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 21:59:55] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 21:59:55" WHERE `id`=45;
+[14-09-07 21:59:55] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:59:55\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:59:55\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 21:59:55\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 21:59:55"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 -:, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 22:00:12] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 22:00:12] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 22:00:12" WHERE `id`=45;
+[14-09-07 22:00:12] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:00:12\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:00:12\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:00:12\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 22:00:12"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 -:, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
+[14-09-07 22:01:01] MySQL_ERROR: Unknown column 'title' in 'field list' (1054)
+[14-09-07 22:01:01] MySQL_QUERY: UPDATE gw_sitemap SET `type`="0", `parent_id`="-1", `pathname`="home", `title`="labadiena", `meta_description`="", `template_id`="14", `active`="1", `in_menu`="1", `update_time`="2014-09-07 22:01:01" WHERE `id`=45;
+[14-09-07 22:01:01] BACKTRACE: 
+--------------------------------
+#0 /var/www/gwcms/admin/lib/data/gw_db.class.php:63, $GW_DB->error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:01:01\" WHERE `id`=45;"]
+#1 /var/www/gwcms/admin/lib/data/gw_db.class.php:105, $GW_DB->trigger_error, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:01:01\" WHERE `id`=45;"]
+#2 /var/www/gwcms/admin/lib/data/gw_db.class.php:295, $GW_DB->query, ARGS: ["UPDATE gw_sitemap SET `type`=\"0\", `parent_id`=\"-1\", `pathname`=\"home\", `title`=\"labadiena\", `meta_description`=\"\", `template_id`=\"14\", `active`=\"1\", `in_menu`=\"1\", `update_time`=\"2014-09-07 22:01:01\" WHERE `id`=45;",false]
+#3 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:310, $GW_DB->update, ARGS: ["gw_sitemap","`id`=45",{"type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","update_time":"2014-09-07 22:01:01"}]
+#4 /var/www/gwcms/admin/lib/data/gw_data_object.class.php:413, $GW_Page->update, ARGS: []
+#5 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:125, $GW_Page->save, ARGS: []
+#6 -:-, $Module_Pages->common_doSave, ARGS: []
+#7 /var/www/gwcms/admin/lib/cms/gw_common_module.class.php:429, function call_user_func_array, ARGS: 
+#8 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->__call, ARGS: ["dosave",[]]
+#9 /var/www/gwcms/admin/lib/cms/gw_module.class.php:122, $Module_Pages->dosave, ARGS: []
+#10 /var/www/gwcms/admin/lib/cms/gw_module.class.php:160, $Module_Pages->process_act, ARGS: ["do:save"]
+#11 /var/www/gwcms/admin/lib/cms/gw_request.class.php:294, $Module_Pages->process, ARGS: [["form"],{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#12 /var/www/gwcms/admin/lib/cms/gw_request.class.php:396, $GW_Request->processModule, ARGS: [{"dirname":"sitemap","path":["sitemap","pages"],"module":"pages","params":["form"]},{"url":"lt\/sitemap\/pages\/45\/form","act":"do:save","item":{"id":"45","type":"0","parent_id":"-1","pathname":"home","title":"labadiena","meta_description":"","template_id":"14","active":"1","in_menu":"1","input_data":{"tekstas":"<p>\r\n\ttetastasd<\/p>\r\n"}},"submit_type":"1"}]
+#13 /var/www/gwcms/admin/index.php:23, $GW_Request->process, ARGS: []
+
+--------------------------------
+
