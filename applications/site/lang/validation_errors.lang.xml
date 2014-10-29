@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="EMAIL">
+		<i id="INVALID_EMAIL">
+			<en>Invalid e-mail address format.</en>
+			<lt>Neteisingas el. pašto adresas</lt>
+		</i>
+	</i>
+	<i id="USER">
+		<i id="LOGIN_WELCOME">Prisijungėte</i>
+		<i id="LOGIN_FAIL">Patikrinkite vartotojo vardą/slaptažodį</i>	
+		<i id="PASS_CHANGE_LINK_SENT">Priminimo laiškas išsiųstas</i>
+		<i id="PASSCHANGE_ALLREADY_SENT">Priminimo laiškas jau buvo išsiųstas anksčiau</i>	
+		<i id="REPEAT_PASS_BAD">Slaptažodžio pakartojimas nesutampa su slaptažodžiu</i>	
+	</i>
+	<i id="PHONE">
+		<i id="MIN_LENGTH">Patikrinkite ar teisingai įvedėte</i>
+	</i>
+	
+	<i id="STRING">
+		<i id="MIN_LENGTH">
+			<en>Too short</en>
+			<lt>Per trumpas</lt>
+		</i>
+		<i id="MAX_LENGTH">
+			<en>Too long</en>
+			<lt>Per ilgas</lt>
+		</i>
+	</i>
+
+	<i id="REQUIRED">
+		<en>Required</en>
+		<lt>Būtina užpildyti</lt>
+	</i>
+
+	<i id="UNIQUE">
+		<en>Not unique</en>
+		<lt>Ne unikalus</lt>
+	</i>
+
+	<i id="ILLEGAL_PHONE">
+		<en>Invalid phone number</en>
+		<lt>Neteisingas tel. numeris</lt>
+	</i>
+
+</xml>

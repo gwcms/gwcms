@@ -1,1 +1,0 @@
-a:2:{s:6:"FIELDS";a:4:{s:4:"text";s:7:"Turinys";s:6:"active";s:7:"Aktyvus";s:5:"title";s:11:"Pavadinimas";s:4:"desc";s:10:"Aprašymas";}s:3:"MAP";a:3:{s:5:"title";s:11:"Straipsniai";s:4:"info";a:1:{s:5:"model";s:10:"GW_Article";}s:6:"childs";a:1:{s:6:"groups";a:2:{s:5:"title";s:7:"Grupės";s:4:"info";a:1:{s:5:"model";s:17:"GW_Articles_Group";}}}}}

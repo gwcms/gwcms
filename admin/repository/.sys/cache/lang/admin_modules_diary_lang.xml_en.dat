@@ -1,5 +1,0 @@
-a:5:{s:4:"ROOT";s:4:"Root";s:21:"GALLERY_ITEM_TYPE_OPT";a:2:{i:0;s:8:"Įrašas";i:1;s:10:"Kategorija";}s:6:"FIELDS";a:1:{s:9:"parent_id";s:10:"Kategorija";}s:11:"FIELD_NOTES";a:1:{s:7:"page_by";s:14:"0 - paging off";}s:3:"MAP";a:2:{s:5:"title";s:19:"
-			Dienoraštis
-		";s:6:"childs";a:1:{s:5:"items";a:2:{s:5:"title";s:23:"
-					Dienoraštis
-				";s:4:"info";a:1:{s:5:"model";s:11:"Diary_Entry";}}}}}

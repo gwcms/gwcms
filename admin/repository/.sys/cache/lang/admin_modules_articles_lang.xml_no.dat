@@ -1,1 +1,0 @@
-a:2:{s:6:"FIELDS";a:4:{s:4:"text";s:7:"Teksten";s:6:"active";s:5:"Aktiv";s:5:"title";s:4:"Navn";s:4:"desc";s:11:"Beskrivelse";}s:3:"MAP";a:3:{s:5:"title";s:8:"Artikler";s:4:"info";a:1:{s:5:"model";s:10:"GW_Article";}s:6:"childs";a:1:{s:6:"groups";a:2:{s:5:"title";s:7:"Grupper";s:4:"info";a:1:{s:5:"model";s:17:"GW_Articles_Group";}}}}}
