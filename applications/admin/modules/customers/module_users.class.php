@@ -27,7 +27,35 @@ class Module_Users extends GW_Common_Module
 		parent::eventHandler($event, $context);
 	}
 
+	function doAddCredit()
+	{
+		$item = $this->getDataObjectById();
 
+		$add = (float)$_REQUEST['addcredit'];
+		
+		$old = $item->credit;
+		
+		$item->addFunds($add, "Papildymas");
+		
+		$new = $item->credit;
+		/*
+		if($item->phone)
+			Sms_Outgoing::systemMessage($item->phone, "JÅ«sÅ³ sÄsk. papildyta: $add, viso dabar turite: $new -- sms.gw.lt");
+		*/
+		$this->app->setMessage("User <b>$item->username</b> credit changed from $old to $new");
+		
+		$this->jump();
+	}
+	
+	function viewBalanceLog()
+	{
+		$item = $this->getDataObjectById();
+		$list = gw::getInstance('GW_Balance_Log_Item')->findAll(['user_id=?', $item->id],['order'=>'id DESC']);
+		
+		$this->smarty->assign('list', $list);
+		
+		//return ['list'=>$list];
+	}
 }
 
 ?>

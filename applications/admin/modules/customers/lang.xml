@@ -49,6 +49,14 @@
 			<en>Information</en>
 			<lt>Pastabos</lt>
 		</i>
+		<i id="balance_diff">Pokytis</i>
+		<i id="balance_diff_message">Pokyčio žinutė</i>
+		<i id="funds">Balansas</i>
+		<i id="allow_credit">Leisti kreditą</i>
+	</i>
+	
+	<i id="VIEWS">
+		<i id="balancelog">Balanso žurnalas</i>
 	</i>
 
 	<i id="SESSION_VALIDITY_OPT">

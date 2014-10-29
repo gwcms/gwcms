@@ -21,4 +21,5 @@
 		<en>Email already taken</en>
 		<lt>Vartotojo e-pastas jau užimtas</lt>
 	</i>
+	<i id="INSUFFICIENT FUNDS">Nepakankamas likutis, reikia %s, yra: %s</i>
 </xml>

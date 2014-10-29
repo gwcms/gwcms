@@ -6,22 +6,18 @@
 		<i id="text">
 			<en>Text</en>
 			<lt>Turinys</lt>
-			<no>Teksten</no>
 		</i>
 		<i id="active">
 			<en>Active</en>
 			<lt>Aktyvus</lt>
-			<no>Aktiv</no>
 		</i>
 		<i id="title">
 			<en>Title</en>
 			<lt>Pavadinimas</lt>
-			<no>Navn</no>
 		</i>
 		<i id="desc">
 			<en>Description</en>
 			<lt>Aprašymas</lt>
-			<no>Beskrivelse</no>
 		</i>
 	</i>
 	
@@ -30,7 +26,6 @@
 		<i id="title">
 			<en>Articles</en>
 			<lt>Straipsniai</lt>
-			<no>Artikler</no>	
 		</i>
 		<i id="info">
 			<i id="model">GW_Article</i>
@@ -41,7 +36,6 @@
 				<i id="title">
 					<en>Groups</en>
 					<lt>Grupės</lt>
-					<no>Grupper</no>
 				</i>
 				<i id="info">
 					<i id="model">GW_Articles_Group</i>

@@ -22,4 +22,5 @@
 		<lt>Vartotojo e-paštas jau užimtas</lt>
 	</i>
 	<i id="PASS_CHANGED">Slaptažodis pakeistas, galite prisijungti</i>
+	<i id="INSUFFICIENT FUNDS">Nepakankamas likutis, reikia %s, yra: %s</i>	
 </xml>

@@ -114,8 +114,10 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	{
 		if($pass){//cant be empty
 			return $salt ? crypt($pass, $salt) : crypt($pass);
-		}else
+		}else{
+			//d::dumpas('Password cant be empty');
 			die('Password cant be empty');
+		}
 	}
 	
 	function checkPass($pass)
@@ -132,7 +134,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	{
 		switch($event)
 		{
-			case 'BEFORE_SAVE':
+			case 'BEFORE_SAVE':				
 				if(isset($this->content_base['pass_new']) && $this->content_base['pass_new'])
 					$this->set('pass', $this->cryptPass($this->get('pass_new')));
 

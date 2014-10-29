@@ -1,5 +1,10 @@
 {extends file="default_list.tpl"}
 
+{block name="after_list"}
+<script>function addcredit(id, val){ if(!val) return false; $('#addcredit_id').val(id); $('#addcredit_val').val(val); $('#addcredit').submit() }</script>
+<form id="addcredit"><input type="hidden" id="addcredit_id" name="id" ><input type="hidden" name="act" value="do:addCredit" /><input type="hidden" id="addcredit_val" name="addcredit"/></form>
+{/block}
+
 {block name="init"}
 
 	{*function dl_actions_switchtouser}
@@ -11,9 +16,19 @@
 		username=>1,
 		name=>1,
                 email=>1,
+		funds=>1,
 		insert_time=>0,
 		update_time=>0
 	]}
+	
+	{function dl_actions_add}
+		<a href="#" onclick="addcredit({$item->id},window.prompt('Papildyti sąsk.'));return false" title="Add funds">A</a>
+	{/function}
+	
+	{function dl_actions_balance_log}
+
+		{gw_link relative_path="`$item->id`/balancelog"  params=[id=>$item->id] title="BL"}
+	{/function}		
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
@@ -24,7 +39,7 @@
 	{$dl_smart_fields=[name]}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[invert_active,edit,delete]}
+	{$dl_actions=[add, balance_log,invert_active,edit,delete]}
 	
 	{$dl_filters=$display_fields}
 	

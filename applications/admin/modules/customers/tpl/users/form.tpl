@@ -11,6 +11,7 @@
 {include file="elements/input.tpl" type=select name=session_validity options=$m->lang.SESSION_VALIDITY_OPT}
 
 {include file="elements/input.tpl" type=pass_visible name=pass_new title=$m->lang.FIELDS.pass}
+{include file="elements/input.tpl" type=bool name=allow_credit}
+{include file="elements/input.tpl" name=funds}
 
-
-{include file="default_form_close.tpl" extra_fields=[id]}
+{include file="default_form_close.tpl" extra_fields=[id,funds]}

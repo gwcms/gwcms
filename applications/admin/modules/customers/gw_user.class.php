@@ -115,8 +115,6 @@ class GW_User extends GW_ADM_User
 	{
 		switch ($event) {
 			case 'BEFORE_SAVE':
-				if (isset($this->content_base['pass_new']))
-					$this->set('pass', self::cryptPass($this->get('pass_new')));
 				
 				if(!$this->username && $this->email)
 					$this->username = $this->email;
@@ -232,6 +230,37 @@ class GW_User extends GW_ADM_User
 		
 		
 		return $secret;
-	}	
+	}
+	
+	
+	function debitFunds($funds, $msg, &$errors=[])
+	{
+		if($this->funds < $funds && !$this->allow_credit){
+			$errors[] = sprintf(GW_Error_Message::read('/USER/INSUFFICIENT FUNDS'), $funds, $this->funds);
+			return false;
+		}
+		
+		$this->funds = $this->funds - $funds;
+		
+		$bl = new GW_Balance_Log_Item([
+		    'user_id'=>$this->id, 
+		    'msg'=>$msg,
+		    'balance_diff'=>-$funds]);
+		$bl->insert();
+		
+		$this->update(['funds']);
+	}
+	
+	function addFunds($funds, $msg)
+	{
+		$this->credit = $this->funds + $funds;
+		$bl = new GW_Balance_Log_Item([
+		    'user_id'=>$this->id, 
+		    'msg'=>$msg,
+		    'balance_diff'=>$funds]);
+		$bl->insert();
+		
+		$this->update(['funds']);
+	}
 
 }

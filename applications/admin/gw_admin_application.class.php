@@ -47,4 +47,12 @@ class GW_Admin_Application extends GW_Application
 		return GW::getInstance('GW_ADM_Page')->getChilds($params);
 	}
 	
+	function init()
+	{
+		parent::init();
+		
+		GW_ADM_Sitemap_Helper::updateSitemap();
+		
+	}
+	
 }

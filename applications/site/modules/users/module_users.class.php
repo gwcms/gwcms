@@ -86,7 +86,7 @@ class Module_Users extends GW_Public_Module
 		if(!$this->app->user)
 			return false;
 		
-		$this->smarty->assign('credit', $this->app->user->credit);
+		$this->smarty->assign('funds', $this->app->user->funds);
 	}
 	
 	
