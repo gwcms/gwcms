@@ -297,7 +297,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 			return false;
 			
 		$info=$user->get('info');
-		$exp=$info['autologin'][md5($pass)];
+		$exp = isset($info['autologin'][md5($pass)]) ? $info['autologin'][md5($pass)] : false;
 		
 		if($exp && strtotime($exp) > time() )
 			return $user;
