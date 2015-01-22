@@ -215,7 +215,7 @@ class GW_Common_Module extends GW_Module
 	
 	function setListParams(&$cond='', &$params=Array())
 	{		
-		if($this->list_params['views']['conditions'])
+		if(isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
 			
 		$tmp1=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
