@@ -242,7 +242,7 @@ class GW_Common_Module extends GW_Module
 		foreach($tmp1 as $key => $val)
 		{
 			if(!isset($val[1])) 
-				$val[1] = false;
+				$val[1] = null;
 			
 			list($type, $value) = $val;
 			
