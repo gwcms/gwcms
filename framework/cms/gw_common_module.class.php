@@ -238,10 +238,13 @@ class GW_Common_Module extends GW_Module
 		
 		foreach($this->filters as $key => $val)
 			$tmp1[$key]=Array('=',$val);
-						
+								
 		foreach($tmp1 as $key => $val)
 		{
-			list($type, $value)=$val;
+			if(!isset($val[1])) 
+				$val[1] = false;
+			
+			list($type, $value) = $val;
 			
 			if($value==='' || $value===null)
 				continue;
