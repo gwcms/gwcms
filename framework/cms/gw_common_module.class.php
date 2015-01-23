@@ -39,12 +39,25 @@ class GW_Common_Module extends GW_Module
 			$this->model = $tmp;
 	}
 	
-	function getDataObjectById($load=true, $class=false)
+	
+	function getCurrentItemId()
 	{
-		$id = $_REQUEST['id'];
+		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
+		
+		if(isset($this->app->path_arr_parent['data_object_id']) && $tmp = $this->app->path_arr_parent['data_object_id'])
+			$id = $tmp;	
 		
 		if($this->data_object_id_type == 1)
-			$id = (int)$id;
+			$id = (int)$id;		
+		
+		return $id;
+	}
+	
+	function getDataObjectById($load=true, $class=false)
+	{
+	
+		$id = $this->getCurrentItemId();
+		
 		
 		if(!$id)
 			return $this->setErrors('/GENERAL/BAD_ARGUMENTS');
@@ -154,7 +167,9 @@ class GW_Common_Module extends GW_Module
 	{
 		$item = $this->model->createNewObject();
 		
-		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
+		$id = $this->getCurrentItemId();
+		
+		
 		
 		//only form i18n objects
 		if(isset($this->i18n_fields) && $this->i18n_fields)
@@ -162,8 +177,9 @@ class GW_Common_Module extends GW_Module
 		
 		//pvz kelias: articles/77/form
 		//istrauks 77
-		if(isset($this->app->path_arr_parent['data_object_id']) && $tmp = $this->app->path_arr_parent['data_object_id'])
-			$id = $tmp;
+
+		
+
 		
 		//if we encounter error during the submit
 		//fill out form with values that user submited
@@ -204,12 +220,12 @@ class GW_Common_Module extends GW_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
         
-        $this->canBeAccessed($item, true);
-                 
-        if(!$item->invertActive()) 
-                return $this->setErrors('/GENERAL/ACTION_FAIL'); 
+		$this->canBeAccessed($item, true);
+
+		if(!$item->invertActive()) 
+			return $this->setErrors('/GENERAL/ACTION_FAIL'); 
 	 	 
-        $this->jump(); 
+		$this->jump(); 
 	}	
 
 	
