@@ -88,6 +88,10 @@
 	<lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
 </i>
 
+<i id="CONFIRM_DELETE">
+	<en>Confirm delete</en>
+	<lt>Patvirtinkite įrašo šalinimą</lt>
+</i>
 
 <i id="LOGGED_AS">
 	<en>Logged as</en>
