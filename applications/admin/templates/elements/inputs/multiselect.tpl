@@ -1,4 +1,4 @@
-<div style="overflow-y:scroll;max-height:80px;width:auto;float:left;padding-right:5px;border:1px solid silver">
+<div style="overflow-y:scroll;max-height:{$height|default:"80px"};width:auto;float:left;padding-right:5px;border:1px solid silver">
 <table class="gw_clean_tbl" cellspacing="0" cellpadding="0" style="width:auto">
 
 {if is_array($selected)}
