@@ -68,6 +68,8 @@ class GW_Links
 		$db = $this->getDB();
 		$list = $db->fetch_rows(Array("SELECT {$this->id2} FROM $this->table WHERE $this->id1=?",$this->owner_obj_id), false);
 		
+		$list1 = [];
+		
 		foreach($list as $i => $rec)
 			$list1[]=$rec[0];
 		
