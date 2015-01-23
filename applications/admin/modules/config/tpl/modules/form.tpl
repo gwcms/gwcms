@@ -9,6 +9,10 @@
 {include file="elements/input.tpl" name=notes type=htmlarea}
 {include file="elements/input.tpl" name=active type="bool"}
 
-{$extra_fields=[info,in_menu,fields,id,insert_time,update_time,sync_time]}
+
+
+{$item->set('fields_str',str_replace('"','',json_encode($item->fields)))}
+
+{$extra_fields=[info,in_menu,fields_str,id,insert_time,update_time,sync_time]}
 
 {include file="default_form_close.tpl"}
