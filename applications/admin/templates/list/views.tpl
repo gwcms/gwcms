@@ -5,7 +5,7 @@
 	{foreach $views as $view}
 		<a href="{$ln}/{$app->path}?act=do:setView&name={$view.name}"
 			{if $view.active} style="font-weight:bold"{/if}
-			title="{$view.conditions|escape:'html'}"
+			title="{if $view.hint}{$view.hint|escape}{else}{$view.conditions|escape:'html'}{/if}"
 		>{$view.name}{if $view.calculate} ({$view.count}){/if}</a>
 	{/foreach}
 	

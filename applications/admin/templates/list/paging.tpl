@@ -7,11 +7,8 @@
 	$current=(int)$params['page'] ? (int)$params['page'] : 1;
 	$length=ceil($vars['query_info']['item_count'] / $params['page_by']);
 
-	$vars['app']->smarty->assign('paging_tpl_page_count',$length);
-
 	if($length<2)
 		return;
-		
 		
 	$template->assign('paging', Array
 	(
@@ -22,10 +19,11 @@
 		'next'=>  $current >= $length-1 ? 0 : $current+1,
 		'last'=>  $current >= $length   ? 0 : $length,
 	));	
-	
 {/php}
 
 {if $paging.length > 1}
+	
+{assign var="paging_tpl_page_count" value=$paging.length scope=parent}	
 
 <table class="fontsz10 gw_clean_tbl" cellspacing="" cellpadding="1">
 	<tr>
