@@ -3,7 +3,7 @@
 
 </table>
 	{include file="tools/form_submit_buttons.tpl"}
-</form>
+
 
 
 {if $app->smarty->template_functions.df_after_form}
@@ -16,7 +16,7 @@
 
 </table>
 
-
+</form>
 
 
 {include file="default_close.tpl"}

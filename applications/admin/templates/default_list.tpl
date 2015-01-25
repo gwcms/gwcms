@@ -6,6 +6,16 @@
 		{include file="default_open.tpl"}
 {/block}
 
+{*functions*}
+	{function name=dl_cell_mark}
+		<input type="checkbox" class="checklist_item" class="checklist" value="{$item->id}" />
+	{/function}
+	{function name=dl_custom_head_mark}
+		<input type="checkbox" id="checklist_toggle" />
+	{/function}
+{*/functions*}
+
+
 
 {$dl_toolbar_buttons=[addnew,filters,info]}
 
@@ -16,6 +26,13 @@
 	{/block}
 	
 	{$dl_smart_fields=array_flip($dl_smart_fields|default:[])}
+	{if $dl_checklist_enabled}
+		{$dl_custom_head.mark=1}
+		{$x=array_unshift($dl_fields, mark)}
+		{$dl_smart_fields.mark=1}
+	{/if}
+	
+	
 
 	{include file="list/toolbar_buttons.tpl"}
 	{include file="list/actions.tpl"}
@@ -70,11 +87,15 @@
 	
 	{foreach $dl_fields as $field}
 		<th>
-			{$title=$app->fh()->shortFieldTitle($field)}
-			{if isset($dl_order_enabled_fields.$field)}
-				{include file="list/order.tpl" name=$field title=$title}
+			{if isset($dl_custom_head.$field)}
+				{call name="dl_custom_head_$field"}
 			{else}
-				{$title}
+				{$title=$app->fh()->shortFieldTitle($field)}
+				{if isset($dl_order_enabled_fields.$field)}
+					{include file="list/order.tpl" name=$field title=$title}
+				{else}
+					{$title}
+				{/if}
 			{/if}
 		</th>
 	{/foreach}	
@@ -120,6 +141,39 @@
 {/if}
 
 </td></tr></table>{*1*}
+
+
+{if $dl_checklist_enabled}
+<br />
+	<div id="checklist_actions" style="display:none">
+		{$lang.CHECKLIST_SELECT_ACTION}:
+
+		<select name="action" onchange="eval(this.value);this.selectedIndex=0">
+			<option value="">{$lang.EMPTY_OPTION.0}</option>
+			{foreach $dl_checklist_actions as $action}
+				{$action}
+			{/foreach}
+			{*
+			<option value="if(!confirm('Turbut šis veiksmas iššauktas per klaidą! Ar norite atšaukti užsakymų trinimą?'))gw_checklist.submit('delete')">!Trinti</option>
+			*}
+		</select>
+	</div>
+
+
+	<script>
+	function checked_action(action){
+		
+		var selected=[];
+		$.each($('.checklist_item:checked'), function() {
+			selected.push($(this).val());
+		});
+		
+		gw_dialog.open(GW.ln+'/'+GW.path+'/'+action+'?ids='+selected.join(','))		
+	}
+
+	gw_checklist.init();
+</script>
+{/if}
 
 {block name="after_list"}
 {/block}

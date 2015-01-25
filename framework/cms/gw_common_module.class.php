@@ -230,7 +230,7 @@ class GW_Common_Module extends GW_Module
 
 	
 	function setListParams(&$cond='', &$params=Array())
-	{		
+	{	
 		if(isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
 			
@@ -241,10 +241,8 @@ class GW_Common_Module extends GW_Module
 								
 		foreach($tmp1 as $key => $val)
 		{
-			if(!isset($val[1])) 
-				$val[1] = null;
-			
-			list($type, $value) = $val;
+			$type = isset($val[0]) ? $val[0] : '=';
+			$value = isset($val[1]) ? $val[1] : null;
 			
 			if($value==='' || $value===null)
 				continue;

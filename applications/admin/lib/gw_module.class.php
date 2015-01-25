@@ -24,6 +24,12 @@ class GW_Module
 	var $list_params=Array('page_by'=>20);
 	var $log=Array();
 	
+	/**
+	 * specify template file path (without extension)
+	 * @var string  
+	 */
+	var $tpl_file_name;
+	
 	
 	function getInfo()
 	{
@@ -178,9 +184,13 @@ class GW_Module
 		$this->smarty->assignByRef('messages', $this->messages);
 		$this->smarty->assign('m', $this);
 		
-		$basename=preg_replace('/^view|do/','',strtolower($this->action_name));
-		$file=$this->tpl_dir.$basename;
-		
+		if($this->tpl_file_name)
+		{
+			$file = $this->tpl_file_name;
+		}else{
+			$basename=preg_replace('/^view|do/','',strtolower($this->action_name));
+			$file=$this->tpl_dir.$basename;
+		}
 		
 
 		if(file_exists($tmp = $file.'.php')){
@@ -194,6 +204,8 @@ class GW_Module
 					$tmp='default_empty.tpl';
 					
 		}
+		
+		
 					
 		$this->smarty->display($tmp);
 		

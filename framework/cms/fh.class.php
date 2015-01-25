@@ -21,7 +21,7 @@ class FH
 		return $res;
 	}
 	
-	function out($var)
+	static function out($var)
 	{
 		if(is_array($var) || is_object($var))
 			return dump($var);
