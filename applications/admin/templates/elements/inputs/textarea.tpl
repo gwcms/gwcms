@@ -1,10 +1,10 @@
 {if $tabs}
-	<script type="text/javascript" src="js/textarea_tabfunc.js"></script>	
+	<script type="text/javascript" src="{$app_root}js/textarea_tabfunc.js"></script>	
 {/if}
 
 
 {if $autoresize}
-	<script type="text/javascript" src="js/autoresize.jquery.min.js"></script>
+	<script type="text/javascript" src="{$app_root}js/autoresize.jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){ $('.ta_autoresize').autoResize(); });
 	</script>
