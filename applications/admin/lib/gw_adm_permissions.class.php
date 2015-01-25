@@ -17,7 +17,7 @@ class GW_ADM_Permissions
 	 * 
 	 * @return DB
 	 */
-	static function &getDB()
+	static function getDB()
 	{
 		return GW::$context->db;
 	}
