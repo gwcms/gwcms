@@ -35,9 +35,11 @@ class GW_Request_Helper
 		(
 			'ip'=>$IP,
 			'host'=>$HOST,
-			'browser'=>$_SERVER['HTTP_USER_AGENT'],
-			'referer'=>$_SERVER['HTTP_REFERER']
+			'browser'=>$_SERVER['HTTP_USER_AGENT']
 		);
+		
+		if(isset($_SERVER['HTTP_REFERER']))
+			$info['referer'] = $_SERVER['HTTP_REFERER'];
 		
 		if(isset($PROXY))
 			$info['proxy']=$PROXY;
