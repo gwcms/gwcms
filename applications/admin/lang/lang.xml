@@ -88,9 +88,9 @@
 	<lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
 </i>
 
-<i id="CONFIRM_DELETE">
-	<en>Confirm delete</en>
-	<lt>Patvirtinkite įrašo šalinimą</lt>
+<i id="REQUIRED">
+	<en>Required</en>
+	<lt>Būtinas užpildyti</lt>
 </i>
 
 <i id="LOGGED_AS">
@@ -119,6 +119,12 @@
 	<en>Item added</en>
 	<lt>Įrašas idetas</lt>
 </i>
+<i id="CONFIRM_DELETE">
+	<en>Confirm delete</en>
+	<lt>Patvirtinkite įrašo šalinimą</lt>
+</i>
+
+
 
 <i id="FIELDS">
 	<i id="insert_time">

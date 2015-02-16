@@ -2,4 +2,6 @@
 	{$options=$lang.EMPTY_OPTION+$options}
 {/if}
 
-{html_options name=$input_name selected=$value options=$options onchange=$onchange}
+<select {if $class}class="{$class}"{/if} {if $required}required="required"{/if} name="{$input_name}" onchange="{$onchange}">
+	{html_options  selected=$value options=$options}
+</select>
