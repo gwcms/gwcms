@@ -37,5 +37,10 @@
 		<en>Invalid phone number</en>
 		<lt>Neteisingas tel. numeris</lt>
 	</i>
+	
+	<i id="NUMERIC_FAIL">
+		<lt>Ne skaičius</lt>
+		<en>Not numeric</en>
+	</i>
 
 </xml>
