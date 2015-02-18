@@ -61,7 +61,9 @@ class GW_ADM_Permissions
 		if($path)
 			$sql.=" AND path = '". GW_DB::escape($path)."'";
 		
-		return self::getDB()->fetch_assoc($sql);	
+		$data = self::getDB()->fetch_assoc($sql);;
+		
+		return $data;	
 	}
 	
 	static function &getPrmByMltGrpIds($gids)
