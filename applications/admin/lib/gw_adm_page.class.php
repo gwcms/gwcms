@@ -25,7 +25,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		return json_decode($this->get('views'), true);
 	}
 	
-	function getChilds($params=Array())
+	function getChilds($params=Array(), $max_level=3)
 	{
 		$menu = isset($params['menu']) ? $params['menu'] : true;
 		$check_perm	= isset($params['check_permissions']) ? $params['check_permissions'] : true;			
@@ -40,8 +40,10 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		{		
 			$can_access = isset($params['can_access']) ? call_user_func($params['can_access'], $item) : true;
 			
+			if($max_level<0)
+				continue;
 			
-			if(!$check_perm || $can_access || $item->getChilds($params+Array('parent_id'=>$item->id)))
+			if(!$check_perm || $can_access || $item->getChilds($params+Array('parent_id'=>$item->id), $max_level-1))
 			{
 				if(isset($params['return_first_only']) && $params['return_first_only']) 
 					return $item;
