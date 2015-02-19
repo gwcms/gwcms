@@ -34,7 +34,7 @@ file="messages.tpl"} <br />
 		<td style="padding-right: 10px">{$lang.AUTOLOGIN}</td>
 		<td><input name="login_auto" type="checkbox" /></td>
 	</tr>
-	{/if} {if count(GW::$settings.LANGS)>1}
+	{/if} {if count(GW::$settings.ADMIN.LANGS)>1}
 	<tr>
 		<td>{$lang.LANGUAGE}:</td>
 		<td><select name="ln">
