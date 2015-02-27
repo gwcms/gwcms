@@ -402,6 +402,19 @@ class GW_DB
 		return preg_replace_callback('/(\?)/',Array(&$ho,'replace'), $query);
 	}
 	
+	static function buidConditions($conds, $operator='AND')
+	{
+		$conditions=[];
+		foreach($conds as $field => $val){
+			$conditions[0][]="`$field`=?";
+			$conditions[]=$val;
+		}
+		if(isset($conditions[0]))
+			$conditions[0] = implode(' '.$operator.' ', $conditions[0]);
+		
+		return $conditions;
+	}	
+	
 	static function escape($mixed)
 	{
 		return addslashes($mixed);
