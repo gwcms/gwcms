@@ -29,10 +29,12 @@ $dir['AUTOLOAD'][] = $dir['LIB'];
 //used to send mail through
 //GW::$static_conf['REMOTE_SERVICES']['MAIL1'] = 'http://uostas.net/services/mail.php?key=fh5ad2fg1ht4a6s5dg1hy4a5d4fg';	
 		
-include $dir['ROOT'].'config/project.php';
+
 
 GW::s('DEFAULT_APPLICATION','SITE');
 GW::s('LANGS', Array('lt','en'));
+
+include $dir['ROOT'].'config/project.php';
 
 /*
 echo "<pre>";
