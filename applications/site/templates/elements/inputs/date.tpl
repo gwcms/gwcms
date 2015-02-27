@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="css/datepicker.css" type="text/css" />
-<script type="text/javascript" src="js/datepicker.js"></script>
-<script type="text/javascript" src="lang/datepicker.php?ln={$request->ln}"></script>
+<link rel="stylesheet" href="{$app_root}css/datepicker.css" type="text/css" />
+<script type="text/javascript" src="{$app_root}js/datepicker.js"></script>
+<script type="text/javascript" src="{$app_root}lang/datepicker.php?ln={$request->ln}"></script>
 
 {*$value=$value|default:'Y-m-d'|date*}
 {$GLOBALS.input_date_index++}

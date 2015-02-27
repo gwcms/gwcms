@@ -1,6 +1,6 @@
 
-	<script type="text/javascript" src="js/autoresize.jquery.min.js"></script>
-	<script type="text/javascript" src="js/elements_inputs_sms.js"></script>
+	<script type="text/javascript" src="{$app_root}js/autoresize.jquery.min.js"></script>
+	<script type="text/javascript" src="{$app_root}js/elements_inputs_sms.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){ 
 		

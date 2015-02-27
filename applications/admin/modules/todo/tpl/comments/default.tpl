@@ -47,7 +47,7 @@
 	<input type="hidden"  name="item[user_create]" value="{$comment->user_create|default:$app->user->id}"  />
 
 
-	<script type="text/javascript" src="js/autoresize.jquery.min.js"></script>
+	<script type="text/javascript" src="{$app_root}js/autoresize.jquery.min.js"></script>
 	<script type="text/javascript">
 		
 		$(document).ready(function(){ 
