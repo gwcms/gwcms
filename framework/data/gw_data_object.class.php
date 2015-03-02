@@ -581,6 +581,17 @@ class GW_Data_Object
 		}
 	}
 	
+	function encodeComma($fieldname, $value, $revert)
+	{
+		if($revert){
+			if($value)
+				return explode(',', trim($value,','));
+		}else{
+			if(is_array($value))
+				return ','.implode(',', $value).',';
+		}
+	}	
+	
 	function encodeJSON($fieldname, $value, $revert)
 	{
 		if($revert){
