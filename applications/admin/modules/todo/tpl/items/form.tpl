@@ -17,7 +17,9 @@
 
 
 {include file="elements/input.tpl" type=select name=state options=$m->lang.STATE_OPT|strip_tags}
-{include file="elements/input.tpl" type=select name=priority options=$m->lang.PRIORITY_OPT default=5}
+
+
+{include file="elements/input.tpl" type=select name=priority options=$m->lang.PRIORITY_OPT default=5 data_type=numeric}
 {include file="elements/input.tpl" type=date name=deadline}
 
 {$users = $app->user->getOptions(true)}
