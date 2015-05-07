@@ -7,24 +7,24 @@
 <div id="wrap">
     <div id="header">
         <div class="space1">
-            <a href="#" title="">{$lang.SITE_TITLE}{*<img src="{$app_root}img/logo.png">*}</a>
+            <a href="#" title="{GW::s('SITE_TITLE_DETAIL')}">{GW::s('SITE_TITLE')}{*<img src="{$app_root}img/logo.png">*}</a>
         </div>
         
 	{include file="submenu.tpl"}
 	
         <div id="login-info">
         	<b>{$lang.LOGGED_AS}:</b> 
-        	<a href="{$app->ln}/adm_users/profile">{$app->user->get('name')|default:$app->user->get('username')} 
+        	<a href="{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
         	 
         	</a> 
         	{if $smarty.session.cms_auth.switchUser}
-        	<a href="{$app->ln}/adm_users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+        	<a href="{$app->ln}/users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		{$sw_usr_return=$app->user->find(['id=?',$smarty.session.cms_auth.switchUser])}
         		({$lang.SWITCH_USER_RETURN|sprintf:$sw_usr_return->name})
         	</a>
         	{/if}
         	| 
-            	<a href="{$app->ln}/adm_users/login/logout" id="logout">{$lang.LOGOUT}</a>
+            	<a href="{$app->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
             	
             	{$new_messages=$app->user->countNewMessages()}
             	{if $new_messages}

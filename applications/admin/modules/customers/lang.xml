@@ -2,13 +2,13 @@
 <xml>
 	<i id="FIELDS">
 		<i id="name">
-			<en>Name, Surname</en>
-			<lt>Vardas pavardė</lt>
-		</i>		
-		<i id="first_name">
 			<en>Name</en>
 			<lt>Vardas</lt>
-		</i>
+		</i>	
+		<i id="surname">
+			<en>Surname</en>
+			<lt>Pavardė</lt>
+		</i>		
 		<i id="phone">
 			<en>Phone</en>
 			<lt>Telefonas</lt>
@@ -21,10 +21,7 @@
 			<en>City</en>
 			<lt>Miestas</lt>
 		</i>
-		<i id="second_name">
-			<en>Surname</en>
-			<lt>Pavardė</lt>
-		</i>
+
 		<i id="username">
 			<en>Username</en>
 			<lt>Vartotojo vardas</lt>
@@ -51,8 +48,9 @@
 		</i>
 		<i id="balance_diff">Pokytis</i>
 		<i id="balance_diff_message">Pokyčio žinutė</i>
-		<i id="funds">Balansas</i>
-		<i id="allow_credit">Leisti kreditą</i>
+		<i id="sms_funds">Balansas</i>
+		<i id="sms_allow_credit">Leisti kreditą</i>
+		<i id="sms_pricing_plan">Apmokėjimo planas</i>
 	</i>
 	
 	<i id="VIEWS">
@@ -85,7 +83,7 @@
 					<lt>Svetainės vartotojai</lt>
 				</i>		
 				<i id="info">
-					<i id="model">GW_User</i>
+					<i id="model">GW_Customer</i>
 				</i>
 			</i>
 		</i>

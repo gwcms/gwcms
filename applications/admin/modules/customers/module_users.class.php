@@ -8,6 +8,9 @@ class Module_Users extends GW_Common_Module
 		//$this->filters['id'] = isset(GW::$app->path_arr[1]['data_object_id']) ? GW::$app->path_arr[1]['data_object_id'] : false;
 
 		parent::init();
+		
+		
+		$this->options['sms_pricing_plan']=GW::getInstance('GW_Pricing_Item')->getAllPricingPlans();
 	}
 	
 	function viewDefault()
@@ -20,7 +23,9 @@ class Module_Users extends GW_Common_Module
 		switch($event)
 		{
 			case "BEFORE_SAVE_0":
+				
 				$context->setValidators('update');
+				
 			break;
 		}
 		

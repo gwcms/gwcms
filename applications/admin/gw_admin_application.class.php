@@ -2,7 +2,7 @@
 
 class GW_Admin_Application extends GW_Application
 {
-	public $user_class="GW_ADM_User";
+	public $user_class="GW_User";
 	
 	function checkCompatability()
 	{
@@ -28,7 +28,7 @@ class GW_Admin_Application extends GW_Application
 		if($this->user->isRoot())
 			return true;
 		
-		return $page->get('active') && GW_ADM_Permissions::canAccess($page->get('path'), $this->user->group_ids);
+		return $page->get('active') && GW_Permissions::canAccess($page->get('path'), $this->user->group_ids);
 	}
 	
 	function jumpToFirstChild()
@@ -44,7 +44,11 @@ class GW_Admin_Application extends GW_Application
 	{
 		$params['can_access']=array($this, 'canAccess');
 		
-		return GW::getInstance('GW_ADM_Page')->getChilds($params);
+		$tmp = GW::getInstance('GW_ADM_Page')->getChilds($params);
+		
+		//d::dumpas($tmp);
+		
+		return $tmp;
 	}
 	
 	function init()

@@ -22,7 +22,10 @@ class GW_Common_Module extends GW_Module
 	var $paging_enabled=true;
 	
 	// 1 - integer
-	var $data_object_id_type = 1;	
+	var $data_object_id_type = 1;
+	
+	// share with smarty
+	var $options;
 	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -37,6 +40,8 @@ class GW_Common_Module extends GW_Module
 		//specifu model name in lang file
 		if(! isset($this->model) && ($tmp = $this->app->page->getDataObject()))
 			$this->model = $tmp;
+		
+		$this->smarty->assignByRef('opt', $this->options);
 	}
 	
 	

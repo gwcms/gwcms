@@ -5,7 +5,7 @@ class Module_Profile extends GW_Module
 {	
 	function init()
 	{
-		$this->model = new GW_ADM_User();
+		$this->model = new GW_User();
 		
 		parent::init();
 	}
@@ -53,7 +53,7 @@ class Module_Profile extends GW_Module
 	{
 		$vals=$_REQUEST['item'];
 		
-		$fields=Array('name','email');
+		$fields=Array('name','surname','email');
 		
 		$item =& $this->app->user;
 		$item->setValues($vals);	

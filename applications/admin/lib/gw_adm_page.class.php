@@ -32,6 +32,11 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		$pid = isset($params['parent_id']) ? $params['parent_id'] : 0;
 		
 		$cond = Array('parent_id=?'.($menu?' AND active AND in_menu':''), $pid);
+		
+		
+		if(isset($params['test']))
+			d::dumpas($params);
+			
 
 		$list_0 = $this->findAll($cond);
 		$list = Array();
@@ -43,7 +48,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			if($max_level<0)
 				continue;
 			
-			if(!$check_perm || $can_access || $item->getChilds($params+Array('parent_id'=>$item->id), $max_level-1))
+			if(!$check_perm || $can_access || $item->getChilds(Array('parent_id'=>$item->id)+$params, $max_level-1))
 			{
 				if(isset($params['return_first_only']) && $params['return_first_only']) 
 					return $item;
@@ -97,7 +102,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			break;
 			
 			case 'AFTER_DELETE':
-				GW_ADM_Permissions::deleteByPath($this->get('path'));
+				GW_Permissions::deleteByPath($this->get('path'));
 			break;
 		}
 		

@@ -4,7 +4,7 @@ class Module_Groups extends GW_Common_Module
 {	
 	function init()
 	{
-		$this->model = new GW_ADM_Users_Group();
+		$this->model = new GW_Users_Group();
 		
 		parent::init();
 	}
@@ -58,7 +58,7 @@ class Module_Groups extends GW_Common_Module
 		}
 					
 		
-		$selected = GW_ADM_Permissions::getByGroupId($item->id);
+		$selected = GW_Permissions::getByGroupId($item->id);
 
 		
 		$this->smarty->assign('item', $item);//group
@@ -84,13 +84,13 @@ class Module_Groups extends GW_Common_Module
 			unset($vals['paths']['users/groups']);
 			
 			foreach($vals['paths'] as $path => $x)
-				if(!GW_ADM_Permissions::canAccess($path, $this->app->user->group_ids))
+				if(!GW_Permissions::canAccess($path, $this->app->user->group_ids))
 					unset($vals['paths'][$path]);
 		}
 			
 		$item->load();
 		
-		GW_ADM_Permissions::save($vals['id'], $vals['paths']);
+		GW_Permissions::save($vals['id'], $vals['paths']);
 		
 		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
 		$this->jumpAfterSave($item);		

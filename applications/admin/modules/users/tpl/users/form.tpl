@@ -4,6 +4,13 @@
 {include file="elements/input.tpl" name=username}
 {include file="elements/input.tpl" name=email}
 {include file="elements/input.tpl" name=name}
+{include file="elements/input.tpl" name=surname}
+{include file="elements/input.tpl" name=phone}
+{include file="elements/input.tpl" name=city}
+{include file="elements/input.tpl" name=address}
+
+
+
 {include file="elements/input.tpl" type=bool name=active}
 {include file="elements/input.tpl" type=multiselect name=link_groups options=$groups_options selected=$group_options_selected}
 {include file="elements/input.tpl" type=select name=session_validity options=$m->lang.SESSION_VALIDITY_OPT}

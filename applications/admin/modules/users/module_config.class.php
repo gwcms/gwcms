@@ -6,7 +6,7 @@ class Module_Config extends GW_Common_Module
 
 	function init()
 	{
-		$this->model = new GW_Config('gw_adm_users/');
+		$this->model = new GW_Config('gw_users/');
 		
 		parent::init();
 	}

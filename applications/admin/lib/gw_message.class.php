@@ -1,8 +1,8 @@
 <?php
 
-class GW_Adm_Message extends GW_Data_Object
+class GW_Message extends GW_Data_Object
 {
-	var $table='gw_adm_messages';
+	var $table='gw_messages';
 
 	var $calculate_fields = Array('list_color'=>'listColor');
 	

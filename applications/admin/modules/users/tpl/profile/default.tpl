@@ -18,6 +18,7 @@
 
 {include file="elements/input.tpl" name=email}
 {include file="elements/input.tpl" name=name}
+{include file="elements/input.tpl" name=surname}
 
 
 <tr><td></td><td><input type="submit" value="{$lang.SAVE}"/></td></tr>

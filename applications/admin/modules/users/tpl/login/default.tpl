@@ -3,7 +3,7 @@
 
 <div id="wrap">
 <div id="header">
-<div class="space1"><a href="#" title="">{$lang.SITE_TITLE}{*<img
+<div class="space1"><a href="#" title="">{GW::s(SITE_TITLE)}{*<img
 	src="img/logo.png">*}</a></div>
 </div>
 

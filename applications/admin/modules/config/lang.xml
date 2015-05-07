@@ -50,7 +50,7 @@
 			</i>				
 			<i id="messages">
 				<i id="title">Messages</i>
-				<i id="info"><i id="model">GW_Adm_Message</i></i>				
+				<i id="info"><i id="model">GW_Message</i></i>				
 			</i>			
 					
 		</i>

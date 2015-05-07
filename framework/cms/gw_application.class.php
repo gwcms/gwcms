@@ -460,7 +460,7 @@ class GW_Application
 		$path_info['path']=Array('default');
 		$path_info['dirname']='default';
 
-		$this->processModule($path_info);
+		$this->processModule($path_info, []);
 		
 		exit;
 	}

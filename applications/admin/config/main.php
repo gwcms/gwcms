@@ -1,6 +1,6 @@
 <?php
 
-GW::s('PATH_LOGIN','adm_users/login');
+GW::s('PATH_LOGIN','users/login');
 GW::s('GW_USERZONE_PATH',"usr/");
 
 GW::s('GW_LOGIN_NAME_EXPIRATION','+1 month'); //strtotime format
@@ -21,8 +21,8 @@ $dir['TEMPLATES'] = $dir['ROOT'].'templates/';
 $rdir['AUTOLOAD'][] = $dir['LIB'];
 $rdir['AUTOLOAD_RECURSIVE'] = $dir['MODULES'];
 
-GW::s('ADMIN/LANGS', Array('lt','en'));
-GW::s('ADMIN/PATH_LOGIN', 'adm_users/login');
+GW::s('ADMIN/LANGS', Array('lt'));
+GW::s('ADMIN/PATH_LOGIN', 'users/login');
 
 
 

@@ -16,7 +16,10 @@
 		username=>1,
 		name=>1,
                 email=>1,
-		funds=>1,
+		phone=>1,
+		sms_pricing_plan=>1,
+		sms_allow_credit=>1,
+		sms_funds=>1,
 		insert_time=>0,
 		update_time=>0
 	]}
@@ -33,10 +36,15 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	{function dl_cell_name}
-                {$item->first_name} {$item->second_name}
+                {$item->name} {$item->surname}
 	{/function}
 	
-	{$dl_smart_fields=[name]}
+	{function dl_cell_insert_time}
+                {$x=explode(' ',$item->insert_time)}
+		{$x.0}
+	{/function}
+	
+	{$dl_smart_fields=[name, insert_time]}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[add, balance_log,invert_active,edit,delete]}

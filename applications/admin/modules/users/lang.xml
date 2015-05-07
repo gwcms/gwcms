@@ -21,9 +21,25 @@
 			<lt>El. pašto adresas</lt>
 		</i>
 		<i id="name">
-			<en>Name, surname</en>
-			<lt>Vardas, pavardė</lt>
+			<en>Name</en>
+			<lt>Vardas</lt>
 		</i>
+		<i id="surname">
+			<en>Surname</en>
+			<lt>Pavardė</lt>
+		</i>
+		<i id="phone">
+			<en>Phone</en>
+			<lt>Tel. nr.</lt>
+		</i>
+		<i id="city">
+			<en>City</en>
+			<lt>Miestas</lt>
+		</i>
+		<i id="address">
+			<en>Address</en>
+			<lt>Adresas</lt>
+		</i>						
 		<i id="pass_old">
 			<en>Old password</en>
 			<lt>Senas slaptažodis</lt>
@@ -133,17 +149,17 @@
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
-			<en>Admins</en>
-			<lt>Administratoriai</lt>
+			<en>Users</en>
+			<lt>Vartotojai</lt>
 		</i>
 				
 		<i id="childs">
 			<i id="users">
 				<i id="title">
-					<en>Admins</en>
-					<lt>Administratoriai</lt>				
+					<en>Users</en>
+					<lt>Vartotojai</lt>				
 				</i>
-				<i id="info"><i id="model">GW_Adm_User</i></i>
+				<i id="info"><i id="model">GW_User</i></i>
 			</i>
 			<i id="profile">
 				<i id="title">
@@ -166,7 +182,7 @@
 					<en>Groups</en>
 					<lt>Grupės</lt>
 				</i>
-				<i id="info"><i id="model">GW_Adm_Users_Group</i></i>
+				<i id="info"><i id="model">GW_Users_Group</i></i>
 			</i>
 			<i id="config">
 				<i id="title">

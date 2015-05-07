@@ -5,8 +5,8 @@ class Module_Users extends GW_Common_Module
 {	
 	function init()
 	{
-		$this->model = new GW_ADM_User();
-		$this->group0 = new GW_ADM_Users_Group();
+		$this->model = new GW_User();
+		$this->group0 = new GW_Users_Group();
 		
 		parent::init();
 	}
@@ -34,7 +34,7 @@ class Module_Users extends GW_Common_Module
 	
 	function viewList()
 	{
-		$list = $this->model->findAll('! removed');	
+		$list = $this->model->findAll('removed=0');	
 		
 		if(!$this->app->user->isRoot())
 			foreach($list as $i => $item)

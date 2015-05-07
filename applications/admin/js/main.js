@@ -268,7 +268,7 @@ var gw_checklist =
 
 var gw_login_dialog = 
 {
-	page_path: '/adm_users/login/dialog',
+	page_path: '/users/login/dialog',
 		
 	is_open: function()
 	{

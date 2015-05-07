@@ -6,7 +6,7 @@ class GW_Auth
 {
 	/**
 	 * 
-	 * @var GW_ADM_User or GW_User
+	 * @var GW_User or GW_Customer
 	 */
 	var $user0;
 	var $session;
@@ -16,7 +16,7 @@ class GW_Auth
 	{
 		$this->user0 =& $user0;
 		
-		if (get_class($this->user0) == "GW_ADM_User")
+		if (get_class($this->user0) == "GW_User")
 			$this->session =& $_SESSION[AUTH_SESSION_KEY];
 		else
 			$this->session =& $_SESSION[PUBLIC_AUTH_SESSION_KEY];
@@ -136,7 +136,7 @@ class GW_Auth
 		static $cache;
 		
 		if(!$cache)
-			$cache = GW::getInstance('GW_Config')->get('gw_adm_users/autologin');
+			$cache = GW::getInstance('GW_Config')->get('gw_users/autologin');
 			
 		return $cache;
 	}

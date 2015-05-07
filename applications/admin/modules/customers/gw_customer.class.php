@@ -1,13 +1,13 @@
 <?php
 
-class GW_User extends GW_ADM_User 
+class GW_Customer extends GW_User 
 {
 
-	var $table = 'gw_users';
+
 	var $min_pass_length = 6;
 	var $max_pass_length = 16;
 	var $validators = Array();
-	var $calculate_fields = Array('title' => 1, 'name' => 1/* did project specified */);
+	var $calculate_fields = Array('title' => 1/* did project specified */);
 	var $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1);
 	var $autologgedin = false;
 
@@ -18,8 +18,8 @@ class GW_User extends GW_ADM_User
 
 		$validators_def = Array(
 			'username' => Array('gw_string', Array('min_length' => 2, 'max_length' => 120, 'required' => 1)),
-			'first_name' => Array('gw_string', Array('required' => 1)),
-			'second_name' => Array('gw_string', Array('required' => 1)),
+			'name' => Array('gw_string', Array('required' => 1)),
+			'surname' => Array('gw_string', Array('required' => 1)),
 			'phone' => Array('gw_phone', Array('min_length' => 6, 'max_length' => 20, 'required' => 1)),
 			'email' => Array('gw_email', Array('required' => 1)),
 			'pass_old' => 1,
@@ -35,8 +35,8 @@ class GW_User extends GW_ADM_User
 			'update_pass' => Array('pass'),
 			'change_pass' => Array('pass_new'),
 			'change_pass_repeat' => Array('pass_new','pass_new_repeat'),
-			'register' => Array('first_name', 'second_name', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone'),
-			'update' => Array('first_name', 'second_name', 'phone', 'email', 'username'),
+			'register' => Array('name', 'surname', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone'),
+			'update' => Array('name', 'surname', 'phone', 'email', 'username'),
 		);
 
 		$this->validators = Array();
@@ -46,7 +46,7 @@ class GW_User extends GW_ADM_User
 	}
 
 	function validate() 
-	{
+	{	
 		if (!parent::validate())
 			return false;
 
@@ -73,6 +73,9 @@ class GW_User extends GW_ADM_User
 		if (isset($this->validators['unique_email']))
 			if ($this->count(Array('email=? AND !removed', $this->get('email'))))
 				$this->errors['email'] = '/USER/EMAIL_TAKEN';
+			
+			
+		
 
 		return $this->errors ? false : true;
 	}
@@ -127,7 +130,7 @@ class GW_User extends GW_ADM_User
 
 	function isRoot() 
 	{
-		return GW_ADM_Permissions::isRoot($this->group_ids);
+		return GW_Permissions::isRoot($this->group_ids);
 	}
 
 	/*
@@ -154,7 +157,7 @@ class GW_User extends GW_ADM_User
 
 	function getForActivationById($id) 
 	{
-		return $this->find(Array('id=? AND ! banned AND ! removed', $id));
+		return $this->find(Array('id=? AND removed=0', $id));
 	}
 
 	function getByUsernamePass($username, $pass) 
@@ -235,12 +238,12 @@ class GW_User extends GW_ADM_User
 	
 	function debitFunds($funds, $msg, &$errors=[])
 	{
-		if($this->funds < $funds && !$this->allow_credit){
+		if($this->sms_funds < $funds && !$this->allow_credit){
 			$errors[] = sprintf(GW_Error_Message::read('/USER/INSUFFICIENT FUNDS'), $funds, $this->funds);
 			return false;
 		}
 		
-		$this->funds = $this->funds - $funds;
+		$this->sms_funds = $this->sms_funds - $funds;
 		
 		$bl = new GW_Balance_Log_Item([
 		    'user_id'=>$this->id, 
@@ -248,19 +251,19 @@ class GW_User extends GW_ADM_User
 		    'balance_diff'=>-$funds]);
 		$bl->insert();
 		
-		$this->update(['funds']);
+		$this->update(['sms_funds']);
 	}
 	
 	function addFunds($funds, $msg)
 	{
-		$this->credit = $this->funds + $funds;
+		$this->sms_funds = $this->sms_funds + $funds;
 		$bl = new GW_Balance_Log_Item([
 		    'user_id'=>$this->id, 
 		    'msg'=>$msg,
 		    'balance_diff'=>$funds]);
 		$bl->insert();
 		
-		$this->update(['funds']);
+		$this->update(['sms_funds']);
 	}
 
 }

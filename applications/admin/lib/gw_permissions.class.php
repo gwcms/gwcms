@@ -1,10 +1,10 @@
 <?php
 
 
-class GW_ADM_Permissions
+class GW_Permissions
 {
 	
-	static $table = 'gw_adm_permissions';
+	static $table = 'gw_permissions';
 	static $root_group_id = 1;
 	static $cache = Array();
 	
@@ -72,7 +72,8 @@ class GW_ADM_Permissions
 		if($cache_var =& self::$cache[$cache_id])
 			return $cache_var;
 		
-		return $cache_var = self::__getPrmByMltGrpIds($gids);
+		$cache_var = self::__getPrmByMltGrpIds($gids);
+		return $cache_var;
 	}
 
 	static function canAccess($path, $gids, $load_once=true)

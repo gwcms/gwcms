@@ -8,7 +8,7 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<base href="{$app_base}" />
-	<title>{$title|default:$app->page->get(title,$ln)} - {$lang.SITE_TITLE}</title>
+	<title>{$title|default:$app->page->get(title,$ln)} - {GW::s(SITE_TITLE)}</title>
 	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
 	<link rel="icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />

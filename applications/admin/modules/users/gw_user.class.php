@@ -1,7 +1,7 @@
 <?php
-class GW_ADM_User extends GW_Composite_Data_Object
+class GW_User extends GW_Composite_Data_Object
 {
-	var $table = 'gw_adm_users';
+	var $table = 'gw_users';
 	var $min_pass_length=4;
 	var $max_pass_length=200;	
 	var $validators = Array();
@@ -146,7 +146,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	
 	function isRoot()
 	{
-		return GW_ADM_Permissions::isRoot($this->group_ids);
+		return GW_Permissions::isRoot($this->group_ids);
 	}
 	
 	function delete()
@@ -175,7 +175,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	
 	/**
 	 * can user view,edit,this item
-	 * @param GW_ADM_User
+	 * @param GW_User
 	 */
 	function canBeAccessedByUser($user)
 	{
@@ -244,7 +244,7 @@ class GW_ADM_User extends GW_Composite_Data_Object
 		switch($key)
 		{
 			case 'title':
-				$val=$this->get('username');
+				$val=($this->name || $this->surname? $this->name.' '.$this->surname : $this->username);
 			break;
 			case 'group_ids':
 				if($lg=$this->get('link_groups'))
@@ -329,13 +329,13 @@ class GW_ADM_User extends GW_Composite_Data_Object
 	
 	function getOptions($active=true)
 	{
-		$cond = $active ? 'active AND !removed' : '';
+		$cond = $active ? 'active!=0 AND removed=0' : '';
 		
 		return $this->getAssoc(Array('id','username'), $cond);
 	}
 	
 	function countNewMessages()
 	{
-		return GW_Adm_Message::countStatic(Array('user_id=? AND seen=0',$this->id));
+		return GW_Message::countStatic(Array('user_id=? AND seen=0',$this->id));
 	}
 }

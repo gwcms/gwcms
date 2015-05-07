@@ -44,8 +44,8 @@ class Module_Comments extends Module_Items
   		$parent = $this->model->createNewObject($comment->parent_id);
   		$parent->load();
   		
-  		$usr_create = GW_Adm_User::getById($parent->user_create);
-  		$usr_exec = GW_Adm_User::getById($parent->user_exec);
+  		$usr_create = GW_User::getById($parent->user_create);
+  		$usr_exec = GW_User::getById($parent->user_exec);
   		$user_comment = $this->app->user;
   		
   		$emails = Array();
