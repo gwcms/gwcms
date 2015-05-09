@@ -125,7 +125,7 @@ class GW_Data_Object
 		
 		$info=Array
 		(
-			'item_count'=>$db->getSQLResultsCount(),
+			'item_count'=>$db->fetch_result("SELECT FOUND_ROWS()"),
 			'last_query_time'=>$db->last_query_time
 		);
 		
@@ -154,7 +154,7 @@ class GW_Data_Object
 		$data	= array();
 		
 		$options['conditions']=$conditions;
-		$sql = "SELECT {$select} FROM ".$this->findAllTable($options);
+		$sql = "SELECT SQL_CALC_FOUND_ROWS {$select} FROM ".$this->findAllTable($options);
 		
 		if($conditions)
 			$sql.= ' WHERE ' . GW_DB::prepare_query($conditions);

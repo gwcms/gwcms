@@ -239,36 +239,46 @@ class GW_Common_Module extends GW_Module
 		if(isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
 			
-		$tmp1=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
+		$search=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
+		
+		
 		
 		foreach($this->filters as $key => $val)
-			$tmp1[$key]=Array('=',$val);
+			$search[$key]=Array('=',$val);
 								
-		foreach($tmp1 as $key => $val)
+		foreach($search as $field => $val)
 		{
-			$type = isset($val[0]) ? $val[0] : '=';
+			$compare_type = isset($val[0]) ? $val[0] : '=';
 			$value = isset($val[1]) ? $val[1] : null;
 			
 			if($value==='' || $value===null)
 				continue;
 			
+			
+			$cond.= ($cond ? ' AND ':'');
+			
 			$value=GW_DB::escape($value);
 			
-			$cond.= ($cond?' AND ':'');
-			$cond.= '`'.GW_DB::escape($key)."` ".GW_DB::escape($type?$type:'=');
-			
-			if($type=='IN' && $val){
-				$opt = array_splice($val,1);
-				$cond .= '("'.implode('","',$opt).'")';								
-			}elseif($type=='LIKE'){
-				$cond .= "'%$value%'";
-			}else{
-				$cond .= "'$value'";
+			if(method_exists($this, $ofmethod="overideFilter$field")) {
+				$cond.=$this->$ofmethod($value);
+			} else {					
+				switch($compare_type)
+				{
+					case 'IN':
+						$opt = array_splice($val,1);
+						$cond .= '("'.implode('","',$opt).'")';	
+						break;
+					case 'LIKE':
+						$cond.="(`$field` LIKE '%".$value."%')";
+						break;
+					case 'LIKE%,,%':
+						$cond.="(`$field` LIKE '%,".$value.",%')";					
+					default:
+						$cond.="(`$field` = '".$value."')";
+						break;
+				}
 			}
 		}
-		
-		
-		
 		
 		if(isset($this->list_params['order']) && $ord=$this->list_params['order'])
 			$params['order']=$ord;
