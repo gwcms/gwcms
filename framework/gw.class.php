@@ -40,6 +40,14 @@ class GW
 		return self::$context->db;
 	}
 	
+	static function initClass($name)
+	{
+		$o = new $name();
+		$o->db = self::$context->db;
+		
+		return $o;
+	}
+	
 	static function getInstance($class, $file=false) 
 	{
 		static $cache;
@@ -50,7 +58,7 @@ class GW
 		if($file)
 			include_once $file;
 			
-		$cache[$class] = new $class();
+		$cache[$class] = self::initClass($class);
 	
 		return $cache[$class];
 	}
