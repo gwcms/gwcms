@@ -4,6 +4,7 @@ class GW_Config
 {
 	public $prefix;
 	var $table='gw_config';
+	public $db;
 
 	function __construct($prefix='')
 	{
