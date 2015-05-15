@@ -37,20 +37,31 @@
 
 	{function name=dl_cell_actions1}
 		{if $item->user_exec == $app->user->id}
-			{if ((int)$item->state < 100)}
-				{gw_link do=complete params=[id=>$item->id] title="Fix"}
+			{if ((int)$item->state < 15)}
+				{gw_link do=execute params=[id=>$item->id] title="P.S. į vykdomas"}
+				
+			{elseif ((int)$item->state < 100)}
+				{gw_link do=complete params=[id=>$item->id] title="P.S. į atliktas"}
 			{/if}
-		{else}
-			{gw_link do=execute params=[id=>$item->id] title="Exec"}
+		{elseif $item->state >=100}
+			
 		{/if}
 	{/function}	
 	
 
 	{function name=dl_cell_user_exec}
 				{$users[$item->user_exec]}
+	{/function}
+	{function name=dl_cell_deadline}
+			{if $item->deadline!='0000-00-00 00:00:00'}
+				{date('Y-m-d',strtotime($item->deadline))}
+			{else}
+				-
+			{/if}
 	{/function}	
+	
 
-	{$dl_smart_fields=[state,user_create,user_exec,title,actions1]}
+	{$dl_smart_fields=[state,user_create,user_exec,title,actions1,deadline]}
 	
 	
 	{$display_fields = 	[

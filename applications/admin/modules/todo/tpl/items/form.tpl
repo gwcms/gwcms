@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" max_width=900}
+{include file="default_form_open.tpl" form_width=1000}
 
 <style>
 .input_label_td { width:120px; }
@@ -7,7 +7,7 @@
 {include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
 {include file="elements/input.tpl" name=type type=select options=$m->lang.TODO_ITEM_TYPE_OPT}
-{include file="elements/input.tpl" name=job_type type=radio options=$m->lang.TODO_ITEM_JOB_TYPE_OPT}
+{*include file="elements/input.tpl" name=job_type type=radio options=$m->lang.TODO_ITEM_JOB_TYPE_OPT*}
 
 {include file="elements/input.tpl" name=title}
 
@@ -27,7 +27,7 @@
 
 {include file="elements/input.tpl" type=select name=user_create empty_option=1 options=$users default=$app->user->id data_type=numeric}
 
-{include file="elements/input.tpl" type=select name=user_exec empty_option=1 options=$users}
+{include file="elements/input.tpl" type=select name=user_exec empty_option=1 options=$users default=$app->user->id data_type=numeric}
 
 
 </table>
