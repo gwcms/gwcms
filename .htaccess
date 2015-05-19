@@ -4,6 +4,8 @@ php_value upload_max_filesize 20M
 php_value post_max_size 21M
 AddDefaultCharset UTF-8
 
+php_flag display_errors on
+
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-d
