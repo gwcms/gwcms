@@ -22,8 +22,13 @@
 			{if $ind!=0}, {/if}<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$groups_options.$gid}</a>
 		{/foreach}	
 	{/function}
+
+	{function dl_cell_name}
+		{$item->name} {$item->surname}
+	{/function}	
+		
 	
-	{$dl_smart_fields=[link_groups]}
+	{$dl_smart_fields=[link_groups,name]}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[switchtouser,invert_active,edit,delete]}
