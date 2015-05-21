@@ -21,7 +21,7 @@
 	
 	{$dl_toolbar_buttons = []}
 	
-	{$dl_actions=[edit, delete]}
+	{$dl_actions=[edit,delete]}
 {/block}	
 
 {block name="after_list"}

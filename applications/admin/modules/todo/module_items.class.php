@@ -34,5 +34,12 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		}
 		$this->jump();
 	}
+	
+	function viewForm()
+	{
+		
+		parent::viewForm();
+		//d::dumpas($this->parent);
+	}
 
 }

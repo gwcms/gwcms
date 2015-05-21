@@ -49,6 +49,9 @@ class GW_Common_Module extends GW_Module
 	{
 		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
 		
+		if($id)
+			return $id;
+		
 		if(isset($this->app->path_arr_parent['data_object_id']) && $tmp = $this->app->path_arr_parent['data_object_id'])
 			$id = $tmp;	
 		
@@ -210,7 +213,7 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$this->smarty->assign('update', (int)$item->get('id'));
-		$this->smarty->assign('item', $item);
+		$this->smarty->assignByRef('item', $item);
 		
 		return $item;
 	}

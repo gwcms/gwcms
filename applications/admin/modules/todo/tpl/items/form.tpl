@@ -50,7 +50,7 @@
 		<td>
 			<script type="text/javascript" src="{$app_root}js/jquery.iframe-auto-height.plugin.1.5.0.js"></script>
 			
-			<iframe id="comments" style="width:100%;height:250px" src="{$ln}/{$app->path}/{$m->parent->id}/comments" frameborder="0"></iframe>
+			<iframe id="comments" style="width:100%;height:250px" src="{$ln}/todo/items/{$item->id}/form/{$m->parent->id}/comments" frameborder="0"></iframe>
 			
 			<script type="text/javascript">
 

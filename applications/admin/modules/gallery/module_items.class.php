@@ -50,22 +50,22 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	function importEntry($file)
 	{
 		$values['parent_id'] = $this->filters['parent_id'];	
-    	$values['active']   = 0;
-    	$values['type']=0;//image
-    	$values['title']=pathinfo($file, PATHINFO_FILENAME);
-    	
-    	$image =Array
-	    (
-    		'new_file'=>$file,
-    		'size'=>filesize($file),
-    		'original_filename'=> pathinfo($file, PATHINFO_BASENAME),
-    	);
-    	
-	    $item = $this->model->createNewObject($values);
+		$values['active']   = 0;
+		$values['type']=0;//image
+		$values['title']=pathinfo($file, PATHINFO_FILENAME);
 
-	    $item->set('image', $image);
-	   	$item->validate();		
-        $item->insert();
+		$image =Array
+		    (
+			'new_file'=>$file,
+			'size'=>filesize($file),
+			'original_filename'=> pathinfo($file, PATHINFO_BASENAME),
+		);
+
+		$item = $this->model->createNewObject($values);
+
+		$item->set('image', $image);
+		$item->validate();		
+		$item->insert();
 	}
 	
 	function doSetPositions()

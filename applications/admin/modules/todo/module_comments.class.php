@@ -31,16 +31,21 @@ class Module_Comments extends Module_Items
 		switch($event)
 		{
 			case "BEFORE_SAVE":
+				$item = $context;
+				
+				$item->description = str_replace("\n", "<br />", $item->description);
+				
 				$this->notifySave($context);
+			break;
+			case 'AFTER_FORM':
+				$item = $context;
+				$item->description = str_replace('<br />',"\n", $item->description);
 			break;
 		}
 	}
 	
 	function notifySave($comment)
 	{
-		//dump($item);
-		
-
   		$parent = $this->model->createNewObject($comment->parent_id);
   		$parent->load();
   		
@@ -50,17 +55,22 @@ class Module_Comments extends Module_Items
   		
   		$emails = Array();
   		
+		//jei pakomentaves vartotojas nera tasko autorius, prideti emaila
   		if($user_comment->id != $usr_create->id && $usr_create->email)
   			$emails[] = $usr_create->email;
   			
+		//jei pakomentaves artotojas nera tasko vykdytojas, prideti emaila
   		if($usr_exec && $user_comment->id != $usr_exec->id && $usr_exec->email)
   			$emails[] = $usr_exec->email;
 				
+		
+		$tmp = str_replace('<br />',"\n", $comment->description);
+		
 		$msg = Array();
 		$msg['from']=$user_comment->email;
 		$msg['subject'] = GW::s('PROJECT_NAME')." :: New comment on task '".$parent->title."'";
 		$msg['body']="Link: \n".Navigator::getBase(true).$this->app->ln."/todo/items/".$parent->id."/form\n\nComment:\n".
-		$comment->description;
+		$tmp;
 		
 		
 		
@@ -74,5 +84,5 @@ class Module_Comments extends Module_Items
 				$this->app->setMessage("Notifcation sent($sent) to $email");
 			}
 		}	
-	}
+	}	
 }

@@ -2,7 +2,7 @@
 
 <body>
     
-{if !isset($smarty.get.clean)}
+{if !isset($smarty.get.clean) && !$no_standart_cms_frame}
 
 <div id="wrap">
     <div id="header">

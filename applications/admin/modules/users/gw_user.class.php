@@ -79,7 +79,7 @@ class GW_User extends GW_Composite_Data_Object
 	function logLogin()
 	{
 		$inf = GW_Request_Helper::visitorInfo();
-		$msg="ip: $inf[ip]".(isset($inf['proxy'])?" | $inf[proxy]":'').($inf['referer']?" | $inf[referer]":'');
+		$msg="ip: {$inf['ip']}".(isset($inf['proxy'])?" | {$inf['proxy']}":'').(isset($inf['referer'])?" | {$inf['referer']}":'');
 		GW_DB_Logger::msg($msg,'user','login',$this->id,$inf['browser']);
 	}
 
