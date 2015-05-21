@@ -17,7 +17,7 @@
 	{/function}
 	
 	{function dl_cell_description}
-		{$item->description} 
+		{$item->description|make_links_blank} 
 		{if $item->update_time!='0000-00-00 00:00:00'}
 			<small><a href="#" onclick="return false" title='Redaguota {$item->update_time}'>(R)</a></small>
 		{/if}

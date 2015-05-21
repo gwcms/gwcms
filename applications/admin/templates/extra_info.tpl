@@ -12,7 +12,7 @@
 		<td width="99%">
 			{$x=$item->get($field_id)}
 			{if is_array($x)}
-				{dump($x)}
+				{d::jsonNice($x)}
 			{else}
 				{$x}
 			{/if}

@@ -305,10 +305,14 @@ class GW_Common_Module extends GW_Module
 		$views = Array('All'=>Array('name'=>'All','conditions'=>'','default'=>1)) + (array)$views;
 		
 		foreach($views as $i => $view)
+			if(isset($view['default']))
+				$default = $view;
+			
+		if(!$store['name'])
+			$store=$default;
+					
+		foreach($views as $i => $view)
 		{		
-
-			if($view['default'])
-				$default=$view;
 				
 			if($store['name']==$view['name'])
 			{
@@ -327,9 +331,6 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
-		
-		if(!$store['name'])
-			$store=$default;
 				
 		$this->smarty->assign('views', $views);
 	}

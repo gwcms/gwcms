@@ -45,6 +45,8 @@ class d
 	
 	static function fbacktrace($bt)
 	{
+			//limit size, sometimes can kill memory
+			//$bt = array_slice($bt, 0, 4);
 		
 		
 			if(!isset($bt[0]['file'])) //tiesiai is dump funkcijos kviecia
@@ -99,6 +101,11 @@ class d
 		echo "<pre>";
 		debug_print_backtrace();
 		echo "</pre>";
+	}
+	
+	static function jsonNice($array)
+	{
+		return json_encode($array, JSON_PRETTY_PRINT);
 	}
 
 }
