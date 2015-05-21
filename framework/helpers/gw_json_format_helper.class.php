@@ -57,7 +57,7 @@ class GW_Json_Format_Helper
 	
 	static function f($arr)
 	{
-		return self::format(json_encode($arr));
+		return self::format(json_encode($arr, JSON_UNESCAPED_UNICODE));
 	}
 		
 }

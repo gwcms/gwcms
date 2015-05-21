@@ -22,6 +22,13 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 
 	function getViews()
 	{
+		
+		if(!$this->get('views')){
+			$info=$this->get('info');
+			if(isset($info['default_views']))
+				return json_decode($info['default_views'], true);
+		}
+		
 		return json_decode($this->get('views'), true);
 	}
 	

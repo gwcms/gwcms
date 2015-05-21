@@ -172,6 +172,25 @@
 				</i>
 				<i id="info">
 					<i id="model">todo_item</i>
+					<i id="default_views">
+<![CDATA[						
+[
+	{
+		"name":"Eilė",
+		"conditions":"state<100",
+		"calculate":1,
+		"default":1,
+		"order":"priority DESC, state ASC"
+	},
+	{
+		"name":"Atlikti",
+		"conditions":"state>=100",
+		"calculate":1,
+		"order":"priority DESC, state ASC"
+	}
+]
+]]>						
+					</i>
 				</i>
 			</i>			
 		</i>
