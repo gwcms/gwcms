@@ -179,14 +179,12 @@
 		"name":"Eilė",
 		"conditions":"state<100",
 		"calculate":1,
-		"default":1,
-		"order":"priority DESC, state ASC"
+		"default":1
 	},
 	{
 		"name":"Atlikti",
 		"conditions":"state>=100",
-		"calculate":1,
-		"order":"priority DESC, state ASC"
+		"calculate":1
 	}
 ]
 ]]>						
