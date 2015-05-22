@@ -84,5 +84,11 @@ class Module_Comments extends Module_Items
 				$this->app->setMessage("Notifcation sent($sent) to $email");
 			}
 		}	
-	}	
+	}
+	
+	//workaround kad nepaimtu is items
+	function loadViews()
+	{
+		
+	}
 }
