@@ -156,7 +156,8 @@ class GW_Common_Module extends GW_Module
 	function jumpAfterSave($item=false)
 	{	
 		//show last operated item in list
-		$_REQUEST['id']=$item->get('id');
+		if($item)
+			$_REQUEST['id']=$item->get('id');
 		
 		if($_REQUEST['submit_type']==1){//apply
 			$options = $item ? Array('id'=>$item->get('id')) : Array();
