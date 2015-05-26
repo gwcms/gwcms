@@ -50,7 +50,7 @@
 <td>
 
 	<input type="hidden" name="act" value="do:save" />
-	<input type="hidden" name="item[id]" value="{$comment->id}" />
+	<input type="hidden" name="item[id]" value="" />
 	<input type="hidden"  name="item[user_create]" value="{$comment->user_create|default:$app->user->id}"  />
 
 
@@ -66,7 +66,7 @@
 
 	<textarea class="ta_autoresize" name="item[description]"  
 	style="width: 100%; height: 100px;"  
-	onchange="this.value=$.trim(this.value);" >{$comment->description|escape}</textarea>
+	onchange="this.value=$.trim(this.value);" ></textarea>
 </td>
 
 </tr>
