@@ -6,17 +6,21 @@
 {else}
 	{$selected=[]}
 {/if}
+	
+{if $selected_ontop}
 
-{$selecteditems=[]}
 
-{foreach $options as $key => $val}
-	{if isset($selected.$key)}
-		{$selecteditems[$key]=$val}
-		{gw_unassign var=$options.$key}
-	{/if}
-{/foreach}
+	{$selecteditems=[]}
 
-{$options=$selecteditems+$options}
+	{foreach $options as $key => $val}
+		{if isset($selected.$key)}
+			{$selecteditems[$key]=$val}
+			{gw_unassign var=$options.$key}
+		{/if}
+	{/foreach}
+
+	{$options=$selecteditems+$options}
+{/if}
 
 {foreach $options as $key => $title}
 <tr>
