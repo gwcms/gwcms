@@ -272,7 +272,7 @@ class GW_Common_Module extends GW_Module
 				{
 					case 'IN':
 						$opt = array_splice($val,1);
-						$cond .= '("'.implode('","',$opt).'")';	
+						$cond .= "(`$field` IN ('".implode("','",$opt)."'))";	
 						break;
 					case 'LIKE':
 						$cond.="(`$field` LIKE '%".$value."%')";
