@@ -11,6 +11,8 @@ class Module_Comments extends Module_Items
 		
  		$this->filters['parent_id']=$this->app->path_arr[1]['data_object_id'];
  		$this->filters['type']=2;
+		
+		$this->model->default_order = 'id ASC';
   	}
   	
   	
