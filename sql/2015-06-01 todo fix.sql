@@ -1,0 +1,1 @@
+ALTER TABLE  `gw_todo` CHANGE  `state`  `state` TINYINT( 4 ) UNSIGNED NOT NULL ;
