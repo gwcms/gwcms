@@ -14,13 +14,8 @@
 	{$value=$item->get($name)}
 		
 
-	{if $data_type=='numeric' && !$value}
-
+	{if $value!=='0' && !$value && $default}
 		{$value=$default}
-	{else}
-		{if !$value}
-			{$value=$default}
-		{/if}
 	{/if}
 {/if}
 
