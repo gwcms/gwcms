@@ -177,13 +177,13 @@
 [
 	{
 		"name":"Eilė",
-		"conditions":"state<100",
+		"conditions":"state<100 AND type=0",
 		"calculate":1,
 		"default":1
 	},
 	{
 		"name":"Atlikti",
-		"conditions":"state>=100",
+		"conditions":"state>=100 AND type=0",
 		"calculate":1
 	}
 ]
