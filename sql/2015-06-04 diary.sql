@@ -33,3 +33,20 @@ CREATE TABLE IF NOT EXISTS `diary_entries` (
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=448 ;
+
+
+CREATE TABLE IF NOT EXISTS `movies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` varchar(255) NOT NULL,
+  `name_orig` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `rate` enum('0','1','2','3','4','5','6','7','8','9','10') NOT NULL,
+  `imdb` text NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `recommend` varchar(255) NOT NULL,
+  `insert_time` datetime NOT NULL,
+  `update_time` datetime NOT NULL,
+  `active` varchar(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=313 ;
