@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+			<no>Teksten</no>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+			<no>Aktiv</no>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+			<no>Navn</no>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+			<no>Beskrivelse</no>
+		</i>
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			Filmai
+		</i>
+		<i id="info">
+			<i id="model">gw_movie</i>
+		</i>
+
+
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

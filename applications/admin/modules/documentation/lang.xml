@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="ROOT">
+		<en>Root</en>
+		<lt>Šakninis</lt>
+		<no>Hoved</no>
+	</i>
+	
+
+	<i id="GALLERY_ITEM_TYPE_OPT">
+		<i id="0">Įrašas</i>
+		<i id="1">Kategorija</i>
+	</i>
+	
+	<i id="FIELDS"> 
+		<i id="parent_id">Kategorija</i>
+	</i>
+	
+	<i id="FIELD_NOTES">
+		<i id="page_by">
+			<en>0 - paging off</en>
+			<lt>0 - puslapiavimas išjungtas</lt>
+			<no>0 - sidedeling avslått</no>
+		</i>
+	</i>
+	
+
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			Dokumentavimas
+		</i>	
+		<i id="childs">
+			<i id="items">
+				<i id="title">
+					Dokumentavimas
+				</i>
+				<i id="info">
+					<i id="model">Doc_Entry</i>
+				</i>
+			</i>			
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

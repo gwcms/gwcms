@@ -125,7 +125,7 @@ class FH
 	//path only
 	function gw_link_po(&$params)
 	{		
-		$params['params'] = (array)$params['params'] /*+ $app->carryParams()*/;		
+		$params['params'] = (array)$params['params'] + $this->app->carryParams();		
 		$params['params'] = http_build_query($params['params']);	
 			
 		if(isset($params['do']))
