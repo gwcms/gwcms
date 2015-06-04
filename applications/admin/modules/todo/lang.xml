@@ -117,14 +117,19 @@
 			<lt><![CDATA[<font color="green"><b>Vykdomas</b></font>]]></lt>
 			<en><![CDATA[<font color="green"><b>Working</b></font>]]></en>
 		</i>
+		<i id="12">
+			<lt><![CDATA[<font color="yellow">Pauzė</font>]]></lt>
+			<en><![CDATA[<font color="yellow">Paused</font>]]></en>
+		</i>
+		<i id="50">
+			<lt><![CDATA[<font color="orange">Gražinta pataisymams</font>]]></lt>
+			<en><![CDATA[<font color="orange">Returned for fixes</font>]]></en>
+		</i>				
 		<i id="100">
 			<lt><![CDATA[<font color="green">Atliktas</font>]]></lt>
 			<en><![CDATA[<font color="green">Done</font>]]></en>
 		</i>
-		<i id="110">
-			<lt><![CDATA[<font color="red">Atliktas. Nepilnai.</font>]]></lt>
-			<en><![CDATA[<font color="red">Done. Incomplete.</font>]]></en>
-		</i>
+
 		<i id="200">
 			<lt><![CDATA[<font color="red">Atmestas</font>]]></lt>
 			<en><![CDATA[<font color="red">Canceled</font>]]></en>

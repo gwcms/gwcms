@@ -11,11 +11,11 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	}
 	
 	
-	function doExecute()
+	function doSwitchState()
 	{
 		
 		$item = $this->getDataObjectById();
-		$item->state=15;
+		$item->state=$_GET['state'];
 		$item->user_exec = $this->app->user->id;
 			
 		$item->update(Array('state','user_exec'));
@@ -23,17 +23,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->jump();
 	}
 	
-	function doComplete()
-	{
-		$item = $this->getDataObjectById();
-		
-		if($item->user_exec == $this->app->user->id)
-		{
-			$item->state=100;
-			$item->update(Array('state'));
-		}
-		$this->jump();
-	}
+
 	
 	function viewForm()
 	{
