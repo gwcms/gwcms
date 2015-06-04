@@ -20,7 +20,7 @@ Imdb info
 
 
 <div id="imdb_info">
-	{if $item && $item->image}<img src="repository/{$item->image}" />{/if}
+	{if $item && $item->image}<img src="{$app->sys_base}repository/{$item->image}" />{/if}
 </div>
 
 
