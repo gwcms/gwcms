@@ -19,6 +19,7 @@ class GW_Math_Helper
 		
 	static function uptime($secs,$precision='s')
 	{
+		
 		$y=floor($secs/31514400);$secs-=$y*31514400;
 		$M=floor($secs/2592000);$secs-=$M*2592000;
 		$d=floor($secs/86400);$secs-=$d*86400;
@@ -26,12 +27,12 @@ class GW_Math_Helper
 		$m=floor($secs/60);$secs-=$m*60;
 		$s=$secs;	
 		
-		$y=($y?$y.' y. ':'');
-		$M=($M?$M.' m. ':'');
-		$d=($d?$d.' d. ':'');
-		$h=($h?$h.' h. ':'');
-		$m=($m?$m.' m. ':'');
-		$s=($s?$s.' s. ':'');
+		$y=($y?$y.'Y ':'');
+		$M=($M?$M.'M ':'');
+		$d=($d?$d.'d ':'');
+		$h=($h?$h.'h ':'');
+		$m=($m?$m.'m ':'');
+		$s=($s?$s.'s ':'');
 		
 		$t=$y;
 		
@@ -58,5 +59,19 @@ class GW_Math_Helper
 		}
 		
 		return substr($t,0,-1);
-	}	
+	}
+	
+	function uptimeReverse($str)
+	{
+		$time=0;
+		
+		if(preg_match('/(\d+) ?h/', $str, $m)) $time+=$m[1]*3600;
+		if(preg_match('/(\d+) ?m/', $str, $m)) $time+=$m[1]*60;
+		if(preg_match('/(\d+) ?s/', $str, $m)) $time+=$m[1];
+		if(preg_match('/(\d+) ?d/', $str, $m)) $time+=$m[1]*86400;
+		if(preg_match('/(\d+) ?M/', $str, $m)) $time+=$m[1]*2592000;
+		if(preg_match('/(\d+) ?Y/', $str, $m)) $time+=$m[1]*31514400;
+		
+		return $time;
+	}
 }

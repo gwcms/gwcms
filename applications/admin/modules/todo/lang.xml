@@ -54,8 +54,12 @@
 			<lt>Egzekutorius</lt>
 			<en>Executor</en>
 		</i>
+		<i id="time_have">
+			Skirta laiko
+		</i>
 		
 		<i id="actions1">Veiksmai</i>		
+		<i id="project_id">Projektas</i>		
 
 	</i>
 	
@@ -176,7 +180,7 @@
 					<en>Todo list</en>
 				</i>
 				<i id="info">
-					<i id="model">todo_item</i>
+					<i id="model">gw_todo_item</i>
 					<i id="default_views">
 <![CDATA[						
 [
@@ -195,7 +199,15 @@
 ]]>						
 					</i>
 				</i>
-			</i>			
+			</i>
+			<i id="projects">
+				<i id="title">
+					Projektai
+				</i>
+				<i id="info">
+					<i id="model">gw_todo_project</i>
+				</i>
+			</i>
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->

@@ -75,7 +75,7 @@ class GW_Data_Object
 		if(isset($this->calculate_fields[$key]))
 		{
 			$func=$this->calculate_fields[$key];
-			$func=$func==1?'calculateField':$func;
+			$func=$func==1?'calculateFieldCache':$func;
 			return $this->$func($key);
 		}
 		
@@ -623,42 +623,48 @@ class GW_Data_Object
 		}
 	}
 	
-	function calculatedFields($name)
+	function calculateField($name)
 	{
 		die('overide this');
 	}
 	
-    public static function __callStatic($name, $arguments) 
-    {
-    	if( stripos($name, 'getBy') === 0 )
-    	{
-    		//Example call GW_Articles::getById(15);
-    		//will work same as $o = new GW_Articles; $o->find("id=15")
-    		    		
-    		$field = substr($name,5);
-    		
-	    	$cn = get_called_class();
-	    	$item_0 = new $cn;
-	    		    	
-	    	return $item_0->find(Array("`$field`=?",$arguments[0]));
-    	}
-    	elseif( stripos($name, 'static') !== false)
-    	{    		
-    		//Example call GW_Articles::findStatic("id=15");
-    		//will work same as $o = new GW_Articles; $o->find("id=15")
-    		
-    		$func = str_ireplace('static','',$name);
-    		
-	    	$cn = get_called_class();
-	    	$item_0 = new $cn;	    	
-	    		    	
-	    	return call_user_func_array(Array($item_0,$func), $arguments);   		
-    	}
-    	else
-    	{
-    		trigger_error("Unhandled static call", E_USER_ERROR);
-    	}
-        
-    }	
+	function calculateFieldCache($key)
+	{
+		$cache =& $this->cache['calcf'];
+		
+		if(isset($cache[$key]))
+			return $cache[$key];
+		
+		$cache[$key]=$this->calculateField($key);
+		
+		return $cache[$key];
+	}		
 	
+	public static function __callStatic($name, $arguments) 
+	{
+		if (stripos($name, 'getBy') === 0) {
+			//Example call GW_Articles::getById(15);
+			//will work same as $o = new GW_Articles; $o->find("id=15")
+
+			$field = substr($name, 5);
+
+			$cn = get_called_class();
+			$item_0 = new $cn;
+
+			return $item_0->find(Array("`$field`=?", $arguments[0]));
+		} elseif (stripos($name, 'static') !== false) {
+			//Example call GW_Articles::findStatic("id=15");
+			//will work same as $o = new GW_Articles; $o->find("id=15")
+
+			$func = str_ireplace('static', '', $name);
+
+			$cn = get_called_class();
+			$item_0 = new $cn;
+
+			return call_user_func_array(Array($item_0, $func), $arguments);
+		} else {
+			trigger_error("Unhandled static call", E_USER_ERROR);
+		}
+	}
+
 }

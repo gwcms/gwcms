@@ -27,6 +27,7 @@
 			<a href="{$link}">{$item->title} (Enter)</a>
 		{else}
 			{$item->title}
+			{if $item->comments_count}<span title="Komentarai">({$item->comments_count}){/if}
 		{/if}
 	{/function}
 
@@ -50,8 +51,6 @@
 		{if $item->state==100}{$is_green=''}{else}{$is_green='_0'}{/if}
 		{if $item->state===200}{$is_red=''}{else}{$is_red='_0'}{/if}
 		
-		
-
 
 		{if $item->state >= 100}
 			{gw_link do=switch_state params=[id=>$item->id,state=>50] icon="dot_orange`$is_orange`" title=$states.50 show_title=0}
@@ -62,6 +61,7 @@
 			{gw_link do=switch_state params=[id=>$item->id,state=>10] icon="dot_white`$is_white`" title=$states.5 show_title=0}
 			{gw_link do=switch_state params=[id=>$item->id,state=>15] icon="dot_violet`$is_violet`" title=$states.15 show_title=0}
 
+			{gw_link do=switch_state params=[id=>$item->id,state=>50] icon="dot_orange`$is_orange`" title=$states.50 show_title=0}
 			{gw_link do=switch_state params=[id=>$item->id,state=>12] icon="dot_yellow`$is_yellow`" title=$states.12 show_title=0}
 
 			{gw_link do=switch_state params=[id=>$item->id,state=>100] icon="dot_green`$is_green`" title=$states.100 show_title=0}
@@ -82,20 +82,37 @@
 				-
 			{/if}
 	{/function}	
-	
+	{function name=dl_cell_time_have}
+			{if $item->time_have=='-1'}
+				-
+			{else}
+				{gw_math_helper::uptime($item->time_have)}
+			{/if}
+	{/function}	
+	{function name=dl_cell_project_id}
+		{$opt.project_id[$item->project_id]}
+	{/function}	
+	{function name=dl_cell_week}
+		<span title="{$item->insert_time}">W{date('W',strtotime($item->insert_time))}
+		</span>
+	{/function}	
+		
 
-	{$dl_smart_fields=[state,user_create,user_exec,title,deadline]}
+	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have]}
 	
 	
 	{$display_fields = 	[
 			id=>1,
 			priority=>1,
+			project_id=>0,
 			title=>1,
+			time_have=>1,
 			deadline=>1,
 			insert_time=>1,
 			update_time=>1,
 			user_create=>1,
 			user_exec=>1,
+			week=>1,
 			state=>1
 		]}	
 	

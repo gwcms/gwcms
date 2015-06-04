@@ -6,10 +6,13 @@
 
 {include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
+
+{include file="elements/input.tpl" name=project_id type=select options=$opt.project_id empty_option=1}
 {include file="elements/input.tpl" name=type type=select options=$m->lang.TODO_ITEM_TYPE_OPT}
 {*include file="elements/input.tpl" name=job_type type=radio options=$m->lang.TODO_ITEM_JOB_TYPE_OPT*}
 
 {include file="elements/input.tpl" name=title}
+{include file="elements/input.tpl" name=time_have value=gw_math_helper::uptime($item->time_have)}
 
 {include file="elements/input.tpl" name=description type=textarea height="100px" autoresize=1}
 
