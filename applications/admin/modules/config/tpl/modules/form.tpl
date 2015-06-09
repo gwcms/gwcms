@@ -6,6 +6,7 @@
 {include file="elements/input.tpl" name=path}
 {include file="elements/input.tpl" name=pathname}
 {include file="elements/input.tpl" name=views type=textarea value=$item->VIEWS  height=200px tabs=1}
+{include file="elements/input.tpl" name=orders type=textarea value=$item->ORDERS  height=200px tabs=1}
 {include file="elements/input.tpl" name=notes type=htmlarea}
 {include file="elements/input.tpl" name=active type="bool"}
 

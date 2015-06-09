@@ -10,7 +10,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 {
 	var $table = 'gw_adm_sitemap';
 	var $i18n_fields = Array('title'=>1);
-	var $validators = Array('views'=>'gw_json');
+	var $validators = Array('views'=>'gw_json','orders'=>'gw_json');
 
 	var $default_order = 'priority ASC';
 	var $level=0;
@@ -18,7 +18,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 	
 	var $encode_fields=Array('info'=>'serialize', 'fields'=>'serialize');
 	var $ignore_fields = Array('data_object_id'=>1);
-	var $calculate_fields = Array('VIEWS'=>'getViews');
+	var $calculate_fields = Array('VIEWS'=>'getViews', 'ORDERS'=>'getOrders');
 
 	function getViews()
 	{
@@ -31,6 +31,18 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		return json_decode($this->get('views'), true);
 	}
+	
+	function getOrders()
+	{
+		
+		if(!$this->get('orders')){
+			$info=$this->get('orders');
+			if(isset($info['default_orders']))
+				return json_decode($info['default_orders'], true);
+		}
+		
+		return json_decode($this->get('orders'), true);
+	}	
 	
 	function getChilds($params=Array(), $max_level=3)
 	{

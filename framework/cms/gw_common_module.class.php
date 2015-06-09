@@ -305,7 +305,9 @@ class GW_Common_Module extends GW_Module
 		$store =& $this->list_params['views'];
 		$default = false;
 		
-		$views = Array('All'=>Array('name'=>'All','conditions'=>'','default'=>1)) + (array)$views;
+		$alli18n = $this->app->lang['FILTER_ALL'];
+		
+		$views = Array($alli18n=>Array('name'=>$alli18n,'conditions'=>'','default'=>1)) + (array)$views;
 		
 		foreach($views as $i => $view)
 			if(isset($view['default']))
@@ -338,6 +340,36 @@ class GW_Common_Module extends GW_Module
 		$this->smarty->assign('views', $views);
 	}
 	
+	function loadOrders()
+	{
+		$orders = $this->app->page->ORDERS;
+		$store =& $this->list_params['orders'];
+		$default = false;
+		
+		$defi18n_name = $this->app->lang['DEFAULT'];
+		
+		$orders = Array('default'=>Array('name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy(),'default'=>1)) + (array)$orders;
+		
+		foreach($orders as $i => $order)
+			if(isset($order['default']))
+				$default = $order;
+			
+		if(!$store['name'])
+			$store=$default;
+					
+		foreach($orders as $i => $order)
+		{		
+				
+			if(isset($store['name']) && $store['name']==$order['name'])
+			{
+				$store=$order;
+				$orders[$i]['active']=1;
+			}
+		}
+						
+		$this->smarty->assign('list_orders', $orders);		
+	}
+	
 	function doSetView()
 	{
 		$this->list_params['views']['name'] = $_REQUEST['name'];
@@ -348,9 +380,90 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 	}
 	
+	function doSetOrder()
+	{
+		
+		$orders = $this->app->page->ORDERS;
+		
+		$foundorder=false;
+		
+		
+		
+		
+		if(isset($_REQUEST['name']))
+		{
+			$defi18n_name = $this->app->lang['DEFAULT'];
+			
+			if($_REQUEST['name']==$defi18n_name)
+				$orders[] = array('name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy());
+
+
+			foreach($orders as $order)
+				if($order['name']==$_REQUEST['name'])
+					$foundorder = $order;
+
+			if(!$foundorder){
+				$this->setErrors('/GENERAL/ORDER_NOT_FOUND'); 
+				$this->jump();
+			}
+
+			$this->list_params['order'] = $foundorder['order'];
+
+			$this->list_params['orders']['name'] = $_REQUEST['name'];
+		}elseif(isset($_REQUEST['order'])){
+			
+			if(!$this->__validateOrder($_REQUEST['order'], $this->model->getColumns()))
+			{
+				$this->setErrors('/GENERAL/BAD_ORDER_FIELD'); 
+				$this->jump();
+			}else{				
+				$this->list_params['orders']['name'] = 'NIEKAS';
+				$this->list_params['order'] = $_REQUEST['order'];
+			}
+		}
+		
+		
+		
+		unset($_GET['name']);
+		
+		$this->jump();
+	}
+	
+	function __parseOrders($order)
+	{
+		preg_match_all('/(\w+) (ASC|DESC)/i', $order, $matches, PREG_SET_ORDER);
+			
+		return $matches;	
+	}
+	
+	//pereina per visus stulpelius (norimus rikiuoti) ir patikrina ar yra stulpeliu sarase
+	//jei nera arba jei nematchina grazina false
+	function __validateOrder(&$order, $columns)
+	{
+		if($matches = $this->__parseOrders($order))
+		{
+			foreach($matches as $match)
+				if(!isset($columns[$match[1]]))
+					return false;
+				
+			
+			$orders=[];
+			foreach($matches as $match)
+				$orders[]=$match[1].' '.$match[2];
+			
+			$order=implode(',', $orders);
+				
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
 	function common_viewList($params=Array())
 	{
 		$this->loadViews();
+		$this->loadOrders();
 		
 		$cond=isset($params['conditions']) ? $params['conditions'] : false;
 		

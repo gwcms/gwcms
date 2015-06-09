@@ -14,11 +14,13 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		
 		
 		//jeigu vykdomas filtravimas rodyti visus elementus
-		if(isset($this->list_params['filters']))
+		if(isset($this->list_params['filters']) && $this->list_params['filters'])
 			unset($this->filters['parent_id']);		
 		
+		
+		
 		//uzloadinti tevini irasa
-		$this->parent=$this->model->createNewObject($this->filters['parent_id']);
+		$this->parent=$this->model->createNewObject(isset($this->filters['parent_id']) ?  $this->filters['parent_id'] : false);
 		$this->parent->load();
 				
 		

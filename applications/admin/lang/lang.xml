@@ -434,8 +434,14 @@
 </i>
 
 <i id="VIEWS_LABEL">
-	Views
+	<en>Views</en>
+	<lt>Filtrai</lt>
 </i>
+<i id="ORDERS_LABEL">
+	<en>Order</en>
+	<lt>Rikiavimas</lt>
+</i>
+
 
 <i id="GO_BACK">
 	<lt>Atgal</lt>
@@ -450,6 +456,15 @@
 <i id="ERROR">
 	<lt>klaida</lt>
 	<en>error</en>
+</i>
+<i id="DEFAULT">
+	<lt>Numatytasis</lt>
+	<en>Default</en>
+</i>
+
+<i id="FILTER_ALL">
+	<lt>Visi</lt>
+	<en>All</en>
 </i>
 
 

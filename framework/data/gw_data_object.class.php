@@ -274,6 +274,15 @@ class GW_Data_Object
 		return $db->count($this->table, $condition, $this->db_die_on_error);
 	}
 	
+	function getColumns()
+	{
+		$db =& $this->getDB();
+		$cols = $db->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE table_name =  '".$this->table."'");
+		
+		return 	array_flip($cols);
+
+	}
+	
 	function getIdCondition()
 	{
 		$idfield=$this->primary_fields[0];

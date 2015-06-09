@@ -66,7 +66,10 @@ class GW_Module
 			$sess_store=Array();
 		
 		$this->list_params = array_merge($this->list_params, $sess_store);
-						
+				
+		if(isset($_GET['list_params']))
+			die('LIST_PARAMS_DEPRECATED');		
+		
 		if(isset($_GET['list_params']) && ($tmp = $_GET['list_params']))
 			$this->list_params = array_merge($this->list_params, $tmp);
 			

@@ -60,9 +60,20 @@
 
 </td></tr><tr><td>{*1*}
 
-{if count($views) > 1}
-	{include "list/views.tpl"}
-{/if}
+<table>
+	<tr>
+		<td>
+		{if count($views) > 1}
+			{include "list/views.tpl"}
+		{/if}
+		</td>
+		<td>
+		{if count($list_orders) > 1}
+			{include "list/orders.tpl"}
+		{/if}
+		</td>
+	</tr>
+</table>
 
 
 {if $dl_filters}
