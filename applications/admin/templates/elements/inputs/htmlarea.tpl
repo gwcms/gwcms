@@ -1,6 +1,6 @@
 
 {$dir = GW::$settings.DIR.LIB}
-{$ck = GW::getInstance('ckeditor',"`$dir`/ckeditor/ckeditor_php5.php")}
+{$ck = GW::getInstance('ckeditor',"`$dir`/ckeditor/ckeditor_php5_gw.php")}
 
 
 {$width=$width|default:"800"}
