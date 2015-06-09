@@ -447,6 +447,8 @@ class CKEditor
 
 		$args = "";
 		$ckeditorPath = $this->ckeditorPath();
+		
+		d::ldump($ckeditorPath);
 
 		if (!empty($this->timestamp) && $this->timestamp != "%"."TIMESTAMP%") {
 			$args = '?t=' . $this->timestamp;
@@ -477,6 +479,8 @@ class CKEditor
 	 */
 	private function ckeditorPath()
 	{
+		
+		
 		if (!empty($this->basePath)) {
 			return $this->basePath;
 		}
