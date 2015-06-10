@@ -4,8 +4,22 @@
 
 
 {$width=$width|default:"800"}
-{$ck->editor($input_name, $value, ['width'=>$width, 'language'=>$app->ln])}
 
+
+{$ck_editor_opt=['width'=>$width, 'language'=>$app->ln]}
+
+{if $ck_options=='minimum'}
+	{$ck_editor_opt['toolbarStartupExpanded']=false}
+	{$ck_editor_opt['toolbar']='Basic'}
+{elseif $ck_options=='basic'}
+	{$ck_editor_opt['toolbar']='Basic'}
+{elseif is_array($ck_options)}
+	{$ck_editor_opt=$ck_editor_opt+$ck_options}
+{else}
+	
+{/if}
+
+{$ck->editor($input_name, $value, $ck_editor_opt)}
 
 {*
 <textarea {if $autoresize}class="ta_autoresize"{/if} name="{$input_name}" {if $tabs}onkeydown="return catchTab(this,event)"{/if} 
