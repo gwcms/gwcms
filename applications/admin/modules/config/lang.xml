@@ -12,6 +12,11 @@
 		<i id="path">Path</i>
 		<i id="actions">Actions</i>
 		<i id="params">Parameters</i>
+		<i id="user_id">Gavėjas</i>
+		<i id="sender">Siuntėjas</i>
+		<i id="subject">Tema</i>
+		<i id="message">Žinutė</i>
+		
 	</i>
 	
 	<i id="TASK_NAME">

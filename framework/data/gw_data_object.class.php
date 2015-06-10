@@ -452,18 +452,23 @@ class GW_Data_Object
 		return $this->set($name, $value);
 	}
 	
-	function invertActive()
+	function invert($fieldname)
 	{
 		if(!$this->loaded)
-			$this->load('active');
+			$this->load($fieldname);
 			
 		if(!$this->loaded)
 			return false;
 				
-		$this->set('active', (bool)$this->get('active') ? 0 : 1);
-		$this->update(Array('active'));
+		$this->set($fieldname, (bool)$this->get($fieldname) ? 0 : 1);
+		$this->update(Array($fieldname));
 		
-		return true;
+		return true;		
+	}
+	
+	function invertActive()
+	{
+		return $this->invert('active');
 	}
 	
 	function getFirstError()

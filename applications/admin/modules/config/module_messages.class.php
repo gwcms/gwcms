@@ -25,5 +25,18 @@ class Module_Messages extends GW_Common_Module
 		$item->update(Array('seen'));
 	}
 	
+	function doInvertSeen()
+	{
+		if(! $item = $this->getDataObjectById())
+			return false;
+        
+		$this->canBeAccessed($item, true);
+
+		if(!$item->invert('seen')) 
+			return $this->setErrors('/GENERAL/ACTION_FAIL'); 
+	 	 
+		$this->jump(); 		
+	}
+	
 }
 

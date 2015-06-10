@@ -22,6 +22,7 @@
 			</a>		
 		{/if}
 	{/function}
+	
 
 	{$display_fields=[insert_time=>1,subject=>1,message=>1, sender=>1,update_time=>1]}
 	
@@ -30,7 +31,15 @@
 	
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[invert_active,edit,delete]}
+	
+	{function dl_actions_invert_seen}
+		{if $item->seen==0}{$color='orange'}{else}{$color='white'}{/if}
+		
+			{gw_link do=invert_seen params=[id=>$item->id] icon="dot_`$color`" title="Mark as read" show_title=0}
+		
+	{/function}		
+	
+	{$dl_actions=[invert_seen,edit,delete]}
 		
 		
 	{*$dl_order_enabled_fields=array_keys($display_fields)*}
