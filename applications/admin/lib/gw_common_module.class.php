@@ -3,8 +3,8 @@
 
 class GW_Common_Module extends GW_Module
 {
-	var $allow_auto_actions=Array
-	(
+	var $allow_auto_actions=
+	[
 		'dosave'=>1,
 		'dodelete'=>1,
 		'doinvertactive'=>1, 
@@ -13,8 +13,8 @@ class GW_Common_Module extends GW_Module
 		'viewlist'=>1,
 		'viewdialogconfig'=>1,
 		'dodialogconfigsave'=>1,
-		'doinvertbanned'=>1
-	);
+		'doclone'=>1,
+	];
 	
 	var $filters=Array();
 	
@@ -99,6 +99,30 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('AFTER_DELETE', $item);
 		
 		$this->jump();
+	}
+	
+	function common_doClone(){
+		
+		if(! $item = $this->getDataObjectById())
+			return false;
+			
+		$this->canBeAccessed($item, true);
+		
+		$this->fireEvent('BEFORE_CLONE', $item);
+		$this->__doCloneAfterClone($item);
+		
+		
+		$_REQUEST['item'] = $item->toArray();
+		$_REQUEST['item']['id']=0;
+		
+		$this->processView('form');
+		
+		exit;	
+	}
+	
+	function __doCloneAfterClone($item)
+	{
+		$item->title = $item->title.' ('.$this->app->lang['ITEM_COPY'].')';
 	}
 
 	

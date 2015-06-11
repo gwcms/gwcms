@@ -278,7 +278,14 @@
 	<i id="active_1">Disable</i>
 	<i id="action_move_up">Move up</i>
 	<i id="action_move_down">Move down</i>
-	<i id="action_edit">Edit</i>
+	<i id="action_edit">
+		<lt>Redaguoti</lt>
+		<en>Edit</en>
+	</i>
+	<i id="copy">
+		<lt>Klonuoti</lt>
+		<en>Clone</en>
+	</i>
 	<i id="action_file_delete">Delete</i>	
 	<i id="print">
 		<en>Print</en>
@@ -465,6 +472,10 @@
 <i id="FILTER_ALL">
 	<lt>Visi</lt>
 	<en>All</en>
+</i>
+<i id="ITEM_COPY">
+	<lt>Kopija</lt>
+	<en>Cloned</en>
 </i>
 
 

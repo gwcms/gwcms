@@ -20,3 +20,8 @@
 		{call name="dl_actions_`$button_func`"}
 	{/foreach}	
 {/function}
+
+
+{function name=dl_actions_clone}
+	{gw_link relative_path="form" do="clone" icon="copy" params=[id=>$item->id] show_title=0}
+{/function}

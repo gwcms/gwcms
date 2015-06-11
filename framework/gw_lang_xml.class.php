@@ -108,7 +108,7 @@ class GW_Lang_XML
         return $tree;
 	}
 	
-    static function &__getXMLChildren($vals, &$i)
+    static function __getXMLChildren($vals, &$i)
     {
     	$children = array();
  
