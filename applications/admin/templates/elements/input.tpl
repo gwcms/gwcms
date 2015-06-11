@@ -29,7 +29,7 @@
 	<td class="input_label_td {if $m->error_fields.$name}error_label{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if $hidden_note}
-				<span class="tooltip" title="{$hidden_note}">
+				<span class="tooltip" title="{$hidden_note|escape}">
 			{else}
 				<span>
 			{/if}

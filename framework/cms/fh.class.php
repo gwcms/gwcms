@@ -183,7 +183,7 @@ class FH
 
 		if($params['confirm'])
 		{
-			$params['tag_params']['onclick']="return confirm('".$this->app->lang['ACTION_CONFIRM_REQUIRED']."')";
+			$params['tag_params']['onclick']="return confirm('".$this->app->lang['ACTION_CONFIRM_REQUIRED']."\\n".$this->app->lang['ACTION'].": '+this.title)";
 		}
 
 
@@ -196,7 +196,7 @@ class FH
 
 
 		$a =
-			'<a href="'.$params['path'].'" '.$tag_params.'>';
+			'<a href="'.$params['path'].'" '.$tag_params.' title="'.$params['title'].'">';
 			
 		$a_end='</a>';
 

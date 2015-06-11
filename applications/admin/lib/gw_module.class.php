@@ -276,12 +276,18 @@ class GW_Module
 				$this->EventHandler($e, $context);
 	}
 	
+	//overrride me || extend me
 	function eventHandler($event, &$context)
 	{
 		switch($event)
 		{
-			//no events
+			case 'AFTER_SAVE':
+				$item=$context;
+			break;
 		}
+		
+		//pass deeper
+		//parent::eventHandler($event, $context);
 	}
 
 	function lang()

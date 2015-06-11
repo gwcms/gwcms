@@ -131,7 +131,7 @@
 				{elseif isset($dl_output_filters.$field)}
 					{call name="dl_output_filters_`$dl_output_filters.$field`"}
 				{else}
-					{$item->get($field)}
+					{$item->get($field)|escape}
 				{/if}
 			</td>
 		{/foreach}

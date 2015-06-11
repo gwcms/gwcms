@@ -477,6 +477,10 @@
 	<lt>Kopija</lt>
 	<en>Cloned</en>
 </i>
+<i id="ACTION">
+	<lt>Veiksmas</lt>
+	<en>Action</en>
+</i>
 
 
 </xml>
