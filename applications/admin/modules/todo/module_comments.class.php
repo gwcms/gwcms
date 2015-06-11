@@ -93,4 +93,9 @@ class Module_Comments extends Module_Items
 	{
 		
 	}
+	
+	function loadOrders()
+	{
+		
+	}	
 }
