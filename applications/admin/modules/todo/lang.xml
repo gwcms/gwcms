@@ -54,9 +54,8 @@
 			<lt>Egzekutorius</lt>
 			<en>Executor</en>
 		</i>
-		<i id="time_have">
-			Skirta laiko
-		</i>
+		<i id="time_have">Skirta laiko</i>
+		<i id="last_comment">Paskutinis komentaras</i>
 		
 		<i id="actions1">Veiksmai</i>		
 		<i id="project_id">Projektas</i>		

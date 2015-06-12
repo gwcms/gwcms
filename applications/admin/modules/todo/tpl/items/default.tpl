@@ -96,9 +96,11 @@
 		<span title="{$item->insert_time}">W{date('W',strtotime($item->insert_time))}
 		</span>
 	{/function}	
-		
+	{function name=dl_cell_last_comment}
+		{$item->last_comment|strip_tags|truncate:40}
+	{/function}		
 
-	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have]}
+	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment]}
 	
 	
 	{$display_fields = 	[
@@ -113,7 +115,8 @@
 			user_create=>1,
 			user_exec=>1,
 			week=>1,
-			state=>1
+			state=>1,
+			last_comment=>0
 		]}	
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}

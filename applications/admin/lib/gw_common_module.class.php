@@ -499,6 +499,7 @@ class GW_Common_Module extends GW_Module
 			$params['offset']=$this->list_params['page_by']*$page;
 			$params['limit']=$this->list_params['page_by'];
 		}
+		$params['key_field']=$this->model->primary_fields[0];
 		
 		$list = $this->model->findAll($cond, $params);
 		
