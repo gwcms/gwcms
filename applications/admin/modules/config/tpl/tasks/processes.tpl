@@ -19,7 +19,7 @@
 	{$dl_actions=[halt]}
 	
 	{*auto reload*}
-	<script>
+	<script type="text/javascript">
 		setInterval("location.href=location.href", 30000);
 	</script>
 	

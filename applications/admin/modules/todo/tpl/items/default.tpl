@@ -6,7 +6,7 @@
 {*Laikinas reikalas*}
 	{*Little hack for server to display current task*}
 	{if $smarty.server.HTTP_HOST=="localhost"}
-		<script>
+		<script type="text/javascript">
 			setTimeout('location=location',60000);
 		</script>
 	{/if}

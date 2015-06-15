@@ -16,6 +16,8 @@ class Module_Messages extends GW_Common_Module
 	function viewDefault()
 	{
 		$this->viewList();
+		
+		$this->smarty->assign('lasttestmail', GW::getInstance('GW_Config')->get('newsletter/lastmail'));
 	}
 
 	//overrride me || extend me
@@ -43,10 +45,19 @@ class Module_Messages extends GW_Common_Module
 		
 		$sent_count = $item->sent_count;
 		
-		foreach($recip as $recipient){
+
+		
+		//$item->saveValues(['sent_info'=>  json_encode($recip), 'sent_count'=>$sent_count]);
+		
+		$this->jump();
+	}
+	
+	function __doSend($item, $recipients)
+	{
+		foreach($recipients as $recipient){
 			
-			$msg = $item->{"body_".$recipient->lang};
-			$subj = $item->{"subject_".$recipient->lang};
+			$msg = $item->body;
+			$subj = $item->subject;
 			
 			$msg = str_replace('%NAME%', $recipient->name, $msg);
 			
@@ -67,14 +78,29 @@ class Module_Messages extends GW_Common_Module
 				$this->app->setErrors("Įvyko klaida. Nepavyksta išsiųsti į $recipient->email");
 				$recipient->sent = false;
 			}else{
-				$this->app->setMessage("$recipient->name &gt; $recipient->email :: $recipient->lang :: OK");
+				$this->app->setMessage("$recipient->name &gt; $recipient->email :: OK");
 				$recipient->sent=true;
 				$sent_count++;
 			}
 		}
 		
-		$item->saveValues(['sent_info'=>  json_encode($recip), 'sent_count'=>$sent_count]);
-		
-		$this->jump();
+		return ['sent'=>$sent_count];
 	}
+	
+	
+	function doTest()
+	{
+		if(! $item = $this->getDataObjectById())
+			return false;		
+		
+		$mail = $_REQUEST['mail'];
+		
+		GW::getInstance('GW_Config')->set('newsletter/lastmail', $mail);
+		
+		$this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail]]);
+		
+		
+		$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
+		$this->jump();
+	}	
 }

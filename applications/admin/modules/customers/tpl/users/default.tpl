@@ -1,7 +1,8 @@
 {extends file="default_list.tpl"}
 
 {block name="after_list"}
-<script>function addcredit(id, val){ if(!val) return false; $('#addcredit_id').val(id); $('#addcredit_val').val(val); $('#addcredit').submit() }</script>
+	{*ant newsletter geresnis sprendimas*}
+<script type="text/javascript">function addcredit(id, val){ if(!val) return false; $('#addcredit_id').val(id); $('#addcredit_val').val(val); $('#addcredit').submit() }</script>
 <form id="addcredit"><input type="hidden" id="addcredit_id" name="id" ><input type="hidden" name="act" value="do:addCredit" /><input type="hidden" id="addcredit_val" name="addcredit"/></form>
 {/block}
 

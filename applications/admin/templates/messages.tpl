@@ -11,7 +11,7 @@
 {/foreach}
 
 
-<script>
+<script type="text/javascript">
 {literal}
 $(document).ready(function() {
 	$('.status_bx1').fadeIn("slow");

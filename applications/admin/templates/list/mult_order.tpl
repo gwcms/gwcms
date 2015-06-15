@@ -18,6 +18,6 @@
 </tr>
 
 
-<script>
+<script type="text/javascript">
 	gw_adm_sys.order_init({$app->fh()->out(json_encode(explode(',',$m->list_params.order)))});
 </script>

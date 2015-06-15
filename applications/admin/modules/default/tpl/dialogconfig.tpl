@@ -19,7 +19,7 @@ html>body #sortable li { height: 1.5em; line-height: 1em; }
 
 </style>
 
-<script>
+<script type="text/javascript">
 	$(function() {
 		$( "#sortable" ).sortable({
 			placeholder: "ui-state-highlight"

@@ -7,7 +7,7 @@
 {if $success}
 	<br />
 	<div style="color:green">{$lang.SESSION_EXTEND_SUCCESS}</div>
-	<script>gw_login_dialog.success();</script>
+	<script type="text/javascript">gw_login_dialog.success();</script>
 {else}
 
 

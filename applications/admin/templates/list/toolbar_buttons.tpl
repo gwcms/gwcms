@@ -29,7 +29,7 @@
 {/function}
 	
 {function name=dl_toolbar_buttons_dialogconf}
-	<script>
+	<script type="text/javascript">
 		function lds_config()
 		{
 			gw_dialog.open('{$ln}/{$app->path}/dialogconfig', { width:400 })

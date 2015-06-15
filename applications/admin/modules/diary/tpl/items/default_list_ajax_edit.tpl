@@ -1,7 +1,7 @@
 
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 
-<script>
+<script type="text/javascript">
 
 ckeditor_config = { 
 	width:700, 

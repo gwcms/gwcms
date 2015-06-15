@@ -28,7 +28,7 @@ span:last-child { background-color: orange; }
 
 <div id="ta_container"></div>
 
-<script>
+<script type="text/javascript">
 
 
 var x = new rt_logwatch({ 

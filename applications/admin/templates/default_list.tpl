@@ -171,7 +171,7 @@
 	</div>
 
 
-	<script>
+	<script type="text/javascript">
 	function checked_action(action){
 		
 		var selected=[];

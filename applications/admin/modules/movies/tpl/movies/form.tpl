@@ -25,7 +25,7 @@ Imdb info
 
 
 
-<script>
+<script type="text/javascript">
 $(function(){
 	$("[name='item[name_orig]']").change(do_imdb());
 

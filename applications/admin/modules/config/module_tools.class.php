@@ -14,8 +14,6 @@ class Module_Tools extends GW_Module
 	{
 		list($vars['lastupdates'], $vars['updatefiles']) = $this->__doImportSqlUpdates_list2update();
 		
-		
-		//$this->app->setMessage("<pre>testsa\nlabas</pre>");
 
 		$this->smarty->assign($vars);
 	}

@@ -1,29 +1,4 @@
-{* for i18n form request when requesting not default language. show only i18n fields*}
-{if !isset($smarty.request.lang) || $app->ln == $smarty.request.lang || $i18n || $item->isI18NField($name)}
-
-
-{if !$input_name_pattern}
-	{$input_name_pattern="item[%s]"}
-	{if $type=='multiselect'}{$input_name_pattern="`$input_name_pattern`[]"}{/if}
-{/if}
-{$input_name=$input_name_pattern|sprintf:$name}
 {$title=$title|default:$app->fh()->fieldTitle($name)}
-
-
-{if !$value}
-	{$value=$item->get($name)}
-		
-
-	{if $value!=='0' && !$value && $default}
-		{$value=$default}
-	{/if}
-{/if}
-
-{if is_array($value)}
-	{$value=GW_Json_Format_Helper::f($value)}
-{/if}
-
-
 
 <tr id="gw_input_{$name}">
 	<td class="input_label_td {if $m->error_fields.$name}error_label{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
@@ -41,14 +16,12 @@
 		
 	</td>
 	<td class="input_td" width="{$width_input}">
-	{if $did_note}<small>{$did_note}</small>{/if}  
-	{$inp_type=$type|default:'text'}
-	
-	{if $type=='password'}{$inp_type='text'}{/if}
-	{include file="elements/inputs/`$inp_type`.tpl"}  
+		
+		
+		
+		{include file="elements/input0.tpl"}  
 	
 	</td>
 	
 </tr>
 
-{/if}

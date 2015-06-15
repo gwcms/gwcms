@@ -10,7 +10,7 @@
 </div>
 
 {if $item && $item->id}
-	<script>
+	<script type="text/javascript">
 	
 	var itemform_values='';
 	var form_data_saver_enabled=true;

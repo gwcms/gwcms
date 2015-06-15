@@ -4,7 +4,7 @@
 {block name="init"}
 
 
-	{$display_fields=[pax_title=>1, emails=>1 ,insert_time=>1,update_time=>1]}
+	{$display_fields=[title=>1, insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	

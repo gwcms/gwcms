@@ -52,7 +52,7 @@
 				<input name="list_params[page]" value="{$paging.current}" style="width:40px" />
 			{else}
 			<select id="list_paging" name="list_params[page]" onchange="this.form.submit()"></select> 
-			<script>
+			<script type="text/javascript">
 				gw_adm_sys.paging_select_box($('#list_paging'),1,{$paging.length});
 				$('#list_paging').val({$paging.current|default:1});
 			</script>
