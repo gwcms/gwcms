@@ -11,7 +11,7 @@
 		<div>
 		
 		{if $item->type!=0}
-			<img align="absmiddle" onclick="$(this).next().click()" src="img/icons/folder.png">
+			<img align="absmiddle" onclick="$(this).next().click()" src="{$app_root}img/icons/folder.png">
 			<a href="{gw_link params=[pid=>$id] path_only=1}">{$item->title} ({$item->child_count})</a>
 		{else}
 			{$item->title}

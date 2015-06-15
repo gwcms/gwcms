@@ -253,7 +253,8 @@ class GW_Module
 	function jump($path=false, $params=Array())
 	{
 		//this thing allows to see last eddited element in list
-		if($this->getCurrentItemId())
+		
+		if(method_exists($this, 'getCurrentItemId') && $this->getCurrentItemId())
 			$params['id']=$this->getCurrentItemId();
 		
 		$this->app->jump($path, $params);

@@ -12,7 +12,12 @@ class Module_Tools extends GW_Module
 	
 	function viewDefault()
 	{
+		list($vars['lastupdates'], $vars['updatefiles']) = $this->__doImportSqlUpdates_list2update();
+		
+		
+		//$this->app->setMessage("<pre>testsa\nlabas</pre>");
 
+		$this->smarty->assign($vars);
 	}
 	
 
@@ -28,6 +33,63 @@ class Module_Tools extends GW_Module
 		
 		$this->jump();
 	}
+	
+	
+	
+	
+	function __executeQuery($sql)
+	{
+		
+		$sqls = explode(';', $sql);
+		
+		$db =& $this->app->db;
+		
+		foreach($sqls as $sql)
+		{
+			if(!trim($sql))continue;
+					
+			$db->query($sql);
+			$aff = $db->affected();
+
+			$this->app->setMessage("<pre>".htmlspecialchars($sql).";\n<b># Affected rows:</b> ".$aff."</pre>");
+		}
+	}	
+	
+	
+	
+	function __doImportSqlUpdates_list2update()
+	{
+		$lastupdates= GW::getInstance('GW_Config')->get('gwcms/last_sql_updates');
+		
+		
+		$list_files = glob(GW::s('DIR/ROOT').'sql/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9]*.sql');
+		
+		$updates = [];
+		
+		foreach($list_files as $filename)
+		{
+			if(basename($filename) > $lastupdates)
+				$updates[] = $filename;
+		}
+		
+		return [$lastupdates, $updates];
+	}
+	
+	function doImportSqlUpdates()
+	{
+		list($lastupdates, $updates) = $this->__doImportSqlUpdates_list2update();
+		
+		foreach($updates as $updatefile)
+		{
+			$sqls = file_get_contents($updatefile);
+			$this->__executeQuery($sqls);
+			
+			GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
+		}
+		
+		$this->jump();
+	}
+	
 	
 	function viewPHPinfo()
 	{
@@ -65,7 +127,9 @@ class Module_Tools extends GW_Module
 		);
 		
 		$this->log[]=$comp;
-	}	
+	}
+	
+	
 
 	
 }

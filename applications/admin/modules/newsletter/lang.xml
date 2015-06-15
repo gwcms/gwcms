@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+		</i>
+		
+		<i id="sender">Siuntėjas</i>
+		<i id="sent_count">Išsiųstų sk.</i>
+		<i id="recipients_count">Gavėjų sk.</i>
+		<i id="subject">Tema</i>
+		<i id="body">Turinys</i>
+		<i id="recipients_total">Gavėjų sk.</i>
+		
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			Naujienlaiškis
+		</i>
+		
+		<i id="childs">
+			<i id="subscribers">
+				<i id="title">Prenumeratoriai</i>
+				<i id="info">
+					<i id="model">GW_NL_Subscriber</i>
+				</i>			
+			</i>
+			
+			<i id="messages">
+				<i id="title">Laiškai</i>
+				<i id="info">
+					<i id="model">GW_NL_Message</i>
+				</i>			
+			</i>			
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

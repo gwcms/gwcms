@@ -1,11 +1,11 @@
-<?
+<?php
 
 define('GW_GALLERY_ITEM_FOLDER', 1);
 define('GW_GALLERY_ITEM_IMAGE', 0);
 
-class Doc_Entry extends GW_Composite_Data_Object
+class GW_Doc_Entry extends GW_Composite_Data_Object
 {
-	var $table = 'documentation';
+	var $table = 'gw_documentation';
 	
 	var $calculate_fields = Array('child_count'=>1, 'path'=>'getPath', 'short_descr'=>1);
 	var $default_order = 'type DESC, time DESC';		
@@ -105,7 +105,7 @@ class Doc_Entry extends GW_Composite_Data_Object
 	
 	function &getParentOpt()
 	{
-		$list =& $this->getFoldersTree();
+		$list = $this->getFoldersTree();
 		
 		unset($list[$this->get('id')]);
 		

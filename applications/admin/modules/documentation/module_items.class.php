@@ -1,69 +1,23 @@
-<?
+<?php
 
 
-class Module_Items extends GW_Common_Module
+class Module_Items extends GW_Common_Module_Tree_Data
 {	
-	function breadcrumbsAttach()
-	{
-		if(! $this->parent->title)
-			return;
-		
-		$breadcrumbs_attach=Array();
-		
-		foreach($this->parent->getParents() as $item)
-			$breadcrumbs_attach[]=Array
-			(
-				'path'=>FH::gw_path(Array('params' => Array('pid'=>$item->id) )),
-				'title'=>$item->title
-			);
-		
-		$breadcrumbs_attach[]=Array('title'=>$this->parent->title, 'path'=>FH::gw_path(Array('params' => Array('pid'=>$this->parent->id) )));
-		
-		
-		$this->smarty->assign('breadcrumbs_attach', $breadcrumbs_attach);
-	}
+
 	
 	function init()
 	{	
 		parent::init();
-		
-		GW::$request->carry_params['pid']=1;
-				
-		$this->filters['parent_id']=(int)$_GET['pid']?(int)$_GET['pid']:-1;
-		$this->filters['active']=1;
-		
-		//jeigu filtravimas
-		if($this->list_params['filters'])
-			unset($this->filters['parent_id']);
-			
-
-		
-		$this->parent=$this->model->createNewObject($this->filters['parent_id']);
-		$this->parent->load();	
-		
-		if(!isset($_GET['act']))
-			$this->breadcrumbsAttach();		
 		
 	}
 
 	
 	function viewDefault()
 	{
-		$this->viewList(Array('order'=>'type DESC, insert_time DESC'));
+		$this->viewList();
 	}
 	
-	function getMoveCondition($item)
-	{
-		$tmp = $this->filters;
-		$tmp['type']=$item->get('type');
-		
-		return GW_SQL_Helper::condition_str($tmp);
-	}
-	
-	function viewImport()
-	{
 
-	}
 	
 	function doDelete()
 	{
