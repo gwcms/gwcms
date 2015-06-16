@@ -14,6 +14,14 @@ class Module_Groups extends GW_Common_Module
 	
 	function viewDefault()
 	{
-		$this->viewList();
+		$list=$this->viewList();
+		
+		
+		#attach counts
+		$counts = $this->model->getCountsByIds(array_keys($list));
+		foreach($list as $id => $item)
+			$item->subscribers_count = isset($counts[$id]) ? $counts[$id] : 0;
+		
+		
 	}
 }

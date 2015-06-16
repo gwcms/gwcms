@@ -10,7 +10,7 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 	var $composite_map = Array
 	(
 		'groups' => ['gw_links', ['table'=>'gw_nl_subs_bind_groups', 'fieldnames'=>['subscriber_id','group_id']]],
-	);	
+	);
 	
 	function getTitle()
 	{

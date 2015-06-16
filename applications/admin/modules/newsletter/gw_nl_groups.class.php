@@ -1,16 +1,33 @@
 <?php
 
 
-class GW_NL_Groups extends GW_Data_Object
+class GW_NL_Groups extends GW_Composite_Data_Object
 {
 	var $table = 'gw_nl_subs_groups';
 	
+	var $composite_map = Array
+	(
+		'subscribers' => ['gw_links', ['table'=>'gw_nl_subs_bind_groups', 'fieldnames'=>['group_id','subscriber_id']]],
+	);	
 	
+		
 	function getOptions($active=true)
 	{
 		$cond = $active ? 'active!=0' : '';
 		
 		return $this->getAssoc(['id','title'], $cond);
+	}
+	
+	function getCountsByIds($ids)
+	{
+		$ids_cond = "group_id IN (".implode(',', $ids).")";
+		
+		$counts_sql = "SELECT group_id, count(*) AS cnt 
+			FROM gw_nl_subs_bind_groups AS b, gw_nl_subscribers AS a 
+			WHERE a.id=b.subscriber_id AND $ids_cond AND a.active=1 AND a.unsubscribed=0
+			GROUP BY group_id";
+		
+		return $this->getDb()->fetch_assoc($counts_sql);		
 	}
 	
 	function getOptionsWithCounts()
@@ -20,14 +37,7 @@ class GW_NL_Groups extends GW_Data_Object
 		if(!$opt)
 			return $opt;
 		
-		$ids_cond = "group_id IN (".implode(',', array_keys($opt)).")";
-		
-		$counts_sql = "SELECT group_id, count(*) AS cnt 
-			FROM gw_nl_subs_bind_groups AS b, gw_nl_subscribers AS a 
-			WHERE a.id=b.subscriber_id AND $ids_cond AND a.active=1 AND a.unsubscribed=0
-			GROUP BY group_id";
-		
-		$counts = $this->getDb()->fetch_assoc($counts_sql);
+		$counts = $this->getCountsByIds(array_keys($opt));
 		
 		foreach($opt as $id => $title)
 		{

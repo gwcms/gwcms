@@ -31,7 +31,7 @@
 	<td nowrap>
 		{if $type=='multiselect'}
 			{$input_name_pattern="`$input_name_pattern`[]"}
-			{$selected=array_splice($data, 1)}
+			{$value=array_splice($data, 1)}
 		{elseif $type=='select'}
 			{*Add empty option*}
 

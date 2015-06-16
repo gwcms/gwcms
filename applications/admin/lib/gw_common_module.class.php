@@ -270,8 +270,7 @@ class GW_Common_Module extends GW_Module
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
 			
 		$search=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
-		
-		
+				
 		
 		foreach($this->filters as $key => $val)
 			$search[$key]=Array('=',$val);
@@ -280,23 +279,25 @@ class GW_Common_Module extends GW_Module
 		{
 			$compare_type = isset($val[0]) ? $val[0] : '=';
 			$value = isset($val[1]) ? $val[1] : null;
-			
+					
 			if($value==='' || $value===null)
 				continue;
 			
+			if($compare_type=="IN"){
+				$value = array_splice($val,1);
+			}else{
+				$value=GW_DB::escape($value);
+			}
 			
 			$cond.= ($cond ? ' AND ':'');
 			
-			$value=GW_DB::escape($value);
-			
-			if(method_exists($this, $ofmethod="overideFilter$field")) {
+			if(method_exists($this, $ofmethod="overrideFilter$field")) {
 				$cond.=$this->$ofmethod($value);
 			} else {					
 				switch($compare_type)
 				{
 					case 'IN':
-						$opt = array_splice($val,1);
-						$cond .= "(`$field` IN ('".implode("','",$opt)."'))";	
+						$cond .= "(`$field` IN ('".implode("','",$value)."'))";	
 						break;
 					case 'LIKE':
 						$cond.="(`$field` LIKE '%".$value."%')";
