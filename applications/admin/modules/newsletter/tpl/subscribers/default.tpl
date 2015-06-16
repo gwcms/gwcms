@@ -4,18 +4,32 @@
 {block name="init"}
 
 
-	{$display_fields=[title=>1, insert_time=>1,update_time=>1]}
+	{$display_fields=[title=>1,groups=>1,insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[invert_active,edit,delete]}
 	
-	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
-	{$dl_smart_fields=[title]}
+	{$dl_filters=[
+		name=>1, 
+		surname=>1, 
+		email=>1, 
+		insert_time=>1, 
+		active=>[type=>select, options=>$lang.ACTIVE_OPT],
+		groups=>[type=>multiselect, options=>$opt.groups]]
+	}
+	
+	{$dl_smart_fields=[title,groups]}
 	
 	{function dl_cell_title}
 		{if $item->unsubscribed}<s style="color:gray">{$item->title}</s>{else}{$item->title}{/if}
+	{/function}
+
+	{function dl_cell_groups}
+		{foreach from=$item->groups key=ind item=gid}
+			<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$opt.groups.$gid}</a>
+		{/foreach}	
 	{/function}
 	
 	

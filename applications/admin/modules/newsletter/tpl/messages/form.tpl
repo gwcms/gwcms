@@ -12,6 +12,7 @@
 
 {include file="elements/input.tpl" type=htmlarea name=body remember_size=1}
 
+{include file="elements/input.tpl" name=groups type=multiselect options=$opt.groups}
 
 
 

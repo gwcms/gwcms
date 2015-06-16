@@ -8,10 +8,17 @@ class Module_Messages extends GW_Common_Module
 	{	
 		parent::init();
 		
-		$this->list_params['paging_enabled']=1;		
+		$this->list_params['paging_enabled']=1;
+		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptions();
 		
 	}
 
+	function viewForm()
+	{
+		parent::viewForm();
+		
+		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptionsWithCounts();		
+	}
 	
 	function viewDefault()
 	{
@@ -28,7 +35,7 @@ class Module_Messages extends GW_Common_Module
 			case 'BEFORE_SAVE':
 				$item=$context;
 				
-				$item->beforeSaveParseRecipients();
+				//$item->beforeSaveParseRecipients();
 			break;
 		}
 		
