@@ -21,7 +21,7 @@
 	{/if}
 {/if}
 
-{if is_array($value)}
+{if is_array($value) && $type=='textarea'}
 	{$value=GW_Json_Format_Helper::f($value)}
 {/if}
 

@@ -115,9 +115,9 @@ class GW_Common_Module extends GW_Module
 		$_REQUEST['item'] = $item->toArray();
 		$_REQUEST['item']['id']=0;
 		
-		$this->processView('form');
+		$_SESSION['item']=$_REQUEST['item'];
 		
-		exit;	
+		$this->jump();
 	}
 	
 	function __doCloneAfterClone($item)

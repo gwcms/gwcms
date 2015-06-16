@@ -1,30 +1,35 @@
 <div style="overflow-y:scroll;max-height:{$height|default:"80px"};width:auto;float:left;padding-right:5px;border:1px solid silver">
 <table class="gw_clean_tbl" cellspacing="0" cellpadding="0" style="width:auto">
 
-{if is_array($selected)}
-	{$selected = array_flip($selected)}
+{if is_array($value)}
+	{$value = array_flip($value)}
 {else}
-	{$selected=[]}
+	{$value=[]}
 {/if}
+
+
+
+
 	
 {if $selected_ontop}
-
 
 	{$selecteditems=[]}
 
 	{foreach $options as $key => $val}
-		{if isset($selected.$key)}
+		{if isset($value.$key)}
 			{$selecteditems[$key]=$val}
 			{gw_unassign var=$options.$key}
 		{/if}
 	{/foreach}
 
-	{$options=$selecteditems+$options}
+	{$optionss=$selecteditems+$options}
+{else}
+	{$optionss=$options}{*kad nenumustu aukstesniuose templeituose options kintamojo*}
 {/if}
 
-{foreach $options as $key => $title}
+{foreach $optionss as $key => $title}
 <tr>
-    <td width="10"><input type="checkbox" name="{$input_name}" value="{$key}" title="{$title|escape}" {if isset($selected.$key)}CHECKED{/if} /></td>
+    <td width="10"><input type="checkbox" name="{$input_name}" value="{$key}" title="{$title|escape}" {if isset($value.$key)}CHECKED{/if} /></td>
     <td>{$title}</td>
 </tr>
 {/foreach}

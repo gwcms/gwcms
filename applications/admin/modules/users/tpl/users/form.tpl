@@ -12,7 +12,7 @@
 
 
 {include file="elements/input.tpl" type=bool name=active}
-{include file="elements/input.tpl" type=multiselect name=link_groups options=$groups_options selected=$group_options_selected}
+{include file="elements/input.tpl" type=multiselect name=group_ids options=$groups_options}
 {include file="elements/input.tpl" type=select name=session_validity options=$m->lang.SESSION_VALIDITY_OPT}
 
 

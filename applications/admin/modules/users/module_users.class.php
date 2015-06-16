@@ -60,11 +60,7 @@ class Module_Users extends GW_Common_Module
 	{
 		$this->assignGroupOptions();
 		
-		$item = parent::viewForm();
-		
-		if($item->id)
-			$this->smarty->assign('group_options_selected', $item->get('link_groups')->getBinds());
-		
+		$item = parent::viewForm();		
 	}
 	
 	function doSave()

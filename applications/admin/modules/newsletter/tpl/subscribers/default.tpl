@@ -12,6 +12,12 @@
 	{$dl_actions=[edit,delete]}
 	
 	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
+	{$dl_smart_fields=[title]}
+	
+	{function dl_cell_title}
+		{if $item->unsubscribed}<s style="color:gray">{$item->title}</s>{else}{$item->title}{/if}
+	{/function}
+	
 	
 	
 	{gw_unassign var=$display_fields.image} 	

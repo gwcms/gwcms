@@ -21,6 +21,7 @@
 		{gw_link 
 			do="test" 
 			icon="test" 
+			title="testuoti"
 			params=[id=>$item->id,'mail'=>0] show_title=0 
 			tag_params=[onclick=>"x=prompt('Test laiško gavėjas', '`$lasttestmail`'); if(!x)return false; this.href=this.href.replace('mail=0','mail='+x)"]
 		}

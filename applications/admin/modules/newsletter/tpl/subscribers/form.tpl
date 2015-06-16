@@ -6,6 +6,9 @@
 {include file="elements/input.tpl" name=email}
 {include file="elements/input.tpl" name=lang}
 
+
+{include file="elements/input.tpl" name=groups type=multiselect options=$opt.groups}
+
 {include file="elements/input.tpl" type=bool name=active}
 {include file="elements/input.tpl" type=bool name=unsubscribed}
 

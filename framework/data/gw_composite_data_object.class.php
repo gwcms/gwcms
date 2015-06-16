@@ -10,7 +10,15 @@
  *
  *
  */
-
+interface GW_Composite_Slave
+{
+	public function setParams($params);
+	public function setOwnerObject($master, $fieldname);
+	public function getByOwnerObject($master, $fieldname);
+	public function save();
+	public function delete();
+    
+}
 
 
 
@@ -79,7 +87,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			
 		$this->loadCompositeItem($field);
 			
-		return $this->composite_content_base[$field];
+		return $this->composite_content_base[$field]->getValue();
 	}	
 	
 	function set($field, $value)

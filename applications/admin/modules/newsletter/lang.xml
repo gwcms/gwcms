@@ -25,6 +25,13 @@
 		<i id="recipients_count">Gavėjų sk.</i>
 		<i id="subject">Tema</i>
 		<i id="body">Turinys</i>
+		<i id="name">Vardas</i>
+		<i id="surname">Pavardė</i>
+		<i id="email">El. paštas</i>
+		<i id="lang">Kalba</i>
+		<i id="groups">Grupės</i>
+		
+		<i id="unsubscribed">Atsisakė</i>
 		<i id="recipients_total">Gavėjų sk.</i>
 		
 	</i>
@@ -36,19 +43,25 @@
 		</i>
 		
 		<i id="childs">
-			<i id="subscribers">
-				<i id="title">Prenumeratoriai</i>
-				<i id="info">
-					<i id="model">GW_NL_Subscriber</i>
-				</i>			
-			</i>
 			
 			<i id="messages">
 				<i id="title">Laiškai</i>
 				<i id="info">
 					<i id="model">GW_NL_Message</i>
 				</i>			
-			</i>			
+			</i>	
+			<i id="subscribers">
+				<i id="title">Prenumeratoriai</i>
+				<i id="info">
+					<i id="model">GW_NL_Subscriber</i>
+				</i>			
+			</i>
+			<i id="groups">
+				<i id="title">Prenumeratorių grupės</i>
+				<i id="info">
+					<i id="model">GW_NL_Groups</i>
+				</i>			
+			</i>											
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->

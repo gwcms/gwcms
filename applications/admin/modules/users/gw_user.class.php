@@ -10,7 +10,7 @@ class GW_User extends GW_Composite_Data_Object
 	var $encode_fields=Array('info'=>'serialize');	
 	var $composite_map = Array
 	(
-		'link_groups' => Array('gw_links', Array('table'=>'gw_link_user_groups')),
+		'group_ids' => Array('gw_links', Array('table'=>'gw_link_user_groups')),
 	);
 	var $autologgedin=false;
 	var $validators_def;
@@ -245,17 +245,6 @@ class GW_User extends GW_Composite_Data_Object
 		{
 			case 'title':
 				$val=($this->name || $this->surname? $this->name.' '.$this->surname : $this->username);
-			break;
-			case 'group_ids':
-				if($lg=$this->get('link_groups'))
-				{
-					$val = $lg->getBinds();
-					
-					/////////////////////////////////////////////////////////////////
-					///REIKIA TAISYTI COMPOSITE CONTENT BASE MODELI
-					///////////////////////////////////////////////////////////////////
-					unset($this->composite_content_base['link_groups']);
-				}
 			break;
 			case 'api_key':
 				$val=md5($this->get('password'));
