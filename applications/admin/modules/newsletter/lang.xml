@@ -36,7 +36,11 @@
 		<i id="subscribers_count">Prenumeratorių skaičius</i>
 		
 	</i>
-	
+	<i id="LANGUAGES">
+		<i id="LT">LT</i>
+		<i id="EN">EN</i>
+		<i id="RU">RU</i>
+	</i>
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">

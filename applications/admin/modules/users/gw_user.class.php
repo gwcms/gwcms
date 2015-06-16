@@ -1,20 +1,20 @@
 <?php
 class GW_User extends GW_Composite_Data_Object
 {
-	var $table = 'gw_users';
-	var $min_pass_length=4;
-	var $max_pass_length=200;	
-	var $validators = Array();
-	var $calculate_fields = Array('group_ids'=>1,'title'=>1, 'api_key'=>1);
-	var $ignore_fields = Array('pass_old'=>1, 'pass_new'=>1, 'pass_new_repeat'=>1);
-	var $encode_fields=Array('info'=>'serialize');	
-	var $composite_map = Array
+	public $table = 'gw_users';
+	public $min_pass_length=4;
+	public $max_pass_length=200;	
+	public $validators = Array();
+	public $calculate_fields = Array('group_ids'=>1,'title'=>1, 'api_key'=>1);
+	public $ignore_fields = Array('pass_old'=>1, 'pass_new'=>1, 'pass_new_repeat'=>1);
+	public $encode_fields=Array('info'=>'serialize');	
+	public $composite_map = Array
 	(
 		'group_ids' => Array('gw_links', Array('table'=>'gw_link_user_groups')),
 	);
-	var $autologgedin=false;
-	var $validators_def;
-	var $validators_set;
+	public $autologgedin=false;
+	public $validators_def;
+	public $validators_set;
 	
 
 	function loadValidators()

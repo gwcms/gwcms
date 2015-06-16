@@ -3,9 +3,12 @@
 
 class GW_NL_Subscriber extends GW_Composite_Data_Object
 {
-	var $table = 'gw_nl_subscribers';
-	
+	public $table = 'gw_nl_subscribers';
 	public $calculate_fields = ['title'=>'getTitle'];
+	
+	public $validators = [
+	    'email'=>['gw_email', ['required'=>1]]
+	];	
 	
 	var $composite_map = Array
 	(
