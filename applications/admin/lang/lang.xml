@@ -262,6 +262,9 @@
 	<i id="1">Active</i>	
 </i>
 
+<i id="YES">Yes</i>
+<i id="NO">No</i>
+
 <i id="SEARCH">
 	<en>Search</en>
 	<lt>Paieška</lt>

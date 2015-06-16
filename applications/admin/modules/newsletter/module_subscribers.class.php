@@ -47,8 +47,6 @@ class Module_Subscribers extends GW_Common_Module
 		$cond = " (SELECT count(*) FROM gw_nl_subs_bind_groups WHERE subscriber_id=id AND group_id IN (".implode(",",$ids)."))>0 ";
 		
 		return $cond;
-		//d::dumpas($cond);
-
 	}
 	
 }

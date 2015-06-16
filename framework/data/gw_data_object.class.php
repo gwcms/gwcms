@@ -606,17 +606,20 @@ class GW_Data_Object
 		}
 	}	
 	
-	function encodeJSON($fieldname, $value, $revert)
+	function encodeJSON($fieldname, $value, $revert, $object=false)
 	{
 		if($revert){
 			if($value)
-				return json_decode($value, true);
+				return json_decode($value, !$object);
 		}else{
 			if(is_array($value))
 				return json_encode($value);
 		}
 	}	
-	
+	function encodeJSONo($fieldname, $value, $revert)
+	{
+		return $this->encodeJSON($fieldname, $value, $revert, true);
+	}	
 	
 	function eventHandler($event)
 	{

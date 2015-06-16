@@ -4,7 +4,10 @@
 {block name="init"}
 
 
-	{$display_fields=[title=>1,groups=>1,insert_time=>1,update_time=>1]}
+	{$display_fields=[title=>1,
+		email=>1,
+		lang=>1,
+		groups=>1,insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	
@@ -14,7 +17,8 @@
 	{$dl_filters=[
 		name=>1, 
 		surname=>1, 
-		email=>1, 
+		email=>1,
+		lang=>1,
 		insert_time=>1, 
 		active=>[type=>select, options=>$lang.ACTIVE_OPT],
 		groups=>[type=>multiselect, options=>$opt.groups]]

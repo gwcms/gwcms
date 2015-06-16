@@ -35,6 +35,7 @@ class Module_Messages extends GW_Common_Module
 			case 'BEFORE_SAVE':
 				$item=$context;
 				
+				$item->recipients_count = count($item->getRecipients());
 				//$item->beforeSaveParseRecipients();
 			break;
 		}
@@ -43,30 +44,59 @@ class Module_Messages extends GW_Common_Module
 		//parent::eventHandler($event, $context);
 	}
 	
+	
+	
+	
 	function doSend()
 	{
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
-		$recip = json_decode($item->recipients_data);
 		
-		$sent_count = $item->sent_count;
 		
-
+		$recipients = $item->getRecipients();
+		
+		$item->saveValues(['status'=>10]);
+		
+		
+		$info = $this->__doSend($item, $recipients);
+		$item->setValues($info);
+			
+		
+		$item->sent_time = date('Y-m-d H:i:s');
+		$item->status = 70;
+		
+		
+		$this->app->setMessage($this->lang['SENT'].count($recipients).'/'.$item->sent_count);
+		
+		$item->update(['status','sent_count', 'sent_info', 'sent_time']);
 		
 		//$item->saveValues(['sent_info'=>  json_encode($recip), 'sent_count'=>$sent_count]);
 		
-		$this->jump();
+		$this->jump($this->app->path.'/sentinfo');
 	}
+	
+	function viewSentInfo()
+	{
+		if(! $item = $this->getDataObjectById())
+			return false;
+		
+		$this->smarty->assign('item', $item);
+	}
+	
+	
 	
 	function __doSend($item, $recipients)
 	{
+		$sent_info = [];
+		$sent_count=0;
+		
 		foreach($recipients as $recipient){
 			
 			$msg = $item->body;
 			$subj = $item->subject;
 			
-			$msg = str_replace('%NAME%', $recipient->name, $msg);
+			$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
 			
 			//d::dumpas([$recipient, $msg, $subj, $item->sender]);
 			
@@ -78,20 +108,23 @@ class Module_Messages extends GW_Common_Module
 			if($item->sender)
 				$headers .= "From: $item->sender\r\n";
 
-
-
+			GW_Array_Helper::copy($recipient->toArray(), $info, ['id','name','surname','email']);
+			
+			$info['time'] = date('Y-m-d H:i:s');
+			
 			if(!mail($recipient->email, $subj, $msg, $headers))
 			{
-				$this->app->setErrors("Įvyko klaida. Nepavyksta išsiųsti į $recipient->email");
-				$recipient->sent = false;
+				$info['sent'] = false;
+				
 			}else{
-				$this->app->setMessage("$recipient->name &gt; $recipient->email :: OK");
-				$recipient->sent=true;
+				$info['sent'] = true;
 				$sent_count++;
 			}
+			
+			$sent_info[]=$info;
 		}
 		
-		return ['sent'=>$sent_count];
+		return ['sent_count'=>$sent_count, 'sent_info'=>$sent_info];
 	}
 	
 	

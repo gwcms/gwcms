@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xml>
+	<i id="SENT">Išsiųsta: </i>
 
+	
 	<i id="FIELDS">
 		<i id="text">
 			<en>Text</en>
@@ -30,17 +32,39 @@
 		<i id="email">El. paštas</i>
 		<i id="lang">Kalba</i>
 		<i id="groups">Grupės</i>
+		<i id="status">Būklė</i>
 		
 		<i id="unsubscribed">Atsisakė</i>
 		<i id="recipients_total">Gavėjų sk.</i>
 		<i id="subscribers_count">Prenumeratorių skaičius</i>
+		<i id="sent">Išsiųsta</i>
+		<i id="row_num">Eil. nr.</i>
+		<i id="time">Laikas</i>
+		<i id="comments">Komentarai, pastabos</i>
 		
 	</i>
-	<i id="LANGUAGES">
-		<i id="LT">LT</i>
-		<i id="EN">EN</i>
-		<i id="RU">RU</i>
+	<i id="OPT">
+		<i id="lang">
+			<i id="LT">LT</i>
+			<i id="EN">EN</i>
+			<i id="RU">RU</i>
+		</i>
+		<i id="status">
+			<i id="0">Nepradėtas</i>
+			<i id="5">Pristabdyta</i>
+			<i id="10">Siunčiama...</i>
+			<i id="60">Atšaukta</i>
+			<i id="70">Išsiųsta</i>
+		</i>
+		
 	</i>
+	
+	<i id="VIEWS">
+		<i id="sentinfo">Išsiuntimo informacija</i>
+	</i>
+	
+		
+
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
