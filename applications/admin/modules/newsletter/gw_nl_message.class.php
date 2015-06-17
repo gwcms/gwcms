@@ -7,7 +7,12 @@ class GW_NL_Message extends GW_Data_Object
 
 	var $encode_fields = Array('groups'=>'json', 'sent_info'=>'jsono');
 	
-	
+	public $validators = [
+	    'title'=>['gw_string', ['required'=>1]],
+	    'sender'=>['gw_string', ['required'=>1]],
+	    'subject'=>['gw_string', ['required'=>1]],
+	    'lang'=>['gw_string', ['required'=>1]],
+	];	
 	
 	
 	public function getRecipients(){

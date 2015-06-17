@@ -15,7 +15,7 @@
 {include file="elements/input.tpl" type=htmlarea name=body remember_size=1}
 
 {include file="elements/input.tpl" name=groups type=multiselect options=$opt.groups}
-{include file="elements/input.tpl" type=select name=lang options=$m->lang.OPT.lang empty_option=1}
+{include file="elements/input.tpl" type=select name=lang options=$m->lang.OPT.lang empty_option=1 required=1}
 {include file="elements/input.tpl" type=select name=status options=$m->lang.OPT.status}
 
 

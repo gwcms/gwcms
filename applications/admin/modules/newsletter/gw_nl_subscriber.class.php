@@ -7,7 +7,8 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 	public $calculate_fields = ['title'=>'getTitle'];
 	
 	public $validators = [
-	    'email'=>['gw_email', ['required'=>1]]
+	    'email'=>['gw_email', ['required'=>1]],
+	    'lang'=>['gw_string', ['required'=>1]],
 	];	
 	
 	var $composite_map = Array

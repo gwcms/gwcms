@@ -3,9 +3,9 @@
 
 {include file="elements/input.tpl" name=name}
 {include file="elements/input.tpl" name=surname}
-{include file="elements/input.tpl" name=email}
+{include file="elements/input.tpl" name=email required=1}
 
-{include file="elements/input.tpl" type=select name=lang options=$m->lang.OPT.lang empty_option=1}
+{include file="elements/input.tpl" type=select name=lang options=$m->lang.OPT.lang empty_option=1 required=1}
 
 {include file="elements/input.tpl" name=groups type=multiselect options=$opt.groups}
 

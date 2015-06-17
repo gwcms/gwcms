@@ -9,6 +9,13 @@ class GW_Site_Application extends GW_Application
 	{
 		$this->page = new GW_Page();
 		
+		if(isset($this->path_arr[0]['name']) && $this->path_arr[0]['name']=='direct')
+		{
+			$this->page->id=99999999;
+			$this->page->type=3;
+		}
+			
+		
 		for($i=count($this->path_arr)-1;$i>=0;$i--)
 		{
 			if($tmp = $this->page->getByPath($this->path_arr[$i]['path']))
@@ -106,6 +113,11 @@ class GW_Site_Application extends GW_Application
 		
 		$m->init();
 		
+		
+		if($this->page->type==3 && isset($m->lang['VIEWS'][$this->page->path]['TITLE']))
+			$this->page->title = $m->lang['VIEWS'][$this->page->path]['TITLE'];
+		
+		
 		$params = array_merge($params, $this->path_arg);
 		
 		$m->process($params);
@@ -170,6 +182,8 @@ class GW_Site_Application extends GW_Application
 
 	function process()
 	{
+		//d::dumpas($this->page);
+		
 		if(!$this->page->id)
 			$this->jumpToFirstPage();
 			
@@ -180,6 +194,12 @@ class GW_Site_Application extends GW_Application
 			case 0: $this->processPage();break;
 			case 1: $this->jumpToFirstChild();break;
 			case 2: $this->jumpLink();break;
+			case 3: 
+				//shift off direct
+				$path = preg_replace('/^.*\//U','',$this->path);
+				$this->page->path = $path;
+				$this->processPath($path);
+			break;
 			default: die("Unknown page type");break;
 		}
 	}

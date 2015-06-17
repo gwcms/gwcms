@@ -94,9 +94,7 @@ class Module_Messages extends GW_Common_Module
 		
 		$msg = $item->body;
 		
-		$unsubscribe_link = Navigator::getBase(true).'site/newsletter/unsubscribe?nlid='.$item->id.'&rid=';		
-		
-		
+		$unsubscribe_link = Navigator::getBase(true).'site/';	
 		
 		foreach($recipients as $recipient){
 			
@@ -105,9 +103,10 @@ class Module_Messages extends GW_Common_Module
 			
 			$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
 			
-			$unsubscribe_link=$unsubscribe_link.base64_encode($recipient->email);
-			$unsubscribe_link='<a href="'.$unsubscribe_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][$recipient->lang].'</a>';
-			$msg = str_replace('%UNSUBSCRIBE%', $unsubscribe_link, $msg);
+			$us_link=$unsubscribe_link.strtolower($recipient->lang)."/direct/newsletter/newsletter/subscribe?nlid={$item->id}&rid=";	
+			$us_link=$us_link.base64_encode($recipient->email);
+			$us_link='<a href="'.$us_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][strtoupper($recipient->lang)].'</a>';
+			$msg = str_replace('%UNSUBSCRIBE%', $us_link, $msg);
 			
 			//d::dumpas([$recipient, $msg, $subj, $item->sender]);
 			
@@ -147,7 +146,7 @@ class Module_Messages extends GW_Common_Module
 		
 		GW::getInstance('GW_Config')->set('newsletter/lastmail', $mail);
 		
-		$info = $this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail]]);
+		$info = $this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail,'lang'=>'lt']]);
 		
 		if($info['sent_count']) {
 			$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
