@@ -63,6 +63,13 @@
 		<i id="sentinfo">Išsiuntimo informacija</i>
 	</i>
 	
+	<i id="UNSUBSCRIBE_LINK">
+		<i id="">Nuoroda</i>
+		<i id="LT">Nuoroda</i>
+		<i id="EN">Link</i>		
+		<i id="RU">Link</i>		
+	</i>
+	
 		
 
 	<!-- =============== MODULE MAP START =================== -->

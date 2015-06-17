@@ -216,10 +216,13 @@ class GW_Common_Module extends GW_Module
 		//pvz kelias: articles/77/form
 		//istrauks 77
 
+		
+		if(isset($_SESSION['item']) && $_REQUEST['item']=$_SESSION['item'])
+			unset($_REQUEST['item']);
 				
 		//if we encounter error during the submit
 		//fill out form with values that user submited
-		if((isset($_REQUEST['item']) && $vals=$_REQUEST['item']) || isset($_SESSION['item']) && $vals=$_SESSION['item']){
+		if((isset($_REQUEST['item']) && $vals=$_REQUEST['item'])){
 
 			$item->set('id', $vals['id']);
 			$item->load();

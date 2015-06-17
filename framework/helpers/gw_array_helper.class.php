@@ -80,6 +80,12 @@ class GW_Array_Helper
 			$destination[$key]=$source[$key];
 	}
 	
+	static function objectCopy($source, &$destination, $keys)
+	{
+		foreach($keys as $key)
+			$destination->$key=$source->$key;
+	}	
+	
 	/**
 	 * Build associative array
 	 * $names=Array('a','b')

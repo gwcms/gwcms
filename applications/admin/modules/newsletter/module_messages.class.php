@@ -91,12 +91,23 @@ class Module_Messages extends GW_Common_Module
 		$sent_info = [];
 		$sent_count=0;
 		
+		
+		$msg = $item->body;
+		
+		$unsubscribe_link = Navigator::getBase(true).'site/newsletter/unsubscribe?nlid='.$item->id.'&rid=';		
+		
+		
+		
 		foreach($recipients as $recipient){
 			
 			$msg = $item->body;
 			$subj = $item->subject;
 			
 			$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
+			
+			$unsubscribe_link=$unsubscribe_link.base64_encode($recipient->email);
+			$unsubscribe_link='<a href="'.$unsubscribe_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][$recipient->lang].'</a>';
+			$msg = str_replace('%UNSUBSCRIBE%', $unsubscribe_link, $msg);
 			
 			//d::dumpas([$recipient, $msg, $subj, $item->sender]);
 			
@@ -108,16 +119,15 @@ class Module_Messages extends GW_Common_Module
 			if($item->sender)
 				$headers .= "From: $item->sender\r\n";
 
-			GW_Array_Helper::copy($recipient->toArray(), $info, ['id','name','surname','email']);
+			$info = new stdClass();
+			GW_Array_Helper::objectCopy($recipient, $info, ['id','name','surname','email']);
 			
-			$info['time'] = date('Y-m-d H:i:s');
+			$info->time = date('Y-m-d H:i:s');
 			
-			if(!mail($recipient->email, $subj, $msg, $headers))
-			{
-				$info['sent'] = false;
-				
+			if(!mail($recipient->email, $subj, $msg, $headers)) {
+				$info->sent = false;
 			}else{
-				$info['sent'] = true;
+				$info->sent = true;
 				$sent_count++;
 			}
 			
@@ -137,10 +147,13 @@ class Module_Messages extends GW_Common_Module
 		
 		GW::getInstance('GW_Config')->set('newsletter/lastmail', $mail);
 		
-		$this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail]]);
+		$info = $this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail]]);
 		
-		
-		$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
+		if($info['sent_count']) {
+			$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
+		} else {
+			$this->app->setMessage('Testinis laiško siuntimas nepavyko. Gavėjas: '.$mail);
+		}
 		$this->jump();
 	}	
 }
