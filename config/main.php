@@ -33,6 +33,8 @@ $dir['AUTOLOAD'][] = $dir['LIB'];
 
 GW::s('DEFAULT_APPLICATION','SITE');
 GW::s('LANGS', Array('lt','en'));
+GW::s('SYS_VERSION', '2.1');
+
 
 include $dir['ROOT'].'config/project.php';
 
