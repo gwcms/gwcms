@@ -7,7 +7,7 @@ class GW_NL_Groups extends GW_Composite_Data_Object
 	
 	var $composite_map = Array
 	(
-		'subscribers' => ['gw_links', ['table'=>'gw_nl_subs_bind_groups', 'fieldnames'=>['group_id','subscriber_id']]],
+		'subscribers' => ['gw_links', ['table'=>'gw_nl_subs_bind_groups', 'fieldnames'=>['group_id','subscriber_id'], 'get_cached'=>1]],
 	);	
 	
 		

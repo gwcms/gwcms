@@ -80,15 +80,25 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			$this->loadCompositeItem($field);
 	}
 	
+	function getComposite($field)
+	{
+		$this->loadCompositeItem($field);
+			
+		return $this->composite_content_base[$field]->getValue();		
+	}
+	
+	function getCompositeCached($field)
+	{
+		return $this->getCached($field, 'getComposite');
+	}
+	
 	function get($field)
 	{
 		if(!$this->isCompositeField($field))
 			return parent::get($field);
 			
-		$this->loadCompositeItem($field);
-			
-		return $this->composite_content_base[$field]->getValue();
-	}	
+		return $this->{isset($this->composite_map[$field][1]['get_cached']) ? 'getCompositeCached' : 'getComposite'}($field);
+	}
 	
 	function set($field, $value)
 	{

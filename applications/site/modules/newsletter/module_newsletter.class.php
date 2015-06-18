@@ -5,7 +5,8 @@ class Module_NewsLetter extends GW_Public_Module
 
 	function init()
 	{
-		$this->model = new GW_NL_Subscriber;
+		$this->subscriber = new GW_NL_Subscriber;
+		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptions();
 	}
 
 
@@ -26,7 +27,22 @@ class Module_NewsLetter extends GW_Public_Module
 		$rid=$_GET['rid'];
 		$rid=  base64_decode($rid);
 		
-		d::dumpas([$nlid, $rid]);
+		
+		$subscriber = $this->subscriber->find(['email=?', $rid]);
+		
+		
+		
+		if(!$subscriber)
+		{
+			$this->app->setMessage("nerasta");
+			
+			return false;
+		}
+		
+		
+		d::dumpas([$subscriber, $subscriber->groups, $subscriber->groups]);
+		
+		//d::dumpas([$nlid, $rid]);
 		
 		
 		

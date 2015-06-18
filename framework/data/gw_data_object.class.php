@@ -82,6 +82,18 @@ class GW_Data_Object
 		return isset($this->content_base[$key]) ? $this->content_base[$key] : false;
 	}
 	
+	function getCached($key, $f='get')
+	{
+		$cache =& $this->cache[$f.'Cached'];
+		
+		if(isset($cache[$key]))
+			return $cache[$key];
+		
+		$cache[$key]=$this->$f($key);
+		
+		return $cache[$key];
+	}	
+	
 	function setValues($vals)
 	{
 		foreach($vals as $key => $val)
