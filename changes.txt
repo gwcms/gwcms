@@ -5,4 +5,5 @@
  * site users and admin users now live in one table, in one modules, with ability to extend site user in another module
  * added orders, ability to configure list view, like views
  * on view finish return list of template vars or assign to dedicated var $tpl_vars
+ * template var $opt returned to $options as long as problem with rewriting (assignByRef vs assign) was solved
  * bugfixes

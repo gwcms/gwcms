@@ -90,7 +90,7 @@
 			{/if}
 	{/function}	
 	{function name=dl_cell_project_id}
-		{$opt.project_id[$item->project_id]}
+		{$options.project_id[$item->project_id]}
 	{/function}	
 	{function name=dl_cell_week}
 		<span title="{$item->insert_time}">W{date('W',strtotime($item->insert_time))}

@@ -21,7 +21,7 @@
 		lang=>1,
 		insert_time=>1, 
 		active=>[type=>select, options=>$lang.ACTIVE_OPT],
-		groups=>[type=>multiselect, options=>$opt.groups]]
+		groups=>[type=>multiselect, options=>$options.groups]]
 	}
 	
 	{$dl_smart_fields=[title,groups]}
@@ -32,7 +32,7 @@
 
 	{function dl_cell_groups}
 		{foreach from=$item->groups key=ind item=gid}
-			<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$opt.groups.$gid}</a>
+			<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$options.groups.$gid}</a>
 		{/foreach}	
 	{/function}
 	

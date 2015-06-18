@@ -43,7 +43,7 @@ class GW_Common_Module extends GW_Module
 		if(! isset($this->model) && ($tmp = $this->app->page->getDataObject()))
 			$this->model = $tmp;
 		
-		$this->tpl_vars['opt'] =& $this->options;
+		$this->tpl_vars['options'] =& $this->options;
 		
 	}
 	
