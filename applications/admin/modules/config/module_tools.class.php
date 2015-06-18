@@ -15,7 +15,7 @@ class Module_Tools extends GW_Module
 		list($vars['lastupdates'], $vars['updatefiles']) = $this->__doImportSqlUpdates_list2update();
 		
 
-		$this->smarty->assign($vars);
+		return $vars;
 	}
 	
 

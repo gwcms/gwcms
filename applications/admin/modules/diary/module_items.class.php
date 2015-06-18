@@ -20,7 +20,7 @@ class Module_Items extends GW_Common_Module
 		$breadcrumbs_attach[]=Array('title'=>$this->parent->title, 'path'=>$this->app->fh()->gw_path(Array('params' => Array('pid'=>$this->parent->id) )));
 		
 		
-		$this->smarty->assign('breadcrumbs_attach', $breadcrumbs_attach);
+		$this->tpl_vars['breadcrumbs_attach']=$breadcrumbs_attach;
 	}
 	
 	function init()

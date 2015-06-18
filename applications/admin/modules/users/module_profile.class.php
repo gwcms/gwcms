@@ -13,7 +13,7 @@ class Module_Profile extends GW_Module
 	
 	function viewDefault()
 	{
-		$this->smarty->assign('item', $this->app->user);		
+		return ['item'=>$this->app->user];		
 	}
 
 	function doSave()

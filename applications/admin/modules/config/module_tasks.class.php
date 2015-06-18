@@ -30,7 +30,7 @@ class Module_Tasks extends GW_Common_Module
 		foreach($tasks as $i => $task)
 			$tasks[$i] = str_replace('.task.class','' ,pathinfo($task, PATHINFO_FILENAME));
 			
-		$this->smarty->assign('tasks', $tasks);	
+		$this->tpl_vars['tasks']= $tasks;	
 	}	
 
 	/*Nusiusti signala system procesui vykdyti uzduoti*/

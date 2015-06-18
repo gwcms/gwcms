@@ -15,7 +15,7 @@ class Module_Config extends GW_Common_Module
 	
 	function viewDefault()
 	{
-		$this->smarty->assign('item', $this->model);
+		return ['item'=>$this->model];
 	}
 	
 	function doSave()

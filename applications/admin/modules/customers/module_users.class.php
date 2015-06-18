@@ -57,7 +57,7 @@ class Module_Users extends GW_Common_Module
 		$item = $this->getDataObjectById();
 		$list = gw::getInstance('GW_Balance_Log_Item')->findAll(['user_id=?', $item->id],['order'=>'id DESC']);
 		
-		$this->smarty->assign('list', $list);
+		return ['list'=>$list];
 		
 		//return ['list'=>$list];
 	}

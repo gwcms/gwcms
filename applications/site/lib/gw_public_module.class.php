@@ -2,14 +2,16 @@
 
 class GW_Public_Module
 {
-	var $module_file;
-	var $tpl_dir;
-	var $module_dir;
-	var $lang;
-	var $smarty;
-	var $errors=Array();
-	var $tpl_name;
-	var $app;
+	public $module_file;
+	public $tpl_dir;
+	public $module_dir;
+	public $lang;
+	public $smarty;
+	public $errors=Array();
+	public $tpl_name;
+	public $app;
+	public $tpl_vars;
+	public $options;
 
 
 	function __construct($variables=Array())
@@ -30,13 +32,17 @@ class GW_Public_Module
 	
 	function init()
 	{
-		
+		$this->tpl_vars['messages'] =& $this->messages;
+		$this->tpl_vars['options'] =& $this->options;
 	}
 	
 	function processTemplate($name)
 	{
-		$this->smarty->assignByRef('messages', $this->messages);
+		
 		$this->smarty->assign('m', $this);
+		
+		foreach($this->tpl_vars as $name => $val)
+			$this->smarty->assign($this->tpl_vars);		
 
 		if($this->tpl_name)
 			$file=$this->tpl_dir.$this->tpl_name;
@@ -55,7 +61,13 @@ class GW_Public_Module
 			$name="default";
 	
 		$methodname="view".$name;
-		$this->$methodname($params);
+		$vars = $this->$methodname($params);
+		
+		
+		if(is_array($vars))
+			foreach($vars as $name => $var)
+				$this->tpl_vars[$name] =& $vars[$name];		
+		
 
 		$this->processTemplate($name);
 	}

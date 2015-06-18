@@ -36,7 +36,7 @@ class Module_Groups extends GW_Common_Module
 				if(!$item->canBeAccessedByUser($this->app->user))
 					unset($list[$i]);
 		
-		$this->smarty->assign('list', $list);
+		return ['list'=>$list];
 	}
 	
 
@@ -44,7 +44,7 @@ class Module_Groups extends GW_Common_Module
 	function viewPermissions()
 	{
 		if(!$item = $this->getDataObjectById())
-			return;		
+			return;	
 		
 		$page0 = new GW_ADM_Page();
 		$list = $page0->findAll('active', Array('order'=>'path'));
@@ -57,13 +57,9 @@ class Module_Groups extends GW_Common_Module
 					unset($list[$i]);
 		}
 					
-		
 		$selected = GW_Permissions::getByGroupId($item->id);
 
-		
-		$this->smarty->assign('item', $item);//group
-		$this->smarty->assign('list', $list);//paths
-		$this->smarty->assign('selected', $selected);
+		return compact(['item','list', 'selected']);
 	}
 	
 	function doSavePermissions()

@@ -65,7 +65,7 @@ class Module_Messages extends GW_Common_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
-		$this->smarty->assign('item', $item);
+		return ['item'=>$item];
 	}
 	
 	

@@ -12,8 +12,7 @@ class Module_Login extends GW_Module
 
 	function viewDefault()
 	{
-		$this->smarty->assign('autologin', GW_Auth::isAutologinEnabled());
-		// rodyt login forma	
+		return ['autologin'=>GW_Auth::isAutologinEnabled()];	
 	}
 
 	function doLogin()
@@ -31,7 +30,7 @@ class Module_Login extends GW_Module
 		if(!$this->app->user = $this->app->auth->loginPass($user,$pass)){
 			$this->setErrors($this->app->auth->error);
 		}else{
-			$this->smarty->assign('success', 1);
+			$this->tpl_vars['success']=1;
 			$success=true;
 			
 			//autologin

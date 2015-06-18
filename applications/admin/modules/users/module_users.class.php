@@ -26,14 +26,11 @@ class Module_Users extends GW_Common_Module
 		$this->jump($this->app->page->path);
 	}
 	
-	function viewDefault()
-	{
-		$this->assignGroupOptions();		
-		$this->viewList();
-	}
 	
 	function viewList()
 	{
+		$this->assignGroupOptions();
+		
 		$list = $this->model->findAll('removed=0');	
 		
 		if(!$this->app->user->isRoot())
@@ -43,7 +40,7 @@ class Module_Users extends GW_Common_Module
 					unset($list[$i]);
 			}
 		
-		$this->smarty->assign('list', $list);
+		return ['list'=>$list];
 	}	
 	
 	function assignGroupOptions()
@@ -53,7 +50,7 @@ class Module_Users extends GW_Common_Module
 		if(!$this->app->user->isRoot())
 			unset($options[$this->group0->root_group_id]);
 		
-		$this->smarty->assign('groups_options', $options);		
+		$this->tpl_vars['groups_options']=$options;		
 	}
 	
 	function viewForm()
