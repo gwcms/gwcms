@@ -1,0 +1,7 @@
+2.0 2015-02 
+ * added applications
+2.1 2015-06
+ * improved composite object, caching, added implementation rules for composite item
+ * site users and admin users now live in one table, in one modules, with ability to extend site user in another module
+ * added orders, ability to configure list view, like views
+ * bugfixes

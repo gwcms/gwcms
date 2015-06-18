@@ -575,7 +575,7 @@ class GW_Common_Module extends GW_Module
 	
 	function common_viewDialogConfig()
 	{
-		$fields = $_SESSION['current_module_fields'];
+		$fields = $_SESSION['current_module_fields'] ? $_SESSION['current_module_fields']: [];
 		$saved = $this->app->page->fields ? (array)$this->app->page->fields: [];
 		
 		$this->tpl_vars['fields'] = $saved + $fields;
