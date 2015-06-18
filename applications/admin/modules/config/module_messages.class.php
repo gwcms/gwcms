@@ -4,6 +4,8 @@
 class Module_Messages extends GW_Common_Module
 {	
 
+	public $default_view='viewList';
+	
 	function init()
 	{
 		parent::init();
@@ -11,18 +13,12 @@ class Module_Messages extends GW_Common_Module
 		
 		$this->filters['user_id']=$this->app->user->id;
 	}
-
-	
-	function viewDefault()
-	{
-		$this->viewList(Array('order'=>$this->model->default_order));
-	}
 	
 	function viewView()
 	{
 		$item = parent::viewForm();
 		$item->seen=1;
-		$item->update(Array('seen'));
+		$item->update(['seen']);
 	}
 	
 	function doInvertSeen()

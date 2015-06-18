@@ -3,29 +3,25 @@
 
 class Module_Subscribers extends GW_Common_Module
 {	
-
+	public $default_view='viewList';
+	
+	
 	function init()
 	{	
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;	
 		
-		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptions();
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptions();
 		
 	}
 
 	
 	function viewDefault()
 	{
-		$this->viewList();
+		return $this->viewList();
 	}
 	
-	function viewForm()
-	{
-		$item = parent::viewForm();
-		
-		//d::dumpas($item->groups);
-	}
 	
 	function overrideFilterGroups($value)
 	{
@@ -46,7 +42,7 @@ class Module_Subscribers extends GW_Common_Module
 		
 		$cond = " (SELECT count(*) FROM gw_nl_subs_bind_groups WHERE subscriber_id=id AND group_id IN (".implode(",",$ids)."))>0 ";
 		
+		
 		return $cond;
 	}
-	
 }

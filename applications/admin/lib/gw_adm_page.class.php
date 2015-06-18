@@ -9,16 +9,16 @@
 class GW_ADM_Page extends GW_i18n_Data_Object
 {
 	var $table = 'gw_adm_sitemap';
-	var $i18n_fields = Array('title'=>1);
-	var $validators = Array('views'=>'gw_json','orders'=>'gw_json');
+	var $i18n_fields = ['title'=>1];
+	var $validators = ['views'=>'gw_json','orders'=>'gw_json'];
 
 	var $default_order = 'priority ASC';
 	var $level=0;
 	var $data_object;
 	
-	var $encode_fields=Array('info'=>'serialize', 'fields'=>'serialize');
-	var $ignore_fields = Array('data_object_id'=>1);
-	var $calculate_fields = Array('VIEWS'=>'getViews', 'ORDERS'=>'getOrders');
+	var $encode_fields=['info'=>'serialize', 'fields'=>'serialize'];
+	var $ignore_fields = ['data_object_id'=>1];
+	var $calculate_fields = ['VIEWS'=>'getViews', 'ORDERS'=>'getOrders'];
 
 	function getViews()
 	{
@@ -44,13 +44,13 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		return json_decode($this->get('orders'), true);
 	}	
 	
-	function getChilds($params=Array(), $max_level=3)
+	function getChilds($params=[], $max_level=3)
 	{
 		$menu = isset($params['menu']) ? $params['menu'] : true;
 		$check_perm	= isset($params['check_permissions']) ? $params['check_permissions'] : true;			
 		$pid = isset($params['parent_id']) ? $params['parent_id'] : 0;
 		
-		$cond = Array('parent_id=?'.($menu?' AND active AND in_menu':''), $pid);
+		$cond = ['parent_id=?'.($menu?' AND active AND in_menu':''), $pid];
 		
 		
 		if(isset($params['test']))
@@ -67,7 +67,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			if($max_level<0)
 				continue;
 			
-			if(!$check_perm || $can_access || $item->getChilds(Array('parent_id'=>$item->id)+$params, $max_level-1))
+			if(!$check_perm || $can_access || $item->getChilds(['parent_id'=>$item->id]+$params, $max_level-1))
 			{
 				if(isset($params['return_first_only']) && $params['return_first_only']) 
 					return $item;
@@ -87,7 +87,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		$path = preg_replace('/\/\d+\//','/',$path);
 		
-		if(($tmp = $this->find(Array('path=?',$path))) && $data_object_id)
+		if(($tmp = $this->find(['path=?',$path])) && $data_object_id)
 			$tmp->set('data_object_id', $data_object_id);
 			
 		return $tmp;
@@ -140,7 +140,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			
 			
 		$class=strtolower($Class);
-		$class=str_replace(Array('/','\\'),'',$class);
+		$class=str_replace(['/','\\'],'',$class);
 		
 		list($dir) = explode('/', $this->get('path'));
 		$dir=GW::s('DIR/ADMIN/MODULES').$dir.'/';

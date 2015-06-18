@@ -13,13 +13,6 @@ class Module_LogWatch extends GW_Common_Module
 		
 		$this->model = new GW_Log_Watch;
 	}
-
-	
-	function viewDefault()
-	{
-		$this->viewList();
-	}
-
 	
 	function getFile()
 	{

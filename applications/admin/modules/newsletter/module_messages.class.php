@@ -3,47 +3,31 @@
 
 class Module_Messages extends GW_Common_Module
 {	
-
+	public $default_view='viewList';
+	
 	function init()
 	{	
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;
-		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptions();
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptions();
 		
 	}
 
-	function viewForm()
+	function __eventAfterForm()
 	{
-		parent::viewForm();
-		
-		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptionsWithCounts();		
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts();		
 	}
 	
-	function viewDefault()
+	function __eventAfterList()
 	{
-		$this->viewList();
-		
-		$this->smarty->assign('lasttestmail', GW::getInstance('GW_Config')->get('newsletter/lastmail'));
-	}
-
-	//overrride me || extend me
-	function eventHandler($event, &$context)
-	{
-		switch($event)
-		{
-			case 'BEFORE_SAVE':
-				$item=$context;
-				
-				$item->recipients_count = count($item->getRecipients());
-				//$item->beforeSaveParseRecipients();
-			break;
-		}
-		
-		//pass deeper
-		//parent::eventHandler($event, $context);
+		$this->tpl_vars['lasttestmail']=GW::getInstance('GW_Config')->get('newsletter/lastmail');
 	}
 	
+	function __eventAfterSave($item)
+	{
+		$item->recipients_count = count($item->getRecipients());		
+	}
 	
 	
 	

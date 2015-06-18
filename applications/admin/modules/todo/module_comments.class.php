@@ -16,16 +16,14 @@ class Module_Comments extends Module_Items
   	}
   	
   	
-  	function viewList()
+  	function __eventAfterList()
   	{
-  		if($id = $_REQUEST['id'])
+		if($id = $_REQUEST['id'])
   		{
   			$comment = $this->model->createNewObject($id);
   			$comment->load();
-  			$this->smarty->assign('comment',$comment); 
-  		}
-  		  		
-  		return parent::viewList();
+  			$this->tpl_vars['comment'] =& $comment; 
+  		}	
   	}
   	
 	function eventHandler($event, &$context)
@@ -44,6 +42,8 @@ class Module_Comments extends Module_Items
 				$item->description = str_replace('<br />',"\n", $item->description);
 			break;
 		}
+		
+		parent::eventHandler($event, $context);
 	}
 	
 	function notifySave($comment)

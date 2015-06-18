@@ -3,6 +3,7 @@
 
 class Module_Modules extends GW_Common_Module
 {
+	public $default_view = 'viewList';
 
 	function init()
 	{
@@ -10,15 +11,12 @@ class Module_Modules extends GW_Common_Module
 		parent::init();
 	}
 	
-	function viewDefault()
-	{	
-		
-		
+	
+	function viewList()
+	{
 		$list = $this->model->getChilds(Array('menu'=>false));
 		
 		$list1=Array();
-		
-		
 		
 		foreach($list as $item)
 		{
@@ -28,7 +26,7 @@ class Module_Modules extends GW_Common_Module
 			$list1=array_merge($list1, $childs);
 		}
 		
-		$this->smarty->assign('list', $list1);	
+		return ['list'=>$list1];	
 	}
 	
 	function doMove($params=false)
@@ -38,7 +36,7 @@ class Module_Modules extends GW_Common_Module
 		
 		$item->move($_REQUEST['where'], "parent_id=".(int)$item->get('parent_id'));
 		
-		$this->jump(false, Array('id'=>$item->get('id')));
+		$this->jump(false, ['id'=>$item->get('id')]);
 	}
 	
 	function doGetNotes()

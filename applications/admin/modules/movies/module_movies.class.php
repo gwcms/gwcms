@@ -6,21 +6,12 @@ class Module_Movies extends GW_Common_Module
 {	
 
 	function init()
-	{
-		$this->model = new GW_Movie();
-	
+	{	
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;			
 		
-	}
-
-	
-	function viewDefault()
-	{
-		$this->viewList();
-	}
-	
+	}	
 	
 	function doGetImdb()
 	{

@@ -40,9 +40,11 @@ class Module_NewsLetter extends GW_Public_Module
 		}
 		
 		
-		d::dumpas([$subscriber, $subscriber->groups, $subscriber->groups]);
+		//d::dumpas([$subscriber, $subscriber->groups, $subscriber->groups]);
+		//$this->smarty->assign();
 		
 		//d::dumpas([$nlid, $rid]);
+		return ['subscriber'=>$subscriber];
 		
 		
 		

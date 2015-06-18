@@ -16,7 +16,7 @@
 define('GW_SYS_IMAGES_DIR', GW::s('DIR/SYS_IMAGES'));
 
 
-class GW_Image extends GW_Data_Object
+class GW_Image extends GW_Data_Object implements GW_Composite_Slave 
 {
 	var $table = 'gw_images';
 	var $dir=GW_SYS_IMAGES_DIR;
@@ -52,9 +52,15 @@ class GW_Image extends GW_Data_Object
 		return get_class($obj).'_'.$obj->get($obj->primary_fields[0]).'_'.$fieldname;
 	}	
 	
-	function getByOwnerObject($owner_obj, $fieldname)
+	function getByOwnerObject($master, $fieldname)
 	{
-		return $this->find(Array('owner=?', self::getOwnerFormat($owner_obj, $fieldname)));
+		$this->setOwnerObject($master, $fieldname);
+		return $this;
+	}
+	
+	function getValue()
+	{		
+		return $this->find(Array('owner=?', $this->owner));		
 	}
 
 	function setOwnerObject($owner_obj, $fieldname)

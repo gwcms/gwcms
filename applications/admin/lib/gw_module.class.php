@@ -2,33 +2,35 @@
 
 class GW_Module
 {
-	var $app;
+	public $app;
 	
-	var $db;
-	var $action_name;
-	var $tpl_dir;
-	var $module_dir;
-	var $module_name;
-	var $module_path;
-	var $smarty;
+	public $db;
+	public $action_name;
+	public $tpl_dir;
+	public $module_dir;
+	public $module_name;
+	public $module_path;
+	public $smarty;
 	
-	var $errors=Array();
-	var $errorMsgs=Array();
-	var $ob_collect=true;
-	var $error_fields;
+	public $errors=[];
+	public $errorMsgs=[];
+	public $ob_collect=true;
+	public $error_fields;
 		
 	/**
 	 * @var GW_Request
 	 */
 	
-	var $list_params=Array('page_by'=>20);
-	var $log=Array();
+	public $list_params=['page_by'=>20];
+	public $log=[];
 	
 	/**
 	 * specify template file path (without extension)
 	 * @var string  
 	 */
-	var $tpl_file_name;
+	public $tpl_file_name;
+	public $tpl_vars;
+	public $default_view='viewDefault';
 	
 	
 	function getInfo()
@@ -56,6 +58,8 @@ class GW_Module
 		
 		$this->loadErrorFields();
 		$this->initListParams();
+		
+		$this->tpl_vars['messages'] =& $this->messages;
 	}
 	
 	function initListParams()
@@ -63,7 +67,7 @@ class GW_Module
 		$sess_store =& $_SESSION[implode('/',$this->module_path)];
 		
 		if(!$sess_store)
-			$sess_store=Array();
+			$sess_store=[];
 		
 		$this->list_params = array_merge($this->list_params, $sess_store);
 				
@@ -145,18 +149,18 @@ class GW_Module
 
 
 	
-	function processView($name='',$params=Array())
+	function processView($name='',$params=[])
 	{
 		$this->ob_start();
 
-		$this->isPublic($name="view$name") ||	$name='viewDefault';
+		$this->isPublic($name="view$name") || $name=$this->default_view;
 		$this->action_name=$name;
 
 		$vars = $this->$name($params);
-		
+						
 		if(is_array($vars))
-			foreach($vars as $i => $var)
-				$this->smarty->assignByRef($i, $vars[$i]);
+			foreach($vars as $name => $var)
+				$this->tpl_vars[$name] =& $vars[$name];
 		
 		$this->ob_end();
 
@@ -164,7 +168,7 @@ class GW_Module
 	}
 	
 	
-	function process($params=Array(), $request_params=Array())
+	function process($params=Array(), $request_params=[])
 	{
 		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
@@ -184,8 +188,14 @@ class GW_Module
 	
 	function processTemplate($soft=1)
 	{
-		$this->smarty->assignByRef('messages', $this->messages);
+		
 		$this->smarty->assign('m', $this);
+		
+		foreach($this->tpl_vars as $name => $val)
+			$this->smarty->assign($this->tpl_vars);
+		
+		
+		//d::dumpas(array_keys($this->tpl_vars));
 		
 		if($this->tpl_file_name)
 		{
@@ -207,11 +217,8 @@ class GW_Module
 					$tmp='default_empty.tpl';
 					
 		}
-		
-		
-					
+				
 		$this->smarty->display($tmp);
-		
 	}
 	
 
@@ -235,7 +242,7 @@ class GW_Module
 		if(!$this->ob_collect)
 			return;
 			
-		$this->smarty->assignByRef('log', $this->log);
+		$this->tpl_vars['log'] =& $this->log;
 
 		ob_start();
 	}
@@ -250,7 +257,7 @@ class GW_Module
 		ob_end_clean();
 	}
 	
-	function jump($path=false, $params=Array())
+	function jump($path=false, $params=[])
 	{
 		//this thing allows to see last eddited element in list
 		
@@ -262,7 +269,7 @@ class GW_Module
 	
 	function doSetFilters()
 	{
-		$this->list_params['filters'] = $_REQUEST['filters_unset'] ? Array() : $_REQUEST['filters'];
+		$this->list_params['filters'] = $_REQUEST['filters_unset'] ? [] : $_REQUEST['filters'];
 		$this->list_params['page']=0;
 				
 		$this->jump();
@@ -286,6 +293,10 @@ class GW_Module
 				$item=$context;
 			break;
 		}
+		
+		$tmp = '__event'.  str_replace('_', '', $event);
+		if(method_exists($this, $tmp))
+			$this->$tmp($context);
 		
 		//pass deeper
 		//parent::eventHandler($event, $context);

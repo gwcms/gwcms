@@ -13,6 +13,8 @@
 	{$display_fields=[title=>1,subject=>1,lang=>1,status=>1,recipients_count=>1,sent_count=>1,insert_time=>1,update_time=>1]}
 	{$dl_smart_fields=[status]}
 	
+	
+	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	

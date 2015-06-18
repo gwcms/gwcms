@@ -4,16 +4,18 @@
 class Module_Groups extends GW_Common_Module
 {	
 
-	function init()
+	public $default_view='viewList';	
+	
+/*	
+	function __eventAfterList(&$list)
 	{
-		$this->model = new GW_Articles_Group();
 		
-		parent::init();
 	}
 
-	
-	function viewDefault()
+	function init()
 	{
-		$this->viewList();
+		parent::init();
 	}
+ 
+ */
 }

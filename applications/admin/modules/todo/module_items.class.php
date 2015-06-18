@@ -4,10 +4,19 @@
 class Module_Items extends GW_Common_Module_Tree_Data
 {	
 	
-	function viewDefault()
+	public $default_view = 'viewList';
+	
+	function init()
 	{
-		$this->viewList(Array('conditions'=>'type<2'));
+		parent::init();
 		
+		$this->options['project_id'] = GW::getInstance('gw_todo_project')->getOptions();
+		
+	}	
+	
+	function __eventBeforeListParams(&$params)
+	{
+		$params['conditions']='type<2';
 	}
 	
 	
@@ -23,10 +32,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->jump();
 	}
 	
-	function viewList()
-	{
-		$list = parent::viewList();
-		
+	function __eventAfterList(&$list)
+	{				
 		$this->__attachLastComment($list);
 	}
 	
@@ -51,21 +58,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			$list[$pid]->last_comment = $comment->description;		
 	}
 	
+	
 
-	
-	function viewForm()
-	{
-		
-		parent::viewForm();
-		//d::dumpas($this->parent);
-	}
-	
-	function init()
-	{
-		parent::init();
-		
-		$this->options['project_id'] = GW::getInstance('gw_todo_project')->getOptions();
-		
-	}
 
 }

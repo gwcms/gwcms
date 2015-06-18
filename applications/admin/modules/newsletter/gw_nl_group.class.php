@@ -1,7 +1,7 @@
 <?php
 
 
-class GW_NL_Groups extends GW_Composite_Data_Object
+class GW_NL_Group extends GW_Composite_Data_Object
 {
 	var $table = 'gw_nl_subs_groups';
 	
@@ -20,6 +20,9 @@ class GW_NL_Groups extends GW_Composite_Data_Object
 	
 	function getCountsByIds($ids)
 	{
+		if(!$ids)
+			return false;
+		
 		$ids_cond = "group_id IN (".implode(',', $ids).")";
 		
 		$counts_sql = "SELECT group_id, count(*) AS cnt 
@@ -37,7 +40,11 @@ class GW_NL_Groups extends GW_Composite_Data_Object
 		if(!$opt)
 			return $opt;
 		
+		
+		
 		$counts = $this->getCountsByIds(array_keys($opt));
+		
+		
 		
 		foreach($opt as $id => $title)
 		{

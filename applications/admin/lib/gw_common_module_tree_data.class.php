@@ -47,19 +47,19 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		if(! $this->parent->title)
 			return;
 		
-		$breadcrumbs_attach=Array();
+		$breadcrumbs_attach=[];
 		
 		foreach($this->parent->getParents() as $item)
 			$breadcrumbs_attach[]=Array
 			(
-				'path'=>$this->app->fh()->gw_path(Array('params' => Array('pid'=>$item->id) )),
+				'path'=>$this->app->fh()->gw_path(['params' => ['pid'=>$item->id] ]),
 				'title'=>$item->title
 			);
 		
-		$breadcrumbs_attach[]=Array('title'=>$this->parent->title, 'path'=>$this->app->fh()->gw_path(Array('params' => Array('pid'=>$this->parent->id) )));
+		$breadcrumbs_attach[]=['title'=>$this->parent->title, 'path'=>$this->app->fh()->gw_path(['params' => ['pid'=>$this->parent->id]] )];
 		
 		
-		$this->smarty->assign('breadcrumbs_attach', $breadcrumbs_attach);
+		$this->tpl_vars['breadcrumbs_attach'] =& $breadcrumbs_attach;
 	}	
 
 }

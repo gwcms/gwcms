@@ -4,7 +4,7 @@ class GW_Message extends GW_Data_Object
 {
 	var $table='gw_messages';
 
-	var $calculate_fields = Array('list_color'=>'listColor');
+	var $calculate_fields = ['list_color'=>'listColor'];
 	
 	var $default_order = "seen ASC, insert_time DESC";
 	
@@ -14,22 +14,22 @@ class GW_Message extends GW_Data_Object
 	function msg($to, $subj, $msg, $sender='')
 	{
 		
-		if($group = $this->find(Array('subject=? AND sender=? AND seen=0 AND user_id=?',$subj,$sender,$to)))
+		if($group = $this->find(['subject=? AND sender=? AND seen=0 AND user_id=?',$subj,$sender,$to]))
 		{
 			$group->message.="\n\n---------------------------\n";
 			$group->message.=date('Y-m-d H:i:s').":\n---------------------------\n";
 			$group->message.=$msg;
 			$group->group_cnt = $group->group_cnt-1+2;
 			
-			$group->update(Array('message','group_cnt'));
+			$group->update(['message','group_cnt']);
 		}else{
 
-			$msg = $this->createNewObject(Array(
+			$msg = $this->createNewObject([
 				'user_id'=>$to,
 				'subject'=>$subj,
 				'message'=>$msg,
 				'sender'=>$sender,
-			));
+			]);
 			
 			$msg->insert();
 		}

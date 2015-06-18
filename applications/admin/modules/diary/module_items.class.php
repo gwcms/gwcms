@@ -49,7 +49,7 @@ class Module_Items extends GW_Common_Module
 	
 	function viewDefault()
 	{
-		$this->viewList(Array('order'=>'type DESC, insert_time DESC'));
+		return $this->viewList(Array('order'=>'type DESC, insert_time DESC'));
 	}
 	
 	function getMoveCondition($item)

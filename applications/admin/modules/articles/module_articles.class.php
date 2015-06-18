@@ -4,6 +4,8 @@
 class Module_Articles extends GW_Common_Module
 {	
 
+	public $default_view='viewList';
+	
 	function init()
 	{	
 		parent::init();
@@ -11,10 +13,17 @@ class Module_Articles extends GW_Common_Module
 		$this->list_params['paging_enabled']=1;		
 		
 	}
-
 	
-	function viewDefault()
+/*	
+	function __eventAfterList(&$list)
 	{
-		$this->viewList();
+		
 	}
+
+	function init()
+	{
+		parent::init();
+	}
+ 
+ */	
 }

@@ -4,19 +4,11 @@
 class Module_Groups extends GW_Common_Module
 {	
 
-	function init()
-	{
-		$this->model = new GW_NL_Groups();
-		
-		parent::init();
-	}
+	public $default_view='viewList';
 
-	
-	function viewDefault()
+		
+	function __eventAfterList(&$list)
 	{
-		$list=$this->viewList();
-		
-		
 		#attach counts
 		$counts = $this->model->getCountsByIds(array_keys($list));
 		

@@ -1,23 +1,9 @@
 <?php
 
-include_once __DIR__.'/gw_db_queries.class.php';
 
 class Module_DBQueries extends GW_Common_Module
 {	
-
-	function init()
-	{
-		$this->model = new GW_DB_Queries();
-		
-		parent::init();
-	}
-
-	
-	function viewDefault()
-	{
-		$this->viewList();
-	}
-
+	public $default_view = 'viewList';
 	
 
 	

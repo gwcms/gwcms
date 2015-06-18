@@ -33,16 +33,16 @@ class GW_Admin_Application extends GW_Application
 	
 	function jumpToFirstChild()
 	{
-		if(!$item = $this->getPages(Array('return_first_only'=>1,'parent_id'=>$this->page->id)))
+		if(!$item = $this->getPages(['return_first_only'=>1,'parent_id'=>$this->page->id]))
 			$this->fatalError('Restricted access');
 		
 		
 		$this->jump($item->get('path'));
 	}	
 	
-	function getPages($params=Array())
+	function getPages($params=[])
 	{
-		$params['can_access']=array($this, 'canAccess');
+		$params['can_access']=[$this, 'canAccess'];
 		
 		$tmp = GW::getInstance('GW_ADM_Page')->getChilds($params);
 		

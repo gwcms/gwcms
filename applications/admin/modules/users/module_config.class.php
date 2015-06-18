@@ -4,6 +4,8 @@
 class Module_Config extends GW_Common_Module
 {	
 
+	public $default_view = 'viewDefault';
+	
 	function init()
 	{
 		$this->model = new GW_Config('gw_users/');

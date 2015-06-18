@@ -3,7 +3,7 @@
 
 class GW_Common_Module extends GW_Module
 {
-	var $allow_auto_actions=
+	public $allow_auto_actions=
 	[
 		'dosave'=>1,
 		'dodelete'=>1,
@@ -16,16 +16,18 @@ class GW_Common_Module extends GW_Module
 		'doclone'=>1,
 	];
 	
-	var $filters=Array();
+	public $filters=[];
 	
 	//to easy adjust list for printing
-	var $paging_enabled=true;
+	public $paging_enabled=true;
 	
 	// 1 - integer
-	var $data_object_id_type = 1;
+	public $data_object_id_type = 1;
 	
 	// share with smarty
-	var $options;
+	public $options;
+	
+	public $default_view = 'viewList';	
 	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -41,7 +43,8 @@ class GW_Common_Module extends GW_Module
 		if(! isset($this->model) && ($tmp = $this->app->page->getDataObject()))
 			$this->model = $tmp;
 		
-		$this->smarty->assignByRef('opt', $this->options);
+		$this->tpl_vars['opt'] =& $this->options;
+		
 	}
 	
 	
@@ -187,7 +190,7 @@ class GW_Common_Module extends GW_Module
 			$_REQUEST['id']=$item->get('id');
 		
 		if($_REQUEST['submit_type']==1){//apply
-			$options = $item ? Array('id'=>$item->get('id')) : Array();
+			$options = $item ? ['id'=>$item->get('id')] : [];
 			$this->jump(false, $options+$_GET);
 		}else{ //save
 			
@@ -242,11 +245,7 @@ class GW_Common_Module extends GW_Module
 		
 		$this->fireEvent("AFTER_FORM", $item);
 		
-		
-		$this->smarty->assign('update', (int)$item->get('id'));
-		$this->smarty->assignByRef('item', $item);
-		
-		return $item;
+		return ['update'=> (int)$item->get('id'), 'item'=>$item];
 	}
 	
 	/** 
@@ -268,16 +267,16 @@ class GW_Common_Module extends GW_Module
 	}	
 
 	
-	function setListParams(&$cond='', &$params=Array())
+	function setListParams(&$cond='', &$params=[])
 	{	
 		if(isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
 			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
 			
-		$search=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : array();
+		$search=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : [];
 				
 		
 		foreach($this->filters as $key => $val)
-			$search[$key]=Array('=',$val);
+			$search[$key]=['=',$val];
 								
 		foreach($search as $field => $val)
 		{
@@ -336,7 +335,7 @@ class GW_Common_Module extends GW_Module
 		
 		$alli18n = $this->app->lang['FILTER_ALL'];
 		
-		$views = Array($alli18n=>Array('name'=>$alli18n,'conditions'=>'','default'=>1)) + (array)$views;
+		$views = [$alli18n=>['name'=>$alli18n,'conditions'=>'','default'=>1]] + (array)$views;
 		
 		foreach($views as $i => $view)
 			if(isset($view['default']))
@@ -366,7 +365,7 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 				
-		$this->smarty->assign('views', $views);
+		$this->tpl_vars['views'] =& $views;
 	}
 	
 	function loadOrders()
@@ -377,7 +376,7 @@ class GW_Common_Module extends GW_Module
 		
 		$defi18n_name = $this->app->lang['DEFAULT'];
 		
-		$orders = Array('default'=>Array('name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy(),'default'=>1)) + (array)$orders;
+		$orders = ['default'=>['name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy(),'default'=>1]] + (array)$orders;
 		
 		foreach($orders as $i => $order)
 			if(isset($order['default']))
@@ -396,7 +395,7 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 						
-		$this->smarty->assign('list_orders', $orders);		
+		$this->tpl_vars['list_orders'] =& $orders;
 	}
 	
 	function doSetView()
@@ -416,15 +415,12 @@ class GW_Common_Module extends GW_Module
 		
 		$foundorder=false;
 		
-		
-		
-		
 		if(isset($_REQUEST['name']))
 		{
 			$defi18n_name = $this->app->lang['DEFAULT'];
 			
 			if($_REQUEST['name']==$defi18n_name)
-				$orders[] = array('name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy());
+				$orders[] = ['name'=>$defi18n_name,'order'=>$this->model->getDefaultOrderBy()];
 
 
 			foreach($orders as $order)
@@ -489,12 +485,15 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	
-	function common_viewList($params=Array())
+	function common_viewList($params=[])
 	{
 		$this->loadViews();
 		$this->loadOrders();
 		
+		
 		$cond=isset($params['conditions']) ? $params['conditions'] : false;
+		
+		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
 		$this->setListParams($cond, $params);
 		
@@ -510,19 +509,22 @@ class GW_Common_Module extends GW_Module
 		
 		if($this->model->errors)
 		{
-			$this->list_params=Array();
+			$this->list_params=[];
 			return $this->setErrors($this->model->errors);
 		}
 		
 		$this->setDefaultOrder();//for template
 		
-		$this->smarty->assignByRef('list', $list);
+		
 		
 		if($this->list_params['page_by'])
-			$this->smarty->assign('query_info', $this->model->lastRequestInfo());
+			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();
+		
+		
+		$this->fireEvent('AFTER_LIST', $list);
 			
 			
-		return $list;
+		return ['list'=>$list];
 	}
 	
 	function common_doMove($params=false)
@@ -533,7 +535,7 @@ class GW_Common_Module extends GW_Module
 		$item->move($_REQUEST['where'], $this->getMoveCondition($item));
 		unset($_GET['where']);
 		
-		$this->jump(false, Array('id'=>$item->get('id')));
+		$this->jump(false, ['id'=>$item->get('id')]);
 	}
 	
 	//used to allow user edit field list	
@@ -545,7 +547,7 @@ class GW_Common_Module extends GW_Module
 		if($saved = (array)$this->app->page->fields)
 			$fields = $saved+$fields; //prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
 		
-		$rez = Array();
+		$rez = [];
 		
 		foreach($fields as $id => $enabled)
 			if($enabled)
@@ -565,7 +567,7 @@ class GW_Common_Module extends GW_Module
 			
 		
 		$this->app->page->fields = $fields;
-		$this->app->page->update(Array('fields'));
+		$this->app->page->update(['fields']);
 		
 		$this->jump();
 	}
@@ -574,10 +576,9 @@ class GW_Common_Module extends GW_Module
 	function common_viewDialogConfig()
 	{
 		$fields = $_SESSION['current_module_fields'];
-		$saved = (array)$this->app->page->fields;
+		$saved = $this->app->page->fields ? (array)$this->app->page->fields: [];
 		
-
-		$this->smarty->assign('fields', $saved + $fields);
+		$this->tpl_vars['fields'] = $saved + $fields;
 		
 		ob_flush();
 	}
@@ -608,7 +609,7 @@ class GW_Common_Module extends GW_Module
 		$name = strtolower($name);
 		
 		if(isset($this->allow_auto_actions[$name]))
-			return call_user_func_array(Array($this, "common_$name"), $arguments);
+			return call_user_func_array([$this, "common_$name"], $arguments);
 		else
 			trigger_error('method "'.$name.'" not exists', E_USER_NOTICE);
 	}

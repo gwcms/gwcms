@@ -6,7 +6,7 @@ class GW_Permissions
 	
 	static $table = 'gw_permissions';
 	static $root_group_id = 1;
-	static $cache = Array();
+	static $cache = [];
 	
 	function __construct()
 	{
@@ -27,10 +27,10 @@ class GW_Permissions
 		$group_id=(int)$group_id;
 		$db = self::getDB();
 		
-		$list = Array();
+		$list = [];
 		
 		foreach($path_access as $path => $access_level)
-			$list[] = Array('group_id'=>$group_id, 'path'=>$path, 'access_level'=>$access_level);
+			$list[] = ['group_id'=>$group_id, 'path'=>$path, 'access_level'=>$access_level];
 		
 		self::deleteAll($group_id);
 		$db->_multi_insert(self::$table, $list);
@@ -38,7 +38,7 @@ class GW_Permissions
 	
 	static function deleteAll($group_id)
 	{
-		self::getDB()->delete(self::$table, Array('group_id=?',$group_id));
+		self::getDB()->delete(self::$table, ['group_id=?',$group_id]);
 	}
 	
 	static function getByGroupId($group_id)
@@ -49,7 +49,7 @@ class GW_Permissions
 	static function &__getPrmByMltGrpIds($gids, $path=false)
 	{
 		if(!count($gids))
-			return Array();
+			return [];
 					
 		$sql = "SELECT DISTINCT path, access_level FROM `".self::$table."` WHERE (";
 		foreach($gids as $gid)
@@ -104,6 +104,6 @@ class GW_Permissions
 	
 	static function deleteByPath($path)
 	{
-		self::getDB()->delete(self::$table, Array('path=?',$path));
+		self::getDB()->delete(self::$table, ['path=?',$path]);
 	}
 }
