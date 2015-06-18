@@ -6,7 +6,7 @@ class Module_NewsLetter extends GW_Public_Module
 	function init()
 	{
 		$this->subscriber = new GW_NL_Subscriber;
-		$this->options['groups']=GW::getInstance('GW_NL_Groups')->getOptions();
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptions();
 	}
 
 

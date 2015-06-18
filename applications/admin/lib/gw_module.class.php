@@ -159,8 +159,8 @@ class GW_Module
 		$vars = $this->$name($params);
 						
 		if(is_array($vars))
-			foreach($vars as $name => $var)
-				$this->tpl_vars[$name] =& $vars[$name];
+			foreach($vars as $varname => $var)
+				$this->tpl_vars[$varname] =& $vars[$varname];
 		
 		$this->ob_end();
 
@@ -190,9 +190,7 @@ class GW_Module
 	{
 		
 		$this->smarty->assign('m', $this);
-		
-		foreach($this->tpl_vars as $name => $val)
-			$this->smarty->assign($this->tpl_vars);
+		$this->smarty->assign($this->tpl_vars);
 		
 		
 		//d::dumpas(array_keys($this->tpl_vars));

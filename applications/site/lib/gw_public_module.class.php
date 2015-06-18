@@ -37,12 +37,10 @@ class GW_Public_Module
 	}
 	
 	function processTemplate($name)
-	{
-		
+	{		
 		$this->smarty->assign('m', $this);
 		
-		foreach($this->tpl_vars as $name => $val)
-			$this->smarty->assign($this->tpl_vars);		
+		$this->smarty->assign($this->tpl_vars);		
 
 		if($this->tpl_name)
 			$file=$this->tpl_dir.$this->tpl_name;
@@ -65,10 +63,10 @@ class GW_Public_Module
 		
 		
 		if(is_array($vars))
-			foreach($vars as $name => $var)
-				$this->tpl_vars[$name] =& $vars[$name];		
+			foreach($vars as $varname => $var)
+				$this->tpl_vars[$varname] =& $vars[$varname];		
 		
-
+		
 		$this->processTemplate($name);
 	}
 
