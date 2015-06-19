@@ -7,3 +7,4 @@
  * on view finish return list of template vars or assign to dedicated var $tpl_vars
  * template var $opt returned to $options as long as problem with rewriting (assignByRef vs assign) was solved
  * bugfixes
+ * different list_params availabe per view

@@ -11,6 +11,7 @@
 					<td nowrap class="fontsz5">{$lang.PAGE_BY}:</td>
 					<td>
 						<form method="get" action="{$smarty.server.REQUEST_URI}" style="display:inline">
+						<input type="hidden" name="act" value="do:setListParams" />
 						<input onchange="this.form.submit()" name="list_params[page_by]" size=5 value="{$m->list_params.page_by}" />
 						<input type="hidden" name="list_params[page]" value="0" />
 						</form>	

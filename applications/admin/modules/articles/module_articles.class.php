@@ -3,8 +3,6 @@
 
 class Module_Articles extends GW_Common_Module
 {	
-
-	public $default_view='viewList';
 	
 	function init()
 	{	

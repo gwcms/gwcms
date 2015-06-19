@@ -5,8 +5,12 @@ class Module_NewsLetter extends GW_Public_Module
 
 	function init()
 	{
+		parent::init();
+		
 		$this->subscriber = new GW_NL_Subscriber;
 		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptions();
+		
+		
 	}
 
 
@@ -17,20 +21,15 @@ class Module_NewsLetter extends GW_Public_Module
 		
 	}
 	
-	function viewSubscribe()
-	{		
-		
-		//d::Dumpas($_GET['rid']);
-		//d::Dumpas($_GET['rid']);
-		
+	
+	function __initSubscriber()
+	{
 		$nlid=$_GET['nlid'];
 		$rid=$_GET['rid'];
 		$rid=  base64_decode($rid);
 		
 		
 		$subscriber = $this->subscriber->find(['email=?', $rid]);
-		
-		
 		
 		if(!$subscriber)
 		{
@@ -39,21 +38,66 @@ class Module_NewsLetter extends GW_Public_Module
 			return false;
 		}
 		
-		
-		//d::dumpas([$subscriber, $subscriber->groups, $subscriber->groups]);
-		//$this->smarty->assign();
-		
-		//d::dumpas([$nlid, $rid]);
-		return ['subscriber'=>$subscriber];
-		
-		
+		$this->tpl_vars['newsletter_id']=$nlid;
+		$this->tpl_vars['subscriber']=$subscriber;
+		$this->tpl_vars['selected_groups']=array_flip($subscriber->groups);
+	}
+	
+	
+	function viewSubscribe()
+	{		
+		$this->__initSubscriber();		
+	}
+	
+	function viewSuccess()
+	{
 		
 	}
 	
-	function doTest()
+	
+	function doSubscribe()
 	{		
-		d::ldump('doTest');
+		$this->__initSubscriber();
 		
+		$item = $this->tpl_vars['subscriber'];
+		
+		$success = true;
+		
+		$prev_groups = $item->groups;
+		$post_groups = array_filter($_POST['groups'], 'intval');
+		
+		if($_POST['unsubscribed']==0)
+		{
+			$item->groups = $post_groups;
+			
+		}else{
+			if($_POST['email']!=$item->email)
+			{
+				$this->app->setErrors("Neteisingai nurodytas el. pašto adresas");
+				$success = false;
+			}
+		}
+		
+		if($success){
+			
+			$item->unsubscribed = $_POST['unsubscribed'];
+			$item->save();			
+			
+			//register hit
+			$hit=GW::getInstance('GW_NL_Hit')->createNewObject();
+			$hit->setValues(
+				[
+				    'message_id'=>$this->tpl_vars['newsletter_id'],
+				    'subscriber_id'=>$item->id,
+				    'link'=>$item->unsubscribed ? 'unsubscribe' : 'newsgroup change '.implode(',', $prev_groups).' > '.implode(',', $post_groups)
+				]
+			);
+			$hit->insert();
+			
+			$this->app->jump(dirname($this->app->path).'/success');
+		}else{
+			$this->app->jump(false, $_GET);
+		}
 	}
 
 	

@@ -149,7 +149,7 @@ var gw_adm_sys =
 	
 	change_page: function(page)
 	{
-		gw_navigator.jump(false, {'list_params[page]': page})
+		gw_navigator.jump(false, {'act':'doSetListParams','list_params[page]': page})
 		return false;
 	},
 	

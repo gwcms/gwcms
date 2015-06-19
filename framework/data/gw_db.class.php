@@ -424,7 +424,17 @@ class GW_DB
 			$conditions[0] = implode(' '.$operator.' ', $conditions[0]);
 		
 		return $conditions;
-	}	
+	}
+	
+	static function inCondition($fieldname, $ids)
+	{
+		if(!$ids)
+			return '1=0';
+		
+		$ids = array_filter($ids, 'intval');
+		
+		return $fieldname.' IN ('. implode(',', $ids).')';
+	}
 	
 	static function escape($mixed)
 	{

@@ -3,7 +3,6 @@
 
 class Module_Messages extends GW_Common_Module
 {	
-	public $default_view='viewList';
 	
 	function init()
 	{	
@@ -19,9 +18,21 @@ class Module_Messages extends GW_Common_Module
 		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts();		
 	}
 	
-	function __eventAfterList()
+	
+	function __addHitCounts(&$list)
+	{
+		#attach counts
+		$counts = GW::getInstance('GW_NL_Hit')->countGrouped('message_id', GW_DB::inCondition('message_id', array_keys($list) ));		
+		
+		foreach($list as $id => $item)
+			$item->hit_count = isset($counts[$id]) ? $counts[$id] : 0;
+	}	
+	
+	function __eventAfterList(&$list)
 	{
 		$this->tpl_vars['lasttestmail']=GW::getInstance('GW_Config')->get('newsletter/lastmail');
+		
+		$this->__addHitCounts($list);
 	}
 	
 	function __eventAfterSave($item)
@@ -138,5 +149,41 @@ class Module_Messages extends GW_Common_Module
 			$this->app->setMessage('Testinis laiško siuntimas nepavyko. Gavėjas: '.$mail);
 		}
 		$this->jump();
+	}
+	
+	function viewHits()
+	{		
+		if(! $item = $this->getDataObjectById())
+			return false;
+		
+		$cond = "message_id=".(int)$item->id;
+		$this->setListParams($cond, $params);
+		
+		
+		$params['key_field']='id';
+		
+		$list = GW::getInstance('GW_NL_Hit')->findAll($cond, $params);
+		
+		if($this->list_params['page_by'])
+			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();		
+		
+		$this->__addSubscribers($list);
+		return ['list'=>$list];
+	}
+	
+	function __addSubscribers(&$list)
+	{
+		#attach counts
+		$subscriber_ids = [];
+		foreach($list as $item)
+			$subscriber_ids[]=$item->subscriber_id;
+		
+		$subscribers = GW::getInstance('GW_NL_Subscriber')->findAll( GW_DB::inCondition('id', $subscriber_ids),['key_field'=>'id']);		
+		
+		
+		foreach($list as $item)
+			if(isset($subscribers[$item->subscriber_id]))
+				$item->subscriber = $subscribers[$item->subscriber_id];
 	}	
+	
 }

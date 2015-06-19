@@ -3,8 +3,6 @@
 
 class Module_Modules extends GW_Common_Module
 {
-	public $default_view = 'viewList';
-
 	function init()
 	{
 		$this->model = new GW_ADM_Page();//nebutinas uzloadina per lang faila jei nurodyta

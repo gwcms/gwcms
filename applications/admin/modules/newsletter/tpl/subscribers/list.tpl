@@ -3,14 +3,22 @@
 
 {block name="init"}
 
-
+	{function name=dl_toolbar_buttons_import} 
+		{gw_link relative_path=import title=Importuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{/function}
+	{function name=dl_toolbar_buttons_export} 
+		{gw_link relative_path=export title=Eksportuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{/function}
+	
 	{$display_fields=[title=>1,
 		email=>1,
 		lang=>1,
 		groups=>1,insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	
+	{$dl_toolbar_buttons[] = hidden}
+	{$dl_toolbar_buttons_hidden=[import,export,dialogconf]}	
 	
 	{$dl_actions=[invert_active,edit,delete]}
 	

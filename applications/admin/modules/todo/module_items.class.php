@@ -4,8 +4,7 @@
 class Module_Items extends GW_Common_Module_Tree_Data
 {	
 	
-	public $default_view = 'viewList';
-	
+
 	function init()
 	{
 		parent::init();
@@ -43,10 +42,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		if(!$ids)
 			return;
-		
-		$ids_cond = "parent_id IN (".implode(',', $ids).")";
-		
-		$comment_list = GW::getInstance('GW_Todo_Item')->findAll("type=2 AND ".$ids_cond,
+				
+		$comment_list = GW::getInstance('GW_Todo_Item')->findAll("type=2 AND ".GW_DB::inCondition(parent_id, $ids),
 			[
 			    'select'=>'LEFT(description, 100) AS description, parent_id',
 			    'order'=>'id DESC',

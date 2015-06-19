@@ -3,9 +3,6 @@
 
 class Module_Groups extends GW_Common_Module
 {	
-
-	public $default_view='viewList';
-
 		
 	function __eventAfterList(&$list)
 	{
@@ -14,7 +11,5 @@ class Module_Groups extends GW_Common_Module
 		
 		foreach($list as $id => $item)
 			$item->subscribers_count = isset($counts[$id]) ? $counts[$id] : 0;
-		
-		
 	}
 }

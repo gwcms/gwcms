@@ -31,7 +31,7 @@ class GW_Public_Module
 	}
 	
 	function init()
-	{
+	{		
 		$this->tpl_vars['messages'] =& $this->messages;
 		$this->tpl_vars['options'] =& $this->options;
 	}

@@ -382,14 +382,16 @@ class GW_Application
 		
 		$this->module =& $module;
 
+		
+		$path_info['params'] = isset($path_info['params']) ? $path_info['params'] : [];
+		
+		$module->_args = ['params'=>$path_info['params'], 'request_params'=>$request_params];
 		$module->init();
 		
 		//if(GW::$app->inner_request)
 		//	$module->ob_collect = false;
 		
-                $path_info['params'] = isset($path_info['params']) ? $path_info['params'] : Array();
-                
-		$module->process($path_info['params'], $request_params);		
+		$module->process();		
 	}
 	
 	

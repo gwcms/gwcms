@@ -27,7 +27,7 @@ class GW_Common_Module extends GW_Module
 	// share with smarty
 	public $options;
 	
-	public $default_view = 'viewList';	
+	public $default_view = 'list';
 	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -314,6 +314,13 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 		
+		if($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by'])
+		{
+			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page']-1 : 0;
+			$params['offset']=$this->list_params['page_by']*$page;
+			$params['limit']=$this->list_params['page_by'];
+		}		
+		
 		if(isset($this->list_params['order']) && $ord=$this->list_params['order'])
 			$params['order']=$ord;
 			
@@ -497,12 +504,7 @@ class GW_Common_Module extends GW_Module
 		
 		$this->setListParams($cond, $params);
 		
-		if($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by'])
-		{
-			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page']-1 : 0;
-			$params['offset']=$this->list_params['page_by']*$page;
-			$params['limit']=$this->list_params['page_by'];
-		}
+
 		$params['key_field']=$this->model->primary_fields[0];
 		
 		$list = $this->model->findAll($cond, $params);

@@ -41,7 +41,9 @@
 		<i id="row_num">Eil. nr.</i>
 		<i id="time">Laikas</i>
 		<i id="comments">Komentarai, pastabos</i>
-		
+		<i id="hits">Aktyvumas</i>		
+		<i id="subscriber_id">Prenumeratorius</i>		
+		<i id="sent_time">Išsiuntimo laikas</i>		
 	</i>
 	<i id="OPT">
 		<i id="lang">
@@ -61,6 +63,9 @@
 	
 	<i id="VIEWS">
 		<i id="sentinfo">Išsiuntimo informacija</i>
+		<i id="hits">Aktyvumo žurnalas</i>
+		<i id="import">Importavimas iš spreadsheet</i>
+		<i id="export">Eksportavimas į spreadsheet</i>
 	</i>
 	
 	<i id="UNSUBSCRIBE_LINK">
@@ -69,6 +74,9 @@
 		<i id="EN">Link</i>		
 		<i id="RU">Link</i>		
 	</i>
+	
+	<i id="INSERTED">Naujas</i>
+	<i id="UPDATED">Atnaujintas</i>
 	
 		
 

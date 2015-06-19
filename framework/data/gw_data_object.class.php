@@ -286,6 +286,14 @@ class GW_Data_Object
 		return $db->count($this->table, $condition, $this->db_die_on_error);
 	}
 	
+	function countGrouped($groupby, $condition)
+	{
+		$counts_sql = "SELECT `$groupby`, count(*) AS cnt FROM `{$this->table}` WHERE $condition GROUP BY `$groupby`";
+		
+		return $this->getDb()->fetch_assoc($counts_sql);		
+	}
+	
+	
 	function getColumns()
 	{
 		$db =& $this->getDB();

@@ -6,6 +6,7 @@ class GW_Module
 	
 	public $db;
 	public $action_name;
+	public $view_name;
 	public $tpl_dir;
 	public $module_dir;
 	public $module_name;
@@ -30,7 +31,8 @@ class GW_Module
 	 */
 	public $tpl_file_name;
 	public $tpl_vars;
-	public $default_view='viewDefault';
+	public $default_view='default';
+	public $_args=[];//data passed from application params, request_params
 	
 	
 	function getInfo()
@@ -56,6 +58,8 @@ class GW_Module
 		
 		$this->lang = GW_Lang_XML::load("{$this->module_dir}lang.xml", $this->app->ln);
 		
+		$this->__processViewSolveViewName();
+		
 		$this->loadErrorFields();
 		$this->initListParams();
 		
@@ -64,27 +68,27 @@ class GW_Module
 	
 	function initListParams()
 	{
-		$sess_store =& $_SESSION[implode('/',$this->module_path)];
+		
+		$sess_store =& $_SESSION[implode('/',$this->module_path).'/'.$this->view_name];
 		
 		if(!$sess_store)
 			$sess_store=[];
 		
 		$this->list_params = array_merge($this->list_params, $sess_store);
-				
-		if(isset($_GET['list_params']))
-			die('LIST_PARAMS_DEPRECATED');		
 		
+		$sess_store = $this->list_params;
+		$this->list_params =& $sess_store;		
+	}
+	
+	function doSetListParams()
+	{
 		if(isset($_GET['list_params']) && ($tmp = $_GET['list_params']))
 			$this->list_params = array_merge($this->list_params, $tmp);
-			
-		$sess_store = $this->list_params;
-		$this->list_params =& $sess_store;
 		
-		if(isset($_GET['list_params']) && $_GET['list_params'])
-		{
-			unset($_GET['list_params']);
-			$this->jump();
-		}
+		
+		unset($_GET['list_params']);
+		$this->jump();
+			
 	}
 	
 	function methodExists($name)
@@ -149,14 +153,24 @@ class GW_Module
 
 
 	
+	function __processViewSolveViewName()
+	{
+		$params = $this->_args['params'];
+		
+		$name = self::__funcVN(isset($params[0]) ? $params[0] : false);
+		
+		$this->view_name = $name;
+		
+		if(!$this->isPublic("view{$name}"))
+			$this->view_name = $this->default_view;	
+		
+	}
+	
 	function processView($name='',$params=[])
 	{
 		$this->ob_start();
-
-		$this->isPublic($name="view$name") || $name=$this->default_view;
-		$this->action_name=$name;
-
-		$vars = $this->$name($params);
+		
+		$vars = $this->{"view{$this->view_name}"}($params);
 						
 		if(is_array($vars))
 			foreach($vars as $varname => $var)
@@ -168,8 +182,10 @@ class GW_Module
 	}
 	
 	
-	function process($params=Array(), $request_params=[])
+	function process()
 	{
+		extract($this->_args);
+		
 		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
 			$this->process_act($act);
@@ -178,11 +194,8 @@ class GW_Module
 				return true;
 		}
 		
-		$params=(array)$params;
-		$this->processView(self::__funcVN(
-			isset($params[0]) ? $params[0] : false), 
-			array_splice($params,1)
-			);
+		
+		$this->processView($this->view_name, array_splice($params,1));
 	}
 	
 	
@@ -193,25 +206,17 @@ class GW_Module
 		$this->smarty->assign($this->tpl_vars);
 		
 		
-		//d::dumpas(array_keys($this->tpl_vars));
-		
-		if($this->tpl_file_name)
-		{
-			$file = $this->tpl_file_name;
-		}else{
-			$basename=preg_replace('/^view|do/','',strtolower($this->action_name));
-			$file=$this->tpl_dir.$basename;
-		}
-		
 
+		$file = $this->tpl_file_name ? $this->tpl_file_name : $this->tpl_dir.$this->view_name;
+
+		
 		if(file_exists($tmp = $file.'.php')){
 			include $tmp;
 		}else{
-			
 			//iesko modulio tpl kataloge
 			if(!file_exists($tmp = $file.'.tpl'))
 				//ieskoti default kataloge
-				if(!file_exists($tmp = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/".$basename.'.tpl'))
+				if(!file_exists($tmp = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/".$this->view_name.'.tpl'))
 					$tmp='default_empty.tpl';
 					
 		}
@@ -266,7 +271,7 @@ class GW_Module
 	}
 	
 	function doSetFilters()
-	{
+	{		
 		$this->list_params['filters'] = $_REQUEST['filters_unset'] ? [] : $_REQUEST['filters'];
 		$this->list_params['page']=0;
 				
