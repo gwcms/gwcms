@@ -25,7 +25,7 @@ class Module_Comments extends Module_Items
   			$this->tpl_vars['comment'] =& $comment; 
   		}	
   	}
-  	
+
 	function eventHandler($event, &$context)
 	{
 		switch($event)

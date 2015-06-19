@@ -43,7 +43,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if(!$ids)
 			return;
 				
-		$comment_list = GW::getInstance('GW_Todo_Item')->findAll("type=2 AND ".GW_DB::inCondition(parent_id, $ids),
+		$comment_list = GW::getInstance('GW_Todo_Item')->findAll("type=2 AND ".GW_DB::inCondition('parent_id', $ids),
 			[
 			    'select'=>'LEFT(description, 100) AS description, parent_id',
 			    'order'=>'id DESC',

@@ -80,33 +80,45 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
+	function __prepareMessage(&$msg, $letter, $linkbase , $recipient)
+	{		
+		# 1 - VARDAS PAVARDE
+		$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
+
+		$linkbase = $linkbase.strtolower($recipient->lang)."/direct/newsletter/newsletter/";
+		
+		# 2 - ATSISAKYMO LINKAS
+		$us_link="subscribe?nlid={$letter->id}&rid=";	
+		$us_link=$us_link.base64_encode($recipient->email);
+		$us_link='<a href="'.$us_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][strtoupper($recipient->lang)].'</a>';
+		$msg = str_replace('%UNSUBSCRIBE%', $us_link, $msg);
+		
+		# 3 - TRACKING PRIDEJIMAS
+		$trackinglink=$linkbase."link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
+		$msg = str_replace('%%TRACKINGLINK%%', $trackinglink, $msg);
+	}
+	
 	
 	function __doSend($item, $recipients)
 	{
 		$sent_info = [];
 		$sent_count=0;
 		
+		$linkbase = Navigator::getBase(true).'site/';	
 		
-		$msg = $item->body;
+		$message = $item->body;
+		$message = GW_Link_Helper::trackingLink($message);
 		
-		$unsubscribe_link = Navigator::getBase(true).'site/';	
+		
 		
 		foreach($recipients as $recipient){
 			
-			$msg = $item->body;
+			$msg = $message;
 			$subj = $item->subject;
 			
-			$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
+			$this->__prepareMessage($msg, $item, $linkbase, $recipient);
 			
-			$us_link=$unsubscribe_link.strtolower($recipient->lang)."/direct/newsletter/newsletter/subscribe?nlid={$item->id}&rid=";	
-			$us_link=$us_link.base64_encode($recipient->email);
-			$us_link='<a href="'.$us_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][strtoupper($recipient->lang)].'</a>';
-			$msg = str_replace('%UNSUBSCRIBE%', $us_link, $msg);
-			
-			//d::dumpas([$recipient, $msg, $subj, $item->sender]);
-			
-			
-			//d::dumpas([$msg, $data]);
+
 			$headers = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 			
