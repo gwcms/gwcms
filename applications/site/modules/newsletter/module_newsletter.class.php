@@ -18,9 +18,7 @@ class Module_NewsLetter extends GW_Public_Module
 	{
 		//dump($this->lang);
 		//exit;		
-		
 	}
-	
 	
 	function __initSubscriber()
 	{
