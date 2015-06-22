@@ -17,7 +17,7 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[test,clone,edit,delete,send]}
+	{$dl_actions=[test,clone,edit,invert_active,delete,send]}
 	
 	{function dl_actions_test}
 		{gw_link 

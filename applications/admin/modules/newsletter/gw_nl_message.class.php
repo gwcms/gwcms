@@ -3,9 +3,10 @@
 
 class GW_NL_Message extends GW_Data_Object
 {
-	var $table = 'gw_nl_messages';
+	public $table = 'gw_nl_messages';
 
-	var $encode_fields = Array('groups'=>'json', 'sent_info'=>'jsono');
+	public $encode_fields = Array('groups'=>'json', 'sent_info'=>'jsono');
+	public $calculate_fields = ['body_full'=>'getBodyFull'];
 	
 	public $validators = [
 	    'title'=>['gw_string', ['required'=>1]],
@@ -28,6 +29,11 @@ class GW_NL_Message extends GW_Data_Object
 		$r = GW::getInstance('GW_NL_Subscriber')->findAll(['active=1 AND unsubscribed=0 AND lang=? AND '.$groups_cond, $this->lang]);
 		
 		return $r;
+	}
+	
+	function getBodyFull()
+	{
+		return "<html><body style='margin:0'>".$this->body."</body></html>";
 	}
 	
 }			

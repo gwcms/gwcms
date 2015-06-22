@@ -68,11 +68,11 @@
 		<i id="export">Eksportavimas į spreadsheet</i>
 	</i>
 	
-	<i id="UNSUBSCRIBE_LINK">
+	<i id="LINK">
 		<i id="">Nuoroda</i>
 		<i id="LT">Nuoroda</i>
 		<i id="EN">Link</i>		
-		<i id="RU">Link</i>		
+		<i id="RU">Cсылка</i>		
 	</i>
 	
 	<i id="INSERTED">Naujas</i>

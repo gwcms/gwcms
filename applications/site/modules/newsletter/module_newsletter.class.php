@@ -25,11 +25,11 @@ class Module_NewsLetter extends GW_Public_Module
 	function __initSubscriber()
 	{
 		$nlid=$_GET['nlid'];
-		$rid=$_GET['rid'];
-		$rid=  base64_decode($rid);
+		$recipient_email=$_GET['re'];
+		$recipient_email=  base64_decode($recipient_email);
 		
 		
-		$subscriber = $this->subscriber->find(['email=?', $rid]);
+		$subscriber = $this->subscriber->find(['email=?', $recipient_email]);
 		
 		if(!$subscriber)
 		{
@@ -126,6 +126,40 @@ class Module_NewsLetter extends GW_Public_Module
 			$this->app->jump(false, $_GET);
 		}
 	}
+	
+	function viewItem()
+	{
+		if(!isset($_GET['nlid']) || !isset($_GET['rid']) || !isset($_GET['re']))
+			die('Bad link Errcode: 651956'); 
+		
+		$letter = GW::getInstance('GW_NL_Message')->find(['active=1 AND id=?', $_GET['nlid']]);
+		
+		if(!$letter)
+			die('Link expired');
+
+		
+		$recipient = $this->subscriber->find(['id=? AND email=?', $_GET['rid'], base64_decode($_GET['re'])]);
+		$this->smarty->assign('NAME', $recipient->name.' '.$recipient->surname);
+		
+		
+		$us_link="subscribe?nlid={$letter->id}&rid=".base64_encode($recipient->email);
+		$us_link='<a href="'.$us_link.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
+		
+		$this->smarty->assign('UNSUBSCRIBE', $us_link);
+		
+		
+		$message = $letter->body_full;
+		$message = GW_Link_Helper::trackingLink($message);
+		
+		$trackinglink="link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
+		$message = str_replace('##TRACKINGLINK##', $trackinglink, $message);
+		
+		
+		
+		echo $this->smarty->fetch('string:'.$message);
+		exit;
+		
+	}	
 
 	
 

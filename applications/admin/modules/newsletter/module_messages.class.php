@@ -35,9 +35,10 @@ class Module_Messages extends GW_Common_Module
 		$this->__addHitCounts($list);
 	}
 	
-	function __eventAfterSave($item)
+	function __eventBeforeSave($item)
 	{
-		$item->recipients_count = count($item->getRecipients());		
+		$item->recipients_count = count($item->getRecipients());
+		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);		
 	}
 	
 	
@@ -83,19 +84,30 @@ class Module_Messages extends GW_Common_Module
 	function __prepareMessage(&$msg, $letter, $linkbase , $recipient)
 	{		
 		# 1 - VARDAS PAVARDE
-		$msg = str_replace('%NAME%', $recipient->name.' '.$recipient->surname, $msg);
+		$this->smarty->assign('NAME', $recipient->name.' '.$recipient->surname);
 
 		$linkbase = $linkbase.strtolower($recipient->lang)."/direct/newsletter/newsletter/";
 		
+		
 		# 2 - ATSISAKYMO LINKAS
-		$us_link="subscribe?nlid={$letter->id}&rid=";	
-		$us_link=$us_link.base64_encode($recipient->email);
-		$us_link='<a href="'.$us_link.'">'.$this->lang['UNSUBSCRIBE_LINK'][strtoupper($recipient->lang)].'</a>';
-		$msg = str_replace('%UNSUBSCRIBE%', $us_link, $msg);
+		
+		$reml_encoded = base64_encode($recipient->email);
+		$us_link=$linkbase."subscribe?nlid={$letter->id}&re=";	
+		$us_link=$us_link.$reml_encoded;
+		$us_link='<a href="'.$us_link.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
+		
+		$this->smarty->assign('UNSUBSCRIBE', $us_link);
+		
+		$link_online = $linkbase.'item?nlid='.$letter->id.'&rid='.$recipient->id.'&re='.$reml_encoded;
+		$link_online = '<a href="'.$link_online.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
+		$this->smarty->assign('LINKONLINE', $link_online);
 		
 		# 3 - TRACKING PRIDEJIMAS
 		$trackinglink=$linkbase."link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
-		$msg = str_replace('%%TRACKINGLINK%%', $trackinglink, $msg);
+			
+		$msg = $this->smarty->fetch('string:'.$msg);		
+		
+		$msg = str_replace('##TRACKINGLINK##', $trackinglink, $msg);
 	}
 	
 	
@@ -106,9 +118,12 @@ class Module_Messages extends GW_Common_Module
 		
 		$linkbase = Navigator::getBase(true).'site/';	
 		
-		$message = $item->body;
-		$message = GW_Link_Helper::trackingLink($message);
+		$message = $item->body_full;
 		
+		//$message="<a href='http://www.menuturas.lt/newsletter_images/nl1-head.jpg'>Abc</a>";
+		//d::dumpas(htmlspecialchars(GW_Link_Helper::trackingLink($message)));
+		
+		$message = GW_Link_Helper::trackingLink($message);
 		
 		
 		foreach($recipients as $recipient){
@@ -140,6 +155,8 @@ class Module_Messages extends GW_Common_Module
 			$sent_info[]=$info;
 		}
 		
+		d::dumpas($msg);
+		
 		return ['sent_count'=>$sent_count, 'sent_info'=>$sent_info];
 	}
 	
@@ -153,7 +170,10 @@ class Module_Messages extends GW_Common_Module
 		
 		GW::getInstance('GW_Config')->set('newsletter/lastmail', $mail);
 		
-		$info = $this->__doSend($item, [(object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail,'lang'=>'lt']]);
+		if(!($recipient=GW::getInstance('GW_NL_Subscriber')->find(['email=?', $mail])))
+			$recipient = (object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail,'lang'=>'lt'];
+		
+		$info = $this->__doSend($item, [$recipient]);
 		
 		if($info['sent_count']) {
 			$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
