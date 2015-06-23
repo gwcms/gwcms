@@ -35,8 +35,8 @@
 			<en>Category</en>
 		</i>
 		<i id="priority">
-			<lt>Svarba</lt>
-			<en>Impotance</en>
+			<lt>Prioritetas</lt>
+			<en>Priority</en>
 		</i>
 		<i id="deadline">
 			<lt>Terminas</lt>
@@ -59,7 +59,15 @@
 		
 		<i id="actions1">Veiksmai</i>		
 		<i id="project_id">Projektas</i>		
-
+		<i id="week">Savaitė</i>
+	</i>
+	<i id="FIELDS_SHORT">
+		<i id="week">S</i>
+		<i id="deadline">Term</i>
+		<i id="id">Id</i>
+		<i id="priority">P</i>
+		<i id="user_exec">Vykdo</i>
+		<i id="time_have">Laikas</i>
 	</i>
 	
 	
