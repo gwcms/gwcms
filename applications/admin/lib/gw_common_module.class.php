@@ -415,6 +415,9 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 	}
 	
+	// key=>value rule fieldname=>1
+	public $allowed_order_columns=[];
+	
 	function doSetOrder()
 	{
 		
@@ -444,7 +447,7 @@ class GW_Common_Module extends GW_Module
 			$this->list_params['orders']['name'] = $_REQUEST['name'];
 		}elseif(isset($_REQUEST['order'])){
 			
-			if(!$this->__validateOrder($_REQUEST['order'], $this->model->getColumns()))
+			if(!$this->__validateOrder($_REQUEST['order'], $this->allowed_order_columns+$this->model->getColumns()))
 			{
 				$this->setErrors('/GENERAL/BAD_ORDER_FIELD'); 
 				$this->jump();
@@ -477,14 +480,14 @@ class GW_Common_Module extends GW_Module
 			foreach($matches as $match)
 				if(!isset($columns[$match[1]]))
 					return false;
-				
+			
 			
 			$orders=[];
 			foreach($matches as $match)
 				$orders[]=$match[1].' '.$match[2];
 			
 			$order=implode(',', $orders);
-				
+			
 			return true;
 		}else{
 			return false;

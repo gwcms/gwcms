@@ -16,9 +16,12 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		$params['conditions']='type<2 ';
 		
+		//rodyti paskutini komentara
 		$params['select']='*, (SELECT LEFT(description, 100) FROM gw_todo AS aaa WHERE aaa.parent_id=a.id ORDER BY `id` DESC LIMIT 1) AS last_comment';
 	}
 	
+	
+	public $allowed_order_columns=['last_comment'=>1];
 	
 	function doSwitchState()
 	{
