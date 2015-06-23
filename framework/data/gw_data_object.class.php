@@ -149,14 +149,28 @@ class GW_Data_Object
 	 */	
 	function findAllTable($params)
 	{
-			return $this->table;
+		$tables = ["`$this->table` AS a"];
+		
+		if(isset($params['from_extra'])){
+			foreach($params['from_extra'] as $index=> $table)
+				$tables="`$table` AS ".chr(97+1+$index);
+		}
+		
+		return implode(', ', $tables);
 	}
 	
 
+	/*
+	 * PAGAL susitarima FROM lenteles gauna aliasus a-z
+	 * LEFTJOIN lenteles aa-az
+	 * RIGHTJOIN lenteles ba-bz
+	 * SUBQUERIU lenteles is select aaa-aaz
+	 */
+	
 	function buildSql($options)
 	{
 		$conditions = isset($options['conditions']) ? $options['conditions'] : '';
-		$select = isset($options['select']) ? $options['select'] : '*';
+		$select = isset($options['select']) ? $options['select'] : 'a.*';
 		
 		if(isset($options['assoc_fields']))
 			$select=join(',', $options['assoc_fields']);
