@@ -2,7 +2,6 @@
 
 class GW_Site_Application extends GW_Application
 {
-	public $user_class="GW_User";
 	public $path_arg=Array();
 
 	function getPage()

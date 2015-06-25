@@ -1,9 +1,7 @@
 <?php
 
 class GW_Admin_Application extends GW_Application
-{
-	public $user_class="GW_User";
-	
+{	
 	function checkCompatability()
 	{
 		//NO MSIE 6

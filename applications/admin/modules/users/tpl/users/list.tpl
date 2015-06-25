@@ -19,7 +19,7 @@
 	
 	{function dl_cell_group_ids}
 		{foreach from=$item->group_ids key=ind item=gid}
-			{if $ind!=0}, {/if}<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$groups_options.$gid}</a>
+			{if $ind!=0}, {/if}<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$options.group_ids.$gid}</a>
 		{/foreach}	
 	{/function}
 

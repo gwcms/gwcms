@@ -8,8 +8,21 @@ class Module_Users extends GW_Common_Module
 		$this->model = new GW_User();
 		$this->group0 = new GW_Users_Group();
 		
+		
+		$this->__initGroupOptions();
 		parent::init();
 	}
+
+	function __initGroupOptions()
+	{
+		$options = $this->group0->getAssoc(Array('id','title'));
+		
+		if(!$this->app->user->isRoot())
+			unset($options[$this->group0->root_group_id]);
+		
+		$this->options['group_ids'] =$options;
+	}
+		
 
 	function canBeAccessed($item, $die=true, $load = true)
 	{	
@@ -28,9 +41,7 @@ class Module_Users extends GW_Common_Module
 	
 	
 	function viewList()
-	{
-		$this->assignGroupOptions();
-		
+	{		
 		$list = $this->model->findAll('removed=0');	
 		
 		if(!$this->app->user->isRoot())
@@ -42,24 +53,7 @@ class Module_Users extends GW_Common_Module
 		
 		return ['list'=>$list];
 	}	
-	
-	function assignGroupOptions()
-	{
-		$options = $this->group0->getAssoc(Array('id','title'));
-		
-		if(!$this->app->user->isRoot())
-			unset($options[$this->group0->root_group_id]);
-		
-		$this->tpl_vars['groups_options']=$options;		
-	}
-	
-	function viewForm()
-	{
-		$this->assignGroupOptions();
-		
-		$item = parent::viewForm();		
-	}
-	
+
 	function doSave()
 	{
 		$vals = $_REQUEST['item'];

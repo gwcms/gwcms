@@ -394,10 +394,14 @@ var gw_session =
 	keep_timer: 0,
 	exp: 1,	
 	
+	keep_infinity: function(){
+		$.ajax({url: 'tools/session_keep'});
+	},
+	
 	keep: function(left_secs)
 	{
 		if(!left_secs)
-			return $.ajax({url: 'tools/session_keep.php', success: gw_session.keep});
+			return $.ajax({url: 'tools/session_keep', success: gw_session.keep});
 		
 		gw_session.time_left(left_secs);
 		
@@ -468,7 +472,9 @@ var gw_session =
 			gw_session.keep_timer = setInterval('gw_session.keep(0)', 5*60*1000);//5min
 			gw_session.display_timer60 = setInterval(gw_session.timer_update, 60*1000);//1min
 			gw_session.timer_update();
-		}		
+		}else{
+			setInterval('gw_session.keep_infinity()', 5*60*1000);//5min
+		}
 	}
 	
 }

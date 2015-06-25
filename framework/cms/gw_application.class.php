@@ -27,8 +27,9 @@ class GW_Application
 	
 	//argumentai kurie bus išlaikomi jumpinant, sudarinėjant linkus, perduodami per formas
 	//pvz jei bus Array('pid'=>1), visad bus pernesama pid reiksme
-	var $carry_params = Array();
-	var $inner_request = false;	
+	public $carry_params = Array();
+	public $inner_request = false;
+	public $user_class="GW_User";
 	
 	
 	/*
