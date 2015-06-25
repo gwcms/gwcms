@@ -32,6 +32,7 @@
 		<i id="email">El. paštas</i>
 		<i id="lang">Kalba</i>
 		<i id="groups">Grupės</i>
+		<i id="groups_string">Grupės</i>
 		<i id="status">Būklė</i>
 		
 		<i id="unsubscribed">Atsisakė</i>
