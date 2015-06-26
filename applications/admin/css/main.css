@@ -412,4 +412,4 @@ p{}
 	background-color:#eee;
 }
 
-.cke{ padding:0;border: 0; }
+.cke{ padding:0 !important;border: 0 !important; }
