@@ -11,6 +11,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'codemirror';	
 	config.removePlugins = 'elementspath,save,font,forms,flash,pagebreak,smiley,language';	
 	config.skin = 'kama';
+	config.allowedContent=true; //jei neuzsetintas viska filtruos
 	
 	config.toolbarCanCollapse = true;	
 	
