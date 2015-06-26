@@ -9,7 +9,7 @@
 
 
 
-{$ck_options=[toolbarStartupExpanded=>false, autoParagraph=>false]}
+{$ck_options=[toolbarStartupExpanded=>false, autoParagraph=>false, contentsCss=>'applications/admin/css/newsletter.css']}
 
 
 {include file="elements/input.tpl" type=htmlarea name=body remember_size=1}

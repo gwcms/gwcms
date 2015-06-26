@@ -7,6 +7,7 @@
 
 
 {$ck_editor_opt=['width'=>$width, 'language'=>$app->ln]}
+{$ck_editor_opt['contentsCss']='applications/site/css/style.css'}
 
 
 
@@ -40,7 +41,7 @@
 
 
 
-
+{*d::ldump([$ck_options,$ck_editor_opt])*}
 
 {if $ck_options=='minimum'}
 	{$ck_editor_opt['toolbarStartupExpanded']=false}
