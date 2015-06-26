@@ -14,4 +14,23 @@
 <input type="hidden" name="act" value="do:{$action|default:"save"}" />
 <input type="hidden" name="item[id]" value="{$item->id}" />
 
+
+<script>
+	
+	$(function(){
+		$('#itemform').attr('rel', $('#itemform').serialize());	
+	})
+	
+	$('#itemform').submit(function() {
+		window.onbeforeunload = null;
+	});	
+
+	
+	window.onbeforeunload = function() {
+		if($('#itemform').attr('rel') != $('#itemform').serialize())
+			return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
+	}	
+	
+</script>
+
 <table class="gwTable" style="width:100%">
