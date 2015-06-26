@@ -5,7 +5,7 @@ class GW_Link_Helper
 {
 	static function __trackingLink($match)
 	{
-		
+		$match[2]=str_replace('&amp;','&', $match[2]);
 		
 		return $match[1].'##TRACKINGLINK##'.  base64_encode($match[2]).$match[3];
 	}
