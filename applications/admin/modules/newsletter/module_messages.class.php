@@ -37,7 +37,8 @@ class Module_Messages extends GW_Common_Module
 	
 	function __eventBeforeSave($item)
 	{
-		$item->recipients_count = count($item->getRecipients());
+		$item->recipients_count = $item->getRecipientsCount();
+		
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);		
 	}
 	

@@ -18,7 +18,7 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 	
 	function getTitle()
 	{
-		return $this->email ? "$this->name $this->surname <$this->email>" : '';
+		return $this->email ? "$this->name $this->surname &lt;$this->email&gt;" : '';
 	}
 	
 	
