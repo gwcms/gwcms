@@ -30,10 +30,10 @@
 	{/function}
 	
 	{function dl_actions_send}
-		{if $item->status < 10}
+		{if $item->status < 11}
 			{gw_link do="send" icon="email_go" params=[id=>$item->id] show_title=0 confirm=1 title="Send email"}
 		{else}
-			{gw_link icon=action_info relative_path="`$item->id`/sentinfo" params=[id=>$item->id] title=$m->lang.VIEWS.sentinfo show_title=0}
+			{gw_link icon=action_info relative_path="`$item->id`/sentinfo" title=$m->lang.VIEWS.sentinfo show_title=0}
 		{/if}
 	{/function}
 	

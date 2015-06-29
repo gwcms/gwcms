@@ -433,6 +433,9 @@ class GW_DB
 		
 		$ids = array_filter($ids, 'intval');
 		
+		if(strpos($fieldname,'`')===false)
+			$fieldname = '`'.$fieldname.'`';
+		
 		return $fieldname.' IN ('. implode(',', $ids).')';
 	}
 	

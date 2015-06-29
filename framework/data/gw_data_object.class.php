@@ -162,8 +162,9 @@ class GW_Data_Object
 
 	/*
 	 * PAGAL susitarima FROM lenteles gauna aliasus a-z
-	 * LEFTJOIN lenteles aa-az
-	 * RIGHTJOIN lenteles ba-bz
+	 * LEFT JOIN lenteles aa-az
+	 * RIGHT JOIN lenteles ba-bz
+	 * INNER JOIN ca-cz
 	 * SUBQUERIU lenteles is select aaa-aaz
 	 */
 	
@@ -181,6 +182,13 @@ class GW_Data_Object
 		
 		$options['conditions']=$conditions;
 		$sql = "SELECT SQL_CALC_FOUND_ROWS {$select} FROM ".$this->findAllTable($options);
+		
+		
+		//ussage example $options=['joins'=>[['RIGHT','table_name','condition AND condition']]]
+		if(isset($options['joins']))
+			foreach($options['joins'] as $join)
+				$sql.=" ".$join[0]." JOIN ".$join[1]." ON ".$join[2];
+		
 		
 		if($conditions)
 			$sql.= ' WHERE ' . GW_DB::prepare_query($conditions);

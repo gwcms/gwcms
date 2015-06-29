@@ -11,6 +11,9 @@ class Module_Messages extends GW_Common_Module
 		$this->list_params['paging_enabled']=1;
 		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptions();
 		
+		
+		$this->config = new GW_Config($this->module_path[0].'/');
+		
 	}
 
 	function __eventAfterForm()
@@ -44,33 +47,76 @@ class Module_Messages extends GW_Common_Module
 	
 	
 	
+	function __getRecipients($letter, $portion)
+	{
+		$db =& $letter->getDB();
+		
+		$incond = GW_DB::inCondition('b.`group_id`', $letter->groups);
+		
+		$sql = "SELECT DISTINCT a.id, a.* 
+			FROM 
+				`gw_nl_subscribers` AS a
+			INNER JOIN `gw_nl_subs_bind_groups` AS b
+				ON a.id=b.subscriber_id
+			LEFT JOIN gw_nl_sent_messages AS aa 
+				ON a.id = aa.subscriber_id AND aa.message_id=?
+			WHERE 
+				a.unsubscribed=0 AND
+				a.active=1 AND 
+				a.lang=? AND
+				$incond AND
+				aa.status IS NULL
+			LIMIT $portion
+			";
+		
+		$sql = GW_DB::prepare_query([$sql, $letter->id, $letter->lang]);	
+		$rows = $db->fetch_rows($sql);
+		
+		return $rows;
+	}
+	
 	function doSend()
 	{
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
+		if($item->status==0){
+			$item->sent_count = 0;
+			$item->saveValues(['status'=>10]);
+		}
 		
+		$finished = $this->__sendPortion($item);
+			
+
 		
-		$recipients = $item->getRecipients();
+		if($finished)
+		{
+			$this->jump($this->app->path.'/sentinfo');	
+		}
+	}
+	
+	
+	function __sendPortion($item)
+	{		
+		$recipients = $this->__getRecipients($item, $this->config->portion_size);
 		
-		$item->saveValues(['status'=>10]);
-		
-		
+		if(!$recipients)
+		{
+			$item->setValues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
+			return true;
+		}
+				
 		$info = $this->__doSend($item, $recipients);
-		$item->setValues($info);
+		
+		
+		$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
+		
+		$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients)]);
+		
+		
+		$this->app->setMessage($this->lang['SENT'].$info['sent_count'].'/'.count($recipients));
 			
 		
-		$item->sent_time = date('Y-m-d H:i:s');
-		$item->status = 70;
-		
-		
-		$this->app->setMessage($this->lang['SENT'].count($recipients).'/'.$item->sent_count);
-		
-		$item->update(['status','sent_count', 'sent_info', 'sent_time']);
-		
-		//$item->saveValues(['sent_info'=>  json_encode($recip), 'sent_count'=>$sent_count]);
-		
-		$this->jump($this->app->path.'/sentinfo');
 	}
 	
 	function viewSentInfo()
@@ -78,7 +124,23 @@ class Module_Messages extends GW_Common_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
-		return ['item'=>$item];
+		$cond='1=1';
+		
+		$options=['joins'=>[['INNER','gw_nl_sent_messages AS ca','ca.subscriber_id = a.id AND ca.message_id='.(int)$item->id]]];
+		$options['select']='a.*, ca.status, ca.time';
+		$options['order']='ca.time DESC';
+		
+		$this->setListParams($cond, $options);
+		
+		$list = GW::getInstance('GW_NL_Subscriber')->findAll($cond, $options);
+		
+		
+		
+		if($this->list_params['page_by'])
+			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();		
+		
+		
+		return ['list'=>$list];
 	}
 	
 	
@@ -131,6 +193,7 @@ class Module_Messages extends GW_Common_Module
 			
 			$msg = $message;
 			$subj = $item->subject;
+			$recipient = (object)$recipient;
 			
 			$this->__prepareMessage($msg, $item, $linkbase, $recipient);
 			
@@ -141,15 +204,13 @@ class Module_Messages extends GW_Common_Module
 			if($item->sender)
 				$headers .= "From: $item->sender\r\n";
 
-			$info = new stdClass();
-			GW_Array_Helper::objectCopy($recipient, $info, ['id','name','surname','email']);
+			$info = ['subscriber_id'=>$recipient->id, 'message_id'=>$item->id, 'time'=>date('Y-m-d H:i:s')];
 			
-			$info->time = date('Y-m-d H:i:s');
 			
 			if(!mail($recipient->email, $subj, $msg, $headers)) {
-				$info->sent = false;
+				$info['status']=0;
 			}else{
-				$info->sent = true;
+				$info['status']=1;
 				$sent_count++;
 			}
 			

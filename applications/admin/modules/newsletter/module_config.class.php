@@ -8,7 +8,7 @@ class Module_Config extends GW_Common_Module
 	
 	function init()
 	{
-		$this->model = new GW_Config('gw_'.$this->module_path[0].'/');
+		$this->model = new GW_Config($this->module_path[0].'/');
 		
 		parent::init();
 	}

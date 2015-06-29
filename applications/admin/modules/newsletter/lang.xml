@@ -44,7 +44,8 @@
 		<i id="comments">Komentarai, pastabos</i>
 		<i id="hits">Aktyvumas</i>		
 		<i id="subscriber_id">Prenumeratorius</i>		
-		<i id="sent_time">Išsiuntimo laikas</i>		
+		<i id="sent_time">Išsiuntimo laikas</i>	
+		<i id="portion_size">Porcijos dydis</i>
 	</i>
 	<i id="OPT">
 		<i id="lang">
@@ -106,7 +107,10 @@
 				<i id="info">
 					<i id="model">GW_NL_Group</i>
 				</i>			
-			</i>											
+			</i>	
+			<i id="config">
+				<i id="title">Nustatymai</i>
+			</i>													
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
