@@ -6,7 +6,9 @@
 	<input type="hidden" name="id" value="{$subscriber->id}" />
 
 <fieldset  id="csubscribed">
-	<legend><input type="radio" class="susbcribe_inp" id="subscribed" name="unsubscribed" value="0" {if !$subscriber->unsubscribed}checked="checked"{/if}/> Užsisakyti</legend>
+	<legend><input type="radio" class="susbcribe_inp" id="subscribed" name="unsubscribed" value="0" {if !$subscriber->unsubscribed}checked="checked"{/if}/> 
+		{if $subscriber->unsubscribed}Užsisakyti{else}Pasirinkti naujienų grupes{/if}
+	</legend>
 
 	Naujienų grupės:
 	
@@ -32,9 +34,12 @@
 		
 		<div class="expandifactive" style="display:none">
 		<br />
-		Įveskite el. pašto adresa kad atsisakyti
-			<input type="email" name="email" required="required" />
-			<input type="submit" value="Atisakyti" />
+			<input type="checkbox" name="unsubscribe_confirm" required="required" />
+			Nebenoriu gauti daugiau naujienlaiškių į <b>{$subscriber->email}</b>
+			
+			
+			<br /><br />
+			<input type="submit" value="Išsaugoti pasirinkimą" />
 		</div>
 	{/if}
 </fieldset>
@@ -54,7 +59,7 @@
 		$('#csubscribed .expandifactive').toggle(state)
 		$('#cunsubscribed .expandifactive').toggle(!state)
 		
-		$('#cunsubscribed input[type="email"]').prop('required', !state);
+		$('#cunsubscribed input[name="unsubscribe_confirm"]').prop('required', !state);
 		
 		
 	}).click(function(){ $(this).click() }).change();

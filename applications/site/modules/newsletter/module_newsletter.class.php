@@ -95,11 +95,14 @@ class Module_NewsLetter extends GW_Public_Module
 			$item->groups = $post_groups;
 			
 		}else{
+			/*
 			if($_POST['email']!=$item->email)
 			{
 				$this->app->setErrors("Neteisingai nurodytas el. pašto adresas");
 				$success = false;
-			}
+			}*/
+			
+			$success=true;
 		}
 		
 		if($success){
