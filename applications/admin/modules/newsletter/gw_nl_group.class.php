@@ -35,21 +35,15 @@ class GW_NL_Group extends GW_Composite_Data_Object
 	
 	function getOptionsWithCounts($active=true)
 	{
-		$opt = $this->getOptions($active=true);
+		$opt = $this->getOptions($active);
 		
 		if(!$opt)
 			return $opt;
 		
-		
-		
 		$counts = $this->getCountsByIds(array_keys($opt));
 		
-		
-		
 		foreach($opt as $id => $title)
-		{
 			$opt[$id] = $title." (".(isset($counts[$id]) ? $counts[$id] : 0).")";
-		}
 		
 		return $opt;
 	}
