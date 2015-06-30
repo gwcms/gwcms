@@ -9,7 +9,18 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 	public $validators = [
 	    'email'=>['gw_email', ['required'=>1]],
 	    'lang'=>['gw_string', ['required'=>1]],
-	];	
+	];
+	
+	
+	function validate()
+	{
+		parent::validate();
+						
+		if($this->count(Array('email=? AND id!=?', $this->email, $this->id)))
+			$this->errors['email']='/VALIDATION/UNIQUE';
+				
+		return $this->errors ? false : true;	
+	}	
 	
 	var $composite_map = Array
 	(
