@@ -136,4 +136,10 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return $this->errors ? false : true;		
 	}
 	
+	/*
+	function __isset($name) 
+	{
+		return isset($this->composite_map[$name]) || parent::__isset($name);
+	}	
+	*/
 }

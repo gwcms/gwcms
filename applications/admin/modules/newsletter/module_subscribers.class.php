@@ -130,6 +130,7 @@ class Module_Subscribers extends GW_Common_Module
 
 		$update_cnt=0;
 		$insert_cnt=0;
+		$skipped_cnt=0;
 		
 
 		foreach($data as $line => $row)
@@ -154,13 +155,17 @@ class Module_Subscribers extends GW_Common_Module
 			$debug_data = $item->toArray();
 			
 			if($tmp=$item->find(Array('email=?',$item->email))){
-				$item->id = $tmp->id;
-				$item->update();
-				$update_cnt++;
-				$debug_data['insert']=$this->lang['UPDATED'];
-			}elseif($_REQUEST['insert_only']){
-				$skipped_cnt++;
-				$debug_data['insert']=$this->lang['SKIPPED'];
+				
+				
+				if($_REQUEST['insert_only']){
+					$skipped_cnt++;
+					$debug_data['insert']=$this->lang['SKIPPED'];
+				}else{
+					$item->id = $tmp->id;
+					$item->update();
+					$update_cnt++;
+					$debug_data['insert']=$this->lang['UPDATED'];
+				}
 			}else{
 				$item->insert();
 				$insert_cnt++;
@@ -173,7 +178,7 @@ class Module_Subscribers extends GW_Common_Module
 		}
 
 		
-		$msg="Sėkmingai importuota. Atnaujinti įrašai: $update_cnt; Nauji įrašai: $insert_cnt";
+		$msg="Sėkmingai importuota. Atnaujinti įrašai: $update_cnt; Nauji įrašai: $insert_cnt; Praleisti: $skipped_cnt";
 		echo $msg;
 		
 

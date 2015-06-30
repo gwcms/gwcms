@@ -2,20 +2,20 @@
 
 class GW_Data_Object
 {
-	var $table;
-	var $db_die_on_error=true;
-	var $primary_fields = array('id');
-	var $content_base=Array();
-	var $errors=Array();
-	var $loaded=false;
-	var $auto_fields=true;
-	var $auto_validation=false;	// calls $this->validate before save
-	var $default_order=false;
-	var $ignore_fields=Array();
-	var $encode_fields=Array();
-	var $calculate_fields=Array();	
+	public $table;
+	public $db_die_on_error=true;
+	public $primary_fields = array('id');
+	public $content_base=Array();
+	public $errors=Array();
+	public $loaded=false;
+	public $auto_fields=true;
+	public $auto_validation=false;	// calls $this->validate before save
+	public $default_order=false;
+	public $ignore_fields=Array();
+	public $encode_fields=Array();
+	public $calculate_fields=Array();	
 	static $_instance;
-	var $cache;
+	public $cache;
     
     
     
@@ -724,6 +724,11 @@ class GW_Data_Object
 		} else {
 			trigger_error("Unhandled static call", E_USER_ERROR);
 		}
+	}
+	
+	function __isset($name) 
+	{
+		return isset($this->content_base[$name]) || isset($this->calculate_fields[$name]);
 	}
 
 }
