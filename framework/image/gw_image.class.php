@@ -189,7 +189,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 		$this->key=md5($this->owner);	
 	}
 	
-	function EventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -210,7 +210,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 			break;
 		}
 		
-		parent::EventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}
 	
 }
