@@ -49,7 +49,7 @@ class GW_NL_Message extends GW_Data_Object
 	
 	function getBodyFull()
 	{
-		return '<html><head><meta charset="UTF-8"><body style="margin:0">'.$this->body.'</body></html>';
+		return '<html><head><meta charset="UTF-8"></head><body style="margin:0">'.$this->body.'</body></html>';
 	}
 	
 }			
