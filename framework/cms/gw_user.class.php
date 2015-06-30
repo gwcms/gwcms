@@ -130,7 +130,7 @@ class GW_User extends GW_Composite_Data_Object
 		return $tmp == $this->cryptPass($pass,$tmp);
 	}
 	
-	function EventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -141,7 +141,7 @@ class GW_User extends GW_Composite_Data_Object
 			break;	
 		}
 		
-		parent::EventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}
 	
 	function isRoot()

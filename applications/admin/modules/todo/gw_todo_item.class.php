@@ -111,7 +111,7 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 	
 
 	
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -126,6 +126,6 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 			break;
 		}
 		
-		parent::EventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}	
 }

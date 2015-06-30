@@ -25,11 +25,15 @@
 	</tr>
 
 	<tr>
-		<td style="width: 150px">Importuoti tik naujus</td>
+		<td style="width: 150px">Importuoti tik naujus <small>(neatnaujinti egzistuojančių)</small></td>
 		<td>{include file="elements/inputs/bool.tpl" input_name=insert_only}
 		</td>
 	</tr>	
-	
+	<tr>
+		<td style="width: 150px">Atnaujinti tik vardus pavardes</td>
+		<td>{include file="elements/inputs/bool.tpl" input_name=update_name_surname_only}
+		</td>
+	</tr>	
 </table>
 
 <small>

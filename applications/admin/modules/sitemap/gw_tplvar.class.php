@@ -8,7 +8,7 @@
  */
 
 
-class GW_TplVar extends GW_Composite_Data_Object
+class GW_TplVar extends GW_Data_Object
 {
 	var $table = 'gw_template_vars';
 	var $default_order = 'id ASC';
@@ -40,7 +40,7 @@ class GW_TplVar extends GW_Composite_Data_Object
 	}
 
 	
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -50,6 +50,6 @@ class GW_TplVar extends GW_Composite_Data_Object
 			break;
 		}	
 			
-		return parent::eventHandler($event);
+		return parent::eventHandler($event, $context_data);
 	}
 }

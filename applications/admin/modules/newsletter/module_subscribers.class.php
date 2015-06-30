@@ -162,9 +162,30 @@ class Module_Subscribers extends GW_Common_Module
 					$debug_data['insert']=$this->lang['SKIPPED'];
 				}else{
 					$item->id = $tmp->id;
-					$item->update();
+					
+					
+					if($_REQUEST['update_name_surname_only'])
+					{
+						$updates = [];
+						if($item->name) $updates[]='name';
+						if($item->surname) $updates[]='surname';
+						
+						if($updates){
+							$item->update($updates);
+							$debug_data['insert']=$this->lang['UPDATED_NAME'];
+						}else{
+							$debug_data['insert']=$this->lang['SKIPPED'];
+						}
+						
+					}else{
+						$item->update();
+						
+						$debug_data['insert']=$this->lang['UPDATED'];
+					}
+					
+					
 					$update_cnt++;
-					$debug_data['insert']=$this->lang['UPDATED'];
+					
 				}
 			}else{
 				$item->insert();

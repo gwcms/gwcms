@@ -138,7 +138,7 @@ class Diary_Entry extends GW_Composite_Data_Object
 		return $cache = $this->config()->store_size;
 	}
 	
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -151,6 +151,6 @@ class Diary_Entry extends GW_Composite_Data_Object
 			break;
 		}
 		
-		parent::EventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}	
 }

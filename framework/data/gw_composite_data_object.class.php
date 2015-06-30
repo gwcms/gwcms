@@ -23,12 +23,15 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return isset($this->composite_map[$field]);
 	}
 
-	function saveCompositeItems()
-	{
-		//dump($this->composite_content_base);
-		
+	function saveCompositeItems($update_context)
+	{		
 		foreach($this->composite_content_base as $field => $item)
 		{
+			//if it is requested to update only some fields not all
+			if(isset($update_context['update_only']))
+				if(!isset($update_context['update_only'][$field]))
+					continue;
+
 			$item->setOwnerObject($this, $field);
 			$item->save();
 		}
@@ -107,7 +110,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	}
 	
 	
-	function eventHandler($event)
+	function eventHandler($event, $context_data=[])
 	{
 		switch($event)
 		{
@@ -115,12 +118,12 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 				$this->removeAllCompositeItems();
 			break;
 			
-			case 'AFTER_SAVE':
-				$this->saveCompositeItems();
+			case 'AFTER_SAVE':				
+				$this->saveCompositeItems($context_data);
 			break;
 		}
 		
-		parent::EventHandler($event);
+		parent::EventHandler($event, $context_data);
 	}
 	
 	function validate()

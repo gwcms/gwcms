@@ -336,20 +336,27 @@ class GW_Data_Object
 	 * @param Array $field_names
 	 * @return unknown_type
 	 */
-	function update($field_names=Array())
+	function update($field_names=[])
 	{	
 		if($this->auto_validation && !$this->validate())
 			return false;
-			
-		$this->fireEvent(Array('BEFORE_UPDATE','BEFORE_SAVE'));	
+		
+		if($this->auto_fields && $field_names)
+			$field_names[]='update_time';
+		
+		$context=[];
+		
+		if($field_names)
+			$context['update_only']=$field_names;	
+		
+		
+		
+		$this->fireEvent(['BEFORE_UPDATE','BEFORE_SAVE'], $context);	
 			
 		$entry = Array();
 		$idfield = $this->primary_fields[0];
-
-		if($this->auto_fields && $field_names)
-			$field_names = array_merge($field_names, Array('update_time'));			
-			
 		$field_names = count($field_names) ? $field_names : array_keys($this->content_base);
+
 					
 		foreach($field_names as $field)
 			if(!isset($this->ignore_fields[$field]))
@@ -360,7 +367,7 @@ class GW_Data_Object
 		$db =& $this->getDB();
 		$rez = $db->update($this->table, $this->getIdCondition(), $entry);
 		
-		$this->fireEvent(Array('AFTER_UPDATE','AFTER_SAVE'));
+		$this->fireEvent(['AFTER_UPDATE','AFTER_SAVE'], $context);
 		
 		return $rez;
 	}
@@ -475,13 +482,13 @@ class GW_Data_Object
 		$this->fireEvent('AFTER_DELETE');
 	}
 	
-	function fireEvent($event)
-	{
+	function fireEvent($event, &$context_data=[])
+	{		
 		if(!is_array($event))
-			$this->EventHandler($event);
+			$this->EventHandler($event, $context_data);
 		else
 			foreach($event as $e)
-				$this->EventHandler($e);
+				$this->EventHandler($e, $context_data);
 	}
 	
 	function __get($name)
@@ -663,7 +670,7 @@ class GW_Data_Object
 		return $this->encodeJSON($fieldname, $value, $revert, true);
 	}	
 	
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{

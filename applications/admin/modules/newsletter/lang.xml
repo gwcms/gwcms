@@ -81,6 +81,8 @@
 	<i id="INSERTED">Naujas</i>
 	<i id="UPDATED">Atnaujintas</i>
 	<i id="SKIPPED">Praleistas</i>
+	<i id="UPDATED_NAME">Atnaujintas vard./pavard.</i>
+	
 	
 		
 
