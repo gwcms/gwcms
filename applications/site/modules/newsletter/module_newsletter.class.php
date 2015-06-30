@@ -176,7 +176,6 @@ class Module_NewsLetter extends GW_Public_Module
 		
 		
 		
-		echo '<html><meta charset="UTF-8">';
 		echo $this->smarty->fetch('string:'.$message);
 		exit;
 		
