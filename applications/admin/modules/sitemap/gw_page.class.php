@@ -82,7 +82,7 @@ class GW_Page extends GW_i18n_Data_Object
 		$this->set('path', $path=($parent?$parent->get('path').'/':'').$this->get('pathname'));
 	}
 
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -99,7 +99,7 @@ class GW_Page extends GW_i18n_Data_Object
 				break;
 		}
 
-		parent::eventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}
 
 	function calculateField($key)

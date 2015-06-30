@@ -103,7 +103,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			$item->delete();
 	}
 
-	function eventHandler($event)
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
@@ -125,7 +125,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			break;
 		}
 		
-		parent::eventHandler($event);
+		parent::eventHandler($event, $context_data);
 	}
 	
 	function getDataObject()
