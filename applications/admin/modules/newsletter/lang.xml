@@ -68,6 +68,7 @@
 		<i id="hits">Aktyvumo žurnalas</i>
 		<i id="import">Importavimas iš spreadsheet</i>
 		<i id="export">Eksportavimas į spreadsheet</i>
+		<i id="emailsfromtext">El. paštų išėmimas iš teksto</i>
 	</i>
 	
 	<i id="LINK">
@@ -79,6 +80,7 @@
 	
 	<i id="INSERTED">Naujas</i>
 	<i id="UPDATED">Atnaujintas</i>
+	<i id="SKIPPED">Praleistas</i>
 	
 		
 

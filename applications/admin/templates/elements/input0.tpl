@@ -13,7 +13,7 @@
 
 
 {if !$value}
-	{$value=$item->get($name)}
+	{$value=$item->$name}
 		
 
 	{if $value!=='0' && !$value && $default}

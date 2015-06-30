@@ -24,6 +24,12 @@
 		</td>
 	</tr>
 
+	<tr>
+		<td style="width: 150px">Importuoti tik naujus</td>
+		<td>{include file="elements/inputs/bool.tpl" input_name=insert_only}
+		</td>
+	</tr>	
+	
 </table>
 
 <small>

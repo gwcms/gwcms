@@ -64,26 +64,33 @@ class Module_Subscribers extends GW_Common_Module
 		
 	}	
 	
+	
+	function __list2Str($list)
+	{
+		$data = "";
+		
+		$data = implode("\t", array_keys($this->import_field_translations))."\n";
+		
+		
+		foreach($list as $item){
+			$item->groups_string = implode(',', $item->groups);
+			
+			$row = Array();
+			foreach($this->import_field_translations as $xlsname => $sysname)
+				$row[] = str_replace("\n","<br />", isset($item->$sysname) ? $item->$sysname:'' );
+			
+			$data .= implode("\t", $row)."\n";
+		}
+		
+		return $data;
+	}
+	
 	function viewExport()
 	{
 		$this->setListParams($cond, $params);
 		$list = $this->model->findAll($cond, $params);
 		
-		$data = "";
-		
-		
-		$data = implode("\t", array_keys($this->import_field_translations))."\n";
-		
-		foreach($list as $item){
-			$item->groups_string = implode(',', $item->groups);
-			
-			
-			$row = Array();
-			foreach($this->import_field_translations as $xlsname => $sysname)
-				$row[] = str_replace("\n","<br />", $item->get($sysname));
-			
-			$data .= implode("\t", $row)."\n";
-		}
+		$data = $this->__list2Str($list);
 		
 		return compact('data');
 	}
@@ -150,11 +157,14 @@ class Module_Subscribers extends GW_Common_Module
 				$item->id = $tmp->id;
 				$item->update();
 				$update_cnt++;
-				$debug_data['insert']=$m->lang['UPDATED'];
+				$debug_data['insert']=$this->lang['UPDATED'];
+			}elseif($_REQUEST['insert_only']){
+				$skipped_cnt++;
+				$debug_data['insert']=$this->lang['SKIPPED'];
 			}else{
 				$item->insert();
 				$insert_cnt++;
-				$debug_data['insert']=$m->lang['INSERTED'];
+				$debug_data['insert']=$this->lang['INSERTED'];
 			}
 			
 			
@@ -171,5 +181,77 @@ class Module_Subscribers extends GW_Common_Module
 
 	}	
 	
+	
+	function extractEmailAddress($string)
+	{
+		$emails = [];
+		
+		foreach (preg_split('/\s/', $string) as $token) 
+		{
+			$email = filter_var(filter_var($token, FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL);
+			if ($email !== false) {
+				$email = strtolower($email);
+				$emails[$email] = ['email'=>$email];
+			}
+		}
+		return $emails;
+	}
+	function extractEmailAddressWithName($string){
+		
+		preg_match_all("/'([^'@]*)' <(.*@.*)>/U", $string, $matches, PREG_SET_ORDER);
+		
+		
+		$list = [];
+		
+		foreach($matches as $match)
+		{
+			$name_surname = explode(' ',$match[1],2);
+			
+			$name = $name_surname[0];
+			
+			$surname = (isset($name_surname[1]) && strlen($name_surname[1])>1) ? $name_surname[1] : '';
+			
+			$e = strtolower($match[2]);
+			
+			$list[$e] = ['email'=>$e, 'name'=>GW_String_Helper::ucfirst($name,1), 'surname'=>GW_String_Helper::ucfirst($surname,1)];
+		}
+		
+		return $list;
+	}
+	
+
+	function doParseEmailsFromText()
+	{
+		
+		
+		$string = $_POST['string'];
+		
+		$emails1 = self::extractEmailAddress($string);
+		
+		
+		$this->tpl_vars['string'] = $string;
+		
+		
+		$emails2 = self::extractEmailAddressWithName($string);
+		
+		$emails = array_merge($emails1, $emails2);
+		
+		//d::dumpas($_POST['item']);
+		
+		foreach($emails as $i => $item)
+		{
+			$emails[$i] = $item + $_POST['item'];			
+			$emails[$i] = (object)$emails[$i];
+		}
+				
+		$data = $this->__list2Str($emails);
+				
+		$this->tpl_vars['result'] = addslashes($data);
+	}
+	
+	function viewEmailsFromText()
+	{
+		$this->tpl_vars['item'] = isset($_POST['item']) ? (object)$_POST['item'] : new stdClass(); 
+	}
 	
 }
