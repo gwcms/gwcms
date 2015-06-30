@@ -33,9 +33,9 @@ class GW_NL_Group extends GW_Composite_Data_Object
 		return $this->getDb()->fetch_assoc($counts_sql);		
 	}
 	
-	function getOptionsWithCounts()
+	function getOptionsWithCounts($active=true)
 	{
-		$opt = $this->getOptions();
+		$opt = $this->getOptions($active=true);
 		
 		if(!$opt)
 			return $opt;

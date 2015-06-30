@@ -18,7 +18,7 @@ class Module_Messages extends GW_Common_Module
 
 	function __eventAfterForm()
 	{
-		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts();		
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts(false);		
 	}
 	
 	

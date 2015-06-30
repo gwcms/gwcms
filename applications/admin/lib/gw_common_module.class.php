@@ -117,6 +117,7 @@ class GW_Common_Module extends GW_Module
 				
 		
 		$_SESSION['item']=$item->toArray();
+		unset($_SESSION['item']['id']);
 		unset($_GET['id']);
 		
 		
