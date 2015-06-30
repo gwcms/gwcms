@@ -114,11 +114,9 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('BEFORE_CLONE', $item);
 		$this->__doCloneAfterClone($item);
 		
+				
 		
-		$_REQUEST['item'] = $item->toArray();
-		$_REQUEST['item']['id']=0;
-		
-		$_SESSION['item']=$_REQUEST['item'];
+		$_SESSION['item']=$item->toArray();
 		unset($_GET['id']);
 		
 		
@@ -221,8 +219,8 @@ class GW_Common_Module extends GW_Module
 
 		
 		if(isset($_SESSION['item']) && $_REQUEST['item']=$_SESSION['item'])
-			unset($_REQUEST['item']);
-				
+			unset($_SESSION['item']);
+			
 		//if we encounter error during the submit
 		//fill out form with values that user submited
 		if((isset($_REQUEST['item']) && $vals=$_REQUEST['item'])){
