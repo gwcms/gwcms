@@ -130,6 +130,11 @@ class Module_NewsLetter extends GW_Public_Module
 	
 	function viewItem()
 	{
+		
+		//d::dumpas(GW::s('LOGS'));
+		//file_put_contents(GW::s('ROOT_DIR').'', $data)
+		
+		
 		if(!isset($_GET['nlid']) || !isset($_GET['rid']) || !isset($_GET['re']))
 			die('Bad link Errcode: 651956'); 
 		
@@ -157,6 +162,21 @@ class Module_NewsLetter extends GW_Public_Module
 		
 		
 		
+		//register hit
+		$hit=GW::getInstance('GW_NL_Hit')->createNewObject();
+		$hit->setValues(
+			[
+			    'message_id'=>$letter->id,
+			    'subscriber_id'=>$recipient->id,
+			    'link'=>'link-newsletter-online',
+			    'ip'=>$_SERVER['REMOTE_ADDR']				    
+			]
+		);
+		$hit->insert();		
+		
+		
+		
+		echo '<html><meta charset="UTF-8">';
 		echo $this->smarty->fetch('string:'.$message);
 		exit;
 		
