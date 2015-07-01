@@ -5,7 +5,18 @@
 {include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
 
-{include file="elements/input.tpl" name=text type=htmlarea ck_options=minimum}
+{$ck_options=[
+	toolbarStartupExpanded=>false, 
+	autoParagraph=>false, 
+	contentsCss=>'applications/admin/modules/diary/css/ckstyle.css',
+	enterMode=>'CKEDITOR.ENTER_BR', 
+	extraPlugins=>autogrow,
+	height=>150,
+	autoGrow_maxHeight=>800
+	
+]}
+
+{include file="elements/input.tpl" name=text type=htmlarea}
 
 {$curr=date('Y-m-d H:i:s')}
 {include file="elements/input.tpl" name=time default=$curr}
