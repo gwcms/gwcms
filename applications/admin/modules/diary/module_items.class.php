@@ -1,49 +1,16 @@
 <?php
 
 
-class Module_Items extends GW_Common_Module
-{	
-	function breadcrumbsAttach()
-	{
-		if(! $this->parent->title)
-			return;
-		
-		$breadcrumbs_attach=Array();
-		
-		foreach($this->parent->getParents() as $item)
-			$breadcrumbs_attach[]=Array
-			(
-				'path'=>$this->app->fh()->gw_path(Array('params' => Array('pid'=>$item->id) )),
-				'title'=>$item->title
-			);
-		
-		$breadcrumbs_attach[]=Array('title'=>$this->parent->title, 'path'=>$this->app->fh()->gw_path(Array('params' => Array('pid'=>$this->parent->id) )));
-		
-		
-		$this->tpl_vars['breadcrumbs_attach']=$breadcrumbs_attach;
-	}
+class Module_Items extends GW_Common_Module_Tree_Data
+{
+	
+	public $list_params=['page_by'=>100];	
 	
 	function init()
 	{	
 		parent::init();
-		
-		$this->app->carry_params['pid']=1;
-				
-		$this->filters['parent_id'] = isset($_GET['pid']) && (int)$_GET['pid'] ? (int)$_GET['pid'] : -1;
 		$this->filters['active']=1;
-		
-		//jeigu filtravimas
-		if(isset($this->list_params['filters']))
-			unset($this->filters['parent_id']);
-			
-
-		
-		$this->parent=$this->model->createNewObject($this->filters['parent_id']);
-		$this->parent->load();	
-		
-		if(!isset($_GET['act']))
-			$this->breadcrumbsAttach();		
-		
+		$this->list_params['paging_enabled']=1;
 	}
 
 	
@@ -60,10 +27,6 @@ class Module_Items extends GW_Common_Module
 		return GW_SQL_Helper::condition_str($tmp);
 	}
 	
-	function viewImport()
-	{
-
-	}
 	
 	function doDelete()
 	{

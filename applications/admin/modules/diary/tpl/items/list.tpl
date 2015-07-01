@@ -21,7 +21,7 @@
 			<img align="absmiddle" onclick="$(this).next().click()" src="{$app_root}/img/icons/folder.png">
 			<a href="{gw_link params=[pid=>$id] path_only=1}">{$item->text} ({$item->child_count})</a>
 		{else}
-			{$item->text}
+			{GW_Link_Helper::parse($item->text)}
 		{/if}
 		</div>
 		
