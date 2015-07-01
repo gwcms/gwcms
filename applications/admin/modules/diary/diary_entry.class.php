@@ -1,8 +1,5 @@
 <?php
 
-define('GW_GALLERY_ITEM_FOLDER', 1);
-define('GW_GALLERY_ITEM_IMAGE', 0);
-
 class Diary_Entry extends GW_Composite_Data_Object
 {
 	var $table = 'diary_entries';
@@ -129,22 +126,10 @@ class Diary_Entry extends GW_Composite_Data_Object
 		return $path?'/':$path;
 	}
 	
-	function getStoreSize()
-	{
-		static $cache;
-		if($cache)
-			return $cache;
-			
-		return $cache = $this->config()->store_size;
-	}
-	
 	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{
-			case 'AFTER_CONSTRUCT':
-				$this->composite_map['image'][1]['dimensions_resize']=$this->getStoreSize();
-			break;
 			
 			case 'BEFORE_DELETE':
 				$this->deleteChilds();

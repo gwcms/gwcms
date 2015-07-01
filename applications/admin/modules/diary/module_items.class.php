@@ -14,11 +14,6 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	}
 
 	
-	function viewDefault()
-	{
-		return $this->viewList(Array('order'=>'type DESC, insert_time DESC'));
-	}
-	
 	function getMoveCondition($item)
 	{
 		$tmp = $this->filters;
