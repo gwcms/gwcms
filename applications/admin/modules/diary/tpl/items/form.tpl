@@ -5,7 +5,7 @@
 {include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
 
-{include file="elements/input.tpl" name=text type=htmlarea}
+{include file="elements/input.tpl" name=text type=htmlarea ck_options=minimum}
 
 {$curr=date('Y-m-d H:i:s')}
 {include file="elements/input.tpl" name=time default=$curr}
