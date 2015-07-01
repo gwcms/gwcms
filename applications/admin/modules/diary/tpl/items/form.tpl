@@ -8,7 +8,7 @@
 {$ck_options=[
 	toolbarStartupExpanded=>false, 
 	autoParagraph=>false, 
-	contentsCss=>'applications/admin/modules/diary/css/ckstyle.css',
+	contentsCss=>'applications/admin/css/ckstyle1.css',
 	enterMode=>'CKEDITOR.ENTER_BR', 
 	extraPlugins=>autogrow,
 	height=>150,
