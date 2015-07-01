@@ -8,3 +8,4 @@ CREATE TABLE IF NOT EXISTS `gw_nl_sent_messages` (
 
 
 ALTER TABLE `gw_nl_subscribers` ADD `unsubscribe_note` VARCHAR(200) NOT NULL AFTER `unsubscribed`;
+ALTER TABLE `gw_nl_messages` ADD `replyto` VARCHAR(200) NOT NULL AFTER `sender`;
