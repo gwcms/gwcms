@@ -1,5 +1,9 @@
 <?php
 
+define('GW_TREE_ITEM_FOLDER', 1);
+define('GW_TREE_ITEM_ITEM', 0);
+
+
 class Diary_Entry extends GW_Composite_Data_Object
 {
 	var $table = 'diary_entries';
@@ -98,7 +102,7 @@ class Diary_Entry extends GW_Composite_Data_Object
 			$arr = Array();
 			$arr[$parent->get('id')] = $path ? $path : ' / ';
 			
-			foreach($parent->getChilds(Array('type'=>GW_GALLERY_ITEM_FOLDER)) as $item)
+			foreach($parent->getChilds(Array('type'=>GW_TREE_ITEM_FOLDER)) as $item)
 				$arr+=$f($item, $path.' / '.strip_tags($item->get('text')));
 
 			return $arr;
