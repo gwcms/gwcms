@@ -3,9 +3,9 @@
 
 GW::s('MASTER_MAIL', 'info@gw.lt');
 GW::s('SYS_MAIL', GW::s('MASTER_MAIL'));
-GW::s('DB/UPHD', 'gwcms:HQz4cRyPWdqSct8E@localhost/gwcms_gwcms');
-GW::s('PROJECT_NAME', 'Totorių darbai');
-GW::s("SITE_URL",'http://localhost/bulksms/');
+GW::s('DB/UPHD', 'user:pass@localhost/databasename');
+GW::s('PROJECT_NAME', 'Projekto pavadinimas');
+GW::s("SITE_URL",'http://localhost/path/to/project/');
 
 GW::s('DEFAULT_APPLICATION','ADMIN');
 
