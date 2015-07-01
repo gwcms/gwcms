@@ -46,6 +46,9 @@
 		<i id="subscriber_id">Prenumeratorius</i>		
 		<i id="sent_time">Išsiuntimo laikas</i>	
 		<i id="portion_size">Porcijos dydis</i>
+		<i id="default_sender">"Laiškų siuntėjas" pagal nutylėjimą</i>
+		<i id="default_replyto">"Atsakyti į" pagal nutylėjimą</i>
+		<i id="replyto">Atsakyti į</i>
 	</i>
 	<i id="OPT">
 		<i id="lang">

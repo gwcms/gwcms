@@ -15,12 +15,12 @@
 	
 	{$dl_actions=[]}
 	
-	{$dl_filters=[subscriber=>1, insert_time=>1, link=>1]}
+	{$dl_filters=[email=>1, insert_time=>1, link=>1]}
 	
 	
 	{function dl_cell_subscriber_id}			
-		{if $item->subscriber}
-			<a href="{$app->ln}/{$m->module_path.0}/subscribers?id={$item->subscriber->id}">{$item->subscriber->email}</a>
+		{if $item->subscriber_id}
+			<a href="{$app->ln}/{$m->module_path.0}/subscribers?id={$item->subscriber_id}">{$item->email}</a>
 		{else}
 			{$item->subscriber_id}
 		{/if}

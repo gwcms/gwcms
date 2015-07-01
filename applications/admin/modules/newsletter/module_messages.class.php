@@ -203,6 +203,9 @@ class Module_Messages extends GW_Common_Module
 			
 			if($item->sender)
 				$headers .= "From: $item->sender\r\n";
+			
+			if($item->replyto)
+				$headers .= "Reply-To: $item->replyto\r\n";
 
 			$info = ['subscriber_id'=>$recipient->id, 'message_id'=>$item->id, 'time'=>date('Y-m-d H:i:s')];
 			
@@ -256,28 +259,16 @@ class Module_Messages extends GW_Common_Module
 		
 		$params['key_field']='id';
 		
+		$params['joins']=array(['left','gw_nl_subscribers AS aa','a.subscriber_id=aa.id']);
+		$params['select']='a.*, aa.id AS subscriber_id, aa.email AS email';
+		
 		$list = GW::getInstance('GW_NL_Hit')->findAll($cond, $params);
 		
 		if($this->list_params['page_by'])
 			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();		
 		
-		$this->__addSubscribers($list);
+		//$this->__addSubscribers($list);
 		return ['list'=>$list];
-	}
-	
-	function __addSubscribers(&$list)
-	{
-		#attach counts
-		$subscriber_ids = [];
-		foreach($list as $item)
-			$subscriber_ids[]=$item->subscriber_id;
-		
-		$subscribers = GW::getInstance('GW_NL_Subscriber')->findAll( GW_DB::inCondition('id', $subscriber_ids),['key_field'=>'id']);		
-		
-		
-		foreach($list as $item)
-			if(isset($subscribers[$item->subscriber_id]))
-				$item->subscriber = $subscribers[$item->subscriber_id];
 	}	
 	
 }

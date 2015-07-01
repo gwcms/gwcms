@@ -4,7 +4,8 @@
 {include file="elements/input.tpl" name=comments type=textarea note="(Nesiunčiama)" autoresize=1 height=40px}
 
 
-{include file="elements/input.tpl" name=sender hidden_note="Sender title &lt;email@address.com&gt;"}
+{include file="elements/input.tpl" name=sender hidden_note="Sender title &lt;email@address.com&gt;" default=$m->config->default_sender}
+{include file="elements/input.tpl" name=replyto hidden_note="Sender title &lt;email@address.com&gt;"  default=$m->config->default_replyto}
 {include file="elements/input.tpl" name=subject}
 
 
