@@ -5,3 +5,6 @@ CREATE TABLE IF NOT EXISTS `gw_nl_sent_messages` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`message_id`,`subscriber_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `gw_nl_subscribers` ADD `unsubscribe_note` VARCHAR(200) NOT NULL AFTER `unsubscribed`;
