@@ -86,8 +86,8 @@ class GW_Application
 		$s->assign('app', $this);
 
 		$s->assign('app_base', $this->app_base);
+		$s->assign('sys_base', $this->sys_base);
 		$s->assign('app_root', $this->app_root);
-
 
 		$s->assignByRef('ln', $this->ln);
 		$s->assignByRef('lang', $this->lang);

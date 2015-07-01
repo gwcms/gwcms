@@ -7,7 +7,7 @@
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<base href="{$app_base}" />
+	<base href="{$sys_base}" />
 	<title>{$title|default:$app->page->get(title,$ln)} - {GW::s(SITE_TITLE)}</title>
 	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
 	<link rel="icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
@@ -26,7 +26,7 @@
 		
 	
 	<script type="text/javascript">
-		$.extend(GW, { base:'{$app_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
+		$.extend(GW, { app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
 		gw_adm_sys.init();
 	</script>
 </head>

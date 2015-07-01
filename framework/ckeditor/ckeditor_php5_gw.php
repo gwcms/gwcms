@@ -18,7 +18,7 @@
 class CKEditor
 {
 	/**
-	 * The version of %CKEditor.
+	 * The version of %CKEditor._
 	 */
 	const version = '3.6.2';
 	/**
@@ -447,7 +447,7 @@ class CKEditor
 
 		$args = "";
 		$ckeditorPath = $this->ckeditorPath();
-		$ckeditorPath = GW::$context->app->app_base.'framework/ckeditor/';
+		$ckeditorPath = GW::$context->app->sys_base.'framework/ckeditor/';
 
 		
 
