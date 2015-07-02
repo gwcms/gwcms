@@ -35,6 +35,15 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->jump();
 	}
 	
+	function overrideFilterComments($value)
+	{
+		$value = GW_DB::escape($value);
+		$cond = " (SELECT count(*) FROM `gw_todo` AS aab WHERE aab.parent_id=a.id AND description LIKE '%$value%')>0 ";
+		
+		
+		return $cond;
+	}	
+	
 
 	
 	

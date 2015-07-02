@@ -126,7 +126,7 @@
 	{$dl_actions=[edit, delete]}
 	
 	
-	{$dl_filters=$display_fields}
+	{$dl_filters=array_merge($display_fields,['description'=>1,'comments'=>1])}
 	
 	{$dl_order_enabled_fields=array_keys($display_fields)}
 	

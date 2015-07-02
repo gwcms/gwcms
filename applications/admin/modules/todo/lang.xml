@@ -60,6 +60,7 @@
 		<i id="actions1">Veiksmai</i>		
 		<i id="project_id">Projektas</i>		
 		<i id="week">Savaitė</i>
+		<i id="comments">Komentarai</i>
 	</i>
 	<i id="FIELDS_SHORT">
 		<i id="week">S</i>
