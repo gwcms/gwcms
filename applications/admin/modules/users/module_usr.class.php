@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Users extends GW_Common_Module
+class Module_Usr extends GW_Common_Module
 {	
 	function init()
 	{

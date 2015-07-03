@@ -135,6 +135,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		$info=$this->get('info');
 		
+		
 		if(!$Class=$info['model'])
 			return false;
 			

@@ -151,10 +151,9 @@
 		<i id="title">
 			<en>Users</en>
 			<lt>Vartotojai</lt>
-		</i>
-				
+		</i>				
 		<i id="childs">
-			<i id="users">
+			<i id="usr">
 				<i id="title">
 					<en>Users</en>
 					<lt>Vartotojai</lt>				

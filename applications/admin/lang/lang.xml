@@ -177,8 +177,8 @@
 
 <i id="VIEWS">
 	<i id="form">
-		<en>Create new / Edit</en>
-		<lt>Kurti naują / Redaguoti</lt>
+		<en>Form</en>
+		<lt>Forma</lt>
 	</i>
 	<i id="print">
 		<en>Print</en>
