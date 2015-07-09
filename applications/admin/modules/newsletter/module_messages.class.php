@@ -272,7 +272,7 @@ class Module_Messages extends GW_Common_Module
 	function initPhpmailer($from, $replyto, $subject)
 	{
 		$mail = new PHPMailer;
-		$mail->isSendmail();
+		//$mail->isSendmail();
 		$mail->CharSet = 'UTF-8';
 		
 		
