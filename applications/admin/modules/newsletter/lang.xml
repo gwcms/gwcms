@@ -49,7 +49,36 @@
 		<i id="default_sender">"Laiškų siuntėjas" pagal nutylėjimą</i>
 		<i id="default_replyto">"Atsakyti į" pagal nutylėjimą</i>
 		<i id="replyto">Atsakyti į</i>
+		<i id="subscribe_confirm_msg">Prenumeratos patvirtinimo žinutė</i>
 	</i>
+	
+	<i id="FIELD_NOTE">
+		<i id="dkim_private_key">
+<![CDATA[
+
+	 * Generating Public and Private Key<br />
+	 * openssl genrsa -out key.priv 1024<br />
+	 * openssl rsa -in key.priv -out key.pub -pubout -outform PEM<br />
+	 *<br />
+	 * copy key.priv contents here<br />
+	-----BEGIN RSA PRIVATE KEY-----<br />
+	...<br />
+	-----END RSA PRIVATE KEY-----	
+
+]]>				
+</i>
+		<i id="dkim_domain">Domain of the signing entity</i>
+		<i id="dkim_domain_selector">
+<![CDATA[			
+	<b>Domain Selector</b><br />
+	Example value: burger<br />
+	Verifier Will resolv public key into: burger._domainkey.example.com<br />
+	On UNIX/Linux system, you can test it with this command line:<br />
+	# host -t txt burger._domainkey.example.com<br />
+]]>	
+		</i>
+	</i>
+	
 	<i id="OPT">
 		<i id="lang">
 			<i id="LT">LT</i>
@@ -81,12 +110,15 @@
 		<i id="RU">Cсылка</i>		
 	</i>
 	
+	
+	
 	<i id="INSERTED">Naujas</i>
 	<i id="UPDATED">Atnaujintas</i>
 	<i id="SKIPPED">Praleistas</i>
 	<i id="UPDATED_NAME">Atnaujintas vard./pavard.</i>
 	
-	
+	<i id="subscribe_confirm_msg_note">Iš žinutės negali būti išimtas {$CONFIRM_LINK}</i>
+	<i id="email_note"><![CDATA[Siuntėjo vardas &lt;email@address.com&gt;]]></i>
 		
 
 	<!-- =============== MODULE MAP START =================== -->

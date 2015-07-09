@@ -8,5 +8,10 @@
 		<i id="EN">Link</i>		
 		<i id="RU">Cсылка</i>		
 	</i>
+	
+	<i id="CONFIRM_SUSBSCRIBE">
+		<lt>Patvirtinkite registraciją</lt>
+		<en>Patvirtinkite registraciją</en>
+	</i>
 
 </xml>

@@ -32,8 +32,14 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 		return $this->email ? "$this->name $this->surname &lt;$this->email&gt;" : '';
 	}
 	
-	
+	function setConfirmCode()
+	{
+		$this->set('confirm_code', rand(1000000000, 4294967295));
+	}
 	
 	
 
 }			
+
+
+

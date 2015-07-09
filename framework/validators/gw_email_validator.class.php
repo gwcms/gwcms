@@ -188,6 +188,26 @@ class GW_Email_Validator extends GW_String_Validator
 			
 		return($isValid);
 	} // END validateEmailFormat
+	
+	static function getDisplaynameFromRfcEmail($rfc_email_string) {
+		// match all words and whitespace, will be terminated by '<'
+		$name       = preg_match('/[^<"\'\t]*/', $rfc_email_string, $matches);
+		$matches[0] = trim($matches[0]);
+				
+		return $matches[0];
+	}
+	// Output: My Test Email
+
+	static function getEmailFromRfcEmail($rfc_email_string) {
+		// extract parts between the two parentheses
+		$mailAddress = preg_match('/(?:<)(.+)(?:>)$/', $rfc_email_string, $matches);
+		return $matches[1];
+	}
+	
+	static function separateDisplayNameEmail($rfc_email_string)
+	{
+		return [self::getDisplaynameFromRfcEmail($rfc_email_string), self::getEmailFromRfcEmail($rfc_email_string)];
+	}
 }
 
 ?>

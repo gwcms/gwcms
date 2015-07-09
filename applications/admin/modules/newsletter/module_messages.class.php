@@ -187,35 +187,32 @@ class Module_Messages extends GW_Common_Module
 		//d::dumpas(htmlspecialchars(GW_Link_Helper::trackingLink($message)));
 		
 		$message = GW_Link_Helper::trackingLink($message);
+		$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
 		
 		
 		foreach($recipients as $recipient){
 			
 			$msg = $message;
-			$subj = $item->subject;
+
 			$recipient = (object)$recipient;
 			
 			$this->__prepareMessage($msg, $item, $linkbase, $recipient);
 			
 
-			$headers = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-			
-			if($item->sender)
-				$headers .= "From: $item->sender\r\n";
-			
-			if($item->replyto)
-				$headers .= "Reply-To: $item->replyto\r\n";
-
 			$info = ['subscriber_id'=>$recipient->id, 'message_id'=>$item->id, 'time'=>date('Y-m-d H:i:s')];
 			
+			$mail->addAddress($recipient->email);
+			$mail->msgHTML($msg);
 			
-			if(!mail($recipient->email, $subj, $msg, $headers)) {
+			if(!$mail->send()) {
 				$info['status']=0;
 			}else{
 				$info['status']=1;
 				$sent_count++;
 			}
+			
+			$mail->clearAddresses();
+			$mail->clearAttachments();
 			
 			$sent_info[]=$info;
 		}
@@ -269,6 +266,70 @@ class Module_Messages extends GW_Common_Module
 		
 		//$this->__addSubscribers($list);
 		return ['list'=>$list];
-	}	
+	}
+	
+	
+	function initPhpmailer($from, $replyto, $subject)
+	{
+		$mail = new PHPMailer;
+		$mail->isSendmail();
+		$mail->CharSet = 'UTF-8';
+		
+		
+		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($from);
+		$mail->setFrom($email, $name);
+		
+		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($replyto);
+		$mail->addReplyTo($email, $name);
+		
+		$mail->Subject = $subject;
+		
+		$mail->DKIM_domain = $this->config->dkim_domain;
+		$mail->DKIM_private = GW::s('DIR/SYS_FILES').'.mail.key';
+
+		$mail->DKIM_selector = $this->config->dkim_domain_selector;
+		$mail->DKIM_passphrase = ''; //key is not encrypted
+		
+		return $mail;
+	}
+	
+	
+	function viewTestPhpMailer()
+	{
+		
+		$mail = new PHPMailer;
+		// Set PHPMailer to use the sendmail transport
+		$mail->isSendmail();
+		
+		$mail->addAddress('<vidmantas.work@gmail.com>', 'Vidmantas Darbinis');
+		
+		$mail->setFrom('postmaster@lektuvu.lt', 'PostMasteris at lektuvu');
+		//Set an alternative reply-to address
+
+
+		$mail->addAddress('laiskonoriu@gmail.com', 'Pirmas android akountas');
+		//Set the subject line
+		$mail->Subject = 'PHPMailer - DKIM tikrinu 2';
+		//Read an HTML message body from an external file, convert referenced images to embedded,
+		//convert HTML into a basic plain-text alternative body
+		$mail->msgHTML("tai yra <b>bandymas</b>");
+		//Replace the plain text body with one created manually
+		$mail->AltBody = 'This is a plain-text message body';
+		//Attach an image file
+		//$mail->addAttachment('images/phpmailer_mini.png');
+
+
+
+		
+		
+
+		//send the message, check for errors
+		if (!$mail->send()) {
+		    echo "Mailer Error: " . $mail->ErrorInfo;
+		} else {
+		    echo "Message sent!";
+		}		
+		
+	}
 	
 }
