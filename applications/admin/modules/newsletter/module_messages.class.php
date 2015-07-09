@@ -299,7 +299,7 @@ class Module_Messages extends GW_Common_Module
 		
 		$mail = new PHPMailer;
 		// Set PHPMailer to use the sendmail transport
-		$mail->isSendmail();
+		//$mail->isSendmail();
 		
 		$mail->addAddress('<vidmantas.work@gmail.com>', 'Vidmantas Darbinis');
 		
