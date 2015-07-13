@@ -60,7 +60,7 @@
 				sendPortion();
 			}
 			
-				$('#progress_percent_drop').text( Math.round(obj.total_sent / obj.total_size*10000)/100 + '%'  );
+				$('#progress_percent_drop').text( Math.round(obj.total_sent / obj.total_size*1000)/10 + '%'  );
 				$('#progress_count_drop').text(obj.total_sent+' / '+obj.total_size);			
 
 
