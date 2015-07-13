@@ -40,7 +40,8 @@ class Module_Messages extends GW_Common_Module
 	
 	function __eventBeforeSave($item)
 	{
-		$item->recipients_count = $item->getRecipientsCount();
+		list($nevermind, $count) = $this->__getRecipients($item, 1);
+		$item->recipients_count = $count;
 		
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);		
 	}
@@ -53,7 +54,7 @@ class Module_Messages extends GW_Common_Module
 		
 		$incond = GW_DB::inCondition('b.`group_id`', $letter->groups);
 		
-		$sql = "SELECT DISTINCT a.id, a.* 
+		$sql = "SELECT SQL_CALC_FOUND_ROWS DISTINCT a.id, a.* 
 			FROM 
 				`gw_nl_subscribers` AS a
 			INNER JOIN `gw_nl_subs_bind_groups` AS b
@@ -72,7 +73,12 @@ class Module_Messages extends GW_Common_Module
 		$sql = GW_DB::prepare_query([$sql, $letter->id, $letter->lang]);	
 		$rows = $db->fetch_rows($sql);
 		
-		return $rows;
+		
+		$count = $db->fetch_result("SELECT FOUND_ROWS()");
+		
+		
+		
+		return [$rows, $count];
 	}
 	
 	function doSend()
@@ -85,38 +91,38 @@ class Module_Messages extends GW_Common_Module
 			$item->saveValues(['status'=>10]);
 		}
 		
-		$finished = $this->__sendPortion($item);
-			
-
+		$info = $this->__sendPortion($item);
 		
-		if($finished)
-		{
-			$this->jump($this->app->path.'/sentinfo');	
-		}
+		
+		echo json_encode($info);	
+		exit;
 	}
 	
 	
 	function __sendPortion($item)
 	{		
-		$recipients = $this->__getRecipients($item, $this->config->portion_size);
+		list($recipients, $count) = $this->__getRecipients($item, $this->config->portion_size);
+		
+		$finished = false;
 		
 		if(!$recipients)
 		{
 			$item->setValues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
-			return true;
-		}
-				
-		$info = $this->__doSend($item, $recipients);
-		
-		
-		$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
-		
-		$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients)]);
-		
-		
-		$this->app->setMessage($this->lang['SENT'].$info['sent_count'].'/'.count($recipients));
 			
+			$finished = true;
+
+		}else{
+				
+			$info = $this->__doSend($item, $recipients);
+
+
+			$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
+
+			$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients), 'recipients_count'=>$count]);
 		
+		}
+		
+		return ['total'=>$count, 'total_sent'=>$item->sent_count, 'sent'=>$info['sent_count'], 'from'=>count($recipients), 'finished'=>$finished];
 	}
 	
 	function viewSentInfo()
@@ -218,7 +224,7 @@ class Module_Messages extends GW_Common_Module
 		}
 		
 		//d::dumpas($msg);
-		
+				
 		return ['sent_count'=>$sent_count, 'sent_info'=>$sent_info];
 	}
 	
@@ -330,6 +336,17 @@ class Module_Messages extends GW_Common_Module
 		    echo "Message sent!";
 		}		
 		
+	}
+	
+	
+	function viewSend()
+	{
+		if(! $item = $this->getDataObjectById())
+			return false;
+		
+		
+		//d::dumpas('tikrinu');
+		return ['id'=>$item->id ];
 	}
 	
 }
