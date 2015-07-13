@@ -17,7 +17,7 @@
 	
 	{$dl_actions=[]}
 	
-	{$dl_filters=[email=>1, insert_time=>1, link=>1]}
+	{$dl_filters=[email=>1, insert_time=>1, link=>1,ip=>1,browser=>1,referer=>1]}
 	
 	
 	{function dl_cell_subscriber_id}			
