@@ -32,7 +32,7 @@
 		{if is_numeric($item->link)}
 			id:{$item->link} {call name="truncate_hint" value=$links[$item->link] length=30}
 		{else}
-			{$item->link}
+			{call name="truncate_hint" value=$item->link length=30}
 		{/if}
 	{/function}	
 	
