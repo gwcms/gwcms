@@ -13,6 +13,15 @@
 	{function name=dl_custom_head_mark}
 		<input type="checkbox" id="checklist_toggle" />
 	{/function}
+	
+	
+	{function name=truncate_hint}
+		{if mb_strlen($value) > $length}
+			<span title="{$value}">{$value|truncate:$length}</span>
+		{else}
+			{$value|truncate:$length}
+		{/if}
+	{/function}	
 {*/functions*}
 
 
