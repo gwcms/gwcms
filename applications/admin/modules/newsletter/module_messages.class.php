@@ -56,7 +56,8 @@ class Module_Messages extends GW_Common_Module
 		$body = $item->body;
 		
 		foreach($links as $id => $link){
-			$body = str_replace($link, '{$TRACKINK_LINK}'.$id, $body);
+			$body = str_replace("'".$link."'", '\'{$TRACKINK_LINK}\''.$id, $body);
+			$body = str_replace('"'.$link.'"', '"{$TRACKINK_LINK}"'.$id, $body);
 		}
 		
 		$item->body_prepared = $body;
