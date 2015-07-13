@@ -164,11 +164,21 @@ class Module_NewsLetter extends GW_Public_Module
 		
 		$link = base64_decode($_GET['link']);
 		
+		
+		//APTIKTA KLAIDA 2015-07-13
+		if(strpos($link,'http')===false)
+		{
+			$recipient = $this->subscriber->find(['id=? ', $_GET['rid']]);
+			$re = base64_encode($recipient->email);
+			
+			$this->app->jump(dirname($this->app->path).'/item',['nlid'=>$_GET['nlid'],'rid'=>$_GET['rid'], 're'=>$re]);
+		}
+			
+		
 		if($nl = GW::getInstance('GW_NL_Message')->find(['id=?', $_GET['nlid']]))
 		{
 			$this->__saveHit(['message_id'=>$_GET['nlid'], 'subscriber_id'=>$_GET['rid'], 'link'=>$link]);		
 		}
-		
 		
 		Header('Location: '.$link);
 	}
