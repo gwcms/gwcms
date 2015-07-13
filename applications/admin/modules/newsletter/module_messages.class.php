@@ -40,15 +40,15 @@ class Module_Messages extends GW_Common_Module
 	
 	function __eventBeforeSave($item)
 	{
-		list($nevermind, $count) = $this->__getRecipients($item, 1);
-		$item->recipients_count = $count;
+		 
+		$item->recipients_count = $this->__getRecipients($item, 1, true);
 		
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);		
 	}
 	
 	
 	
-	function __getRecipients($letter, $portion)
+	function __getRecipients($letter, $portion, $count_total=false)
 	{
 		$db =& $letter->getDB();
 		
@@ -65,8 +65,8 @@ class Module_Messages extends GW_Common_Module
 				a.unsubscribed=0 AND
 				a.active=1 AND 
 				a.lang=? AND
-				$incond AND
-				aa.status IS NULL
+				$incond 
+				". (!$count_total ? 'AND aa.status IS NULL' : '')."
 			LIMIT $portion
 			";
 		
@@ -74,11 +74,13 @@ class Module_Messages extends GW_Common_Module
 		$rows = $db->fetch_rows($sql);
 		
 		
-		$count = $db->fetch_result("SELECT FOUND_ROWS()");
+		if($count_total){
+			return $db->fetch_result("SELECT FOUND_ROWS()");
+		}
 		
 		
 		
-		return [$rows, $count];
+		return $rows;
 	}
 	
 	function doSend()
@@ -101,28 +103,34 @@ class Module_Messages extends GW_Common_Module
 	
 	function __sendPortion($item)
 	{		
-		list($recipients, $count) = $this->__getRecipients($item, $this->config->portion_size);
+		$recipients = $this->__getRecipients($item, $this->config->portion_size);
 		
 		$finished = false;
+		
+		$response = ['total_size'=>$item->recipients_count];
 		
 		if(!$recipients)
 		{
 			$item->setValues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
 			
-			$finished = true;
+			$response['finished']=true;
 
 		}else{
 				
 			$info = $this->__doSend($item, $recipients);
 
-
 			$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
 
-			$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients), 'recipients_count'=>$count]);
-		
+			$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients)]);
+			
+			
+			$response['portion_sent']=$info['sent_count'];
+			$response['portion_size']=count($recipients);
 		}
 		
-		return ['total'=>$count, 'total_sent'=>$item->sent_count, 'sent'=>$info['sent_count'], 'from'=>count($recipients), 'finished'=>$finished];
+		$response['total_sent']=$item->sent_count;
+		
+		return $response;
 	}
 	
 	function viewSentInfo()
