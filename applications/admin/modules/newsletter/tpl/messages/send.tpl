@@ -43,9 +43,9 @@
 
 			var obj = jQuery.parseJSON(data);
 
-			if(!obj.sent)
+			if(!obj.portion_size || obj.finished)
 			{
-				if(Math.round(obj.total_sent / obj.total_size) > 0.98)
+				if((Math.round(obj.total_sent / obj.total_size) > 0.98) || obj.finished)
 				{
 					$('#progress_status_drop').text('Išsiūsta.');
 					$('#icon_working').hide();
