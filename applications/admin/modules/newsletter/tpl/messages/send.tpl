@@ -19,7 +19,7 @@
 					</td>
 					
 					<td id="progress_status_drop" style="font-size:14px">
-						Siunčiama... Neišjunkite lango. (išjungus įvyks pauzė, gryžus siuntimas bus tesiamas.)
+						Siunčiama... <i title="Išjungus įvyks pauzė, grįžus siuntimas bus tęsiamas.">Neišjunkite lango.</i>
 					</td>					
 					
 				</tr>	
