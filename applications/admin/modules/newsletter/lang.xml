@@ -96,6 +96,7 @@
 	</i>
 	
 	<i id="VIEWS">
+		<i id="send">Siuntimas</i>
 		<i id="sentinfo">Išsiuntimo informacija</i>
 		<i id="hits">Aktyvumo žurnalas</i>
 		<i id="import">Importavimas iš spreadsheet</i>

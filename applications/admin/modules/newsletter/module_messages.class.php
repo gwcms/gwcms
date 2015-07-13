@@ -111,7 +111,7 @@ class Module_Messages extends GW_Common_Module
 		
 		if(!$recipients)
 		{
-			$item->setValues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
+			$item->saveVAlues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
 			
 			$response['finished']=true;
 
