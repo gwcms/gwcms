@@ -155,10 +155,11 @@ class Module_NewsLetter extends GW_Public_Module
 			$hit=GW::getInstance('GW_NL_Hit')->createNewObject();
 			$hit->setValues(
 				[
-				    'message_id'=>$_GET['nlid'],
-				    'subscriber_id'=>$_GET['rid'],
-				    'link'=>$link,
-				    'ip'=>$_SERVER['REMOTE_ADDR']
+					'message_id'=>$_GET['nlid'],
+					'subscriber_id'=>$_GET['rid'],
+					'link'=>$link,
+					'ip'=>$_SERVER['REMOTE_ADDR'],
+					'debug'=>$_SERVER['REQUEST_URI']
 				]
 			);
 			$hit->insert();			
@@ -212,7 +213,8 @@ class Module_NewsLetter extends GW_Public_Module
 				    'message_id'=>$this->tpl_vars['newsletter_id'],
 				    'subscriber_id'=>$item->id,
 				    'link'=>$item->unsubscribed ? 'unsubscribe' : 'newsgroup change '.implode(',', $prev_groups).' > '.implode(',', $post_groups),
-				    'ip'=>$_SERVER['REMOTE_ADDR']				    
+				    'ip'=>$_SERVER['REMOTE_ADDR'],
+				    'debug'=>$_SERVER['REQUEST_URI']
 				]
 			);
 			$hit->insert();
@@ -264,7 +266,8 @@ class Module_NewsLetter extends GW_Public_Module
 			    'message_id'=>$letter->id,
 			    'subscriber_id'=>$recipient->id,
 			    'link'=>'link-newsletter-online',
-			    'ip'=>$_SERVER['REMOTE_ADDR']				    
+			    'ip'=>$_SERVER['REMOTE_ADDR'],
+			    'debug'=>$_SERVER['REQUEST_URI']
 			]
 		);
 		$hit->insert();		
