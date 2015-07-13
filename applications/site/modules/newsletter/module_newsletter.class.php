@@ -173,6 +173,26 @@ class Module_NewsLetter extends GW_Public_Module
 		Header('Location: '.$link);
 	}
 	
+	function viewLink2()
+	{
+		if(!isset($_GET['nlid']) || !isset($_GET['rid']) || !isset($_GET['link']))
+			die('Bad link Errcode: 48499444');
+		
+		$nl = GW::getInstance('GW_NL_Message')->find(['id=?', $_GET['nlid']]);
+		$link = GW::getInstance('GW_NL_Link')->find(['letter_id=? AND id=?', $_GET['nlid'], $_GET['link']]);
+				
+		if($nl && $link)
+		{
+			$this->__saveHit(['message_id'=>$_GET['nlid'], 'subscriber_id'=>$_GET['rid'], 'link'=>$link->id]);	
+			
+			Header('Location: '.$link->link);
+			exit;
+		}
+		
+		
+		die('Bad request. Error Code: 15516gf1jr91');
+	}	
+	
 	function viewSuccess()
 	{
 		
@@ -249,12 +269,11 @@ class Module_NewsLetter extends GW_Public_Module
 		$this->smarty->assign('UNSUBSCRIBE', $us_link);
 		
 		
-		$message = $letter->body_full;
-		$message = GW_Link_Helper::trackingLink($message);
+		$message = $letter->getBodyFull('body_prepared');
 		
-		$trackinglink="link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
-		$message = str_replace('##TRACKINGLINK##', $trackinglink, $message);
 		
+		$trackinglink2="link2?nlid={$letter->id}&rid=".$recipient->id.'&link=';
+		$this->smarty->assign('TRACKINK_LINK', $trackinglink2);
 		
 		
 		//register hit

@@ -3,6 +3,13 @@
 
 class GW_Link_Helper
 {
+	static function getLinks($text) 
+	{
+		preg_match_all("/(href=[\"'])(https?\:\/\/.+)([\"'])/U", $text, $matches);
+		
+		return isset($matches[2]) ? $matches[2] : false;
+	}
+	
 	static function __trackingLink($match)
 	{
 		$match[2]=str_replace('&amp;','&', $match[2]);

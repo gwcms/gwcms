@@ -8,7 +8,7 @@
 	
 	
 	{$display_fields=[subscriber_id,link,insert_time]}
-	{$dl_smart_fields=['subscriber_id']}
+	{$dl_smart_fields=['subscriber_id','link']}
 	
 	{$dl_fields=$display_fields}
 	{$dl_toolbar_buttons = ['filters']}	
@@ -25,6 +25,14 @@
 			{$item->subscriber_id}
 		{/if}
 	{/function}
+	
+	{function dl_cell_link}			
+		{if is_numeric($item->link)}
+			id:{$item->link} {$links[$item->link]} 
+		{else}
+			{$item->link}
+		{/if}
+	{/function}	
 	
 	
 	{$dl_order_enabled_fields=array_keys($display_fields)}

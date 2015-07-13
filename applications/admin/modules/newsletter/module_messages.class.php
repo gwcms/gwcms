@@ -43,7 +43,23 @@ class Module_Messages extends GW_Common_Module
 		 
 		$item->recipients_count = $this->__getRecipients($item, 1, true);
 		
-		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);		
+		//paskutini p taga nuimti
+		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);	
+		
+		
+		//surasti linkus irasyt i duombaze
+		$links = GW_Link_Helper::getLinks($item->body);
+		GW::getInstance('GW_NL_Link')->storeNew($links, $item->id);
+		
+		$links = GW::getInstance('GW_NL_Link')->getAllidLink($item->id);
+		
+		$body = $item->body;
+		
+		foreach($links as $id => $link){
+			$body = str_replace($link, '{$TRACKINK_LINK}'.$id, $body);
+		}
+		
+		$item->body_prepared = $body;
 	}
 	
 	
@@ -180,11 +196,15 @@ class Module_Messages extends GW_Common_Module
 		$this->smarty->assign('LINKONLINE', $link_online);
 		
 		# 3 - TRACKING PRIDEJIMAS
-		$trackinglink=$linkbase."link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
-			
+		# //2015-07-13 removed
+		//$trackinglink=$linkbase."link?nlid={$letter->id}&rid=".$recipient->id.'&link=';
+		$trackinglink2=$linkbase."link2?nlid={$letter->id}&rid=".$recipient->id.'&link=';	
+		$this->smarty->assign('TRACKINK_LINK', $trackinglink2);
+		
 		$msg = $this->smarty->fetch('string:'.$msg);		
 		
-		$msg = str_replace('##TRACKINGLINK##', $trackinglink, $msg);
+		//2015-07-13 removed
+		//$msg = str_replace('##TRACKINGLINK##', $trackinglink, $msg);
 	}
 	
 	
@@ -195,12 +215,13 @@ class Module_Messages extends GW_Common_Module
 		
 		$linkbase = Navigator::getBase(true).'site/';	
 		
-		$message = $item->body_full;
+		$message = $item->getBodyFull('body_prepared');
 		
 		//$message="<a href='http://www.menuturas.lt/newsletter_images/nl1-head.jpg'>Abc</a>";
 		//d::dumpas(htmlspecialchars(GW_Link_Helper::trackingLink($message)));
 		
-		$message = GW_Link_Helper::trackingLink($message);
+		//2015-07-13 removed
+		//$message = GW_Link_Helper::trackingLink($message);
 		$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
 		
 		
@@ -279,7 +300,7 @@ class Module_Messages extends GW_Common_Module
 			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();		
 		
 		//$this->__addSubscribers($list);
-		return ['list'=>$list];
+		return ['list'=>$list, 'links'=> GW::getInstance('GW_NL_Link')->getAllidLink($item->id)];
 	}
 	
 	
