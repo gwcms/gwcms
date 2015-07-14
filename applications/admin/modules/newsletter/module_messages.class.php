@@ -244,7 +244,7 @@ class Module_Messages extends GW_Common_Module
 			$mail->msgHTML($msg);
 			
 		
-			$mail->addCustomHeader("List-Unsubscribe",'<'.$mail->__replyTo.'>, <'.$message_info['unsubscribe_link'].'>');
+			//$mail->addCustomHeader("List-Unsubscribe",'<'.$mail->__replyTo.'>, <'.$message_info['unsubscribe_link'].'>');
 			
 			
 			if(!$mail->send()) {
