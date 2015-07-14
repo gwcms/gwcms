@@ -137,7 +137,7 @@ class Module_NewsLetter extends GW_Public_Module
 	{		
 		$subscriber = new GW_NL_Subscriber;
 		
-		$subscriber->setValues(['email'=>$_POST['email'], 'lang'=>$this->app->ln, 'active'=>0, 'unsubscribed'=>0]);
+		$subscriber->setValues(['email'=>$_REQUEST['email'], 'lang'=>$this->app->ln, 'active'=>0, 'unsubscribed'=>0]);
 		$subscriber->setConfirmCode();
 		
 		
