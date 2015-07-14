@@ -82,7 +82,7 @@ class Module_Messages extends GW_Common_Module
 				a.unsubscribed=0 AND
 				a.active=1 AND 
 				a.lang=? AND
-				a.confirm_code < 100
+				a.confirm_code < 100 AND
 				$incond 
 				". (!$count_total ? 'AND aa.status IS NULL' : '')."
 			LIMIT $portion
@@ -188,10 +188,10 @@ class Module_Messages extends GW_Common_Module
 		
 		$reml_encoded = base64_encode($recipient->email);
 		$us_link=$linkbase."subscribe?nlid={$letter->id}&re=";	
-		$us_link=$us_link.$reml_encoded;
-		$us_link='<a href="'.$us_link.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
+		$us_link=$us_link.urlencode($reml_encoded);
+		$us_link_html='<a href="'.$us_link.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
 		
-		$this->smarty->assign('UNSUBSCRIBE', $us_link);
+		$this->smarty->assign('UNSUBSCRIBE', $us_link_html);
 		
 		$link_online = $linkbase.'item?nlid='.$letter->id.'&rid='.$recipient->id.'&re='.$reml_encoded;
 		$link_online = '<a href="'.$link_online.'">'.$this->lang['LINK'][strtoupper($recipient->lang)].'</a>';
@@ -207,6 +207,8 @@ class Module_Messages extends GW_Common_Module
 		
 		//2015-07-13 removed
 		//$msg = str_replace('##TRACKINGLINK##', $trackinglink, $msg);
+		
+		return ['unsubscribe_link'=>$us_link];
 	}
 	
 	
@@ -233,13 +235,17 @@ class Module_Messages extends GW_Common_Module
 
 			$recipient = (object)$recipient;
 			
-			$this->__prepareMessage($msg, $item, $linkbase, $recipient);
+			$message_info = $this->__prepareMessage($msg, $item, $linkbase, $recipient);
 			
 
 			$info = ['subscriber_id'=>$recipient->id, 'message_id'=>$item->id, 'time'=>date('Y-m-d H:i:s')];
 			
 			$mail->addAddress($recipient->email);
 			$mail->msgHTML($msg);
+			
+		
+			$mail->addCustomHeader("List-Unsubscribe",'<'.$mail->__replyTo.'>, <'.$message_info['unsubscribe_link'].'>');
+			
 			
 			if(!$mail->send()) {
 				$info['status']=0;
@@ -250,6 +256,10 @@ class Module_Messages extends GW_Common_Module
 			
 			$mail->clearAddresses();
 			$mail->clearAttachments();
+			
+	
+			
+			
 			
 			$sent_info[]=$info;
 		}
@@ -318,6 +328,7 @@ class Module_Messages extends GW_Common_Module
 		
 		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($replyto);
 		$mail->addReplyTo($email, $name);
+		$mail->__replyTo = $email;
 		
 		$mail->Subject = $subject;
 		
