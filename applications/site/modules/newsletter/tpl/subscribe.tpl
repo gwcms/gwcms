@@ -1,4 +1,4 @@
-{include "default_open_clean.tpl"}
+{include "default_open.tpl"}
 
 
 <form action="{$smarty.server.REQUEST_URI}" method="post">

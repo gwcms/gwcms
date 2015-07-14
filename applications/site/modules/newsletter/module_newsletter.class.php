@@ -13,9 +13,15 @@ class Module_NewsLetter extends GW_Public_Module
 		
 		
 		$this->config = new GW_Config('newsletter/');
-		
-		
 	}
+	
+	function processView($name, $params = array()) {
+		
+		$this->app->page->title = isset($this->lang['VIEWS'][$name]) ? $this->lang['VIEWS'][$name] : $this->lang['VIEWS']['default'];
+		
+		parent::processView($name, $params);
+	}
+	
 
 
 	function viewDefault($params)
@@ -72,6 +78,13 @@ class Module_NewsLetter extends GW_Public_Module
 	{
 		
 	}
+
+	function viewNewSubscribe_Menuturas()
+	{
+		
+	}
+	
+	
 	
 	function viewConfirm()
 	{
@@ -84,7 +97,7 @@ class Module_NewsLetter extends GW_Public_Module
 		
 			$recipient->groups = array_keys($this->options['groups']);
 			$recipient->active = 1;
-			$recipient->confirm_code = 0;
+			$recipient->confirm_code = 7;
 			
 			$recipient->save();
 			
@@ -101,29 +114,18 @@ class Module_NewsLetter extends GW_Public_Module
 		$confirm_link = $linkbase.strtolower($this->app->ln)."/direct/newsletter/newsletter/confirm?rid=".$subscriber->id.'&confirm='.$subscriber->confirm_code;
 		$this->smarty->assign('CONFIRM_LINK', $confirm_link);
 		
-		
-		
 		$body = $this->smarty->fetch('string:'.$this->config->subscribe_confirm_msg);
-		
-		$sender = $this->config->default_sender;
-		$replyto = $this->config->default_replyto;
-		$subj = $this->lang['CONFIRM_SUSBSCRIBE'];
-		
-		
-		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-		if(!$sender)
-			die('ERROR NO SENDER CONFIGURED. ERRCODE: 9846a5498g4sf6');
+		if(!$this->config->default_sender)
+			die('ERROR NO SENDER CONFIGURED. ERRCODE: 9846a5498g4sf6');		
 		
-		$headers .= "From: $sender\r\n";
-
-		if($replyto)
-			$headers .= "Reply-To: $replyto\r\n";
-
+		$mailer = $this->initPhpmailer($this->config->default_sender, $this->config->default_replyto, $this->lang['CONFIRM_SUSBSCRIBE']);
 		
+		$mailer->addAddress($subscriber->email);
+		$mailer->msgHTML($body);
+				
 		
-		if(!mail($subscriber->email, $subj, $body, $headers)) {	
+		if(! $mailer->send()) {	
 			die('mail send failed');
 		}	
 		
@@ -301,6 +303,32 @@ class Module_NewsLetter extends GW_Public_Module
 		
 	}	
 
+	
+	function initPhpmailer($from, $replyto, $subject)
+	{
+		$mail = new PHPMailer;
+		//$mail->isSendmail();
+		$mail->CharSet = 'UTF-8';
+		
+		
+		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($from);
+		$mail->setFrom($email, $name);
+		
+		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($replyto);
+		$mail->addReplyTo($email, $name);
+		
+		$mail->Subject = $subject;
+		
+		
+		$cfg = new GW_Config('newsletter/');
+		$mail->DKIM_domain = $cfg->dkim_domain;
+		$mail->DKIM_private = GW::s('DIR/SYS_FILES').'.mail.key';
+
+		$mail->DKIM_selector = $this->config->dkim_domain_selector;
+		$mail->DKIM_passphrase = ''; //key is not encrypted
+		
+		return $mail;
+	}	
 	
 
 	

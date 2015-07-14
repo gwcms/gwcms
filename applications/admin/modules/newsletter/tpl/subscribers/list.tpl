@@ -16,7 +16,8 @@
 	{$display_fields=[title=>1,
 		email=>1,
 		lang=>1,
-		groups=>1,insert_time=>1,update_time=>1]}
+		groups=>1,confirmed=>1,insert_time=>1,update_time=>1]}
+	{$dl_smart_fields=[title,email,groups,confirmed]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
@@ -36,8 +37,7 @@
 		groups=>[type=>multiselect, options=>$options.groups]]
 	}
 	
-	{$dl_smart_fields=[title,email,groups]}
-	
+
 	{function dl_cell_title}
 		{if $item->unsubscribed}<s style="color:gray">{$item->title}</s>{else}{$item->title}{/if}
 	{/function}
@@ -51,6 +51,16 @@
 		{/foreach}	
 	{/function}
 	
+	
+	{function dl_cell_confirmed}
+		{if $item->confirm_code==0}
+			-
+		{elseif $item->confirm_code==7}
+			{$lang.YES}
+		{else}
+			{$lang.NO}, patvirtinimo kodas {$item->confirm_code}
+		{/if}
+	{/function}	
 	
 	
 	{gw_unassign var=$display_fields.image} 	

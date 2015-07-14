@@ -9,6 +9,12 @@
 		<i id="RU">Cсылка</i>		
 	</i>
 	
+	<i id="VIEWS">
+		<i id="confirm">Patvirtinti naujienlaiškio užsakymą</i>
+		<i id="subscribe">Naujienų užsakymas</i>
+		<i id="default">Naujienos</i>
+	</i>
+	
 	<i id="CONFIRM_SUSBSCRIBE">
 		<lt>Patvirtinkite registraciją</lt>
 		<en>Patvirtinkite registraciją</en>

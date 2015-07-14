@@ -50,6 +50,7 @@
 		<i id="default_replyto">"Atsakyti į" pagal nutylėjimą</i>
 		<i id="replyto">Atsakyti į</i>
 		<i id="subscribe_confirm_msg">Prenumeratos patvirtinimo žinutė</i>
+		<i id="confirmed">Patvirtintas</i>
 	</i>
 	
 	<i id="FIELD_NOTE">

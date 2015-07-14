@@ -262,8 +262,14 @@
 	<i id="1">Active</i>	
 </i>
 
-<i id="YES">Yes</i>
-<i id="NO">No</i>
+<i id="YES">
+	<en>Yes</en>
+	<lt>Taip</lt>
+</i>
+<i id="NO">
+	<en>No</en>
+	<lt>Ne</lt>
+</i>
 
 <i id="SEARCH">
 	<en>Search</en>
