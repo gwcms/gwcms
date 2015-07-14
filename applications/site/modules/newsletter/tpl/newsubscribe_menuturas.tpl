@@ -1,10 +1,14 @@
 <style>
 	#newsletter_subscribe *{
 		font-family: "Trebuchet MS", Helvetica, sans-serif;
-		font-size:12px;
+		font-size:14px;
 	}
 	
 	.marginleft25{ margin-left:25px }
+	.nl_title{ font-size: 14px !important;font-weight: bold }
+	.nl_input_email{ width:160px }
+	.error_field{ border: 1px solid red; }
+	.success_field{ border: 1px solid green; }
 </style>
 
 <script type="text/javascript">
@@ -12,27 +16,33 @@
 	
 	$(document).ready(function(e) {
 
-	    $("#subscribeForm").submit(function() {
-		$.post(subscribeUrl, $("#subscribeForm").serialize()) //Serialize looks good name=textInNameInput&&telefon=textInPhoneInput---etc
-		.done(function(data) {
+		$("#subscribeForm").submit(function() {
+			$.ajax({
+				type: "GET",
+				url: subscribeUrl,
+				data: $("#subscribeForm").serialize(),
+				async:true,
+				dataType : 'jsonp',   //you may use jsonp for cross origin request
+				crossDomain:true,
+				success: function(data, status, xhr) {
+					if(data.success)
+					{
+						$('.nl_input_email').addClass('success_field');
+						alert('Jūs užsiregistravote naujienlaiškiui, patikrinkite pašto dėžutę, kad patvirtinti prenumeratą');
+					}else{
+						$('.nl_input_email').addClass('error_field');
+						alert('Toks el. paštas jau įregistruotas');
+					}
 
+				},
+				error: function(jqXHR, textStatus, ex) {
+				    alert(textStatus + "," + ex + "," + jqXHR.responseText);
+				}		     
+			})
 
-
-
-			if (data.match(/subscribe_ok_confirm/))
-			{
-				$('#subscribefail').hide();
-				$('#subscribeok').show();
-				$('#subscribeForm').hide();
-			}
-			else {
-				$("#subscribefail").text("Klaida!");   
-
-
-			}
+			return false;
 		});
-		return false;
-	    })
+		   
 	});	
  </script>
 
@@ -48,10 +58,10 @@
 
 <div id="step1" style="">	
 <p> 
-	Naujienlaiškio prenumerata<br />
-	<input type="email" name="email" required="required" style="" placeholder="El@pašto.adresas">
+	<span class="nl_title">Naujienlaiškio prenumerata</span><br />
+	<input class="nl_input_email"  type="email" name="email" required="required" style="" placeholder="El@pašto.adresas">
 	
-	<input type="submit" value="Užsisakyti" />
+	<input type="submit" value="&#9654;" />
 	<!--<img src="https://cdn3.iconfinder.com/data/icons/rssesque/7.png">-->
 </p>
 
@@ -60,22 +70,6 @@
 
 </div>
 
-<div id="step2" style="display:none">
-<p>
-Naujienų grupės:
-
-<div class="marginleft25">
-{foreach $options.groups as $id => $item}
-	<input type="checkbox" name="groups[]" value="{$id}" checked="checked" /> {$item} <br />
-{/foreach}
-</div>
-
-
-
-
-<p>
-	
-</p>
 </div>
 
 </form>
