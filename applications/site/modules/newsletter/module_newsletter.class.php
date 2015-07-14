@@ -153,6 +153,7 @@ class Module_NewsLetter extends GW_Public_Module
 		}
 		
 		echo $_GET['callback']."(".json_encode($response).");";
+		exit;
 		
 	}
 	
