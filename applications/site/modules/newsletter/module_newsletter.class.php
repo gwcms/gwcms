@@ -140,20 +140,19 @@ class Module_NewsLetter extends GW_Public_Module
 		$subscriber->setValues(['email'=>$_REQUEST['email'], 'lang'=>$this->app->ln, 'active'=>0, 'unsubscribed'=>0]);
 		$subscriber->setConfirmCode();
 		
-		
 		if($subscriber->validate())
 		{
 			$subscriber->insert();
 			
 			$this->__sendConfirmMail($subscriber);
 			
+			$response['success']=1;
 			
-			die('subscribe_ok_confirm');
 		}else{
-			die(json_encode($subscriber->errors));;
+			$response['errors'] = $subscriber->errors;
 		}
 		
-		
+		echo $_GET['callback']."(".json_encode($response).");";
 		
 	}
 	
