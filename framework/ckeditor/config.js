@@ -9,7 +9,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.uiColor = '#AADC6E';
 	
 	config.extraPlugins = 'codemirror';	
-	config.removePlugins = 'elementspath,save,font,forms,flash,pagebreak,smiley,language';	
+	config.removePlugins = 'elementspath,save,forms,flash,pagebreak,smiley,language';	
 	config.skin = 'kama';
 	config.allowedContent=true; //jei neuzsetintas viska filtruos
 	
