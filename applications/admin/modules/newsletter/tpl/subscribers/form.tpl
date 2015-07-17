@@ -11,6 +11,8 @@
 
 {include file="elements/input.tpl" type=bool name=active}
 {include file="elements/input.tpl" type=bool name=unsubscribed}
+{include file="elements/input.tpl" type=text name=unsubscribe_note}
+
 
 
 

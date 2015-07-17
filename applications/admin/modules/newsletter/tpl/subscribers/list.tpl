@@ -16,7 +16,9 @@
 	{$display_fields=[title=>1,
 		email=>1,
 		lang=>1,
-		groups=>1,confirmed=>1,insert_time=>1,update_time=>1]}
+		groups=>1,confirmed=>1,insert_time=>1,update_time=>1,
+		unsubscribe_note=>0
+		]}
 	{$dl_smart_fields=[title,email,groups,confirmed]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
