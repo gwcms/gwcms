@@ -51,6 +51,7 @@
 		<i id="replyto">Atsakyti į</i>
 		<i id="subscribe_confirm_msg">Prenumeratos patvirtinimo žinutė</i>
 		<i id="confirmed">Patvirtintas</i>
+		<i id="unsubscribe_note">Atsisakymo pastaba</i>
 	</i>
 	
 	<i id="FIELD_NOTE">
