@@ -234,6 +234,8 @@ class Module_NewsLetter extends GW_Public_Module
 				$success = false;
 			}*/
 			
+			$item->unsubscribe_note = $_POST['unsubscribe_note'];
+			
 			$success=true;
 		}
 		

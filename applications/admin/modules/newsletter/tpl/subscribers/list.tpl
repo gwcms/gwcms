@@ -36,6 +36,7 @@
 		insert_time=>1, 
 		active=>[type=>select, options=>$lang.ACTIVE_OPT],
 		unsubscribed=>[type=>select, options=>['0'=>$lang.NO, '1'=>$lang.YES]],
+		unsubscribe_note=>1,
 		groups=>[type=>multiselect, options=>$options.groups]]
 	}
 	

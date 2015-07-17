@@ -37,9 +37,12 @@
 			<input type="checkbox" name="unsubscribe_confirm" required="required" />
 			Nebenoriu gauti daugiau naujienlaiškių į <b>{$subscriber->email}</b>
 			
+			<br /><br />
+			Trumpa atsisakymo žinutė (nebūtina): <br />
+			<input type="text" name="unsubscribe_note" maxlength="100" style="width: 500px" />
 			
 			<br /><br />
-			<input type="submit" value="Išsaugoti pasirinkimą" />
+			<input type="submit" value="Atsisakyti" />
 		</div>
 	{/if}
 </fieldset>
