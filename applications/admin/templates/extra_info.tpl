@@ -8,7 +8,7 @@
 
 {foreach from=$extra_fields item=field_id}
 	<tr>
-		<td width="1%" nowrap>{$app->fh()->fieldTitle($field_id)}</td>
+		<td width="1%" nowrap align="right"><i>{$app->fh()->fieldTitle($field_id)}</i></td>
 		<td width="99%">
 			{$x=$item->get($field_id)}
 			{if is_array($x)}
