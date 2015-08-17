@@ -25,7 +25,7 @@ class Cron
 	
 	function checkAndRunInterval($time_match, $interval)
 	{
-		$config = GW_Config::singleton();
+		$config = GW::getInstance('GW_Config');;
 		
 		if(strpos($time_match,' ')===false)
 			$time_match='....-..-.. '.$time_match;

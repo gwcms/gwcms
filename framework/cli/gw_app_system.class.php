@@ -28,7 +28,7 @@ class GW_App_System Extends GW_App_Base
 	
 	static function getRunningPid()
 	{
-		$cfg = GW_Config::singleton();
+		$cfg = GW::getInstance('GW_Config');
 		$pid = $cfg->get('system_app/pid');
 		
 		if(GW_Proc_Ctrl::isRunning($pid, 'system.php'))
@@ -59,8 +59,8 @@ class GW_App_System Extends GW_App_Base
 	
 	
 	static function runSelf()
-	{
-		GW_Proc_Ctrl::startDaemon(GW::$dir['ADMIN']."cli/system.php", GW::$dir['LOGS'].'system.log');
+	{		
+		GW_Proc_Ctrl::startDaemon(GW::s('DIR/ROOT')."daemon/system.php", GW::s('DIR/LOGS').'system.log');
 	}
 	
 	

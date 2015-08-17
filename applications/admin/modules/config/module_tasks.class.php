@@ -4,6 +4,8 @@
 class Module_Tasks extends GW_Common_Module
 {	
 
+	public $default_view = 'list';	
+	
 	function init()
 	{
 		parent::init();
@@ -12,10 +14,11 @@ class Module_Tasks extends GW_Common_Module
 
 	
 	
-	function viewDefault()
+	function __eventBeforeList()
 	{	
-		$this->viewList();
 
+		
+		
 		$this->loadTasksList();		
 		
 		if(!GW_App_System::getRunningPid())
@@ -25,7 +28,7 @@ class Module_Tasks extends GW_Common_Module
 	
 	function loadTasksList()
 	{
-		$tasks = glob(GW::$dir['ADMIN'].'cli/tasks/*'); 
+		$tasks = glob(GW::s('DIR/ADMIN').'cli/tasks/*'); 
 		
 		foreach($tasks as $i => $task)
 			$tasks[$i] = str_replace('.task.class','' ,pathinfo($task, PATHINFO_FILENAME));

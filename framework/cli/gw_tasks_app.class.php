@@ -16,6 +16,10 @@ class GW_Tasks_App extends GW_App_Base
 
 	function __construct($data)
 	{
+		$this->initDb();
+		
+		
+				
 		if(is_object($data))
 			$this->data = $data;
 		else
@@ -24,7 +28,8 @@ class GW_Tasks_App extends GW_App_Base
 			
 		$this->timer = new GW_Timer;
 		$this->debug = $this->data->arguments['debug'];
-			
+		
+		
 	}
 	
 	function init()
@@ -47,7 +52,7 @@ class GW_Tasks_App extends GW_App_Base
 		{
 			$this->msg('Running in debug mode ($this->debug=1)');
 		
-			dump(Array('arguments'=>$this->data->arguments));
+			$this->msg(Array('arguments'=>$this->data->arguments));
 		}
 		
 	}
@@ -58,11 +63,13 @@ class GW_Tasks_App extends GW_App_Base
 	
 	function afterProcess()
 	{
-		dump('-----TASKINFO-----');
-		dump("TASK_ID: {$this->data->id} :TASK_ID");
-		dump("ERROR_CODE: $this->error_code :ERROR_CODE");
-		dump("ERROR_MESSAGE: $this->error_message :ERROR_MESSAGE");
+		$this->output('-----TASKINFO-----');
+		$this->output("TASK_ID: {$this->data->id} :TASK_ID");
+		$this->output("ERROR_CODE: $this->error_code :ERROR_CODE");
+		$this->output("ERROR_MESSAGE: $this->error_message :ERROR_MESSAGE");
 	}
+	
+
 
 	function loadData($id)
 	{
@@ -94,7 +101,7 @@ class GW_Tasks_App extends GW_App_Base
 		//dont ever change and add char "." it would allow to exit from cli/tasks directory (/../../)
 		$task_name = preg_replace('/[^a-z0-9_\/]/i','', $task_name);
 		
-		return GW::$dir['ADMIN'].'cli/tasks/'.$task_name.'.task.class.php';
+		return GW::s('DIR/ROOT').'daemon/tasks/'.$task_name.'.task.class.php';
 	}
 	
 	static function loadTaskFile($task_name)
@@ -182,7 +189,7 @@ class GW_Tasks_App extends GW_App_Base
 		
 		$name = $this->data->name;
 		$id = $this->data->id;
-		dump("[$name][$id] out:\n{$this->data->output}");
+		$this->msg("[$name][$id] out:\n{$this->data->output}");
 		
 		
 		$this->data->finish_time = date('Y-m-d H:i:s');
@@ -210,7 +217,11 @@ class GW_Tasks_App extends GW_App_Base
 	
 	function msg($msg)
 	{
-		dump('['.$this->timer->stop(4).'] '.$msg);
+		echo ('['.$this->timer->stop(4).'] '.$msg."\n");
 	}	
-		
+	
+	function output($msg)
+	{
+		echo $msg."\n";
+	}		
 }

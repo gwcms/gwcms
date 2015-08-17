@@ -11,7 +11,7 @@ if(is_numeric($argv[1])) //Tasks stored in DataBase
 {
 	$app = new GW_Tasks_App($argv[1]);
 	
-	if($argv[2]=='wrap')
+	if(isset($argv[2]) && $argv[2]=='wrap')
 		$app->runSeparate();
 	else
 		$app->runInside();

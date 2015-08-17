@@ -40,7 +40,7 @@ class GW_Test_Internet
 	
 	function saveState($state)
 	{
-		$cfg=GW_Config::singleton();
+		$cfg=GW::getInstance('GW_Config');;
 		$cfg->set('system/internet', (int)$state.'|'.date('Y-m-d H:i:s'));			
 	}
 	
@@ -53,7 +53,7 @@ class GW_Test_Internet
 	
 	function lastCheck()
 	{
-		$cfg=GW_Config::singleton();
+		$cfg=GW::getInstance('GW_Config');;
 		list($state,$time) = explode('|', $cfg->get('system/internet'));
 		
 		$diff=time() - strtotime($time);

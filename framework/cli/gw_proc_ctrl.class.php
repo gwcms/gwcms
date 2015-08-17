@@ -23,8 +23,9 @@ class GW_Proc_Ctrl
 		$out=explode("\n", $out);
 		$proc=Array();
 		
+		
 		foreach($out as $i => $line)
-			if(strpos($line, GW::$dir['ADMIN'])===false){
+			if(strpos($line, GW::s('DIR/ROOT'))===false){
 				unset($out[$i]);
 			}else{
 				list($procid, $cmd) = explode(' - ',$line, 2);
