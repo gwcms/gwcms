@@ -14,7 +14,7 @@
 {include file="elements/input.tpl" name=sms_allow_credit type=bool}
 {include file="elements/input.tpl" name=sms_funds}
 
-{include file="elements/input.tpl" name=sms_pricing_plan type=select options=$opt.sms_pricing_plan empty_option=1}
+{include file="elements/input.tpl" name=sms_pricing_plan type=select options=$options.sms_pricing_plan empty_option=1}
 
 {*
 {include file="elements/input.tpl" name=sms_gates type="multiselect" options=[labas=>labas, routesms=>routesms]}

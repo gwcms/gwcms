@@ -1,11 +1,12 @@
 <?php
+
 class GW_User extends GW_Composite_Data_Object
 {
 	public $table = 'gw_users';
 	public $min_pass_length=4;
 	public $max_pass_length=200;	
 	public $validators = Array();
-	public $calculate_fields = Array('group_ids'=>1,'title'=>1, 'api_key'=>1);
+	public $calculate_fields = Array('group_ids'=>1,'title'=>1, 'api_key'=>1, 'online'=>1);
 	public $ignore_fields = Array('pass_old'=>1, 'pass_new'=>1, 'pass_new_repeat'=>1);
 	public $encode_fields=Array('info'=>'serialize');	
 	public $composite_map = Array
@@ -146,7 +147,7 @@ class GW_User extends GW_Composite_Data_Object
 	
 	function isRoot()
 	{
-		return GW_Permissions::isRoot($this->group_ids);
+		return $this->id == GW_USER_SYSTEM_ID || GW_Permissions::isRoot($this->group_ids);
 	}
 	
 	function delete()
@@ -214,6 +215,9 @@ class GW_User extends GW_Composite_Data_Object
 	
 	function isSessionNotExpired()
 	{
+		if($this->id == GW_USER_SYSTEM_ID )
+			return true;
+		
 		$tmp = $this->remainingSessionTime();
 		return $tmp > -2;
 	}
@@ -248,7 +252,10 @@ class GW_User extends GW_Composite_Data_Object
 			break;
 			case 'api_key':
 				$val=md5($this->get('password'));
-			break;			
+			break;
+			case 'online':
+				return $this->last_request_time > date('Y-m-d H:i:s', strtotime('-10 minute'));
+			break;
 		}
 		
 		return $cache[$key]=$val;
@@ -316,9 +323,11 @@ class GW_User extends GW_Composite_Data_Object
 	}
 	
 	
-	function getOptions($active=true)
+	function getOptions($active=true, $other_cond='')
 	{
 		$cond = $active ? 'active!=0 AND removed=0' : '';
+		
+		$cond .= ($other_cond && $cond ? ' AND ':'').$other_cond;			
 		
 		return $this->getAssoc(Array('id','username'), $cond);
 	}

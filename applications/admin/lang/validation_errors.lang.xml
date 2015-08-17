@@ -42,5 +42,9 @@
 		<lt>Ne skaičius</lt>
 		<en>Not numeric</en>
 	</i>
+	<i id="INVALID_JSON">
+		<lt>Nevalidus JSON</lt>
+		<en>Invalid JSON</en>		
+	</i>
 
 </xml>

@@ -3,8 +3,7 @@
 
 class Module_Config extends GW_Common_Module
 {	
-	public $default_view = 'default';
-	
+
 	function init()
 	{
 		$this->model = new GW_Config('gallery/');
@@ -15,7 +14,7 @@ class Module_Config extends GW_Common_Module
 	
 	function viewDefault()
 	{
-		return ['item'=>$this->model];
+		$this->smarty->assign('item', $this->model);
 	}
 	
 	function doSave()

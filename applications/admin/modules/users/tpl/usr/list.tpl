@@ -11,9 +11,16 @@
 		username=>1,
 		name=>1,
 		group_ids=>1,
+		online=>1,
 		insert_time=>0,
 		update_time=>0
 	]}
+	
+	{if $m->rootadmin}
+		{$display_fields.parent_user_id=1}
+	{/if}
+	
+	{$dl_smart_fields=[group_ids,name,online]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
@@ -26,12 +33,20 @@
 	{function dl_cell_name}
 		{$item->name} {$item->surname}
 	{/function}	
-		
 	
-	{$dl_smart_fields=[group_ids,name]}
+	{function dl_cell_online}
+		<img src="{$app_root}img/icons/{if $item->online}dot_green{else}dot_white{/if}.png">
+	{/function}			
+	
+	
+	
 	{$dl_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[switchtouser,invert_active,edit,delete]}
+	{$dl_actions=[message,switchtouser,invert_active,edit,delete]}
+	
+	{function dl_actions_message}
+		{gw_link relative_path="`$item->id`/message" params=[id=>$item->id] icon="message" title="write message" show_title=0}
+	{/function}
 	
 	{$dl_filters=$display_fields}
 	

@@ -119,13 +119,13 @@ class FH
 	{
 		$this->gw_link_po($params);
 		
-		return $params['path'];
+		return isset($params['path']) ? $params['path'] : false;
 	}
 	
 	//path only
 	function gw_link_po(&$params)
 	{		
-		$params['params'] = (array)$params['params'] + $this->app->carryParams();		
+		$params['params'] = (isset($params['params']) ? $params['params'] : [])   + $this->app->carryParams();		
 		$params['params'] = http_build_query($params['params']);	
 			
 		if(isset($params['do']))

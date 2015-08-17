@@ -25,3 +25,18 @@ RENAME TABLE  `gw_adm_messages` TO  `gw_messages`;
 
 
 
+
+
+
+#tik smsams
+
+ALTER TABLE  `gw_users` ADD  `site_verif_key` VARCHAR( 255 ) NOT NULL AFTER  `info` ,
+ADD  `site_passchange` VARCHAR( 255 ) NOT NULL AFTER  `site_verif_key` ,
+ADD  `sms_funds` FLOAT NOT NULL AFTER  `site_passchange` ,
+ADD  `sms_allow_credit` TINYINT NOT NULL AFTER  `sms_funds` ,
+ADD  `sms_gates` VARCHAR( 255 ) NOT NULL AFTER  `sms_allow_credit` ;
+
+ALTER TABLE  `gw_users` ADD  `sms_pricing_plan` VARCHAR( 30 ) NOT NULL AFTER  `sms_gates` ;
+
+
+

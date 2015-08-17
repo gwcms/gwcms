@@ -1,0 +1,1 @@
+{include "`$m->tpl_dir`/new.tpl"}

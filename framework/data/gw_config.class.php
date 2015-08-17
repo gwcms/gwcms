@@ -5,6 +5,7 @@ class GW_Config
 	public $prefix;
 	var $table='gw_config';
 	public $db;
+	private $_cache=[];
 
 	function __construct($prefix='')
 	{
@@ -27,11 +28,28 @@ class GW_Config
 		$db =& $this->getDB();
 
 		$key=addslashes(substr($this->prefix.$key,0,50));
+		
+		if(isset($this->_cache[$key])){
+			return $this->_cache[$key];
+		}
+		
 		$rez = $db->fetch_row("SELECT * FROM {$this->table} WHERE id='$key'");
 		$time = $rez['time'];
 		return $rez['value'];
 	}
 
+	function preload($key,&$time=0)
+	{
+		$db =& $this->getDB();
+
+		$key=addslashes(substr($this->prefix.$key,0,50));
+		$rows = $db->fetch_assoc($q="SELECT id,value FROM {$this->table} WHERE id LIKE '$key%'");
+	
+		$this->_cache=$rows+$this->_cache;
+		
+		return $rows;
+	}	
+	
 	function setValues($vals)
 	{
 		foreach($vals as $key => $val)
@@ -59,39 +77,5 @@ class GW_Config
 		return $this->get($key);
 	}
 	
-	
-	//magic methods
-	
-    private static $instance;
-
-    public static function singleton()
-    {
-        if (!isset(self::$instance)) 
-        {
-            $className = __CLASS__;
-            self::$instance = new $className;
-        }
-        
-        return self::$instance;
-    }
-
-    public static function __callStatic($name, $arguments) 
-    {
-       	if( stripos($name, 'static') !== false)
-    	{    		
-    		//Example call GW_Config::setStatic('key','value');
-    		//will work same as $o = GW_Config::singleton(); $o->set('key','value')
-    		
-    		$func = str_ireplace('static','',$name);
-
-	    		    		    	
-	    	return call_user_func_array(Array( self::singleton() ,$func), $arguments);   		
-    	}
-    	else
-    	{
-    		trigger_error("Unhandled static call", E_USER_ERROR);
-    	}
-        
-    }    
     
 }

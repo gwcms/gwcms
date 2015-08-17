@@ -40,6 +40,13 @@ class Module_LogWatch extends GW_Common_Module
 		exit;
 	}
 	
+	function doClean()
+	{
+		$lw = new GW_Log_Watch($_REQUEST['id']);
+		$lw->clean();
+		$this->jump();
+	}
+	
 
 	function doSet()
 	{

@@ -18,7 +18,7 @@
         	 
         	</a> 
         	{if $smarty.session.cms_auth.switchUser}
-        	<a href="{$app->ln}/users?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+        	<a href="{$app->ln}/users/profile?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		{$sw_usr_return=$app->user->find(['id=?',$smarty.session.cms_auth.switchUser])}
         		({$lang.SWITCH_USER_RETURN|sprintf:$sw_usr_return->name})
         	</a>
@@ -26,11 +26,13 @@
         	| 
             	<a href="{$app->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
             	
-            	{$new_messages=$app->user->countNewMessages()}
-            	{if $new_messages}
-	            	<br>
-	            	<a href="{$ln}/config/messages"><font color="#ffff99">{$new_messages}</font> new messages</a>
-            	{/if}
+			{$new_messages=$app->user->countNewMessages()}
+			<div id="new_messages_block" {if !$new_messages}style="display:none"{/if}>
+	            				
+			<a href="#show_msg" onclick="open_iframe({ url:'{$ln}/users/messages/new', title:'{$lang.NEW_MESSAGES}' }); return false">
+				{$lang.NEW_MESSAGES} (<font color="#ffff99" id="drop_new_messages_count">{$new_messages}</font>)
+			</a>
+			</div>
 		</div>
     </div>
 

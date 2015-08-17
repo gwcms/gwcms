@@ -24,4 +24,4 @@ GW::s('SITE/USER_PASS_CHANGE_PAGE', "sys/user/passchange?id1=%s&id2=%s");
 GW::s('SITE/PATH_LOGOUT','usr/user/logout');
 
 
-GW::s('SITE/TITLE','Menų Turas');
+GW::s('SITE/TITLE','Žinutės');

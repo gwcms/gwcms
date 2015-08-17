@@ -7,6 +7,9 @@ class GW_Logger
 	var $date_format='ymd H:i:s';
 	var $pre='';
 
+	public $collect_messages=false;
+	public $collected_messages=[];
+	
 	function replacern($str)
 	{
 		return str_replace(Array("\r","\n"),Array('\r','\n'),$str);
@@ -30,7 +33,11 @@ class GW_Logger
 
 	function msg($msg)
 	{
+
+		
+		
 		$logstr=date($this->date_format).($this->pre ? $this->pre : ' ').$msg;
+		
 		if($this->STDOUT)
 		{
 			echo $logstr."\n";
@@ -38,10 +45,24 @@ class GW_Logger
 			ob_flush();
 		}
 
+		if($this->collect_messages)
+			$this->collected_messages[]=$logstr;
+		
+			
 		if($this->file)
 			file_put_contents($this->file,$logstr."\r\n",FILE_APPEND);
 		
 	}
+	
+	function getCollectedMessages($implode="\n")
+	{
+		return $implode ? implode($implode, $this->collected_messages) : $this->collected_messages;
+	}
+	
+	function resetCollectedMessages($implode="\n")
+	{
+		$this->collected_messages=[];
+	}	
 	
 	function fmsg()
 	{

@@ -102,7 +102,7 @@
 
 
 <tr>	
-	
+
 	{$dl_order_enabled_fields=array_flip($dl_order_enabled_fields|default:[])}
 	
 	{foreach $dl_fields as $field}
@@ -126,10 +126,18 @@
 
 {$list_row_id=0}
 
+{function name=dl_prepare_item}
+
+{/function}
+
 {foreach from=$list item=item}
 	{$id=$item->id}
 	{$list_row_id=$list_row_id+1}
-<tr id="list_row_{$list_row_id}" class="{if $id && $smarty.get.id==$id}gw_active_row{/if}" 
+
+	
+	{call name="dl_prepare_item"}
+	
+<tr id="list_row_{$list_row_id}" class="{if $item->row_class}{$item->row_class} {/if}{if $id && $smarty.get.id==$id}gw_active_row{/if}" 
 	{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
 	
 	{block name="item_row"}

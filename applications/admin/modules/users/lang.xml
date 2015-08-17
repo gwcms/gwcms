@@ -107,7 +107,52 @@
 			<en>Enable cms autologin</en>
 			<lt>Automatinis prisijungimas prie sistemos</lt>
 		</i>
+		<i id="online">
+			<en>Online</en>
+			<lt>Prisijungęs</lt>			
+		</i>
 		
+		<i id="user_id">
+			<en>To</en>
+			<lt>Kam</lt>
+		</i>
+		<i id="subject">
+			<en>Subject</en>
+			<lt>Tema</lt>
+		</i>
+		<i id="message">
+			<en>Message</en>
+			<lt>Žinutė</lt>
+		</i>
+		<i id="sender">
+			<en>Sender</en>
+			<lt>Siuntėjas</lt>
+		</i>	
+		<i id="parent_user_id">
+			<en>Root user</en>
+			<lt>Aukštesnis vartotojas</lt>
+		</i>
+		
+	</i>
+	
+	<i id="FIELDS_SHORT">
+		<i id="online">O</i>
+	</i>
+
+	<i id="VIEWS">
+		<i id="message">
+			<lt>Siųsti žinutę</lt>
+			<en>Send message</en>
+		</i>
+	</i>
+			
+	<i id="SEND">
+		<lt>Siųsti</lt>
+		<lt>Send</lt>
+	</i>
+	<i id="SENT">
+		<lt>Žinutė išsiųsta</lt>
+		<lt>Message was sent</lt>		
 	</i>
 
 	<i id="PASS_UPDATED">
@@ -132,7 +177,14 @@
 		<en>Change group "%s" permissions</en>
 		<lt>Keisti grupės "%s" teises</lt>
 	</i>
-	
+	<i id="MESSAGES">
+		<en>Messages</en>
+		<lt>Žinutės</lt>
+	</i>
+	<i id="MARK_AS_READ">
+		<en>Mark as read</en>
+		<lt>Pažymėti kaip perskaitytą</lt>
+	</i>	
 	<i id="SESSION_VALIDITY_OPT">
 		<i id="30">30 min</i>
 		<i id="60">60 min</i>
@@ -168,6 +220,16 @@
 				</i>
 				<i id="in_menu">0</i>
 			</i>
+			<i id="messages">
+				<i id="title">
+					<en>Messages</en>
+					<lt>Pranešimai</lt>						
+				</i>
+				<i id="info"><i id="model">GW_Message</i></i>	
+				<i id="in_menu">0</i>
+				<i id="public">1</i>		
+			</i>				
+			
 			<i id="login">
 				<i id="title">
 					<en>User identification</en>

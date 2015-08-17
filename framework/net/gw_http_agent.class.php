@@ -34,6 +34,8 @@ class GW_Http_Agent
 	var $debug=0;
 	var $debug_data;
 	var $cookie_file;
+	
+	var $lgr;
 
 	
 
@@ -87,7 +89,12 @@ class GW_Http_Agent
 
 	function parseCookies()
 	{
-		preg_match_all('/Set-Cookie: ([^=]*)=([^;]*)/i',$this->last_response_header,$m,PREG_SET_ORDER);
+		
+		//labas exception
+		$header = explode('Location: ', $this->last_response_header);
+		preg_match_all('/Set-Cookie: ([^=]*)=([^;]*)/i',$header[0],$m,PREG_SET_ORDER);
+		
+		
 		foreach($m as $i => $tmp)
 			$this->cookies[rawurldecode($tmp[1])]=rawurldecode($tmp[2]);
 			
@@ -118,6 +125,8 @@ class GW_Http_Agent
 	
 	function file_get_contents($url, $context_options)
 	{
+		$error = false;
+		
 		set_error_handler(
 		    create_function(
 		        '$severity, $message, $file, $line',
@@ -155,8 +164,9 @@ class GW_Http_Agent
 		$context = Array
 		(
 			'timeout'=>$this->timeout,
-			'max_redirects'=>$this->max_redirects,
-			'user_agent'=>$this->user_agent
+			//'max_redirects'=>$this->max_redirects,
+			'user_agent'=>$this->user_agent,
+			'follow_location' => false		    
 		);
 
 		if(count($post_params))
@@ -204,7 +214,8 @@ class GW_Http_Agent
 
 		$this->parseCookies();
 
-		dump($context['method']." ".$url);
+		if($this->lgr)
+			$this->lgr->msg($context['method']." ".$url);
 		
 		if($this->debug)
 		{
@@ -219,8 +230,9 @@ class GW_Http_Agent
 			$this->debug_data['large'][]=$s+Array(
 				'url'=>$url,
 				'size'=>strlen($body), 
-				'time'=>$timer->stop(),			
-				'sent'=>$header, 
+				'time'=>$timer->stop(),
+				'request_heder'=>$context['header'],
+				'request_body'=>isset($context['content']) ? $context['content'] : false,
 				'received_header'=>$this->last_response_header,
 				'received_body'=>$body, 			
 			);			
@@ -244,6 +256,48 @@ class GW_Http_Agent
 	{
 		echo date('ymd His').' '.$msg."\n";
 	}
+	
+	
+	function impuls($url, $post_params=[])
+	{	
+		$parts=parse_url($url);
+		
+
+		$fp = fsockopen($parts['host'],
+		    isset($parts['port'])?$parts['port']:80,
+		    $errno, $errstr, 30);
+
+		$out = "GET ".$parts['path'].'?'.$parts['query']." HTTP/1.1\r\n";
+		$out.= "Host: ".$parts['host']."\r\n";
+		$out.= "Connection: Close\r\n\r\n";
+		fwrite($fp, $out);
+		fclose($fp);		
+		
+		
+		return true;
+		
+		/*
+		$post_string = http_build_query($post_params);
+		$parts=parse_url($url);
+
+		$fp = fsockopen($parts['host'],
+		    isset($parts['port'])?$parts['port']:80,
+		    $errno, $errstr, 30);
+
+		$out = "POST ".$parts['path']." HTTP/1.1\r\n";
+		$out.= "Host: ".$parts['host']."\r\n";
+		$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$out.= "Content-Length: ".strlen($post_string)."\r\n";
+		$out.= "Connection: Close\r\n\r\n";
+		if (isset($post_string)) $out.= $post_string;
+
+		fwrite($fp, $out);
+		fclose($fp);
+		 * 
+		 */
+	}	
+	
+	
 }
 
 ?>

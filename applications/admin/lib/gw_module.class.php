@@ -298,8 +298,12 @@ class GW_Module
 		}
 		
 		$tmp = '__event'.  str_replace('_', '', $event);
-		if(method_exists($this, $tmp))
+		if(method_exists($this, $tmp)){
 			$this->$tmp($context);
+		}else{
+			//d::dump('method '. $tmp.'notexists');
+		}
+		
 		
 		//pass deeper
 		//parent::eventHandler($event, $context);
@@ -311,7 +315,20 @@ class GW_Module
 			return $this->args['lang'];
 			
 		return $this->app->ln;
-	}	
+	}
+	
+	function buildPath($params=[])
+	{
+		if(isset($params['modulepath']))
+		{
+			$params['path']=$this->app->ln.'/'.implode('/',$this->module_path).'/'.$params['modulepath'];
+			unset($params['modulepath']);
+		}
+		
+		
+		
+		return $this->app->fh()->gw_path($params);
+	}
 	
 }
 

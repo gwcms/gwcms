@@ -7,7 +7,14 @@ class Module_Usr extends GW_Common_Module
 	{
 		$this->model = new GW_User();
 		$this->group0 = new GW_Users_Group();
+				
+		$this->rootadmin = $this->app->user->isRoot();
 		
+		if(!$this->rootadmin){
+			$this->filters['parent_user_id'] = $this->app->user->id;
+		}
+		
+		$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);
 		
 		$this->__initGroupOptions();
 		parent::init();
@@ -28,7 +35,9 @@ class Module_Usr extends GW_Common_Module
 	{	
 		$item->load_if_not_loaded();
 		
-		$result = $item->canBeAccessedByUser($this->app->user);
+		$result = ($this->rootadmin) || ($item->parent_user_id == $this->app->user->id);
+		
+		
 		
 		if(!$die || $result)
 			return $result;
@@ -40,58 +49,7 @@ class Module_Usr extends GW_Common_Module
 	}
 	
 	
-	function viewList()
-	{		
-		$list = $this->model->findAll('removed=0');	
-		
-		if(!$this->app->user->isRoot())
-			foreach($list as $i => $item)
-			{
-				if(!$item->canBeAccessedByUser($this->app->user) || $item->get('id') == $this->app->user->get('id'))
-					unset($list[$i]);
-			}
-		
-		return ['list'=>$list];
-	}	
-
-	function doSave()
-	{
-		$vals = $_REQUEST['item'];
-		
-		//do not allow assign to root group if user is not in root group
-		if(!$this->app->user->isRoot())
-			$index = array_search($this->group0->root_group_id, (array)$vals['link_groups']);
-			if(isset($index) && $index!==false)
-				unset($vals['link_groups'][$index]);
-				
-		$item = $this->model->createNewObject();
-		
-		if(!(int)$vals['id']){ // if insert	
-			$item->setValidators('insert');
-			//$vals['user_id']=$this->app->user->get('id');
-		}else{ //if update
-			$item->setValidators('update');
-		}
-		
-		$item->setValues($vals);
-		$this->canBeAccessed($item, true);
-		$item->setValues($vals);
-		
-		if(!$item->validate())
-		{
-			$this->setErrors($item->errors);
-			$this->processView('form');
-			exit;
-		}
-		
-		$item->setValidators(false); //remove validators
-		$item->save();
-		
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
-		
-		$this->jumpAfterSave($item);
-	}
-		
+	
 	function doDelete()
 	{	
 		if(!$item = $this->getDataObjectById())
@@ -138,10 +96,28 @@ class Module_Usr extends GW_Common_Module
 		$this->jump();
 	}
 	
-	function doSwitchUserReturn()
+
+	
+	
+	function viewMessage()
 	{
-		$this->app->auth->switchUserReturn();
-		$this->jump();
+		//GW_Message//
+		$user = $this->getDataObjectById();
+				
+		$this->tpl_vars['user']=$user;
+		
+	}
+	
+	function doMessage()
+	{
+	
+		$vals = $_REQUEST['item'];
+		
+		GW::getInstance('GW_Message')->msg($vals['user_id'], $vals['subject'], $vals['message'], $this->app->user->id);
+		
+		$this->app->setMessage($this->lang['SENT']);
+		
+		$this->jumpAfterSave();
 	}
 		
 }

@@ -11,13 +11,17 @@
 		
 		{$item->subject}
 	{/function}
+	{function dl_cell_sender}
+		{$options.user_id[$item->sender]}
+	{/function}	
+	
 
 	{function dl_cell_message}
 		{if $smarty.request.read_all}
 			<pre class="gw_pre">{$item->message}</pre>
 			{if !$item->seen}{$success=$item->saveValues([seen=>1])}{/if}
 		{else}
-			<a href="#show_msg" onclick="open_ajax({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:this.innerHTML }); return false">
+			<a href="#show_msg" onclick="open_ajax({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{$m->lang.MESSAGES}' }); return false">
 				{$item->message|truncate:'60'}
 			</a>		
 		{/if}
@@ -25,9 +29,10 @@
 	
 
 	{$display_fields=[insert_time=>1,subject=>1,message=>1, sender=>1,update_time=>1]}
+	{$dl_smart_fields=[subject,message,sender]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_smart_fields=[subject, message]}
+	
 	
 	{$dl_toolbar_buttons[] = dialogconf}	
 	

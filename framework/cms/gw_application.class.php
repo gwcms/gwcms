@@ -497,4 +497,16 @@ class GW_Application
 		
 		return $fh;
 	}
+	
+	function backgroundRequest($path, $get_args=[])
+	{
+		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
+		
+		$get_args['temp_access']=GW_USER_SYSTEM_ID.','.$token;
+		$path .= (strpos($path,'?')===false ? '?' : '&') . http_build_query($get_args);
+		
+		GW_Http_Agent::impuls($url=Navigator::getBase(true).$path);
+		
+		return $url;
+	}
 }

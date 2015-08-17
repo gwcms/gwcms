@@ -234,6 +234,16 @@ var gw_adm_sys =
 		//gw_login_dialog.open();
 	},
 	
+	updateNotifications: function(count)
+	{
+		if(count-0){
+			$('#new_messages_block').show();
+		}else{
+			$('#new_messages_block').hide();
+		}
+		$('#drop_new_messages_count').text(count);
+	}
+	
 
 }
 
@@ -394,16 +404,25 @@ var gw_session =
 	keep_timer: 0,
 	exp: 1,	
 	
-	keep_infinity: function(){
-		$.ajax({url: 'tools/session_keep'});
+	
+	process_notifications: function(response)
+	{		
+		gw_adm_sys.updateNotifications(response.new_messages ? response.new_messages : 0);
 	},
 	
-	keep: function(left_secs)
+	ping: function(response){
+		$.ajax({url: 'tools/ping',success: gw_session.process_notifications, dataType:'json'});
+	},
+	
+	keep: function(response)
 	{
-		if(!left_secs)
-			return $.ajax({url: 'tools/session_keep', success: gw_session.keep});
+		if(!response){
+			return $.ajax({url: 'tools/ping', success: gw_session.keep, dataType:'json'});
+		}else{
+			gw_session.process_notifications(response);
+		}
 		
-		gw_session.time_left(left_secs);
+		gw_session.time_left(response.sess_expires);
 		
 		if(gw_session.exp < 0){
 			clearInterval(gw_session.keep_timer);
@@ -469,11 +488,11 @@ var gw_session =
 
 		if(GW.session_exp!=-1)
 		{
-			gw_session.keep_timer = setInterval('gw_session.keep(0)', 5*60*1000);//5min
+			gw_session.keep_timer = setInterval('gw_session.keep(0)', 1*60*1000);//1min
 			gw_session.display_timer60 = setInterval(gw_session.timer_update, 60*1000);//1min
 			gw_session.timer_update();
 		}else{
-			setInterval('gw_session.keep_infinity()', 5*60*1000);//5min
+			setInterval('gw_session.ping()', 1*60*1000);//1min
 		}
 	}
 	
@@ -640,20 +659,20 @@ function open_dialog(conf)
 	$('body').append('<div id="'+id+'"></div>');	
 	
 	if(conf.iframe){
-		$('#'+id).html('<iframe frameborder=0 style="width:100%;height:95%" src="'+conf.url+'">');
+		$('#'+id).get(0).innerHTML='<iframe frameborder=0 style="width:100%;height:95%" src="'+conf.url+'">';
 	}else{
 		$('#'+id).load(conf.url)
 	}
 		
 	var dconf = {
-		buttons: {
-				close: function() {
-				$( this ).dialog( "close" );
-				$('#'+id).destroy();
-			}			
-		},
+		buttons: {},
 		width: $(document).width()/10*4,
 		height: $(window).height()/10*4
+	}
+	
+	dconf.buttons[translations.CLOSE] = function() {
+				$( this ).dialog( "close" );
+				$('#'+id).destroy();
 	}
 	
 	$.extend(dconf, conf);

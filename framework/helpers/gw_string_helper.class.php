@@ -4,7 +4,7 @@ class GW_String_Helper
 {
 	static $encoding = "UTF-8";
 	
-	function ucfirst($str, $lower_str_end = false) 
+	static function ucfirst($str, $lower_str_end = false) 
 	{
 		$first_letter = mb_strtoupper(mb_substr($str, 0, 1, self::$encoding), self::$encoding);
 		
@@ -17,5 +17,22 @@ class GW_String_Helper
 		
 		return $first_letter . $str_end;
 	}
+	
+	static $chars="ABCDEFGHIJKLMNOPQRSTUWVXYZ0123456789";
+	
+	static function getRandString($length)
+	{
+		$str = "";
+		$cmax = strlen(self::$chars);
+		
+		for($i=0;$i<$length;$i++)
+		{
+			$str.= self::$chars[rand(0,$cmax-1)];
+		}
+		
+		return $str;
+	}	
+	
+	
 
 }

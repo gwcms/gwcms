@@ -5,6 +5,7 @@
 {/if}
 
 {assign var="breadcrumbs" value=$app->getBreadcrumbs($breadcrumbs_attach) scope=parent}
+{$translations[]='CLOSE'}
 
 
 <head>
@@ -33,5 +34,10 @@
 	<script type="text/javascript">
 		$.extend(GW, { app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
 		gw_adm_sys.init();
+		
+		translations = {};
+		{foreach $translations as $key}
+			translations['{$key}']='{$app->fh()->altLang($key)}';
+		{/foreach}
 	</script>
 </head>

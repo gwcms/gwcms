@@ -18,7 +18,9 @@
 
 {include file="elements/input.tpl" type=pass_visible name=pass_new title=$m->lang.FIELDS.pass}
 
-
+{if $m->rootadmin}
+	{include file="elements/input.tpl" name=parent_user_id type=select options=$options.parent_user_id empty_option=1 default=$app->user->id}
+{/if}
 
 
 {include file="default_form_close.tpl" extra_fields=[id,login_time,login_count,last_ip,insert_time,update_time]}

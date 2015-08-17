@@ -23,6 +23,7 @@
 
 			
 		{gw_link relative_path="entire" params=[id=>$item->id] title="Entire"}	
+		{gw_link do="clean" params=[id=>$item->id] title="Clean"}	
 	{/function}
 	
 	{$dl_smart_fields=['size','new_size']}

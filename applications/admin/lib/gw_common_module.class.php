@@ -26,6 +26,7 @@ class GW_Common_Module extends GW_Module
 	
 	// share with smarty
 	public $options;
+	public $links;
 	
 	public $default_view = 'list';
 	
@@ -39,11 +40,14 @@ class GW_Common_Module extends GW_Module
 		
 		$this->list_params['paging_enabled']=false;
 		
+		//d::dumpas($this->app->page);
+		
 		//specifu model name in lang file
 		if(! isset($this->model) && ($tmp = $this->app->page->getDataObject()))
 			$this->model = $tmp;
 		
 		$this->tpl_vars['options'] =& $this->options;
+		$this->tpl_vars['links'] =& $this->links;
 		
 	}
 	
@@ -80,6 +84,8 @@ class GW_Common_Module extends GW_Module
 			
 		if($load && !$item->load())
 			return $this->setErrors('/GENERAL/ITEM_NOT_EXISTS');
+		
+		$this->canBeAccessed($item, true);
 			
 		return $item;
 	}
@@ -90,9 +96,7 @@ class GW_Common_Module extends GW_Module
 	function common_doDelete()
 	{
 		if(! $item = $this->getDataObjectById())
-			return false;
-			
-		$this->canBeAccessed($item, true);	
+			return false;	
 		
 		$this->fireEvent('BEFORE_DELETE', $item);
 			
@@ -109,7 +113,6 @@ class GW_Common_Module extends GW_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
 			
-		$this->canBeAccessed($item, true);
 		
 		$this->fireEvent('BEFORE_CLONE', $item);
 		$this->__doCloneAfterClone($item);
@@ -143,15 +146,14 @@ class GW_Common_Module extends GW_Module
 		$vals+=$this->filters;
 		$item = $this->model->createNewObject($vals, false, $this->lang());
 		
-		$this->fireEvent('BEFORE_SAVE_0', $item);		
-		
-		
 		$this->canBeAccessed($item, true);
-		
-		
+		$item->setValues($vals);
+	
+		$this->fireEvent('BEFORE_SAVE_0', $item);
+					
 		if($this->auto_images && count($_FILES))
 			GW_Image_Helper::__setFiles($item);
-		
+				
 		if(!$item->validate())
 		{
 			$this->setErrors($item->errors);
@@ -159,7 +161,7 @@ class GW_Common_Module extends GW_Module
 			$this->processView('form');
 			exit;
 		}
-		
+				
 		$this->fireEvent('BEFORE_SAVE', $item);
 		
 		//jeigu nustatomas id naujo iraso sukurimo atveju GW_Data_Object::save() funkcija interpretuoja kad norima atlikti update veiksma
@@ -168,7 +170,7 @@ class GW_Common_Module extends GW_Module
 		//	<input type="hidden" name="SAVE-TYPE" value="INSERT">
 		//{/if}
 		//isvengsime sio nesklandumo
-		
+				
 		if(isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE']=="INSERT")
 			$item->insert();
 		else
@@ -208,8 +210,6 @@ class GW_Common_Module extends GW_Module
 		$item = $this->model->createNewObject();
 		
 		$id = $this->getCurrentItemId();
-		
-		
 		
 		//only form i18n objects
 		if(isset($this->i18n_fields) && $this->i18n_fields)
@@ -265,7 +265,9 @@ class GW_Common_Module extends GW_Module
 
 		if(!$item->invertActive()) 
 			return $this->setErrors('/GENERAL/ACTION_FAIL'); 
-	 	 
+		
+		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);
+	
 		$this->jump(); 
 	}	
 
@@ -509,6 +511,8 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
 		$this->setListParams($cond, $params);
+		
+		$this->fireEvent('AFTER_LIST_PARAMS', $params);
 		
 
 		$params['key_field']=$this->model->primary_fields[0];

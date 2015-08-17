@@ -219,7 +219,7 @@ table{line-height:100%;}
 
 .gwTable { border-spacing:0px;  border-collapse: collapse;  font-size: 12px; }
 /* inside table header */
-.gwTable th { border: 1px solid #fff;  padding: 2px 5px 2px 5px;  background: #efefef;}
+.gwTable > tbody >  tr > th { border: 1px solid #fff;  padding: 2px 5px 2px 5px;  background: #efefef;}
 .input_label_td{padding: 5px !important}
 
 .th_h3{
@@ -231,7 +231,7 @@ table{line-height:100%;}
 .th_single{ border: 1px solid #efefef !important; }
 
 /* inside table row */
-.gwTable td { border: 1px solid #efefef; padding: 2px 5px 2px 5px;}
+.gwTable > tbody >  tr > td { border: 1px solid #efefef; padding: 2px 5px 2px 5px;}
 
 .gwActiveTable tr:hover{ background-color:#efefef !important; } 
 

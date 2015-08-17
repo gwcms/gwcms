@@ -73,6 +73,11 @@ class Module_Profile extends GW_Module
 		$this->jump();		
 	}
 	
+	function doSwitchUserReturn()
+	{
+		$this->app->auth->switchUserReturn();
+		$this->jump();
+	}	
 		
 }
 

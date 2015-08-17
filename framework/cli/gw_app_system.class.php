@@ -11,7 +11,7 @@ class GW_App_System Extends GW_App_Base
 	
 	function init()
 	{
-		
+		$this->initDb();
 		
 		$this->config = new GW_Config('system_app/');
 		$this->config->pid = getmypid();

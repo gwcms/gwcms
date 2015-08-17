@@ -33,6 +33,10 @@
 	<en>Cancel</en>
 	<lt>Atšaukti</lt>
 </i>
+<i id="CLOSE">
+	<en>Close</en>
+	<lt>Užverti</lt>
+</i>
 <i id="CONTINUE">
 	<en>Continue</en>
 	<lt>Tęsti</lt>
@@ -123,6 +127,15 @@
 	<en>Confirm delete</en>
 	<lt>Patvirtinkite įrašo šalinimą</lt>
 </i>
+<i id="NEW_MESSAGES">
+	<en>New messages</en>
+	<lt>Nauji pranešimai</lt>
+</i>
+
+<i id="NO_NEW_MESSAGES">
+	<en>No new messages found</en>
+	<lt>Naujų pranešimų nėra</lt>
+</i>
 
 
 
@@ -163,7 +176,10 @@
 		<en>Text</en>
 		<lt>Tekstas</lt>
 	</i>
-	
+	<i id="time">
+		<en>Time</en>
+		<lt>Laikas</lt>
+	</i>	
 	<i id="id">
 		<en>Id. num.</en>
 		<lt>Id. num.</lt>

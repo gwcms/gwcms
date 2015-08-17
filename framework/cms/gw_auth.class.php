@@ -49,7 +49,13 @@ class GW_Auth
 				
 		$logedin=(isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int)$this->session["user_id"]);
 		
-		if($logedin) {
+		if(isset($_GET['temp_access'])){
+			list($uid, $token) = explode(',',$_GET['temp_access']);
+			
+			if(GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token))
+				$user = GW::getInstance('GW_User')->createNewObject($uid, 1);
+				
+		}elseif($logedin) {
 			$user = $this->getUserByUserID($user_id);
 		} elseif($autologin) {
 			$user = $this->loginAuto($cookieUsername, $cookiePass);
@@ -78,7 +84,8 @@ class GW_Auth
 			return $this->setError('/GENERAL/USER_BANNED');
 		if($user->active == 0)
 			return $this->setError('/GENERAL/USER_INNACTIVE');
-			
+		
+		
 		return $user;
 	}
 	

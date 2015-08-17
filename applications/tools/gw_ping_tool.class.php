@@ -1,6 +1,6 @@
 <?php
 
-class GW_Session_Keep_Tool
+class GW_Ping_Tool
 {
 	public $path_arr;
 	
@@ -22,6 +22,8 @@ class GW_Session_Keep_Tool
 	
 	function process()
 	{
+		$response = [];
+		
 		$this->app->initSession();
 		
 		
@@ -30,11 +32,18 @@ class GW_Session_Keep_Tool
 		
 		$this->app->initAuth();
 		
+		$response['sess_expires'] = -2;
 		
 		if($this->app->user)
-			die((string)$this->app->user->remainingSessionTime());
-
-		die('-2');
+		{
+			$response['sess_expires']=$this->app->user->remainingSessionTime();
+			$response['new_messages']=$this->app->user->countNewMessages();
+		}	
+		
+		FINISH:
+		echo json_encode($response);
+		exit;	
+		
 	}
 }
 

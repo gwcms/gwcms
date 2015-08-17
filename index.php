@@ -1,21 +1,7 @@
 <?php
-//testas1234
-
-$debug=Array('mem_use'=>Array(memory_get_usage(true)));
 
 
-
-include "framework/functions.php";
-include "framework/gw_autoload.class.php";
-include "framework/gw.class.php";
-
-include "config/main.php";
-
-GW_Autoload::init();
-
-$proc_timer = new GW_Timer;
-
-GW::init();
+include __DIR__.'/init_basic.php';
 GW::request();
 
 

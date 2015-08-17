@@ -9,28 +9,3 @@
 			{/foreach}
 </div>
 
-{if $item && $item->id}
-	<script type="text/javascript">
-	
-	var itemform_values='';
-	var form_data_saver_enabled=true;
-	
-	$(function(){
-		itemform_values = $('#itemform').serialize();
-	})
-				
-	$(window).bind('beforeunload', function(){
-	
-		if(form_data_saver_enabled && (itemform_values != $('#itemform').serialize()) )
-			return "Ar tikrai norite palikti puslapi ir prarasti pakeitimus?"
-		
-	});	
-	
-	function remove_form_data_saver()
-	{
-		//itemform_values = $('#itemform').serialize();
-		form_data_saver_enabled=false;
-	}
-			
-	</script>
-{/if}

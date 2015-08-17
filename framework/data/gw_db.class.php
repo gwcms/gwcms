@@ -137,13 +137,16 @@ class GW_DB
 		if(!is_resource($this->result))
 			return false;
 
-		if($assoc)
+		if($assoc==1)
 			while($row=mysql_fetch_assoc($this->result))$result[]=$row;
+		elseif($assoc==2)
+			while($row=mysql_fetch_object($this->result))$result[]=$row;
 		else
 			while($row=mysql_fetch_row($this->result))$result[]=$row;
 
 		return $result;
 	}
+		
 
 	function fetch_rows_key($cmd,$key,$nodie=false)
 	{
@@ -285,21 +288,31 @@ class GW_DB
 	}
 
 
-	function update($table,$filter,$entry,$nodie=false)
+	function __update_set($entry)
+	{
+		$parts = [];
+		
+		foreach ($entry as $elemRak => $vert)
+			if(!is_numeric($elemRak))
+				$parts[]='`'.$elemRak."`=\"".addslashes($vert)."\"";
+			
+		return implode(', ', $parts);
+	}
+	
+	
+	function update($table, $filter, $entry, $nodie=false)
 	{
 		$filter=self::prepare_query($filter);
 
-		$query="UPDATE $table SET ";
+		
 		if(!is_array($entry))$this->fatalError('update: 3d argument must be assoc array');
 
 		//implementation of passing back fetched array (mysql_fetch_array)
 		//do not pass numeric field name (if(!is_numeric($elemRak)))
 
-		foreach ($entry as $elemRak => $vert)
-			if(!is_numeric($elemRak))
-				$query.='`'.$elemRak."`=\"".addslashes($vert)."\", ";
+
 				
-		$query=substr($query,0,-2)." WHERE $filter;";
+		$query="UPDATE $table SET ".$this->__update_set($entry)." WHERE $filter;";
 
 		if(isset($GLOBALS['show_update_sql']))
 			dump($query);
@@ -438,6 +451,21 @@ class GW_DB
 		
 		return $fieldname.' IN ('. implode(',', $ids).')';
 	}
+	
+	static function inConditionStr($fieldname, $ids)
+	{
+		if(!$ids)
+			return '1=0';
+		
+		foreach($ids as $i => $x)
+			$ids[$i]=self::escape($x);
+			
+		
+		if(strpos($fieldname,'`')===false)
+			$fieldname = '`'.$fieldname.'`';
+		
+		return $fieldname.' IN ("'. implode('","', $ids).'")';
+	}	
 	
 	static function escape($mixed)
 	{

@@ -7,6 +7,7 @@ class GW_Data_Object
 	public $primary_fields = array('id');
 	public $content_base=Array();
 	public $errors=Array();
+	public $error_codes=[];
 	public $loaded=false;
 	public $auto_fields=true;
 	public $auto_validation=false;	// calls $this->validate before save
@@ -16,9 +17,9 @@ class GW_Data_Object
 	public $calculate_fields=Array();	
 	static $_instance;
 	public $cache;
+	public $changed_fields=[];
     
-    
-    
+   	
 	/**
 	 * pvz 
 	 * 
@@ -65,9 +66,19 @@ class GW_Data_Object
 		return $this->content_base[$key];
 	}
 
+	
 	function set($key, $val)
 	{
-		$this->content_base[$key]=$val;
+		if(!isset($this->content_base[$key]) || $this->content_base[$key]!==$val)
+		{
+			$this->content_base[$key]=$val;
+			$this->changed_fields[$key]=1;
+		}
+	}
+	
+	function resetChangedFields()
+	{
+		$this->changed_fields = [];
 	}
 
 	function get($key)
@@ -290,6 +301,7 @@ class GW_Data_Object
 			
 		$this->setValues($vals);
 		$this->loaded=true;
+		$this->resetChangedFields();
 		
 		$this->fireEvent('AFTER_LOAD');
 		
@@ -368,6 +380,20 @@ class GW_Data_Object
 		$rez = $db->update($this->table, $this->getIdCondition(), $entry);
 		
 		$this->fireEvent(['AFTER_UPDATE','AFTER_SAVE'], $context);
+		
+		return $rez;
+	}
+	
+	function updateChanged()
+	{
+		return $this->update(array_keys($this->changed_fields));
+	}
+	
+	function showChanged()
+	{
+		$rez = [];
+		foreach($this->changed_fields as $fieldname => $x)
+			$rez[$fieldname] = $this->get($fieldname);
 		
 		return $rez;
 	}
@@ -539,7 +565,7 @@ class GW_Data_Object
 				list($validator, $params) = $validator;	
 				
 			if($err = GW_Validator::getErrors($validator, $this->get($fieldname), $params))
-				$this->errors[$fieldname]=$err[0];
+				$this->setError($err[0],$fieldname);
 				
 		}
 		return $this->errors ? false : true;
@@ -737,5 +763,11 @@ class GW_Data_Object
 	{
 		return isset($this->content_base[$name]) || isset($this->calculate_fields[$name]);
 	}
+	
+	function setError($msg,$field=false,$error_code=GW_GENERIC_ERROR)
+	{
+		$this->errors[$field]=$msg;
+		$this->error_codes[$error_code]=($field?$field.'::':''). $msg;
+	} 	
 
 }

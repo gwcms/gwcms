@@ -19,6 +19,10 @@ class GW_App_Base
 	var $stop_process=false;
 
 	
+	function initDb()
+	{
+		GW::db();
+	}
 	
 	function __construct()
 	{
@@ -34,7 +38,7 @@ class GW_App_Base
 		$this->setPidFile();
 
 		$this->killOldInstance();
-
+		
 		if(is_callable(Array($this,'init')))
 			$this->init();
 
@@ -61,7 +65,8 @@ class GW_App_Base
 	function setPidFile()
 	{
 		//proc_name + md5(path) + 1st argument
-		$this->process_pid_file = GW::s('DIR/TEMP').'app_'.$this->proc_name.'_'.md5($this->path.' '.$GLOBALS['argv'][1]);		
+		
+		$this->process_pid_file = GW::s('DIR/TEMP').'app_'.$this->proc_name.'_'.md5($this->path.' '.(isset($GLOBALS['argv'][1]) ? $GLOBALS['argv'][1] : '')) ;		
 	}	
 
 	function registerTimer($id,$callback,$interval)
@@ -179,7 +184,7 @@ class GW_App_Base
 	static function sendSignal($pid, $signalNo, $test_is_running=false)
 	{
 		if($test_is_running && !GW_Proc_Ctrl::isRunning($pid, $test_is_running))
-			return dump('Fail. "'.$test_is_running.'" process is not running');		
+			return $this->msg('Fail. "'.$test_is_running.'" process is not running');		
 			
 		//$output = shell_exec("kill -$signalNo $pid");
 		
@@ -195,7 +200,7 @@ class GW_App_Base
 		
 	function msg($msg)
 	{
-		dump(date('i:s').' '.$msg);
+		echo (date('i:s').' '.$msg."\n");
 	}
 
 	function getLastProcPid()

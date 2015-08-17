@@ -77,7 +77,8 @@ class GW_Array_Helper
 	static function copy($source, &$destination, $keys)
 	{
 		foreach($keys as $key)
-			$destination[$key]=$source[$key];
+			if(isset($source[$key]))
+				$destination[$key]=$source[$key];
 	}
 	
 	static function objectCopy($source, &$destination, $keys)

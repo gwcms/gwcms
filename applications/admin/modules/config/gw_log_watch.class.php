@@ -93,8 +93,12 @@ class GW_Log_Watch extends GW_Data_Object
 	
 	function readNewLines()
 	{						
-		$buff=GW_Log_Read::offsetRead($this->filename, $this->last_offset);
+		$tmp = $this->last_offset;
 		
+
+		
+		$buff=GW_Log_Read::offsetRead($this->filename, $tmp);
+	
 		$this->last_offset = $this->size;
 		$this->saveData();
 		
@@ -111,6 +115,15 @@ class GW_Log_Watch extends GW_Data_Object
 		return file_get_contents($fn);
 	}
 	
+	function clean()
+	{
+		$fn = $this->getFilename($this->id);
+				
+		$this->last_offset = 0;
+		$this->saveData();
+		
+		return file_put_contents($fn, "");
+	}	
 	
 	function findAll($conditions = NULL, $options = Array())
 	{

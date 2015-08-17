@@ -236,12 +236,18 @@ class GW_Customer extends GW_User
 	}
 	
 	
-	function debitFunds($funds, $msg, &$errors=[])
+	function canDebit($funds, &$errors)
 	{
 		if($this->sms_funds < $funds && !$this->allow_credit){
-			$errors[] = sprintf(GW_Error_Message::read('/USER/INSUFFICIENT FUNDS'), $funds, $this->funds);
+			$errors[MIS_ERROR_NOFUNDS] = sprintf(GW_Error_Message::read('/USER/INSUFFICIENT FUNDS'), $funds, $this->sms_funds);
 			return false;
-		}
+		}		
+	}
+	
+	function debitFunds($funds, $msg, &$errors=[])
+	{
+		if(!$this->canDebit($funds, $errors))
+			return false;
 		
 		$this->sms_funds = $this->sms_funds - $funds;
 		
@@ -256,7 +262,11 @@ class GW_Customer extends GW_User
 	
 	function addFunds($funds, $msg)
 	{
+		$old = $this->sms_funds;
 		$this->sms_funds = $this->sms_funds + $funds;
+		$new = $this->sms_funds;
+		
+		
 		$bl = new GW_Balance_Log_Item([
 		    'user_id'=>$this->id, 
 		    'msg'=>$msg,
@@ -264,6 +274,8 @@ class GW_Customer extends GW_User
 		$bl->insert();
 		
 		$this->update(['sms_funds']);
+		
+		return ['old'=>$old, 'new'=>$new];
 	}
 
 }

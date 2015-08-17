@@ -27,7 +27,7 @@
 {*template 1 bulk sms*}
 	{foreach from=$response_to item=bitem}
 
-		<tr class="bulk_sms"><td>Atsakymai į žinutę:</td><td>{$bitem.send_time|date_format:'%Y-%m-%d'}</td><td>{$bitem.msg}</td></tr>
+		<tr class="bulk_sms"><td>Atsakymai į žinutę:</td><td>{$bitem.sent_time|date_format:'%Y-%m-%d'}</td><td>{$bitem.msg}</td></tr>
 		{foreach from=$list item=item}
 			{if $bitem.msg == $item.response_to.msg}
 			<tr class="bulk_sms_resp">
@@ -47,7 +47,7 @@
 {foreach from=$list item=item}
 	
 	{if $item.response_to}
-		<tr class="response_to_row"><td></td><td>{$item.response_to.send_time}</td><td>{$item.response_to.msg|escape}</td></tr>
+		<tr class="response_to_row"><td></td><td>{$item.response_to.sent_time}</td><td>{$item.response_to.msg|escape}</td></tr>
 	{/if}
 	<tr>
 		<td>{$item.from}{if $item.name} ({$item.name|escape}){/if}</td>
