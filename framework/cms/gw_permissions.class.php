@@ -90,7 +90,7 @@ class GW_Permissions
 	}
 	
 	static function isRoot($gids)
-	{
+	{		
 		if(in_array(self::$root_group_id, (array)$gids)) // root group has access to anything
 			return true;				
 	}

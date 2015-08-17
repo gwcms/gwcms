@@ -41,6 +41,7 @@ class GW_General_RPC
 			
 			$json_result->error_code='66';
 			$json_result->response=$raw_result;
+			$json_result->request = ['url'=>$url];
 			$json_result->curl_errpr = curl_error($ch);
 		}
 		
@@ -58,5 +59,14 @@ class GW_General_RPC
 		$post = isset($args[1]) ? $args[1] : [];
 			
 		return $this->call($name, $get, $post);
-	}	
+	}
+	
+	function sysUserCall($name, $get=[], $post=[], $uid=GW_USER_SYSTEM_ID)
+	{
+		$token = GW::getInstance('gw_temp_access')->getToken($uid);
+		
+		$get['temp_access']=$uid.','.$token;
+		
+		return $this->call($name, $get, $post);
+	}
 }
