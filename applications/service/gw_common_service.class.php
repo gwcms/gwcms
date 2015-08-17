@@ -7,6 +7,7 @@ class GW_Common_Service
 	public $admin=false;
 	public $app;
 	public $debug = true;
+	public $user;
 	
 	function __construct($context)
 	{
@@ -19,42 +20,14 @@ class GW_Common_Service
 		$this->app->initDB();
 	}
 	
-	function checkAuth($can_pass_auth = false)
+	function checkAuth()
 	{
-		$args = $_POST;
-		
-		if($_SERVER['REMOTE_ADDR']=='127.0.0.1')
-			$args = $_REQUEST;
-		
-		
-		$identity = false;
-		
-		if($can_pass_auth && isset($args['uid']) && isset($args['upwd']))
-		{
-			$identity = GW::getInstance('r1_identity')->find(['id=? AND pass=? AND active=1', $args['uid'], md5($args['upwd'])]);
-			
-		}elseif( isset($args['uid']) && isset($args['token']) ){
-			$identity = GW::getInstance('r1_identity')->find(['id=? AND token=? AND ip=? AND active=1', $args['uid'], $args['token'], $_SERVER['REMOTE_ADDR']]);
-			
-		}
-		
-		if($identity){
-			$identity->saveValues(['last_login_time'=>date('Y-m-d H:i:s')]);
-			
-			$this->user = $identity;
+		if($this->user)
 			return true;
-		}
 	}
 	
-	function actGetToken()
-	{
-		$this->user->token = GW_String_Helper::getRandString(20);
-		$this->user->ip = $_SERVER['REMOTE_ADDR'];
-		$this->user->update(['token','ip']);
+
 		
-		return ['token'=>$this->user->token];
-	}
-	
 	function actPublic($args)
 	{
 		$act = array_shift($args);

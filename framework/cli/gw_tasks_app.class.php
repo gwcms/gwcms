@@ -145,7 +145,7 @@ class GW_Tasks_App extends GW_App_Base
 	static function runSeparateWrap($task_id)
 	{
 		
-		$cmd = GW::$dir['ADMIN'].'cli/task.php '.$task_id.' wrap >/tmp/gw_cms_task_wrap 2>&1 &';
+		$cmd = GW::s('DIR/ROOT').'daemon/task.php '.$task_id.' wrap >/tmp/gw_cms_task_wrap 2>&1 &';
 		shell_exec($cmd);
 	}
 	
@@ -167,7 +167,7 @@ class GW_Tasks_App extends GW_App_Base
 		
 		$logfile=GW::$dir['LOGS'].'task_'.$this->data->id.'.log';
 		
-		shell_exec(GW::$dir['ADMIN'].'cli/task.php '.$this->data->id.' >'.$logfile.' 2>&1');
+		shell_exec(GW::s('DIR/ROOT').'daemon/task.php '.$this->data->id.' >'.$logfile.' 2>&1');
 		
 		$output=file_get_contents($logfile);
 		
@@ -183,6 +183,8 @@ class GW_Tasks_App extends GW_App_Base
 			$this->data->error_code = self::__get_value('ERROR_CODE', $output);
 			$this->data->error_msg = self::__get_value('ERROR_MESSAGE', $output);
 		}
+		
+
 		
 		$this->data->output = preg_replace('/-----TASKINFO-----.*/is','', $output);
 				

@@ -17,4 +17,13 @@ class GW_Test_service extends GW_Common_Service
 		return ['date'=>date('Y-m-d H:i:s')];
 		
 	}
+	
+	function actTestInternet()
+	{
+		if(GW_Test_Internet::check($error)){
+			return ['testinternet'=>1];			
+		}else{
+			return ['error_code'=>6, 'error'=>$error];			
+		}
+	}
 }

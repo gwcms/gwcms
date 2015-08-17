@@ -25,6 +25,10 @@ class GW_Service_Application extends GW_Application
 		$this->handler->app = $this;
 		$this->handler->name = $service_name;
 		$this->handler->init();
+		
+		
+		$this->initAuth();
+		$this->handler->user = $this->user;
 	}
 	
 	function process()
