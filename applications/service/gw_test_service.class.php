@@ -26,4 +26,30 @@ class GW_Test_service extends GW_Common_Service
 			return ['error_code'=>6, 'error'=>$error];			
 		}
 	}
+	
+	function actSysInfo()
+	{
+		$i = [];
+		
+		$i['url']=Navigator::getBase(true);
+		
+		
+		if($this->user->isRoot()){
+			$i['user']=$this->user->toArray();
+		}
+		
+		return $i;
+	}
+	
+	function actTestCall()
+	{
+		$rpc = new GW_General_RPC();
+		$rpc->url = Navigator::getBase(true).'service/test';
+		$rpc->debug=true;
+		
+		$response = $rpc->sysUserCall('sysinfo');
+		$response->meta = $rpc->debug_data;
+		
+		return (array)$response;
+	}
 }
