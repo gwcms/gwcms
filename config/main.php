@@ -33,6 +33,7 @@ GW::s('LANGS', Array('lt','en'));
 
 define('GW_USER_SYSTEM_ID', 1);
 define('GW_GENERIC_ERROR', 100);
+GW::s('GW_CMS_VERSION', '2.1');
 
 include $dir['ROOT'].'config/project.php';
 
