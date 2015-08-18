@@ -769,5 +769,14 @@ class GW_Data_Object
 		$this->errors[$field]=$msg;
 		$this->error_codes[$error_code]=($field?$field.'::':''). $msg;
 	} 	
-
+	
+	
+	/** 
+	 * @return GW_Data_Object 
+	 */
+	
+	public static function singleton()
+	{
+		return GW::getInstance(get_called_class());
+	}
 }
