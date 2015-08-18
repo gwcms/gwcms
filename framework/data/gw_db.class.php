@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * TODO: dont halt execution if it is not debug mode
+ * 
+ */
+
 class GW_DB
 {
 	var $link=false;
@@ -113,7 +118,7 @@ class GW_DB
 		if($this->debug)
 			$this->query_times[]=Array($cmd, (float)$this->last_query_time);
 		
-		$this->result || $nodie || $this->trigger_error($cmd);
+		$this->result || $this->trigger_error($cmd);
 		
 		return $this->result;
 	}
@@ -509,4 +514,3 @@ class db_query_prep_helper
 	}
 }
 
-?>
