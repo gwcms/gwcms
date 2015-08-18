@@ -4,7 +4,6 @@
 {$image=$value}
 
 {if $image}
-	Key: {$image->key}
 	{$preview_container_id="preview_image_`$name`"}
 	<p id="{$preview_container_id}">
 		{include file="tools/image_preview.tpl" image=$image border=1 width=200 height=200}
