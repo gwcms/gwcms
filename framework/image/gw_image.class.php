@@ -184,10 +184,10 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	
 	function generateKey()
 	{
-		//dump("FILENAME: " . $this->generateFileName());
-		//exit;
-		$this->key=md5($this->owner);	
+		$this->key=md5($this->owner.$this->id);	
 	}
+	
+	private $after_save_done = false;
 	
 	function eventHandler($event, &$context_data=[])
 	{
@@ -200,14 +200,18 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 			break;
 			
 			case 'BEFORE_INSERT':
-					$this->removeOld();	
-					$this->generateKey();			
+				$this->removeOld();	
 			break;
 			
 			case 'AFTER_INSERT':
-					$this->storeFile();
-					$this->update(Array('filename','width','height','size'));
+				$this->after_save_done=true;
+				$this->storeFile();
+				$this->generateKey();	
+				
+				$this->update(Array('filename','width','height','size', 'key'));
 			break;
+		
+
 		}
 		
 		parent::eventHandler($event, $context_data);
