@@ -72,7 +72,7 @@ class GW_Img_Tool
 			header("Accept-Ranges: bytes");
 			header("Content-Length: ".$item->get('size'));
 		}else{
-			header("Content-Type: ". Mime_Type_Helper::getByFilename($item->get('original_filename')) );	
+			header("Content-Type: ". Mime_Type_Helper::getByFilename($item->getFilename()) );	
 		}
 
 		readfile($item->getFilename());
