@@ -132,7 +132,7 @@ class FH
 			$params['params']= 'act=do:'.$params['do'].($params['params']?'&':'').$params['params'];
 			
 
-		$path_start = $this->app->ln.'/' ;
+		$path_start = '' ;
 		$path = $this->app->path;
 			
 		if(isset($params['levelup'])){ 
@@ -151,6 +151,7 @@ class FH
 			$params['path'] = $path_start . $path;
 		}
 		
+		$params['path'] =  $this->app->buildUri($params['path']);
 		$params['path']=$params['path'].($params['params']?'?':'').$params['params'];		
 	}	
 	
