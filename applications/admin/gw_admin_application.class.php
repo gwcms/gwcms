@@ -53,6 +53,8 @@ class GW_Admin_Application extends GW_Application
 	{
 		parent::init();
 		
+		$this->autoPrepare();
+		
 		GW_ADM_Sitemap_Helper::updateSitemap();
 		
 	}
@@ -94,6 +96,26 @@ class GW_Admin_Application extends GW_Application
 		}
 		
 		return $list;
+	}
+	
+	
+	/**
+	 * function is called on developer request
+	 * to prepare system, exmpl: cache files
+	 */
+	function autoPrepare()
+	{
+		if(!$this->user || !$this->user->isRoot() || $this->user->id==GW_USER_SYSTEM_ID)
+			return;
+		
+		
+		GW::getInstance('GW_Config')->set('sys/project_url', Navigator::getBase(true));		
+		
+		//start system process
+		if(GW::getInstance('GW_Config')->get('sys/autostart_system_process') && GW_App_System::startIfNotStarted())
+		{
+			$this->setMessage('System process was just started');
+		}
 	}
 	
 }

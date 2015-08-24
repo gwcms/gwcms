@@ -31,8 +31,7 @@ class Module_LogWatch extends GW_Common_Module
 			
 		$timer = new GW_Timer;
 			
-		if(!$lines = (int)$_REQUEST['lines']) 
-			$lines = $default_lines_count;
+		$lines =  isset($_REQUEST['lines']) ? $_REQUEST['lines'] : $default_lines_count;
 		
 		$data=($offset=(int)$_REQUEST['offset']) ? GW_Log_Read::offsetRead($file, $offset) : GW_Log_Read::LinesRead($file, $lines, $offset);
 			

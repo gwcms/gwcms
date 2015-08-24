@@ -106,7 +106,7 @@ class GW_Proc_Ctrl
 	{
 		shell_exec($cmd="$cmd >> $logfile 2>&1 &");
 		
-		dump($cmd);
+		//dump($cmd);
 	}
 	
 	static function sendSignal($pid, $signalNo, $test_is_running=false)

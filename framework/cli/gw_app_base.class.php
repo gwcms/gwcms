@@ -219,10 +219,10 @@ class GW_App_Base
 		{
 			$pid = $this->getLastProcPid();
 			
-
 			if($pid && GW_Proc_Ctrl::isRunning($pid, $this->proc_name))
 			{
-				if($this->kill_old_instance)
+				
+				if($this->kill_old_instance && isset($this->params['terminate']))
 				{
 					self::msg("Terminating old instance (pid: $pid)");
 					
@@ -230,7 +230,7 @@ class GW_App_Base
 						die("Can't kill");
 
 				}else{
-					self::msg('Cant run. Another instance already running.');
+					self::msg('Cant run. Another instance already running. Add -terminate if you want to kill running instance');
 					$this->quit();
 				}
 			}
@@ -238,7 +238,7 @@ class GW_App_Base
 		
 		$this->writePid();
 	}
-
+	
 
 	function removePidFile()
 	{		

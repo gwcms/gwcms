@@ -18,6 +18,8 @@ class GW_App_System Extends GW_App_Base
 		
 
 		$this->registerInnerMethod('actionDoTasks', 5);	
+		$this->registerInnerMethod('actionDoSendDefered', 60);	
+		
 
 		pcntl_signal(SIGUSR1, array(&$this,"forceDoTasks"));
 		
@@ -51,16 +53,22 @@ class GW_App_System Extends GW_App_Base
 	static function startIfNotStarted()
 	{
 		if($pid = self::getRunningPid()){
-			dump('system already running');
+			return false;
 		}else{
 			self::runSelf();
+			return true;
 		}
 	} 
 	
 	
-	static function runSelf()
+	static function runSelf($restart=false)
 	{		
-		GW_Proc_Ctrl::startDaemon(GW::s('DIR/ROOT')."daemon/system.php", GW::s('DIR/LOGS').'system.log');
+		$cmd =GW::s('DIR/ROOT')."daemon/system.php";
+		
+		if($restart)
+			$cmd.=' -terminate';
+		
+		GW_Proc_Ctrl::startDaemon($cmd, GW::s('DIR/LOGS').'system.log');
 	}
 	
 	
@@ -87,6 +95,14 @@ class GW_App_System Extends GW_App_Base
 	}
 	
 	
+	
+	function actionDoSendDefered()
+	{
+		$url = $this->backgroundRequest('admin/lt/mass_messages?act=do:sendqueue');
+		$this->msg('send defered: '.$url);
+		
+	}
+	
 	function actionDoTasks()
 	{
 		$count = GW_Tasks_App::checkAndRun();
@@ -102,6 +118,25 @@ class GW_App_System Extends GW_App_Base
 		parent::quit($exit);
 	}
 
+	
+	function setPidFile()
+	{
+		//proc_name + md5(path) + 1st argument
+		
+		$this->process_pid_file = GW::s('DIR/TEMP').'app_'.$this->proc_name.'_'.md5($this->path) ;		
+	}
+	
+	function backgroundRequest($path, $get_args=[])
+	{
+		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
+		
+		$get_args['temp_access']=GW_USER_SYSTEM_ID.','.$token;
+		$path .= (strpos($path,'?')===false ? '?' : '&') . http_build_query($get_args);
+		
+		GW_Http_Agent::impuls($url=GW::getInstance('GW_Config')->get('sys/project_url').$path);
+		
+		return $url;
+	}	
 
 }
 

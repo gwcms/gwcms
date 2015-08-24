@@ -207,6 +207,15 @@ class GW_Application
 		return file_exists(GW::s("DIR/{$this->app_name}/MODULES")."$dirname/module_".($name?$name:$dirname).".class.php");
 	}
 	
+	function postRun()
+	{	
+		$files = glob(GW::s("DIR/{$this->app_name}/MODULES").'*/zz_event_postrun*');
+		
+		foreach($files as $file)
+			include($file);
+	}	
+	
+	
 	
 	function ifAjaxCallProcess()
 	{
@@ -392,7 +401,11 @@ class GW_Application
 		//if(GW::$app->inner_request)
 		//	$module->ob_collect = false;
 		
-		$module->process();		
+		$module->attachEvent('BEFORE_TEMPLATE', array($this,'postRun'));
+		
+		$module->process();
+		
+		
 	}
 	
 	

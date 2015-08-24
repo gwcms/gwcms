@@ -77,7 +77,35 @@ class Module_Tasks extends GW_Common_Module
 	
 	function doRestartSystem()
 	{
-		GW_App_System::runSelf();
+		$t = new GW_Timer();
+		
+		$oldpid = GW_App_System::getRunningPid();
+		
+		GW_App_System::runSelf(true);
+		
+		
+		
+		$i=0;
+		while(true)
+		{
+			$runningpid=GW_App_System::getRunningPid();
+			
+			if($runningpid && $runningpid!=$oldpid)
+			{
+				$this->app->setMessage('Restart ok - '.$t->stop().'s');
+				break;
+			}
+			
+			$i++;
+			usleep(100000);//0.5sec
+			
+			if($i>50){ // 5s timeout
+				$this->app->setError('Failed to restart');
+				break;
+			}
+		}
+		
+		
 		$this->jump();
 	}
 	

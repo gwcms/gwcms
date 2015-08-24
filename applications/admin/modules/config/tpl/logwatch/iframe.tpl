@@ -22,7 +22,7 @@ span:last-child { background-color: orange; }
 			
 
 
-<script src="modules/{$app->path_arr.0.path}/tpl/logwatch/realtime.js"></script>			
+<script src="{$app_root}modules/{$app->path_arr.0.path}/tpl/logwatch/realtime.js"></script>			
 			
 <body>
 

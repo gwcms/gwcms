@@ -53,6 +53,9 @@
 				<i id="title">Cron Tasks</i>
 				<i id="info"><i id="model">GW_CronTask</i></i>
 			</i>	
+			<i id="cfg">
+				<i id="title">Nustatymai</i>
+			</i>				
 					
 		</i>
 					

@@ -42,6 +42,9 @@ class GW_Public_Module
 	
 	function processTemplate($name)
 	{
+		
+		$this->fireEvent("BEFORE_TEMPLATE");		
+		
 		$this->smarty->assignByRef('messages', $this->messages);
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
@@ -157,6 +160,52 @@ class GW_Public_Module
 			if($error[0]===2)
 				$this->error_fields[$field]=$_SESSION['messages'][$field][1];
 		}
+	}	
+	
+	
+	function fireEvent($event, &$context=false)
+	{
+		if(!is_array($event))
+			$this->EventHandler($event, $context);
+		else
+			foreach($event as $e)
+				$this->EventHandler($e, $context);
+	}
+	
+	
+	public $__attached_events;
+	
+	function attachEvent($event, $callback)
+	{
+		$this->__attached_events[$event][]=$callback;
+	}
+	
+	//overrride me || extend me
+	function eventHandler($event, &$context)
+	{
+		switch($event)
+		{
+			case 'AFTER_SAVE':
+				$item=$context;
+			break;
+		}
+		
+		$tmp = '__event'.  str_replace('_', '', $event);
+		if(method_exists($this, $tmp)){
+			$this->$tmp($context);
+		}else{
+			//d::dump('method '. $tmp.'notexists');
+		}
+		
+		if(isset($this->__attached_events[$event]))
+		{
+			foreach($this->__attached_events[$event] as $callback)
+				call_user_func ($callback,$context);
+		}
+		
+		
+		//pass deeper
+		//parent::eventHandler($event, $context);
 	}	
 		
 	

@@ -202,6 +202,8 @@ class GW_Module
 	function processTemplate($soft=1)
 	{
 		
+		$this->fireEvent("BEFORE_TEMPLATE");
+		
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
 		
@@ -287,6 +289,14 @@ class GW_Module
 				$this->EventHandler($e, $context);
 	}
 	
+	
+	public $__attached_events;
+	
+	function attachEvent($event, $callback)
+	{
+		$this->__attached_events[$event][]=$callback;
+	}
+	
 	//overrride me || extend me
 	function eventHandler($event, &$context)
 	{
@@ -302,6 +312,12 @@ class GW_Module
 			$this->$tmp($context);
 		}else{
 			//d::dump('method '. $tmp.'notexists');
+		}
+		
+		if(isset($this->__attached_events[$event]))
+		{
+			foreach($this->__attached_events[$event] as $callback)
+				call_user_func ($callback,$context);
 		}
 		
 		
