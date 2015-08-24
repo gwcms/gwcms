@@ -2,6 +2,9 @@
 
 {*if ID is set then it will be UPDATE action. else - INSERT*}
 
+{$default_form_before_form}
+
+
 <form id="itemform" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" >
 
 <table style="width:{if $form_width}{$form_width}{else}600{/if}px">
