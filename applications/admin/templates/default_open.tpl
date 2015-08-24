@@ -14,17 +14,17 @@
 	
         <div id="login-info">
         	<b>{$lang.LOGGED_AS}:</b> 
-        	<a href="{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
+        	<a href="{$app->app_base}{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
         	 
         	</a> 
         	{if $smarty.session.cms_auth.switchUser}
-        	<a href="{$app->ln}/users/profile?act=do:switch_user_return"  style="font-weight:normal;color:orange">
+        	<a href="{$app->app_base}{$app->ln}/users/profile?act=do:switch_user_return"  style="font-weight:normal;color:orange">
         		{$sw_usr_return=$app->user->find(['id=?',$smarty.session.cms_auth.switchUser])}
         		({$lang.SWITCH_USER_RETURN|sprintf:$sw_usr_return->name})
         	</a>
         	{/if}
         	| 
-            	<a href="{$app->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
+            	<a href="{$app->app_base}{$app->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
             	
 			{$new_messages=$app->user->countNewMessages()}
 			<div id="new_messages_block" {if !$new_messages}style="display:none"{/if}>
