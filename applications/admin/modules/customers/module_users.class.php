@@ -8,6 +8,7 @@ class Module_Users extends GW_Common_Module
 		//$this->filters['id'] = isset(GW::$app->path_arr[1]['data_object_id']) ? GW::$app->path_arr[1]['data_object_id'] : false;
 
 		parent::init();
+		$this->cfg = new GW_Config($this->module_path[0].'/');
 		
 		
 		$this->rootadmin = $this->app->user->isRoot();
@@ -32,7 +33,18 @@ class Module_Users extends GW_Common_Module
 		{
 			case "BEFORE_SAVE_0":
 				
-				$context->setValidators('update');
+				$item = $context;
+				
+				if($item->id){
+					$item->setValidators('update');
+				}else{
+					$item->setValidators('insert');
+					$item->group_ids = [$this->cfg->customer_group];
+					
+					$item->parent_user_id = $this->app->user->id;
+				}
+				
+				
 				
 			break;
 		}
@@ -61,7 +73,7 @@ class Module_Users extends GW_Common_Module
 		$subject = "Jūsų sąskaita papildyta ".$add." Eur";
 		$message = "Prieš papildymą buvo: $before_funds Eur. <br />Dabar yra: $after_funds Eur";
 		
-		GW::getInstance('GW_Message')->msg($item->id, $subject, $message, $this->app->user->id);
+		GW_Message::singleton()->msg($item->id, $subject, $message, $this->app->user->id, 0, false);
 		
 		$this->jump();
 	}

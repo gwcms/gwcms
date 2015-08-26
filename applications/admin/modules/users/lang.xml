@@ -219,6 +219,7 @@
 					<no>Min Profil</no>
 				</i>
 				<i id="in_menu">0</i>
+				<i id="public">1</i>	
 			</i>
 			<i id="messages">
 				<i id="title">

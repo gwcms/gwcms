@@ -5,6 +5,11 @@ class Module_Profile extends GW_Module
 {	
 	function init()
 	{
+		//profile modulis public, su salyga yra prisilogines vartotojas
+		if(!$this->app->user)
+			$this->app->jump(Navigator::getBase());
+		
+		
 		$this->model = new GW_User();
 		
 		parent::init();

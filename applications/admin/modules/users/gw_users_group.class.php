@@ -30,4 +30,11 @@ class GW_Users_Group extends GW_Data_Object
 		return true;
 	}
 	
+	function getOptions()
+	{
+		//$cond = $active ? 'active!=0 AND removed=0' : '';
+		
+		return $this->getAssoc(Array('id','title')/*, $cond*/);
+	}	
+	
 }
