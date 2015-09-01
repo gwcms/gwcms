@@ -337,7 +337,7 @@ class GW_Module
 	{
 		if(isset($params['modulepath']))
 		{
-			$params['path']=$this->app->ln.'/'.implode('/',$this->module_path).'/'.$params['modulepath'];
+			$params['path']=implode('/',$this->module_path).'/'.$params['modulepath'];
 			unset($params['modulepath']);
 		}
 		
