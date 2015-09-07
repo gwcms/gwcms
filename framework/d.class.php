@@ -82,7 +82,7 @@ class d
 			$backtracestr.="<li style='text-decoration:underline;padding:0;margin:0;' title='".htmlspecialchars($data, ENT_QUOTES)."'>".@$point['file']." : ".@$point['line']." : ".@$point['class'].@$point['type'].@$point['function']."</li>";
 		}
 	
-		@$GLOBALS['debug_block']++;
+		$GLOBALS['debug_block'] = isset($GLOBALS['debug_block']) ? $GLOBALS['debug_block']+1 : 1;
 	
 		$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>". $point1['file'].':'.$point1['line']."</a>
 		<div id='debug_bl_{$GLOBALS['debug_block']}' style='display:none'><ul>$backtracestr</ul></div>";
