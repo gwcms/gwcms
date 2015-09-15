@@ -29,6 +29,7 @@ class GW_Common_Module extends GW_Module
 	public $links;
 	
 	public $default_view = 'list';
+	public $load_before_save = true;
 	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -145,6 +146,9 @@ class GW_Common_Module extends GW_Module
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 		$item = $this->model->createNewObject($vals, false, $this->lang());
+		
+		if($this->load_before_save)
+			$item->load();
 		
 		$this->canBeAccessed($item, true);
 		$item->setValues($vals);
