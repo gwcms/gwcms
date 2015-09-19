@@ -5,6 +5,7 @@ class GW_General_RPC
 	public $url;
 	public $debug=false;
 	public $debug_data;
+	public $last_url;
 	
 	
 	public function call($name, $get=[], $post=[]) 
@@ -30,6 +31,7 @@ class GW_General_RPC
 		if($this->debug)
 			$this->debug_data[] = ['url'=>$url,'act'=>$name, 'get'=>$get, 'post'=>$post, 'response'=>$raw_result, 'error'=>curl_error ($ch)];
 		
+		$this->last_url = $url;
 		
 		$json_result = json_decode($raw_result);
 		
