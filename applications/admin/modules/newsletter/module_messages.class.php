@@ -88,6 +88,8 @@ class Module_Messages extends GW_Common_Module
 			LIMIT $portion
 			";
 		
+		d::dumpas($sql);
+		
 		$sql = GW_DB::prepare_query([$sql, $letter->id, $letter->lang]);	
 		$rows = $db->fetch_rows($sql);
 		
