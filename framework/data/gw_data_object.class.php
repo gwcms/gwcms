@@ -301,7 +301,6 @@ class GW_Data_Object
 			
 		$this->setValues($vals);
 		$this->loaded=true;
-		$this->resetChangedFields();
 		
 		$this->fireEvent('AFTER_LOAD');
 		
@@ -710,7 +709,11 @@ class GW_Data_Object
 			break;
 			
 			case 'AFTER_LOAD':
-					$this->decodeFields();
+				$this->decodeFields();
+				$this->resetChangedFields();
+			break;
+			case 'AFTER_CONSTRUCT':
+				$this->resetChangedFields();
 			break;
 		}
 	}
