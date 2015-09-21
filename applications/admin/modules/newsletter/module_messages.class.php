@@ -100,8 +100,6 @@ class Module_Messages extends GW_Common_Module
 		if($count_total){
 			
 			$count_total= $db->fetch_result("SELECT FOUND_ROWS()");
-				
-			d::dumpas([$sql, $count_total]);
 			
 			return $count_total;
 		}
