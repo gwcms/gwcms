@@ -82,7 +82,7 @@ class Module_Messages extends GW_Common_Module
 				a.unsubscribed=0 AND
 				a.active=1 AND 
 				a.lang=? AND
-				a.confirm_code < 100 AND
+				(a.confirm_code IS NULL OR a.confirm_code < 100) AND
 				$incond 
 				". (!$count_total ? 'AND aa.status IS NULL' : '')."
 			LIMIT $portion
