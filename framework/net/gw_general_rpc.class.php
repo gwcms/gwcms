@@ -6,7 +6,7 @@ class GW_General_RPC
 	public $debug=false;
 	public $debug_data;
 	public $last_url;
-	
+	public $timeout=500;
 	
 	public function call($name, $get=[], $post=[]) 
 	{
@@ -17,6 +17,7 @@ class GW_General_RPC
 		$getargs= $get ? '?'.http_build_query($get) : '';
 			
 			
+		curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($ch, CURLOPT_URL, $url=$this->url.'/'.$name.$getargs);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
