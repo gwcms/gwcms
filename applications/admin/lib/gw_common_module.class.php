@@ -69,6 +69,12 @@ class GW_Common_Module extends GW_Module
 		return $id;
 	}
 	
+	/**
+	 * 
+	 * @param type $load
+	 * @param type $class
+	 * @return GW_Data_Object
+	 */
 	function getDataObjectById($load=true, $class=false)
 	{
 	
@@ -199,8 +205,12 @@ class GW_Common_Module extends GW_Module
 			$this->jump(false, $options+$_GET);
 		}else{ //save
 			
-			if($tmp = $_REQUEST['return_to'])
+			if(isset($_REQUEST['return_to']) && ($tmp = $_REQUEST['return_to']))
 				return $this->jump($tmp);
+			
+			if(isset($_REQUEST['RETURN_TO']) && ($tmp = $_REQUEST['RETURN_TO']))
+				return die(header('Location: '.$tmp));
+			
 			
 			$this->jump(dirname($this->app->path));
 		}		
