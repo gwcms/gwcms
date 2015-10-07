@@ -1,6 +1,9 @@
 {extends file="default_list.tpl"}
 
 {block name="init"}
+	<style>
+		.row-inprogress td{ font-weight: bold; }
+	</style>
 
 
 {*Laikinas reikalas*}
@@ -15,6 +18,11 @@
 {$link=$app->fh()->gw_link([params=>[pid=>$item->id], path_only=>1])}
 
 	{$users = $app->user->getOptions()}
+	{function name=dl_prepare_item}
+		{if $item->state==15}
+			{$item->set('row_class', 'row-inprogress')}
+		{/if}
+	{/function}
 
 	{function name=dl_cell_state_title}
 				{$m->lang.STATE_OPT[$item->state]}

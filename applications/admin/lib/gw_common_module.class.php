@@ -340,11 +340,23 @@ class GW_Common_Module extends GW_Module
 			$params['limit']=$this->list_params['page_by'];
 		}		
 		
+		
+		
 		if(isset($this->list_params['order']) && $ord=$this->list_params['order'])
 			$params['order']=$ord;
-			
+		
+		
+				
+		//perrasoma is modulio konfig. views
 		if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
 			$params['order']=$ord;
+		
+		
+		//perrasoma is modulio konfig. orders
+		if(isset($this->list_params['orders']['order']) && $ord=$this->list_params['orders']['order'])
+			$params['order']=$ord;		
+		
+		
 	}
 	
 	function setDefaultOrder()
