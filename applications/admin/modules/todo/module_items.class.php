@@ -10,6 +10,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		parent::init();
 		
 		$this->options['project_id'] = GW::getInstance('gw_todo_project')->getOptions();
+		$this->options['project'] = GW::getInstance('gw_todo_project')->findAll(null, ['key_field'=>'id']);;
+		
 	}	
 	
 	function __eventBeforeListParams(&$params)
