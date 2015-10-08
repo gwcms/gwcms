@@ -11,5 +11,6 @@
 	{if $maxlength}maxlength="{$maxlength}"{/if} 
 	style="width: {$width|default:"100%"};" 
 	{if $hidden_note}title="{$hidden_note}"{/if} 
+	{if $placeholder}placeholder="{$placeholder}"{/if} 
 	{$input_extra_params}
 />
