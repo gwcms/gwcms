@@ -34,6 +34,9 @@
 			<i id="modules">
 				<i id="title">Module Configuration</i>
 			</i>
+			<i id="i18n">
+				<i id="title">i18n</i>
+			</i>			
 			<i id="tools">
 				<i id="title">Tools</i>
 			</i>

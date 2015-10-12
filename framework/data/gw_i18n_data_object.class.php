@@ -70,6 +70,55 @@ class GW_i18n_Data_Object extends GW_Data_Object
 		foreach($vals as $key => $val)
 			$this->set($key,$val, $ln);
 	}
+	
+	function addLang($default_lang, $create_lang)
+	{
+		$list = $this->getDB()->fetch_rows_key("SHOW COLUMNS FROM `$this->table`",'Field');
+		
+		$copy = [];
+		foreach($this->i18n_fields as $field => $x)
+			$copy[$field.'_'.$default_lang]=1;
+		
+		$structures = array_intersect_key($list, $copy);
+		
+		$sqls = [];
+		
+		foreach($this->i18n_fields as $fname =>$x){
+			$s = $structures[$fname.'_'.$default_lang];
+			
+			$type = $s['Type'];
+			$null = $s['Null']=='YES' ? "NULL" : "NOT NULL";
+			$default = $s['Default'] ? "DEFAULT ".$s['Default'] : 'DEFAULT NULL';
+			$new = $fname.'_'.$create_lang;
+			$old = $fname.'_'.$default_lang;
+			$comment = "COMMENT  'copy from $old'";
+				
+			$sqls[] = "ALTER TABLE  `$this->table` ADD  `$new` $type $null $default $comment  AFTER  `$old` ;";
+		}
+		
+		foreach($sqls as $sql){
+			$this->getDB()->query($sql);
+		}
+		
+		return $sqls;
+		
+	}
+	
+	function dropLang($lang)
+	{
+		$del=[];
+		
+		$sqls = [];
+		foreach($this->i18n_fields as $field => $x)
+			$sqls[]="ALTER TABLE  `$this->table` DROP  `{$field}_{$lang}` ";
+			
+		foreach($sqls as $sql){
+			$this->getDB()->query($sql);
+		}
+		
+		return $sqls;		
+		
+	}	
 
 }
 

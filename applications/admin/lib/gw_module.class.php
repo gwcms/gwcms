@@ -327,8 +327,9 @@ class GW_Module
 
 	function lang()
 	{
-		if(isset($this->args['lang']))
-			return $this->args['lang'];
+		if(isset($_GET['lang']))
+			return $_GET['lang'];
+		
 			
 		return $this->app->ln;
 	}
@@ -345,6 +346,6 @@ class GW_Module
 		
 		return $this->app->fh()->gw_path($params);
 	}
-	
+		
 }
 
