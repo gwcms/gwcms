@@ -63,7 +63,13 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$item->pathname = GW_Validation_Helper::pagePathName($item->pathname);
 		$item->fixPath();
 	}
+	
+	function getMoveCondition($item)
+	{
+		$tmp = $this->filters;
 		
+		return GW_SQL_Helper::condition_str($tmp);
+	}	
 	
 	function eventHandler($event, &$context)
 	{
