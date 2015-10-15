@@ -55,8 +55,10 @@ class GW_Module
 		$this->tpl_dir="{$this->module_dir}tpl/".$this->module_name."/";
 
 		$this->smarty = $this->app->smarty;
+				
+		GW_Lang::$module = $this->module_path[0];
+		$this->lang = GW::l('/m/');
 		
-		$this->lang = GW_Lang_XML::load("{$this->module_dir}lang.xml", $this->app->ln);
 		
 		$this->__processViewSolveViewName();
 		

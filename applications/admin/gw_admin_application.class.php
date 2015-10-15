@@ -84,7 +84,7 @@ class GW_Admin_Application extends GW_Application
 					
 					
 				}else{
-					$item['title'] = $this->fh()->viewTitle($item['name']);
+					$item['title'] = GW::l('/A/VIEWS/'.$item['name']);
 				}
 			}
 				

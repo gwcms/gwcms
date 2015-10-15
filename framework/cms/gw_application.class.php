@@ -96,9 +96,11 @@ class GW_Application
 	
 	function initLang()
 	{
-		GW_Error_Message::$ln = $this->ln;
-		GW_Error_Message::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
-		$this->lang=GW_Lang_XML::load(GW::s("DIR/{$this->app_name}/LANG")."lang.xml", $this->ln);		
+		GW_Lang::$ln = $this->ln;
+		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
+		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
+		
+		$this->lang= GW::l('/g/');
 	}
 	
 	

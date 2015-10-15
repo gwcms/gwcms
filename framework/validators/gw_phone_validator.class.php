@@ -7,9 +7,9 @@ class GW_Phone_Validator extends GW_String_Validator
 	
 	function init()
 	{
-		$this->setParam('error_min_length', '/VALIDATION/PHONE/MIN_LENGTH');
-		$this->setParam('error_max_length', '/VALIDATION/PHONE/MAX_LENGTH');
-		$this->setParam('error_illegal_phone_format', '/VALIDATION/PHONE/ILLEGAL_PHONE_FORMAT');
+		$this->setParam('error_min_length', '/G/VALIDATION/PHONE/MIN_LENGTH');
+		$this->setParam('error_max_length', '/G/VALIDATION/PHONE/MAX_LENGTH');
+		$this->setParam('error_illegal_phone_format', '/G/VALIDATION/PHONE/ILLEGAL_PHONE_FORMAT');
 	}
 	
 

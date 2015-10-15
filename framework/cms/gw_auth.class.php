@@ -69,21 +69,21 @@ class GW_Auth
 		
 		
 		if(!isset($user) || !$user)
-			return $this->setError('/GENERAL/NOT_LOGGEDIN');
+			return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
 		
 		if(!$autologin && !$user->isSessionNotExpired() ){ //jei autologin neveikia tai sesijos galiojimas yra
 			$this->logout();
-			$_SESSION['messages'][]=Array(1,'/GENERAL/SESSION_EXPIRED');
-			return $this->setError('/GENERAL/SESSION_EXPIRED');
+			$_SESSION['messages'][]=Array(1,'/G/GENERAL/SESSION_EXPIRED');
+			return $this->setError('/G/GENERAL/SESSION_EXPIRED');
 		}
 		
 		if(isset($this->session['autologin']) && $this->session['autologin'])
 			$user->autologgedin=true;
 
 		if($user->banned == 1)
-			return $this->setError('/GENERAL/USER_BANNED');
+			return $this->setError('/G/GENERAL/USER_BANNED');
 		if($user->active == 0)
-			return $this->setError('/GENERAL/USER_INNACTIVE');
+			return $this->setError('/G/GENERAL/USER_INNACTIVE');
 		
 		
 		return $user;
@@ -94,13 +94,13 @@ class GW_Auth
 		if (! $user=$this->user0->getByUsernamePass($username, $password) )
 		{
 			$this->logout();
-			return $this->setError('/GENERAL/LOGIN_FAIL');
+			return $this->setError('/G/GENERAL/LOGIN_FAIL');
 		}
 		if($user->banned == 1){
-			return $this->setError('/GENERAL/USER_BANNED');
+			return $this->setError('/G/GENERAL/USER_BANNED');
 		}
 		if($user->active == 0){
-			return $this->setError('/GENERAL/USER_INNACTIVE');
+			return $this->setError('/G/GENERAL/USER_INNACTIVE');
 		}
 		return $this->login($user);
 	}

@@ -33,7 +33,7 @@ class GW_TplVar extends GW_Data_Object
 		);
 		
 		if($duplicate = $this->find($cond))
-			$this->errors['title']='/VALIDATION/UNIQUE';
+			$this->errors['title']='/G/VALIDATION/UNIQUE';
 		
 			
 		return !(bool)count($this->errors);

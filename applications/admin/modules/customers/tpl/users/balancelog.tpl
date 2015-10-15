@@ -4,9 +4,9 @@
 {if $list}
 <table class="gwTable gwActiveTable">
 	<tr>
-		<th>{$app->fh()->FieldTitle(insert_time)}</th>
-		<th>{$app->fh()->FieldTitle(balance_diff)}</th>
-		<th>{$app->fh()->FieldTitle(balance_diff_message)}</th>
+		<th>{GW::l('/A/FIELDS/insert_time')}</th>
+		<th>{GW::l('/A/FIELDS/balance_diff')}</th>
+		<th>{GW::l('/A/FIELDS/balance_diff_message')}</th>
 	</tr>
 			
 {foreach $list as $item}

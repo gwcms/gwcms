@@ -7,7 +7,7 @@ class GW_Numeric_Validator extends GW_Validator
 	
 	function init()
 	{
-		$this->setParam('error_message', '/VALIDATION/NUMERIC_FAIL');
+		$this->setParam('error_message', '/G/VALIDATION/NUMERIC_FAIL');
 	}
 	
 

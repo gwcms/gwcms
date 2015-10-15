@@ -23,9 +23,9 @@
 <table class="gwTable gwActiveTable" style="width:auto">
 <tr>
 	<th></th>
-	<th>{$app->fh()->fieldTitle(title)}</th>
-	<th>{$app->fh()->fieldTitle(insert_time)}</th>
-	<th>{$app->fh()->fieldTitle(update_time)}</th>
+	<th>{GW::l("/A/FIELDS/title")}</th>
+	<th>{GW::l("/A/FIELDS/insert_time")}</th>
+	<th>{GW::l("/A/FIELDS/update_time")}</th>
 	<th>{$lang.ACTIONS}</th>
 </tr>
 

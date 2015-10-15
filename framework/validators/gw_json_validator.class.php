@@ -12,7 +12,7 @@ class GW_Json_Validator extends GW_Validator
 	
 	function init()
 	{
-		$this->setParam('error_invalid', '/VALIDATION/INVALID_JSON');
+		$this->setParam('error_invalid', '/G/VALIDATION/INVALID_JSON');
 	}
 	
 	function isValid()

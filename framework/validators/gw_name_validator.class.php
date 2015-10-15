@@ -7,9 +7,9 @@ class GW_Name_Validator extends GW_Validator
 	
 	function init()
 	{
-		$this->setParam('error_min_length', '/VALIDATION/NAME/MIN_LENGTH');
-		$this->setParam('error_max_length', '/VALIDATION/NAME/MAX_LENGTH');
-		$this->setParam('error_illegal_name_format', '/VALIDATION/NAME/ILLEGAL_NAME_FORMAT');
+		$this->setParam('error_min_length', '/G/VALIDATION/NAME/MIN_LENGTH');
+		$this->setParam('error_max_length', '/G/VALIDATION/NAME/MAX_LENGTH');
+		$this->setParam('error_illegal_name_format', '/G/VALIDATION/NAME/ILLEGAL_NAME_FORMAT');
 	}
 	
 

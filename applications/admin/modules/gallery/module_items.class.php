@@ -28,7 +28,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		if(!$_FILES['zipfile']['tmp_name'] || !preg_match('/\.zip$/', $_FILES['zipfile']['name'])) 
 		{
-			$this->setError('/GENERAL/FAIL');
+			$this->setError('/G/GENERAL/FAIL');
 			$this->jump();
 		}
 		

@@ -42,16 +42,16 @@ class GW_Image_Validator Extends GW_Validator
 		//var_dump(file_exists($new_file));
 		
 		if(!file_exists($new_file))
-			return ($item->errors[]='/GENERAL/FILE/DOESNT_EXIST') && false;
+			return ($item->errors[]='/G/GENERAL/FILE/DOESNT_EXIST') && false;
 			
 		if(isset($im_vali['size_max']) && @filesize($new_file) > $im_vali['size_max'])
-			return ($item->errors[]='/GENERAL/FILE/TOO_LARGE') && false;
+			return ($item->errors[]='/G/GENERAL/FILE/TOO_LARGE') && false;
 	
 		if(isset($im_vali['dimensions_min']) && !self::isValidDimensions($im_vali['dimensions_min']))
-			return ($item->errors[]='/GENERAL/IMAGE/ERR_DIMENSIONS_MIN') && false;
+			return ($item->errors[]='/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN') && false;
 
 		if(isset($im_vali['dimensions_max']) && !self::isValidDimensions(false, $im_vali['dimensions_max']))
-			return ($item->errors[]='/GENERAL/IMAGE/ERR_DIMENSIONS_MAX') && false;
+			return ($item->errors[]='/G/GENERAL/IMAGE/ERR_DIMENSIONS_MAX') && false;
 	}
 	
 	

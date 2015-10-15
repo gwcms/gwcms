@@ -7,7 +7,7 @@ class GW_Email_Validator extends GW_String_Validator
 	
 	function init()
 	{
-		$this->setParam('error_message', '/VALIDATION/EMAIL/INVALID_EMAIL');
+		$this->setParam('error_message', '/G/VALIDATION/EMAIL/INVALID_EMAIL');
 	}
 	
 	function isValid()

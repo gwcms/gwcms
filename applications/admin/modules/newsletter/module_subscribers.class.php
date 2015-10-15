@@ -54,7 +54,7 @@ class Module_Subscribers extends GW_Common_Module
 	{
 		$list=[];
 		foreach($this->import_field_translations as $name)	
-			$list[$this->app->fh()->FieldTitle($name)] = $name;
+			$list[GW::l("/A/FIELDS/$name")] = $name;
 		
 		$this->import_field_translations = $list;
 	}

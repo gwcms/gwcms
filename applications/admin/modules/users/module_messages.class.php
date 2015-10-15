@@ -66,7 +66,7 @@ class Module_Messages extends GW_Common_Module
 
 
 		if(!$item->invert('seen')) 
-			return $this->setErrors('/GENERAL/ACTION_FAIL'); 
+			return $this->setErrors('/G/GENERAL/ACTION_FAIL'); 
 	 	 
 		$this->jump(); 		
 	}
@@ -83,7 +83,7 @@ class Module_Messages extends GW_Common_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/GENERAL/ACTION_RESTRICTED');
+		$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
 		
 		
 		$this->jump($this->app->page->path);

@@ -42,7 +42,7 @@ class Module_Usr extends GW_Common_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/GENERAL/ACTION_RESTRICTED');
+		$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
 		
 		
 		$this->jump($this->app->page->path);

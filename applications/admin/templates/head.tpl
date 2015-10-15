@@ -37,7 +37,7 @@
 		
 		translations = {};
 		{foreach $translations as $key}
-			translations['{$key}']='{$app->fh()->altLang($key)}';
+			translations['{$key}']='{GW::l("/A/$key")}';
 		{/foreach}
 	</script>
 </head>

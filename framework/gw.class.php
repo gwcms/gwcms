@@ -129,4 +129,14 @@ class GW
 		
 		return $var;
 	}
+	
+	/** vertimai
+	 * 
+	 * @param type $key
+	 */
+	
+	static function l($key)
+	{
+		return GW_Lang::read($key);
+	}
 }

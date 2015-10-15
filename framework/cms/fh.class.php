@@ -37,30 +37,17 @@ class FH
 	{
 		return GW_Array_Helper::altValue($key_arr, $this->app->module->lang, $this->app->lang);
 	}
-	
-	//to use in javascript
-	//get lang strings
-	//var lang={FH::printLangStrings('FIELDS/title','BUTTONS/OK','BUTTONS/CANCEL')}
-	function printLangStrings()
-	{
-		$arr=Array();
-
-		foreach(func_get_args() as $arrkey)
-			$arr[$arrkey]=$this->altLang($arrkey);
-			
-		echo json_encode($arr);
-	}
-	
+		
 	function fieldTitle($key)
 	{	
-		$title = $this->altLang(Array('FIELDS',$key));
+		$title = GW::l('/A/FIELDS/'.$key);
 		
-		return $title ? $title : $key;
+		return $title!=$key ? $title : $key;
 	}
 	
 	function shortFieldTitle($key)
 	{
-		$title = $this->fieldTitle($key);
+		$title = GW::l('/A/FIELDS/'.$key);
 		
 		if($tmp=$this->app->module->lang['FIELDS_SHORT'][$key])
 			return "<span title='$title'>$tmp</span>";
@@ -68,20 +55,7 @@ class FH
 		return $title;
 	}
 	
-	function viewTitle($key)
-	{	
-		$title=$this->altLang(Array('VIEWS',$key));
-		
-		//magic stuff for "form" view. switch create or view
-		//if($key=='form')
-		//{
-		//	$create_edit=explode('/', $title);
-		//	$title=$create_edit[(bool)(int)$_GET['id']];
-		//}	
-			
-		return $title;		
-	}
-	
+
 	
 	/**
 	 * should be called in smarty only

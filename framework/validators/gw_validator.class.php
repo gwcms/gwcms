@@ -9,7 +9,7 @@ class GW_Validator
 	
 	var $params = Array
 	(
-		'error_message' => '/VALIDATION/REQUIRED'
+		'error_message' => '/G/VALIDATION/REQUIRED'
 	);
 
 

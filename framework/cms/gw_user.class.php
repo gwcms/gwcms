@@ -62,15 +62,15 @@ class GW_User extends GW_Composite_Data_Object
 						
 		if(isset($this->validators['pass_old']))
 			if(!$this->checkPass($this->get('pass_old')))
-				$this->errors['pass_old']='/USER/PASS_OLD';				
+				$this->errors['pass_old']='/G/USER/PASS_OLD';				
 		
 		if(isset($this->validators['pass_new_repeat']))
 			if($this->get('pass_new')!=$this->get('pass_new_repeat'))
-				$this->errors['pass_new_repeat']='/USER/PASS_REPEAT';	
+				$this->errors['pass_new_repeat']='/G/USER/PASS_REPEAT';	
 		
 		if(isset($this->validators['unique_username']))
 			if($this->count(Array('username=? AND removed!=0', $this->get('username'))))
-				$this->errors['username']='/USER/USERNAME_TAKEN';
+				$this->errors['username']='/G/USER/USERNAME_TAKEN';
 				
 		return $this->errors ? false : true;	
 	}

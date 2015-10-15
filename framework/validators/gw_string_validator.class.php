@@ -7,8 +7,8 @@ class GW_String_Validator extends GW_Validator
 	
 	function init()
 	{
-		$this->setParam('error_min_length', '/VALIDATION/STRING/MIN_LENGTH');
-		$this->setParam('error_max_length', '/VALIDATION/STRING/MAX_LENGTH');
+		$this->setParam('error_min_length', '/G/VALIDATION/STRING/MIN_LENGTH');
+		$this->setParam('error_max_length', '/G/VALIDATION/STRING/MAX_LENGTH');
 	}
 	
 

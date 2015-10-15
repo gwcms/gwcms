@@ -7,7 +7,7 @@ class GW_SMS_Sender_Validator extends GW_Validator
 	
 	function init()
 	{
-		$this->setParam('error_invalid', '/VALIDATION/INVALID_SMS_SENDER');
+		$this->setParam('error_invalid', '/G/VALIDATION/INVALID_SMS_SENDER');
 	}
 	
 

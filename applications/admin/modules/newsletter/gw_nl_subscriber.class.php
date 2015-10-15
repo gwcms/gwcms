@@ -17,7 +17,7 @@ class GW_NL_Subscriber extends GW_Composite_Data_Object
 		parent::validate();
 						
 		if($this->count(Array('email=? AND id!=?', $this->email, $this->id)))
-			$this->errors['email']='/VALIDATION/UNIQUE';
+			$this->errors['email']='/G/VALIDATION/UNIQUE';
 				
 		return $this->errors ? false : true;	
 	}	
