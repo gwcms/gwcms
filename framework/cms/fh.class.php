@@ -40,14 +40,14 @@ class FH
 		
 	function fieldTitle($key)
 	{	
-		$title = GW::l('/A/FIELDS/'.$key);
+		$title = GW::l($fkey='/A/FIELDS/'.$key);
 		
-		return $title!=$key ? $title : $key;
+		return $title!=$fkey ? $title : $key;
 	}
 	
 	function shortFieldTitle($key)
 	{
-		$title = GW::l('/A/FIELDS/'.$key);
+		$title = self::fieldTitle($key);
 		
 		if($tmp=$this->app->module->lang['FIELDS_SHORT'][$key])
 			return "<span title='$title'>$tmp</span>";
