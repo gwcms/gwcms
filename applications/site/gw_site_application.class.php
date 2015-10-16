@@ -88,12 +88,18 @@ class GW_Site_Application extends GW_Application
 		if(!$this->moduleExists($dir, $name))
 			die("Failed locating module $dir/$name");
 		
+		$info=[];
+		$info['module_path']=[$dir, $name];
+		$info['module_name']=$name;
+		
 		$fname = $this->moduleFileName($dir, $name);
+		
+	
 				
-		$this->processModule($fname, $path);
+		$this->processModule($fname, $path, $info);
 	}
 	
-	function processModule($file, $params, $exit=true)
+	function processModule($file, $params, $info)
 	{
 		//prevent hacking via ajax request
 		$file=str_replace('..','',$file);
@@ -104,8 +110,13 @@ class GW_Site_Application extends GW_Application
 		require_once $file;
 
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
+		
 
-		$m = new $classname(Array('module_file'=>$file,'app'=>$this, 'smarty'=>$this->smarty));
+		$m = new $classname(Array(
+		    'module_file'=>$file,
+		    'app'=>$this, 
+		    'smarty'=>$this->smarty
+		)+$info);
 		
 		
 		$this->module =& $m;

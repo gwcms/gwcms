@@ -30,6 +30,8 @@ class GW
 	static $settings;
 	static $error_log;
 	static $context;
+	//jeigu prisijunges vartotojas developeris
+	static $devel_debug;
 
 	
 	function db()
@@ -110,6 +112,9 @@ class GW
 		$app_o->app_name = $app;
 		
 		$app_o->init();
+		
+		self::$devel_debug = self::$context->app->user->isRoot();
+		
 		$app_o->process();
 	}
 	
@@ -140,12 +145,24 @@ class GW
 		return GW_Lang::read($key);
 	}
 	
-	static function ln($key, $valueifnotfound=false)
+	
+	/**
+	 * pakrauna vertimus is duombazes, 
+	 * jei nera duombazeje tada pakrauna is 
+	 * lang failu arba pacio templeito jei vartotojas developeris
+	 */
+	static function ln($fullkey, $valueifnotfound=false)
 	{
 		static $cache;
 		
-		list($module, $key) = explode('/', $key, 2);
-		$module=  strtolower($module);
+		list(,$module, $key) = explode('/', $fullkey, 3);
+		
+		if($module=='M')
+		{
+			list($module, $key) = explode('/', $key, 2);
+		}elseif($module=='m'){
+			$module = GW_Lang::$module;
+		}
 
 		//uzloadinti vertima jei nera uzloadintas
 		
@@ -167,33 +184,37 @@ class GW
 		
 		//paimti vertima is cache
 		$explode = explode('/',$key);
-
+		
+		$vr = Null;
+		if(isset($cache[$module]))
+			$vr =& $cache[$module];
+			
 		foreach($explode as $part){
-			if(isset($var[$part])){
-				$var =& $var[$part];
+			if(isset($vr[$part])){
+				$vr =& $vr[$part];
 			}else{
-				$var=null;
+				$vr=null;
 				break;
 			}
 		}
 		
-		if($var==Null){
+		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
+		if(self::$devel_debug && ($vr==Null || ($var[0]=='*' && $var[strlen($var)-1]=='*')) ){
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
 			if($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln.':')!==false ){
-				list($ln, $val) = explode(':', $valueifnotfound, 2);
-				$t = GW_Translation::singleton()->createNewObject(['module'=>$module,'key'=>$key, 'value_'.GW_Lang::$ln=>$val]);
-				$t->insert();
+				list($ln, $vr) = explode(':', $valueifnotfound, 2);
+				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
 				
-				$var = $val;
+			}else{
+				//is lang failu
+				$fromxml = GW::l($fullkey);
+				$vr = $fromxml!=$fullkey ? $fromxml : '*'.$key.'*';
+				
+				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
 			}
 		}
-			
 		
-		return $var;		
-		
-		
-			
-		
+		return $vr;
 	}
 		
 }

@@ -100,6 +100,8 @@ class GW_Application
 		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
 		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
 		
+		
+		
 		$this->lang= GW::l('/g/');
 	}
 	

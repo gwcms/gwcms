@@ -61,7 +61,9 @@ class Module_Users extends GW_Public_Module
 		
 		
 		$item->setValidators('register');
-				
+		GW_Customer::singleton();
+			
+		$item->username = $item->email;
 		
 		if($item->validate())
 		{		
