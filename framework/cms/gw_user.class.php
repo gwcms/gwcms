@@ -114,7 +114,7 @@ class GW_User extends GW_Composite_Data_Object
 	function cryptPass($pass, $salt=null)
 	{
 		if($pass){//cant be empty
-			return $salt ? crypt($pass, $salt) : crypt($pass);
+			return $salt ? crypt($pass, $salt) : crypt($pass, 'salt');
 		}else{
 			//d::dumpas('Password cant be empty');
 			die('Password cant be empty');
