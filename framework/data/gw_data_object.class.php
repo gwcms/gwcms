@@ -183,10 +183,7 @@ class GW_Data_Object
 	{
 		$conditions = isset($options['conditions']) ? $options['conditions'] : '';
 		$select = isset($options['select']) ? $options['select'] : 'a.*';
-		
-		if(isset($options['assoc_fields']))
-			$select=join(',', $options['assoc_fields']);
-		
+			
 		$offset = isset($options['offset']) ? $options['offset'] : 0;
 		$order 	= isset($options['order']) ? $options['order'] : $this->getDefaultOrderBy();
 		$data	= array();
@@ -280,7 +277,8 @@ class GW_Data_Object
 	{
 		$options['return_simple']=1;
 		$options['assoc_fields']=$fields;
-		$options['select']=$fields[0].', '.$fields[1];
+		$options['select']="`{$fields[0]}`, `{$fields[1]}`";
+		
 		
 		return $this->findAll($conditions, $options);
 	}

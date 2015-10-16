@@ -40,7 +40,9 @@ class GW_ADM_Sitemap_Helper
 	
 	static function loadModuleMap($pathname)
 	{
-		$tmp = GW_Lang_XML::getAllLn(GW::s('DIR/ADMIN/MODULES').$pathname.'/lang.xml');
+		$tmp = GW_Lang_XML::getAllLn(GW::s('LANGS'), GW::s('DIR/ADMIN/MODULES').$pathname.'/lang.xml');
+		
+
 		
 		foreach($tmp as $ln => $tree)
 		{
@@ -56,7 +58,7 @@ class GW_ADM_Sitemap_Helper
 	{
 		if(!$all_ln_tree = self::loadModuleMap($pathname))
 			return false;
-			
+					
 		$list=Array();
 		
 		$priority=1;

@@ -88,7 +88,8 @@ class GW_i18n_Data_Object extends GW_Data_Object
 			
 			$type = $s['Type'];
 			$null = $s['Null']=='YES' ? "NULL" : "NOT NULL";
-			$default = $s['Default'] ? "DEFAULT ".$s['Default'] : 'DEFAULT NULL';
+			
+			$default = $s['Default'] ? "DEFAULT ".$s['Default'] : '';
 			$new = $fname.'_'.$create_lang;
 			$old = $fname.'_'.$default_lang;
 			$comment = "COMMENT  'copy from $old'";

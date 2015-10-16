@@ -139,4 +139,61 @@ class GW
 	{
 		return GW_Lang::read($key);
 	}
+	
+	static function ln($key, $valueifnotfound=false)
+	{
+		static $cache;
+		
+		list($module, $key) = explode('/', $key, 2);
+		$module=  strtolower($module);
+
+		//uzloadinti vertima jei nera uzloadintas
+		
+		if(!isset($cache[$module]))
+		{
+			$tr = GW_Translation::singleton()->getAssoc(['key','value_'.GW_Lang::$ln],['module=?', $module]);
+			
+			foreach($tr as $k => $val){
+				
+				$var  =& $cache[$module];			
+				
+				foreach(explode('/', $k) as $kk)
+					$var =& $var[$kk];
+				
+				$var = $val;
+			}
+				
+		}
+		
+		//paimti vertima is cache
+		$explode = explode('/',$key);
+
+		foreach($explode as $part){
+			if(isset($var[$part])){
+				$var =& $var[$part];
+			}else{
+				$var=null;
+				break;
+			}
+		}
+		
+		if($var==Null){
+			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
+			if($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln.':')!==false ){
+				list($ln, $val) = explode(':', $valueifnotfound, 2);
+				$t = GW_Translation::singleton()->createNewObject(['module'=>$module,'key'=>$key, 'value_'.GW_Lang::$ln=>$val]);
+				$t->insert();
+				
+				$var = $val;
+			}
+		}
+			
+		
+		return $var;		
+		
+		
+			
+		
+	}
+		
 }

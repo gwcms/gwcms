@@ -47,11 +47,11 @@ class GW_Lang_XML
 		return self::___multiLangStruct(self::parseXML($file), $ln);
 	}
 
-	static function getAllLn($file)
+	static function getAllLn($langs, $file)
 	{
 		$rez = Array();
 		
-		foreach(GW::s('LANGS') as $ln_code)
+		foreach($langs as $ln_code)
 			$rez[$ln_code]=self::load($file, $ln_code);
 		
 		return $rez;
