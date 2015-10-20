@@ -25,9 +25,9 @@ class GW_Public_Module
 		$this->module_dir = dirname($this->module_file).'/';
 		$this->tpl_dir = $this->module_dir.'tpl/';
 
-		if(file_exists($langf="{$this->module_dir}lang.xml"))
-			$this->lang = GW_Lang_XML::load($langf, $this->app->ln);
-			
+		GW_Lang::$module = $this->module_path[0];
+		$this->lang = GW::l('/m/');
+				
 		$this->loadErrorFields();
 		
 		$this->tpl_vars['options'] =& $this->options;
