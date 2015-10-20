@@ -40,7 +40,7 @@ class GW_ADM_Sitemap_Helper
 	
 	static function loadModuleMap($pathname)
 	{
-		$tmp = GW_Lang_XML::getAllLn(GW::s('LANGS'), GW::s('DIR/ADMIN/MODULES').$pathname.'/lang.xml');
+		$tmp = GW_Lang_XML::getAllLn(GW::s('ADMIN/LANGS'), GW::s('DIR/ADMIN/MODULES').$pathname.'/lang.xml');
 		
 
 		
