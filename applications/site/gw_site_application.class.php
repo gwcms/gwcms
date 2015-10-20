@@ -66,6 +66,7 @@ class GW_Site_Application extends GW_Application
 
 	function processTemplate($file)
 	{
+		$this->preRun();
 		$this->postRun();
 		$this->smarty->display($file);
 	}
@@ -173,6 +174,8 @@ class GW_Site_Application extends GW_Application
 			die('Template not set');
 			
 
+		$this->preRun();
+		
 		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
 		{
 			$this->processTemplate(GW::s("DIR/SITE/ROOT").$template->path);

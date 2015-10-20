@@ -4,7 +4,7 @@
 
 $list = GW_Page::singleton()->getByModulePath('users/%');
 
-$translate = ['SITE/PATH_USERZONE', 'SITE/PATH_REGISTER', 'SITE/PATH_LOGOUT', 'SITE/PATH_LOGIN'];
+$translate = ['SITE/PATH_USERZONE', 'SITE/PATH_REGISTER', 'SITE/PATH_LOGOUT', 'SITE/PATH_LOGIN','SITE/PATH_PASSCHANGE'];
 
 
 foreach($translate as $path){

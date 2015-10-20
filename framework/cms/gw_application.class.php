@@ -133,20 +133,21 @@ class GW_Application
 	}
 
 
-	function buildUri($path=false, $params=Array())
+	function buildUri($path=false, $getparams=Array(), $params=[])
 	{
 		$ln =  isset($params['ln']) ? $params['ln'] : $this->ln;
-		unset($params['url']);
-		unset($params['ln']);
-
+		
+		unset($getparams['url']);
+		
 		if($path===false)
 			$path=$this->path;
 		
 		return 
+			(isset($params['absolute']) ? Navigator::__getAbsBase() : '').
 			$this->app_base.
 			$ln.
 			($path?'/':'').$path.
-			($params? '?'.http_build_query($params):'');
+			($params? '?'.http_build_query($getparams):'');
 	}
 	
 	
@@ -210,6 +211,15 @@ class GW_Application
 	{	
 		return file_exists(GW::s("DIR/{$this->app_name}/MODULES")."$dirname/module_".($name?$name:$dirname).".class.php");
 	}
+	
+	
+	function preRun()
+	{	
+		$files = glob(GW::s("DIR/{$this->app_name}/MODULES").'*/zz_event_prerun*');
+		
+		foreach($files as $file)
+			include($file);
+	}	
 	
 	function postRun()
 	{	

@@ -4,7 +4,8 @@
 class Navigator
 {
 	
-	static private function __getAbsBase()
+
+	static public function __getAbsBase()
 	{
 		$arr =& $_SERVER;
 
