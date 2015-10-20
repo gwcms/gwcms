@@ -66,6 +66,7 @@ class GW_Site_Application extends GW_Application
 
 	function processTemplate($file)
 	{
+		$this->postRun();
 		$this->smarty->display($file);
 	}
 
@@ -122,6 +123,8 @@ class GW_Site_Application extends GW_Application
 		$this->module =& $m;
 		
 		$m->init();
+		
+		$m->attachEvent('BEFORE_TEMPLATE', array($this,'postRun'));		
 		
 		
 		if($this->page->type==3 && isset($m->lang['VIEWS'][$this->page->path]['TITLE']))

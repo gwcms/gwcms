@@ -113,7 +113,8 @@ class GW
 		
 		$app_o->init();
 		
-		self::$devel_debug = self::$context->app->user->isRoot();
+		if(self::$context->app->user)
+			self::$devel_debug = self::$context->app->user->isRoot();
 		
 		$app_o->process();
 	}
@@ -160,6 +161,7 @@ class GW
 		if($module=='M')
 		{
 			list($module, $key) = explode('/', $key, 2);
+			$module = strtolower($module);
 		}elseif($module=='m'){
 			$module = GW_Lang::$module;
 		}
@@ -198,8 +200,10 @@ class GW
 			}
 		}
 		
+
+		
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
-		if(self::$devel_debug && ($vr==Null || ($var[0]=='*' && $var[strlen($var)-1]=='*')) ){
+		if(self::$devel_debug && ($vr==Null || ($vr[0]=='*' && $vr[strlen($vr)-1]=='*')) ){
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
 			if($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln.':')!==false ){
 				list($ln, $vr) = explode(':', $valueifnotfound, 2);

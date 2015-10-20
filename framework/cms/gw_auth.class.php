@@ -93,7 +93,7 @@ class GW_Auth
 	{
 		if (! $user=$this->user0->getByUsernamePass($username, $password) )
 		{
-			$this->logout();
+			//$this->logout();
 			return $this->setError('/G/GENERAL/LOGIN_FAIL');
 		}
 		if($user->banned == 1){
@@ -133,6 +133,11 @@ class GW_Auth
 
 	function logout()
 	{
+
+		setcookie('login_7', '---', time(), GW::$context->app->sys_base);
+		$_COOKIE['login_7']=false;
+
+		
 		//dump("logging out");
 		$this->session = array();
 		$_SESSION=Array();

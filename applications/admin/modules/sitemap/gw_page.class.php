@@ -50,6 +50,20 @@ class GW_Page extends GW_i18n_Data_Object
 
 		return false; //no page found
 	}
+	
+	function getByModulePath($path)
+	{
+		$list = $this->findAll("ca.path LIKE '$path'",
+			[
+				'select'=>'ca.path AS m_path, a.path AS p_path',
+				'joins'=>[['inner','gw_templates AS ca','a.template_id=ca.id']],
+				'return_simple'=>1,
+				'assoc_fields'=>['m_path', 'p_path']
+			]
+		);
+		
+		return $list;	
+	}	
 
 	function getFirstChild()
 	{
