@@ -99,9 +99,7 @@ class GW_Application
 		GW_Lang::$ln = $this->ln;
 		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
 		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
-		
-		
-		
+				
 		$this->lang= GW::l('/g/');
 	}
 	
@@ -147,7 +145,7 @@ class GW_Application
 			$this->app_base.
 			$ln.
 			($path?'/':'').$path.
-			($params? '?'.http_build_query($getparams):'');
+			($getparams? '?'.http_build_query($getparams):'');
 	}
 	
 	
@@ -166,25 +164,14 @@ class GW_Application
 	
 	function jump($path=false, $params=Array())
 	{	
-		
 		if(!is_array($params))
 			backtrace();
-		
-		
-		
-		
+
 		
 		$params = $params + $this->carryParams();
-		
-		
-		//d::dumpas([$path, $params, self::buildUri($path, $params)]);
-			
+					
 		Navigator::jump(self::buildUri($path, $params));
 	}
-
-
-	
-
 	
 	//gali buti ieskoma pvz
 	//sitemap/templates/15/tplvars/form jei bus toks - sitemap/templates/tplvars tai supras
