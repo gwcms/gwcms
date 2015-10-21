@@ -11,7 +11,7 @@
 
 $(document).ready(function (){
 
-$('.datepicker').each(function(){
+$('.datepicker_elm').each(function(){
 	var inp_id='#'+this.id+'_b';
 	var options = {
 			format:'Y-m-d',
@@ -24,6 +24,7 @@ $('.datepicker').each(function(){
 			},
 			onChange: function(formated, dates){
 				$(inp_id).val(formated);
+				$('.datepicker').hide();
 			}
 		}
 	
