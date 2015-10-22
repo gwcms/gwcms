@@ -39,8 +39,11 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	
 	function removeCompositeItem($field)
 	{
-		if($item = $this->composite_content_base[$field])
-			$item->delete();
+		if($item = $this->composite_content_base[$field]){
+			
+			$item->deleteComposite();
+			unset($this->composite_content_base[$field]);
+		}
 	}	
 
 	function removeAllCompositeItems()
@@ -48,8 +51,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		$this->loadCompositeItems();
 		
 		foreach($this->composite_content_base as $field => $item)
-			if($item)
-				$item->delete();
+			$this->removeCompositeItem($field);
 	}
 	
 	function loadCompositeItem($field)
@@ -118,8 +120,23 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 				$this->removeAllCompositeItems();
 			break;
 			
-			case 'AFTER_SAVE':				
+			case 'AFTER_SAVE':		
 				$this->saveCompositeItems($context_data);
+			break;
+		
+			case 'BEFORE_SAVE':
+				if(isset($this->content_base['delete_composite'])){				
+					foreach($this->content_base['delete_composite'] as $field => $checked)
+					{
+						if(!$checked)
+							continue;
+						
+						$this->getComposite($field);
+						$this->removeCompositeItem($field);
+					}
+					
+					unset($this->content_base['delete_composite']);
+				}				
 			break;
 		}
 		

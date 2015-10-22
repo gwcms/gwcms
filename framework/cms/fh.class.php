@@ -125,7 +125,7 @@ class FH
 			$params['path'] = $path_start . $path;
 		}
 		
-		$params['path'] =  $this->app->buildUri($params['path']);
+		$params['path'] =  isset($params['fullpath']) ? $params['fullpath'] : $this->app->buildUri($params['path']);
 		$params['path']=$params['path'].($params['params']?'?':'').$params['params'];		
 	}	
 	

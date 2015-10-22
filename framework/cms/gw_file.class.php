@@ -13,29 +13,36 @@
  * 
  */
 
-define('GW_SYS_IMAGES_DIR', GW::s('DIR/SYS_IMAGES'));
+define('GW_SYS_FILES_DIR', GW::s('DIR/SYS_FILES'));
 
 
-class GW_Image extends GW_Data_Object implements GW_Composite_Slave 
+class GW_File extends GW_Data_Object implements GW_Composite_Slave 
 {
-	var $table = 'gw_images';
-	var $dir=GW_SYS_IMAGES_DIR;
+	var $table = 'gw_files';
+	var $dir=GW_SYS_FILES_DIR;
 	var $file_permissions = 0666;
 	var $auto_validation = false;
 	var $auto_fields = false;
 	var $original_file = false;//used with resize
 	var $ignore_fields=Array('new_file'=>1);
+	public $calculate_fields = ['size_human'=>1];
 	
 	var $validators=Array
 	(
-		'image_file'=>Array
+		'file'=>Array
 		(
-			'dimensions_min'=>'0x0', //if smaller - throw error
-			'dimensions_max'=>'999999x999999',	//if greater - throw error
-			'dimensions_resize'=>'10000x10000', //if greater - resize
 			'size_max'=>20971520, //if greater - throw error
+			'allowed_extensions'=>'pdf,doc', //if greater - throw error
 		)
 	);
+	
+	function calculateField($name) {
+		
+		if($name=='size_human')
+			return GW_Math_Helper::cFileSize($this->size, $prec=3);
+		
+		parent::calculateField($name);
+	}
 	
 	function getFilename()
 	{
@@ -79,20 +86,12 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	}
 	
 	
-	function prepare()
-	{
-		//get image dimensions
-		list($width, $height, $type) = @getimagesize($this->get('new_file'));
-		
-		$this->set('width', $width);
-		$this->set('height', $height);
-	}
+
 	
 	function validate()
 	{
-		$this->prepare();
-		
-		GW_Validator::getErrors('gw_image', $this);
+
+		GW_Validator::getErrors('gw_file', $this);
 
 		
 		//if(!parent::validate())
@@ -102,16 +101,6 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 			
 		return $this->errors ? false : true;
 	}
-	
-	function storeResize()
-	{
-		if(!$size=$this->validators['image_file']['dimensions_resize'])
-			return false;
-
-		$params = self::parseDimensions($size);
-		
-		GW_Image_Resize_Helper::resize($this, $params, $this->getFilename());
-	}	
 	
 	function storeFile()
 	{
@@ -128,31 +117,8 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 		if(!file_exists($file))
 			trigger_error('Can\'t write file "'.$file.'". Check permissions', E_USER_ERROR);
 			
-		$this->storeResize();
 	}	
 	
-	
-	/**
-	 * $arguments 
-	 * Array(
-	 * 		width
-	 * 		height
-	 * 		method
-	 * )
-	 * if empty then returns original
-	 */
-	
-	function resize($params)
-	{
-		$this->original_file=$this->getFileName();
-		
-		GW_Image_Resize_Helper::resizeAndCache($this, $params);
-	}
-	
-	function getCacheFiles()
-	{
-		return GW_Image_Resize_Helper::getCacheFiles($this);
-	}
 	
 	function removeOld()
 	{
@@ -165,22 +131,9 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 		if(!is_array($arr))
 			trigger_error('Invalid argument',E_USER_ERROR);
 			
-		$this->validators['image_file']=$arr;
+		$this->validators['file']=$arr;
 	}
 	
-	static function parseDimensions($str)
-	{
-		$dim=Array();
-		$str=explode('x',$str);
-		
-		if($str[0]!='')
-			$dim['width']=(int)$str[0];
-			
-		if($str[1]!='')
-			$dim['height']=(int)$str[1];
-			
-		return $dim;
-	}	
 	
 	function generateKey()
 	{
@@ -189,10 +142,11 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	
 	private $after_save_done = false;
 	
+	
 	function deleteComposite()
 	{
 		$this->removeOld();
-	}	
+	}
 	
 	function eventHandler($event, &$context_data=[])
 	{
@@ -201,7 +155,6 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 			case 'BEFORE_DELETE':
 				if(file_exists($fn=$this->getFilename()))
 					@unlink($fn);
-				GW_Image_Resize_Helper::deleteCached($this);
 			break;
 			
 			case 'BEFORE_INSERT':
@@ -213,7 +166,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 				$this->storeFile();
 				$this->generateKey();	
 				
-				$this->update(Array('filename','width','height','size', 'key'));
+				$this->update(Array('filename', 'key'));
 			break;
 		
 
@@ -223,4 +176,3 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	}
 	
 }
-?>
