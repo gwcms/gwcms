@@ -60,11 +60,12 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			return false;
 		
 		$params = $this->composite_map[$field];
+		$classname = $params[0];
 		
-		list($classname, $ci_params) = $params;
 		$obj = new $classname;
 		
-		$obj->setParams($ci_params);
+		if(isset($params[1]))
+			$obj->setParams($params[1]);
 		
 		$this->composite_content_base[$field]=$obj->getByOwnerObject($this, $field);	
 	}
@@ -101,11 +102,16 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			return parent::set($field, $value);
 			
 		
-		list($classname, $params) = $this->composite_map[$field];
+		$descript = $this->composite_map[$field];
+		$classname = $descript[0];
+		
 
 		$item = new $classname();
 		$item->setValues($value);
-		$item->setParams($params);
+		
+		if(isset($descript[1]))
+			$item->setParams($descript[1]);
+		
 		$item->setOwnerObject($this, $field);
 			
 		$this->composite_content_base[$field] = $item;

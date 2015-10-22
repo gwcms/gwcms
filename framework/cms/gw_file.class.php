@@ -25,14 +25,15 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 	var $auto_fields = false;
 	var $original_file = false;//used with resize
 	var $ignore_fields=Array('new_file'=>1);
-	public $calculate_fields = ['size_human'=>1];
+	public $calculate_fields = ['size_human'=>1,'full_filename'=>1];
 	
 	var $validators=Array
 	(
 		'file'=>Array
 		(
-			'size_max'=>20971520, //if greater - throw error
-			'allowed_extensions'=>'pdf,doc', //if greater - throw error
+			'size_max'=>50971520, //if greater - throw error
+			//'allowed_extensions'=>'pdf,odt,doc', //example
+			//'allowed_extensions'=>'', //if greater - throw error
 		)
 	);
 	
@@ -40,6 +41,9 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 		
 		if($name=='size_human')
 			return GW_Math_Helper::cFileSize($this->size, $prec=3);
+		
+		if($name=='full_filename')
+			return $this->dir.$this->get('filename');		
 		
 		parent::calculateField($name);
 	}
@@ -128,10 +132,11 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 
 	function setParams($arr)
 	{
-		if(!is_array($arr))
+		if($arr && !is_array($arr)){
 			trigger_error('Invalid argument',E_USER_ERROR);
-			
-		$this->validators['file']=$arr;
+		}elseif($arr){
+			$this->validators['file']=$arr;
+		}
 	}
 	
 	
