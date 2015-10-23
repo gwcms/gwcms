@@ -2,6 +2,8 @@
 
 class GW_Data_Object
 {
+	use Singleton;
+	
 	public $table;
 	public $db_die_on_error=true;
 	public $primary_fields = array('id');
@@ -772,12 +774,5 @@ class GW_Data_Object
 	} 	
 	
 	
-	/** 
-	 * @return GW_Data_Object 
-	 */
 	
-	public static function singleton()
-	{
-		return GW::getInstance(get_called_class());
-	}
 }
