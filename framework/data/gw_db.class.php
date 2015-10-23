@@ -61,24 +61,16 @@ class GW_DB
 
 	function trigger_error($cmd='',$msg=Null, $type=E_USER_ERROR)
 	{
-		
 		$this->conf['errshow'] = 1;
 		$this->debug=1;		
 		
 		if($this->debug)
 			dump(GW_Debug_Helper::backtrace_soft());
 
-		
-		
-
-			
 		if(empty($msg))
 			$msg = $this->error($cmd);
-		
-		
-		
-
-		trigger_error("CMD: $cmd\n".$msg,E_USER_ERROR);
+	
+		trigger_error("ERROR: $msg \nCMD: $cmd",E_USER_ERROR);
 	}
 	
 	function getError()
