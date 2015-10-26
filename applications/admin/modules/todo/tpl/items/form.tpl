@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" form_width=1000}
+{include file="default_form_open.tpl" form_width=1000px}
 
 <style>
 .input_label_td { width:120px; }
