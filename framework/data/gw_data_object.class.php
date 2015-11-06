@@ -231,20 +231,22 @@ class GW_Data_Object
 		
 		$db =& $this->getDB();
 		
+		$nodie = isset($options['soft_error']) && $options['soft_error'] ? true : false;
+		
 		if(
 			isset($options['assoc_fields']) && $options['assoc_fields'] && 
 			isset($options['return_simple']) && $options['return_simple']
 		){
-			$entries = $db->fetch_assoc($sql, true);
+			$entries = $db->fetch_assoc($sql, $nodie);
 		}elseif(isset($options['key_field']))
-			$entries = $db->fetch_rows_key($sql, $options['key_field'], true);
+			$entries = $db->fetch_rows_key($sql, $options['key_field'], $nodie);
 		else
-			$entries = $db->fetch_rows($sql,1,true);
+			$entries = $db->fetch_rows($sql,1, $nodie);
 
-		if($tmp = $db->getError())
+		if($db->error)
 		{
-			$this->errors[]=$tmp;
-			return false;
+			$this->errors[]=$db->getError();
+			return null;
 		}
 			
 		if(isset($options['return_simple']))

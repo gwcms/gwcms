@@ -538,16 +538,22 @@ class GW_Common_Module extends GW_Module
 		
 		$this->setListParams($cond, $params);
 		
+				
 		$this->fireEvent('AFTER_LIST_PARAMS', $params);
 		
 
 		$params['key_field']=$this->model->primary_fields[0];
 		
+		$params['soft_error']=true;
 		$list = $this->model->findAll($cond, $params);
 		
-		if($this->model->errors)
+		if($list === null)
 		{
 			$this->list_params=[];
+			
+			if($this->app->user->isRoot())
+				$this->setErrors("Last query: ". $this->model->getDB()->error_query);
+				
 			return $this->setErrors($this->model->errors);
 		}
 		

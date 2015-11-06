@@ -1,6 +1,4 @@
 <?php
-define("AUTH_SESSION_KEY", "cms_auth");
-define("PUBLIC_AUTH_SESSION_KEY", "auth");
 
 class GW_Auth
 {

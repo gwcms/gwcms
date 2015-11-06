@@ -59,7 +59,7 @@ class GW_DB
 	}
 
 
-	function trigger_error($cmd='',$msg=Null, $type=E_USER_ERROR)
+	function trigger_error($cmd='',$msg=Null, $soft_error=false)
 	{
 		$this->conf['errshow'] = 1;
 		$this->debug=1;		
@@ -70,7 +70,11 @@ class GW_DB
 		if(empty($msg))
 			$msg = $this->error($cmd);
 	
-		trigger_error("ERROR: $msg \nCMD: $cmd",E_USER_ERROR);
+		$this->error = $msg;
+		$this->error_query=$cmd;
+		
+		if(!$soft_error)
+			trigger_error("ERROR: $msg \nCMD: $cmd",E_USER_ERROR);
 	}
 	
 	function getError()
@@ -102,6 +106,8 @@ class GW_DB
 
 	function query($cmd, $nodie=false)
 	{
+		$this->error = false;
+		
 		$tmp = new GW_Timer();
 		$this->result=mysql_query($cmd, $this->link);
 		$this->last_query_time=$tmp->stop(6);
@@ -110,7 +116,7 @@ class GW_DB
 		if($this->debug)
 			$this->query_times[]=Array($cmd, (float)$this->last_query_time);
 		
-		$this->result || $this->trigger_error($cmd);
+		$this->result || $this->trigger_error($cmd, null, $nodie);
 		
 		return $this->result;
 	}
@@ -129,10 +135,11 @@ class GW_DB
 		if(!$cmd)return;
 
 		$this->query(self::prepare_query($cmd), $nodie);
-		$result=Array();
 		
 		if(!is_resource($this->result))
-			return false;
+			return Null;
+		
+		$result=Array();
 
 		if($assoc==1)
 			while($row=mysql_fetch_assoc($this->result))$result[]=$row;
@@ -153,10 +160,14 @@ class GW_DB
 
 		$this->query($cmd,$nodie);
 
+		if(!$this->result)
+			return Null;
+		
 		$result=Array();
-
+			
 		while($row=mysql_fetch_assoc($this->result))
 			$result[$row[$key]]=$row;
+		
 
 		return $result;
 	}

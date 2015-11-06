@@ -34,7 +34,8 @@ class GW_Links implements GW_Composite_Slave
 	
 	public function save()
 	{
-		$this->updateBinds($this->values);
+		if(!is_null($this->values))		
+			$this->updateBinds($this->values);
 	}
 	
 	public function setValues($values)

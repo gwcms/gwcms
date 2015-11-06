@@ -162,6 +162,31 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return $this->errors ? false : true;		
 	}
 	
+	
+	function getImageMinSize($name)
+	{
+		if(!isset($this->composite_map[$name][1]['dimensions_min']))
+			return false;
+		
+		return explode('x', $this->composite_map[$name][1]['dimensions_min']);
+	}
+	
+	function getImageMaxSize($name)
+	{
+		if(!isset($this->composite_map[$name][1]['dimensions_max']))
+			return false;
+		
+		return explode('x', $this->composite_map[$name][1]['dimensions_max']);
+	}
+	
+	function getImageReSize($name)
+	{
+		if(!isset($this->composite_map[$name][1]['dimensions_resize']))
+			return false;
+		
+		return explode('x', $this->composite_map[$name][1]['dimensions_resize']);
+	}	
+	
 	/*
 	function __isset($name) 
 	{

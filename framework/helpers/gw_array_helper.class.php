@@ -102,7 +102,16 @@ class GW_Array_Helper
 			$new[$key]=$values[$i];
 			
 		return $new;
-	}	
+	}
+	
+	static function arrArr2ArrObj($arr)
+	{
+		$tmp = [];
+		foreach($arr as $key => $itm)
+			$arr[$key] = (object)$itm;
+		
+		return $arr;
+	}
 
 
 }

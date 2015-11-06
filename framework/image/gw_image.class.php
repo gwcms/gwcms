@@ -105,9 +105,11 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	
 	function storeResize()
 	{
-		if(!$size=$this->validators['image_file']['dimensions_resize'])
+		if(!isset($this->validators['image_file']['dimensions_resize']))
 			return false;
 
+		$size=$this->validators['image_file']['dimensions_resize'];
+		
 		$params = self::parseDimensions($size);
 		
 		GW_Image_Resize_Helper::resize($this, $params, $this->getFilename());
@@ -192,7 +194,14 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	function deleteComposite()
 	{
 		$this->removeOld();
-	}	
+	}
+	
+	function save()
+	{
+		if(isset($this->new_file))
+			return parent::save();
+		
+	}
 	
 	function eventHandler($event, &$context_data=[])
 	{

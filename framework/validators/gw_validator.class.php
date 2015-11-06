@@ -76,6 +76,18 @@ class GW_Validator
 	{
 		$this->error_messages = Array();
 	}
+	
+	
+	function isValid()
+	{
+		$value = $this->validation_object;
+					
+		if (!$value && $this->getParam('required'))
+			$this->setErrorMessage($this->getParam('error_message'));
+		
+		
+		return count($this->error_messages)==0;
+	}
 }
 
 ?>
