@@ -7,9 +7,9 @@
 
 class GW_DB
 {
-	var $link=false;
-	var $uphd=Array();
-	var $conf=Array
+	public $link=false;
+	public $uphd=Array();
+	public $conf=Array
 	(
 		'logfile' => '',
 		'errshow' => true,
@@ -17,12 +17,14 @@ class GW_DB
 		'lang'=>'lt',
 	);
 
-	var $result=false;
-	var $last_query;
-	var $last_query_time;
-	var $query_times;
-	var $debug=false;
+	public $result=false;
+	public $last_query;
+	public $last_query_time;
+	public $query_times;
+	public $debug=false;
 	static $datetime_format='Y-m-d H:i:s';
+	public $error;
+	public $error_query;
 
 
 	function parse_uphd($uphd)
