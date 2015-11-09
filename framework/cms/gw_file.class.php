@@ -25,7 +25,7 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 	var $auto_fields = false;
 	var $original_file = false;//used with resize
 	var $ignore_fields=Array('new_file'=>1);
-	public $calculate_fields = ['size_human'=>1,'full_filename'=>1];
+	public $calculate_fields = ['size_human'=>1,'full_filename'=>1,'extension'=>'getType'];
 	
 	var $validators=Array
 	(
@@ -89,7 +89,12 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 		return $this->get('id').'_'.$this->get('owner').'.'.$this->getType();
 	}
 	
-	
+	function save()
+	{
+		if(isset($this->new_file))
+			return parent::save();
+		
+	}	
 
 	
 	function validate()
@@ -178,6 +183,16 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 		}
 		
 		parent::eventHandler($event, $context_data);
+	}
+	
+	function getIcon($source)
+	{
+		$filename=GW::s('DIR/APPLICATIONS').strtolower(GW::$context->app->app_name).'/'.$source.'/type_'.$this->extension.'.png';
+		
+		if(file_exists($filename))
+			return 'type_'.$this->extension.'.png';
+
+		return 'type_file.png';
 	}
 	
 }
