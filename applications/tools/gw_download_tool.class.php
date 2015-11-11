@@ -58,5 +58,6 @@ class GW_Download_Tool
 		
 
 		readfile($item->getFilename());
+		exit; //kad neiskristu process time
 	}
 }

@@ -13,7 +13,7 @@
 	</td>
 	<td>
 	{if $app->user->isRoot()}
-		{gw_link path="`$ln`/config/modules/`$pgid`/form" icon="action_edit" title="Edit views" show_title=0 params=[return_to=>$page->path]}
+		{gw_link path="config/modules/`$pgid`/form" icon="action_edit" title="Edit views" show_title=0 params=[return_to=>$page->path]}
 	{/if}
 	</td>
 	</tr>

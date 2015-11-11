@@ -46,9 +46,13 @@ class Module_Tools extends GW_Module
 		{
 			if(!trim($sql))continue;
 					
-			$db->query($sql);
+			$db->query($sql, true);
 			$aff = $db->affected();
 
+			
+			if($db->error)
+				$this->app->setErrors($db->error .' Query: '.$db->error_query);
+			
 			$this->app->setMessage("<pre>".htmlspecialchars($sql).";\n<b># Affected rows:</b> ".$aff."</pre>");
 		}
 	}	

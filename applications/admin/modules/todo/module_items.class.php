@@ -22,6 +22,11 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$params['select']='*, (SELECT LEFT(description, 100) FROM gw_todo AS aaa WHERE aaa.parent_id=a.id ORDER BY `id` DESC LIMIT 1) AS last_comment, insert_time AS week';
 	}
 	
+	function __eventAfterForm($item)
+	{
+		//d::dumpas($item->file1);
+	}
+	
 	
 	public $allowed_order_columns=['last_comment'=>1, 'week'=>1];
 	

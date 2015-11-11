@@ -5,10 +5,11 @@
 class GW_Todo_Item extends GW_Composite_Data_Object
 {
 	var $table = 'gw_todo';
-//	var $composite_map = Array
-//	(
-//		'image' => Array('gw_image', Array('dimensions_resize'=>'6000x4000', 'dimensions_min'=> '10x10')),
-//	);
+	var $composite_map = Array
+	(
+		//'image' => Array('gw_image', Array('dimensions_resize'=>'6000x4000', 'dimensions_min'=> '10x10')),
+		'file1'=>['gw_file']
+	);
 	
 	var $calculate_fields = Array('child_count'=>1, 'comments_count'=>1, 'path'=>'getPath');
 	var $default_order = 'state ASC, priority DESC';		
