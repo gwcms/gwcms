@@ -61,6 +61,7 @@
 		<i id="project_id">Projektas</i>		
 		<i id="week">Savaitė</i>
 		<i id="comments">Komentarai</i>
+		<i id="file1">Prisegtukas 1</i>
 	</i>
 	<i id="FIELDS_SHORT">
 		<i id="week">S</i>
