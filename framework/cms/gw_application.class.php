@@ -137,6 +137,9 @@ class GW_Application
 		
 		unset($getparams['url']);
 		
+		if(isset($params['carry_params']))
+			$getparams = $getparams + $this->carryParams();
+		
 		if($path===false)
 			$path=$this->path;
 		
@@ -147,7 +150,7 @@ class GW_Application
 			($path?'/':'').$path.
 			($getparams? '?'.http_build_query($getparams):'');
 	}
-	
+		
 	
 	/**
 	 * returns $_GET parameters which is configured to carry through jumps
@@ -166,11 +169,8 @@ class GW_Application
 	{	
 		if(!is_array($params))
 			backtrace();
-
-		
-		$params = $params + $this->carryParams();
 					
-		Navigator::jump(self::buildUri($path, $params));
+		Navigator::jump(self::buildUri($path, $params, ['carry_params'=>1]));
 	}
 	
 	//gali buti ieskoma pvz

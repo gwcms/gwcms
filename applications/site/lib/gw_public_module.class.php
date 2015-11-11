@@ -13,6 +13,9 @@ class GW_Public_Module
 	public $app;
 	public $options;
 	public $links;
+	
+	// pvz news/list bus modulis/viewsas, news/view/1/images bus - modulis,viewsas o params = [1,'images']
+	public $params;
 
 
 	function __construct($variables=Array())
@@ -135,8 +138,11 @@ class GW_Public_Module
 			$view_name = 'default';
 		}
 		
+		$this->params = $params;
+		
 		if($act_name)
 			$this->processAction($act_name);
+		
 
 		$this->processView($view_name, $params);
 	}
@@ -206,7 +212,28 @@ class GW_Public_Module
 		
 		//pass deeper
 		//parent::eventHandler($event, $context);
-	}	
+	}
+	
+	
+	function setErrorItem($vals, $name)
+	{
+		$_SESSION['error_item_vals_'.$name] = $vals;
+	}
+	
+	function getErrorItem($name)
+	{
+		if(!isset($_SESSION['error_item_vals_'.$name]))
+			return null;
+		
+		$vals = $_SESSION['error_item_vals_'.$name];
+		unset($_SESSION['error_item_vals_'.$name]);
+		return $vals;
+	}
+	
+	function links($name)
+	{
+		return $this->app->buildUri($this->links[$name],[],['carry_params'=>1]);
+	}
 		
 	
 }
