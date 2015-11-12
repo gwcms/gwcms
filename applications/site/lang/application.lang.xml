@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+
+<i id="FOOTER">
+	<![CDATA[
+		Gateway CMS<br />%s ©	
+	]]>
+</i>
+
+
+<i id="USER_PASSCHANGE_EML">
+	<![CDATA[
+		Slaptažodžio keitimo nuoroda: %s
+		--
+		Jei šis laiškas atėjo per klaida prašome ignuoroti.
+	]]>
+</i>
+
+<i id="ln">
+	<en>English</en>
+	<lt>Lithuanian</lt>
+</i>
+
+
+</xml>
