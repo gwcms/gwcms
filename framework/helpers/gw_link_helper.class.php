@@ -7,7 +7,18 @@ class GW_Link_Helper
 	{
 		preg_match_all("/(href=[\"'])(https?\:\/\/.+)([\"'])/U", $text, $matches);
 		
-		return isset($matches[2]) ? $matches[2] : false;
+		return isset($matches[2]) ? self::prepareLinks($matches[2]) : false;
+	}
+	
+	
+	static function prepareLinks($links)
+	{
+		$list = [];
+		
+		foreach($links as $link)
+			$list[] = str_replace('&amp;','&', $link);
+		
+		return $list;
 	}
 	
 	static function __trackingLink($match)
