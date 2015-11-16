@@ -3,7 +3,8 @@
 class GW_Site_Application extends GW_Application
 {
 	public $path_arg=Array();
-
+	public $user_class="GW_Customer";
+	
 	function getPage()
 	{
 		$this->page = new GW_Page();
@@ -66,7 +67,7 @@ class GW_Site_Application extends GW_Application
 
 	function processTemplate($file)
 	{
-		$this->preRun();
+		//$this->preRun();
 		$this->postRun();
 		$this->smarty->display($file);
 	}
@@ -174,7 +175,7 @@ class GW_Site_Application extends GW_Application
 			die('Template not set');
 			
 
-		$this->preRun();
+		//$this->preRun();
 		
 		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
 		{
@@ -188,9 +189,8 @@ class GW_Site_Application extends GW_Application
 	function userzoneAccess()
 	{		
 		if(strpos($this->page->path, GW::s('SITE/USERZONE_PATH'))===0 && !$this->user)
-		{
-
-			$this->jump(GW::s('PATH_LOGIN'));
+		{			
+			$this->jump(GW::s('SITE/PATH_LOGIN'),['returnto_url'=>$this->path]);
 			exit;
 		}	
 	}
@@ -202,6 +202,8 @@ class GW_Site_Application extends GW_Application
 		
 		if(!$this->page->id)
 			$this->jumpToFirstPage();
+		
+		$this->preRun();
 			
 		$this->userzoneAccess();
 
@@ -214,6 +216,9 @@ class GW_Site_Application extends GW_Application
 				//shift off direct
 				$path = preg_replace('/^.*\//U','',$this->path);
 				$this->page->path = $path;
+				
+				
+				
 				$this->processPath($path);
 			break;
 			default: die("Unknown page type");break;
