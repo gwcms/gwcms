@@ -1,3 +1,24 @@
+{*
+	type - laukelio tipas, pvz textarea,htmlarea,image,text,bool,select,image,file
+	hideifempty - naudingas kai laukelio tipas read ir nenorima rodyti tuscios eilutes
+	name - laukelio vardas
+	value - laukelio vertÄ, jei laukelio verte nenustatyta tada imama $item->value
+	default - laukelio vertÄ jei laukelis neuÅ¾pildytas
+	item - duomenu objektas
+	i18n - 1|0 - daugiakalbiskas laukelis
+	title - laukelio antraÅ¡tÄ
+	note - matoma pastaba
+	hidden_note - tooltip pastaba
+	width_title - antraÅ¡tÄs plotis
+	nowrap - antraÅ¡tÄs turinys Ä¯ kitÄ eilutÄ neperkeliamas
+	placeholder - sufleris kÄ Ä¯vesti
+	readonly - laukelis tik skaitomas
+	input_name_pattern - laukelio vardo formatas // pvz: input[section][%s]
+	options - select,multiselect,read tipams vertÄs
+	class - laukelio objektui uÅ¾dedama klasÄ
+*}
+{if !$hideifempty || $value || $item->$name}
+	
 {$title=$title|default:$app->fh()->fieldTitle($name)}
 
 <tr id="gw_input_{$name}">
@@ -36,4 +57,5 @@
 	
 	
 </tr>
+{/if}
 

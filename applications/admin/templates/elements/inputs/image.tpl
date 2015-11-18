@@ -18,4 +18,6 @@ onclick="if (!confirm('{$app->lang.CONFIRM_DELETE}'))return;jserver.callmodule('
   		</p>
 {/if}
 
-<input id="input_file_{$name}_{$suffix}" type="file" name="{$name}" />
+{if !$readonly}
+	<input id="input_file_{$name}_{$suffix}" type="file" name="{$name}" />
+{/if}

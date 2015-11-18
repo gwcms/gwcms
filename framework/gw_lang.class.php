@@ -49,8 +49,9 @@ class GW_Lang
 		return true;
 	}
 	
-	static function getFromCache($file_id, $module, $path)
+	static function &getFromCache($file_id, $module, $path, $create=false)
 	{
+		$false = false;
 		$var =& self::$cache[$file_id.'/'.$module];
 		
 		//grazinti visa faila
@@ -59,12 +60,14 @@ class GW_Lang
 		
 		foreach($path as $key)
 		{
-			if(!is_array($var) || !isset($var[$key]))
-				return false;
+			if(!$create)
+				if(!is_array($var) || !isset($var[$key]))
+					return $false;
 							
 			$var =& $var[$key];
 		}
-
+		
+				
 		return $var;
 	}
 		
@@ -72,17 +75,24 @@ class GW_Lang
 
 	
 	
-	static function readG($file_id,$module, $path)
+	static function &readG($file_id,$module, $path, $create=false)
 	{
+		$null = null;
+		
 		$file_id=strtolower($file_id);
 		$module=  strtolower($module);
 		
 		if(!self::loadFile($file_id, $module))
 			return $key;
+		
 
-		$tmp=self::getFromCache($file_id,$module, explode('/',$path));
+		$tmp =& self::getFromCache($file_id,$module, explode('/',$path),$create);
+		
 
-		return $tmp ? $tmp : null;		
+		if($tmp || $create)
+			return $tmp;
+		else
+			return $null;
 		
 	}
 	
@@ -102,43 +112,52 @@ class GW_Lang
 	// /A/alternatyvus vertimas - jei ras modulyje ims is modulio, jei neras ieskos application.lang.xml
 	
 	// key butinai turi prasidet ne "/" - tuo atveju bus rodomas pats key	
-	static function read($key)
+	static function &readWrite($key, $write=null)
 	{	
 			if($key[0]!='/')
 				return $key;
 							
 			list(,$type,$otherargs) = explode('/',$key,3);
 			
+			
+			$create = $write!==null;
+			
 			switch($type)
 			{
 				case 'G': // /G/failopavadinimas/kelias 
 					list($fileid, $path) = explode('/',$otherargs,2);
 										
-					$r = self::readG($fileid,'', $path);
+					$r =& self::readG($fileid,'', $path, $create);
 				break;
 				case 'g'://globalus_vertimo failas
-					$r = self::readG('application','',$otherargs);
+					$r =& self::readG('application','',$otherargs,$create);
 				break;
 				case 'M':
 					list($module, $path) = explode('/',$otherargs,2);
-					$r = self::readG('',$module,$path);
+					$r =& self::readG('',$module,$path,$create);
 				break;
 				case 'm':
-					$r = self::readG('', self::$module, $otherargs);
+					$r =& self::readG('', self::$module, $otherargs,$create);
 				break;
 			
 				case 'A':
-					$r = self::readG('', self::$module, $otherargs);
+					$r =& self::readG('', self::$module, $otherargs);
 					if(!$r)
-						$r = self::readG('application','',$otherargs);
+						$r =& self::readG('application','',$otherargs,$create);
 				break;
 
 			}
 			
-			return $r === null ? $key : $r;
-			//d::dumpas($key);
 			
+			if($write!==null){			
+				$r = $write;
+			}
 			
+			if ($r !== null || $write)
+				return $r;
+			else 
+				return	$key;
 	}
+
 	
 }

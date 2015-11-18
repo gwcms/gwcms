@@ -12,3 +12,12 @@
 {function name=dl_output_filters_truncate}
 	{$item->$field|truncate:$dl_output_filters_truncate_size}
 {/function}	
+
+
+{function name=dl_output_filters_options}
+	{if isset($options[$field][$item->$field])}
+		{$options[$field][$item->$field]}
+	{else}
+		<span title="{$item->$field|escape}">-</span>
+	{/if}
+{/function}	

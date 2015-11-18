@@ -141,9 +141,10 @@ class GW
 	 * @param type $key
 	 */
 	
-	static function l($key)
+	static function &l($key, $write=null)
 	{
-		return GW_Lang::read($key);
+		
+		return GW_Lang::readWrite($key, $write);
 	}
 	
 	
