@@ -2,20 +2,20 @@
 	type - laukelio tipas, pvz textarea,htmlarea,image,text,bool,select,image,file
 	hideifempty - naudingas kai laukelio tipas read ir nenorima rodyti tuscios eilutes
 	name - laukelio vardas
-	value - laukelio vertÄ, jei laukelio verte nenustatyta tada imama $item->value
-	default - laukelio vertÄ jei laukelis neuÅ¾pildytas
+	value - laukelio vertė, jei laukelio verte nenustatyta tada imama $item->value
+	default - laukelio vertė jei laukelis neužpildytas
 	item - duomenu objektas
 	i18n - 1|0 - daugiakalbiskas laukelis
-	title - laukelio antraÅ¡tÄ
+	title - laukelio antraštė
 	note - matoma pastaba
 	hidden_note - tooltip pastaba
-	width_title - antraÅ¡tÄs plotis
-	nowrap - antraÅ¡tÄs turinys Ä¯ kitÄ eilutÄ neperkeliamas
-	placeholder - sufleris kÄ Ä¯vesti
+	width_title - antraštės plotis
+	nowrap - antraštės turinys į kitą eilutę neperkeliamas
+	placeholder - sufleris ką įvesti
 	readonly - laukelis tik skaitomas
 	input_name_pattern - laukelio vardo formatas // pvz: input[section][%s]
-	options - select,multiselect,read tipams vertÄs
-	class - laukelio objektui uÅ¾dedama klasÄ
+	options - select,multiselect,read tipams vertės
+	class - laukelio objektui uždedama klasė
 *}
 {if !$hideifempty || $value || $item->$name}
 	
