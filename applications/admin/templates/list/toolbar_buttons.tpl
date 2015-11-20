@@ -59,9 +59,15 @@
 
 {/function}
 
+{function name=dl_toolbar_buttons_importdata} 
+	{gw_link relative_path=importdata title=GW::l('/g/VIEWS/importdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
+{/function}	
+{function name=dl_toolbar_buttons_exportdata} 
+	{gw_link relative_path=exportdata title=GW::l('/g/VIEWS/exportdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
+{/function}
 
 
-	
+
 {function name=dl_display_toolbar_buttons}
 	{foreach $dl_toolbar_buttons as $button_func}
 		<span style="white-space: nowrap;">{call name="dl_toolbar_buttons_`$button_func`"}</span>
