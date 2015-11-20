@@ -68,10 +68,15 @@ class GW_Module
 		$this->tpl_vars['messages'] =& $this->messages;
 	}
 	
-	function initListParams()
+	function initListParams($modulepath=false,$viewname=false)
 	{
+		if(!$modulepath)
+			$modulepath=implode('/',$this->module_path);
 		
-		$sess_store =& $_SESSION[implode('/',$this->module_path).'/'.$this->view_name];
+		if(!$viewname)
+			$viewname=$this->view_name;
+		
+		$sess_store =& $_SESSION["$modulepath/$viewname"];
 		
 		if(!$sess_store)
 			$sess_store=[];

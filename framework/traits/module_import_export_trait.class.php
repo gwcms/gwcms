@@ -13,6 +13,8 @@ trait Module_Import_Export_Trait
 		return $cols;
 	}
 	
+	public $importexport_replacibles=[["\n","\t","\r"],['\n','\t','\r']];
+	
 	function __list2Str($list)
 	{
 		$data = "";
@@ -25,8 +27,10 @@ trait Module_Import_Export_Trait
 			
 			
 			$row = Array();
-			foreach($cols as $xlsname => $sysname)
-				$row[] = str_replace("\n","<br />", isset($item->$sysname) ? $item->$sysname:'' );
+			foreach($cols as $xlsname => $sysname){
+				$val = isset($item->$sysname) ? $item->$sysname:'';
+				$row[] = str_replace($this->importexport_replacibles[0], $this->importexport_replacibles[1], $val);
+			}
 			
 			$data .= implode("\t", $row)."\n";
 		}
@@ -36,8 +40,11 @@ trait Module_Import_Export_Trait
 	
 	function viewExportData()
 	{
+		$this->initListParams(false,'list');
 		$this->setListParams($cond, $params);
 		$list = $this->model->findAll($cond, $params);
+		
+		//d::Dumpas([$cond, $params]);
 		
 		$data = $this->__list2Str($list);
 				
@@ -60,8 +67,6 @@ trait Module_Import_Export_Trait
 
 		$data = explode("\n", $rawdata);
 		
-	
-		
 		foreach($data as $i=>$row)
 		{
 			$data[$i] = explode("\t", trim($row, "\r"));
@@ -80,14 +85,18 @@ trait Module_Import_Export_Trait
 		
 		
 		$error_rows=[];
+		$saved=[];
 		
 		foreach($data as $line => $row)
 		{
 			$item = $this->model->createNewObject();
 
 
-			foreach($header as $i => $fieldname)
-				$item->set($fieldname, $row[$i]);
+			foreach($header as $i => $fieldname){
+				$val = isset($row[$i]) ? $row[$i] : '';
+				$val = str_replace($this->importexport_replacibles[1], $this->importexport_replacibles[0], $val);
+				$item->set($fieldname, $val);
+			}
 			
 			if(!$item->validate())
 			{
@@ -97,12 +106,16 @@ trait Module_Import_Export_Trait
 				
 				$item->save();
 				$counts['success'] ++;
+				$saved[]=$item->toArray();
 			}
 		}
 		
 		d::ldump($counts);
-		
-		d::ldump(['error_rows'=>$error_rows]);
+		d::ldump([
+		    'error_rows'=>$error_rows,
+		    'header'=>$header, 
+		    'saved'=>$saved
+		]);
 		
 		$this->tpl_vars['data']=$rawdata;
 		

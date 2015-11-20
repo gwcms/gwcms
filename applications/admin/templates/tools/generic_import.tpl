@@ -35,6 +35,15 @@
 </p>
 
 <p>
+
+<b>Neleistini simboliai užkoduojami:</b>
+<ul>
+	<li>[tab] - \t</li>
+	<li>[eilutes perkelimo simbolis] - \n arba 2simboliu junginys \r\n</li>
+</ul>
+</p>
+
+<p>
 	Importuojamų duomenų šablonui galima panaudoti <a href="{$app_base}{$app->ln}/{implode('/',$m->module_path)}/exportdata">Eksporto</a> veiksmą
 </p>
 

@@ -31,6 +31,12 @@
 	{implode(array_keys($fields),', ')}
 </p>
 
+<b>Neleistini simboliai užkoduojami:</b>
+<ul>
+	<li>[tab] - \t</li>
+	<li>[eilutes perkelimo simbolis] - \n arba 2simboliu junginys \r\n</li>
+</ul>
+
 <p>
 	Pakeistus, papildytus duomenis galima
 	<a href="{$app_base}{$app->ln}/{implode('/',$m->module_path)}/importdata">Importuotuoti</a>

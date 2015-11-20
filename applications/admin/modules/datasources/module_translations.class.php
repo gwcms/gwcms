@@ -3,6 +3,7 @@
 
 class Module_Translations extends GW_Common_Module
 {	
+	use Module_Import_Export_Trait;	
 	
 	function init()
 	{	
@@ -13,8 +14,6 @@ class Module_Translations extends GW_Common_Module
 
 		
 	}
-	
-	
 	
 	function appendData(&$data, $file, $module)
 	{
