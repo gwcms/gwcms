@@ -23,7 +23,7 @@ date_picker_locale =
 	weekMin: ''
 }	
 	
-		<?
+		<?php
 	break;
 
 	case 'no':
@@ -42,7 +42,7 @@ date_picker_locale =
 	weekMin: ''
 }	
 	
-		<?
+		<?php
 	break;	
 
 }

@@ -204,6 +204,14 @@
 		<en>Export</en>
 		<lt>Eksportuoti</lt>
 	</i>
+	<i id="importdata">
+		<en>Import</en>
+		<lt>Importuoti</lt>
+	</i>		
+	<i id="exportdata">
+		<en>Export</en>
+		<lt>Eksportuoti</lt>
+	</i>
 </i>
 
 <i id="NO_ITEMS">

@@ -11,30 +11,30 @@
 
 $(document).ready(function (){
 
-$('.datepicker_elm').each(function(){
-	var inp_id='#'+this.id+'_b';
-	var options = {
-			format:'Y-m-d',
-			date: $(inp_id).val(),
-			current: $(inp_id).val(),
-			starts: 0,
-			position: 'right',
-			onBeforeShow: function(){
-				$(inp_id).DatePickerSetDate($(inp_id).val(), true);
-			},
-			onChange: function(formated, dates){
-				$(inp_id).val(formated);
-				$('.datepicker').hide();
+	$('.datepicker_elm').each(function(){
+		var inp_id='#'+this.id+'_b';
+		var options = {
+				format:'Y-m-d',
+				date: $(inp_id).val(),
+				current: $(inp_id).val(),
+				starts: 0,
+				position: 'right',
+				onBeforeShow: function(){
+					$(inp_id).DatePickerSetDate($(inp_id).val(), true);
+				},
+				onChange: function(formated, dates){
+					$(inp_id).val(formated);
+					$('.datepicker').hide();
+				}
 			}
-		}
-	
 
-	try{options.locale = date_picker_locale;}catch(err){}
-	
-	$(this).DatePicker(options);
 
-	$(this).click(function(){$(this).DatePickerToggle();})	
-});
+		try{options.locale = date_picker_locale;}catch(err){}
+
+		$(this).DatePicker(options);
+
+		$(this).click(function(){$(this).DatePickerToggle();})	
+	});
 
 });
 
