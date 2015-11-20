@@ -162,16 +162,21 @@ class GW
 		if($module=='M')
 		{
 			list($module, $key) = explode('/', $key, 2);
-			$module = strtolower($module);
+			$module = 'M/'.strtolower($module);
 		}elseif($module=='m'){
-			$module = GW_Lang::$module;
+			$module = 'M/'.GW_Lang::$module;
+		}elseif($module=='g'){
+			$module = 'G/application';
+		}elseif($module=='G'){
+			list($module, $key) = explode('/', $key, 2);
+			$module = 'G/'.strtolower($module);
 		}
-
+		
 		//uzloadinti vertima jei nera uzloadintas
 		
 		if(!isset($cache[$module]))
 		{
-			$tr = GW_Translation::singleton()->getAssoc(['key','value_'.GW_Lang::$ln],['module=?', $module]);
+			$tr = GW_Translation::singleton()->getAssoc(['key','value_'.GW_Lang::$ln],['module=?', $module],['order'=>'id ASC']);
 			
 			foreach($tr as $k => $val){
 				
@@ -200,11 +205,10 @@ class GW
 				break;
 			}
 		}
-		
-
+				
 		
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
-		if(self::$devel_debug && ($vr==Null || ($vr[0]=='*' && $vr[strlen($vr)-1]=='*')) ){
+		if(self::$devel_debug && ($vr==Null || (is_string($vr) && $vr[0]=='*' && $vr[strlen($vr)-1]=='*')) ){
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
 			if($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln.':')!==false ){
 				list($ln, $vr) = explode(':', $valueifnotfound, 2);
@@ -214,7 +218,7 @@ class GW
 				//is lang failu
 				$fromxml = GW::l($fullkey);
 				$vr = $fromxml!=$fullkey ? $fromxml : '*'.$key.'*';
-				
+								
 				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
 			}
 		}

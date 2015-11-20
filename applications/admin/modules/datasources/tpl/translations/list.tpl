@@ -8,6 +8,14 @@
 {block name="init"}
 
 	
+	{function name=dl_toolbar_buttons_synchronizefromxml} 
+		{gw_link relative_path=synchronizefromxml title=GW::l('/m/VIEWS/synchronizefromxml') icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{/function}	
+	
+	{$dl_toolbar_buttons[] = hidden}
+	{$dl_toolbar_buttons_hidden=[synchronizefromxml,dialogconf]}		
+	
+	
 	{$display_fields=[module=>1,key=>1]}
 
 	{foreach GW::$settings.LANGS as $lncode}
@@ -18,7 +26,6 @@
 	
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
 	

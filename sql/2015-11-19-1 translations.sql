@@ -1,0 +1,1 @@
+ALTER TABLE `gw_translations` ADD `priority` INT NOT NULL AFTER `value_en`;

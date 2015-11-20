@@ -68,11 +68,16 @@ class GW_Data_Object
 		return $this->content_base[$key];
 	}
 
-	
+	/**
+	 * Atkreipti dÄmesÄ¯ Ä¯ tai kad atliekamas laukelio pazymejimas i pakeista net tuo
+	 * atveju kai paduodama (string)6 o buvo (int)6 (cast sensitive palyginimas)
+	 */
 	function set($key, $val)
 	{
 		if(!isset($this->content_base[$key]) || $this->content_base[$key]!==$val)
 		{
+			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
+			
 			$this->content_base[$key]=$val;
 			$this->changed_fields[$key]=1;
 		}
