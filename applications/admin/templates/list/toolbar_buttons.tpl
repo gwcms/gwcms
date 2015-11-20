@@ -60,10 +60,10 @@
 {/function}
 
 {function name=dl_toolbar_buttons_importdata} 
-	{gw_link relative_path=importdata title=GW::l('/g/VIEWS/importdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{gw_link relative_path=importdata title=GW::l('/A/VIEWS/importdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 {/function}	
 {function name=dl_toolbar_buttons_exportdata} 
-	{gw_link relative_path=exportdata title=GW::l('/g/VIEWS/exportdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{gw_link relative_path=exportdata title=GW::l('/A/VIEWS/exportdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 {/function}
 
 
