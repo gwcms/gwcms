@@ -105,7 +105,8 @@ class d
 	
 	static function jsonNice($array)
 	{
-		return json_encode($array, JSON_PRETTY_PRINT);
+		return json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
+
 
 }
