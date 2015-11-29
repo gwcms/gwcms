@@ -82,7 +82,7 @@ class GW_Common_Module extends GW_Module
 		
 		
 		if(!$id)
-			return $this->setErrors('/GENERAL/BAD_ARGUMENTS');
+			return $this->setErrors('/g/GENERAL/BAD_ARGUMENTS');
 		
 		if($class)
 			$item = new $class($id);
@@ -90,7 +90,7 @@ class GW_Common_Module extends GW_Module
 			$item = $this->model->createNewObject($id);
 			
 		if($load && !$item->load())
-			return $this->setErrors('/GENERAL/ITEM_NOT_EXISTS');
+			return $this->setErrors('/g/GENERAL/ITEM_NOT_EXISTS');
 		
 		$this->canBeAccessed($item, true);
 			
@@ -278,7 +278,7 @@ class GW_Common_Module extends GW_Module
 		$this->canBeAccessed($item, true);
 
 		if(!$item->invertActive()) 
-			return $this->setErrors('/GENERAL/ACTION_FAIL'); 
+			return $this->setErrors('/g/GENERAL/ACTION_FAIL'); 
 		
 		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);
 	
@@ -286,10 +286,12 @@ class GW_Common_Module extends GW_Module
 	}	
 
 	
-	function setListParams(&$cond='', &$params=[])
+	function setListParams(&$params=[])
 	{	
+		$cond = isset($params['conditions']) ? $params['conditions'] : ''; 
+		
 		if(isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
-			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];
+			$cond .= ($cond?' AND ':''). $this->list_params['views']['conditions'];		
 			
 		$search=isset($this->list_params['filters']) ? (array)$this->list_params['filters'] : [];
 				
@@ -345,18 +347,18 @@ class GW_Common_Module extends GW_Module
 		if(isset($this->list_params['order']) && $ord=$this->list_params['order'])
 			$params['order']=$ord;
 		
-		
 				
 		//perrasoma is modulio konfig. views
-		if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
-			$params['order']=$ord;
+		//if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
+		//	$params['order']=$ord;
 		
 		
 		//perrasoma is modulio konfig. orders
-		if(isset($this->list_params['orders']['order']) && $ord=$this->list_params['orders']['order'])
-			$params['order']=$ord;		
+		//if(isset($this->list_params['orders']['order']) && $ord=$this->list_params['orders']['order'])
+		//	$params['order']=$ord;		
 		
 		
+		$params['conditions'] = $cond;
 	}
 	
 	function setDefaultOrder()
@@ -365,6 +367,9 @@ class GW_Common_Module extends GW_Module
 			$this->list_params['order']=$this->model->getDefaultOrderBy();
 	}
 	
+	
+	//uzkrauna sarasui viewsus
+	//viewsai savyje turi pavadinima, salyga, rikiavima, suskaiciuoti direktyva, 
 	function loadViews()
 	{
 		$views = $this->app->page->VIEWS;
@@ -439,10 +444,17 @@ class GW_Common_Module extends GW_Module
 	function doSetView()
 	{
 		$this->list_params['views']['name'] = $_REQUEST['name'];
+		$this->loadViews();
 		
-		unset($_GET['name']);
+		
+		if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
+		{
+			$this->list_params['order'] = $ord;
+		}
+
 				
-		
+				
+		unset($_GET['name']);		
 		$this->jump();
 	}
 	
@@ -469,7 +481,7 @@ class GW_Common_Module extends GW_Module
 					$foundorder = $order;
 
 			if(!$foundorder){
-				$this->setErrors('/GENERAL/ORDER_NOT_FOUND'); 
+				$this->setErrors('/g/GENERAL/ORDER_NOT_FOUND'); 
 				$this->jump();
 			}
 
@@ -480,7 +492,7 @@ class GW_Common_Module extends GW_Module
 			
 			if(!$this->__validateOrder($_REQUEST['order'], $this->allowed_order_columns+$this->model->getColumns()))
 			{
-				$this->setErrors('/GENERAL/BAD_ORDER_FIELD'); 
+				$this->setErrors('/g/GENERAL/BAD_ORDER_FIELD'); 
 				$this->jump();
 			}else{				
 				$this->list_params['orders']['name'] = 'NIEKAS';
@@ -532,14 +544,16 @@ class GW_Common_Module extends GW_Module
 		$this->loadOrders();
 		
 		
-		$cond=isset($params['conditions']) ? $params['conditions'] : false;
 		
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
-		$this->setListParams($cond, $params);
-		
+		$this->setListParams($params);
 				
 		$this->fireEvent('AFTER_LIST_PARAMS', $params);
+		
+		$cond = isset($params['conditions']) ? $params['conditions'] : false;
+		
+		//d::Dumpas($cond);
 		
 
 		$params['key_field']=$this->model->primary_fields[0];
@@ -644,7 +658,7 @@ class GW_Common_Module extends GW_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/GENERAL/ACTION_RESTRICTED');
+		$this->setErrors('/g/GENERAL/ACTION_RESTRICTED');
 		$this->jump();
 	}	
 	
