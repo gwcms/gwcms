@@ -65,7 +65,7 @@ html>body #sortable li { height: 1.5em; line-height: 1em; }
 </div>
 
 
-<form id="changestatus"  action="{$ln}/{$app->path_arr_parent.path}" method="post" >
+<form id="changestatus"  action="{$app->buildURI($app->path_arr_parent.path)}" method="post" >
 
 <input type="hidden" name="act" value="do:dialog_config_save" />
 <input type="hidden" id="defaults" name="defaults" value="0" />
