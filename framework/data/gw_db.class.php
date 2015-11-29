@@ -66,9 +66,6 @@ class GW_DB
 		$this->conf['errshow'] = 1;
 		$this->debug=1;		
 		
-		if($this->debug)
-			dump(GW_Debug_Helper::backtrace_soft());
-
 		if(empty($msg))
 			$msg = $this->error($cmd);
 	
