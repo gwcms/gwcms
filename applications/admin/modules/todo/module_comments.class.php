@@ -18,9 +18,9 @@ class Module_Comments extends Module_Items
   	
   	function __eventAfterList()
   	{
-		if($id = $_REQUEST['id'])
+		if(isset($_REQUEST['id']))
   		{
-  			$comment = $this->model->createNewObject($id);
+  			$comment = $this->model->createNewObject($_REQUEST['id']);
   			$comment->load();
   			$this->tpl_vars['comment'] =& $comment; 
   		}	
@@ -98,4 +98,10 @@ class Module_Comments extends Module_Items
 	{
 		
 	}	
+	
+	function __eventBeforeListParams(&$params)
+	{
+		//nes module_items turi
+	}	
+	
 }
