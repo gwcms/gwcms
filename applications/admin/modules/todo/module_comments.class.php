@@ -33,6 +33,8 @@ class Module_Comments extends Module_Items
 			case "BEFORE_SAVE":
 				$item = $context;
 				
+				$item->user_create = $this->app->user->id;
+				
 				$item->description = str_replace("\n", "<br />", $item->description);
 				
 				$this->notifySave($context);
