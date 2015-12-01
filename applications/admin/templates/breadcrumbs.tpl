@@ -4,7 +4,7 @@
 		{if $item@last}
 			{$item.title}
 		{else}
-			<a href="{$ln}/{$item.path}">{$item.title}</a> &raquo;
+			<a href="{$app->buildURI($item.path)}">{$item.title}</a> &raquo;
 		{/if}	
 	{/foreach}
 	

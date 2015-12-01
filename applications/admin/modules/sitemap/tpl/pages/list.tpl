@@ -47,10 +47,10 @@
 	
 	{if $m->filters.parent_id}
 		{*tree display*}
-		{$dl_actions=[invert_active,move,edit,delete]}
+		{$dl_actions=[invert_active,move,edit,delete,clone]}
 	{else}
 		{*one level list display*}
-		{$dl_actions=[invert_active,edit,delete]}
+		{$dl_actions=[invert_active,edit,delete,clone]}
 	{/if}
 	
 	{gw_unassign var=$display_fields.ico}
