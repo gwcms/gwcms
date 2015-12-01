@@ -23,7 +23,9 @@
 	
 	{function dl_cell_in_menu}
 			{foreach GW::$settings.LANGS as $ln_code}
-				{if $item->get("in_menu_`$ln_code`")}{$ln_code|strtoupper}{/if}
+				{if $item->get("in_menu_`$ln_code`")}
+					<a href="{$sys_base}{$ln_code}/{$item->path}">{$ln_code|strtoupper}</a>
+				{/if}
 			{/foreach}		
 	{/function}
 	
