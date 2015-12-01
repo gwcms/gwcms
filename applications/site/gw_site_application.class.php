@@ -187,10 +187,15 @@ class GW_Site_Application extends GW_Application
 	}
 	
 	function userzoneAccess()
-	{		
+	{
 		if(strpos($this->page->path, GW::s('SITE/USERZONE_PATH'))===0 && !$this->user)
-		{			
-			$this->jump(GW::s('SITE/PATH_LOGIN'),['returnto_url'=>$this->path]);
+		{		
+			$getargs=$_GET;
+			unset($getargs['url']);
+			
+			$getargs = $getargs ? '?'.http_build_query($getargs) : '';
+			
+			$this->jump(GW::s('SITE/PATH_LOGIN'),['returnto_url'=>  $this->path.$getargs]);
 			exit;
 		}	
 	}
