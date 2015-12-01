@@ -82,6 +82,17 @@ class Navigator
 	{
 		$uri = self::buildURI($url, $params);
 		
+		/*
+		ob_start();
+		d::dump($uri);
+		$out = ob_get_contents();
+		ob_end_clean();	
+	
+		
+		file_put_contents(GW::s('DIR/REPOSITORY').'redirect.html', $out, FILE_APPEND);
+		*/
+		
+		
 		header( "Location: $uri");
 		exit;
 	}
