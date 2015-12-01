@@ -48,8 +48,11 @@ class GW_Permissions
 	
 	static function &__getPrmByMltGrpIds($gids, $path=false)
 	{
-		if(!count($gids))
-			return [];
+		
+		if(!count($gids)){
+			$empty=[];
+			return $empty;
+		}
 					
 		$sql = "SELECT DISTINCT path, access_level FROM `".self::$table."` WHERE (";
 		foreach($gids as $gid)
