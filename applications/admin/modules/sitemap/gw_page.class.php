@@ -63,7 +63,16 @@ class GW_Page extends GW_i18n_Data_Object
 		);
 		
 		return $list;	
-	}	
+	}
+	
+	//get page path by module path
+	//gauti puslapio kelia pagal modulio kelia, salyga kad templeitas butu tik karta naudojamas
+	function getSingleByModulePath($path)
+	{
+		$tmp = $this->getByModulePath($path);
+		
+		return isset($tmp[$path]) ? $tmp[$path] : false;
+	}
 
 	function getFirstChild()
 	{
