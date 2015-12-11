@@ -62,17 +62,17 @@ class GW_Gallery_Item extends GW_Composite_Data_Object
 	function getChilds($params=Array())
 	{
 		$id = $this->id ? (int)$this->id : -1;
-
-		$cond = Array('parent_id=?'.($params['type']?' AND type='.(int)$params['type']:'').($params['active']?' AND active':''), $id);
+		
+		$cond = Array('parent_id=?'.($params['type']?' AND type='.(int)$params['type']:'').(isset($params['active'])?' AND active':''), $id);
 
 		$p=Array();
 		
-		if($params['limit'])
+		if(isset($params['limit']))
 			$p['limit']=$params['limit'];
 		
 		$list = $this->findAll($cond, $p);
 
-		if($params['return_first_only']) 
+		if(isset($params['return_first_only'])) 
 			return $list[0];
 					
 		return $list;

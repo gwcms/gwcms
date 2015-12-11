@@ -17,7 +17,10 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	{$dl_smart_fields=[]}
-	{$dl_toolbar_buttons[] = dialogconf}	
+
+	{$dl_toolbar_buttons[] = hidden}
+	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}		
+	
 	
 	{$dl_actions=[tplvars,invert_active,edit,delete]}
 	
