@@ -69,7 +69,7 @@ class GW_Data_Object
 	}
 
 	/**
-	 * Atkreipti dÄmesÄ¯ Ä¯ tai kad atliekamas laukelio pazymejimas i pakeista net tuo
+	 * Atkreipti demensi i tai kad atliekamas laukelio pazymejimas i pakeista net tuo
 	 * atveju kai paduodama (string)6 o buvo (int)6 (cast sensitive palyginimas)
 	 */
 	function set($key, $val)
@@ -218,7 +218,7 @@ class GW_Data_Object
 			$sql.= " LIMIT {$offset}, {$options['limit']}"; 
 			
 		if (isset($options['dump'])){
-			dump($sql);
+			dump([$sql,$options]);
 			exit;
 		}	
 		

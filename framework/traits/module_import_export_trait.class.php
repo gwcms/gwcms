@@ -40,8 +40,12 @@ trait Module_Import_Export_Trait
 	
 	function viewExportData()
 	{
+		$params=[];
+		$cond='';
 		$this->initListParams(false,'list');
-		$this->setListParams($cond, $params);
+		$this->setListParams($params);
+		$cond = $params['conditions'];		
+		
 		$list = $this->model->findAll($cond, $params);
 		
 		//d::Dumpas([$cond, $params]);
