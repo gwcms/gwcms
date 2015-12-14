@@ -218,7 +218,7 @@ class GW_Data_Object
 			$sql.= " LIMIT {$offset}, {$options['limit']}"; 
 			
 		if (isset($options['dump'])){
-			dump([$sql,$options]);
+			dump($sql);
 			exit;
 		}	
 		
@@ -648,6 +648,31 @@ class GW_Data_Object
 		$db->_multi_insert($this->table, $list, true);
 	}
 	
+	public $order_limit_fields=Array();
+	
+	function getLimitOrdCondition()
+	{
+		$ordering_conditions = "";
+		$params	= Array();
+		
+		foreach($this->order_limit_fields as $field)
+		{
+			$ordering_conditions.=($ordering_conditions?' AND ':'')." `$field`=?";
+			$params[]=$this->$field;
+		}
+		
+		if($params)
+			$ordering_conditions = GW_DB::prepare_query(array_merge(Array($ordering_conditions),$params));
+		
+		return $ordering_conditions ? $ordering_conditions : false;
+	}
+	
+	
+	function fixOrder()
+	{
+		$this->move("", $this->getLimitOrdCondition());
+	}	
+	
 	function savePositions($shifts, $conditions='')
 	{
 		$db = $this->getDB();
@@ -781,5 +806,5 @@ class GW_Data_Object
 	} 	
 	
 	
-	
+
 }
