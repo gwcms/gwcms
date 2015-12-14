@@ -5,14 +5,15 @@ define('GW_GALLERY_ITEM_IMAGE', 0);
 
 class GW_Gallery_Item extends GW_Composite_Data_Object
 {
-	var $table = 'gw_gallery_items';
-	var $composite_map = Array
+	public $table = 'gw_gallery_items';
+	public $composite_map = Array
 	(
 		'image' => Array('gw_image', Array('dimensions_resize'=>'6000x4000', 'dimensions_min'=> '10x10')),
 	);
 	
-	var $calculate_fields = Array('child_count'=>1, 'path'=>'getPath');
-	var $default_order = 'type DESC, priority ASC';		
+	public $calculate_fields = Array('child_count'=>1, 'path'=>'getPath');
+	public $default_order = 'type DESC, priority ASC';		
+	public $order_limit_fields=['parent_id'];
 	
 	function config()
 	{

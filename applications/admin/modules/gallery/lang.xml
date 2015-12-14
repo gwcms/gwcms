@@ -5,61 +5,70 @@
 	<i id="ROOT">
 		<en>Root</en>
 		<lt>Šakninis</lt>
-		<no>Hoved</no>
 	</i>
 	
 	<i id="CMS">
 		<en>Content management system</en>
 		<lt>Turinio valdymo sistema</lt>
-		<no>Content management system</no>
 	</i>
 	<i id="PUBLIC">
 		<en>Public</en>
 		<lt>Vieša sritis</lt>
-		<no>Offentlig</no>
 	</i>	
 
 	<i id="GALLERY_ITEM_TYPE_OPT">
 		<i id="0">
 			<en>Image</en>
 			<lt>Atvaizdas</lt>
-			<no>Bildet</no>
 		</i>
 		<i id="1">
 			<en>Folder</en>
 			<lt>Katalogas</lt>
-			<no>Mappe</no>
 		</i>
 	</i>
 	
-	<i id="ZIP_IMPORT">
-		<en>Zip import</en>
-		<lt>Importuoti iš zip</lt>
-		<no>Importer fra zip</no>
+	<i id="IMPORT">
+		<en>Import</en>
+		<lt>Importuoti</lt>
+	</i>
+	<i id="ACTIVATE_AFTER_INSERT">
+		<en>Activate after insert</en>
+		<lt>Aktyvuoti po įkėlimo</lt>
 	</i>
 	
 	<i id="ZIP_FILE">
 		<en>Zip file</en>
 		<lt>Zip byla</lt>
-		<no>Zip fil</no>
+	</i>
+	<i id="MULTIPLE_FILES">
+		<en>Multiple files (press ctrl or shift to select multiple)</en>
+		<lt>Kelios rinkmenos (pažymėti laikant ctrl ar shift mygtuką)</lt>
+	</i>
+	<i id="OR">
+		<en>Or</en>
+		<lt>Arba</lt>
 	</i>
 	
 	<i id="PLEASE_WAIT_UPLOADING">
 		<en>Please wait. Uploading file...</en>
 		<lt>Prašome palaukti. Siunčiami duomenys</lt>
-		<no>Opplastning pågår, vent.</no>
 	</i>
 	
 	<i id="GALLERY_ADM_STYLE_OPT">
 		<i id="0">
 			<en>List</en>
 			<lt>Sąrašas</lt>
-			<no>Liste</no>
 		</i>	
 		<i id="1">
 			<en>Thumbnails</en>
 			<lt>Miniatiūros</lt>
-			<no>Miniatyrbilder</no>
+		</i>
+	</i>
+	
+	<i id="VIEWS">
+		<i id="import">
+			<en>Import</en>
+			<lt>Importuoti</lt>
 		</i>
 	</i>
 
@@ -69,53 +78,43 @@
 		<i id="author">
 			<en>Author</en>
 			<lt>Autorius</lt>
-			<no>Eier</no>
 		</i>
 		
 		<i id="store_size">
 			<en>Image store size</en>
 			<lt>Saugojamo atvaizdo dydis</lt>
-			<no>Bildet lagrings størrelse</no>
 		</i>
 		<i id="thunmbnails_size">
 			<en>Thumbnail size</en>
 			<lt>Miniatiūrų dydis</lt>
-			<no>Miniatyrbildet størrelse</no>
 		</i>
 		<i id="adm_thunmbnails_size">
 			<en>CMS thumbnail size</en>
 			<lt>TVS miniatiurų dydis</lt>
-			<no>CMS miniatyrbildet størrelse</no>
 		</i>		
 		<i id="display_size">
 			<en>Display size</en>
 			<lt>Padidinto atvaizdo dydis</lt>
-			<no>Visnings størrelse</no>
 		</i>
 		<i id="page_by">
 			<en>Images per page</en>
 			<lt>Atvaizdų skaičius puslapyje</lt>
-			<no>Bilder per side</no>
 		</i>
 		<i id="enable_description">
 			<en>Description field</en>
 			<lt>Aprašymo įvestis</lt>
-			<no>Beskrivelses felt</no>
 		</i>
 		<i id="enable_author">
 			<en>Author field</en>
 			<lt>Autoriaus įvestis</lt>
-			<no>Forfatter felt</no>
 		</i>
 		<i id="parent_id">
 			<en>Folder</en>
 			<lt>Katalogas</lt>
-			<no>Mappe</no>
 		</i>
 		<i id="adm_list_style">
 			<en>List style</en>
-			<lt>Sąrašo stilius</lt>	
-			<no>Liste stil</no>		
+			<lt>Sąrašo stilius</lt>			
 		</i>		
 	</i>
 	
@@ -123,7 +122,6 @@
 		<i id="page_by">
 			<en>0 - paging off</en>
 			<lt>0 - puslapiavimas išjungtas</lt>
-			<no>0 - sidedeling avslått</no>
 		</i>
 	</i>
 	
@@ -134,14 +132,12 @@
 		<i id="title">
 			<en>Gallery</en>
 			<lt>Galerija</lt>
-			<no>Galleri</no>
 		</i>	
 		<i id="childs">
 			<i id="items">
 				<i id="title">
 					<en>Gallery</en>
 					<lt>Galerija</lt>
-					<no>Galleri</no>
 				</i>
 				<i id="info">
 					<i id="model">GW_Gallery_Item</i>
@@ -151,7 +147,6 @@
 				<i id="title">
 					<en>Configuration</en>
 					<lt>Nustatymai</lt>
-					<no>Instillinger</no>
 				</i>
 			</i>		
 		</i>

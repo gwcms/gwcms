@@ -38,36 +38,56 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		chdir($zip_dir);
 		exec($cmd='unzip -j ' . $_FILES['zipfile']['tmp_name'] . ' -d' . $zip_dir);	
 		
-		foreach(glob($zip_dir.'*') as $file)
-		    @$this->importEntry($file);
+		foreach(glob($zip_dir.'*') as $idx => $file)
+		    @$this->importEntry($file, pathinfo($file, PATHINFO_BASENAME), isset($_POST['activate']), $idx);
 
 		GW_Install_Helper::recursiveUnlink($zip_dir, $tmp);
-
-
-    	$this->jumpAfterSave();			
-	}	
-	
-	function importEntry($file)
-	{
-		$values['parent_id'] = $this->filters['parent_id'];	
-    	$values['active']   = 0;
-    	$values['type']=0;//image
-    	$values['title']=pathinfo($file, PATHINFO_FILENAME);
-    	
-    	$image =Array
-	    (
-    		'new_file'=>$file,
-    		'size'=>filesize($file),
-    		'original_filename'=> pathinfo($file, PATHINFO_BASENAME),
-    	);
-    	
-	    $item = $this->model->createNewObject($values);
-
-	    $item->set('image', $image);
-	   	$item->validate();		
-        $item->insert();
+		
+		$this->jumpAfterSave();	
 	}
 	
+
+	
+	function doUploadMultiple()
+	{
+		
+		$files = GW_File_Helper::reorderFilesArray('multiple_files');
+		
+		foreach($files as $idx => $file)
+		{
+			$lastitem=$this->importEntry($file['tmp_name'], $file['name'], isset($_POST['activate']), $idx);
+		}
+		
+		$lastitem->fixOrder();
+		
+		$this->jumpAfterSave();	
+	}
+	
+	function importEntry($file, $orig_filename, $active, $idx) 
+	{
+		
+		$values['parent_id'] = $this->filters['parent_id'];
+		$values['active'] = $active ? 1 : 0;
+		$values['type'] = 0; //image
+		$values['title'] = $orig_filename;
+		$values['priority'] = 0-$idx-1;
+
+		$image = Array
+		    (
+		    'new_file' => $file,
+		    'size' => filesize($file),
+		    'original_filename' => $orig_filename,
+		);
+
+		$item = $this->model->createNewObject($values);
+
+		$item->set('image', $image);
+		$item->validate();
+		$item->insert();
+		
+		return $item;
+	}
+
 	function doSetPositions()
 	{
 		$positions = $_REQUEST['positions'];

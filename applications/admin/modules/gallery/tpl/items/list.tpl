@@ -6,7 +6,7 @@
 {gw_link relative_path=form title=$lang.CREATE_NEW icon="action_file_add" params=[id=>0]}
 &nbsp;&nbsp;
 {$path=import}{if $m->parent->id > 0}{$path="`$m->parent->id`/`$path`"}{/if}
-{gw_link relative_path=$path title=$m->lang.ZIP_IMPORT icon="import"}
+{gw_link relative_path=$path title=$m->lang.IMPORT icon="import"}
 &nbsp;&nbsp;&nbsp;&nbsp;
 {$m->lang.FIELDS.adm_list_style}: {gw_link do=toggle_list_style title=$m->lang.GALLERY_ADM_STYLE_OPT[$m->config->adm_list_style]}
 </p>
