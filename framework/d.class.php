@@ -109,4 +109,18 @@ class d
 	}
 
 
+	static function htmlNice($html)
+	{
+		$dom = new DOMDocument();
+		$dom->preserveWhiteSpace = FALSE;
+		$dom->loadHTML($html);
+		$dom->formatOutput = TRUE;
+
+		d::ldump(htmlspecialchars($dom->saveHTML()));	
+	}
+	static function htmldumpas($html)
+	{
+		d::dumpas(htmlspecialchars($html));
+	}	
+	
 }
