@@ -132,7 +132,11 @@
 		<i id="title">
 			<en>Gallery</en>
 			<lt>Galerija</lt>
+			
 		</i>	
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-image"></i>]]></i>
+		</i>		
 		<i id="childs">
 			<i id="items">
 				<i id="title">

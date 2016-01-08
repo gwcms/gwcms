@@ -33,6 +33,9 @@
 		<i id="title">
 			Dienoraštis
 		</i>	
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-book"></i>]]></i>
+		</i>			
 		<i id="childs">
 			<i id="items">
 				<i id="title">

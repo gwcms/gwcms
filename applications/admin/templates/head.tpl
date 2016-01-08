@@ -40,4 +40,7 @@
 			translations['{$key}']='{GW::l("/A/$key")}';
 		{/foreach}
 	</script>
+	
+	<link rel="stylesheet" href="{$app->sys_base}/vendor/font-awesome/css/font-awesome.min.css">	
+	
 </head>

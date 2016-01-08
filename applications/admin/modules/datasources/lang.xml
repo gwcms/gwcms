@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="VIEWS">
+		<i id="synchronizefromxml">Synchronize from xml's</i>
+	</i>
+
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+		</i>
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>Data sources</en>
+			<lt>Duomenų lentelės</lt>
+		</i>
+		
+		<i id="info">
+			<i id="model">GW_Country</i>
+			<i id="icon"><![CDATA[<i class="fa fa-cubes"></i>]]></i>
+		</i>			
+
+		
+		<i id="childs">
+
+			<i id="translations">
+				<i id="title">
+					<en>Translations</en>
+					<lt>Vertimai</lt>
+				</i>
+				<i id="info">
+					<i id="model">GW_Translation</i>
+					<i id="icon"><![CDATA[<i class="fa fa-language"></i>]]></i>
+				</i>			
+			</i>	
+			<i id="countries">
+				<i id="title">
+					<en>Countries</en>
+					<lt>Šalys</lt>
+				</i>
+				<i id="info">
+					<i id="model">GW_Country</i>
+					<i id="icon"><![CDATA[<i class="fa fa-flag"></i>]]></i>
+				</i>			
+			</i>			
+			<i id="languages">
+				<i id="title">
+					<en>Languages</en>
+					<lt>Kalbos</lt>
+				</i>
+				<i id="info">
+					<i id="model">GW_Data_Language</i>
+					<i id="icon"><![CDATA[<i class="fa fa-flag-o"></i>]]></i>
+				</i>			
+			</i>
+			<i id="payments_paysera">
+				<i id="title">Mokėjimai PS</i>
+				<i id="info">
+					<i id="model">gw_paysera_log</i>
+					<i id="icon"><![CDATA[<i class="fa fa-money"></i>]]></i>
+				</i>			
+			</i>	
+			<i id="payments_paypal">
+				<i id="title">Mokėjimai PP</i>
+				<i id="info">
+					<i id="model">gw_paypal_log</i>
+					<i id="icon"><![CDATA[<i class="fa fa-paypal"></i>]]></i>
+
+				</i>			
+			</i>												
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

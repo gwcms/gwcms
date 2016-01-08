@@ -30,6 +30,11 @@
 			<lt>Configuration</lt>
 			<no>Configuration</no>	
 		</i>	
+		
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-tasks"></i>]]></i>
+		</i>
+				
 		<i id="childs">
 			<i id="modules">
 				<i id="title">Module Configuration</i>

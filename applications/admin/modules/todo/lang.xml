@@ -176,12 +176,13 @@
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
-
-			
 			<lt>Darbai</lt>
 			<en>Todo</en>
-
 		</i>	
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-briefcase"></i>]]></i>
+		</i>	
+				
 		<i id="childs">
 			<i id="items">
 				<i id="title">

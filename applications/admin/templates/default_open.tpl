@@ -13,7 +13,7 @@
 	{include file="submenu.tpl"}
 	
         <div id="login-info">
-        	<b>{$lang.LOGGED_AS}:</b> 
+        	<i class="fa fa-user"></i>
         	<a href="{$app->app_base}{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
         	 
         	</a> 
@@ -24,7 +24,7 @@
         	</a>
         	{/if}
         	| 
-            	<a href="{$app->app_base}{$app->ln}/users/login/logout" id="logout">{$lang.LOGOUT}</a>
+            	<a href="{$app->app_base}{$app->ln}/users/login/logout" id="logout"><i class="fa fa-sign-out"></i> {$lang.LOGOUT}</a>
             	
 			{$new_messages=$app->user->countNewMessages()}
 			<div id="new_messages_block" {if !$new_messages}style="display:none"{/if}>

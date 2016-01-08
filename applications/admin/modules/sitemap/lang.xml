@@ -116,6 +116,10 @@
 			<no>Struktur og Innhold</no>
 		</i>
 		
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-sitemap"></i>]]></i>
+		</i>		
+		
 		<i id="childs">
 			<i id="pages">
 				<i id="title">

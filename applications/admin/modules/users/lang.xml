@@ -203,7 +203,10 @@
 		<i id="title">
 			<en>Users</en>
 			<lt>Vartotojai</lt>
-		</i>				
+		</i>		
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-users"></i>]]></i>
+		</i>					
 		<i id="childs">
 			<i id="usr">
 				<i id="title">

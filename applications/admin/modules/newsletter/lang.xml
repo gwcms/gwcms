@@ -130,6 +130,10 @@
 			Naujienlaiškis
 		</i>
 		
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-rss"></i>]]></i>
+		</i>		
+		
 		<i id="childs">
 			
 			<i id="messages">
@@ -152,7 +156,7 @@
 			</i>	
 			<i id="config">
 				<i id="title">Nustatymai</i>
-			</i>													
+			</i>												
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
