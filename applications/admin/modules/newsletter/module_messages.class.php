@@ -314,7 +314,7 @@ class Module_Messages extends GW_Common_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
-		$cond = "message_id=".(int)$item->id;
+		$params['conditions'] = "message_id=".(int)$item->id;
 		$this->setListParams($params);
 		
 		
