@@ -173,15 +173,15 @@ class Module_Messages extends GW_Common_Module
 		if(! $item = $this->getDataObjectById())
 			return false;
 		
-		$cond='1=1';
 		
 		$options=['joins'=>[['INNER','gw_nl_sent_messages AS ca','ca.subscriber_id = a.id AND ca.message_id='.(int)$item->id]]];
 		$options['select']='a.*, ca.status, ca.time';
 		$options['order']='ca.time DESC';
+				
+		$this->setListParams($options);
 		
-		$this->setListParams($cond, $options);
+		$list = GW::getInstance('GW_NL_Subscriber')->findAll($options['conditions'], $options);
 		
-		$list = GW::getInstance('GW_NL_Subscriber')->findAll($cond, $options);
 		
 		
 		
