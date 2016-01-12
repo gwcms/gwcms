@@ -315,7 +315,7 @@ class Module_Messages extends GW_Common_Module
 			return false;
 		
 		$cond = "message_id=".(int)$item->id;
-		$this->setListParams($cond, $params);
+		$this->setListParams($params);
 		
 		
 		$params['key_field']='id';
@@ -323,7 +323,7 @@ class Module_Messages extends GW_Common_Module
 		$params['joins']=array(['left','gw_nl_subscribers AS aa','a.subscriber_id=aa.id']);
 		$params['select']='a.*, aa.id AS subscriber_id, aa.email AS email';
 		
-		$list = GW::getInstance('GW_NL_Hit')->findAll($cond, $params);
+		$list = GW::getInstance('GW_NL_Hit')->findAll($params['conditions'], $params);
 		
 		if($this->list_params['page_by'])
 			$this->tpl_vars['query_info']=$this->model->lastRequestInfo();		
