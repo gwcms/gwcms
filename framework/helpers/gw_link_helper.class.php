@@ -7,16 +7,22 @@ class GW_Link_Helper
 	{
 		preg_match_all("/(href=[\"'])(https?\:\/\/.+)([\"'])/U", $text, $matches);
 		
-		return isset($matches[2]) ? self::prepareLinks($matches[2]) : false;
+		return isset($matches[2]) ? $matches[2] : false;
 	}
 	
 	
-	static function prepareLinks($links)
+	
+	static function cleanAmps($links, &$body)
 	{
 		$list = [];
+				
+		foreach($links as $link){
+			$list[$link] = str_replace('&amp;','&', $link);
+		}
 		
-		foreach($links as $link)
-			$list[] = str_replace('&amp;','&', $link);
+		foreach($list as $oldlink => $newlink){
+			$body = str_replace($oldlink, $newlink , $body);
+		}
 		
 		return $list;
 	}

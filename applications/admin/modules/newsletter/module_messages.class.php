@@ -45,15 +45,20 @@ class Module_Messages extends GW_Common_Module
 		
 		//paskutini p taga nuimti
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);	
-		
-		
+	}
+	
+	function __eventAfterSave($item)
+	{
 		//surasti linkus irasyt i duombaze
-		$links = GW_Link_Helper::getLinks($item->body);
+		$body = $item->body;
+		
+		$orig_links = GW_Link_Helper::getLinks($body);
+		$links = GW_Link_Helper::cleanAmps($orig_links, $body);
+		
+
 		GW::getInstance('GW_NL_Link')->storeNew($links, $item->id);
 		
 		$links = GW::getInstance('GW_NL_Link')->getAllidLink($item->id);
-		
-		$body = $item->body;
 		
 		foreach($links as $id => $link){
 			$body = str_replace("'".$link."'", '\'{$TRACKINK_LINK}'.$id."'", $body);
@@ -61,6 +66,9 @@ class Module_Messages extends GW_Common_Module
 		}
 		
 		$item->body_prepared = $body;
+		
+		
+		$item->update(['body_prepared']);
 	}
 	
 	
