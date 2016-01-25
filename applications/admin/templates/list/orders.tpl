@@ -3,7 +3,7 @@
 	<th>{$lang.ORDERS_LABEL}:</th> 		
 	<td>
 	{foreach $list_orders as $list_order}
-		<a href="{$app->buildURI($app->path)}?act=do:setOrder&name={$list_order.name}"
+		<a href="{$app->buildUri(false,[act=>doSetOrder,name=>$list_order.name],[carry_params=>1])}"
 			{if $list_order.active} style="font-weight:bold"{/if}
 			title="{if $list_order.hint}{$list_order.hint|escape}{else}{$list_order.order|escape:'html'}{/if}"
 		>{$list_order.name}</a>
