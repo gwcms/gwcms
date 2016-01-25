@@ -514,6 +514,10 @@
 	<lt>Veiksmas</lt>
 	<en>Action</en>
 </i>
+<i id="PRINT_VIEW">
+	<lt>Spauzdinimo versija</lt>
+	<en>Print view</en>
+</i>
 
 
 </xml>

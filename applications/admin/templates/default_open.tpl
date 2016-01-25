@@ -2,7 +2,7 @@
 
 <body>
     
-{if !isset($smarty.get.clean) && !$no_standart_cms_frame}
+{if !isset($smarty.get.clean) && !$no_standart_cms_frame && !$smarty.get.print_view}
 
 <div id="wrap">
     <div id="header">
@@ -49,6 +49,13 @@
     <div id="content">
 
 {/if}
+
+{if $smarty.get.print_view}
+	<h3>
+	{include file="breadcrumbs.tpl" nobreadcrumbscontainer=1}
+	</h3>
+{/if}
+
 
 {include file="messages.tpl"}
 

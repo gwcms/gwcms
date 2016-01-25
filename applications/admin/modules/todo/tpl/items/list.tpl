@@ -133,7 +133,8 @@
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
-	{$dl_toolbar_buttons[] = dialogconf}
+	{$dl_toolbar_buttons[] = hidden}
+	{$dl_toolbar_buttons_hidden=[dialogconf,print]}
 	
 	{$dl_actions=[edit, delete]}
 	

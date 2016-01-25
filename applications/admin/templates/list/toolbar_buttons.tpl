@@ -17,6 +17,12 @@
 	{/if}
 {/function}	
 
+{function name=dl_toolbar_buttons_print}
+	<img src="{$app_root}img/icons/print.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
+	<a href="{$app->buildUri(false,[print_view=>1],[carry_params=>1])}">{$lang.PRINT_VIEW}</a>
+	&nbsp;&nbsp;&nbsp;
+{/function}
+
 
 {function name=dl_toolbar_buttons_info}
 	{if $page->notes}

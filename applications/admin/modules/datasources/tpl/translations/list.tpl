@@ -13,7 +13,7 @@
 	{/function}	
 	
 	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf]}		
+	{$dl_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
 	
 	
 	{$display_fields=[module=>1,key=>1]}

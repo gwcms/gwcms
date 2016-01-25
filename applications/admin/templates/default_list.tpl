@@ -45,12 +45,14 @@
 
 	{include file="list/toolbar_buttons.tpl"}
 	{include file="list/actions.tpl"}
-	{include file="list/output_filters.tpl"}
-	
+	{include file="list/output_filters.tpl"}	
+
+
 <table><tr><td>{*1*}
 
 	
 {block name="toolbar"}
+	{if !$smarty.get.print_view}
 	<table style="width:100%">
 	<tr>
 		<td>
@@ -64,11 +66,13 @@
 		{/if}
 	</tr>
 	</table>
+	{/if}
 {/block}
 
 
 </td></tr><tr><td>{*1*}
 
+{if !$smarty.get.print_view}
 <table>
 	<tr>
 		<td>
@@ -83,9 +87,10 @@
 		</td>
 	</tr>
 </table>
+{/if}
 
 
-{if $dl_filters}
+{if $dl_filters && !$smarty.get.print_view}
 	{include "list/filters.tpl"}
 {/if}
 
@@ -119,7 +124,7 @@
 			{/if}
 		</th>
 	{/foreach}	
-	{if count($dl_actions)}
+	{if count($dl_actions) && !$smarty.get.print_view}
 		<th>{$lang.ACTIONS}</th>
 	{/if}
 </tr>
@@ -153,7 +158,7 @@
 			</td>
 		{/foreach}
 		
-		{if count($dl_actions)}
+		{if count($dl_actions) && !$smarty.get.print_view}
 			<td nowrap>
 				{call dl_display_actions}
 			</td>

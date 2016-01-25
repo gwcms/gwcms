@@ -1,4 +1,4 @@
-{if !isset($smarty.get.clean) && !$smarty.get.clean && !$no_standart_cms_frame}
+{if !isset($smarty.get.clean) && !$smarty.get.clean && !$no_standart_cms_frame && !$smarty.get.print_view}
 <br /><br />
 
         <span class="cleaner"></span>

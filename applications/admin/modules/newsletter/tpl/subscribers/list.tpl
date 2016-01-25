@@ -24,7 +24,7 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[import,export,dialogconf,emailsfromtext]}	
+	{$dl_toolbar_buttons_hidden=[import,export,dialogconf,emailsfromtext,print]}	
 	
 	{$dl_actions=[invert_active,edit,delete]}
 	

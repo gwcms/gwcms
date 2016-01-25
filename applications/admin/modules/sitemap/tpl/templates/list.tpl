@@ -19,7 +19,7 @@
 	{$dl_smart_fields=[]}
 
 	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}		
+	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 	
 	
 	{$dl_actions=[tplvars,invert_active,edit,delete]}
