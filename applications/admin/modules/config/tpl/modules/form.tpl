@@ -1,13 +1,16 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="100%"}
 
-{$width_title="1%"}
-{$width_input="99%"}
+{$width_title=100px}
 
 {include file="elements/input.tpl" name=path}
 {include file="elements/input.tpl" name=pathname}
-{include file="elements/input.tpl" name=views type=textarea value=$item->VIEWS  height=200px tabs=1}
-{include file="elements/input.tpl" name=orders type=textarea value=$item->ORDERS  height=200px tabs=1}
-{include file="elements/input.tpl" name=notes type=htmlarea}
+
+{include file="elements/input.tpl"  name=views type=code_json height=200px nopading=1}  
+{include file="elements/input.tpl"  name=orders type=code_json height=200px nopading=1}  
+
+
+{$ck_options=[toolbarStartupExpanded=>false]}
+{include file="elements/input.tpl" name=notes type=htmlarea width="100%"}
 {include file="elements/input.tpl" name=active type="bool"}
 
 

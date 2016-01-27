@@ -1,6 +1,9 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl"  form_width="100%"}
 
-{include file="elements/input.tpl" name=name width_title="1%" width_input="99%"}
-{include file="elements/input.tpl" name=sql type=textarea width_title="1%" width_input="99%" height=400px tabs=1}
+{$width_title=100px}
+
+{include file="elements/input.tpl" name=name}
+
+{include file="elements/input.tpl"  name=sql type=code codelang=sql height=400px wide=1 nopading=1}  
 
 {include file="default_form_close.tpl"}

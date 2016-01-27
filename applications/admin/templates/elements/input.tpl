@@ -21,7 +21,8 @@
 	
 {$title=$title|default:$app->fh()->fieldTitle($name)}
 
-<tr id="gw_input_{$name}">
+
+{function input_label}
 	<td class="input_label_td {if $m->error_fields.$name}error_label{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
@@ -40,22 +41,36 @@
 
 		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
 		
-	</td>
-	
+	</td>	
+{/function}
+
+{function input_content}
 	{if $i18n==2}
 		{foreach GW::$settings.LANGS as $ln_code}
 			
-			<td class="input_td col_i18n_{$ln_code}" width="{$width_input}">
+			<td class="input_td col_i18n_{$ln_code}" width="{$width_input}" {if $wide}colspan="2"{/if}>
 				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td" width="{$width_input}">
+		<td class="input_td" width="{$width_input}" {if $wide}colspan="2"{/if} style="{if $nopading}padding:0{/if}">
 			{include file="elements/input0.tpl"}  
 		</td>
 	{/if}
-	
-	
-</tr>
+{/function}
+
+{if $wide}
+	<tr>
+		{call input_label}
+	</tr>
+	<tr id="gw_input_{$name}">
+		{call input_content}
+	</tr>	
+{else}
+	<tr id="gw_input_{$name}">
+		{call input_label}
+		{call input_content}
+	</tr>
+{/if}
 {/if}
 

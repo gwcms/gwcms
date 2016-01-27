@@ -1,9 +1,3 @@
-{*
-
-Edit array in json format
-Edit json in human readable format
-
-*}
 {if is_array($value)}
 	{$value=GW_Json_Format_Helper::f($value)}
 {elseif is_string($value)}
@@ -15,4 +9,4 @@ Edit json in human readable format
 	{/if}
 {/if}
 
-{include file="elements/inputs/textarea.tpl"}
+{include file="elements/inputs/code.tpl" codelang=json}
