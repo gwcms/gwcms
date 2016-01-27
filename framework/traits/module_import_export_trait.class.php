@@ -1,6 +1,8 @@
 <?php
 
-trait Module_Import_Export_Trait
+//example usage - artistdb/participants
+
+trait Module_Export_Photos
 {	
 	
 	function __importExportGetCols()
@@ -10,10 +12,21 @@ trait Module_Import_Export_Trait
 		foreach($cols as $col => $d)
 			$cols[$col] = $col;
 		
+		
+		
 		return $cols;
 	}
 	
 	public $importexport_replacibles=[["\n","\t","\r"],['\n','\t','\r']];
+	
+	
+	public $export_process=[];
+	public $export_translate_fields = 1;
+	
+	function displayOptions($field, $value, $context_obj)
+	{
+		return $this->options[$field][$value];
+	}
 	
 	function __list2Str($list)
 	{
@@ -21,7 +34,21 @@ trait Module_Import_Export_Trait
 		
 		$cols = $this->__importExportGetCols();
 
-		$data = implode("\t", array_keys($cols))."\n";
+		
+		
+		if($this->export_translate_fields){
+			$tmp=[];
+			foreach($cols as $col)
+				$tmp[$this->app->fh()->fieldTitle($col)]=1;
+			
+			
+			$head = $tmp;
+		}else{
+			$head = $cols;
+		}
+		
+		$data = implode("\t", array_keys($head))."\n";
+		
 		
 		foreach($list as $item){
 			
@@ -29,6 +56,10 @@ trait Module_Import_Export_Trait
 			$row = Array();
 			foreach($cols as $xlsname => $sysname){
 				$val = isset($item->$sysname) ? $item->$sysname:'';
+				
+				if(isset($this->export_process[$sysname]))
+					$val = call_user_func(['self', $this->export_process[$sysname]], $sysname, $val, $item);
+					
 				$row[] = str_replace($this->importexport_replacibles[0], $this->importexport_replacibles[1], $val);
 			}
 			
@@ -37,6 +68,8 @@ trait Module_Import_Export_Trait
 		
 		return $data;
 	}
+	
+	
 	
 	function viewExportData()
 	{
