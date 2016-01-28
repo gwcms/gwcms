@@ -3,7 +3,7 @@
 	<th>{$lang.VIEWS_LABEL}:</th> 		
 	<td>
 	{foreach $views as $view}
-		<a href="{$app->buildURI($app->path)}?act=do:setView&name={$view.name}"
+		<a href="{$app->buildUri(false,[act=>dosetView,name=>$view.name],[carry_params=>1])}"
 			{if $view.active} style="font-weight:bold"{/if}
 			title="{if $view.hint}{$view.hint|escape}{else}{$view.conditions|escape:'html'}{/if}"
 		>{$view.name}{if $view.calculate} ({$view.count}){/if}</a>
