@@ -11,13 +11,13 @@
 
 {if count($breadcrumbs)}
 	{foreach $breadcrumbs as $item}
-		{$item.title}{if !$item@last} / {/if}
+		{$item.title|escape}{if !$item@last} / {/if}
 	{/foreach}
 	
 	{if count($breadcrumbs_attach)}
 		::
 		{foreach $breadcrumbs_attach as $item}
-			{$item.title} {if !$item@last}&raquo;{/if}	
+			{$item.title|escape} {if !$item@last}&raquo;{/if}	
 		{/foreach}
 	{/if}
 		

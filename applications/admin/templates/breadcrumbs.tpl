@@ -5,9 +5,9 @@
 			{$item.title}
 		{else}
 			{if !$smarty.get.print_view}
-			<a href="{$app->buildURI($item.path)}">{$item.title}</a> &raquo;
+			<a href="{$app->buildURI($item.path)}">{$item.title|escape}</a> &raquo;
 			{else}
-				{$item.title} &raquo;
+				{$item.title|escape} &raquo;
 			{/if}
 		{/if}	
 	{/foreach}
@@ -18,7 +18,7 @@
 			{if !$smarty.get.print_view}
 				<a href="{$item.path}">{$item.title}</a> 
 			{else}
-				{$item.title} &raquo;
+				{$item.title|escape} &raquo;
 			{/if}
 			
 			{if !$item@last}&raquo;{/if}	
