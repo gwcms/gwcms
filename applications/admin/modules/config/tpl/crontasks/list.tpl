@@ -7,7 +7,7 @@
 	{$dl_fields=$m->getDisplayFields([title=>1,name=>1,time_match=>1,insert_time=>0,update_time=>0])}
 	{$dl_toolbar_buttons[] = dialogconf}	
 
-	{$dl_actions=[timematch,invert_active,edit,delete]}
+	{$dl_actions=[timematch,invert_active,edit,delete,clone]}
 	
 	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
 		

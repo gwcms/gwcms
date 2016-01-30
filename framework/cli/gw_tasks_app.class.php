@@ -64,7 +64,9 @@ class GW_Tasks_App extends GW_App_Base
 	function afterProcess()
 	{
 		$this->output('-----TASKINFO-----');
-		$this->output("TASK_ID: {$this->data->id} :TASK_ID");
+		
+		if(isset($this->data->id))
+			$this->output("TASK_ID: {$this->data->id} :TASK_ID");
 		$this->output("ERROR_CODE: $this->error_code :ERROR_CODE");
 		$this->output("ERROR_MESSAGE: $this->error_message :ERROR_MESSAGE");
 	}
@@ -138,6 +140,7 @@ class GW_Tasks_App extends GW_App_Base
 	
 	static function runDirect($task, $arguments)
 	{
+		$data = new stdClass();
 		$data->arguments = $arguments;
 		self::run($task, $data);
 	}
@@ -219,6 +222,9 @@ class GW_Tasks_App extends GW_App_Base
 	
 	function msg($msg)
 	{
+		if(is_array($msg))
+			$msg = json_encode($msg, JSON_PRETTY_PRINT);
+			
 		echo ('['.$this->timer->stop(4).'] '.$msg."\n");
 	}	
 	
