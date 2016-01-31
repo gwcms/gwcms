@@ -94,15 +94,6 @@ class GW_App_System Extends GW_App_Base
 		$this->actionDoTasks();
 	}
 	
-	
-	
-	function actionDoSendDefered()
-	{
-		$url = $this->backgroundRequest('admin/lt/mass_messages?act=do:sendqueue');
-		$this->msg('send defered: '.$url);
-		
-	}
-	
 	function actionDoTasks()
 	{
 		$count = GW_Tasks_App::checkAndRun();
