@@ -3,7 +3,7 @@
 /**
  * Http agent class
  *
- * @copyright   sms.gw.lt 2012
+ * @copyright   sms.gw.lt 2016
  * @author      Vidmantas Norkus
  */
 
@@ -12,30 +12,40 @@
 class GW_Http_Agent
 {
 	
-	var $headers=Array(
-		//'Connection'=>'keep-alive',
+	
+
+	public $headers=Array(
 		//'Alive'=>'300',
-		'Accept-Language'=>'en-us,en;q=0.7,lt;q=0.3',
-		//'Accept-Encoding'=>'gzip,deflate',
-		'Accept-Charset'=>'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+		'User-Agent'=>'Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/13.0.1 ',
+		//'Accept'=>'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+		//'Accept-Language'=>'en-US,en;q=0.5',
+		//'Accept-Encoding'=>'gzip, deflate',
+		//'Accept-Charset'=>'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
+		//'Connection'=>'keep-alive',
 	);
 
-	var $timeout=60;
-	var $max_redirects=2;//-1 disabled 
-	var $user_agent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322)';
-
-
-	var $cookies=Array();
-	var $last_request = '';
-	var $last_response_header;
-	var $last_request_time;	
-	var $redirect_count;
-	var $last_url;
-	var $debug=0;
-	var $debug_data;
-	var $cookie_file;
+	public $timeout=60;
+	public $max_redirects=2;//-1 disabled 
 	
-	var $lgr;
+
+	
+	
+	public $cookies=Array();
+	public $last_request = '';
+	public $last_response_header;
+	public $last_request_time;	
+	public $redirect_count;
+	public $last_url;
+	public $debug=0;
+	public $debug_data;
+	public $cookie_file;
+	
+	public $proxy_script=false;
+	public $proxy_script_pass=false;
+
+	public $lgr;
+	
+	public $tidy_html = false;
 
 	
 
@@ -91,12 +101,14 @@ class GW_Http_Agent
 	{
 		
 		//labas exception
-		$header = explode('Location: ', $this->last_response_header);
+		$header = [$this->last_response_header];
+		//$header = explode('Location: ', $this->last_response_header);
+		
 		preg_match_all('/Set-Cookie: ([^=]*)=([^;]*)/i',$header[0],$m,PREG_SET_ORDER);
 		
 		
 		foreach($m as $i => $tmp)
-			$this->cookies[rawurldecode($tmp[1])]=rawurldecode($tmp[2]);
+			$this->cookies[rawurldecode($tmp[1])]=$tmp[2];
 			
 		$this->saveCookies();	
 	}
@@ -105,7 +117,7 @@ class GW_Http_Agent
 	function &getCookies()
 	{
 		if(!$this->cookies && file_exists($this->cookie_file))
-			$this->cookies=unserialize(file_get_contents($this->cookie_file));
+			$this->cookies=json_decode(file_get_contents($this->cookie_file), true);
 		
 		return $this->cookies;
 	}	
@@ -113,7 +125,7 @@ class GW_Http_Agent
 	function saveCookies()
 	{
 		if($this->cookie_file)
-			file_put_contents($this->cookie_file,serialize($this->cookies));
+			file_put_contents($this->cookie_file,json_encode($this->cookies, JSON_PRETTY_PRINT));
 	}
 	
 	function resetCookies()
@@ -134,11 +146,18 @@ class GW_Http_Agent
 		    )
 		);
 		
+		$body = false;
+		
 		try {
 		    $body = file_get_contents($url,false, stream_context_create($context_options));
 		}
+		
 		catch (Exception $e) {
 		    $error = $e->getMessage();
+
+
+			$this->log("FAIL $url" .$error);
+			$this->log('<pre>'.json_encode($context_options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 		}
 		
 		restore_error_handler();
@@ -146,6 +165,27 @@ class GW_Http_Agent
 		return Array($body, $error, $http_response_header);
 	}	
 	
+	
+	function postRequest($url, $post_vars, $headers=[])
+	{
+		$headers['Content-type']='application/x-www-form-urlencoded';
+		
+		$header='';
+		foreach($headers as $name => $value)
+			$header.="$name: $value\r\n";	
+	
+		$opts = array('http' =>
+		    array(
+			'method'  => 'POST',
+			'header'  => $header,
+			'content' => http_build_query($post_vars)
+		    )
+		);
+
+		$context  = stream_context_create($opts);
+
+		return file_get_contents($url, false, $context);		
+	}
 
 	function getContents($url, $headers=Array(), $post_params=Array(), $max_length=false, $redirect=0)
 	{
@@ -156,6 +196,7 @@ class GW_Http_Agent
 			$this->redirect_count = 0;
 
 		$headers = $this->headers + $headers;
+		
 
 		$context_options = Array('http'=>Array());
 		$context =& $context_options['http'];
@@ -165,7 +206,6 @@ class GW_Http_Agent
 		(
 			'timeout'=>$this->timeout,
 			//'max_redirects'=>$this->max_redirects,
-			'user_agent'=>$this->user_agent,
 			'follow_location' => false		    
 		);
 
@@ -189,7 +229,7 @@ class GW_Http_Agent
 		{
 			$cookie =& $headers['Cookie'];
 			foreach($this->cookies as $name => $value)
-				$cookie.=rawurlencode($name).'='.rawurlencode($value)."; ";
+				$cookie.=rawurlencode($name).'='.$value."; ";
 			$cookie = substr($cookie,0,-2);
 		}
 
@@ -205,7 +245,19 @@ class GW_Http_Agent
 
 		$timer = new GW_Timer;
 		
-		list($body, $error, $http_response_header)=self::file_get_contents($url, $context_options);
+		
+		
+		if($this->proxy_script){
+			
+			$r = $this->postRequest($this->proxy_script, ['url'=>$url,'context_options'=>  serialize($context_options)], ['auth'=>$this->proxy_script_pass]);
+			$r = unserialize($r);
+			$body = $r['body'];
+			$error = $r['error'];
+			$http_response_header = $r['http_response_header'];
+		}
+		else{
+			list($body, $error, $http_response_header)=self::file_get_contents($url, $context_options);
+		}
 
 		
 		
@@ -241,6 +293,9 @@ class GW_Http_Agent
 		if(($this->max_redirects != -1) && ($body1 = $this->folowRedirect()))
 			$body = $body1;
 
+		if($this->tidy_html)
+			return $this->tidy($body);
+		
 		return $body;
 	}
 	
@@ -295,9 +350,26 @@ class GW_Http_Agent
 		fclose($fp);
 		 * 
 		 */
+	}
+	
+	
+	
+	
+	function log($msg)
+	{
+		if($this->lgr)
+			$this->lgr->msg($msg);
 	}	
 	
 	
+	function tidy($html)
+	{
+		$html=str_replace(["\r","\n","\n"],' ',$html);
+		$html = preg_replace('/\s+</', '<', $html);
+		$html = preg_replace('/>\s+/', '>', $html);
+		$html = preg_replace('/\s{2,999}/', ' ', $html); //tarpu seka keisti i viena tarpa
+		
+		return $html;
+	}
+	
 }
-
-?>
