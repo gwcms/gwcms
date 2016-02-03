@@ -14,21 +14,41 @@ class Module_Tasks extends GW_Common_Module
 
 	
 	
-	function __eventBeforeList()
+	function __eventAfterList($list)
 	{	
 
-		
-		
 		$this->loadTasksList();		
 		
 		if(!GW_App_System::getRunningPid())
 			$this->setErrors("admin/cli/system.php is not running", 2);
+		
+		
+		if($this->tpl_vars['grouped'])
+		{
+			$counts = GW_Task::singleton()->findAll(false, ['group_by'=>'name','select'=>'count(*) as cnt, `name`','return_simple'=>1, 'key_field'=>'name']);
+		
+			foreach($list as $item)
+				$item->counts = $counts[$item->name]['cnt'];
+		}
+	}
+	
+	function __eventAfterListParams(&$params)
+	{
+		$this->tpl_vars['grouped']=0;
+		
+		if(!$params['conditions']){
+			$params['conditions'] = '`newest`=1';
+			$this->tpl_vars['grouped']=1;
+		}
+		
+		
 	}
 
 	
 	function loadTasksList()
 	{
-		$tasks = glob(GW::s('DIR/ADMIN').'cli/tasks/*'); 
+		$tasks = glob(GW::s('DIR/ROOT').'daemon/tasks/*'); 
+		
 		
 		foreach($tasks as $i => $task)
 			$tasks[$i] = str_replace('.task.class','' ,pathinfo($task, PATHINFO_FILENAME));

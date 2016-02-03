@@ -3,7 +3,14 @@
 
 {block name="init"}
 
-
+	{function name=dl_toolbar_buttons_log}
+		{if $dl_filters}
+			<img src="{$app_root}img/icons/action_log.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
+			<a href="#show_filters" onclick="open_rtlogview('system.log'); return false">Log</a>	
+			&nbsp;&nbsp;&nbsp;
+		{/if}
+	{/function}	
+	
 	{function name=dl_actions_halt}
 		{if $item->running > 0}
 			{gw_link do="haltTask" icon="action_halt" params=[id=>$item->id,sigkill=>1] show_title=0}
@@ -31,6 +38,24 @@
 	
 	{$dl_fields=$m->getDisplayFields($fields)}
 	{$dl_toolbar_buttons[] = dialogconf}	
+	{$dl_toolbar_buttons[] = log}	
+	{$dl_smart_fields=[name,running]}
+	
+	{function dl_cell_name}
+		{if $item->counts}
+			{gw_link do=show_logs params=[task=>$item->name] title="`$item->name` (`$item->counts`)"}
+		{else}
+			{$item->name}
+		{/if}
+	{/function}
+	
+	{function dl_cell_running}
+		{if $item->running > 0}
+			PID: {$item->running}
+		{else}
+			{$m->lang.OPTIONS.running[$item->running]}
+		{/if}
+	{/function}	
 	
 	{$dl_actions=[edit,delete,halt]}
 	

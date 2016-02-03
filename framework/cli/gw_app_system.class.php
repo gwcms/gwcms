@@ -18,7 +18,7 @@ class GW_App_System Extends GW_App_Base
 		
 
 		$this->registerInnerMethod('actionDoTasks', 5);	
-		$this->registerInnerMethod('actionCronTasks', 60);	
+		$this->registerInnerMethod('actionCronTasks', 5);	
 		
 
 		pcntl_signal(SIGUSR1, array(&$this,"forceDoTasks"));
@@ -161,7 +161,7 @@ class GW_App_System Extends GW_App_Base
 		$dif = $dif / 60;
 	
 		if( $match && ($dif > $interval*0.1 ) || $GLOBALS['argv'][1]==$interval){
-			dump('['.date('H:i:s')."] run $interval");
+			$this->msg('['.date('H:i:s')."] run $interval");
 			$config->set($cron_id, date('Y-m-d H:i:s'));
 			return true;
 		}else{

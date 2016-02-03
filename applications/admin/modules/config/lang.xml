@@ -17,10 +17,37 @@
 		<i id="subject">Tema</i>
 		<i id="message">Žinutė</i>
 		
+		
+		<!--Tasks-->
+		<i id="output">Išvestis</i>
+		<i id="error_code">Klaidos kodas</i>
+		<i id="error_msg">Klaidos pranešimas</i>
+		<i id="finish_time">Baigimo laikas</i>
+		<i id="speed">Vykdymo trukmė</i>
+		<i id="running">Vykdomumas</i>
+		<i id="max_tasks_history_length">Maksimalus užduoties istorijos dydis</i>
+	</i>
+	
+	<i id="FIELDS_SHORT">
+		<i id="error_code">Kodas</i>
+		<i id="error_msg">Pranešimas</i>
+		<i id="finish_time">Baig.</i>
+		<i id="speed">Trukmė</i>
+		<i id="running">Vyk.</i>
+		<i id="id">Id</i>
+		<i id="insert_time">Sukurta</i>
 	</i>
 	
 	<i id="TASK_NAME">
 		Task name
+	</i>
+	
+	<i id="OPTIONS">
+		<i id="running">
+			<i id="-1">Waiting to start</i>
+			<i id="-2">In queue</i>
+			<i id="0">-</i>
+		</i>
 	</i>
 	
 	<!-- =============== MODULE MAP START =================== -->

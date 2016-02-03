@@ -666,8 +666,8 @@ function open_dialog(conf)
 		
 	var dconf = {
 		buttons: {},
-		width: $(document).width()/10*4,
-		height: $(window).height()/10*4
+		width: $(document).width()/10*6,
+		height: $(window).height()/10*6
 	}
 	
 	dconf.buttons[translations.CLOSE] = function() {

@@ -2,6 +2,8 @@
 
 class GW_Config
 {
+	use Singleton;
+	
 	public $prefix;
 	var $table='gw_config';
 	public $db;

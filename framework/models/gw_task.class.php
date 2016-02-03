@@ -39,7 +39,12 @@ class GW_Task extends GW_Data_Object
 		$item->set('name', $name);
 		$item->set('arguments', $args);
 		$item->set('time', date('y-m-d H:i:s'));
+		
+		$item->setAsNewest();
+		
 		$item->insert();
+		
+		
 		
 		GW_App_System::triggerUSR1();
 	}
@@ -80,6 +85,13 @@ class GW_Task extends GW_Data_Object
 	{
 		return $this->findAll('running!=0 AND halt_time>time AND halt_time<NOW()');	
 	}
+	
+	
+	function setAsNewest()
+	{
+		$this->getDB()->update($this->table, ['`name`=?', $this->name], ['newest'=>0]);
+		$this->newest = 1;		
+	}	
 		
 	
 }

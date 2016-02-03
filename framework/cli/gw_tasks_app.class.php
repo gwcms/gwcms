@@ -147,9 +147,13 @@ class GW_Tasks_App extends GW_App_Base
 	
 	static function runSeparateWrap($task_id)
 	{
+		//todo
+		//saugot i repository/temp
 		
-		$cmd = GW::s('DIR/ROOT').'daemon/task.php '.$task_id.' wrap >/tmp/gw_cms_task_wrap 2>&1 &';
+		$cmd = GW::s('DIR/ROOT').'daemon/task.php '.$task_id.' wrap >'.GW::s('DIR/TEMP').'gw_cms_task_wrap 2>&1 &';
 		shell_exec($cmd);
+		
+		echo $cmd."\n";
 	}
 	
 	function __get_value($name, &$output)
@@ -168,7 +172,7 @@ class GW_Tasks_App extends GW_App_Base
 				
 		$t = new GW_Timer;
 		
-		$logfile=GW::$dir['LOGS'].'task_'.$this->data->id.'.log';
+		$logfile=GW::s('DIR/LOGS').'task_'.$this->data->id.'.log';
 		
 		shell_exec(GW::s('DIR/ROOT').'daemon/task.php '.$this->data->id.' >'.$logfile.' 2>&1');
 		
@@ -200,13 +204,18 @@ class GW_Tasks_App extends GW_App_Base
 		$this->data->finish_time = date('Y-m-d H:i:s');
 		$this->data->running = 0;
 		
+		
 		$this->data->update(Array('output','error_code','error_msg','finish_time','running','speed'));
 	}	
 	
 	function addTask($vals)
 	{
 		$this->data = new GW_Task();
+		
+		$this->data->setAsNewest();
 		$this->data->setValues($vals);
+		
+		print_r($this->data->toArray());
 		$this->data->insert();
 	}
 	

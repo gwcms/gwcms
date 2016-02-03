@@ -21,7 +21,11 @@ class GW_CronTask extends GW_Data_Object
 	
 	function execute()
 	{
-		GW_Task::addStatic($this->name, json_decode($this->params, true));
+		
+		
+		GW_Task::singleton()->add($this->name, json_decode($this->params, true));
+		
+		
 	}
 	
 	function getByTimeMatchExecute($tm)
