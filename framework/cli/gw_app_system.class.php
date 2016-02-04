@@ -18,7 +18,7 @@ class GW_App_System Extends GW_App_Base
 		
 
 		$this->registerInnerMethod('actionDoTasks', 5);	
-		$this->registerInnerMethod('actionCronTasks', 5);	
+		$this->registerInnerMethod('actionCronTasks', 120);	
 		
 
 		pcntl_signal(SIGUSR1, array(&$this,"forceDoTasks"));
@@ -148,19 +148,16 @@ class GW_App_System Extends GW_App_Base
 	
 	function checkAndRunInterval($time_match, $interval)
 	{
-		$config = GW::getInstance('GW_Config');;
+		$config = GW_Config::singleton();
 		
 		if(strpos($time_match,' ')===false)
 			$time_match='....-..-.. '.$time_match;
 	
 		$match =  preg_match("/$time_match/",date('Y-m-d H:i:s'),$m)  ? 1 : 0 ;
-		
-		//dump("Match:$match $time_match ".date('Y-m-d H:i:s'));
-	
+			
 		$dif=time() - strtotime($config->get($cron_id="ctask $time_match $interval"));
-		$dif = $dif / 60;
-	
-		if( $match && ($dif > $interval*0.1 ) || $GLOBALS['argv'][1]==$interval){
+                          
+		if( $match && ($dif >= $interval*60 ) || $GLOBALS['argv'][1]==$interval){
 			$this->msg('['.date('H:i:s')."] run $interval");
 			$config->set($cron_id, date('Y-m-d H:i:s'));
 			return true;

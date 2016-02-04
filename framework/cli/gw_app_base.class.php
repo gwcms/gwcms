@@ -200,6 +200,9 @@ class GW_App_Base
 		
 	function msg($msg)
 	{
+		if(is_array($msg))		
+			$msg = json_encode($msg, JSON_PRETTY_PRINT);
+		
 		echo (date('i:s').' '.$msg."\n");
 	}
 
