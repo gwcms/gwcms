@@ -26,6 +26,7 @@
 		<i id="speed">Vykdymo trukmė</i>
 		<i id="running">Vykdomumas</i>
 		<i id="max_tasks_history_length">Maksimalus užduoties istorijos dydis</i>
+                <i id="separate_process">Atskirame procese vykdyti</i>
 	</i>
 	
 	<i id="FIELDS_SHORT">
@@ -36,6 +37,7 @@
 		<i id="running">Vyk.</i>
 		<i id="id">Id</i>
 		<i id="insert_time">Sukurta</i>
+                <i id="separate_process">AP</i>
 	</i>
 	
 	<i id="TASK_NAME">
@@ -66,9 +68,6 @@
 			<i id="modules">
 				<i id="title">Module Configuration</i>
 			</i>
-			<i id="i18n">
-				<i id="title">i18n</i>
-			</i>			
 			<i id="tools">
 				<i id="title">Tools</i>
 			</i>

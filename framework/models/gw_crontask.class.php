@@ -21,19 +21,25 @@ class GW_CronTask extends GW_Data_Object
 	
 	function execute()
 	{
-		
-		
 		GW_Task::singleton()->add($this->name, json_decode($this->params, true));
-		
-		
 	}
 	
 	function getByTimeMatchExecute($tm)
 	{		
 		$list = $this->getByTimeMatch($tm);
 				
-		foreach($list as $item)
-			$item->execute();
+		$inner_run = [];
+		
+		foreach($list as $item){
+			if($item->separate_process){
+				$item->execute();
+				echo "abc\n";
+			}else{
+				$inner_run[] = $item;
+			}
+		}
+		
+		return $inner_run;
 	}	
 	
 }

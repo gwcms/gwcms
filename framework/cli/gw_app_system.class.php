@@ -18,7 +18,7 @@ class GW_App_System Extends GW_App_Base
 		
 
 		$this->registerInnerMethod('actionDoTasks', 5);	
-		$this->registerInnerMethod('actionCronTasks', 120);	
+		$this->registerInnerMethod('actionCronTasks', 60);
 		
 
 		pcntl_signal(SIGUSR1, array(&$this,"forceDoTasks"));
@@ -178,7 +178,21 @@ class GW_App_System Extends GW_App_Base
 			if(self::checkAndRunInterval($time_match, $interval))
 			{
 				//run all interval tasks
-				$crontask0->getByTimeMatchExecute($tm);					
+				$inner = $crontask0->getByTimeMatchExecute($tm);
+				
+				foreach($inner as $task)
+				{
+					if(file_exists($f=GW::s('DIR/ROOT').'daemon/tasks/'.$task->name.".inner.php"))
+					{
+						$t = new GW_Timer();
+						include $f;
+						$this->msg("Inner task: ".$task->name.", speed: ".$t->stop());
+					}else{
+						$this->msg("Inner not found: ".$task->name);
+					}					
+					
+					
+				}
 			}
 		}			
 	}	

@@ -7,12 +7,10 @@ class GW_Tasks_App extends GW_App_Base
 	var $error_message;
 	var $timer;
 	var $debug=false;
-	
-	
 	//todo:
 	
 	var $max_execution_time=0; //nurodoma maksimalaus vykdymo sekundes 0-neribojama
-	var $single_instance=1;
+	var $single_instance=0;
 
 	function __construct($data)
 	{
@@ -215,7 +213,6 @@ class GW_Tasks_App extends GW_App_Base
 		$this->data->setAsNewest();
 		$this->data->setValues($vals);
 		
-		print_r($this->data->toArray());
 		$this->data->insert();
 	}
 	

@@ -111,7 +111,7 @@
 		<ul style="margin-right:15px">
 			{*<li>{gw_link do="halt_all" title="Halt All" confirm=1}</li>*}
 			<li>{gw_link do="restart_system" title="Restart system process"}</li>
-			<li>{gw_link do="remove_all" title="Remove All"}</li>
+			<li>{gw_link do="remove_all" title="Empty task log"}</li>
 			<li><a href="#show_proc" onclick="open_iframe({ url:GW.ln+'/'+GW.path+'/processes', title:this.innerHTML }); return false">Show Processes ({GW_Proc_Ctrl::getRunningProcesses()|count})</a></li>
 		</ul>
 	</td>	

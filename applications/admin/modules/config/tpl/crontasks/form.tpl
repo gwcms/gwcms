@@ -6,6 +6,7 @@
 {include file="elements/input.tpl" name=params type=code_json height=100px nopading=1}  
 {include file="elements/input.tpl" name=time_match}
 
+{include file="elements/input.tpl" name=separate_process type=bool}
 
 
 
