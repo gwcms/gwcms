@@ -3,6 +3,7 @@
 
 class Module_CronTasks extends GW_Common_Module
 {	
+	use Module_Import_Export_Trait;
 
 	function init()
 	{
