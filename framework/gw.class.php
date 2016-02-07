@@ -34,6 +34,10 @@ class GW
 	static $devel_debug;
 
 	
+	/**
+	 * 
+	 * @return GW_DB
+	 */
 	function db()
 	{
 		if(!self::$context->db)
