@@ -11,6 +11,10 @@
 	{gw_link relative_path="`$item->id`/form" icon="action_edit" show_title=0}
 {/function}
 
+{function name=dl_actions_editshift}
+	{gw_link relative_path="`$item->id`/form" icon="action_edit_shift" show_title=0 shift_button=1}
+{/function}
+
 {function name=dl_actions_invert_active}
 	{gw_link do="invert_active" icon="active_`$item->active`" params=[id=>$item->id] show_title=0}
 {/function}

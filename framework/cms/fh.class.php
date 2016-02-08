@@ -161,6 +161,10 @@ class FH
 			$params['tag_params']['onclick']="return confirm('".$this->app->lang['ACTION_CONFIRM_REQUIRED']."\\n".$this->app->lang['ACTION'].": '+this.title)";
 		}
 
+		if($params['shift_button'])
+		{
+			$params['tag_params']['onclick']="if(event.shiftKey){location.href=gw_navigator.url(this.href,{'shift_key':1});return false}";
+		}
 
 		$tag_params="";
 

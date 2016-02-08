@@ -129,6 +129,15 @@ var gw_navigator =
 	//http://planetozh.com/blog/2008/04/javascript-basename-and-dirname/
 	dirname: function(path) {
 	    return path.replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
+	},
+	
+	removeUserPassFromUrl: function(url) {
+		var parts = url.split('@')
+
+		if(parts.length == 1 )
+			return url;
+
+		return parts[0].split('//')[0]+'//'+ parts[1];
 	}	
 }
 

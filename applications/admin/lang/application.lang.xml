@@ -315,6 +315,10 @@
 		<lt>Redaguoti</lt>
 		<en>Edit</en>
 	</i>
+	<i id="action_edit_shift">
+		<lt>Redaguoti (shift)</lt>
+		<en>Edit (shift)</en>		
+	</i>
 	<i id="copy">
 		<lt>Klonuoti</lt>
 		<en>Clone</en>
