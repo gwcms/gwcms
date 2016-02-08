@@ -212,6 +212,10 @@
 		<en>Export</en>
 		<lt>Eksportuoti</lt>
 	</i>
+	<i id="edit">
+		<en>Edit</en>
+		<lt>Redaguoti</lt>
+	</i>
 </i>
 
 <i id="NO_ITEMS">

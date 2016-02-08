@@ -36,12 +36,10 @@
 	
 {function name=dl_toolbar_buttons_dialogconf}
 	<script type="text/javascript">
-		
 		function lds_config()
 		{
-			gw_dialog.open('{$app->buildUri("`$app->path`/dialogconfig")}', { width:400 })
+			gw_dialog.open('{$ln}/{$app->path}/dialogconfig', { width:400 })
 		}
-		
 	</script>
 	<img src="{$app_root}img/icons/settings.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
 	<a href="#" onclick="lds_config();return false">{$lang.LIST_DISPLAY_SETTINGS}</a>	
@@ -72,6 +70,9 @@
 	{gw_link relative_path=exportdata title=GW::l('/A/VIEWS/exportdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 {/function}
 
+{function name=dl_toolbar_buttons_edit} 
+	{gw_link relative_path=edit title=GW::l('/A/VIEWS/edit') icon="action_edit24"} &nbsp;&nbsp;&nbsp; 
+{/function}
 
 
 {function name=dl_display_toolbar_buttons}
