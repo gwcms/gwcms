@@ -33,6 +33,7 @@ class GW_Http_Agent
 	public $cookies=Array();
 	public $last_request = '';
 	public $last_response_header;
+	public $last_response_body;
 	public $last_request_time;	
 	public $redirect_count;
 	public $last_url;
@@ -42,6 +43,7 @@ class GW_Http_Agent
 	
 	public $proxy_script=false;
 	public $proxy_script_pass=false;
+	public $request_context=[];
 
 	public $lgr;
 	
@@ -59,6 +61,31 @@ class GW_Http_Agent
 	function setAuth($user,$pass)
 	{
 		$this->headers['Authorization'] = 'Basic '.base64_encode("$user:$pass");
+	}
+	
+	function setProxyScriptOn($url, $pass)
+	{
+		$this->proxy_script=$url;
+		$this->proxy_script_pass=$pass;
+	}
+	
+	function setProxyScriptOff()
+	{
+		$this->proxy_script=false;
+		$this->proxy_script_pass=false;
+	}
+	
+	function setPrivoxyOn()
+	{
+		$this->setProxyScriptOff();
+		$this->request_context['request_fulluri']=true;
+		$this->request_context['proxy']="tcp://localhost:8118";
+	}
+	
+	function setPricoxyOff()
+	{
+		unset($this->request_context['request_fulluri']);
+		unset($this->request_context['proxy']);
 	}
 
 	
@@ -140,26 +167,21 @@ class GW_Http_Agent
 		$error = false;
 		
 		set_error_handler(
-		    create_function(
-		        '$severity, $message, $file, $line',
-		        'throw new ErrorException($message, $severity, $severity, $file, $line);'
-		    )
+			create_function(
+				'$severity, $message, $file, $line', 'throw new ErrorException($message, $severity, $severity, $file, $line);'
+			)
 		);
-		
+
 		$body = false;
 		
 		try {
-		    $body = file_get_contents($url,false, stream_context_create($context_options));
+			$body = file_get_contents($url, false, stream_context_create($context_options));
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+			$this->log("FAIL $url" . $error);
+			$this->log('<pre>' . json_encode($context_options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 		}
-		
-		catch (Exception $e) {
-		    $error = $e->getMessage();
 
-
-			$this->log("FAIL $url" .$error);
-			$this->log('<pre>'.json_encode($context_options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-		}
-		
 		restore_error_handler();
 
 		return Array($body, $error, $http_response_header);
@@ -202,13 +224,13 @@ class GW_Http_Agent
 		$context =& $context_options['http'];
 	
 
-		$context = Array
+		$context = $this->request_context + Array
 		(
 			'timeout'=>$this->timeout,
 			//'max_redirects'=>$this->max_redirects,
 			'follow_location' => false		    
 		);
-
+		
 		if(count($post_params))
 		{
 			$context['method'] = 'POST';
@@ -294,7 +316,9 @@ class GW_Http_Agent
 			$body = $body1;
 
 		if($this->tidy_html)
-			return $this->tidy($body);
+			$body=$this->tidy($body);
+		
+		$this->last_response_body = $body;
 		
 		return $body;
 	}
