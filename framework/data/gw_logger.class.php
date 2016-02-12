@@ -33,8 +33,8 @@ class GW_Logger
 
 	function msg($msg)
 	{
-
-		
+		if(is_array($msg) || is_object($msg))
+			$msg = json_encode($msg, JSON_PRETTY_PRINT);
 		
 		$logstr=date($this->date_format).($this->pre ? $this->pre : ' ').$msg;
 		
