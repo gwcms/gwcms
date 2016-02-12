@@ -129,6 +129,20 @@ class FH
 		$params['path']=$params['path'].($params['params']?'?':'').$params['params'];		
 	}	
 	
+	function gw_link_confirm($include_onclick=true)
+	{
+		$title_or_inner_txt="(this.title ? this.title : this.textContent)";
+		$str= "return confirm('".$this->app->lang['ACTION_CONFIRM_REQUIRED']."\\n".$this->app->lang['ACTION'].": '+$title_or_inner_txt)";
+		
+		return $include_onclick ? 'onclick="'.$str.'"' : $str;
+	}
+	
+	function gw_link_prompt($question, $url, $include_onclick=true)
+	{
+		$str = "var ss=window.prompt('{$question}');if(ss)location.href='".$url."'+ss;return false;";
+		
+		return $include_onclick ? 'href="#" onclick="'.$str.'"' : $str;
+	}
 	
 	function gw_link($params)
 	{		
@@ -157,9 +171,8 @@ class FH
 
 
 		if($params['confirm'])
-		{
-			$params['tag_params']['onclick']="return confirm('".$this->app->lang['ACTION_CONFIRM_REQUIRED']."\\n".$this->app->lang['ACTION'].": '+this.title)";
-		}
+			$params['tag_params']['onclick']=$this->gw_link_confirm(false);
+	
 
 		if($params['shift_button'])
 		{

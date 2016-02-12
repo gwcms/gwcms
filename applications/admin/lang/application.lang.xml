@@ -216,6 +216,10 @@
 		<en>Edit</en>
 		<lt>Redaguoti</lt>
 	</i>
+	<i id="item">
+		<en>Item</en>
+		<lt>Įrašas</lt>		
+	</i>
 </i>
 
 <i id="NO_ITEMS">

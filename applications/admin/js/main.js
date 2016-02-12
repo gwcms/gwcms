@@ -630,7 +630,18 @@ this.tooltip = function(){
 // starting the script on page load
 $(document).ready(function(){
 	tooltip();
+	
+	$(document).click(function(){
+		$(".dropdown").hide();
+	});
+
+	/* Clicks within the dropdown won't make
+	   it past the dropdown itself */
+	$(".dropdown, .dropdown-trigger").click(function(e){
+		e.stopPropagation();
+	});	
 });
+
 
 /* END of TOOLTIP*/
 
@@ -714,3 +725,44 @@ function open_rtlogview(fileid)
 
 
 /* END OF MODULE's_NOTES*/
+
+
+//INLIST HIDEN DROPDOWNS
+
+
+
+function initDropdowns()
+{
+	$(document).ready(function(){	
+		$(document).click(function(){
+			$(".dropdown").hide();
+		});
+
+		/* Clicks within the dropdown won't make
+		   it past the dropdown itself */
+		$(".dropdown, .dropdown-trigger").click(function(e){
+			e.stopPropagation();
+		});
+		$(".dropdown-trigger").click(function(e){
+			$(this).next().fadeToggle();
+			$(this).next().offset({ left: $(this).offset().left});
+		});
+		
+		$('.ajax-fill-dd').click(function(){
+			
+			var data_id = $(this).attr('data-id');
+			
+			if($('#dropdown-'+data_id).attr('rel')=='loaded')
+				return false;
+			
+			$.ajax({
+				url: $(this).attr('data-url'),
+				success: function(data){
+					$('#dropdown-'+data_id).html(data).attr('rel','loaded');
+				}
+			});
+		})
+		
+	});
+	
+}

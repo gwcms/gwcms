@@ -10,6 +10,8 @@ class GW_Common_Module extends GW_Module
 		'doinvertactive'=>1, 
 		'domove'=>1,
 		'viewform'=>1, 
+		'viewitem'=>1,
+		'viewitemactions'=>1,
 		'viewlist'=>1,
 		'viewdialogconfig'=>1,
 		'dodialogconfigsave'=>1,
@@ -264,6 +266,20 @@ class GW_Common_Module extends GW_Module
 		
 		return ['update'=> (int)$item->get('id'), 'item'=>$item];
 	}
+	
+	function common_viewItem(){
+		
+		$item = $this->getDataObjectById();
+		$this->tpl_vars['item'] = $item;
+	}
+	
+	function common_ViewItemActions()
+	{
+		$item = $this->getDataObjectById();
+		$this->tpl_vars['item'] = $item;
+		
+		$this->tpl_file_name = GW::s("DIR/".$this->app->app_name."/TEMPLATES").'tools/item_actions_menu';
+	}	
 	
 	/** 
 	 * common action do:invert_active 

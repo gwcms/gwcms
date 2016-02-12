@@ -206,16 +206,8 @@ class GW_Module
 	}
 	
 	
-	function processTemplate($soft=1)
+	function getTemplateName()
 	{
-		
-		$this->fireEvent("BEFORE_TEMPLATE");
-		
-		$this->smarty->assign('m', $this);
-		$this->smarty->assign($this->tpl_vars);
-		
-		
-
 		$file = $this->tpl_file_name ? $this->tpl_file_name : $this->tpl_dir.$this->view_name;
 
 		
@@ -229,8 +221,23 @@ class GW_Module
 					$tmp='default_empty.tpl';
 					
 		}
+		
+		return $tmp;
+	}
+	
+	function processTemplate($soft=1)
+	{
+		
+		$this->fireEvent("BEFORE_TEMPLATE");
+		
+		$this->smarty->assign('m', $this);
+		$this->smarty->assign($this->tpl_vars);
+		
+		
+
+		$tpl_name = $this->getTemplateName();
 				
-		$this->smarty->display($tmp);
+		$this->smarty->display($tpl_name);
 	}
 	
 
@@ -352,6 +359,22 @@ class GW_Module
 		
 		
 		return $this->app->fh()->gw_path($params);
+	}
+	
+	function buildUri($path=false,$getparams=[], $params=[])
+	{
+		if(!$params['level'])
+			$params['level']=2;
+		
+		
+		if($params['level']==2)
+		{
+			$path = implode('/',$this->module_path) . ($path?'/':''). $path;
+		}elseif($params['level']==1){
+			$path = implode('/',$this->module_path) . ($path?'/':''). $path;
+		}
+		
+		return $this->app->buildURI($path, $getparams, $params);
 	}
 		
 }

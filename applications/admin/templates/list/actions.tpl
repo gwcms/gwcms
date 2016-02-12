@@ -29,3 +29,18 @@
 {function name=dl_actions_clone}
 	{gw_link relative_path="form" do="clone" icon="copy" params=[id=>$item->id] show_title=0}
 {/function}
+
+{function name=dl_actions_ext_actions}
+<div class="unhideroot2">
+	<img class="dropdown-trigger ajax-fill-dd" align="absmiddle" src="{$app_root}img/icons/action_expand.png" data-url="{$m->buildURI('itemactions',[id=>$item->id])}" data-id="{$item->id}">
+	
+	<div class="dropdown" id="dropdown-{$item->id}"><i class="fa fa-spinner fa-pulse"></i></div>
+</div>
+		
+	{if !isset($GLOBALS.dropdown_init_done)}
+		{$GLOBALS.dropdown_init_done=1}
+		<script type="text/javascript">
+			initDropdowns();
+		</script>
+	{/if}
+{/function}

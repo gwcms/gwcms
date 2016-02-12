@@ -4,7 +4,7 @@
 
 	
 <table class="gwTable">
-	<th colspan="2" class="th_h3 th_single">{$lang.EXTRA_INFO}</th>
+	<tr><th colspan="2" class="th_h3 th_single">{$lang.EXTRA_INFO}</th></tr>
 
 {foreach from=$extra_fields item=field_id}
 	<tr>
