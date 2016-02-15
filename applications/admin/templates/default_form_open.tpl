@@ -15,7 +15,10 @@
 
 
 <input type="hidden" name="act" value="do:{$action|default:"save"}" />
+
+{if !$nohiddenitemid}
 <input type="hidden" name="item[id]" value="{$item->id}" />
+{/if}
 
 
 <script>
