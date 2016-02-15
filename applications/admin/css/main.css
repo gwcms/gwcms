@@ -427,6 +427,6 @@ p{}
 .item-actions li{ list-style-type: none; margin-bottom:3px; font-size:13px; }
 .item-actions ul{ margin:0;padding:5px; }
 
-.gw_fa{ margin-right: .3em; width: 1.28571429em;text-align: center; }
+.menu_list .fa, .gw_fa{ margin-right: .3em; width: 1.28571429em;text-align: center; }
 .item-actions a{ padding: 2px 10px 2px 10px; display: block; text-decoration: none; margin-bottom:2px; margin-top:2px; background-color:#eee; border-radius: 3px; border:1px solid silver;}
 .item-actions a:hover { color: white; background-color:black; underline: none }	

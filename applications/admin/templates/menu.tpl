@@ -10,8 +10,7 @@
 
 	<p class="menu_head{if $active} menu_head_active{/if} {if !count($childs)}no_childs{/if}">
 		<a href="{$app->buildUri($item->path)}" onclick="return false">
-			{$item->info.icon}
-			{$item->get(title,$ln)}
+			{$item->info.icon}{$item->get(title,$ln)}
 		</a>
 	</p>
 
