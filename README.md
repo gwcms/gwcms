@@ -4,7 +4,7 @@
 git diff VERSIJOSID HEAD > /tmp/test.diff
 
 #ikelti patch
-cd /var/www/gwcms && patch  -p1 < /var/www/version_sync/gwcms_patches/1.diff
+cd /var/www/gw/project && patch  -p1 < /tmp/test.diff
 
 #repositorija padaryt readwrite for all
 chmod -R a+rwX repository
