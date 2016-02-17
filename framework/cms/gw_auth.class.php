@@ -138,7 +138,7 @@ class GW_Auth
 		
 		//dump("logging out");
 		$this->session = array();
-		$_SESSION=Array();
+		//$_SESSION=Array();
 	}
 	
 	static function isAutologinEnabled()
@@ -165,4 +165,3 @@ class GW_Auth
 		unset($this->session['switchUser']);
 	}
 }
-?>
