@@ -207,7 +207,7 @@ class GW_Public_Module {
 		return $this->app->buildUri($this->links[$name], [], ['carry_params' => 1]);
 	}
 
-	function buildUri($path = false, $getparams = [], $params = []) {
+	function buildDirectUri($path = false, $getparams = [], $params = []) {
 		if (!isset($params['level']))
 			$params['level'] = 2;
 
@@ -217,7 +217,7 @@ class GW_Public_Module {
 			$path = implode('/', $this->module_path) . ($path ? '/' : '') . $path;
 		}
 
-		return $this->app->buildURI($path, $getparams, $params);
+		return $this->app->buildURI('direct/'.$path, $getparams, $params);
 	}
 
 }
