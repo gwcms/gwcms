@@ -22,7 +22,7 @@
 	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 	
 	
-	{$dl_actions=[tplvars,invert_active,edit,delete]}
+	{$dl_actions=[tplvars,invert_active,edit,delete,clone]}
 	
 	{$dl_filters=$display_fields}
 	
