@@ -70,13 +70,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data {
 			case 'BEFORE_SAVE':
 				$item = $context;
 
-				if ($item->id && isset($item->changed_fields['parent_id'])) {
+				if ($item->id && isset($item->changed_fields['parent_id']))
 					$this->afterParentIdChanges($item);
-				}
-
-				$this->afterParentIdChanges($item);
-				exit;
-
+				
 
 				if (GW::$settings['LANGS'][0] == $this->lang())
 					$this->preparePage($context);
