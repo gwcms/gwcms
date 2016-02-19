@@ -219,5 +219,10 @@ class GW_Public_Module {
 
 		return $this->app->buildURI('direct/'.$path, $getparams, $params);
 	}
+	
+	function getViewPath($view)
+	{
+		return $this->app->page->path.'/'.$view;
+	}	
 
 }
