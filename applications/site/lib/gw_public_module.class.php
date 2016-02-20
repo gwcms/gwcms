@@ -46,8 +46,6 @@ class GW_Public_Module {
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
 
-
-
 		if ($this->tpl_name)
 			$file = $this->tpl_dir . $this->tpl_name;
 		else
@@ -214,7 +212,7 @@ class GW_Public_Module {
 		if ($params['level'] == 2) {
 			$path = implode('/', $this->module_path) . ($path ? '/' : '') . $path;
 		} elseif ($params['level'] == 1) {
-			$path = implode('/', $this->module_path) . ($path ? '/' : '') . $path;
+			$path = $this->module_path[0] . ($path ? '/' : '') . $path;
 		}
 
 		return $this->app->buildURI('direct/'.$path, $getparams, $params);
@@ -223,6 +221,6 @@ class GW_Public_Module {
 	function getViewPath($view)
 	{
 		return $this->app->page->path.'/'.$view;
-	}	
-
+	}		
+	
 }

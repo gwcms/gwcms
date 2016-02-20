@@ -186,6 +186,8 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave {
 		$im->clean();
 
 		$this->deleteCached();
+
+		$this->saveValues(['v'=>$this->v+1]); //update file version
 	}
 
 	function eventHandler($event, &$context_data = []) {
