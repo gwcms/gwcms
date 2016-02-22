@@ -2,196 +2,196 @@
 
 <xml>
 
-	<i id="ROOT">
-		<en>Root</en>
-		<lt>Šakninis</lt>
-	</i>
+    <i id="ROOT">
+        <en>Root</en>
+        <lt>Šakninis</lt>
+    </i>
 	
 
-	<i id="GALLERY_ITEM_TYPE_OPT">
-		<i id="0">
-			<lt>Įrašas</lt>
-			<en>Record</en>
-		</i>
-		<i id="1">
-			<lt>Kategorija</lt>
-			<en>Category</en>
-		</i>
-	</i>
+    <i id="GALLERY_ITEM_TYPE_OPT">
+        <i id="0">
+            <lt>Įrašas</lt>
+            <en>Record</en>
+        </i>
+        <i id="1">
+            <lt>Kategorija</lt>
+            <en>Category</en>
+        </i>
+    </i>
 	
 
 
-	<i id="FIELDS">
-		<i id="description">
-			<lt>Aprašymas</lt>
-			<en>Description</en>
-		</i>
-		<i id="state">
-			<lt>Būklė</lt>
-			<en>State</en>
-		</i>
-		<i id="parent_id">
-			<lt>Kategorija</lt>
-			<en>Category</en>
-		</i>
-		<i id="priority">
-			<lt>Prioritetas</lt>
-			<en>Priority</en>
-		</i>
-		<i id="deadline">
-			<lt>Terminas</lt>
-			<en>Deadline</en>
-		</i>
-		<i id="job_type">
-			<lt>Tipas</lt>
-			<en>Type</en>
-		</i>
-		<i id="user_create">
-			<lt>Sukūrė</lt>
-			<en>Created by</en>
-		</i>
-		<i id="user_exec">
-			<lt>Vykdo</lt>
-			<en>Executor</en>
-		</i>
-		<i id="time_have">Skirta laiko</i>
-		<i id="last_comment">Paskutinis komentaras</i>
+    <i id="FIELDS">
+        <i id="description">
+            <lt>Aprašymas</lt>
+            <en>Description</en>
+        </i>
+        <i id="state">
+            <lt>Būklė</lt>
+            <en>State</en>
+        </i>
+        <i id="parent_id">
+            <lt>Kategorija</lt>
+            <en>Category</en>
+        </i>
+        <i id="priority">
+            <lt>Prioritetas</lt>
+            <en>Priority</en>
+        </i>
+        <i id="deadline">
+            <lt>Terminas</lt>
+            <en>Deadline</en>
+        </i>
+        <i id="job_type">
+            <lt>Tipas</lt>
+            <en>Type</en>
+        </i>
+        <i id="user_create">
+            <lt>Sukūrė</lt>
+            <en>Created by</en>
+        </i>
+        <i id="user_exec">
+            <lt>Vykdo</lt>
+            <en>Executor</en>
+        </i>
+        <i id="time_have">Skirta laiko</i>
+        <i id="last_comment">Paskutinis komentaras</i>
 		
-		<i id="actions1">Veiksmai</i>		
-		<i id="project_id">Projektas</i>		
-		<i id="week">Savaitė</i>
-		<i id="comments">Komentarai</i>
-		<i id="file1">Prisegtukas 1</i>
-	</i>
-	<i id="FIELDS_SHORT">
-		<i id="week">S</i>
-		<i id="deadline">Term</i>
-		<i id="id">Id</i>
-		<i id="priority">P</i>
-		<i id="user_exec">Vykdo</i>
-		<i id="time_have">Laikas</i>
-	</i>
+        <i id="actions1">Veiksmai</i>		
+        <i id="project_id">Projektas</i>		
+        <i id="week">Savaitė</i>
+        <i id="comments">Komentarai</i>
+        <i id="file1">Prisegtukas 1</i>
+    </i>
+    <i id="FIELDS_SHORT">
+        <i id="week">S</i>
+        <i id="deadline">Term</i>
+        <i id="id">Id</i>
+        <i id="priority">P</i>
+        <i id="user_exec">Vykdo</i>
+        <i id="time_have">Laikas</i>
+    </i>
 	
 	
-	<i id="PRIORITY_OPT">
-		<i id="1">
-			<lt>1 - Svarstymas</lt>
-			<en>1 - Uncertain</en>
-		</i>
-		<i id="2">
-			<lt>2 - Laukiantis prioriteto pakėlimo</lt>
-			<en>2 - Waiting to be approved</en>
-		</i>
-		<i id="3">
-			<lt>3 - Patvirtintas, žemo prioriteto</lt>
-			<en>3 - Approved, low priority</en>
-		</i>
-		<i id="4">
-			<lt>4</lt>
-			<en>4</en>
-			<no>4</no>
-		</i>
-		<i id="5">
-			<lt>5 - Vidutinis</lt>
-			<en>5 - Average</en>
-		</i>
-		<i id="6">
-			<lt>6</lt>
-			<en>6</en>
-		</i>
-		<i id="7">
-			<lt>7</lt>
-			<en>7</en>
-		</i>
-		<i id="8">
-			<lt>8 - Skubus</lt>
-			<en>8 - Important</en>
-		</i>
-		<i id="9">
-			<lt>9 - Labai skubus!</lt>
-			<en>9 - Very important!</en>
-		</i>
-		<i id="10">
-			<lt>10 - Kritinis!, negalima dirbti</lt>
-			<en>10 - Critical! blocker</en>
-		</i>
-	</i>
+    <i id="PRIORITY_OPT">
+        <i id="1">
+            <lt>1 - Svarstymas</lt>
+            <en>1 - Uncertain</en>
+        </i>
+        <i id="2">
+            <lt>2 - Laukiantis prioriteto pakėlimo</lt>
+            <en>2 - Waiting to be approved</en>
+        </i>
+        <i id="3">
+            <lt>3 - Patvirtintas, žemo prioriteto</lt>
+            <en>3 - Approved, low priority</en>
+        </i>
+        <i id="4">
+            <lt>4</lt>
+            <en>4</en>
+            <no>4</no>
+        </i>
+        <i id="5">
+            <lt>5 - Vidutinis</lt>
+            <en>5 - Average</en>
+        </i>
+        <i id="6">
+            <lt>6</lt>
+            <en>6</en>
+        </i>
+        <i id="7">
+            <lt>7</lt>
+            <en>7</en>
+        </i>
+        <i id="8">
+            <lt>8 - Skubus</lt>
+            <en>8 - Important</en>
+        </i>
+        <i id="9">
+            <lt>9 - Labai skubus!</lt>
+            <en>9 - Very important!</en>
+        </i>
+        <i id="10">
+            <lt>10 - Kritinis!, negalima dirbti</lt>
+            <en>10 - Critical! blocker</en>
+        </i>
+    </i>
 	
-	<i id="STATE_OPT">
-		<i id="5">
-			<lt><![CDATA[<font color="silver">Naujas</font>]]></lt>
-			<en><![CDATA[<font color="silver">New</font>]]></en>
-		</i>	
-		<i id="10">
-			<lt><![CDATA[<font color="blue">Priimtas</font>]]></lt>
-			<en><![CDATA[<font color="blue">Accepted</font>]]></en>
-		</i>
-		<i id="15">
-			<lt><![CDATA[<font color="green"><b>Vykdomas</b></font>]]></lt>
-			<en><![CDATA[<font color="green"><b>Working</b></font>]]></en>
-		</i>
-		<i id="12">
-			<lt><![CDATA[<font color="yellow">Pauzė</font>]]></lt>
-			<en><![CDATA[<font color="yellow">Paused</font>]]></en>
-		</i>
-		<i id="50">
-			<lt><![CDATA[<font color="orange">Gražinta pataisymams</font>]]></lt>
-			<en><![CDATA[<font color="orange">Returned for fixes</font>]]></en>
-		</i>				
-		<i id="100">
-			<lt><![CDATA[<font color="green">Atliktas</font>]]></lt>
-			<en><![CDATA[<font color="green">Done</font>]]></en>
-		</i>
+    <i id="STATE_OPT">
+        <i id="5">
+            <lt><![CDATA[<font color="silver">Naujas</font>]]></lt>
+            <en><![CDATA[<font color="silver">New</font>]]></en>
+        </i>	
+        <i id="10">
+            <lt><![CDATA[<font color="blue">Priimtas</font>]]></lt>
+            <en><![CDATA[<font color="blue">Accepted</font>]]></en>
+        </i>
+        <i id="15">
+            <lt><![CDATA[<font color="green"><b>Vykdomas</b></font>]]></lt>
+            <en><![CDATA[<font color="green"><b>Working</b></font>]]></en>
+        </i>
+        <i id="12">
+            <lt><![CDATA[<font color="yellow">Pauzė</font>]]></lt>
+            <en><![CDATA[<font color="yellow">Paused</font>]]></en>
+        </i>
+        <i id="50">
+            <lt><![CDATA[<font color="orange">Gražinta pataisymams</font>]]></lt>
+            <en><![CDATA[<font color="orange">Returned for fixes</font>]]></en>
+        </i>				
+        <i id="100">
+            <lt><![CDATA[<font color="green">Atliktas</font>]]></lt>
+            <en><![CDATA[<font color="green">Done</font>]]></en>
+        </i>
 
-		<i id="200">
-			<lt><![CDATA[<font color="red">Atmestas</font>]]></lt>
-			<en><![CDATA[<font color="red">Canceled</font>]]></en>
-		</i>
-	</i>
+        <i id="200">
+            <lt><![CDATA[<font color="red">Atmestas</font>]]></lt>
+            <en><![CDATA[<font color="red">Canceled</font>]]></en>
+        </i>
+    </i>
 	
-	<i id="TODO_ITEM_TYPE_OPT">
-		<i id="0">
-			<lt>Įrašas</lt>
-			<en>Record</en>
-		</i>
-		<i id="1">
-			<lt>Katalogas</lt>
-			<en>Folder</en>
-		</i>
-	</i>	
+    <i id="TODO_ITEM_TYPE_OPT">
+        <i id="0">
+            <lt>Įrašas</lt>
+            <en>Record</en>
+        </i>
+        <i id="1">
+            <lt>Katalogas</lt>
+            <en>Folder</en>
+        </i>
+    </i>	
 
 
-	<i id="TODO_ITEM_JOB_TYPE_OPT">
-		<i id="10">
-			<lt>Naujas</lt>
-			<en>New</en>
-		</i>
-		<i id="50">
-			<lt>Pataisymas</lt>
-			<en>Bugfix</en>
-		</i>
-	</i>		
+    <i id="TODO_ITEM_JOB_TYPE_OPT">
+        <i id="10">
+            <lt>Naujas</lt>
+            <en>New</en>
+        </i>
+        <i id="50">
+            <lt>Pataisymas</lt>
+            <en>Bugfix</en>
+        </i>
+    </i>		
 	
 	
-	<!-- =============== MODULE MAP START =================== -->
-	<i id="MAP">
-		<i id="title">
-			<lt>Darbai</lt>
-			<en>Todo</en>
-		</i>	
-		<i id="info">
-			<i id="icon"><![CDATA[<i class="fa fa-briefcase"></i>]]></i>
-		</i>	
+    <!-- =============== MODULE MAP START =================== -->
+    <i id="MAP">
+        <i id="title">
+            <lt>Darbai</lt>
+            <en>Todo</en>
+        </i>	
+        <i id="info">
+            <i id="icon"><![CDATA[<i class="fa fa-briefcase"></i>]]></i>
+        </i>	
 				
-		<i id="childs">
-			<i id="items">
-				<i id="title">
-					<lt>Darbų sąrašas</lt>
-					<en>Todo list</en>
-				</i>
-				<i id="info">
-					<i id="model">gw_todo_item</i>
-					<i id="default_views">
+        <i id="childs">
+            <i id="items">
+                <i id="title">
+                    <lt>Darbų sąrašas</lt>
+                    <en>Todo list</en>
+                </i>
+                <i id="info">
+                    <i id="model">gw_todo_item</i>
+                    <i id="default_views">
 <![CDATA[						
 [
 	{
@@ -207,19 +207,20 @@
 	}
 ]
 ]]>						
-					</i>
-				</i>
-			</i>
-			<i id="projects">
-				<i id="title">
-					Projektai
-				</i>
-				<i id="info">
-					<i id="model">gw_todo_project</i>
-				</i>
-			</i>
-		</i>
-	</i>
-	<!-- =============== MODULE MAP END ===================== -->
+                    </i>
+                </i>
+            </i>
+            <i id="projects">
+                <i id="title">
+                    <lt>Projektai</lt>
+                    <en>Projects</en>
+                </i>
+                <i id="info">
+                    <i id="model">gw_todo_project</i>
+                </i>
+            </i>
+        </i>
+    </i>
+    <!-- =============== MODULE MAP END ===================== -->
 	
 </xml>
