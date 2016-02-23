@@ -141,7 +141,7 @@ trait Module_Import_Export_Trait
 				$counts['fail'] ++;
 			}else{
 				
-				$item->save();
+				$item->replaceInsert();
 				$counts['success'] ++;
 				$saved[]=$item->toArray();
 			}
