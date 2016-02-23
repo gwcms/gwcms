@@ -21,7 +21,7 @@ trait Module_Import_Export_Trait
 	
 	
 	public $export_process=[];
-	public $export_translate_fields = 1;
+	public $export_translate_fields = 0;
 	
 	function displayOptions($field, $value, $context_obj)
 	{
