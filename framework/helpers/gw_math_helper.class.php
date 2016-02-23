@@ -61,6 +61,11 @@ class GW_Math_Helper
 		return substr($t,0,-1);
 	}
 	
+	static function uptimeDate($datetimestr,$precision='s')
+	{
+		return self::uptime(time()-strtotime($datetimestr), $precision);
+	}
+	
 	function uptimeReverse($str)
 	{
 		$time=0;
