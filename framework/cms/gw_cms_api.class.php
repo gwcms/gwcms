@@ -26,37 +26,37 @@
  */
 class GW_Cms_Api {
 
-		var $api_key;
-		var $username;
-		var $lang;
-		var $base;
+	var $api_key;
+	var $username;
+	var $lang;
+	var $base;
 
-		function __construct($user, $api_key, $lang = 'en') {
-				$this->username = $user;
-				$this->api_key = $api_key;
-				$this->lang = $lang;
+	function __construct($user, $api_key, $lang = 'en') {
+		$this->username = $user;
+		$this->api_key = $api_key;
+		$this->lang = $lang;
 
-				$this->http = new GW_Http_Agent();
+		$this->http = new GW_Http_Agent();
 
-				$this->base = GW::s("PROJECT_ADDRESS"); //for local access
-		}
+		$this->base = GW::s("PROJECT_ADDRESS"); //for local access
+	}
 
-		function action($path, $action, $get_params = Array()) {
-				$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
-				$get_params['act'] = 'do:' . $action;
+	function action($path, $action, $get_params = Array()) {
+		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
+		$get_params['act'] = 'do:' . $action;
 
-				$r = $this->http->getContents($this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params));
+		$r = $this->http->getContents($this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params));
 
-				//dump($this->http->flushDebugInfo());
+		//dump($this->http->flushDebugInfo());
 
-				return $r;
-		}
+		return $r;
+	}
 
-		/**
-		 * TODO 
-		 */
-		function request() {
-				
-		}
+	/**
+	 * TODO 
+	 */
+	function request() {
+		
+	}
 
 }

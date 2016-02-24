@@ -10,11 +10,11 @@
 
 class GW_Dummy_Data_Object extends GW_Data_Object {
 
-		function buildList($list) {
-				foreach ($list as $i => $vals)
-						$list[$i] = $this->createNewObject($vals);
+	function buildList($list) {
+		foreach ($list as $i => $vals)
+			$list[$i] = $this->createNewObject($vals);
 
-				return $list;
-		}
+		return $list;
+	}
 
 }
