@@ -42,5 +42,3 @@ class GW_Phone_Validator extends GW_String_Validator
 
 	}
 }
-
-?>
