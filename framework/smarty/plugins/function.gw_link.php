@@ -1,10 +1,10 @@
 <?php
-
 /**
  * Smarty plugin
  * @package Smarty
  * @subpackage plugins
  */
+
 
 /**
  * Smarty {gw_link} function plugin
@@ -17,14 +17,17 @@
  * @param array
  * @param Smarty
  */
-function smarty_function_gw_link($params, &$smarty) {
 
-		//$vars = FH::getTplVars($smarty, Array('app'));
-		//FH::gw_link($params, $vars['app']);
-		$app = $smarty->getVariable('app')->value;
-
-		return $app->fh()->gw_link($params);
+function smarty_function_gw_link($params, &$smarty)
+{
+	
+	//$vars = FH::getTplVars($smarty, Array('app'));
+	//FH::gw_link($params, $vars['app']);
+	$app = $smarty->getVariable('app')->value;
+		
+	return $app->fh()->gw_link($params);
 }
 
 /* vim: set expandtab: */
+
 ?>

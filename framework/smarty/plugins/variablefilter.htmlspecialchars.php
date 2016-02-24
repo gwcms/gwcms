@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Smarty plugin
  *
@@ -14,6 +13,7 @@
  *
  * @return string filtered output
  */
-function smarty_variablefilter_htmlspecialchars($source) {
-		return htmlspecialchars($source, ENT_QUOTES, Smarty::$_CHARSET);
+function smarty_variablefilter_htmlspecialchars($source)
+{
+    return htmlspecialchars($source, ENT_QUOTES, Smarty::$_CHARSET);
 }
