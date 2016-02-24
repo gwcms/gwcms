@@ -39,7 +39,7 @@ class GW_Email_Validator extends GW_String_Validator {
 				$ctrl = '\000-\037';
 				$CRlist = '\n\015';  // note: this should really be only \015.
 				// Items 19, 20, 21 -- see table on page 295 of 'Mastering Regular Expressions'
-				$qtext = "[^$esc$NonASCII$CRlist\"]";	// for within "..."
+				$qtext = "[^$esc$NonASCII$CRlist\"]"; // for within "..."
 				$dtext = "[^$esc$NonASCII$CRlist$OpenBR$CloseBR]"; // for within [...]
 				$quoted_pair = " $esc [^$NonASCII] "; // an escaped character
 				// *********************************************
@@ -51,24 +51,24 @@ class GW_Email_Validator extends GW_String_Validator {
 				// $Cnested matches one non-nested comment.
 				// It is unrolled, with normal of $ctext, special of $quoted_pair.
 				$Cnested = "";
-				$Cnested .= "$OpenParen";	 // (
-				$Cnested .= "$ctext*";	  // 	  normal*
+				$Cnested .= "$OpenParen";  // (
+				$Cnested .= "$ctext*";   // 	  normal*
 				$Cnested .= "(?: $quoted_pair $ctext* )*"; // 	  (special normal*)*
-				$Cnested .= "$CloseParen";	 // 						)
+				$Cnested .= "$CloseParen";  // 						)
 				// $comment allows one level of nested parentheses
 				// It is unrolled, with normal of $ctext, special of ($quoted_pair|$Cnested)
 				$comment = "";
-				$comment .= "$OpenParen";	  //  (
-				$comment .= "$ctext*";	   //     normal*
-				$comment .= "(?:";		//       (
+				$comment .= "$OpenParen";   //  (
+				$comment .= "$ctext*"; //     normal*
+				$comment .= "(?:";  //       (
 				$comment .= "(?: $quoted_pair | $Cnested )"; //         special
-				$comment .= "$ctext*";	   //         normal*
-				$comment .= ")*";		//            )*
-				$comment .= "$CloseParen";	  //                )
+				$comment .= "$ctext*"; //         normal*
+				$comment .= ")*";  //            )*
+				$comment .= "$CloseParen";   //                )
 				// *********************************************
 				// $X is optional whitespace/comments
 				$X = "";
-				$X .= "[$space$tab]*";	 // Nab whitespace
+				$X .= "[$space$tab]*";  // Nab whitespace
 				$X .= "(?: $comment [$space$tab]* )*"; // If comment found, allow more spaces
 				// Item 10: atom
 				$atom_char = "[^($space)<>\@,;:\".$esc$OpenBR$CloseBR$ctrl$NonASCII]";
@@ -78,10 +78,10 @@ class GW_Email_Validator extends GW_String_Validator {
 				//     could be part of an atom
 				// Item 11: doublequoted string, unrolled.
 				$quoted_str = "";
-				$quoted_str .= "\"";	   // "
-				$quoted_str .= "$qtext *";	  //   normal
+				$quoted_str .= "\""; // "
+				$quoted_str .= "$qtext *";   //   normal
 				$quoted_str .= "(?: $quoted_pair $qtext * )*"; //   ( special normal* )*
-				$quoted_str .= "\"";	   //        "
+				$quoted_str .= "\""; //        "
 				// Item 7: word is an atom or quoted string
 				$word = "";
 				$word .= "(?:";
@@ -95,9 +95,9 @@ class GW_Email_Validator extends GW_String_Validator {
 
 				// Item 13: domain-literal is like a quoted string, but [...] instead of "..."
 				$domain_lit = "";
-				$domain_lit .= "$OpenBR";	  // [
+				$domain_lit .= "$OpenBR";   // [
 				$domain_lit .= "(?: $dtext | $quoted_pair )*"; //   stuff
-				$domain_lit .= "$CloseBR";	  //         ]
+				$domain_lit .= "$CloseBR";   //         ]
 				// Item 9: sub-domain is a domain-ref or a domain-literal
 				$sub_domain = "";
 				$sub_domain .= "(?:";
@@ -145,19 +145,19 @@ class GW_Email_Validator extends GW_String_Validator {
 				// We've worked it so that $word, $comment, and $quoted_str to not consume trailing $X
 				// because we take care of it manually.
 				$phrase = "";
-				$phrase .= "$word";						 // leading word
-				$phrase .= "$phrase_char *";				// "normal" atoms and/or spaces
+				$phrase .= "$word";	// leading word
+				$phrase .= "$phrase_char *"; // "normal" atoms and/or spaces
 				$phrase .= "(?:";
 				$phrase .= "(?: $comment | $quoted_str )";  // "special" comment or quoted string
-				$phrase .= "$phrase_char *";			 //  more "normal"
+				$phrase .= "$phrase_char *"; //  more "normal"
 				$phrase .= ")*";
 
 				// Item 1: mailbox is an addr_spec or a phrase/route_addr
 				$mailbox = "";
-				$mailbox .= "$X";	 // optional leading comment
+				$mailbox .= "$X";  // optional leading comment
 				$mailbox .= "(?:";
 				$mailbox .= "$addr_spec";   // address
-				$mailbox .= "|";	 // or
+				$mailbox .= "|";  // or
 				$mailbox .= "$phrase  $route_addr"; // name and address
 				$mailbox .= ")";
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty {unassign} compiler function plugin
  *
@@ -16,15 +17,13 @@
  * @param Smarty_Compiler object
  * @return void|string
  */
+function smarty_compiler_gw_unassign($params, &$smarty) {
+		if (!isSet($params['var'])) {
+				$smarty->_syntax_error("unassign: missing 'var' parameter", E_USER_WARNING);
+				return;
+		}
 
-function smarty_compiler_gw_unassign($params, &$smarty) 
-{
-    if (!isSet($params['var'])) {
-        $smarty->_syntax_error("unassign: missing 'var' parameter", E_USER_WARNING);
-        return;
-    }
-
-    return "<?php unset({$params['var']});?>";
+		return "<?php unset({$params['var']});?>";
 }
 
 ?>

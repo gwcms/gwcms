@@ -17,6 +17,9 @@
 	<i id="PHONE">
 		<i id="MIN_LENGTH">Patikrinkite ar teisingai įvedėte</i>
 	</i>
+	<i id="DATE">
+		<i id="INVALID_DATE">Invalid date</i>
+	</i>		
 	
 	<i id="STRING">
 		<i id="MIN_LENGTH">
