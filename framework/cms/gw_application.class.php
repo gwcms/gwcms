@@ -57,7 +57,7 @@ class GW_Application {
 	}
 
 	function initSmarty() {
-		require GW::s('DIR/LIB') . 'smarty/SmartyBC.class.php';
+		require GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
 		$s = & $this->smarty;
 
 		$s = new SmartyBC;

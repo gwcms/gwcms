@@ -335,7 +335,8 @@ class Module_Messages extends GW_Common_Module
 	
 	function initPhpmailer($from, $replyto, $subject)
 	{
-		$mail = new PHPMailer;
+		
+		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		//$mail->isSendmail();
 		$mail->CharSet = 'UTF-8';
 		
@@ -362,7 +363,7 @@ class Module_Messages extends GW_Common_Module
 	function viewTestPhpMailer()
 	{
 		
-		$mail = new PHPMailer;
+		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		// Set PHPMailer to use the sendmail transport
 		//$mail->isSendmail();
 		
