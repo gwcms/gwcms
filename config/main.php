@@ -7,6 +7,7 @@ $dir['ROOT']=dirname(__DIR__).'/';
 $dir['APPLICATIONS']=$dir['ROOT'].'applications/';
 
 $dir['LIB']=$dir['ROOT'].'framework/';
+$dir['VENDOR']=$dir['ROOT'].'vendor/';
 $dir['PEAR']=$dir['LIB'].'pear/';
 $dir['REPOSITORY']=$dir['ROOT'].'repository/';
 
