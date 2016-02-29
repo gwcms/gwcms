@@ -69,6 +69,33 @@ class GW_Math_Helper {
 				case 's':$t.=$M . $d . $h . $m . $s;
 					if ($s)
 						break;;
+				case '1':
+					if($M){
+						return $M;
+					}elseif($d){
+						return $d;
+					}elseif($h){
+						return $h;
+					}elseif($m){
+						return $m;
+					}elseif($s){
+						return $s;
+					}
+				break;
+				case '2':
+					if($M){
+						return $M. $d;
+					}elseif($d){
+						return $d.$h;
+					}elseif($h){
+						return $h.$m;
+					}elseif($m){
+						return $m.$s;
+					}elseif($s){
+						return $s;
+					}
+				break;				
+					
 			}
 		}
 
