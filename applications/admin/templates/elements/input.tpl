@@ -17,6 +17,15 @@
 	options - select,multiselect,read tipams vertės
 	class - laukelio objektui uždedama klasė
 *}
+
+{if $params_expand}
+	{foreach $params_expand as $k => $v}
+		{assign var=$k value=$v}
+	{/foreach}
+	{$params_expand=[]}
+{/if}
+
+
 {if !$hideifempty || $value || $item->$name}
 	
 {$title=$title|default:$app->fh()->fieldTitle($name)}

@@ -22,18 +22,18 @@ class GW_TplVar extends GW_Data_Object
 		if(!parent::validate())
 			return false;		
 			
-		$this->set('title', preg_replace('/[^a-z-_0-9]/','_', strtolower($this->get('title')) ));
+		$this->set('name', preg_replace('/[^a-z-_0-9]/','_', strtolower($this->get('name')) ));
 			
 		$cond=Array
 		(
-			'template_id=? AND title=? AND id!=?',
+			'template_id=? AND name=? AND id!=?',
 			$this->get('template_id'),
 			$this->get('title'), 
 			(int)$this->get('id')
 		);
 		
 		if($duplicate = $this->find($cond))
-			$this->errors['title']='/G/VALIDATION/UNIQUE';
+			$this->errors['name']='/G/VALIDATION/UNIQUE';
 		
 			
 		return !(bool)count($this->errors);

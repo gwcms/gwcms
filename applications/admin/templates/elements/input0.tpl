@@ -1,5 +1,8 @@
-
-
+{if $params_expand}
+	{foreach $params_expand as $k => $v}
+		{assign var=$k value=$v}
+	{/foreach}
+{/if}
 
 {if !$input_name_pattern}
 	{$input_name_pattern="item[%s]"}

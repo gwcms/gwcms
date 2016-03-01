@@ -167,6 +167,8 @@ class GW_Page extends GW_i18n_Data_Object
 
 		foreach($list as $inp_data)
 			$cache[$inp_data['key']]=$inp_data['content'];
+		
+		//d::ldump([$key, $cache, $list]);
 
 		return $cache[$key];
 	}
