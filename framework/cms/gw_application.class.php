@@ -85,6 +85,7 @@ class GW_Application {
 		$s->assignByRef('ln', $this->ln);
 		$s->assignByRef('lang', $this->lang);
 		$s->assignByRef('page', $this->page);
+		$s->assignByRef('footer_hidden', new stdClass);
 	}
 
 	function initLang() {
