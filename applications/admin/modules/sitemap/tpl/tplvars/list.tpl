@@ -30,5 +30,5 @@
 		{/if}
 	{/foreach}
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete,clone]}
 {/block}

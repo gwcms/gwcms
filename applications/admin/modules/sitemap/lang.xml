@@ -52,6 +52,9 @@
 			<lt>Unikalus vardas</lt>
 		</i>
 	</i>
+	<i id="FIELDS_SHORT">
+		<i id="templatevars">TV</i>
+	</i>
 	
 	<i id="TYPE_OPT">
 		<i id="0">

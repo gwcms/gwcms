@@ -18,4 +18,10 @@ class Module_Templates extends GW_Common_Module
 	{
 		$this->viewList();
 	}
+	
+	function __eventAfterList(&$list)
+	{
+		foreach($list as $item)
+			$item->tplvars_count = GW_TplVar::singleton()->count('template_id='.(int)$item->id);
+	}	
 }
