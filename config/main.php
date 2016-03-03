@@ -49,4 +49,3 @@ print_r(GW::$settings);
 exit;
 
 */
-cat
