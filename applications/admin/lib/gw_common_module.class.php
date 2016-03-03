@@ -332,10 +332,20 @@ class GW_Common_Module extends GW_Module
 			$cond.= ($cond ? ' AND ':'');
 			
 			if(method_exists($this, $ofmethod="overrideFilter$field")) {
+				
 				$cond.=$this->$ofmethod($value);
 			} else {					
 				switch($compare_type)
 				{
+					case '<':
+						$cond .= "(`$field` < ('".$value."'))";	
+					break;	
+					case '>':
+						$cond .= "(`$field` > ('".$value."'))";	
+					break;	
+					case '!=':
+						$cond .= "(`$field` != ('".$value."'))";	
+					break;	
 					case 'IN':
 						$cond .= "(`$field` IN ('".implode("','",$value)."'))";	
 						break;
