@@ -12,5 +12,10 @@
 
 {/if}
 
+
+{foreach $footer_hidden as $block}
+	{$block}
+{/foreach}
+
 </body>
 </html>
