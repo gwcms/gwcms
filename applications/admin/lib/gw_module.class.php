@@ -371,7 +371,7 @@ class GW_Module
 		{
 			$path = implode('/',$this->module_path) . ($path?'/':''). $path;
 		}elseif($params['level']==1){
-			$path = implode('/',$this->module_path) . ($path?'/':''). $path;
+			$path = $this->module_path[0] . ($path?'/':''). $path;
 		}
 		
 		return $this->app->buildURI($path, $getparams, $params);
