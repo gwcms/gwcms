@@ -262,6 +262,12 @@
 	<lt>Nuimti filtrus</lt>	
 </i>
 
+<i id="UNHIDE_FILTER">
+	<en>Unhide hidden</en>
+	<lt>Atslėpti paslėptus</lt>	
+</i>
+
+
 <i id="COMPARE_TYPE">
 	<i id="SHORT">
 		<en>C. t.</en>
@@ -530,6 +536,7 @@
 	<lt>Spauzdinimo versija</lt>
 	<en>Print view</en>
 </i>
+
 
 
 </xml>
