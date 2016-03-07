@@ -655,6 +655,9 @@ class GW_Data_Object {
 		}else {
 			if (is_array($value))
 				return json_encode($value);
+			
+			elseif(is_string($value)) // assume it is valid json
+				return $value;
 		}
 	}
 
