@@ -451,6 +451,11 @@ class GW_Application {
 		return $fh;
 	}
 
+	
+	/**
+	 * Is limited to http. 
+	 * https request does not works
+	 */
 	function backgroundRequest($path, $get_args = []) {
 		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
 
