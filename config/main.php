@@ -42,6 +42,7 @@ define("PUBLIC_AUTH_SESSION_KEY", "site_auth");
 GW::s('GW_CMS_VERSION', '2.1');
 
 include $dir['ROOT'].'config/project.php';
+include $dir['ROOT'].'config/environment.php';
 
 /*
 echo "<pre>";

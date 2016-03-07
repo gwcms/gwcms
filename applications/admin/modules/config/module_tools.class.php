@@ -1,7 +1,8 @@
 <?php
 
+include __DIR__.'/module_config.class.php';
 
-class Module_Tools extends GW_Module
+class Module_Tools extends Module_Config
 {	
 
 	function init()
@@ -14,6 +15,18 @@ class Module_Tools extends GW_Module
 	{
 		list($vars['lastupdates'], $vars['updatefiles']) = $this->__doImportSqlUpdates_list2update();
 		
+		
+		$test_actions = [];
+		
+		$list = get_class_methods ($this);
+		foreach($list as $method){
+
+			if(stripos($method, 'doTest')===0)
+				$test_actions[]=[$method, $this->$method];
+		}
+				
+		$this->tpl_vars['test_actions']=$test_actions;
+				
 
 		return $vars;
 	}
@@ -130,6 +143,57 @@ class Module_Tools extends GW_Module
 		
 		$this->log[]=$comp;
 	}
+	
+
+	
+	public $doTestBackgroundRequest = ["info"=>"Run twice to check"];
+	
+	function doTestBackgroundRequest()
+	{
+		
+		$test_string = GW_String_Helper::getRandString(10).' '.date('Y-m-d H:i:s');
+		
+		$params=[];
+		
+		if(isset($_GET['localhost_base']))
+			$params['localhost_base']=1;
+		
+		if(isset($_GET['force_http']))
+			$params['force_http']=1;
+		
+		$url = $this->app->backgroundRequest($this->buildUri(false,[],['noappbase'=>1]), ["act"=>'doATestBackgroundRequest','test_string'=>$test_string], $params);
+		
+		print_r([
+			'RequestedUrl'=>$url, 
+			'$this->config->backgroundTestValue'=>$this->config->backgroundTestValue,
+			'test_string'=>$test_string
+		]);
+		
+	}
+	
+	public $doTestBackgroundRequestLocalUrl = ["info"=>"Run with APP_BACKGROUND_REQ_TYPE=localhost_base"];
+	
+	function doTestBackgroundRequestLocalUrl()
+	{
+		GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base');
+		$this->doTestBackgroundRequest();
+	}	
+	
+	public $doTestBackgroundRequestForceHttp = ["info"=>"Run with APP_BACKGROUND_REQ_TYPE=force_http"];
+	
+	function doTestBackgroundRequestForceHttp()
+	{
+		GW::s("APP_BACKGROUND_REQ_TYPE", 'force_http');
+		
+		$this->doTestBackgroundRequest();
+	}	
+	
+	function doATestBackgroundRequest()
+	{
+		$this->config->backgroundTestValue = $_GET['test_string'];
+		exit;
+	}
+	
 	
 	
 

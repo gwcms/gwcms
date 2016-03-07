@@ -130,7 +130,7 @@ class GW_Application {
 
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-			$this->app_base .
+			(isset($params['noappbase'])? '' : $this->app_base) .
 			$ln .
 			($path ? '/' : '') . $path .
 			($getparams ? '?' . http_build_query($getparams) : '');
@@ -455,9 +455,22 @@ class GW_Application {
 		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
 
 		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
+		$get_args['sys_call']=1;
+		
 		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
 
-		GW_Http_Agent::impuls($url = Navigator::getBase(true) . $path);
+		
+		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
+			$base = GW::s("SITE_LOCAL_URL");
+		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
+			$base = Navigator::getBase(true);
+			$base = str_replace('https://','http://', $base);
+		}else{
+			$base = Navigator::getBase(true);
+		}		
+		
+		
+		GW_Http_Agent::impuls($url = $base . $path);
 
 		return $url;
 	}

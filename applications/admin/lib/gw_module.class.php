@@ -367,7 +367,7 @@ class GW_Module
 	
 	function buildUri($path=false,$getparams=[], $params=[])
 	{
-		if(!$params['level'])
+		if(!isset($params['level']))
 			$params['level']=2;
 		
 		

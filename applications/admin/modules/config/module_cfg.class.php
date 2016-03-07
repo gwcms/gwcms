@@ -44,6 +44,25 @@ class Module_Cfg extends GW_Common_Module
 		$this->jump();
 	}
 
+	function viewManifest()
+	{
+		echo '{  
+  "name": "Push Demo",  
+  "short_name": "Push Demo",  
+  "icons": [{  
+        "src": "images/icon-192x192.png",  
+        "sizes": "192x192",
+        "type": "image/png"
+      }],  
+  "start_url": "/test/index.html?homescreen=1",  
+  "display": "standalone",  
+  "gcm_sender_id": "'.$this->model->google_project_id.'"
+}';
+		exit;
+	}
+	
+	
+
 }
 
 ?>
