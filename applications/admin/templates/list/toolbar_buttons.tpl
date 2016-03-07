@@ -40,7 +40,7 @@
 	<script type="text/javascript">
 		function lds_config()
 		{
-				gw_dialog.open('{$m->buildURI('dialogconfig')}', {width: 400})
+				gw_dialog.open('{$m->buildURI('dialogconfig')}', { width: 400 })
 		}
 	</script>
 	<img src="{$app_root}img/icons/settings.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
@@ -52,7 +52,7 @@
 {function name=dl_toolbar_buttons_hidden}
 
 	<div class="unhideroot" style="">
-		<img class="visible" align="absmiddle" src="{$app_root}img/icons/action_down24.png" onmouseover="$(this).next().offset({left: $(this).offset().left})">
+		<img class="visible" align="absmiddle" src="{$app_root}img/icons/action_down24.png" onmouseover="$(this).next().offset({ left: $(this).offset().left })">
 
 		<div class="dropdown">
 			{foreach $dl_toolbar_buttons_hidden as $button_func}
