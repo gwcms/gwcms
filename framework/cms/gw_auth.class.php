@@ -43,8 +43,11 @@ class GW_Auth {
 		if (isset($_GET['temp_access'])) {
 			list($uid, $token) = explode(',', $_GET['temp_access']);
 
-			if (GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token))
+			if (GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token)){
 				$user = GW::getInstance('GW_User')->createNewObject($uid, 1);
+			}else{
+				die(json_encode(['error'=>16532,'error_message'=>'Invalid token']));
+			}
 		}elseif ($logedin) {
 			$user = $this->getUserByUserID($user_id);
 		} elseif ($autologin) {
