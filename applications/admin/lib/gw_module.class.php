@@ -2,6 +2,10 @@
 
 class GW_Module
 {
+	/**
+	 *
+	 * @var GW_Admin_Application
+	 */
 	public $app;
 	
 	public $db;
