@@ -5,6 +5,11 @@ class GW_Common_Service
 	public $path_arr;
 	
 	public $admin=false;
+	
+	/**
+	 *
+	 * @var GW_Service_Application
+	 */
 	public $app;
 	public $debug = true;
 	public $user;
