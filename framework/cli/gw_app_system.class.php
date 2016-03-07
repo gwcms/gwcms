@@ -130,7 +130,7 @@ class GW_App_System Extends GW_App_Base {
 
 		$dif = time() - strtotime($config->get($cron_id = "ctask $time_match $interval"));
 
-		if ($match && ($dif >= $interval * 60 ) || $GLOBALS['argv'][1] == $interval) {
+		if ($match && ($dif >= $interval * 60 ) || (isset($GLOBALS['argv'][1]) && $GLOBALS['argv'][1] == $interval)) {
 			$this->msg('[' . date('H:i:s') . "] run $interval");
 			$config->set($cron_id, date('Y-m-d H:i:s'));
 			return true;
