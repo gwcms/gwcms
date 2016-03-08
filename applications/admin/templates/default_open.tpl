@@ -12,6 +12,7 @@
         
 	{include file="submenu.tpl"}
 	
+		{if $app->user}
         <div id="login-info">
         	<i class="fa fa-user"></i>
         	<a href="{$app->app_base}{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
@@ -29,21 +30,27 @@
 			{$new_messages=$app->user->countNewMessages()}
 			<div id="new_messages_block" {if !$new_messages}style="display:none"{/if}>
 	            				
-			<a href="#show_msg" onclick="open_iframe({ url:'{$ln}/users/messages/new', title:'{$lang.NEW_MESSAGES}' }); return false">
+			<a href="#show_msg" onclick="open_iframe({ url:'{$app->app_base}{$ln}/users/messages/new', title:'{$lang.NEW_MESSAGES}' }); return false">
 				{$lang.NEW_MESSAGES} (<font color="#ffff99" id="drop_new_messages_count">{$new_messages}</font>)
 			</a>
 			</div>
 		</div>
+		{/if}
     </div>
 
     <div id="sidebar">
-		{include file="menu.tpl"}
-		
-		{gw_display_plugins id="after_menu"}
+		{if $app->user}
+			{include file="menu.tpl"}
+
+			{gw_display_plugins id="after_menu"}
+		{/if}
 		
     </div>
 
-	{include file="breadcrumbs.tpl"}
+	{if $app->user}
+		{include file="breadcrumbs.tpl"}
+	{/if}
+	
 	{if $toolbar}{include file="toolbar.tpl"}{/if}
     
     <div id="content">
