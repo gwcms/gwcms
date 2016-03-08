@@ -1,17 +1,4 @@
-{include file="head.tpl"}
-<body>
-
-<div id="wrap">
-<div id="header">
-<div class="space1"><a href="#" title="">{GW::s(SITE_TITLE)}{*<img
-	src="img/logo.png">*}</a></div>
-</div>
-
-<div id="sidebar"></div>
-
-<div id="content">{if $smarty.session.messages} {include
-file="messages.tpl"} <br />
-{/if}
+{include "default_open.tpl"}
 
 
 <form method="POST" id="lgn_frm" action="{$app->uri}"><input
