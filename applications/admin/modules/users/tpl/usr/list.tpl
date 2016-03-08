@@ -45,7 +45,8 @@
 	{$dl_actions=[message,switchtouser,invert_active,edit,delete]}
 	
 	{function dl_actions_message}
-		{gw_link relative_path="`$item->id`/message" params=[id=>$item->id] icon="message" title="write message" show_title=0}
+		<a href="{$m->buildURI('messages/form', [item=>[user_id=>$item->id]],[level=>1])}" title="write message">
+			<img src="{$app_root}img/icons/message.png" title="write message" align="absmiddle"></a>
 	{/function}
 	
 	{$dl_filters=$display_fields}

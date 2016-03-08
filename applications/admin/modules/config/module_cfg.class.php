@@ -46,23 +46,22 @@ class Module_Cfg extends GW_Common_Module
 
 	function viewManifest()
 	{
-		echo '{  
-  "name": "Push Demo",  
-  "short_name": "Push Demo",  
-  "icons": [{  
-        "src": "images/icon-192x192.png",  
-        "sizes": "192x192",
-        "type": "image/png"
-      }],  
-  "start_url": "/test/index.html?homescreen=1",  
-  "display": "standalone",  
-  "gcm_sender_id": "'.$this->model->google_project_id.'"
-}';
+		echo json_encode([
+			"name"=> GW::s('SITE_TITLE'),
+			"short_name"=> GW::s('SITE_TITLE'),
+			"icons"=> [[
+				"src"=>$this->app->app_root.'img/logo/logo_with_ltr_color.png',
+				'sizes'=>"192x192",
+				'type'=>'image/png']],
+			"start_url"=>$this->app->app_base,
+			"display"=> "standalone",  
+			"gcm_sender_id"	=>$this->model->google_project_id
+		]);
+		
+	
 		exit;
 	}
 	
 	
 
 }
-
-?>

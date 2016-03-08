@@ -8,6 +8,11 @@
 
 {include file="elements/input.tpl" name=max_tasks_history_length type=number}
 
+{include file="elements/input.tpl" name=google_project_id type=number}
+{include file="elements/input.tpl" name=google_api_access_key type=text}
+
+
+
 
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

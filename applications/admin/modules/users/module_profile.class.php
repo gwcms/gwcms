@@ -82,7 +82,36 @@ class Module_Profile extends GW_Module
 	{
 		$this->app->auth->switchUserReturn();
 		$this->jump();
-	}	
+	}
+
+	function doStoreSubscription()
+	{
+		$subscription = GW_Android_Push_Notif::getRegistrationId($_GET["subscription"]);
+		$new = $this->app->user->getExt()->insertIfNotExists('android_subscription', $subscription);
+
+		echo "New: $new";
+		echo $subscription;
+		echo "\nOK";
+		exit;
+	}
+	
+	function doTestSubscription()
+	{
+		
+		GW_Message::singleton()->message([
+			'to'=>$this->app->user->id,
+			'subject'=>"Testing push message", 
+			'message'=>"If you see this text - it works!",
+			'level'=>10
+		]);		
+		
+		$data = GW_Android_Push_Notif::push($this->app->user);
+		
+		echo json_encode($data, JSON_PRETTY_PRINT);
+		
+		exit;
+			
+	}
 		
 }
 

@@ -15,7 +15,12 @@ class GW_Message extends GW_Data_Object {
 	  $group_messages=2 - group
 	  $group_messages=1 - group and merge messages
 	 */
-	function msg($to, $subj, $msg, $sender = '', $group_messages = 0, $escape = true) {
+	function msg($to, $subj, $msg, $sender = '', $group_messages = 0, $escape = true, $params=[]) {
+		
+		$level = isset($params['level']) ? $params['level'] : 0;
+		
+		
+		
 		if ($escape) {
 			$msg = htmlspecialchars($msg);
 			$msg = str_replace("\n", "<br />", $msg);
@@ -36,15 +41,55 @@ class GW_Message extends GW_Data_Object {
 				'subject' => $subj,
 				'message' => $msg,
 				'sender' => $sender,
+				'level' => $level
 			]);
 
 			$msg->insert();
 		}
+	}
+	
+	/** 
+		same as msg jus all params in array
+		[
+			'to'=>,
+			'subject'=>,
+			'message'=>,
+			'sender'=>,//optional
+			'group'=>,//optional
+			'escape'=>//optional
+		]
+	 */
+	function message($data)
+	{
+		$default = [
+			'to'=>'',
+			'subject'=>'',
+			'message'=>'',
+			'sender'=>1,//system user
+			'group'=>1,
+			'escape'=>true
+		];	
+		
+		$data = array_merge($default, $data);
+		
+		return self::msg($data['to'], $data['subject'], $data['message'], $data['sender'], $data['group'], $data['escape'], $data);
+		
 	}
 
 	function listColor() {
 		if (!$this->seen)
 			return '#FFA347';
 	}
+	
+	function eventHandler($event, &$context_data = []) {
+		switch ($event) {
+			case 'AFTER_INSERT':
+				if($this->level >= 10 && $this->level <= 20)
+					GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
+		}
+		
+		parent::eventHandler($event, $context_data);
+	}
+	
 
 }

@@ -4,7 +4,7 @@ GW::s('PATH_LOGIN','users/login');
 GW::s('GW_USERZONE_PATH',"usr/");
 
 GW::s('GW_LOGIN_NAME_EXPIRATION','+1 month'); //strtotime format
-GW::s('GW_AUTOLOGIN_EXPIRATION', '+2 week'); //strtotime format
+GW::s('GW_AUTOLOGIN_EXPIRATION', '+1 year'); //strtotime format
 
 $rdir =& GW::s('DIR');
 $dir =& $rdir['ADMIN'];

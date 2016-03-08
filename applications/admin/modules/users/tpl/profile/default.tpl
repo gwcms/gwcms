@@ -47,6 +47,23 @@
 </form>
 
 
+
+
+
+<script>
+
+$(document).ready(function(){
+	GW_SW.initBtns();
+	
+});
+</script>
+
+<br />
+<button id="subscribe_btn" data-enable="Enable push messages" data-disable="Disable push messages" style="display:none">Push messages ...</button>
+<button id="test_subscribe_btn" style="display:none" onclick="$.ajax('{$m->buildUri(false,[act=>doTestSubscription])}')">Test push message</button>
+<br /><br />
+
+
 {include file="extra_info.tpl" exta_fields=['id','login_time','login_count','insert_time','update_time']}
 
 

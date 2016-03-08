@@ -18,6 +18,7 @@
 	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
 	<link rel="icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
+	<link rel="manifest" href="{$app->buildUri('default/public/manifest/manifest.json')}">
 	<link rel="stylesheet" type="text/css" href="{$app_root}css/main.css" />
     <!--[if lte IE 1]><link rel="stylesheet" type="text/css" href="{$app_root}css/main_ie.css" /><![endif]-->
 	
@@ -29,10 +30,12 @@
 	<script type="text/javascript" src="{$app_root}js/jquery.selectboxes.min.js"></script>	
 
 	<script type="text/javascript" src="{$app_root}js/main.js"></script>
+	<script type="text/javascript" src="{$app_root}js/set_sw_notifications.js"></script>
+	
 		
 	
 	<script type="text/javascript">
-		$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
+		$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
 		gw_adm_sys.init();
 		
 		translations = {};

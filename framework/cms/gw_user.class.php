@@ -180,7 +180,7 @@ class GW_User extends GW_Composite_Data_Object {
 	}
 
 	function getByUsername($username) {
-		return $this->find(Array('username=? AND active', $username));
+		return $this->find(Array('username=? AND active=1', $username));
 	}
 
 	function getByUsernamePass($username, $pass) {
@@ -234,41 +234,45 @@ class GW_User extends GW_Composite_Data_Object {
 		return $cache[$key] = $val;
 	}
 
+	
+	function getExt()
+	{
+		$cache =& $this->cache['gw_user_extended'];
+		
+		if(!$cache)
+			$cache = new GW_User_Extended($this->id);
+		
+		return $cache;
+	}
+	
 	/**
 	 * Delete expired keys
 	 */
-	function __autologinExpired(&$autologin) {
-		$current_time = date(GW_DB::$datetime_format);
-
-		foreach ((array) $autologin as $key => $expires)
-			if ($current_time > $expires)
-				unset($autologin[$key]);
+	function __autologinExpired() {
+		$how_old = str_replace('+', '-', GW::s('GW_AUTOLOGIN_EXPIRATION'));
+		$this->getExt()->deleteOld('autologin', $how_old);
 	}
 
-	function getAutologinPass() {
+	function getAutologinPass() 
+	{
 		$pass = md5(rand(1, 99999999)) . md5($this->get('username'));
 
-		$info = $this->get('info');
-
-		self::__autologinExpired($info['autologin']);
-
-		$info['autologin'][md5($pass)] = GW_DB::timeString(strtotime(GW::s('GW_AUTOLOGIN_EXPIRATION')));
-
-		$this->set('info', $info);
-		$this->update(Array('info'));
-
+		$this->getExt()->insert("autologin", $pass);
+		$this->__autologinExpired();
+		
 		return $pass;
 	}
 
 	function getUserByAutologinPass($username, $pass) {
-		if (!$user = $this->getByUsername($username))
+		
+		if(!($item=$this->getByUsername($username)))
 			return false;
-
-		$info = $user->get('info');
-		$exp = isset($info['autologin'][md5($pass)]) ? $info['autologin'][md5($pass)] : false;
-
-		if ($exp && strtotime($exp) > time())
-			return $user;
+		
+		
+		if($item->getExt()->exists("autologin", $pass)){
+			$item->getExt()->touch("autologin", $pass);
+			return $item;
+		}
 	}
 
 	function getUserByApiKey($username, $api_key) {

@@ -5,6 +5,7 @@
 {include file="elements/input.tpl" name=subject}
 {include file="elements/input.tpl" name=message type="textarea" height="100px"}
 
+{include file="elements/input.tpl" name=level type=number}
 
 
 {function name=df_submit_button_send}

@@ -58,6 +58,32 @@ class Module_Messages extends GW_Common_Module
 		//$this->tpl_vars['more_messages'] = count($messages);
 	}
 	
+	function viewNewJson()
+	{
+		$messages=$this->model->findAll(['user_id=? AND level >=10 AND level <= 20',$this->app->user->id],['order'=>'insert_time DESC','limit'=>'1']);
+		
+		$data = [];
+		
+		if(isset($messages[0]))
+		{
+			$item = $messages[0];
+			$data["body"]=$item->message;
+			$data['title']=$item->subject;
+			$data["icon"] = $this->app->app_root.'img/logo/logo_with_ltr_color.png';
+			$data['tag'] = 'simple-push-demo-notification-tag';
+			$data["url"] =  Navigator::getBase();
+			
+			$item->saveValues(['seen'=>1]);
+		}
+		
+		
+		
+		header('Content-type: application/json');
+
+		echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		exit;
+	}
+	
 	function doInvertSeen()
 	{
 		if(! $item = $this->getDataObjectById())
@@ -76,7 +102,7 @@ class Module_Messages extends GW_Common_Module
 	{	
 		$item->load_if_not_loaded();
 				
-		$result = $item->user_id == $this->app->user->id || $item->sender == $this->app->user->id;
+		$result = $this->app->user->isRoot() || $item->user_id == $this->app->user->id || $item->sender == $this->app->user->id;
 		
 		
 		
