@@ -59,7 +59,7 @@ echo "1 - extract exported files\n";
 echo "2 - apply diff\n";
 
 echo "l - git status\n";
-echo "c - commit -m 'gwcms uptodate' && git push\n";
+echo "c - commit -m 'gwcms uptodate' && git push //// please check if updates didnt messed up things too badly\n";
 
 echo "ld,2010-01-01 00:00 - gwcms list new commits from date\n";
 echo "ctrl+c - quit\n";
