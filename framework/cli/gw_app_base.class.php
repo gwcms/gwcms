@@ -62,8 +62,13 @@ class GW_App_Base {
 		$this->process_pid_file = GW::s('DIR/TEMP') . 'app_' . $this->proc_name . '_' . md5($this->path . ' ' . (isset($GLOBALS['argv'][1]) ? $GLOBALS['argv'][1] : ''));
 	}
 
-	function registerTimer($id, $callback, $interval) {
-		$this->timers[$id] = Array('interval' => $interval, 'callback' => $callback, 'lastexec' => microtime(1));
+	//uzregistruoti tameri nurodyti 
+	//pavadinima - kad galetu veliau atjungti taimerio vykdyma
+	//callback - ka vykdyti
+	//interval - kas kiek laiko vykdyti
+	//exec1st iskart ivykdys taimerius per pirma pakvietima
+	function registerTimer($id, $callback, $interval, $exec1st=false) {
+		$this->timers[$id] = Array('interval' => $interval, 'callback' => $callback, 'lastexec' => !$exec1st ? 0 : microtime(1));
 	}
 
 	function unregisterTimer($id) {
