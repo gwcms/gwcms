@@ -221,4 +221,3 @@ class GW_App_Base {
 
 }
 
-?>

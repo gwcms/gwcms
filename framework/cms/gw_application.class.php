@@ -457,7 +457,7 @@ class GW_Application {
 	 * https request does not works
 	 */
 	function backgroundRequest($path, $get_args = []) {
-		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
+		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
 
 		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
 		$get_args['sys_call']=1;

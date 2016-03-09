@@ -90,12 +90,24 @@ class GW_App_System Extends GW_App_Base {
 	}
 
 	function backgroundRequest($path, $get_args = []) {
-		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
+		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID,'10 minute', $path);
 
 		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
 		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
 
-		GW_Http_Agent::impuls($url = GW::getInstance('GW_Config')->get('sys/project_url') . $path);
+		
+		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
+			$base = GW::s("SITE_LOCAL_URL");
+		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
+			$base = GW::s("SITE_URL");
+			$base = str_replace('https://','http://', $base);
+		}else{
+			$base = GW::s("SITE_URL");
+		}				
+		
+		
+		GW_Http_Agent::impuls($url = $base . $path);
+		
 
 		return $url;
 	}
