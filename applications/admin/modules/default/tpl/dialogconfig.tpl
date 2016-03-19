@@ -85,7 +85,8 @@ html>body #sortable li { height: 1.5em; line-height: 1em; }
 		<li>
 			<input type="checkbox" {if $enabled}checked{/if} />
 			<input type="hidden" name="fields[{$id}]" value="{$enabled|intval}">
-		{GW::l("/A/FIELDS/`$id`")}</li>
+			{$app->fh()->fieldTitle($id)}
+		</li>
 	{/foreach}
 </ul>
 </td></tr>

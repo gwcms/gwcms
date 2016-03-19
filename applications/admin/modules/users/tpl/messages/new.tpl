@@ -17,6 +17,7 @@
 <br /><br />
 
 <button onclick="location.href='{gw_path do='SetSeen' params=[id=>$item->id]}'">{$m->lang.MARK_AS_READ}</button>
+<button onclick="location.href='{$m->buildUri('', [clean=>1])}'">{$m->lang.ALL_MESSAGES}</button>
 
 
 {else}

@@ -181,7 +181,7 @@ class GW_Http_Agent {
 		$headers = $this->headers + $headers;
 
 
-		$context_options = Array('http' => Array());
+		$context_options = ['http' => []];
 		$context = & $context_options['http'];
 
 
@@ -228,11 +228,16 @@ class GW_Http_Agent {
 
 		if ($this->proxy_script) {
 
-			$r = $this->postRequest($this->proxy_script, ['url' => $url, 'context_options' => serialize($context_options)], ['auth' => $this->proxy_script_pass]);
-			$r = unserialize($r);
-			$body = $r['body'];
-			$error = $r['error'];
-			$http_response_header = $r['http_response_header'];
+			$res = $this->postRequest($this->proxy_script, ['url' => $url, 'context_options' => serialize($context_options)], ['auth' => $this->proxy_script_pass]);
+			
+			if($r = @unserialize($res)){
+				$body = $r['body'];
+				$error = $r['error'];
+				$http_response_header = $r['http_response_header'];
+			}else{
+				$body='';$error='';$http_response_header='';
+				$this->proxy_scrpt_resp = $res;
+			}
 		} else {
 			list($body, $error, $http_response_header) = self::file_get_contents($url, $context_options);
 		}
@@ -241,7 +246,7 @@ class GW_Http_Agent {
 
 		if (count($http_response_header))
 			$this->last_response_header = implode("\n", $http_response_header) . "\n";
-
+		
 		$this->parseCookies();
 
 		if ($this->lgr)

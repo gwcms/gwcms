@@ -17,14 +17,9 @@
 	
 
 	{function dl_cell_message}
-		{if $smarty.request.read_all}
-			<pre class="gw_pre">{$item->message}</pre>
-			{if !$item->seen}{$success=$item->saveValues([seen=>1])}{/if}
-		{else}
 			<a href="#show_msg" onclick="open_ajax({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{$m->lang.MESSAGES}' }); return false">
 				{$item->message|truncate:'60'}
 			</a>		
-		{/if}
 	{/function}
 	
 
@@ -34,7 +29,7 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	
-	{$dl_toolbar_buttons[] = dialogconf}	
+
 	
 	
 	{function dl_actions_invert_seen}
@@ -51,12 +46,19 @@
 	{$dl_filters=$display_fields}	
 	
 	
-	{$dl_toolbar_buttons[]=read_all}
+	
+	{if $m->admin}
+		{$dl_toolbar_buttons[] = readall}
+		{$dl_toolbar_buttons[] = hidden}
+		{$dl_toolbar_buttons_hidden[]=dialogconf}	
+		{$dl_toolbar_buttons_hidden[]=print}	
+	{else}
+		{$dl_toolbar_buttons = [readall]}
+	{/if}	
 
 	
-	{function dl_toolbar_buttons_read_all}
-		{$readAll=!$smarty.request.read_all}
-		{gw_link title=$m->lang.READ_ALL params=[read_all=>$readAll]}
+	{function dl_toolbar_buttons_readall}
+		{gw_link do=markasreadall title=$m->lang.MARK_AS_READ_ALL icon="mark_as_read_24"}
 	{/function}
 	
 {/block}

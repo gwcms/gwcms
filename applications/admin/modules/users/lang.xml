@@ -185,6 +185,14 @@
 		<en>Mark as read</en>
 		<lt>Pažymėti kaip perskaitytą</lt>
 	</i>	
+	<i id="ALL_MESSAGES">
+		<en>All messages</en>
+		<lt>Visos žinutės</lt>
+	</i>
+	<i id="MARK_AS_READ_ALL">
+		<lt>Pažymėti visas kaip perskaitytas</lt>
+		<en>Mark all as read</en>
+	</i>
 	<i id="SESSION_VALIDITY_OPT">
 		<i id="30">30 min</i>
 		<i id="60">60 min</i>

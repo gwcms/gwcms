@@ -109,7 +109,7 @@ class GW_Common_Service
 		
 		if($unexpected)
 		{
-			if($this->debug)
+			//if($this->debug)
 				$response['unexpected_output'] = $unexpected;
 			
 			mail('errors@gw.lt', "Error under service ".$this->name, "Unexpected output: \r\n".$unexpected);

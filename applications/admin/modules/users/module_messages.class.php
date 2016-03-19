@@ -20,6 +20,8 @@ class Module_Messages extends GW_Common_Module
 		$other_cond =  !$this->admin ? 'id='.(int)$this->app->user->parent_user_id : '';
 		
 		$this->options['user_id'] = GW::getInstance('GW_User')->getOptions(false, $other_cond);
+		
+		$this->app->carry_params['clean']=1;
 	}
 	
 	function viewView()
@@ -39,6 +41,25 @@ class Module_Messages extends GW_Common_Module
 		$item->saveValues(['seen'=>1]);
 		
 		$this->jump(implode('/',$this->module_path).'/new');
+	}
+	
+	function doMarkasreadall()
+	{
+		$params = [];
+		$cond = '';
+		$this->initListParams(false, 'list');
+		$this->setListParams($params);
+		$cond = $params['conditions'];
+
+		$list = $this->model->findAll($cond, $params);
+		
+		foreach($list as $item)
+		{
+			if(!$item->seen)
+				$item->saveValues(['seen'=>1]);
+		}
+
+		$this->jump();
 	}
 	
 	function viewNew()
