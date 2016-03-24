@@ -81,11 +81,17 @@ class GW_Message extends GW_Data_Object {
 			return '#FFA347';
 	}
 	
+	public $push_log;
+	
 	function eventHandler($event, &$context_data = []) {
 		switch ($event) {
 			case 'AFTER_INSERT':
-				if($this->level >= 10 && $this->level <= 20)
-					GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
+				if($this->level >= 10 && $this->level <= 20){
+					if($this->level >= 15)
+						$this->push_log = GW_Android_Push_Notif::push($this->user_id);
+					else
+						$this->push_log = GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
+				}
 		}
 		
 		parent::eventHandler($event, $context_data);

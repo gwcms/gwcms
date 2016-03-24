@@ -143,14 +143,17 @@ class GW_App_Base {
 	function memUsage() {
 		return GW_Math_Helper::cFileSize(memory_get_usage());
 	}
-
+	
 	function sigHandler($signo) {
+		$this->msg('SIG:'.$signo);
+		
 		switch ($signo) {
 			case SIGCHLD:pcntl_waitpid(-1, $status);
 				break;
 
+			case SIGWINCH:; //kai ivyksta konsoles resaizinimas
+			break;
 			case SIGINT:;
-			case SIGWINCH:;
 			case SIGQUIT:;
 			case SIGTERM:;
 			case SIGHUP: $this->STOP_SIGNAL = true;

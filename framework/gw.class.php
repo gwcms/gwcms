@@ -30,6 +30,11 @@ class GW {
 	static $context;
 	//jeigu prisijunges vartotojas developeris
 	static $devel_debug;
+	/**
+	 *
+	 * @var GW_Logger
+	 */
+	static $lgr;
 
 	/**
 	 * 
@@ -69,6 +74,7 @@ class GW {
 
 	function init() {
 		self::$context = new GW_Context;
+		self::$lgr = new GW_Logger(GW::s('DIR/LOGS').'system.log');	
 	}
 
 	function request($args = Array()) {
