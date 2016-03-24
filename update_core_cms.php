@@ -78,6 +78,7 @@ function exportExtract2Tmp($repos_local=true, $commit_id)
 	mkdir($outdir);
 	
 	execute('cd '.$outdir.' && for a in `ls -1 /tmp/exportchanges.tar.gz`; do tar -zxvf $a; done');	
+	//tar -xvzf archyvo_pavadinimas.tar.gz extractins i ta pati kataloga
 	
 	echo "Files were extracted to $outdir\n";
 	return $outdir;
