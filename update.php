@@ -70,7 +70,9 @@ function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
 function getChangedFiles($repos_local=true, $commit_id)
 {
 	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
-	return explode("\n", trim(my_shell_exec($enter_repos."git diff --stat $commit_id..HEAD --name-only")));	
+	$files = explode("\n", trim(my_shell_exec($enter_repos."git diff --stat $commit_id..HEAD --name-only")));	
+	
+	return $files==[''] ? [] : $files;
 }
 
 function exportExtract2Tmp($repos_local=true, $commit_id)
@@ -178,6 +180,9 @@ function processCommand($line, $repos_local=true){
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info
 			$changed_files = getChangedFiles(true, $last_sync['lastcommit']);
 			print_r(['$last_sync'=>$last_sync, '$newcommits'=>$newcommits, 'changed_files'=>$changed_files]);	
+			
+			if(!$changed_files)
+				echo "NO CHANGED FILES\n";
 		break;
 	
 		case 'exportupdates2core':
