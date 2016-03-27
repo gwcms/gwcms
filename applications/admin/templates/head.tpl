@@ -16,8 +16,11 @@
 		{include "title_breadcrumbs.tpl"}
 		{*$title|default:$app->page->get(title,$ln)*} - {GW::s(SITE_TITLE)}</title>
 	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
-	<link rel="icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" href="{$app_root}img/favicon.ico" type="image/x-icon" />
+	
+	
+	<link rel="icon" href="{$app_root}img/favicon_{GW::s('PROJECT_ENVIRONMENT')}.ico" type="image/x-icon" />
+	
+	<link rel="shortcut icon" href="{$app_root}img/favicon_{GW::s('PROJECT_ENVIRONMENT')}.ico" type="image/x-icon" />
 	<link rel="manifest" href="{$app->buildUri('default/public/manifest/manifest.json')}">
 	<link rel="stylesheet" type="text/css" href="{$app_root}css/main.css" />
     <!--[if lte IE 1]><link rel="stylesheet" type="text/css" href="{$app_root}css/main_ie.css" /><![endif]-->

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+		</i>
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">Support</i>
+		<i id="info">
+			
+			<i id="icon"><![CDATA[<i class="fa fa-life-ring"></i>]]></i>
+		</i>
+		
+		<i id="childs">
+			<i id="messages">
+				<i id="title">Messages</i>
+				<i id="info">
+					<i id="model">GW_Support_Message</i>
+				</i>			
+			</i>
+			<i id="config">
+				<i id="title">Config</i>
+			</i>						
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

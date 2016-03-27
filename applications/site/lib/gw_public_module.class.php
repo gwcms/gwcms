@@ -10,6 +10,11 @@ class GW_Public_Module {
 	public $smarty;
 	public $errors = Array();
 	public $tpl_name;
+	
+	/**
+	 *
+	 * @var GW_Site_Application
+	 */
 	public $app;
 	public $options;
 	public $links;
@@ -95,8 +100,11 @@ class GW_Public_Module {
 		if (!$str)
 			return; // jei tuscias stringas pasidarys 1 simbolio stringas
 
+
+
+
 			
-		//valid method name
+//valid method name
 		$str = preg_replace('/[^a-z0-9]/i', '_', $str);
 
 
@@ -215,12 +223,11 @@ class GW_Public_Module {
 			$path = $this->module_path[0] . ($path ? '/' : '') . $path;
 		}
 
-		return $this->app->buildURI('direct/'.$path, $getparams, $params);
+		return $this->app->buildURI('direct/' . $path, $getparams, $params);
 	}
-	
-	function getViewPath($view)
-	{
-		return $this->app->page->path.'/'.$view;
-	}		
-	
+
+	function getViewPath($view) {
+		return $this->app->page->path . '/' . $view;
+	}
+
 }

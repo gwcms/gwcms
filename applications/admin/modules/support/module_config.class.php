@@ -8,12 +8,6 @@ class Module_Config extends GW_Common_Module
 	
 	function init()
 	{
-		$this->options['customer_group']=  GW_Users_Group::singleton()->getOptions();
-		
-	
-		
-		
-		
 		$this->model = new GW_Config($this->module_path[0].'/');
 		
 		parent::init();
@@ -25,9 +19,7 @@ class Module_Config extends GW_Common_Module
 		return ['item'=>$this->model];
 	}
 	
-	
-	
-
+		
 	
 	function doSave()
 	{

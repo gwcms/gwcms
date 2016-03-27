@@ -195,7 +195,28 @@ class Module_Tools extends Module_Config
 	}
 	
 	
+	public $doTestEmail = ["info"=>"Check if mail server is correctly configured"];
 	
+	function doTestEmail()
+	{
+		$stat = mail($this->app->user->email, "test mail", "test mail body");
+		
+		$this->app->setMessage("Test mail to: {$this->app->user->email} status ".  var_export($stat, true));
+		$this->jump();
+	}
+	
+	public $doTestGeoip = ["info"=>"Check if geoip function working (geoip_country_code_by_name)"];
+	
+	function doTestGeoip()
+	{
+		if(function_exists('geoip_country_code_by_name')){
+			$this->app->setMessage("Feature available. Jour country ".geoip_country_code_by_name($_SERVER['REMOTE_ADDR']));
+		}else{
+			$this->app->setMessage("Feature not enabled. <a target='_blank' href='http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip'>More info</a>");
+		}
+		
+	}
+
 
 	
 }

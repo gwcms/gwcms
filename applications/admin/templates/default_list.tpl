@@ -125,7 +125,7 @@
 		</th>
 	{/foreach}	
 	{if count($dl_actions) && !$smarty.get.print_view}
-		<th>{$lang.ACTIONS}</th>
+		<th><i class="fa fa-cog"></i></th>
 	{/if}
 </tr>
 

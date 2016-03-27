@@ -55,9 +55,9 @@
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
-			<en>Configuration</en>
-			<lt>Configuration</lt>
-			<no>Configuration</no>	
+			<en>System</en>
+			<lt>System</lt>
+			<no>System</no>	
 		</i>	
 		
 		<i id="info">

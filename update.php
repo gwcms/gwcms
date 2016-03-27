@@ -154,6 +154,8 @@ function processCommand($line, $repos_local=true){
 			$last_sync = getLastCommitWhenVersionsWereSynced(true);
 			print_r($last_sync);
 		break;	
+	
+		case '1':
 		case 'showupdates':
 			//to check updates before get updates
 			$last_sync = getLastCommitWhenVersionsWereSynced(true);
@@ -167,7 +169,8 @@ function processCommand($line, $repos_local=true){
 				]);
 		break;
 	
-		case 'updatesfromcoreexport':
+		case '2':
+		case 'exportupdatesfromcore':
 			//intended to get updates from core gwcms
 			$last_sync = getLastCommitWhenVersionsWereSynced(true);
 			$new_commits = getNewCommitsFromDate(false, $last_sync['lastcommit_date']);
@@ -175,6 +178,7 @@ function processCommand($line, $repos_local=true){
 			exportExtract2Tmp(false, $new_commits['commit_id']);
 		break;
 		
+		case '3':
 		case 'showupdates2core':
 			$last_sync = getLastCommitWhenVersionsWereSynced();
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info
@@ -185,6 +189,7 @@ function processCommand($line, $repos_local=true){
 				echo "NO CHANGED FILES\n";
 		break;
 	
+		case '4':
 		case 'exportupdates2core':
 			$last_sync = getLastCommitWhenVersionsWereSynced();
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info			
@@ -196,7 +201,10 @@ function processCommand($line, $repos_local=true){
 			echo "c|p;show;commit_id - show info about commit\n";
 			
 			echo "c|p;newc;2016-01-01 - new commits since date\n";
-			echo "gwcmsuptodate - get info when was last 'gwcms uptodate' named commit\n";
+			echo "showupdates(1) - get info when was last 'gwcms uptodate' named commit\n";
+			echo "exportupdatesfromcore(2) - get info when was last 'gwcms uptodate' named commit\n";
+			echo "showupdates2core(3) - get info when was last 'gwcms uptodate' named commit\n";
+			echo "exportupdates2core(4) - export files when was last 'gwcms uptodate' named commit\n";
 		break;
 	}	
 	

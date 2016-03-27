@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+
+	<i id="CANT_BE_EMPTY"></i>
+
+	<i id="FIELDS">
+	
+
+
+		<i id="phone">Phone number</i>					
+
+		<i id="address">Adresas</i>
+		<i id="city">Miestas</i>
+		<i id="email">E-mail</i>
+		<i id="name">Name</i>
+		<i id="surname">Surname</i>
+		<i id="pass_new">Password</i>
+		<i id="password">Password</i>
+		<i id="pass_new_repeat">Repeat new password</i>
+		<i id="agree">Agree with terms and conditions</i>
+		<i id="gender">Gender</i>
+		<i id="birthdate">Birthdate</i>
+		<i id="nationality_code">Nationality</i>
+		
+		<i id="city">City</i>
+		<i id="age">Age</i>
+		<i id="location">City</i>
+		<i id="profilefoto">Profile photo</i>
+		<i id="body_type">Body type</i>
+		<i id="eye_color">Eyes color</i>
+		<i id="height">Height</i>
+		<i id="width">Width</i>
+		<i id="aboutyou">About you</i>
+		<i id="languages">Languages</i>
+		<i id="languages_other">Other languages</i>		
+		<i id="message">Question / message</i>
+	</i>
+	
+
+	
+	
+	<i id="SUPPORT_FORM">Fill me</i>
+	<i id="SEND">Send</i>
+	
+</xml>

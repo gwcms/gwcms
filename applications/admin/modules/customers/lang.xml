@@ -46,15 +46,27 @@
 			<en>Information</en>
 			<lt>Pastabos</lt>
 		</i>
-		<i id="balance_diff">Pokytis</i>
-		<i id="balance_diff_message">Pokyčio žinutė</i>
-		<i id="sms_funds">Balansas</i>
-		<i id="sms_allow_credit">Leisti kreditą</i>
-		<i id="sms_pricing_plan">Apmokėjimo planas</i>
+		<i id="location_country">Country</i>
+		<i id="balance_diff">Changeg</i>
+		<i id="balance_diff_message">Change info</i>
+		<i id="profilefoto">Profile photo</i>
+		<i id="gender">Gender</i>
+		<i id="birthdate">Birthdate</i>
+		<i id="age">Age</i>
+	</i>
+	<i id="FIELDS_SHORT">	
+		<i id="email">@</i>
+		<i id="phone"><![CDATA[<i class="fa fa-phone"></i>]]></i>
+		<i id="profilefoto"><![CDATA[<i class="fa fa-camera"></i>]]></i>
+		<i id="gender"><![CDATA[<i class="fa fa-venus-mars"></i>]]></i>
+		<i id="location_country"><![CDATA[<i class="fa fa-flag-o"></i>]]></i>
+		<i id="birthdate">BD</i>
 	</i>
 	
 	<i id="VIEWS">
-		<i id="balancelog">Balanso žurnalas</i>
+		<i id="balancelog">
+			Balance log
+		</i>
 	</i>
 
 	<i id="SESSION_VALIDITY_OPT">
@@ -65,14 +77,14 @@
 		<i id="180">3h</i>
 		<i id="240">4h</i>
 		<i id="-1">
-			<lt>Neribojamas</lt>
+			Unlimited
 		</i>
 	</i>
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
-			<en>Customer Database</en>
+			<en>Site users</en>
 			<lt>Svetainės vartotojai</lt>
 		</i>	
 		<i id="info">
@@ -89,6 +101,12 @@
 					<i id="model">GW_Customer</i>
 				</i>
 			</i>
+			<i id="config">
+				<i id="title">
+					<en>Configuration</en>
+					<lt>Nustatymai</lt>	
+				</i>
+			</i>			
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
