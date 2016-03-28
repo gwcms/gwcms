@@ -107,8 +107,7 @@ function rt_logwatch(conf)
     {
 
     	var _this = this;
-    	
-		$.get(GW.ln+'/config/logwatch/realtime',
+		$.get(rt_watch_url,
 			{
 				'act':'do:get_updates',
 				'id':this.file,

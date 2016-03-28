@@ -718,7 +718,7 @@ function open_rtlogview(fileid)
 	conf=
 	{
 		title:fileid+' LogWatch',
-		url:GW.ln+'/config/logwatch/iframe?id='+fileid
+		url:GW.ln+'/system/logwatch/iframe?id='+fileid
 	}
 	open_iframe(conf)
 }

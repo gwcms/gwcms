@@ -21,8 +21,11 @@ span:last-child { background-color: orange; }
 </style>
 			
 
-
-<script src="{$app_root}modules/{$app->path_arr.0.path}/tpl/logwatch/realtime.js"></script>			
+<script>
+	rt_watch_url = '{$m->buildUri(realtime)}';
+	
+</script>
+<script src="{$app_root}modules/{$m->module_path[0]}/tpl/logwatch/realtime.js"></script>			
 			
 <body>
 

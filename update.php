@@ -193,7 +193,9 @@ function processCommand($line, $repos_local=true){
 		case 'exportupdates2core':
 			$last_sync = getLastCommitWhenVersionsWereSynced();
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info			
-			exportExtract2Tmp(true, $newcommits['commit_id']);
+			$dir = exportExtract2Tmp(true, $newcommits['commit_id']);
+			
+			shell_exec("krusader --left=$dir --right=../gwcms");
 		break;
 	
 		case 'h':
