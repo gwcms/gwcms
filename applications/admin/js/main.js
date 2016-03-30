@@ -650,7 +650,7 @@ function open_notes(pageid){
 	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
 	$( "#dialog:ui-dialog" ).dialog( "destroy" );
 
-	$('#dialog-message').load(GW.app_base+GW.ln+'/config/modules?act=do:get_notes&path='+GW.path);
+	$('#dialog-message').load(GW.app_base+GW.ln+'/system/modules?act=do:get_notes&path='+GW.path);
 	
 	$( "#dialog-message" ).dialog({
 		modal: true,
@@ -659,7 +659,7 @@ function open_notes(pageid){
 				$( this ).dialog( "close" );
 			},
 			Edit: function() {
-				location.href=GW.app_base+GW.ln+'/config/modules/'+pageid+'/form?return_to='+GW.path;
+				location.href=GW.app_base+GW.ln+'/system/modules/'+pageid+'/form?return_to='+GW.path;
 			}				
 		},
 		width: $(document).width()/10*9,
