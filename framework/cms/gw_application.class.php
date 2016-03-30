@@ -28,7 +28,8 @@ class GW_Application {
 	public $carry_params = Array();
 	public $inner_request = false;
 	public $user_class = "GW_User";
-
+	
+	public $sess; //application session - to avoid conflicts with site - admin apps
 
 	/*
 	 * loaded from session!
@@ -42,6 +43,8 @@ class GW_Application {
 	function initSession() {
 		ob_start();
 		session_start();
+		
+		$this->sess =& $_SESSION[$this->app_name];//to avoid conflicts with site - admin apps
 	}
 
 	function initDB() {
@@ -379,18 +382,20 @@ class GW_Application {
 	}
 
 	function setMessage($msg, $status_id = 0) {
-		$_SESSION['messages'][] = Array($status_id, $msg);
+		$this->sess['messages'][] = Array($status_id, $msg);
 	}
 
 	function setMessages($msgs = Array()) {
 		foreach ((array) $msgs as $field => $msg)
-			$_SESSION['messages'][$field] = Array(0, $msg);
+			$this->sess['messages'][$field] = Array(0, $msg);
 	}
 
 	function acceptMessages() {
-		$data = $_SESSION['messages'];
-
-		$_SESSION['messages'] = Null;
+		if(!isset($this->sess['messages']) || ! ($data=$this->sess['messages']))
+			return false;
+		
+		
+		$this->sess['messages'] = Null;
 
 		//copy errors
 		foreach ($data as $key => $item)
@@ -406,9 +411,9 @@ class GW_Application {
 	function setErrors($errors = Array(), $level = 2) {
 		foreach ((array) $errors as $field => $error_str)
 			if (is_numeric($field))
-				$_SESSION['messages'][] = Array($level, $error_str);
+				$this->sess['messages'][] = Array($level, $error_str);
 			else
-				$_SESSION['messages'][$field] = Array($level, $error_str);
+				$this->sess['messages'][$field] = Array($level, $error_str);
 	}
 
 	function fatalError($message) {

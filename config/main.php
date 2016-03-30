@@ -44,6 +44,11 @@ GW::s('GW_CMS_VERSION', '2.2');
 include $dir['ROOT'].'config/project.php';
 include $dir['ROOT'].'config/environment.php';
 
+
+$env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];
+GW::s('SITE/TITLE_MARK', $env_title[GW::s('PROJECT_ENVIRONMENT')]);
+
+
 /*
 echo "<pre>";
 print_r(GW::$settings);
