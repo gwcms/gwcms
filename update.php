@@ -70,12 +70,29 @@ function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
 function getChangedFiles($repos_local=true, $commit_id)
 {
 	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
+	$dir = $repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
+	
 	$files = explode("\n", trim(my_shell_exec($enter_repos."git diff --stat $commit_id..HEAD --name-only")));	
 	
-	return $files==[''] ? [] : $files;
+	$files = $files==[''] ? [] : $files;
+	
+	
+	$removes=[];
+	foreach($files as $idx => $file)
+	{
+		if(!file_exists($dir.'/'.$file))
+		{
+			$removes[]=$file;
+			unset($files[$idx]);
+		}
+	}
+	
+
+	
+	return ['copy'=>$files, 'remove'=>$removes];
 }
 
-function exportExtract2Tmp($repos_local=true, $commit_id)
+function exportExtract2Tmp($repos_local=true, $commit_id, $info=[])
 {
 	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
 	execute($enter_repos."git diff --stat $commit_id..HEAD --name-only | tar czf /tmp/exportchanges.tar.gz -T -");
@@ -84,6 +101,22 @@ function exportExtract2Tmp($repos_local=true, $commit_id)
 	mkdir($outdir);
 	
 	execute('cd '.$outdir.' && for a in `ls -1 /tmp/exportchanges.tar.gz`; do tar -zxvf $a; done');	
+	
+	$removefile = $outdir.'/removefile.sh';
+	$info_file = $outdir.'/update_info_file.txt';
+	
+	$str = '';	
+	$changed_files = getChangedFiles(false, $commit_id);
+	foreach($changed_files['remove'] as $rmfile)
+		$str.="rm $rmfile\n";
+	
+	file_put_contents($removefile, $str);
+	
+	$info['changed']=$changed_files;
+	
+	file_put_contents($info_file, print_r($info, true));
+	
+	
 	//tar -xvzf archyvo_pavadinimas.tar.gz extractins i ta pati kataloga
 	
 	echo "Files were extracted to $outdir\n";
@@ -117,17 +150,9 @@ function processCommand($line, $repos_local=true){
 	$line = explode(';',$line, 2);
 	$args = isset($line[1]) ? explode(';', $line[1]) : [];
 	
+	print_r($args);
+	
 	switch ($line[0]) {
-		case '1':
-			/*
-			if($UPDATES2CORE){//to gwvms
-				exportExtract2Tmp(true, $last_sync['lastcommit']);
-			}else{//from gwcms
-				exportExtract2Tmp(false, $last_sync['lastcommit']);	
-			}
-			*/
-		break;
-
 		case 'c':
 			processCommand(implode(';', $args), false);
 		break;
@@ -157,13 +182,19 @@ function processCommand($line, $repos_local=true){
 	
 		case '1':
 		case 'showupdates':
+			if(isset($args[0]))
+				$datefrom = $args[0];
+			else{
+				$last_sync = getLastCommitWhenVersionsWereSynced(true);
+				$datefrom = $last_sync['lastcommit_date'];
+			}	
+			echo "labadiena\n";
 			//to check updates before get updates
-			$last_sync = getLastCommitWhenVersionsWereSynced(true);
-			$new_commits = getNewCommitsFromDate(false, $last_sync['lastcommit_date']);
 			
+			$new_commits = getNewCommitsFromDate(false, $datefrom);
 			$changed_files = getChangedFiles(false, $new_commits['commit_id']);
 			
-			print_r(['last_sync'=>$last_sync,
+			print_r(['last_sync'=>isset($last_sync) ? $last_sync : false,
 				'new_commits'=>$new_commits,
 				'changed_files'=>$changed_files, 
 				]);
@@ -171,11 +202,18 @@ function processCommand($line, $repos_local=true){
 	
 		case '2':
 		case 'exportupdatesfromcore':
+			if(isset($args[0]))
+				$datefrom = $args[0];
+			else{
+				$last_sync = getLastCommitWhenVersionsWereSynced(true);
+				$datefrom = $last_sync['lastcommit_date'];
+			}
 			//intended to get updates from core gwcms
-			$last_sync = getLastCommitWhenVersionsWereSynced(true);
-			$new_commits = getNewCommitsFromDate(false, $last_sync['lastcommit_date']);
 			
-			exportExtract2Tmp(false, $new_commits['commit_id']);
+			$new_commits = getNewCommitsFromDate(false, $datefrom);
+			$dir = exportExtract2Tmp(false, $new_commits['commit_id'], ['new_commits'=>$new_commits]);
+			
+			shell_exec("krusader --left=$dir --right='".__DIR__."'");
 		break;
 		
 		case '3':
@@ -203,8 +241,8 @@ function processCommand($line, $repos_local=true){
 			echo "c|p;show;commit_id - show info about commit\n";
 			
 			echo "c|p;newc;2016-01-01 - new commits since date\n";
-			echo "showupdates(1) - get info when was last 'gwcms uptodate' named commit\n";
-			echo "exportupdatesfromcore(2) - get info when was last 'gwcms uptodate' named commit\n";
+			echo "showupdates(1)[;2016-01-01] - get info when was last 'gwcms uptodate' named commit\n";
+			echo "exportupdatesfromcore(2)[;2016-01-01] - get info when was last 'gwcms uptodate' named commit - or enter date from\n";
 			echo "showupdates2core(3) - get info when was last 'gwcms uptodate' named commit\n";
 			echo "exportupdates2core(4) - export files when was last 'gwcms uptodate' named commit\n";
 		break;
@@ -223,6 +261,7 @@ if(isset($argv[1]))
 {
 	processCommand($argv[1]);
 	echo "\n";
+	exit;
 }else{
 	processCommand('h');
 }
