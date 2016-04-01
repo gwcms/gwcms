@@ -27,6 +27,7 @@ class Module_DBQueries extends GW_Common_Module
 			else
 				print("<b>No result</b>\n");
 				
+			print("<b>Affected: ".$db->affected()."</b>\n");
 			print("<hr />");
 		}
 	}
