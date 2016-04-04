@@ -181,6 +181,9 @@ class GW_Module
 	{
 		$this->ob_start();
 		
+		if($name)
+			$this->view_name = $name;
+		
 		$vars = $this->{"view{$this->view_name}"}($params);
 						
 		if(is_array($vars))
