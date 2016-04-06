@@ -52,7 +52,7 @@
 {function name=dl_toolbar_buttons_hidden}
 
 	<div class="unhideroot" style="">
-		<img class="visible" align="absmiddle" src="{$app_root}img/icons/action_down24.png" onmouseover="$(this).next().offset({ left: $(this).offset().left })">
+		<img class="visible unhidetrigger" align="absmiddle" src="{$app_root}img/icons/action_down24.png">
 
 		<div class="dropdown">
 			{foreach $dl_toolbar_buttons_hidden as $button_func}
