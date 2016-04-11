@@ -30,17 +30,13 @@
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">
-			Dokumentavimas
-		</i>	
+		<i id="title">Dokumentavimas</i>	
 		<i id="info">
 			<i id="icon"><![CDATA[<i class="fa fa-th-large"></i>]]></i>
 		</i>			
 		<i id="childs">
 			<i id="items">
-				<i id="title">
-					Dokumentavimas
-				</i>
+				<i id="title">Dokumentavimas</i>
 				<i id="info">
 					<i id="model">GW_Doc_Entry</i>
 				</i>
