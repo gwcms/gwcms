@@ -201,7 +201,7 @@ function processCommand($line, $repos_local=true){
 		break;
 	
 		case '2':
-		case 'exportupdatesfromcore':
+		case 'importupdatesfromcore':
 			if(isset($args[0]))
 				$datefrom = $args[0];
 			else{
