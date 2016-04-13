@@ -25,16 +25,16 @@
 	<link rel="stylesheet" type="text/css" href="{$app_root}css/main.css" />
     <!--[if lte IE 1]><link rel="stylesheet" type="text/css" href="{$app_root}css/main_ie.css" /><![endif]-->
 	
-	<link type="text/css" href="{$app_root}css/jquery_ui/jquery-ui-1.8rc3.custom.css" rel="stylesheet" />
+	<script type="text/javascript" src="{$app_root}js/jquery-2.2.3.min.js"></script>
 	
-	<script type="text/javascript" src="{$app_root}js/jquery.min-latest.js"></script>
-	<script type="text/javascript" src="{$app_root}js/jquery-ui-1.8rc3.custom.min.js"></script>
-	
-	<script type="text/javascript" src="{$app_root}js/jquery.selectboxes.min.js"></script>	
 
+	<script type="text/javascript" src="{$app_root}js/jquery.selectboxes.min.js"></script>	
 	<script type="text/javascript" src="{$app_root}js/main.js"></script>
 	<script type="text/javascript" src="{$app_root}js/set_sw_notifications.js"></script>
 	
+	
+	<link href="{$app_root}vendor/jqueryui/jquery-ui.min.css" rel="stylesheet">
+	<script  src="{$app_root}vendor/jqueryui/jquery-ui.min.js" type="text/javascript"></script>	
 		
 	
 	<script type="text/javascript">

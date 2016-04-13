@@ -89,6 +89,7 @@ class GW_Application {
 		$s->assignByRef('lang', $this->lang);
 		$s->assignByRef('page', $this->page);
 		$s->assignByRef('footer_hidden', new stdClass);
+		$s->merge_compiled_includes = true; 
 	}
 
 	function initLang() {

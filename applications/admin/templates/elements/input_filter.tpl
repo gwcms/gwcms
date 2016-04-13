@@ -19,7 +19,7 @@
 {$inp_type=$type|default:'text'}
 
 
-<tr {if !$value && $m->list_params.filters}class="dl_hidden_filter"{/if}>
+<tr {if $value=='' && $m->list_params.filters}class="dl_hidden_filter"{/if}>
 	<td>{$title}</td>
 	<td>
 		{if strpos($type,'select')!==false}

@@ -33,6 +33,9 @@ class GW_Common_Module extends GW_Module
 	public $default_view = 'list';
 	public $load_before_save = true;
 	
+	//include [type:js/css/jsstring,data/path]
+	public $includes=[];
+	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
 	 */
@@ -128,8 +131,8 @@ class GW_Common_Module extends GW_Module
 		
 				
 		
-		$_SESSION['item']=$item->toArray();
-		unset($_SESSION['item']['id']);
+		$this->app->sess['item']=$item->toArray();
+		unset($this->app->sess['item']['id']);
 		unset($_GET['id']);
 		
 		
@@ -168,7 +171,12 @@ class GW_Common_Module extends GW_Module
 				
 		if(!$item->validate())
 		{
-			$this->setErrors($item->errors);
+			if(!isset($_POST['ajax'])){
+				$this->setErrors($item->errors);
+			}else{
+				$this->error_fields = array_merge($this->error_fields, $item->errors);
+			}
+			
 			
 			$this->processView('form');
 			exit;
@@ -191,9 +199,18 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('AFTER_SAVE', $item);	
 		
 		//jeigu saugome tai reiskia kad validacija praejo
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);		
+		if(!isset($_POST['ajax'])){
+			$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+			$this->jumpAfterSave($item);
+		}else{
+			header("GW_AJAX_FORM: OK");
+			header("GW_AJAX_FORM_ITEM_ID: ".$item->id);
+			
+			$this->tpl_vars['ajax_rows_only']=1;
+			$this->processView('list', ['ajax_one_item_list'=>$item->id]);
+			exit;
+		}		
 		
-		$this->jumpAfterSave($item);
 	}
 
 	function jumpAfterSave($item=false)
@@ -235,8 +252,8 @@ class GW_Common_Module extends GW_Module
 		//istrauks 77
 
 		
-		if(isset($_SESSION['item']) && $_REQUEST['item']=$_SESSION['item'])
-			unset($_SESSION['item']);
+		if(isset($this->app->sess['item']) && $_REQUEST['item']=$this->app->sess['item'])
+			unset($this->app->sess['item']);
 			
 		//if we encounter error during the submit
 		//fill out form with values that user submited
@@ -383,6 +400,7 @@ class GW_Common_Module extends GW_Module
 		//if(isset($this->list_params['orders']['order']) && $ord=$this->list_params['orders']['order'])
 		//	$params['order']=$ord;		
 		
+		//unset($this->list_params['order']);
 		
 		$params['conditions'] = $cond;
 	}
@@ -569,8 +587,6 @@ class GW_Common_Module extends GW_Module
 		$this->loadViews();
 		$this->loadOrders();
 		
-		
-		
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
 		$this->setListParams($params);
@@ -585,7 +601,12 @@ class GW_Common_Module extends GW_Module
 		$params['key_field']=$this->model->primary_fields[0];
 		
 		$params['soft_error']=true;
-		$list = $this->model->findAll($cond, $params);
+		
+		if(isset($params['ajax_one_item_list'])){
+			$list = [$this->model->createNewObject($params['ajax_one_item_list'], true)];
+		}else{
+			$list = $this->model->findAll($cond, $params);
+		}
 		
 		if($list === null)
 		{
@@ -625,7 +646,7 @@ class GW_Common_Module extends GW_Module
 	//used to allow user edit field list	
 	function getDisplayFields($fields)
 	{
-		$_SESSION['current_module_fields']=$fields;
+		$this->app->sess['current_module_fields']=$fields;
 		
 
 		if($saved = (array)$this->app->page->fields)
@@ -645,7 +666,7 @@ class GW_Common_Module extends GW_Module
 		
 		//atstatyti numatytuosius nustatymus
 		if($_REQUEST['defaults'])
-			$fields = $_SESSION['current_module_fields'];
+			$fields = $this->app->sess['current_module_fields'];
 		else
 			$fields = $_REQUEST['fields'];	
 			
@@ -659,7 +680,7 @@ class GW_Common_Module extends GW_Module
 	
 	function common_viewDialogConfig()
 	{
-		$fields = $_SESSION['current_module_fields'] ? $_SESSION['current_module_fields']: [];
+		$fields = $this->app->sess['current_module_fields'] ? $this->app->sess['current_module_fields']: [];
 		$saved = $this->app->page->fields ? (array)$this->app->page->fields: [];
 		
 		$this->tpl_vars['fields'] = $saved + $fields;

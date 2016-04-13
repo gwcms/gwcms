@@ -29,8 +29,8 @@
 	</td><td valign="top">
 	
 		<button >{$lang.APPLY_FILTER}</button><br>
-		<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;">{$lang.REMOVE_FILTER}</button>
-		{if $dl_unhide_filters}<br><button style="margin-top:5px" onclick="$('.dl_hidden_filter').fadeIn();$(this).fadeOut();return false">{GW::l('/g/UNHIDE_FILTER')}</button>{/if}
+		<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;" title="{$lang.REMOVE_FILTER}"><i class="fa fa-close"></i></button>
+		<button style="margin-top:5px" onclick="$('.dl_hidden_filter').fadeIn();$(this).fadeOut();return false" title="{GW::l('/g/UNHIDE_FILTER')}"><i class="fa fa-search-plus"></i></button>
 	
 	</td></tr>
 	

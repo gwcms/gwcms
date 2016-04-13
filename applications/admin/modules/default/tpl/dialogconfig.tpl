@@ -1,6 +1,3 @@
-	<script type="text/javascript" src="{$app_root}js/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="{$app_root}js/jquery.ui.widget.js"></script>
-
 <style>
 
 
