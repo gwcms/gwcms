@@ -242,7 +242,7 @@ function processCommand($line, $repos_local=true){
 			
 			echo "c|p;newc;2016-01-01 - new commits since date\n";
 			echo "showupdates(1)[;2016-01-01] - get info when was last 'gwcms uptodate' named commit\n";
-			echo "exportupdatesfromcore(2)[;2016-01-01] - get info when was last 'gwcms uptodate' named commit - or enter date from\n";
+			echo "importupdatesfromcore(2)[;2016-01-01] - get info when was last 'gwcms uptodate' named commit - or enter date from\n";
 			echo "showupdates2core(3) - get info when was last 'gwcms uptodate' named commit\n";
 			echo "exportupdates2core(4) - export files when was last 'gwcms uptodate' named commit\n";
 		break;
