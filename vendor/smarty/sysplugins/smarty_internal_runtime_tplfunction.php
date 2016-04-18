@@ -42,7 +42,8 @@ class Smarty_Internal_Runtime_TplFunction
                 return;
             }
         }
-        throw new SmartyException("Unable to find template function '{$name}'");
+	if(!isset($params['ifexists']))
+		throw new SmartyException("Unable to find template function '{$name}'");
     }
 
     /**

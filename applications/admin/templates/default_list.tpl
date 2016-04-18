@@ -16,16 +16,13 @@
 
 {*functions*}
 {function dl_list_proc_rows}
-	{function name=dl_prepare_item}
-
-	{/function}
 
 	{foreach from=$list item=item}
 		{$id=$item->id}
 		{$list_row_id=$list_row_id+1}
 
 
-		{call name="dl_prepare_item"}
+	{call name="dl_prepare_item" ifexists=1}
 
 	<tr data-id="{$item->id}" id="list_row_{$item->id}" class="list_row{if $item->row_class} {$item->row_class}{/if}{if $id && $smarty.get.id==$id} gw_active_row{/if}" 
 		{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
@@ -226,3 +223,5 @@
 			{include file="default_close.tpl"}
 	{/block}	
 {/if}
+
+
