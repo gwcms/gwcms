@@ -22,10 +22,52 @@ class GW_Context {
 
 }
 
+class GW_Tree_Data_Elm {
+
+	private $data_link;
+
+	function __construct(&$data_link) {
+		$this->data_link = & $data_link;
+	}
+
+	function __get($name) {
+		if (isset($this->data_link[$name]) && is_array($this->data_link[$name]))
+			return new GW_Tree_Data_Elm($this->data_link[$name]);
+		else
+			return $this->data_link[$name];
+	}
+
+}
+
+class GW_l_Object_Call
+{
+	public $base=[];
+
+	function __construct($base=false) {
+		$this->base = $base;
+	}
+
+	function __get($name) {
+		$this->base[] = $name;
+		return new GW_l_Object_Call($this->base);
+	}
+
+	function __toString() {
+		
+		$x= GW::l('/'.implode('/', $this->base));
+		
+		GW::$l->base=[];
+		
+		return $x;
+	}
+}
+
 class GW {
 
 	//nekintantys parametrai per visas aplikacijas
 	static $settings;
+	static $s; //short access to $settings via GW_Tree_Data_Elm
+	static $l; //short access to GW::l() via GW_l_Object_Call
 	static $error_log;
 	static $context;
 	//jeigu prisijunges vartotojas developeris
@@ -74,7 +116,9 @@ class GW {
 
 	function init() {
 		self::$context = new GW_Context;
-		self::$lgr = new GW_Logger(GW::s('DIR/LOGS').'system.log');	
+		self::$s = new GW_Tree_Data_Elm(self::$settings);
+		self::$l = new GW_l_Object_Call;
+		self::$lgr = new GW_Logger(GW::s('DIR/LOGS').'system.log');			
 	}
 
 	function request($args = Array()) {
