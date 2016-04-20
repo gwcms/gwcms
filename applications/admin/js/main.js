@@ -915,7 +915,7 @@ function triggerExpanded(obj, state)
 
 
 
-function openIframeUnderThisTr(trig, url){
+function openIframeUnderThisTr(trig, url, afterclose){
 		
 		var rowobj = $(trig).closest('tr');
 		var id = $(rowobj).attr('data-id');
@@ -925,6 +925,10 @@ function openIframeUnderThisTr(trig, url){
 		{
 			triggerExpanded(trig, 0);
 			$('#'+rowaftername).remove();
+			
+			if(afterclose)
+					eval(afterclose);
+			
 			return false;
 		}
 				
@@ -947,6 +951,14 @@ function openIframeUnderThisTr(trig, url){
 					
 					
 					var iframe_content = $(this).contents().find('body');
+					var src =  this.contentWindow.location.href
+					
+					if(src.indexOf('iframeclose=1')!=-1)
+					{
+							//this will close iframe
+							openIframeUnderThisTr(trig, url, afterclose);
+					}
+							
 					
 					iframe_content.resize(function(){ 
 						$(ifrm).height(ifrmcont.height());

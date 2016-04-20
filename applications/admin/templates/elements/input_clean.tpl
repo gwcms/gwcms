@@ -6,7 +6,7 @@
 {$title=$title|default:$app->fh()->fieldTitle($name)}
 
 {if !$value}
-	{$value=$item->get($name)|default:$default}
+	{$value=$item->$name|default:$default}
 {/if}
 
 {$inp_type=$type|default:'text'}
