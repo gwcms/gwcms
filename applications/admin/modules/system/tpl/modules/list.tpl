@@ -9,7 +9,7 @@
 			{$dl_actions=[edit,invert_active]}
 			{call dl_display_actions}
 			
-			<style>#list_row_{$list_row_id}{ color:silver; }</style>
+			<style>#list_row_{$item->id}{ color:silver; }</style>
 		{else}
 			{$dl_actions=[edit,invert_active,move,delete]}
 			{call dl_display_actions}

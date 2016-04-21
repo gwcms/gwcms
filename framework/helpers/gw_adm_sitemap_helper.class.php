@@ -107,13 +107,15 @@ class GW_ADM_Sitemap_Helper {
 		if (!$modules)
 			return;
 
-		$_SESSION['messages'][] = Array(0, "Synchronized modules: " . implode(',', array_keys($modules)));
+		$msg = "Synchronized modules: " . implode(',', array_keys($modules));
 
 		foreach ($modules as $pathname => $langfile)
 			self::syncModule($pathname);
 
 
 		self::updateParentIds();
+		
+		return [$msg];
 	}
 
 	static function updateParentIds($force = false) {

@@ -18,7 +18,8 @@
 
 {$inp_type=$type|default:'text'}
 
-<tr>
+
+<tr {if $value=='' && $m->list_params.filters}class="dl_hidden_filter"{/if}>
 	<td>{$title}</td>
 	<td>
 		{if strpos($type,'select')!==false}
@@ -31,7 +32,7 @@
 	<td nowrap>
 		{if $type=='multiselect'}
 			{$input_name_pattern="`$input_name_pattern`[]"}
-			{$selected=array_splice($data, 1)}
+			{$value=array_splice($data, 1)}
 		{elseif $type=='select'}
 			{*Add empty option*}
 

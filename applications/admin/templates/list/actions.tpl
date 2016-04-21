@@ -44,3 +44,10 @@
 		</script>
 	{/if}
 {/function}
+
+
+
+{function dl_actions_inlineedit}
+	<a class="inline_edit_trigger" data-id="{$item->id}" data-url="{$m->buildUri("`$item->id`/form",[ajax=>1])}"><img 
+			align="absmiddle" src="{$app_root}img/icons/action_edit.png"></a>
+{/function}

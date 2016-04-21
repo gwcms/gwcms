@@ -62,19 +62,28 @@
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td" width="{$width_input}" {if $wide}colspan="2"{/if} style="{if $nopading}padding:0{/if}">
+		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
+			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			{include file="elements/input0.tpl"}  
+			
+			{if $layout=='inline'}
+				{if $m->error_fields.$name}
+					<span class="error_label" style='display:block'>{GW::l($m->error_fields.$name)}</span>
+				{/if}
+			{/if}
 		</td>
 	{/if}
 {/function}
 
-{if $wide}
+{if $layout=='wide'}
 	<tr>
 		{call input_label}
 	</tr>
 	<tr id="gw_input_{$name}">
 		{call input_content}
-	</tr>	
+	</tr>
+{elseif $layout=='inline'}
+	{call input_content}
 {else}
 	<tr id="gw_input_{$name}">
 		{call input_label}

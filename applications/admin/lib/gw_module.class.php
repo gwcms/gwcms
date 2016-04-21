@@ -20,7 +20,7 @@ class GW_Module
 	public $errors=[];
 	public $errorMsgs=[];
 	public $ob_collect=true;
-	public $error_fields;
+	public $error_fields=[];
 		
 	/**
 	 * @var GW_Request
@@ -39,9 +39,9 @@ class GW_Module
 	public $_args=[];//data passed from application params, request_params
 	
 	
-	function getInfo()
+	function viewModInfo()
 	{
-		return Array
+		$info = Array
 		(
 			'module_name'=>$this->module_name,
 			'module_path'=>$this->module_path,
@@ -50,7 +50,38 @@ class GW_Module
 			'action'=>$this->action,
 			'list_params'=>$this->list_params,
 			'error_fields'=>$this->error_fields,
+			'session'=>$_SESSION
 		);
+		
+		if($this->app->user->isRoot())
+		{
+			$secretactions = ['doResetListVars'];
+			
+			foreach($secretactions as $key => $act)
+			{
+				$tmp = $this->buildUri(false,['act'=>$act]);
+				$secretactions[$key] = "<a href='$tmp'>$act</a>";
+			}
+			
+			d::ldump($info);
+			d::ldump($secretactions);
+		}
+	}
+	
+	function doResetListVars()
+	{
+		if($this->app->user->isRoot())
+		{		
+			foreach($this->app->sess as $key => $data)
+			{
+				if(strpos($key, $this->module_path[0])===0)
+				{
+					unset($this->app->sess[$key]);
+				}
+			}
+		}
+		
+		$this->jump();
 	}
 		
 	function init()
@@ -73,14 +104,14 @@ class GW_Module
 	}
 	
 	function initListParams($modulepath=false,$viewname=false)
-	{
+	{	
 		if(!$modulepath)
 			$modulepath=implode('/',$this->module_path);
 		
 		if(!$viewname)
 			$viewname=$this->view_name;
 		
-		$sess_store =& $_SESSION["$modulepath/$viewname"];
+		$sess_store =& $this->app->sess["$modulepath/$viewname"];
 		
 		if(!$sess_store)
 			$sess_store=[];
@@ -129,10 +160,10 @@ class GW_Module
 	
 	function loadErrorFields()
 	{		
-                if(!isset($_SESSION['messages']))
+                if(!isset($this->app->sess['messages']))
                     return;
                 
-		foreach((array)$_SESSION['messages'] as $field => $error)
+		foreach((array)$this->app->sess['messages'] as $field => $error)
 		{
 			if($error[0]===2)
 				$this->error_fields[$field]=$field;
@@ -382,6 +413,63 @@ class GW_Module
 		}
 		
 		return $this->app->buildURI($path, $getparams, $params);
+	}
+	
+	function getPagingData()
+	{
+		$query_info = $this->tpl_vars['query_info'];
+		$params = $this->list_params;
+
+		$current=(int)$params['page'] ? (int)$params['page'] : 1;
+		$length=ceil($query_info['item_count'] / $params['page_by']);
+
+		if($length<2)
+			return;
+		
+		return [
+			'current'=>$current,
+			'length'=>$length,
+			'first'=> $current < 2 ? 0 : 1,
+			'prev'=>  $current <= 2 ? 0 : $current-1,
+			'next'=>  $current >= $length-1 ? 0 : $current+1,
+			'last'=>  $current >= $length   ? 0 : $length,
+		];			
+	}
+	
+	function calcOrder($name)
+	{
+		
+		$order = $this->list_params['order'];
+		$orders = explode(', ',$this->list_params['order']);
+		$multiorder_index = 0;
+
+
+		$variants1=Array('desc','asc');
+
+		foreach(explode(',', $name) as $iname)
+		{
+			$variants[0].=($variants[0]?',':'')."$iname ASC";
+			$variants[1].=($variants[1]?',':'')."$iname DESC";
+		}
+
+		if($tmp=array_intersect($orders, $variants)) {
+			foreach($tmp as $index => $ordercopy) {
+				$multiorder_index = $index+1;
+			}
+
+			$order = $ordercopy;
+		}
+
+		$param = $variants[$tmp = intval(strpos($order, 'DESC')===false)];
+		$curr_dir = $variants1[$tmp];
+
+
+		return 
+		[
+			'uri'=> Navigator::buildURI(false, ['act'=>'do:setOrder','order'=>$param] ),
+			'current'=>in_array($order, $variants) ? $curr_dir : false,
+			'multiorder'=>count($orders) > 1 ? $multiorder_index : false
+		];		
 	}
 		
 }

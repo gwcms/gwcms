@@ -17,15 +17,20 @@ class Module_Tools extends Module_Config
 		
 		
 		$test_actions = [];
+		$test_views = [];
 		
 		$list = get_class_methods ($this);
 		foreach($list as $method){
 
 			if(stripos($method, 'doTest')===0)
 				$test_actions[]=[$method, $this->$method];
+			
+			if(stripos($method, 'viewTest')===0)
+				$test_views[]=[substr($method,4), $this->$method];			
 		}
 				
 		$this->tpl_vars['test_actions']=$test_actions;
+		$this->tpl_vars['test_views']=$test_views;
 				
 
 		return $vars;
@@ -39,8 +44,8 @@ class Module_Tools extends Module_Config
 	
 	function doDebugModeToggle()
 	{
-		$_SESSION['debug']=(int)$_SESSION['debug'];
-		$_SESSION['debug']=($_SESSION['debug']+1) % 2;
+		$this->app->sess['debug']=(int)$this->app->sess['debug'];
+		$this->app->sess['debug']=($this->app->sess['debug']+1) % 2;
 		
 		$this->jump();
 	}
@@ -214,6 +219,13 @@ class Module_Tools extends Module_Config
 		}else{
 			$this->app->setMessage("Feature not enabled. <a target='_blank' href='http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip'>More info</a>");
 		}
+		
+	}
+	
+	public $viewTestJqueryui = ["info"=>"Test jquery-ui compatability with jquery"];
+	
+	function viewTestJqueryui()
+	{
 		
 	}
 

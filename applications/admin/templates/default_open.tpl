@@ -1,4 +1,6 @@
-{include file="head.tpl"}
+{if !isset($gw_layout_nohead)}
+	{include file="head.tpl"}
+{/if}
 
 <body>
     

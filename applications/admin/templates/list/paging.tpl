@@ -1,25 +1,5 @@
 {if $m->list_params['page_by']}
-{php}
-	$vars = FH::getTplVars($template, Array('m','query_info','app'));
-	
-	$params =& $vars['m']->list_params;
-
-	$current=(int)$params['page'] ? (int)$params['page'] : 1;
-	$length=ceil($vars['query_info']['item_count'] / $params['page_by']);
-
-	if($length<2)
-		return;
-		
-	$template->assign('paging', Array
-	(
-		'current'=>$current,
-		'length'=>$length,
-		'first'=> $current < 2 ? 0 : 1,
-		'prev'=>  $current <= 2 ? 0 : $current-1,
-		'next'=>  $current >= $length-1 ? 0 : $current+1,
-		'last'=>  $current >= $length   ? 0 : $length,
-	));	
-{/php}
+{$paging=$m->getPagingData()}
 
 {if $paging.length > 1}
 	

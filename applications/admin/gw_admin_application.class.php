@@ -55,8 +55,10 @@ class GW_Admin_Application extends GW_Application
 		
 		$this->autoPrepare();
 		
-		GW_ADM_Sitemap_Helper::updateSitemap();
+		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
 		
+		if($msgs)
+			$this->setMessages($msgs);
 	}
 	
 	
