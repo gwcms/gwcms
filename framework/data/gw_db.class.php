@@ -35,9 +35,9 @@ class GW_DB {
 	function connect($updh, $newlink = false) {
 		list($user, $pass, $host, $database) = $updh;
 
-		$this->link = @mysql_connect($host, $user, $pass, $newlink) or $this->trigger_error();
+		$this->link = @mysqli_connect($host, $user, $pass, $newlink) or $this->trigger_error();
 		if ($database)
-			mysql_select_db($database) or $this->trigger_error();
+			mysqli_select_db($database) or $this->trigger_error();
 
 		//comment next line if mysql v < 4.1
 		$this->query('SET names "UTF8"');
@@ -68,14 +68,14 @@ class GW_DB {
 	}
 
 	function getError() {
-		return mysql_error();
+		return mysqli_error();
 	}
 
 	function error($query = '', $nodie = false) {
 		if (!$this->conf['errshow'])
 			return;
 
-		$errorMsg = 'MySQL_ERROR: ' . $this->getError() . ' (' . mysql_errno() . ")";
+		$errorMsg = 'MySQL_ERROR: ' . $this->getError() . ' (' . mysqli_errno() . ")";
 
 		if ($this->conf['logfile']) {
 			$this->logint($errorMsg);
@@ -96,7 +96,7 @@ class GW_DB {
 		$this->error = false;
 
 		$tmp = new GW_Timer();
-		$this->result = mysql_query($cmd, $this->link);
+		$this->result = mysqli_query($cmd, $this->link);
 		$this->last_query_time = $tmp->stop(6);
 		$this->last_query = $cmd;
 
@@ -114,7 +114,7 @@ class GW_DB {
 
 		$this->query(self::prepare_query($cmd), $nodie);
 
-		return $assoc ? mysql_fetch_assoc($this->result) : mysql_fetch_row($this->result);
+		return $assoc ? mysqli_fetch_assoc($this->result) : mysqli_fetch_row($this->result);
 	}
 
 	function fetch_rows($cmd = '', $assoc = 1, $nodie = false) {
@@ -129,13 +129,13 @@ class GW_DB {
 		$result = Array();
 
 		if ($assoc == 1)
-			while ($row = mysql_fetch_assoc($this->result))
+			while ($row = mysqli_fetch_assoc($this->result))
 				$result[] = $row;
 		elseif ($assoc == 2)
-			while ($row = mysql_fetch_object($this->result))
+			while ($row = mysqli_fetch_object($this->result))
 				$result[] = $row;
 		else
-			while ($row = mysql_fetch_row($this->result))
+			while ($row = mysqli_fetch_row($this->result))
 				$result[] = $row;
 
 		return $result;
@@ -154,7 +154,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysql_fetch_assoc($this->result))
+		while ($row = mysqli_fetch_assoc($this->result))
 			$result[$row[$key]] = $row;
 
 
@@ -173,7 +173,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysql_fetch_array($this->result))
+		while ($row = mysqli_fetch_array($this->result))
 			$result[$row[0]] = $row[1];
 
 		return $result;
@@ -189,7 +189,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysql_fetch_array($this->result))
+		while ($row = mysqli_fetch_array($this->result))
 			$result[] = $row[0];
 
 		return $result;
@@ -200,7 +200,7 @@ class GW_DB {
 
 		if ($cmd)
 			$this->query($cmd, $nodie);
-		return @mysql_result($this->result, $index);
+		return @mysqli_result($this->result, $index);
 	}
 
 	function insert($table, $entry, $nodie = false, $replaceinto = false) {
@@ -213,7 +213,7 @@ class GW_DB {
 
 		$query = ($replaceinto ? "REPLACE" : "INSERT") . " INTO $table (" . implode($names, ',') . ") VALUES (" . implode($values, ',') . ")";
 		$this->query($query, $nodie);
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	function save($table, $entry, $nodie = false) {
@@ -231,7 +231,7 @@ class GW_DB {
 
 		$query = substr($query, 0, -2);
 		$this->query($query, $nodie);
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	//required that all entries have set full keys
@@ -268,7 +268,7 @@ class GW_DB {
 
 		$this->query($query, $nodie);
 
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	function multi_insert($table, $entries, $replace = false, $nodie = false) {
@@ -300,7 +300,7 @@ class GW_DB {
 		if (!is_array($entry))
 			$this->fatalError('update: 3d argument must be assoc array');
 
-		//implementation of passing back fetched array (mysql_fetch_array)
+		//implementation of passing back fetched array (mysqli_fetch_array)
 		//do not pass numeric field name (if(!is_numeric($elemRak)))
 
 
@@ -311,7 +311,7 @@ class GW_DB {
 			dump($query);
 		$this->query($query, $nodie);
 
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	function delete($table, $filter, $nodie = false) {
@@ -325,7 +325,7 @@ class GW_DB {
 
 		$this->query("DELETE FROM $table WHERE $filter", $nodie);
 
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	function count($tbl, $filter = '', $nodie = false) {
@@ -351,7 +351,7 @@ class GW_DB {
 	}
 
 	function affected() {
-		return mysql_affected_rows($this->link);
+		return mysqli_affected_rows($this->link);
 	}
 
 	function fatalError($msg) {
@@ -359,11 +359,11 @@ class GW_DB {
 	}
 
 	function insert_id() {
-		return mysql_insert_id($this->link);
+		return mysqli_insert_id($this->link);
 	}
 
 	function num_rows() {
-		return mysql_num_rows($this->result);
+		return mysqli_num_rows($this->result);
 	}
 
 	function getSQLResultsCount($sql = null) {
@@ -380,11 +380,11 @@ class GW_DB {
 	}
 
 	function close() {
-		mysql_close($this->link);
+		mysqli_close($this->link);
 	}
 
 	function ping() {
-		return mysql_ping($this->link);
+		return mysqli_ping($this->link);
 	}
 
 	function check_connection() {
