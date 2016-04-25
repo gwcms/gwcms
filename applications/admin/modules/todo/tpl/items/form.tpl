@@ -52,6 +52,7 @@
 
 	<tr>
 		<td>
+			<script src="{$app->sys_base}vendor/jslibs/browser.js"></script>
 			<script type="text/javascript" src="{$app_root}js/jquery.iframe-auto-height.plugin.1.5.0.js"></script>
 			
 			<iframe id="comments" style="width:100%;height:250px" src="{$app->buildURI("todo/items/`$item->id`/form/`$m->parent->id`/comments")}" frameborder="0"></iframe>
