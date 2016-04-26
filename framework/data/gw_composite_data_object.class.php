@@ -109,7 +109,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object {
 		$this->composite_content_base[$field] = $item;
 	}
 
-	function eventHandler($event, $context_data = []) {
+	function eventHandler($event, &$context_data = []) {
 		switch ($event) {
 			case 'BEFORE_DELETE':
 				$this->removeAllCompositeItems();
