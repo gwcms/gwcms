@@ -6,6 +6,10 @@
  */
 class GW_DB {
 
+	/**
+	 *
+	 * @var mysqli
+	 */
 	public $link = false;
 	public $uphd = Array();
 	public $conf = Array
@@ -35,12 +39,12 @@ class GW_DB {
 	function connect($updh, $newlink = false) {
 		list($user, $pass, $host, $database) = $updh;
 
-		$this->link = @mysqli_connect($host, $user, $pass, $newlink) or $this->trigger_error();
+		$this->link = new mysqli($host, $user, $pass, $newlink) or $this->trigger_error();
 		if ($database)
-			mysqli_select_db($database) or $this->trigger_error();
+			$this->link->select_db($database) or $this->trigger_error();
 
 		//comment next line if mysql v < 4.1
-		$this->query('SET names "UTF8"');
+		$this->link->query('SET names "UTF8"');
 	}
 
 	function __construct($conf = Array()) {
@@ -68,14 +72,14 @@ class GW_DB {
 	}
 
 	function getError() {
-		return mysqli_error();
+		return $this->link->error;
 	}
 
 	function error($query = '', $nodie = false) {
 		if (!$this->conf['errshow'])
 			return;
 
-		$errorMsg = 'MySQL_ERROR: ' . $this->getError() . ' (' . mysqli_errno() . ")";
+		$errorMsg = 'MySQL_ERROR: ' . $this->getError() . ' (' . $this->link->errno . ")";
 
 		if ($this->conf['logfile']) {
 			$this->logint($errorMsg);
@@ -96,7 +100,7 @@ class GW_DB {
 		$this->error = false;
 
 		$tmp = new GW_Timer();
-		$this->result = mysqli_query($cmd, $this->link);
+		$this->result = $this->link->query($cmd);
 		$this->last_query_time = $tmp->stop(6);
 		$this->last_query = $cmd;
 
@@ -114,7 +118,7 @@ class GW_DB {
 
 		$this->query(self::prepare_query($cmd), $nodie);
 
-		return $assoc ? mysqli_fetch_assoc($this->result) : mysqli_fetch_row($this->result);
+		return $assoc ? $this->result->fetch_assoc() : $this->result->fetch_row();
 	}
 
 	function fetch_rows($cmd = '', $assoc = 1, $nodie = false) {
@@ -123,19 +127,19 @@ class GW_DB {
 
 		$this->query(self::prepare_query($cmd), $nodie);
 
-		if (!is_resource($this->result))
-			return Null;
+		//if (!is_resource($this->result))
+		//	return Null;
 
 		$result = Array();
 
 		if ($assoc == 1)
-			while ($row = mysqli_fetch_assoc($this->result))
+			while ($row = $this->result->fetch_assoc())
 				$result[] = $row;
 		elseif ($assoc == 2)
-			while ($row = mysqli_fetch_object($this->result))
+			while ($row = $this->result->fetch_object())
 				$result[] = $row;
 		else
-			while ($row = mysqli_fetch_row($this->result))
+			while ($row = $this->result->fetch_row())
 				$result[] = $row;
 
 		return $result;
@@ -154,7 +158,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysqli_fetch_assoc($this->result))
+		while ($row = $this->result->fetch_assoc())
 			$result[$row[$key]] = $row;
 
 
@@ -173,7 +177,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysqli_fetch_array($this->result))
+		while ($row = $this->result->fetch_array())
 			$result[$row[0]] = $row[1];
 
 		return $result;
@@ -189,7 +193,7 @@ class GW_DB {
 
 		$result = Array();
 
-		while ($row = mysqli_fetch_array($this->result))
+		while ($row = $this->result->fetch_array())
 			$result[] = $row[0];
 
 		return $result;
@@ -200,7 +204,7 @@ class GW_DB {
 
 		if ($cmd)
 			$this->query($cmd, $nodie);
-		return @mysqli_result($this->result, $index);
+		return $this->result->data_seek($index);
 	}
 
 	function insert($table, $entry, $nodie = false, $replaceinto = false) {
@@ -213,7 +217,7 @@ class GW_DB {
 
 		$query = ($replaceinto ? "REPLACE" : "INSERT") . " INTO $table (" . implode($names, ',') . ") VALUES (" . implode($values, ',') . ")";
 		$this->query($query, $nodie);
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	function save($table, $entry, $nodie = false) {
@@ -231,7 +235,7 @@ class GW_DB {
 
 		$query = substr($query, 0, -2);
 		$this->query($query, $nodie);
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	//required that all entries have set full keys
@@ -268,7 +272,7 @@ class GW_DB {
 
 		$this->query($query, $nodie);
 
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	function multi_insert($table, $entries, $replace = false, $nodie = false) {
@@ -311,7 +315,7 @@ class GW_DB {
 			dump($query);
 		$this->query($query, $nodie);
 
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	function delete($table, $filter, $nodie = false) {
@@ -325,7 +329,7 @@ class GW_DB {
 
 		$this->query("DELETE FROM $table WHERE $filter", $nodie);
 
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	function count($tbl, $filter = '', $nodie = false) {
@@ -351,7 +355,7 @@ class GW_DB {
 	}
 
 	function affected() {
-		return mysqli_affected_rows($this->link);
+		return $this->link->affected_rows;
 	}
 
 	function fatalError($msg) {
@@ -359,11 +363,11 @@ class GW_DB {
 	}
 
 	function insert_id() {
-		return mysqli_insert_id($this->link);
+		return $this->link->insert_id;
 	}
 
 	function num_rows() {
-		return mysqli_num_rows($this->result);
+		return $this->result->num_rows;
 	}
 
 	function getSQLResultsCount($sql = null) {
@@ -380,11 +384,11 @@ class GW_DB {
 	}
 
 	function close() {
-		mysqli_close($this->link);
+		$this->link->close();
 	}
 
 	function ping() {
-		return mysqli_ping($this->link);
+		return $this->link->ping();
 	}
 
 	function check_connection() {
@@ -463,6 +467,27 @@ class GW_DB {
 			$this->query_times = Array();
 
 		return $list;
+	}
+	
+	
+	function test()
+	{
+		$this->query("CREATE TABLE IF NOT EXISTS `db_test` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `update_time` datetime NOT NULL,
+  `insert_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+		
+		$this->insert('db_test', ['title'=>($test="inserttest".rand(0,100000))]);
+		$r = $this->fetch_rows("SELECT * FROM db_test WHERE title LIKE 'inserttest%'");
+		
+		$tests['insert_fetch_row']=$r[0]['title']==$test;
+		
+		$this->query("DROP TABLE `db_test`");
+		
+		d::dumpas($tests);
 	}
 
 }
