@@ -57,7 +57,7 @@ var GW = {
 		},
 		path_parent: function ()
 		{
-				return GW.ln + '/' + gw_navigator.dirname(GW.path)
+				return GW.app_base + GW.ln + '/' + gw_navigator.dirname(GW.path)
 		},
 		dump: function (obj)
 		{
@@ -295,12 +295,12 @@ var gw_login_dialog =
 				},
 				open: function ()
 				{
-						$.ajax({url: GW.ln + gw_login_dialog.page_path, success: gw_login_dialog.__open});
+						$.ajax({url: GW.app_base + GW.ln + + gw_login_dialog.page_path, success: gw_login_dialog.__open});
 				},
 				submit: function ()
 				{
 						$.ajax({
-								url: GW.ln + gw_login_dialog.page_path + '?act=do:login',
+								url: GW.app_base + GW.ln + + gw_login_dialog.page_path + '?act=do:login',
 								type: "POST",
 								data: $('#login_dialog input').serialize(),
 								success: gw_login_dialog.__open
@@ -715,7 +715,7 @@ function open_rtlogview(fileid)
 		conf =
 				{
 						title: fileid + ' LogWatch',
-						url: GW.ln + '/system/logwatch/iframe?id=' + fileid
+						url: GW.app_base + GW.ln + '/system/logwatch/iframe?id=' + fileid
 				}
 		open_iframe(conf)
 }
@@ -772,7 +772,7 @@ function checked_action(action) {
 				selected.push($(this).val());
 		});
 
-		gw_dialog.open(GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','))
+		gw_dialog.open(GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','))
 }
 
 
@@ -915,7 +915,7 @@ function triggerExpanded(obj, state)
 
 
 
-function openIframeUnderThisTr(trig, url, afterclose){
+function openIframeUnderThisTr(trig, url){
 		
 		var rowobj = $(trig).closest('tr');
 		var id = $(rowobj).attr('data-id');
@@ -925,10 +925,6 @@ function openIframeUnderThisTr(trig, url, afterclose){
 		{
 			triggerExpanded(trig, 0);
 			$('#'+rowaftername).remove();
-			
-			if(afterclose)
-					eval(afterclose);
-			
 			return false;
 		}
 				
@@ -951,14 +947,6 @@ function openIframeUnderThisTr(trig, url, afterclose){
 					
 					
 					var iframe_content = $(this).contents().find('body');
-					var src =  this.contentWindow.location.href
-					
-					if(src.indexOf('iframeclose=1')!=-1)
-					{
-							//this will close iframe
-							openIframeUnderThisTr(trig, url, afterclose);
-					}
-							
 					
 					iframe_content.resize(function(){ 
 						$(ifrm).height(ifrmcont.height());

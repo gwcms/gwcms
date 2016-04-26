@@ -110,7 +110,8 @@ function exportExtract2Tmp($repos_local=true, $commit_id, $info=[])
 	foreach($changed_files['remove'] as $rmfile)
 		$str.="rm $rmfile\n";
 	
-	file_put_contents($removefile, $str);
+	if($changed_files['remove'])
+		file_put_contents($removefile, $str);
 	
 	$info['changed']=$changed_files;
 	
