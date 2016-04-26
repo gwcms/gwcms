@@ -491,6 +491,7 @@ class GW_DB {
 		$r2 = $this->fetch_row($sql1);
 		
 		$tests['insert_id'] = $this->insert_id() == $r[0]['id'];
+		$tests['insert_id_d'] = [$this->insert_id(), $r[0]['id']];
 		$tests['fetch_rows']=$r[0]['title']==$test;
 		$tests['fetch_result'] = $r1 == $test;
 		$tests['fetch_row'] = $r2['title']==$test;
