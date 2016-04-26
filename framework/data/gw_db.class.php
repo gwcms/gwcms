@@ -46,7 +46,7 @@ class GW_DB {
 		//comment next line if mysql v < 4.1
 		$this->link->query('SET names "UTF8"');
 		
-		$this->test();
+		//$this->test();
 	}
 
 	function __construct($conf = Array()) {
