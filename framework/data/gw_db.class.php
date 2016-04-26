@@ -479,9 +479,9 @@ class GW_DB {
 	{
 		$this->query("CREATE TABLE IF NOT EXISTS `db_test` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `update_time` datetime NOT NULL,
-  `insert_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` varchar(100) NULL,
+  `update_time` datetime NULL,
+  `insert_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 		
