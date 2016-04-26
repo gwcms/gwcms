@@ -100,7 +100,7 @@ class GW_DB {
 		$this->error = false;
 
 		$tmp = new GW_Timer();
-		$this->result = $this->link->query($cmd, $this->link);
+		$this->result = $this->link->query($cmd);
 		$this->last_query_time = $tmp->stop(6);
 		$this->last_query = $cmd;
 
@@ -127,8 +127,8 @@ class GW_DB {
 
 		$this->query(self::prepare_query($cmd), $nodie);
 
-		if (!is_resource($this->result))
-			return Null;
+		//if (!is_resource($this->result))
+		//	return Null;
 
 		$result = Array();
 
@@ -467,6 +467,27 @@ class GW_DB {
 			$this->query_times = Array();
 
 		return $list;
+	}
+	
+	
+	function test()
+	{
+		$this->query("CREATE TABLE IF NOT EXISTS `db_test` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `update_time` datetime NOT NULL,
+  `insert_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+		
+		$this->insert('db_test', ['title'=>($test="inserttest".rand(0,100000))]);
+		$r = $this->fetch_rows("SELECT * FROM db_test WHERE title LIKE 'inserttest%'");
+		
+		$tests['insert_fetch_row']=$r[0]['title']==$test;
+		
+		$this->query("DROP TABLE `db_test`");
+		
+		d::dumpas($tests);
 	}
 
 }
