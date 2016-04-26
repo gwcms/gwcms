@@ -45,6 +45,8 @@ class GW_DB {
 
 		//comment next line if mysql v < 4.1
 		$this->link->query('SET names "UTF8"');
+		
+		$this->test();
 	}
 
 	function __construct($conf = Array()) {
@@ -199,12 +201,15 @@ class GW_DB {
 		return $result;
 	}
 
-	function fetch_result($cmd = '', $index = 0, $nodie = false) {
+	function fetch_result($cmd = '', $nodie = false) {
 		$cmd = self::prepare_query($cmd);
 
 		if ($cmd)
 			$this->query($cmd, $nodie);
-		return $this->result->data_seek($index);
+		
+		$row = $this->result->fetch_array();
+		
+		return isset($row[0]) ? $row[0] : Null;
 	}
 
 	function insert($table, $entry, $nodie = false, $replaceinto = false) {
@@ -481,9 +486,14 @@ class GW_DB {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 		
 		$this->insert('db_test', ['title'=>($test="inserttest".rand(0,100000))]);
-		$r = $this->fetch_rows("SELECT * FROM db_test WHERE title LIKE 'inserttest%'");
+		$r = $this->fetch_rows($sql1="SELECT * FROM db_test WHERE title LIKE 'inserttest%'");
+		$r1 = $this->fetch_result($sql="SELECT title FROM db_test WHERE title LIKE 'inserttest%'");
+		$r2 = $this->fetch_row($sql1);
 		
-		$tests['insert_fetch_row']=$r[0]['title']==$test;
+		$tests['insert_id'] = $this->insert_id() == $r[0]['id'];
+		$tests['fetch_rows']=$r[0]['title']==$test;
+		$tests['fetch_result'] = $r1 == $test;
+		$tests['fetch_row'] = $r2['title']==$test;
 		
 		$this->query("DROP TABLE `db_test`");
 		
