@@ -486,17 +486,19 @@ class GW_DB {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 		
 		$this->insert('db_test', ['title'=>($test="inserttest".rand(0,100000))]);
-		$r = $this->fetch_rows($sql1="SELECT * FROM db_test WHERE title LIKE 'inserttest%'");
-		$r1 = $this->fetch_result($sql="SELECT title FROM db_test WHERE title LIKE 'inserttest%'");
+		$insert_id = $this->insert_id();
+		
+		$r = $this->fetch_rows($sql1="SELECT * FROM db_test WHERE title LIKE '$test'");
+		$r1 = $this->fetch_result($sql="SELECT title FROM db_test WHERE title LIKE '$test'");
 		$r2 = $this->fetch_row($sql1);
 		
-		$tests['insert_id'] = $this->insert_id() == $r[0]['id'];
-		$tests['insert_id_d'] = [$this->insert_id(), $r[0]['id']];
+		$tests['insert_id'] = $insert_id == $r[0]['id'];
+		//$tests['insert_id_d'] = [$insert_id, $r[0]['id']];
 		$tests['fetch_rows']=$r[0]['title']==$test;
 		$tests['fetch_result'] = $r1 == $test;
 		$tests['fetch_row'] = $r2['title']==$test;
 		
-		$this->query("DROP TABLE `db_test`");
+		//$this->query("DROP TABLE `db_test`");
 		
 		d::dumpas($tests);
 	}
