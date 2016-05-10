@@ -436,11 +436,16 @@ class GW_Module
 		];			
 	}
 	
+	/**
+	 * to mark ordered fields in orders row each field must be in group with ASC or DESC
+	 * exmpl: type ASC, group_id ASC, status DESC
+	 */
+	
 	function calcOrder($name)
 	{
 		
 		$order = $this->list_params['order'];
-		$orders = explode(', ',$this->list_params['order']);
+		$orders = explode(', ',$this->list_params['order']);		
 		$multiorder_index = 0;
 
 
