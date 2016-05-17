@@ -35,6 +35,7 @@ class GW_Common_Module extends GW_Module
 	
 	//include [type:js/css/jsstring,data/path]
 	public $includes=[];
+	public $sys_call = false;
 	
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -54,7 +55,16 @@ class GW_Common_Module extends GW_Module
 		
 		$this->tpl_vars['options'] =& $this->options;
 		$this->tpl_vars['links'] =& $this->links;
+				
+		if(isset($_GET['sys_call']))
+			$this->sys_call=1;		
 		
+	}
+	
+	function initLogger()
+	{
+		$this->lgr = new GW_Logger(GW::s('DIR/LOGS').'mod_'.$this->module_name.'.log');
+		$this->lgr->collect_messages = true;		
 	}
 	
 	
@@ -718,4 +728,28 @@ class GW_Common_Module extends GW_Module
 		else
 			trigger_error('method "'.$name.'" not exists', E_USER_NOTICE);
 	}
+	
+	
+	function setMessage($message)
+	{
+		if(is_array($message))
+			$message = json_encode($message);
+		
+		if($this->sys_call)
+		{
+			$this->lgr->msg($message);
+		}else{
+			$this->app->setMessage($message);
+		}
+	}	
+	
+	function setErrors($errors, $level = 2) 
+	{
+		if($this->sys_call)
+		{
+			$this->lgr->msg($errors);
+		}else{
+			parent::setErrors($errors, $level);
+		}		
+	}	
 }
