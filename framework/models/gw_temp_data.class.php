@@ -27,7 +27,7 @@ class GW_Temp_Data extends GW_Data_Object {
 	}
 
 	function cleanup() {
-		$this->getDB()->query("DELETE FROM `$this->table` WHERE expires < NOW()");
+		$this->getDB()->query("DELETE FROM `$this->table` WHERE expires < '".date('Y-m-d H:i:s')."'");
 	}
 
 	function read($user_id, $group, $name) {
