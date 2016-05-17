@@ -13,7 +13,7 @@ class GW_Task extends GW_Data_Object {
 	var $calculate_fields = Array('list_color' => 'listColor');
 
 	function getForExecution() {
-		$list = $this->findAll('time < NOW() AND running = -1');
+		$list = $this->findAll('time < "'.date('Y-m-d H:i:s').'" AND running = -1');
 
 		foreach ($list as $item) {
 			$item->running = -2;
@@ -69,7 +69,7 @@ class GW_Task extends GW_Data_Object {
 	}
 
 	function getOverTimeLimit() {
-		return $this->findAll('running!=0 AND halt_time>time AND halt_time<NOW()');
+		return $this->findAll('running!=0 AND halt_time>time AND halt_time<"'.date('Y-m-d H:i:s').'"');
 	}
 
 	function setAsNewest() {
