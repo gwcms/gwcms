@@ -129,7 +129,7 @@ class GW_Tasks_App extends GW_App_Base {
 		//todo
 		//saugot i repository/temp
 
-		$cmd = GW::s('DIR/ROOT') . 'daemon/task.php ' . $task_id . ' wrap >' . GW::s('DIR/TEMP') . 'gw_cms_task_wrap 2>&1 &';
+		$cmd = GW::s('PHP_CLI_LOCATION').' '.GW::s('DIR/ROOT') . 'daemon/task.php ' . $task_id . ' wrap >' . GW::s('DIR/TEMP') . 'gw_cms_task_wrap 2>&1 &';
 		shell_exec($cmd);
 
 		echo $cmd . "\n";
@@ -151,7 +151,7 @@ class GW_Tasks_App extends GW_App_Base {
 
 		$logfile = GW::s('DIR/LOGS') . 'task_' . $this->data->id . '.log';
 
-		shell_exec(GW::s('DIR/ROOT') . 'daemon/task.php ' . $this->data->id . ' >' . $logfile . ' 2>&1');
+		shell_exec(GW::s('PHP_CLI_LOCATION').' '.GW::s('DIR/ROOT') . 'daemon/task.php ' . $this->data->id . ' >' . $logfile . ' 2>&1');
 
 		$output = file_get_contents($logfile);
 
@@ -195,7 +195,7 @@ class GW_Tasks_App extends GW_App_Base {
 	}
 
 	function checkAndRun() {
-		$list = GW_Task::getForExecutionStatic();
+		$list = GW_Task::singleton()->getForExecution();
 
 		foreach ($list as $item)
 			self::runSeparateWrap($item->id);
