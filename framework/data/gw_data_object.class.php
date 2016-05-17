@@ -169,6 +169,10 @@ class GW_Data_Object {
 	 */
 
 	function buildSql($options) {
+		
+		if(isset($options['sql']))
+			return $options['sql']; // nothing to build, already have sql
+		
 		$conditions = isset($options['conditions']) ? $options['conditions'] : '';
 		$select = isset($options['select']) ? $options['select'] : 'a.*';
 
