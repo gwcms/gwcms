@@ -55,6 +55,11 @@ class Navigator {
 	}
 
 	static function getBase($absolute = false) {
+		
+		//cli
+		if(!isset($_SERVER['HTTP_HOST']))
+			return GW::s("SITE_URL");
+		
 		$arr = & $_SERVER;
 		$base = '';
 
@@ -134,5 +139,33 @@ class Navigator {
 		$params = $params + $_GET;
 		return http_build_query($params);
 	}
+	
+	/**
+	 * Is limited to http. 
+	 * https request does not works
+	 */
+	static function backgroundRequest($path, $get_args = []) {
+		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
+
+		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
+		$get_args['sys_call']=1;
+		
+		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
+		
+		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
+			$base = GW::s("SITE_LOCAL_URL");
+		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
+			$base = Navigator::getBase(true);
+			$base = str_replace('https://','http://', $base);
+		}else{
+			$base = Navigator::getBase(true);
+		}		
+		
+		$url = $base. $path;
+		
+		GW_Http_Agent::impuls($url);
+
+		return $url;
+	}	
 
 }
