@@ -204,7 +204,7 @@ class GW_App_Base {
 			$this->msg('Console messages enabled');
 		}		
 	}
-	
+		
 	function toogleConsoleMessages()
 	{
 		if($this->collect_messages){
@@ -350,6 +350,10 @@ class GW_App_Base {
 			}
 		}
 	}
+	
+	function actionTimeMessage()
+	{
+		$this->msg('Time: '.date('Y-m-d H:i:s'));
+	}	
 
 }
-
