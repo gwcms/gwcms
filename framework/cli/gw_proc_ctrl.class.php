@@ -4,7 +4,7 @@ class GW_Proc_Ctrl {
 
 	static function isRunning($pid, $procname) {
 		$list = shell_exec("ps -p $pid -o cmd= 2>&1");
-
+		
 		return strpos($list, $procname) !== false;
 	}
 
