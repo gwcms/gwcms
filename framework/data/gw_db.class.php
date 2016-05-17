@@ -119,6 +119,10 @@ class GW_DB {
 			return;
 
 		$this->query(self::prepare_query($cmd), $nodie);
+		
+		
+		if(!is_object($this->result))
+			return false; //avoid error if cmd is DELETE FROM ..
 
 		return $assoc ? $this->result->fetch_assoc() : $this->result->fetch_row();
 	}
@@ -131,6 +135,10 @@ class GW_DB {
 
 		//if (!is_resource($this->result))
 		//	return Null;
+		
+		if(!is_object($this->result))
+			return false; //avoid error if cmd is DELETE FROM ..		
+		
 
 		$result = Array();
 
