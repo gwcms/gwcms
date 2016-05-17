@@ -235,10 +235,14 @@ class GW_User extends GW_Composite_Data_Object {
 	}
 
 	
+	/**
+	 * 
+	 * @return GW_User_Extended
+	 */
 	function getExt()
 	{
 		$cache =& $this->cache['gw_user_extended'];
-		
+				
 		if(!$cache)
 			$cache = new GW_User_Extended($this->id);
 		
