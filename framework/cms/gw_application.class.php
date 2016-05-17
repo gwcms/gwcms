@@ -135,7 +135,7 @@ class GW_Application {
 
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-			(isset($params['noappbase'])? '' : $this->app_base) .
+			(isset($params['app'])? $params['app'].'/' : $this->app_base) .
 			$ln .
 			($path ? '/' : '') . $path .
 			($getparams ? '?' . http_build_query($getparams) : '');
@@ -459,32 +459,4 @@ class GW_Application {
 	}
 
 	
-	/**
-	 * Is limited to http. 
-	 * https request does not works
-	 */
-	function backgroundRequest($path, $get_args = []) {
-		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
-
-		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
-		$get_args['sys_call']=1;
-		
-		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
-
-		
-		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
-			$base = GW::s("SITE_LOCAL_URL");
-		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
-			$base = Navigator::getBase(true);
-			$base = str_replace('https://','http://', $base);
-		}else{
-			$base = Navigator::getBase(true);
-		}		
-		
-		
-		GW_Http_Agent::impuls($url = $base . $path);
-
-		return $url;
-	}
-
 }
