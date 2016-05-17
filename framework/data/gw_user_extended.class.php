@@ -12,7 +12,7 @@ class GW_User_Extended {
 	use Singleton;
 
 	public $user_id;
-	var $table = 'gw_user_extended';
+	public $table = 'gw_user_extended';
 	public $db;
 	private $_cache = [];
 
@@ -88,9 +88,9 @@ class GW_User_Extended {
 		$id = $db->fetch_result(["SELECT id FROM {$this->table} WHERE `user_id`=? AND `key`=?", $this->user_id, $key]);
 		
 		if($id)
-			$db->update($vals+['id'=>$id]);
+			$db->update($this->table, "id=".(int)$id,$vals);
 		else
-			$db->insert($vals+['insert_time'=>date('Y-m-d H:i:s')]);
+			$db->insert($this->table, $vals+['insert_time'=>date('Y-m-d H:i:s')]);
 	}
 
 	function get($key, $all=true) {
