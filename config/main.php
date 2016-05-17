@@ -48,6 +48,8 @@ include $dir['ROOT'].'config/environment.php';
 $env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];
 GW::s('SITE/TITLE_MARK', $env_title[GW::s('PROJECT_ENVIRONMENT')]);
 
+//whereis php
+GW::s('PHP_CLI_LOCATION', '/usr/local/bin/php');
 
 /*
 echo "<pre>";
