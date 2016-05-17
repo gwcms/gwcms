@@ -37,7 +37,7 @@
 
 
 
-<form action="{$ln}/{$app->path}/form?id=0" method="post"  enctype="multipart/form-data" >
+<form action="{$app->app_base}{$ln}/{$app->path}/form?id=0" method="post"  enctype="multipart/form-data" >
 
 <table class="gwTable" style="width:100%">
 <tr><th colspan="2" style="text-align:left">Add new comment</th></tr>
