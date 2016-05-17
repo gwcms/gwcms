@@ -27,7 +27,8 @@ class GW_CronTask extends GW_Data_Object {
 		foreach ($list as $item) {
 			if ($item->separate_process) {
 				$item->execute();
-				echo "abc\n";
+				echo "SEP exec: {$item->name}\n";
+				
 			} else {
 				$inner_run[] = $item;
 			}
