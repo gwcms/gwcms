@@ -9,7 +9,7 @@
 <div id="wrap">
     <div id="header">
         <div class="space1">
-            <a href="#" title="{GW::s('SITE_TITLE_DETAIL')}">{GW::s('SITE_TITLE')}{*<img src="{$app_root}img/logo.png">*}</a>
+            <a href="{$app->app_base}{$ln}" title="{GW::s('SITE_TITLE_DETAIL')}">{GW::s('SITE_TITLE')}{*<img src="{$app_root}img/logo.png">*}</a>
         </div>
         
 	{include file="submenu.tpl"}
