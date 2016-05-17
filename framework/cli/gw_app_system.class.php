@@ -13,7 +13,8 @@ class GW_App_System Extends GW_App_Base {
 
 
 		$this->registerInnerMethod('actionDoTasks', 5);
-		$this->registerInnerMethod('actionCronTasks', 60);
+		$this->registerInnerMethod('actionCronTasks', 60, time()-55); //first execution after 5secs
+		$this->registerInnerMethod('actionTimeMessage', 3600, time()-3601); //first execution immediately
 
 
 		pcntl_signal(SIGUSR1, array(&$this, "forceDoTasks"));
@@ -89,28 +90,6 @@ class GW_App_System Extends GW_App_Base {
 		$this->process_pid_file = GW::s('DIR/TEMP') . 'app_' . $this->proc_name . '_' . md5($this->path);
 	}
 
-	function backgroundRequest($path, $get_args = []) {
-		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID,'10 minute', $path);
-
-		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
-		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
-
-		
-		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
-			$base = GW::s("SITE_LOCAL_URL");
-		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
-			$base = GW::s("SITE_URL");
-			$base = str_replace('https://','http://', $base);
-		}else{
-			$base = GW::s("SITE_URL");
-		}				
-		
-		
-		GW_Http_Agent::impuls($url = $base . $path);
-		
-
-		return $url;
-	}
 
 	/**
 	 * match example
@@ -140,7 +119,16 @@ class GW_App_System Extends GW_App_Base {
 
 		$match = preg_match("/$time_match/", date('Y-m-d H:i:s'), $m) ? 1 : 0;
 
-		$dif = time() - strtotime($config->get($cron_id = "ctask $time_match $interval"));
+		$last_exec = $config->get($cron_id = "ctask $time_match $interval");
+		
+		
+		
+		$dif = time() - strtotime($last_exec);
+		
+		//debug
+		//echo "lastexec $time_match#$interval - $last_exec\n";
+		//echo "diff: $dif\n";
+		//echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
 
 		if ($match && ($dif >= $interval * 60 ) || (isset($GLOBALS['argv'][1]) && $GLOBALS['argv'][1] == $interval)) {
 			$this->msg('[' . date('H:i:s') . "] run $interval");
@@ -154,22 +142,26 @@ class GW_App_System Extends GW_App_Base {
 	function actionCronTasks() {
 		$crontask0 = new GW_CronTask;
 		$time_matches = $crontask0->getAllTimeMatches();
-
+		
 		foreach ($time_matches as $tm) {
 			list($time_match, $interval) = explode('#', $tm);
 
 			if (self::checkAndRunInterval($time_match, $interval)) {
 				//run all interval tasks
+				echo "Run $tm\n";
+				
 				$inner = $crontask0->getByTimeMatchExecute($tm);
-
+				
 				foreach ($inner as $task) {
 					if (file_exists($f = GW::s('DIR/ROOT') . 'daemon/tasks/' . $task->name . ".inner.php")) {
 						$t = new GW_Timer();
 						include $f;
-						$this->msg("Inner task: " . $task->name . ", speed: " . $t->stop());
+						$this->msg($msg="Inner task: " . $task->name . ", speed: " . $t->stop());
 					} else {
-						$this->msg("Inner not found: " . $task->name);
+						$this->msg($msg="Inner not found: " . $task->name);
 					}
+					
+					echo "$msg\n";
 				}
 			}
 		}
