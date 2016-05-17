@@ -151,7 +151,7 @@ class Module_Tools extends Module_Config
 	
 
 	
-	public $doTestBackgroundRequest = ["info"=>"Run twice to check"];
+	public $doTestBackgroundRequest = ["info"=>"Tests ability to perform scripts with get-conection-close"];
 	
 	function doTestBackgroundRequest()
 	{
@@ -160,42 +160,32 @@ class Module_Tools extends Module_Config
 		
 		$params=[];
 		
+		/*
 		if(isset($_GET['localhost_base']))
 			$params['localhost_base']=1;
 		
 		if(isset($_GET['force_http']))
 			$params['force_http']=1;
+		 */
 		
-		$url = $this->app->backgroundRequest($this->buildUri(false,[],['noappbase'=>1]), ["act"=>'doATestBackgroundRequest','test_string'=>$test_string], $params);
+		$url = Navigator::backgroundRequest($this->buildUri(false,[],['app'=>'admin']), ["act"=>'doATestBackgroundRequest','test_string'=>$test_string]);
+		
+		sleep(3);
 		
 		print_r([
 			'RequestedUrl'=>$url, 
 			'$this->config->backgroundTestValue'=>$this->config->backgroundTestValue,
-			'test_string'=>$test_string
+			'test_string'=>$test_string,
+			'passed'=> $test_string == $this->config->backgroundTestValue ? 'yes' : 'no'
 		]);
 		
 	}
 	
-	public $doTestBackgroundRequestLocalUrl = ["info"=>"Run with APP_BACKGROUND_REQ_TYPE=localhost_base"];
-	
-	function doTestBackgroundRequestLocalUrl()
-	{
-		GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base');
-		$this->doTestBackgroundRequest();
-	}	
-	
-	public $doTestBackgroundRequestForceHttp = ["info"=>"Run with APP_BACKGROUND_REQ_TYPE=force_http"];
-	
-	function doTestBackgroundRequestForceHttp()
-	{
-		GW::s("APP_BACKGROUND_REQ_TYPE", 'force_http');
-		
-		$this->doTestBackgroundRequest();
-	}	
 	
 	function doATestBackgroundRequest()
 	{
 		$this->config->backgroundTestValue = $_GET['test_string'];
+		echo "your test string: ".$_GET['test_string'];
 		exit;
 	}
 	
@@ -209,6 +199,62 @@ class Module_Tools extends Module_Config
 		$this->app->setMessage("Test mail to: {$this->app->user->email} status ".  var_export($stat, true));
 		$this->jump();
 	}
+	
+	
+	public $doTestPhpMailer = ['info'=>'Check mail sending with phpmailer class'];
+	
+	function doTestPhpMailer()
+	{
+		$from = GW::s('DEFAULT_MAIL_SENDER_ADDR');
+		$to = $this->app->user->email;
+		
+		$mailer = $this->initPhpmailer($from, "testing php mailer");
+		$mailer->msgHTML("This is test message body");
+		$mailer->addAddress($to);
+		
+		$status = $mailer->send();
+		
+		
+
+		$this->app->setMessage("mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
+		
+		$mailer->clearAllRecipients();
+		
+		////--------------2nd test----------------------------------
+		$mailer->addAddress($to="gwcmsmailtest@mailinator.com");
+		$status = $mailer->send();
+		
+		$this->app->setMessage("2nd mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
+		
+			
+	}
+	
+	function initPhpmailer($from, $subject, $replyto='')
+	{
+		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
+		//$mail->isSendmail();
+		$mail->CharSet = 'UTF-8';
+		
+		
+		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($from);
+		$mail->setFrom($email, $name);
+		
+		if($replyto){
+			list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($replyto);
+			$mail->addReplyTo($email, $name);
+			$mail->__replyTo = $email;
+		}
+		
+		$mail->Subject = $subject;
+		
+		//$mail->DKIM_domain = $this->config->dkim_domain;
+		//$mail->DKIM_private = GW::s('DIR/SYS_FILES').'.mail.key';
+
+		//$mail->DKIM_selector = $this->config->dkim_domain_selector;
+		//$mail->DKIM_passphrase = ''; //key is not encrypted
+		
+		return $mail;
+	}	
 	
 	public $doTestGeoip = ["info"=>"Check if geoip function working (geoip_country_code_by_name)"];
 	
@@ -229,6 +275,8 @@ class Module_Tools extends Module_Config
 		
 	}
 
+	
+	
 
 	
 }
