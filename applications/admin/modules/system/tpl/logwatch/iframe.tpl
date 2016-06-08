@@ -11,13 +11,16 @@
 	white-space: pre-line;
 	font-family: courier new;
 
-}		
+}
+.rt_logwatch_ta span{
+	width: 100%;
+}
 
 .rt_logwatch_status{ padding:5px;border:1px solid silver;background-color:#ddd;position:fixed;top:10px;right:20px; }
-.rt_logwatch_status span{ margin-left:2px;margin-right:2px;paddin:1px }
+.rt_logwatch_status span{ margin-left:2px;margin-right:2px;paddin:1px; }
 body{  } 
 
-span:last-child { background-color: orange; } 		
+span:last-child { background-color: orange;  display: inline; width:auto; } 	
 </style>
 			
 

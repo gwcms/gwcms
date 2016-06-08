@@ -98,7 +98,7 @@ function rt_logwatch(conf)
 	
 		this.textarea_j.append('<span style="display:none">'+str+'</span>');
 		
-		this.textarea_j.children('span:last-child').slideDown("slow");
+		this.textarea_j.children('span:last-child').fadeIn();
 		
 		this.autoScroll(first);
 	}
