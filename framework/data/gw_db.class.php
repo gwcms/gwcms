@@ -46,13 +46,21 @@ class GW_DB {
 		//comment next line if mysql v < 4.1
 		$this->link->query('SET names "UTF8"');
 		
+		if(isset($this->conf['INIT_SQLS']))
+		{
+			$list = explode(',', $this->conf['INIT_SQLS']);
+			
+			foreach($list as $sql)
+				$this->link->query($sql);
+		}
+		
 		//$this->test();
 	}
 
 	function __construct($conf = Array()) {
 		$this->conf['logfile'] = GW::s('DIR/LOGS') . 'MySQL.log';
 		$this->uphd = is_array(GW::$settings['DB']['UPHD']) ? GW::$settings['DB']['UPHD'] : self::parse_uphd(GW::$settings['DB']['UPHD']);
-
+		
 		$conf = array_merge(GW::$settings['DB'], $conf);
 		$this->conf = array_merge($this->conf, (array) $conf);
 
