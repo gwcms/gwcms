@@ -4,6 +4,7 @@ class GW_Site_Application extends GW_Application
 {
 	public $path_arg=Array();
 	public $user_class="GW_Customer";
+	public $updates_by_path=[]; //store updates to show in menu
 	
 	function getPage()
 	{
@@ -79,7 +80,7 @@ class GW_Site_Application extends GW_Application
 		if(!isset($_GET['act']) || $_GET['act']!='do:json')
 			return;
 
-		$this->processModule(GW::s("DIR/SITE/MODULES").(isset($_GET['module'])?$_GET['module']:'default'), Array());
+		$this->processSiteModule(GW::s("DIR/SITE/MODULES").(isset($_GET['module'])?$_GET['module']:'default'), Array());
 	}
 
 	
@@ -101,10 +102,10 @@ class GW_Site_Application extends GW_Application
 		
 	
 				
-		$this->processModule($fname, $path, $info);
+		$this->processSiteModule($fname, $path, $info);
 	}
 	
-	function processModule($file, $params, $info)
+	function processSiteModule($file, $params, $info)
 	{
 		//prevent hacking via ajax request
 		$file=str_replace('..','',$file);
