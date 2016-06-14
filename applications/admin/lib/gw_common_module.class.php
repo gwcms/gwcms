@@ -56,9 +56,12 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars['options'] =& $this->options;
 		$this->tpl_vars['links'] =& $this->links;
 				
-		if(isset($_GET['sys_call']))
-			$this->sys_call=1;		
-		
+		if(isset($_GET['sys_call'])){
+			$this->sys_call=1;
+			
+			if($_GET['sys_call']==2)
+				header('Content-type: text/plain');
+		}
 	}
 	
 	function initLogger()
@@ -166,6 +169,10 @@ class GW_Common_Module extends GW_Module
 	{
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
+		                
+		if($vals['id']==='')
+			unset($vals['id']);
+                        
 		$item = $this->model->createNewObject($vals, false, $this->lang());
 		
 		if($this->load_before_save)
