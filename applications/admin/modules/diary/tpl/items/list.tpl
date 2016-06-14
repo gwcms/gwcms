@@ -13,7 +13,7 @@
 		   word-wrap: break-word;      /* IE */
 		}
 		.editable{
-			max-width:100%
+			
 		}
 	</style>
 
