@@ -4,6 +4,18 @@
 {block name="init"}
 
 
+	<style>
+		.wordwrap { 
+		   white-space: pre-wrap;      /* CSS3 */   
+		   white-space: -moz-pre-wrap; /* Firefox */    
+		   white-space: -pre-wrap;     /* Opera <7 */   
+		   white-space: -o-pre-wrap;   /* Opera 7 */    
+		   word-wrap: break-word;      /* IE */
+		}
+		.editable{
+			max-width:calc(100% - 300px);
+		}
+	</style>
 
 	
 
@@ -15,7 +27,7 @@
 			<b>{$app->fh()->shortTime($item->time)} {$weekdays[date('N',strtotime($item->time))]}</b>
 		{/if}
 
-		<div class="editable" ajaxsaveargs="{ name: 'text', vals: {  id: {$item->id} } }">
+		<div class="editable wordwrap" ajaxsaveargs="{ name: 'text', vals: {  id: {$item->id} } }">
 		
 		{if $item->type!=0}
 			<img align="absmiddle" onclick="$(this).next().click()" src="{$app_root}/img/icons/folder.png">
