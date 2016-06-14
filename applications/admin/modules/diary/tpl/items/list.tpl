@@ -5,11 +5,9 @@
 
 
 	<style>
-		.wordwrap { 
-			max-width: 1400px;
-		}
 		.editable{
-			
+			max-width: 1400px;
+			word-wrap: break-word;			
 		}
 	</style>
 
@@ -23,7 +21,7 @@
 			<b>{$app->fh()->shortTime($item->time)} {$weekdays[date('N',strtotime($item->time))]}</b>
 		{/if}
 
-		<div class="editable wordwrap" ajaxsaveargs="{ name: 'text', vals: {  id: {$item->id} } }">
+		<div class="editable" ajaxsaveargs="{ name: 'text', vals: {  id: {$item->id} } }">
 		
 		{if $item->type!=0}
 			<img align="absmiddle" onclick="$(this).next().click()" src="{$app_root}/img/icons/folder.png">
