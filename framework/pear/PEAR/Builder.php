@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Builder for building PHP extensions (PECL packages)
  *
@@ -44,7 +43,8 @@ require_once 'PEAR/PackageFile.php';
  * @since      Class available since PHP 4.0.2
  * @see        http://pear.php.net/manual/en/core.ppm.pear-builder.php
  */
-class PEAR_Builder extends PEAR_Common {
+class PEAR_Builder extends PEAR_Common
+{
 
 	// {{{ properties
 
@@ -72,11 +72,11 @@ class PEAR_Builder extends PEAR_Common {
 	 *
 	 * @access public
 	 */
-	function PEAR_Builder(&$ui) {
+	function PEAR_Builder(&$ui)
+	{
 		parent::PEAR_Common();
 		$this->setFrontendObject($ui);
 	}
-
 	// }}}
 	// {{{ _build_win32()
 
@@ -84,7 +84,8 @@ class PEAR_Builder extends PEAR_Common {
 	 * Build an extension from source on windows.
 	 * requires msdev
 	 */
-	function _build_win32($descfile, $callback = null) {
+	function _build_win32($descfile, $callback = null)
+	{
 		if (is_object($descfile)) {
 			$pkg = $descfile;
 			$descfile = $pkg->getPackageFile();
@@ -150,10 +151,10 @@ class PEAR_Builder extends PEAR_Common {
 		// this regex depends on the build platform and type having been
 		// correctly identified above.
 		$regex = '/.*?!IF\s+"\$\(CFG\)"\s+==\s+("' .
-			$pkg->getPackage() . '\s-\s' .
-			$platform . '\s' .
-			$buildtype . '").*?' .
-			'\/out:"(.*?)"/is';
+		    $pkg->getPackage() . '\s-\s' .
+		    $platform . '\s' .
+		    $buildtype . '").*?' .
+		    '\/out:"(.*?)"/is';
 
 		if ($dsptext && preg_match($regex, $dsptext, $matches)) {
 			// what we get back is a relative path to the output file itself.
@@ -167,10 +168,10 @@ class PEAR_Builder extends PEAR_Common {
 		}
 
 		$built_files[] = array(
-			'file' => "$outfile",
-			'php_api' => $this->php_api_version,
-			'zend_mod_api' => $this->zend_module_api_no,
-			'zend_ext_api' => $this->zend_extension_api_no,
+		    'file' => "$outfile",
+		    'php_api' => $this->php_api_version,
+		    'zend_mod_api' => $this->zend_module_api_no,
+		    'zend_ext_api' => $this->zend_extension_api_no,
 		);
 
 		return $built_files;
@@ -178,7 +179,8 @@ class PEAR_Builder extends PEAR_Common {
 
 	// }}}
 	// {{{ msdevCallback()
-	function msdevCallback($what, $data) {
+	function msdevCallback($what, $data)
+	{
 		if (!$this->_firstline)
 			$this->_firstline = $data;
 		$this->_lastline = $data;
@@ -193,7 +195,8 @@ class PEAR_Builder extends PEAR_Common {
 	 * @param array
 	 * @access private
 	 */
-	function _harvestInstDir($dest_prefix, $dirname, &$built_files) {
+	function _harvestInstDir($dest_prefix, $dirname, &$built_files)
+	{
 		$d = opendir($dirname);
 		if (!$d)
 			return false;
@@ -206,25 +209,24 @@ class PEAR_Builder extends PEAR_Common {
 			$full = $dirname . DIRECTORY_SEPARATOR . $ent;
 			if (is_dir($full)) {
 				if (!$this->_harvestInstDir(
-						$dest_prefix . DIRECTORY_SEPARATOR . $ent, $full, $built_files)) {
+					$dest_prefix . DIRECTORY_SEPARATOR . $ent, $full, $built_files)) {
 					$ret = false;
 					break;
 				}
 			} else {
 				$dest = $dest_prefix . DIRECTORY_SEPARATOR . $ent;
 				$built_files[] = array(
-					'file' => $full,
-					'dest' => $dest,
-					'php_api' => $this->php_api_version,
-					'zend_mod_api' => $this->zend_module_api_no,
-					'zend_ext_api' => $this->zend_extension_api_no,
+				    'file' => $full,
+				    'dest' => $dest,
+				    'php_api' => $this->php_api_version,
+				    'zend_mod_api' => $this->zend_module_api_no,
+				    'zend_ext_api' => $this->zend_extension_api_no,
 				);
 			}
 		}
 		closedir($d);
 		return $ret;
 	}
-
 	// }}}
 	// {{{ build()
 
@@ -251,7 +253,8 @@ class PEAR_Builder extends PEAR_Common {
 	 *
 	 * @see PEAR_Builder::_runCommand
 	 */
-	function build($descfile, $callback = null) {
+	function build($descfile, $callback = null)
+	{
 		$this->current_callback = $callback;
 		if (PEAR_OS == "Windows") {
 			return $this->_build_win32($descfile, $callback);
@@ -297,7 +300,7 @@ class PEAR_Builder extends PEAR_Common {
 				$default = array_key_exists('default', $o) ? $o['default'] : null;
 				list($r) = $this->ui->userDialog('build', array($o['prompt']), array('text'), array($default));
 				if (substr($o['name'], 0, 5) == 'with-' &&
-					($r == 'yes' || $r == 'autodetect')) {
+				    ($r == 'yes' || $r == 'autodetect')) {
 					$configure_command .= " --$o[name]";
 				} else {
 					$configure_command .= " --$o[name]=" . trim($r);
@@ -331,10 +334,10 @@ class PEAR_Builder extends PEAR_Common {
 			$make_command = 'make';
 		}
 		$to_run = array(
-			$configure_command,
-			$make_command,
-			"$make_command INSTALL_ROOT=\"$inst_dir\" install",
-			"find \"$inst_dir\" -ls"
+		    $configure_command,
+		    $make_command,
+		    "$make_command INSTALL_ROOT=\"$inst_dir\" install",
+		    "find \"$inst_dir\" -ls"
 		);
 		if (!file_exists($build_dir) || !is_dir($build_dir) || !chdir($build_dir)) {
 			return $this->raiseError("could not chdir to $build_dir");
@@ -361,7 +364,6 @@ class PEAR_Builder extends PEAR_Common {
 		chdir($old_cwd);
 		return $built_files;
 	}
-
 	// }}}
 	// {{{ phpizeCallback()
 
@@ -377,7 +379,8 @@ class PEAR_Builder extends PEAR_Common {
 	 *
 	 * @access public
 	 */
-	function phpizeCallback($what, $data) {
+	function phpizeCallback($what, $data)
+	{
 		if ($what != 'cmdoutput') {
 			return;
 		}
@@ -396,7 +399,6 @@ class PEAR_Builder extends PEAR_Common {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ _runCommand()
 
@@ -416,7 +418,8 @@ class PEAR_Builder extends PEAR_Common {
 	 *
 	 * @access private
 	 */
-	function _runCommand($command, $callback = null) {
+	function _runCommand($command, $callback = null)
+	{
 		$this->log(1, "running: $command");
 		$pp = popen("$command 2>&1", "r");
 		if (!$pp) {
@@ -448,7 +451,8 @@ class PEAR_Builder extends PEAR_Common {
 	// }}}
 	// {{{ log()
 
-	function log($level, $msg) {
+	function log($level, $msg)
+	{
 		if ($this->current_callback) {
 			if ($this->debug >= $level) {
 				call_user_func($this->current_callback, 'output', $msg);
@@ -457,7 +461,6 @@ class PEAR_Builder extends PEAR_Common {
 		}
 		return PEAR_Common::log($level, $msg);
 	}
-
 	// }}}
 }
 

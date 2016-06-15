@@ -24,14 +24,16 @@
  * @author wdm
  *
  */
-class GW_Cms_Api {
+class GW_Cms_Api
+{
 
 	var $api_key;
 	var $username;
 	var $lang;
 	var $base;
 
-	function __construct($user, $api_key, $lang = 'en') {
+	function __construct($user, $api_key, $lang = 'en')
+	{
 		$this->username = $user;
 		$this->api_key = $api_key;
 		$this->lang = $lang;
@@ -41,7 +43,8 @@ class GW_Cms_Api {
 		$this->base = GW::s("PROJECT_ADDRESS"); //for local access
 	}
 
-	function action($path, $action, $get_params = Array()) {
+	function action($path, $action, $get_params = Array())
+	{
 		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
 		$get_params['act'] = 'do:' . $action;
 
@@ -55,8 +58,8 @@ class GW_Cms_Api {
 	/**
 	 * TODO 
 	 */
-	function request() {
+	function request()
+	{
 		
 	}
-
 }

@@ -1,6 +1,7 @@
 <?php
 
-class GW_Data_Object {
+class GW_Data_Object
+{
 
 	use Singleton;
 
@@ -31,7 +32,8 @@ class GW_Data_Object {
 	 * $article=new Article(15); $article->load(); echo $article->title
 	 * $article=new Article(15, true); echo $article->title
 	 */
-	function __construct($values = Array(), $load = false) {
+	function __construct($values = Array(), $load = false)
+	{
 		if (is_array($values))
 			$this->setValues($values);
 		elseif (!is_null($values) && count($this->primary_fields) == 1)
@@ -43,7 +45,8 @@ class GW_Data_Object {
 		$this->fireEvent('AFTER_CONSTRUCT');
 	}
 
-	function decodeFields() {
+	function decodeFields()
+	{
 		foreach ($this->encode_fields as $key => $val) {
 			if (!isset($this->content_base[$key]))
 				continue;
@@ -53,7 +56,8 @@ class GW_Data_Object {
 		}
 	}
 
-	function getStoreVal($key) {
+	function getStoreVal($key)
+	{
 		if (isset($this->encode_fields[$key])) {
 			$func = "encode" . $this->encode_fields[$key];
 			return $this->$func($key, $this->content_base[$key], false);
@@ -66,7 +70,8 @@ class GW_Data_Object {
 	 * Atkreipti demensi i tai kad atliekamas laukelio pazymejimas i pakeista net tuo
 	 * atveju kai paduodama (string)6 o buvo (int)6 (cast sensitive palyginimas)
 	 */
-	function set($key, $val) {
+	function set($key, $val)
+	{
 		if (!isset($this->content_base[$key]) || $this->content_base[$key] !== $val) {
 			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
 
@@ -75,11 +80,13 @@ class GW_Data_Object {
 		}
 	}
 
-	function resetChangedFields() {
+	function resetChangedFields()
+	{
 		$this->changed_fields = [];
 	}
 
-	function get($key) {
+	function get($key)
+	{
 		if (isset($this->calculate_fields[$key])) {
 			$func = $this->calculate_fields[$key];
 			$func = $func == 1 ? 'calculateFieldCache' : $func;
@@ -89,11 +96,13 @@ class GW_Data_Object {
 		return isset($this->content_base[$key]) ? $this->content_base[$key] : false;
 	}
 
-	public function __unset($name) {
+	public function __unset($name)
+	{
 		unset($this->content_base[$name]);
 	}
 
-	function getCached($key, $f = 'get') {
+	function getCached($key, $f = 'get')
+	{
 		$cache = & $this->cache[$f . 'Cached'];
 
 		if (isset($cache[$key]))
@@ -104,7 +113,8 @@ class GW_Data_Object {
 		return $cache[$key];
 	}
 
-	function setValues($vals) {
+	function setValues($vals)
+	{
 		foreach ($vals as $key => $val)
 			$this->set($key, $val);
 	}
@@ -112,17 +122,20 @@ class GW_Data_Object {
 	/**
 	 * @return GW_DB
 	 */
-	function &getDB() {
+	function &getDB()
+	{
 		return GW::$context->vars['db'];
 	}
 
-	function createNewObject($values = array(), $load = false) {
+	function createNewObject($values = array(), $load = false)
+	{
 		$class = get_class($this);
 		$o = new $class($values, $load);
 		return $o;
 	}
 
-	function &objResult(&$list) {
+	function &objResult(&$list)
+	{
 		$new = Array();
 
 		foreach ($list as $key => $item) {
@@ -134,13 +147,14 @@ class GW_Data_Object {
 		return $new;
 	}
 
-	function lastRequestInfo() {
+	function lastRequestInfo()
+	{
 		$db = & $this->getDB();
 
 		$info = Array
-			(
-			'item_count' => $db->fetch_result("SELECT FOUND_ROWS()"),
-			'last_query_time' => $db->last_query_time
+		    (
+		    'item_count' => $db->fetch_result("SELECT FOUND_ROWS()"),
+		    'last_query_time' => $db->last_query_time
 		);
 
 		return $info;
@@ -149,7 +163,8 @@ class GW_Data_Object {
 	/**
 	 * Overwrite for example to use view instead of real table
 	 */
-	function findAllTable($params) {
+	function findAllTable($params)
+	{
 		$tables = ["`$this->table` AS a"];
 
 		if (isset($params['from_extra'])) {
@@ -159,7 +174,6 @@ class GW_Data_Object {
 
 		return implode(', ', $tables);
 	}
-
 	/*
 	 * PAGAL susitarima FROM lenteles gauna aliasus a-z
 	 * LEFT JOIN lenteles aa-az
@@ -168,11 +182,12 @@ class GW_Data_Object {
 	 * SUBQUERIU lenteles is select aaa-aaz
 	 */
 
-	function buildSql($options) {
-		
-		if(isset($options['sql']))
+	function buildSql($options)
+	{
+
+		if (isset($options['sql']))
 			return $options['sql']; // nothing to build, already have sql
-		
+
 		$conditions = isset($options['conditions']) ? $options['conditions'] : '';
 		$select = isset($options['select']) ? $options['select'] : 'a.*';
 
@@ -210,7 +225,8 @@ class GW_Data_Object {
 		return $sql;
 	}
 
-	function findAll($conditions = Null, $options = Array()) {
+	function findAll($conditions = Null, $options = Array())
+	{
 		if ($conditions)
 			$options['conditions'] = $conditions;
 
@@ -222,8 +238,8 @@ class GW_Data_Object {
 		$nodie = isset($options['soft_error']) && $options['soft_error'] ? true : false;
 
 		if (
-			isset($options['assoc_fields']) && $options['assoc_fields'] &&
-			isset($options['return_simple']) && $options['return_simple']
+		    isset($options['assoc_fields']) && $options['assoc_fields'] &&
+		    isset($options['return_simple']) && $options['return_simple']
 		) {
 			$entries = $db->fetch_assoc($sql, $nodie);
 		} elseif (isset($options['key_field']))
@@ -262,7 +278,8 @@ class GW_Data_Object {
 	 * //smarty:
 	 * {html_options options=$options}
 	 */
-	function getAssoc($fields = Array(), $conditions = '', $options = Array()) {
+	function getAssoc($fields = Array(), $conditions = '', $options = Array())
+	{
 		$options['return_simple'] = 1;
 		$options['assoc_fields'] = $fields;
 		$options['select'] = "`{$fields[0]}`, `{$fields[1]}`";
@@ -271,13 +288,15 @@ class GW_Data_Object {
 		return $this->findAll($conditions, $options);
 	}
 
-	function find($conditions = Null, $options = Array()) {
+	function find($conditions = Null, $options = Array())
+	{
 		$options['limit'] = 1;
 
 		return count($r = $this->findAll($conditions, $options)) ? $r[0] : false;
 	}
 
-	function load($fields = '*') {
+	function load($fields = '*')
+	{
 		$vals = $this->find($this->getIdCondition(), Array('select' => $fields, 'return_simple' => 1));
 
 		if (!$vals)
@@ -291,30 +310,35 @@ class GW_Data_Object {
 		return true;
 	}
 
-	function load_if_not_loaded() {
+	function load_if_not_loaded()
+	{
 		if (!$this->loaded)
 			$this->load();
 	}
 
-	function count($condition) {
+	function count($condition)
+	{
 		$db = & $this->getDB();
 		return $db->count($this->table, $condition, $this->db_die_on_error);
 	}
 
-	function countGrouped($groupby, $condition) {
+	function countGrouped($groupby, $condition)
+	{
 		$counts_sql = "SELECT `$groupby`, count(*) AS cnt FROM `{$this->table}` WHERE $condition GROUP BY `$groupby`";
 
 		return $this->getDb()->fetch_assoc($counts_sql);
 	}
 
-	function getColumns() {
+	function getColumns()
+	{
 		$db = & $this->getDB();
 		$cols = $db->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE table_name =  '" . $this->table . "'");
 
 		return array_flip($cols);
 	}
 
-	function getIdCondition() {
+	function getIdCondition()
+	{
 		$idfield = $this->primary_fields[0];
 		return $this->getDB()->prepare_query(Array('`' . $idfield . '`=?', $this->get($idfield)));
 	}
@@ -324,7 +348,8 @@ class GW_Data_Object {
 	 * @param Array $field_names
 	 * @return unknown_type
 	 */
-	function update($field_names = []) {
+	function update($field_names = [])
+	{
 		if ($this->auto_validation && !$this->validate())
 			return false;
 
@@ -359,11 +384,13 @@ class GW_Data_Object {
 		return $rez;
 	}
 
-	function updateChanged() {
+	function updateChanged()
+	{
 		return $this->update(array_keys($this->changed_fields));
 	}
 
-	function showChanged() {
+	function showChanged()
+	{
 		$rez = [];
 		foreach ($this->changed_fields as $fieldname => $x)
 			$rez[$fieldname] = $this->get($fieldname);
@@ -381,7 +408,8 @@ class GW_Data_Object {
 	 * 1line
 	 * $user->saveValues(Array('check_time'=>1));
 	 */
-	function saveValues($values) {
+	function saveValues($values)
+	{
 		$this->setValues($values);
 		return $this->update(array_keys($values));
 	}
@@ -397,7 +425,8 @@ class GW_Data_Object {
 	 * @param $field_names
 	 * @return unknown_type
 	 */
-	function silentUpdate($field_names = Array()) {
+	function silentUpdate($field_names = Array())
+	{
 		if ($this->auto_validation && !$this->validate())
 			return false;
 
@@ -427,7 +456,8 @@ class GW_Data_Object {
 		return $rez;
 	}
 
-	function insert($replace = false) {
+	function insert($replace = false)
+	{
 		$this->fireEvent(Array('BEFORE_INSERT', 'BEFORE_SAVE'));
 
 		if ($this->auto_validation && !$this->validate())
@@ -452,22 +482,26 @@ class GW_Data_Object {
 		return $rez;
 	}
 
-	function replaceInsert() {
+	function replaceInsert()
+	{
 		return $this->insert(true);
 	}
 
-	function increase($field, $amount = 1) {
+	function increase($field, $amount = 1)
+	{
 		$db = & $this->getDB();
 		$db->increase($this->table, $this->getIdCondition(), $field, $amount);
 
 		$this->set($field, (float) $this->get($field) + $amount);
 	}
 
-	function save() {
+	function save()
+	{
 		return $this->get($this->primary_fields[0]) ? $this->update() : $this->insert();
 	}
 
-	function delete() {
+	function delete()
+	{
 		$this->fireEvent('BEFORE_DELETE');
 
 		$db = & $this->getDB();
@@ -477,7 +511,8 @@ class GW_Data_Object {
 		$this->fireEvent('AFTER_DELETE');
 	}
 
-	function fireEvent($event, &$context_data = []) {
+	function fireEvent($event, &$context_data = [])
+	{
 		if (!is_array($event))
 			$this->EventHandler($event, $context_data);
 		else
@@ -485,15 +520,18 @@ class GW_Data_Object {
 				$this->EventHandler($e, $context_data);
 	}
 
-	function __get($name) {
+	function __get($name)
+	{
 		return $this->get($name);
 	}
 
-	function __set($name, $value) {
+	function __set($name, $value)
+	{
 		return $this->set($name, $value);
 	}
 
-	function invert($fieldname) {
+	function invert($fieldname)
+	{
 		if (!$this->loaded)
 			$this->load($fieldname);
 
@@ -506,16 +544,19 @@ class GW_Data_Object {
 		return true;
 	}
 
-	function invertActive() {
+	function invertActive()
+	{
 		return $this->invert('active');
 	}
 
-	function getFirstError() {
+	function getFirstError()
+	{
 		reset($this->errors);
 		return current($this->errors);
 	}
 
-	function validate() {
+	function validate()
+	{
 		foreach ((array) $this->validators as $fieldname => $validator) {
 			if (!(is_string($validator) || is_array($validator)))
 				continue;
@@ -531,11 +572,13 @@ class GW_Data_Object {
 		return $this->errors ? false : true;
 	}
 
-	function getDefaultOrderBy() {
+	function getDefaultOrderBy()
+	{
 		return $this->default_order ? $this->default_order : $this->primary_fields[0] . ' DESC';
 	}
 
-	function toArray() {
+	function toArray()
+	{
 		$list = Array();
 
 		foreach ($this->content_base as $field => $item)
@@ -544,7 +587,8 @@ class GW_Data_Object {
 		return $list;
 	}
 
-	static function listToArray($list) {
+	static function listToArray($list)
+	{
 		$new_list = Array();
 		foreach ($list as $item)
 			$new_list[] = $item->toArray();
@@ -555,7 +599,8 @@ class GW_Data_Object {
 	/**
 	 * specify condition if items used for custom grouping
 	 */
-	function move($where, $conditions = '') {
+	function move($where, $conditions = '')
+	{
 		$db = $this->getDB();
 		$id_field = $this->primary_fields[0];
 		$id = (int) $this->get($id_field);
@@ -597,7 +642,8 @@ class GW_Data_Object {
 
 	public $order_limit_fields = Array();
 
-	function getLimitOrdCondition() {
+	function getLimitOrdCondition()
+	{
 		$ordering_conditions = "";
 		$params = Array();
 
@@ -612,11 +658,13 @@ class GW_Data_Object {
 		return $ordering_conditions ? $ordering_conditions : false;
 	}
 
-	function fixOrder() {
+	function fixOrder()
+	{
 		$this->move("", $this->getLimitOrdCondition());
 	}
 
-	function savePositions($shifts, $conditions = '') {
+	function savePositions($shifts, $conditions = '')
+	{
 		$db = $this->getDB();
 		$id_field = $this->primary_fields[0];
 		$q = "SELECT `$id_field` FROM `$this->table`" . ($conditions ? " WHERE " . $conditions : '') . ' ORDER BY priority';
@@ -632,7 +680,8 @@ class GW_Data_Object {
 		$db->_multi_insert($this->table, $list, true);
 	}
 
-	function encodeSerialize($fieldname, $value, $revert) {
+	function encodeSerialize($fieldname, $value, $revert)
+	{
 		if ($revert) {
 			if ($value)
 				return unserialize($value);
@@ -642,7 +691,8 @@ class GW_Data_Object {
 		}
 	}
 
-	function encodeComma($fieldname, $value, $revert) {
+	function encodeComma($fieldname, $value, $revert)
+	{
 		if ($revert) {
 			if ($value)
 				return explode(',', trim($value, ','));
@@ -652,24 +702,27 @@ class GW_Data_Object {
 		}
 	}
 
-	function encodeJSON($fieldname, $value, $revert, $object = false) {
+	function encodeJSON($fieldname, $value, $revert, $object = false)
+	{
 		if ($revert) {
 			if ($value)
 				return json_decode($value, !$object);
 		}else {
 			if (is_array($value))
 				return json_encode($value);
-			
-			elseif(is_string($value)) // assume it is valid json
+
+			elseif (is_string($value)) // assume it is valid json
 				return $value;
 		}
 	}
 
-	function encodeJSONo($fieldname, $value, $revert) {
+	function encodeJSONo($fieldname, $value, $revert)
+	{
 		return $this->encodeJSON($fieldname, $value, $revert, true);
 	}
 
-	function eventHandler($event, &$context_data = []) {
+	function eventHandler($event, &$context_data = [])
+	{
 		switch ($event) {
 			case 'BEFORE_UPDATE':
 				if ($this->auto_fields)
@@ -690,11 +743,13 @@ class GW_Data_Object {
 		}
 	}
 
-	function calculateField($name) {
+	function calculateField($name)
+	{
 		die('overide this');
 	}
 
-	function calculateFieldCache($key) {
+	function calculateFieldCache($key)
+	{
 		$cache = & $this->cache['calcf'];
 
 		if (isset($cache[$key]))
@@ -705,7 +760,8 @@ class GW_Data_Object {
 		return $cache[$key];
 	}
 
-	public static function __callStatic($name, $arguments) {
+	public static function __callStatic($name, $arguments)
+	{
 		if (stripos($name, 'getBy') === 0) {
 			//Example call GW_Articles::getById(15);
 			//will work same as $o = new GW_Articles; $o->find("id=15")
@@ -731,13 +787,14 @@ class GW_Data_Object {
 		}
 	}
 
-	function __isset($name) {
+	function __isset($name)
+	{
 		return isset($this->content_base[$name]) || isset($this->calculate_fields[$name]);
 	}
 
-	function setError($msg, $field = false, $error_code = GW_GENERIC_ERROR) {
+	function setError($msg, $field = false, $error_code = GW_GENERIC_ERROR)
+	{
 		$this->errors[$field] = $msg;
 		$this->error_codes[$error_code] = ($field ? $field . '::' : '') . $msg;
 	}
-
 }

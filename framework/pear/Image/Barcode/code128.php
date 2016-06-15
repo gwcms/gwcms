@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -44,7 +43,8 @@
  */
 require_once "Image/Barcode.php";
 
-class Image_Barcode_code128 extends Image_Barcode {
+class Image_Barcode_code128 extends Image_Barcode
+{
 
 	var $_type = 'code128';
 	var $_barcodeheight = 30;
@@ -71,7 +71,8 @@ class Image_Barcode_code128 extends Image_Barcode {
 	 * the image along with the barcode text and display it to the beholder.
 	 *
 	 */
-	function &draw($text, $imgtype = 'png') {
+	function &draw($text, $imgtype = 'png')
+	{
 
 		// We start with the Code128 Start Code character.  We
 		// initialize checksum to 104, rather than calculate it.
@@ -149,7 +150,7 @@ class Image_Barcode_code128 extends Image_Barcode {
 		// bottom and the bar patterns and display the image.
 		// First, print the image, centered across the bottom.
 		imagestring(
-			$img, $this->_font, $barcodewidth / 2 - strlen($text) / 2 * (imagefontwidth($this->_font)), $this->_barcodeheight + imagefontheight($this->_font) / 2, $text, $black
+		    $img, $this->_font, $barcodewidth / 2 - strlen($text) / 2 * (imagefontwidth($this->_font)), $this->_barcodeheight + imagefontheight($this->_font) / 2, $text, $black
 		);
 
 		// We set $xpos to 10 so we start bar printing after 
@@ -176,7 +177,6 @@ class Image_Barcode_code128 extends Image_Barcode {
 
 		return $img;
 	}
-
 // function draw()
 
 	/**
@@ -185,7 +185,8 @@ class Image_Barcode_code128 extends Image_Barcode {
 	 * the $code array, containing the bar and space pattern
 	 * for the Code128 B character set.
 	 */
-	function Image_Barcode_code128() {
+	function Image_Barcode_code128()
+	{
 		$this->code[0] = "212222";  // " "
 		$this->code[1] = "222122";  // "!"
 		$this->code[2] = "222221";  // "{QUOTE}"
@@ -294,7 +295,8 @@ class Image_Barcode_code128 extends Image_Barcode {
 	/**
 	 * Return the Code128 code for a character
 	 */
-	function getCharCode($c) {
+	function getCharCode($c)
+	{
 		$retval = $this->code[ord($c) - 32];
 		return $retval;
 	}
@@ -302,21 +304,24 @@ class Image_Barcode_code128 extends Image_Barcode {
 	/**
 	 * Return the Start Code for Code128
 	 */
-	function getStartCode() {
+	function getStartCode()
+	{
 		return '211214';
 	}
 
 	/**
 	 * Return the Stop Code for Code128
 	 */
-	function getStopCode() {
+	function getStopCode()
+	{
 		return '2331112';
 	}
 
 	/**
 	 * Return the Code128 code equivalent of a character number
 	 */
-	function getNumCode($index) {
+	function getNumCode($index)
+	{
 		$retval = $this->code[$index];
 		return $retval;
 	}
@@ -324,12 +329,13 @@ class Image_Barcode_code128 extends Image_Barcode {
 	/**
 	 * Return the Code128 numerical equivalent of a character.
 	 */
-	function getCharNumber($c) {
+	function getCharNumber($c)
+	{
 		$retval = ord($c) - 32;
 		return $retval;
 	}
-
 }
 
 // class
+
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class auto-loader
  *
@@ -55,7 +54,8 @@ require_once "PEAR.php";
  * @since      File available since Release 0.1
  * @deprecated File deprecated in Release 1.4.0a1
  */
-class PEAR_Autoloader extends PEAR {
+class PEAR_Autoloader extends PEAR
+{
 	// {{{ properties
 
 	/**
@@ -95,7 +95,8 @@ class PEAR_Autoloader extends PEAR {
 	 *
 	 * @access public
 	 */
-	function addAutoload($method, $classname = null) {
+	function addAutoload($method, $classname = null)
+	{
 		if (is_array($method)) {
 			array_walk($method, create_function('$a,&$b', '$b = strtolower($b);'));
 			$this->_autoload_map = array_merge($this->_autoload_map, $method);
@@ -103,7 +104,6 @@ class PEAR_Autoloader extends PEAR {
 			$this->_autoload_map[strtolower($method)] = $classname;
 		}
 	}
-
 	// }}}
 	// {{{ removeAutoload()
 
@@ -116,13 +116,13 @@ class PEAR_Autoloader extends PEAR {
 	 *
 	 * @access public
 	 */
-	function removeAutoload($method) {
+	function removeAutoload($method)
+	{
 		$method = strtolower($method);
 		$ok = isset($this->_autoload_map[$method]);
 		unset($this->_autoload_map[$method]);
 		return $ok;
 	}
-
 	// }}}
 	// {{{ addAggregateObject()
 
@@ -139,7 +139,8 @@ class PEAR_Autoloader extends PEAR {
 	 *
 	 * @access public
 	 */
-	function addAggregateObject($classname) {
+	function addAggregateObject($classname)
+	{
 		$classname = strtolower($classname);
 		if (!class_exists($classname)) {
 			$include_file = preg_replace('/[^a-z0-9]/i', '_', $classname);
@@ -154,7 +155,6 @@ class PEAR_Autoloader extends PEAR {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ removeAggregateObject()
 
@@ -167,7 +167,8 @@ class PEAR_Autoloader extends PEAR {
 	 *
 	 * @access public
 	 */
-	function removeAggregateObject($classname) {
+	function removeAggregateObject($classname)
+	{
 		$ok = false;
 		$classname = strtolower($classname);
 		reset($this->_method_map);
@@ -179,7 +180,6 @@ class PEAR_Autoloader extends PEAR {
 		}
 		return $ok;
 	}
-
 	// }}}
 	// {{{ __call()
 
@@ -197,7 +197,8 @@ class PEAR_Autoloader extends PEAR {
 	 * @return mixed  The return value from the aggregated method, or a PEAR
 	 *                error if the called method was unknown.
 	 */
-	function __call($method, $args, &$retval) {
+	function __call($method, $args, &$retval)
+	{
 		$method = strtolower($method);
 		if (empty($this->_method_map[$method]) && isset($this->_autoload_map[$method])) {
 			$this->addAggregateObject($this->_autoload_map[$method]);
@@ -208,9 +209,9 @@ class PEAR_Autoloader extends PEAR {
 		}
 		return false;
 	}
-
 	// }}}
 }
 
 overload("PEAR_Autoloader");
+
 ?>

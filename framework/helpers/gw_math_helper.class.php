@@ -1,8 +1,10 @@
 <?php
 
-class GW_Math_Helper {
+class GW_Math_Helper
+{
 
-	static function cFileSize($bytes, $prec = 2) {
+	static function cFileSize($bytes, $prec = 2)
+	{
 		if (!$bytes)
 			return '0';
 		$m = array('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
@@ -10,13 +12,13 @@ class GW_Math_Helper {
 		$prec = pow(10, $prec);
 		return (round($bytes / pow(1024, floor($exp)) * $prec) / $prec) . ' ' . $m[$exp] . 'B';
 	}
-
 	/*
 	  uptime funkcija
 	  precision M-menesiais d-dienomis h-valandomis  m-minutemis s-sekundemis
 	 */
 
-	static function uptime($secs, $precision = 's') {
+	static function uptime($secs, $precision = 's')
+	{
 
 		$y = floor($secs / 31514400);
 		$secs-=$y * 31514400;
@@ -70,43 +72,44 @@ class GW_Math_Helper {
 					if ($s)
 						break;;
 				case '1':
-					if($M){
+					if ($M) {
 						return $M;
-					}elseif($d){
+					} elseif ($d) {
 						return $d;
-					}elseif($h){
+					} elseif ($h) {
 						return $h;
-					}elseif($m){
+					} elseif ($m) {
 						return $m;
-					}elseif($s){
+					} elseif ($s) {
 						return $s;
 					}
-				break;
+					break;
 				case '2':
-					if($M){
-						return $M. $d;
-					}elseif($d){
-						return $d.$h;
-					}elseif($h){
-						return $h.$m;
-					}elseif($m){
-						return $m.$s;
-					}elseif($s){
+					if ($M) {
+						return $M . $d;
+					} elseif ($d) {
+						return $d . $h;
+					} elseif ($h) {
+						return $h . $m;
+					} elseif ($m) {
+						return $m . $s;
+					} elseif ($s) {
 						return $s;
 					}
-				break;				
-					
+					break;
 			}
 		}
 
 		return substr($t, 0, -1);
 	}
 
-	static function uptimeDate($datetimestr, $precision = 's') {
+	static function uptimeDate($datetimestr, $precision = 's')
+	{
 		return self::uptime(time() - strtotime($datetimestr), $precision);
 	}
 
-	function uptimeReverse($str) {
+	function uptimeReverse($str)
+	{
 		$time = 0;
 
 		if (preg_match('/(\d+) ?h/', $str, $m))
@@ -124,5 +127,4 @@ class GW_Math_Helper {
 
 		return $time;
 	}
-
 }

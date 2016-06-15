@@ -1,27 +1,32 @@
 <?php
 
-class GW_Validation_Helper {
+class GW_Validation_Helper
+{
 
 	/**
 	 * removes not expected keys
 	 */
-	static function removeUnexpected(&$arr, $expected_keys = Array()) {
+	static function removeUnexpected(&$arr, $expected_keys = Array())
+	{
 		foreach ($arr as $key => $val)
 			if (!in_array($key, $expected_keys))
 				unset($arr[$key]);
 	}
 
-	static function className($str) {
+	static function className($str)
+	{
 		$str = preg_replace('/^\d+/', '', $str);
 		$str = preg_replace('/[^a-z0-9]$/', '', $str);
 		return preg_replace('/[^a-z0-9-_\/]/i', '', $str);
 	}
 
-	static function classFileName($str) {
+	static function classFileName($str)
+	{
 		return strtolower(self::className($str));
 	}
 
-	static function pagePathName($str) {
+	static function pagePathName($str)
+	{
 		$str = mb_strtolower($str);
 		$current = Array('ą', 'č', 'ę', 'ė', 'į', 'š', 'ų', 'ū', 'ž');
 		//$current = array_merge($current, array_map('mb_strtoupper',$current));
@@ -34,5 +39,4 @@ class GW_Validation_Helper {
 
 		return $str;
 	}
-
 }

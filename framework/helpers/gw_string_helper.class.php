@@ -1,10 +1,12 @@
 <?php
 
-class GW_String_Helper {
+class GW_String_Helper
+{
 
 	static $encoding = "UTF-8";
 
-	static function ucfirst($str, $lower_str_end = false) {
+	static function ucfirst($str, $lower_str_end = false)
+	{
 		$first_letter = mb_strtoupper(mb_substr($str, 0, 1, self::$encoding), self::$encoding);
 
 		if ($lower_str_end) {
@@ -19,7 +21,8 @@ class GW_String_Helper {
 
 	static $chars = "ABCDEFGHIJKLMNOPQRSTUWVXYZ0123456789";
 
-	static function getRandString($length) {
+	static function getRandString($length)
+	{
 		$str = "";
 		$cmax = strlen(self::$chars);
 
@@ -30,7 +33,8 @@ class GW_String_Helper {
 		return $str;
 	}
 
-	function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) {
+	function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
+	{
 		if ($length == 0)
 			return '';
 
@@ -48,5 +52,4 @@ class GW_String_Helper {
 			return $string;
 		}
 	}
-
 }

@@ -1,14 +1,17 @@
 <?php
 
-class GW_Proc_Ctrl {
+class GW_Proc_Ctrl
+{
 
-	static function isRunning($pid, $procname) {
+	static function isRunning($pid, $procname)
+	{
 		$list = shell_exec("ps -p $pid -o cmd= 2>&1");
-		
+
 		return strpos($list, $procname) !== false;
 	}
 
-	static function getRunningProcesses() {
+	static function getRunningProcesses()
+	{
 		//http://www.linux.ie/newusers/beginners-linux-guide/ps.php
 		$out = shell_exec('ps -xo "%p - %a" 2>/dev/null');
 
@@ -39,7 +42,8 @@ class GW_Proc_Ctrl {
 	 *  2 - sustabdytas su SIGKILL
 	 *  
 	 */
-	function terminate($params) {
+	function terminate($params)
+	{
 
 		$pid = $params['pid'];
 		$procname = $params['procname'];
@@ -92,17 +96,20 @@ class GW_Proc_Ctrl {
 		}
 	}
 
-	static function killWait($pid, $proc_name, $wait = 30, $messages = false) {
+	static function killWait($pid, $proc_name, $wait = 30, $messages = false)
+	{
 		return self::terminate(Array('pid' => $pid, 'procname' => $proc_name, 'kill' => $wait, 'messages' => $messages));
 	}
 
-	static function startDaemon($cmd, $logfile) {
+	static function startDaemon($cmd, $logfile)
+	{
 		shell_exec($cmd = "$cmd >> $logfile 2>&1 &");
 
 		//dump($cmd);
 	}
 
-	static function sendSignal($pid, $signalNo, $test_is_running = false) {
+	static function sendSignal($pid, $signalNo, $test_is_running = false)
+	{
 		if ($test_is_running && !GW_App_Base::isRunning($pid, $test_is_running))
 			return dump('Fail. "' . $test_is_running . '" process is not running');
 
@@ -112,5 +119,4 @@ class GW_Proc_Ctrl {
 
 		return $output;
 	}
-
 }

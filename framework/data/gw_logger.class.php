@@ -1,6 +1,7 @@
 <?php
 
-class GW_Logger {
+class GW_Logger
+{
 
 	var $file;
 	var $STDOUT = 0;
@@ -9,11 +10,13 @@ class GW_Logger {
 	public $collect_messages = false;
 	public $collected_messages = [];
 
-	function replacern($str) {
+	function replacern($str)
+	{
 		return str_replace(Array("\r", "\n"), Array('\r', '\n'), $str);
 	}
 
-	function __construct($file = -1) {
+	function __construct($file = -1)
+	{
 		if ($file === -1) {
 			$this->STDOUT = 1;
 		} else {
@@ -25,7 +28,8 @@ class GW_Logger {
 		}
 	}
 
-	function msg($msg) {
+	function msg($msg)
+	{
 		if (is_array($msg) || is_object($msg))
 			$msg = json_encode($msg, JSON_PRETTY_PRINT);
 
@@ -45,20 +49,24 @@ class GW_Logger {
 			file_put_contents($this->file, $logstr . "\r\n", FILE_APPEND);
 	}
 
-	function getCollectedMessages($implode = "\n") {
+	function getCollectedMessages($implode = "\n")
+	{
 		return $implode ? implode($implode, $this->collected_messages) : $this->collected_messages;
 	}
 
-	function resetCollectedMessages($implode = "\n") {
+	function resetCollectedMessages($implode = "\n")
+	{
 		$this->collected_messages = [];
 	}
 
-	function fmsg() {
+	function fmsg()
+	{
 		$args = func_get_args();
 		$this->msg(call_user_func_array('sprintf', $args));
 	}
 
-	function critical_msg($msg, $inform = 'mail') {
+	function critical_msg($msg, $inform = 'mail')
+	{
 		die('not implemented');
 
 		switch ($inform) {
@@ -73,12 +81,12 @@ class GW_Logger {
 				include_once GW_LIB_DIR . 'mail.func.php';
 
 				utf_mail(
-					Array(
-						'to' => SYS_ADMIN_EMAIL,
-						'from' => 'important_msg@gw.lt',
-						'subject' => mb_strlen($msg) > 100 ? mb_substr($msg, 0, 100) . ' ...' : $msg,
-						'content' => str_replace("\n", "<br>", $msg)
-					)
+				    Array(
+					'to' => SYS_ADMIN_EMAIL,
+					'from' => 'important_msg@gw.lt',
+					'subject' => mb_strlen($msg) > 100 ? mb_substr($msg, 0, 100) . ' ...' : $msg,
+					'content' => str_replace("\n", "<br>", $msg)
+				    )
 				);
 				break;
 		}
@@ -86,5 +94,4 @@ class GW_Logger {
 		if ($this)
 			$this->msg($msg, 'CRITICAL MSG');
 	}
-
 }

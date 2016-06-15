@@ -1,11 +1,13 @@
 <?php
 
-class GW_App_System Extends GW_App_Base {
+class GW_App_System Extends GW_App_Base
+{
 
 	var $forked_methods = Array();
 	var $one_instance = true;
 
-	function init() {
+	function init()
+	{
 		$this->initDb();
 
 		$this->config = new GW_Config('system_app/');
@@ -13,8 +15,8 @@ class GW_App_System Extends GW_App_Base {
 
 
 		$this->registerInnerMethod('actionDoTasks', 5);
-		$this->registerInnerMethod('actionCronTasks', 60, time()-55); //first execution after 5secs
-		$this->registerInnerMethod('actionTimeMessage', 3600, time()-3601); //first execution immediately
+		$this->registerInnerMethod('actionCronTasks', 60, time() - 55); //first execution after 5secs
+		$this->registerInnerMethod('actionTimeMessage', 3600, time() - 3601); //first execution immediately
 
 
 		pcntl_signal(SIGUSR1, array(&$this, "forceDoTasks"));
@@ -22,7 +24,8 @@ class GW_App_System Extends GW_App_Base {
 		$this->msg('Hello');
 	}
 
-	static function getRunningPid() {
+	static function getRunningPid()
+	{
 		$cfg = GW::getInstance('GW_Config');
 		$pid = $cfg->get('system_app/pid');
 
@@ -30,7 +33,8 @@ class GW_App_System Extends GW_App_Base {
 			return $pid;
 	}
 
-	static function triggerUSR1() {
+	static function triggerUSR1()
+	{
 		if ($pid = self::getRunningPid()) {
 			GW_App_Base::sendSignal($pid, 10);
 			return true;
@@ -40,7 +44,8 @@ class GW_App_System Extends GW_App_Base {
 		}
 	}
 
-	static function startIfNotStarted() {
+	static function startIfNotStarted()
+	{
 		if ($pid = self::getRunningPid()) {
 			return false;
 		} else {
@@ -49,7 +54,8 @@ class GW_App_System Extends GW_App_Base {
 		}
 	}
 
-	static function runSelf($restart = false) {
+	static function runSelf($restart = false)
+	{
 		$cmd = GW::s('DIR/ROOT') . "daemon/system.php";
 
 		if ($restart)
@@ -58,13 +64,15 @@ class GW_App_System Extends GW_App_Base {
 		GW_Proc_Ctrl::startDaemon($cmd, GW::s('DIR/LOGS') . 'system.log');
 	}
 
-	function action0() {
+	function action0()
+	{
 		parent::action0();
 
 		//$this->interface->process();
 	}
 
-	function forceDoTasks() {
+	function forceDoTasks()
+	{
 		$this->msg('force do tasks!');
 
 		sleep(1); //0.3sec
@@ -72,24 +80,26 @@ class GW_App_System Extends GW_App_Base {
 		$this->actionDoTasks();
 	}
 
-	function actionDoTasks() {
+	function actionDoTasks()
+	{
 		$count = GW_Tasks_App::checkAndRun();
 
 		$this->msg("$count Tasks");
 	}
 
-	function quit($exit = 1) {
+	function quit($exit = 1)
+	{
 		//$this->interface->shutdown();
 
 		parent::quit($exit);
 	}
 
-	function setPidFile() {
+	function setPidFile()
+	{
 		//proc_name + md5(path) + 1st argument
 
 		$this->process_pid_file = GW::s('DIR/TEMP') . 'app_' . $this->proc_name . '_' . md5($this->path);
 	}
-
 
 	/**
 	 * match example
@@ -111,7 +121,8 @@ class GW_App_System Extends GW_App_Base {
 	 *  galima paleisti skripta nurodzius intervala cron.php 
 	 *   
 	 */
-	function checkAndRunInterval($time_match, $interval) {
+	function checkAndRunInterval($time_match, $interval)
+	{
 		$config = GW_Config::singleton();
 
 		if (strpos($time_match, ' ') === false)
@@ -120,11 +131,11 @@ class GW_App_System Extends GW_App_Base {
 		$match = preg_match("/$time_match/", date('Y-m-d H:i:s'), $m) ? 1 : 0;
 
 		$last_exec = $config->get($cron_id = "ctask $time_match $interval");
-		
-		
-		
+
+
+
 		$dif = time() - strtotime($last_exec);
-		
+
 		//debug
 		//echo "lastexec $time_match#$interval - $last_exec\n";
 		//echo "diff: $dif\n";
@@ -139,32 +150,32 @@ class GW_App_System Extends GW_App_Base {
 		}
 	}
 
-	function actionCronTasks() {
+	function actionCronTasks()
+	{
 		$crontask0 = new GW_CronTask;
 		$time_matches = $crontask0->getAllTimeMatches();
-		
+
 		foreach ($time_matches as $tm) {
 			list($time_match, $interval) = explode('#', $tm);
 
 			if (self::checkAndRunInterval($time_match, $interval)) {
 				//run all interval tasks
 				echo "Run $tm\n";
-				
+
 				$inner = $crontask0->getByTimeMatchExecute($tm);
-				
+
 				foreach ($inner as $task) {
 					if (file_exists($f = GW::s('DIR/ROOT') . 'daemon/tasks/' . $task->name . ".inner.php")) {
 						$t = new GW_Timer();
 						include $f;
-						$this->msg($msg="Inner task: " . $task->name . ", speed: " . $t->stop());
+						$this->msg($msg = "Inner task: " . $task->name . ", speed: " . $t->stop());
 					} else {
-						$this->msg($msg="Inner not found: " . $task->name);
+						$this->msg($msg = "Inner not found: " . $task->name);
 					}
-					
+
 					echo "$msg\n";
 				}
 			}
 		}
 	}
-
 }

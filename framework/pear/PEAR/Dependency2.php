@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Dependency2, advanced dependency validation
  *
@@ -41,7 +40,8 @@ require_once 'PEAR/Validate.php';
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_Dependency2 {
+class PEAR_Dependency2
+{
 
 	/**
 	 * One of the PEAR_VALIDATE_* states
@@ -88,7 +88,8 @@ class PEAR_Dependency2 {
 	 * @param array format of PEAR_Registry::parsedPackageName()
 	 * @param int installation state (one of PEAR_VALIDATE_*)
 	 */
-	function PEAR_Dependency2(&$config, $installoptions, $package, $state = PEAR_VALIDATE_INSTALLING) {
+	function PEAR_Dependency2(&$config, $installoptions, $package, $state = PEAR_VALIDATE_INSTALLING)
+	{
 		$this->_config = &$config;
 		if (!class_exists('PEAR_DependencyDB')) {
 			require_once 'PEAR/DependencyDB.php';
@@ -111,7 +112,8 @@ class PEAR_Dependency2 {
 		$this->_currentPackage = $package;
 	}
 
-	function _getExtraString($dep) {
+	function _getExtraString($dep)
+	{
 		$extra = ' (';
 		if (isset($dep['uri'])) {
 			return '';
@@ -154,14 +156,16 @@ class PEAR_Dependency2 {
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function getPHP_OS() {
+	function getPHP_OS()
+	{
 		return PHP_OS;
 	}
 
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function getsysname() {
+	function getsysname()
+	{
 		return $this->_os->getSysname();
 	}
 
@@ -171,9 +175,10 @@ class PEAR_Dependency2 {
 	 * There are two generic OS dependencies that will be the most common, unix and windows.
 	 * Other options are linux, freebsd, darwin (OS X), sunos, irix, hpux, aix
 	 */
-	function validateOsDependency($dep) {
+	function validateOsDependency($dep)
+	{
 		if ($this->_state != PEAR_VALIDATE_INSTALLING &&
-			$this->_state != PEAR_VALIDATE_DOWNLOADING) {
+		    $this->_state != PEAR_VALIDATE_DOWNLOADING) {
 			return true;
 		}
 		if (isset($dep['conflicts'])) {
@@ -189,7 +194,7 @@ class PEAR_Dependency2 {
 				if ($not) {
 					if (strtolower(substr($this->getPHP_OS(), 0, 3)) == 'win') {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError("Cannot install %s on Windows");
 						} else {
 							return $this->warning("warning: Cannot install %s on Windows");
@@ -198,7 +203,7 @@ class PEAR_Dependency2 {
 				} else {
 					if (strtolower(substr($this->getPHP_OS(), 0, 3)) != 'win') {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError("Can only install %s on Windows");
 						} else {
 							return $this->warning("warning: Can only install %s on Windows");
@@ -211,21 +216,21 @@ class PEAR_Dependency2 {
 				if ($not) {
 					if (in_array($this->getSysname(), $unices)) {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError("Cannot install %s on any Unix system");
 						} else {
 							return $this->warning(
-									"warning: Cannot install %s on any Unix system");
+								"warning: Cannot install %s on any Unix system");
 						}
 					}
 				} else {
 					if (!in_array($this->getSysname(), $unices)) {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError("Can only install %s on a Unix system");
 						} else {
 							return $this->warning(
-									"warning: Can only install %s on a Unix system");
+								"warning: Can only install %s on a Unix system");
 						}
 					}
 				}
@@ -234,25 +239,25 @@ class PEAR_Dependency2 {
 				if ($not) {
 					if (strtolower($dep['name']) == strtolower($this->getSysname())) {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError('Cannot install %s on ' . $dep['name'] .
-									' operating system');
+								' operating system');
 						} else {
 							return $this->warning('warning: Cannot install %s on ' .
-									$dep['name'] . ' operating system');
+								$dep['name'] . ' operating system');
 						}
 					}
 				} else {
 					if (strtolower($dep['name']) != strtolower($this->getSysname())) {
 						if (!isset($this->_options['nodeps']) &&
-							!isset($this->_options['force'])) {
+						    !isset($this->_options['force'])) {
 							return $this->raiseError('Cannot install %s on ' .
-									$this->getSysname() .
-									' operating system, can only install on ' . $dep['name']);
+								$this->getSysname() .
+								' operating system, can only install on ' . $dep['name']);
 						} else {
 							return $this->warning('warning: Cannot install %s on ' .
-									$this->getSysname() .
-									' operating system, can only install on ' . $dep['name']);
+								$this->getSysname() .
+								' operating system, can only install on ' . $dep['name']);
 						}
 					}
 				}
@@ -263,7 +268,8 @@ class PEAR_Dependency2 {
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function matchSignature($pattern) {
+	function matchSignature($pattern)
+	{
 		return $this->_os->matchSignature($pattern);
 	}
 
@@ -274,7 +280,8 @@ class PEAR_Dependency2 {
 	 * This is the only dependency that accepts an eregable pattern.  The pattern
 	 * will be matched against the php_uname() output parsed by OS_Guess
 	 */
-	function validateArchDependency($dep) {
+	function validateArchDependency($dep)
+	{
 		if ($this->_state != PEAR_VALIDATE_INSTALLING) {
 			return true;
 		}
@@ -287,10 +294,10 @@ class PEAR_Dependency2 {
 			if (!$not) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s Architecture dependency failed, does not ' .
-							'match "' . $dep['pattern'] . '"');
+						'match "' . $dep['pattern'] . '"');
 				} else {
 					return $this->warning('warning: %s Architecture dependency failed, does ' .
-							'not match "' . $dep['pattern'] . '"');
+						'not match "' . $dep['pattern'] . '"');
 				}
 			}
 			return true;
@@ -298,10 +305,10 @@ class PEAR_Dependency2 {
 			if ($not) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s Architecture dependency failed, required "' .
-							$dep['pattern'] . '"');
+						$dep['pattern'] . '"');
 				} else {
 					return $this->warning('warning: %s Architecture dependency failed, ' .
-							'required "' . $dep['pattern'] . '"');
+						'required "' . $dep['pattern'] . '"');
 				}
 			}
 			return true;
@@ -311,14 +318,16 @@ class PEAR_Dependency2 {
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function extension_loaded($name) {
+	function extension_loaded($name)
+	{
 		return extension_loaded($name);
 	}
 
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function phpversion($name = null) {
+	function phpversion($name = null)
+	{
 		if ($name !== null) {
 			return phpversion($name);
 		} else {
@@ -326,9 +335,10 @@ class PEAR_Dependency2 {
 		}
 	}
 
-	function validateExtensionDependency($dep, $required = true) {
+	function validateExtensionDependency($dep, $required = true)
+	{
 		if ($this->_state != PEAR_VALIDATE_INSTALLING &&
-			$this->_state != PEAR_VALIDATE_DOWNLOADING) {
+		    $this->_state != PEAR_VALIDATE_DOWNLOADING) {
 			return true;
 		}
 		$loaded = $this->extension_loaded($dep['name']);
@@ -339,15 +349,15 @@ class PEAR_Dependency2 {
 			}
 		}
 		if (!isset($dep['min']) && !isset($dep['max']) &&
-			!isset($dep['recommended']) && !isset($dep['exclude'])) {
+		    !isset($dep['recommended']) && !isset($dep['exclude'])) {
 			if ($loaded) {
 				if (isset($dep['conflicts'])) {
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s conflicts with PHP extension "' .
-								$dep['name'] . '"' . $extra);
+							$dep['name'] . '"' . $extra);
 					} else {
 						return $this->warning('warning: %s conflicts with PHP extension "' .
-								$dep['name'] . '"' . $extra);
+							$dep['name'] . '"' . $extra);
 					}
 				}
 				return true;
@@ -358,14 +368,14 @@ class PEAR_Dependency2 {
 				if ($required) {
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s requires PHP extension "' .
-								$dep['name'] . '"' . $extra);
+							$dep['name'] . '"' . $extra);
 					} else {
 						return $this->warning('warning: %s requires PHP extension "' .
-								$dep['name'] . '"' . $extra);
+							$dep['name'] . '"' . $extra);
 					}
 				} else {
 					return $this->warning('%s can optionally use PHP extension "' .
-							$dep['name'] . '"' . $extra);
+						$dep['name'] . '"' . $extra);
 				}
 			}
 		}
@@ -375,14 +385,14 @@ class PEAR_Dependency2 {
 			}
 			if (!$required) {
 				return $this->warning('%s can optionally use PHP extension "' .
-						$dep['name'] . '"' . $extra);
+					$dep['name'] . '"' . $extra);
 			} else {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s requires PHP extension "' . $dep['name'] .
-							'"' . $extra);
+						'"' . $extra);
 				}
 				return $this->warning('warning: %s requires PHP extension "' . $dep['name'] .
-						'"' . $extra);
+					'"' . $extra);
 			}
 		}
 		$version = (string) $this->phpversion($dep['name']);
@@ -403,18 +413,18 @@ class PEAR_Dependency2 {
 		if ($fail && !isset($dep['conflicts'])) {
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError('%s requires PHP extension "' . $dep['name'] .
-						'"' . $extra . ', installed version is ' . $version);
+					'"' . $extra . ', installed version is ' . $version);
 			} else {
 				return $this->warning('warning: %s requires PHP extension "' . $dep['name'] .
-						'"' . $extra . ', installed version is ' . $version);
+					'"' . $extra . ', installed version is ' . $version);
 			}
 		} elseif ((isset($dep['min']) || isset($dep['max'])) && !$fail && isset($dep['conflicts'])) {
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError('%s conflicts with PHP extension "' .
-						$dep['name'] . '"' . $extra . ', installed version is ' . $version);
+					$dep['name'] . '"' . $extra . ', installed version is ' . $version);
 			} else {
 				return $this->warning('warning: %s conflicts with PHP extension "' .
-						$dep['name'] . '"' . $extra . ', installed version is ' . $version);
+					$dep['name'] . '"' . $extra . ', installed version is ' . $version);
 			}
 		}
 		if (isset($dep['exclude'])) {
@@ -424,22 +434,22 @@ class PEAR_Dependency2 {
 						continue;
 					}
 					if (!isset($this->_options['nodeps']) &&
-						!isset($this->_options['force'])) {
+					    !isset($this->_options['force'])) {
 						return $this->raiseError('%s is not compatible with PHP extension "' .
-								$dep['name'] . '" version ' .
-								$exclude);
+							$dep['name'] . '" version ' .
+							$exclude);
 					} else {
 						return $this->warning('warning: %s is not compatible with PHP extension "' .
-								$dep['name'] . '" version ' .
-								$exclude);
+							$dep['name'] . '" version ' .
+							$exclude);
 					}
 				} elseif (version_compare($version, $exclude, '!=') && isset($dep['conflicts'])) {
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s conflicts with PHP extension "' .
-								$dep['name'] . '"' . $extra . ', installed version is ' . $version);
+							$dep['name'] . '"' . $extra . ', installed version is ' . $version);
 					} else {
 						return $this->warning('warning: %s conflicts with PHP extension "' .
-								$dep['name'] . '"' . $extra . ', installed version is ' . $version);
+							$dep['name'] . '"' . $extra . ', installed version is ' . $version);
 					}
 				}
 			}
@@ -450,22 +460,23 @@ class PEAR_Dependency2 {
 			} else {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s dependency: PHP extension ' . $dep['name'] .
-							' version "' . $version . '"' .
-							' is not the recommended version "' . $dep['recommended'] .
-							'", but may be compatible, use --force to install');
+						' version "' . $version . '"' .
+						' is not the recommended version "' . $dep['recommended'] .
+						'", but may be compatible, use --force to install');
 				} else {
 					return $this->warning('warning: %s dependency: PHP extension ' .
-							$dep['name'] . ' version "' . $version . '"' .
-							' is not the recommended version "' . $dep['recommended'] . '"');
+						$dep['name'] . ' version "' . $version . '"' .
+						' is not the recommended version "' . $dep['recommended'] . '"');
 				}
 			}
 		}
 		return true;
 	}
 
-	function validatePhpDependency($dep) {
+	function validatePhpDependency($dep)
+	{
 		if ($this->_state != PEAR_VALIDATE_INSTALLING &&
-			$this->_state != PEAR_VALIDATE_DOWNLOADING) {
+		    $this->_state != PEAR_VALIDATE_DOWNLOADING) {
 			return true;
 		}
 		$version = $this->phpversion();
@@ -479,10 +490,10 @@ class PEAR_Dependency2 {
 			if (!version_compare($version, $dep['min'], '>=')) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s requires PHP' .
-							$extra . ', installed version is ' . $version);
+						$extra . ', installed version is ' . $version);
 				} else {
 					return $this->warning('warning: %s requires PHP' .
-							$extra . ', installed version is ' . $version);
+						$extra . ', installed version is ' . $version);
 				}
 			}
 		}
@@ -490,10 +501,10 @@ class PEAR_Dependency2 {
 			if (!version_compare($version, $dep['max'], '<=')) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s requires PHP' .
-							$extra . ', installed version is ' . $version);
+						$extra . ', installed version is ' . $version);
 				} else {
 					return $this->warning('warning: %s requires PHP' .
-							$extra . ', installed version is ' . $version);
+						$extra . ', installed version is ' . $version);
 				}
 			}
 		}
@@ -501,13 +512,13 @@ class PEAR_Dependency2 {
 			foreach ($dep['exclude'] as $exclude) {
 				if (version_compare($version, $exclude, '==')) {
 					if (!isset($this->_options['nodeps']) &&
-						!isset($this->_options['force'])) {
+					    !isset($this->_options['force'])) {
 						return $this->raiseError('%s is not compatible with PHP version ' .
-								$exclude);
+							$exclude);
 					} else {
 						return $this->warning(
-								'warning: %s is not compatible with PHP version ' .
-								$exclude);
+							'warning: %s is not compatible with PHP version ' .
+							$exclude);
 					}
 				}
 			}
@@ -518,11 +529,13 @@ class PEAR_Dependency2 {
 	/**
 	 * This makes unit-testing a heck of a lot easier
 	 */
-	function getPEARVersion() {
+	function getPEARVersion()
+	{
 		return '1.5.4';
 	}
 
-	function validatePearinstallerDependency($dep) {
+	function validatePearinstallerDependency($dep)
+	{
 		$pearversion = $this->getPEARVersion();
 		$extra = $this->_getExtraString($dep);
 		if (isset($dep['exclude'])) {
@@ -533,20 +546,20 @@ class PEAR_Dependency2 {
 		if (version_compare($pearversion, $dep['min'], '<')) {
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError('%s requires PEAR Installer' . $extra .
-						', installed version is ' . $pearversion);
+					', installed version is ' . $pearversion);
 			} else {
 				return $this->warning('warning: %s requires PEAR Installer' . $extra .
-						', installed version is ' . $pearversion);
+					', installed version is ' . $pearversion);
 			}
 		}
 		if (isset($dep['max'])) {
 			if (version_compare($pearversion, $dep['max'], '>')) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s requires PEAR Installer' . $extra .
-							', installed version is ' . $pearversion);
+						', installed version is ' . $pearversion);
 				} else {
 					return $this->warning('warning: %s requires PEAR Installer' . $extra .
-							', installed version is ' . $pearversion);
+						', installed version is ' . $pearversion);
 				}
 			}
 		}
@@ -558,10 +571,10 @@ class PEAR_Dependency2 {
 				if (version_compare($exclude, $pearversion, '==')) {
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s is not compatible with PEAR Installer ' .
-								'version ' . $exclude);
+							'version ' . $exclude);
 					} else {
 						return $this->warning('warning: %s is not compatible with PEAR ' .
-								'Installer version ' . $exclude);
+							'Installer version ' . $exclude);
 					}
 				}
 			}
@@ -569,7 +582,8 @@ class PEAR_Dependency2 {
 		return true;
 	}
 
-	function validateSubpackageDependency($dep, $required, $params) {
+	function validateSubpackageDependency($dep, $required, $params)
+	{
 		return $this->validatePackageDependency($dep, $required, $params);
 	}
 
@@ -581,9 +595,10 @@ class PEAR_Dependency2 {
 	 *                against pecl.php.net packages to accomodate extensions that have
 	 *                moved to pecl.php.net from pear.php.net
 	 */
-	function validatePackageDependency($dep, $required, $params, $depv1 = false) {
+	function validatePackageDependency($dep, $required, $params, $depv1 = false)
+	{
 		if ($this->_state != PEAR_VALIDATE_INSTALLING &&
-			$this->_state != PEAR_VALIDATE_DOWNLOADING) {
+		    $this->_state != PEAR_VALIDATE_DOWNLOADING) {
 			return true;
 		}
 		if (isset($dep['providesextension'])) {
@@ -607,7 +622,8 @@ class PEAR_Dependency2 {
 		}
 	}
 
-	function _validatePackageDownload($dep, $required, $params, $depv1 = false) {
+	function _validatePackageDownload($dep, $required, $params, $depv1 = false)
+	{
 		$dep['package'] = $dep['name'];
 		if (isset($dep['uri'])) {
 			$dep['channel'] = '__uri';
@@ -616,15 +632,15 @@ class PEAR_Dependency2 {
 		$found = false;
 		foreach ($params as $param) {
 			if ($param->isEqual(
-					array('package' => $dep['name'],
-						'channel' => $dep['channel']))) {
+				array('package' => $dep['name'],
+				    'channel' => $dep['channel']))) {
 				$found = true;
 				break;
 			}
 			if ($depv1 && $dep['channel'] == 'pear.php.net') {
 				if ($param->isEqual(
-						array('package' => $dep['name'],
-							'channel' => 'pecl.php.net'))) {
+					array('package' => $dep['name'],
+					    'channel' => 'pecl.php.net'))) {
 					$found = true;
 					break;
 				}
@@ -666,7 +682,7 @@ class PEAR_Dependency2 {
 			}
 		}
 		if (!isset($dep['min']) && !isset($dep['max']) &&
-			!isset($dep['recommended']) && !isset($dep['exclude'])) {
+		    !isset($dep['recommended']) && !isset($dep['exclude'])) {
 			if ($installed || $downloaded) {
 				$installed = $installed ? 'installed' : 'downloaded';
 				if (isset($dep['conflicts'])) {
@@ -677,10 +693,10 @@ class PEAR_Dependency2 {
 					}
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s conflicts with package "' . $depname . '"' .
-								$extra . $rest);
+							$extra . $rest);
 					} else {
 						return $this->warning('warning: %s conflicts with package "' . $depname . '"' .
-								$extra . $rest);
+							$extra . $rest);
 					}
 				}
 				return true;
@@ -691,14 +707,14 @@ class PEAR_Dependency2 {
 				if ($required) {
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s requires package "' . $depname . '"' .
-								$extra);
+							$extra);
 					} else {
 						return $this->warning('warning: %s requires package "' . $depname . '"' .
-								$extra);
+							$extra);
 					}
 				} else {
 					return $this->warning('%s can optionally use package "' . $depname . '"' .
-							$extra);
+						$extra);
 				}
 			}
 		}
@@ -709,14 +725,14 @@ class PEAR_Dependency2 {
 			if ($required) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('%s requires package "' . $depname . '"' .
-							$extra);
+						$extra);
 				} else {
 					return $this->warning('warning: %s requires package "' . $depname . '"' .
-							$extra);
+						$extra);
 				}
 			} else {
 				return $this->warning('%s can optionally use package "' . $depname . '"' .
-						$extra);
+					$extra);
 			}
 		}
 		$fail = false;
@@ -736,20 +752,20 @@ class PEAR_Dependency2 {
 			$dep = $this->_registry->parsedPackageNameToString($dep, true);
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError('%s requires package "' . $depname . '"' .
-						$extra . ", $installed version is " . $version);
+					$extra . ", $installed version is " . $version);
 			} else {
 				return $this->warning('warning: %s requires package "' . $depname . '"' .
-						$extra . ", $installed version is " . $version);
+					$extra . ", $installed version is " . $version);
 			}
 		} elseif ((isset($dep['min']) || isset($dep['max'])) && !$fail &&
-			isset($dep['conflicts']) && !isset($dep['exclude'])) {
+		    isset($dep['conflicts']) && !isset($dep['exclude'])) {
 			$installed = $installed ? 'installed' : 'downloaded';
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError('%s conflicts with package "' . $depname . '"' . $extra .
-						", $installed version is " . $version);
+					", $installed version is " . $version);
 			} else {
 				return $this->warning('warning: %s conflicts with package "' . $depname . '"' .
-						$extra . ", $installed version is " . $version);
+					$extra . ", $installed version is " . $version);
 			}
 		}
 		if (isset($dep['exclude'])) {
@@ -757,25 +773,25 @@ class PEAR_Dependency2 {
 			foreach ($dep['exclude'] as $exclude) {
 				if (version_compare($version, $exclude, '==') && !isset($dep['conflicts'])) {
 					if (!isset($this->_options['nodeps']) &&
-						!isset($this->_options['force'])) {
+					    !isset($this->_options['force'])) {
 						return $this->raiseError('%s is not compatible with ' .
-								$installed . ' package "' .
-								$depname . '" version ' .
-								$exclude);
+							$installed . ' package "' .
+							$depname . '" version ' .
+							$exclude);
 					} else {
 						return $this->warning('warning: %s is not compatible with ' .
-								$installed . ' package "' .
-								$depname . '" version ' .
-								$exclude);
+							$installed . ' package "' .
+							$depname . '" version ' .
+							$exclude);
 					}
 				} elseif (version_compare($version, $exclude, '!=') && isset($dep['conflicts'])) {
 					$installed = $installed ? 'installed' : 'downloaded';
 					if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 						return $this->raiseError('%s conflicts with package "' . $depname . '"' .
-								$extra . ", $installed version is " . $version);
+							$extra . ", $installed version is " . $version);
 					} else {
 						return $this->warning('warning: %s conflicts with package "' . $depname . '"' .
-								$extra . ", $installed version is " . $version);
+							$extra . ", $installed version is " . $version);
 					}
 				}
 			}
@@ -810,22 +826,23 @@ class PEAR_Dependency2 {
 					}
 				}
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force']) &&
-					!isset($this->_options['loose'])) {
+				    !isset($this->_options['loose'])) {
 					return $this->raiseError('%s dependency package "' . $depname .
-							'" ' . $installed . ' version ' . $version .
-							' is not the recommended version ' . $dep['recommended'] .
-							', but may be compatible, use --force to install');
+						'" ' . $installed . ' version ' . $version .
+						' is not the recommended version ' . $dep['recommended'] .
+						', but may be compatible, use --force to install');
 				} else {
 					return $this->warning('warning: %s dependency package "' . $depname .
-							'" ' . $installed . ' version ' . $version .
-							' is not the recommended version ' . $dep['recommended']);
+						'" ' . $installed . ' version ' . $version .
+						' is not the recommended version ' . $dep['recommended']);
 				}
 			}
 		}
 		return true;
 	}
 
-	function _validatePackageInstall($dep, $required, $depv1 = false) {
+	function _validatePackageInstall($dep, $required, $depv1 = false)
+	{
 		return $this->_validatePackageDownload($dep, $required, array(), $depv1);
 	}
 
@@ -835,7 +852,8 @@ class PEAR_Dependency2 {
 	 * @param PEAR_Installer $dl
 	 * @return PEAR_Error|true
 	 */
-	function validatePackageUninstall(&$dl) {
+	function validatePackageUninstall(&$dl)
+	{
 		if (PEAR::isError($this->_dependencydb)) {
 			return $this->_dependencydb;
 		}
@@ -853,7 +871,7 @@ class PEAR_Dependency2 {
 		}
 		// check cache
 		$memyselfandI = strtolower($this->_currentPackage['channel']) . '/' .
-			strtolower($this->_currentPackage['package']);
+		    strtolower($this->_currentPackage['package']);
 		if (isset($dl->___uninstall_package_cache)) {
 			$badpackages = $dl->___uninstall_package_cache;
 			if (isset($badpackages[$memyselfandI]['warnings'])) {
@@ -871,11 +889,11 @@ class PEAR_Dependency2 {
 				}
 				if (isset($this->_options['nodeps']) || isset($this->_options['force'])) {
 					return $this->warning(
-							'warning: %s should not be uninstalled, other installed packages depend ' .
-							'on this package');
+						'warning: %s should not be uninstalled, other installed packages depend ' .
+						'on this package');
 				} else {
 					return $this->raiseError(
-							'%s cannot be uninstalled, other installed packages depend on this package');
+						'%s cannot be uninstalled, other installed packages depend on this package');
 				}
 			}
 			return true;
@@ -885,14 +903,14 @@ class PEAR_Dependency2 {
 		$allparents = array();
 		foreach ($params as $i => $param) {
 			$a = array('channel' => strtolower($param->getChannel()),
-				'package' => strtolower($param->getPackage()));
+			    'package' => strtolower($param->getPackage()));
 			$deps = $this->_dependencydb->getDependentPackages($a);
 			if ($deps) {
 				foreach ($deps as $d) {
 					$pardeps = $this->_dependencydb->getDependencies($d);
 					foreach ($pardeps as $dep) {
 						if (strtolower($dep['dep']['channel']) == $a['channel'] &&
-							strtolower($dep['dep']['name']) == $a['package']) {
+						    strtolower($dep['dep']['name']) == $a['package']) {
 							if (!isset($perpackagelist[$a['channel'] . '/' . $a['package']])) {
 								$perpackagelist[$a['channel'] . '/' . $a['package']] = array();
 							}
@@ -904,7 +922,7 @@ class PEAR_Dependency2 {
 								$allparents[$d['channel'] . '/' . $d['package']][$a['channel'] . '/' . $a['package']] = array();
 							}
 							$allparents[$d['channel'] . '/' . $d['package']]
-								[$a['channel'] . '/' . $a['package']][] = array($d, $dep);
+							    [$a['channel'] . '/' . $a['package']][] = array($d, $dep);
 						}
 					}
 				}
@@ -926,7 +944,7 @@ class PEAR_Dependency2 {
 			foreach ($d1 as $d) {
 				foreach ($params as $param) {
 					if (strtolower($param->getChannel()) == $d[0][0]['channel'] &&
-						strtolower($param->getPackage()) == $d[0][0]['package']) {
+					    strtolower($param->getPackage()) == $d[0][0]['package']) {
 						// found it
 						continue 3;
 					}
@@ -1013,18 +1031,19 @@ class PEAR_Dependency2 {
 				}
 				if (isset($this->_options['nodeps']) || isset($this->_options['force'])) {
 					return $this->warning(
-							'warning: %s should not be uninstalled, other installed packages depend ' .
-							'on this package');
+						'warning: %s should not be uninstalled, other installed packages depend ' .
+						'on this package');
 				} else {
 					return $this->raiseError(
-							'%s cannot be uninstalled, other installed packages depend on this package');
+						'%s cannot be uninstalled, other installed packages depend on this package');
 				}
 			}
 		}
 		return true;
 	}
 
-	function _validatePackageUninstall($dep, $required, $dl) {
+	function _validatePackageUninstall($dep, $required, $dl)
+	{
 		$depname = $this->_registry->parsedPackageNameToString($dep, true);
 		$version = $this->_registry->packageinfo($dep['package'], 'version', $dep['channel']);
 		if (!$version) {
@@ -1043,14 +1062,14 @@ class PEAR_Dependency2 {
 			if ($required) {
 				if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 					return $this->raiseError('"' . $depname . '" is required by ' .
-							'installed package %s' . $extra);
+						'installed package %s' . $extra);
 				} else {
 					return $this->warning('warning: "' . $depname . '" is required by ' .
-							'installed package %s' . $extra);
+						'installed package %s' . $extra);
 				}
 			} else {
 				return $this->warning('"' . $depname . '" can be optionally used by ' .
-						'installed package %s' . $extra);
+					'installed package %s' . $extra);
 			}
 		}
 		$fail = false;
@@ -1069,14 +1088,14 @@ class PEAR_Dependency2 {
 		if ($required) {
 			if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
 				return $this->raiseError($depname . $extra . ' is required by installed package' .
-						' "%s"');
+					' "%s"');
 			} else {
 				return $this->raiseError('warning: ' . $depname . $extra .
-						' is required by installed package "%s"');
+					' is required by installed package "%s"');
 			}
 		} else {
 			return $this->warning($depname . $extra . ' can be optionally used by installed package' .
-					' "%s"');
+				' "%s"');
 		}
 		return true;
 	}
@@ -1094,7 +1113,8 @@ class PEAR_Dependency2 {
 	 * @param array $params full list of packages to install
 	 * @return true|PEAR_Error
 	 */
-	function validatePackage($pkg, &$dl, $params = array()) {
+	function validatePackage($pkg, &$dl, $params = array())
+	{
 		if (is_array($pkg) && isset($pkg['info'])) {
 			$deps = $this->_dependencydb->getDependentPackageDependencies($pkg['info']);
 		} else {
@@ -1116,12 +1136,12 @@ class PEAR_Dependency2 {
 				foreach ($info as $package => $ds) {
 					foreach ($params as $packd) {
 						if (strtolower($packd->getPackage()) == strtolower($package) &&
-							$packd->getChannel() == $channel) {
+						    $packd->getChannel() == $channel) {
 							$dl->log(3, 'skipping installed package check of "' .
-								$this->_registry->parsedPackageNameToString(
-									array('channel' => $channel, 'package' => $package), true) .
-								'", version "' . $packd->getVersion() . '" will be ' .
-								'downloaded and installed');
+							    $this->_registry->parsedPackageNameToString(
+								array('channel' => $channel, 'package' => $package), true) .
+							    '", version "' . $packd->getVersion() . '" will be ' .
+							    'downloaded and installed');
 							continue 2; // jump to next package
 						}
 					}
@@ -1143,7 +1163,7 @@ class PEAR_Dependency2 {
 		}
 		if ($fail) {
 			return $this->raiseError(
-					'%s cannot be installed, conflicts with installed packages');
+				'%s cannot be installed, conflicts with installed packages');
 		}
 		return true;
 	}
@@ -1151,7 +1171,8 @@ class PEAR_Dependency2 {
 	/**
 	 * validate a package.xml 1.0 dependency
 	 */
-	function validateDependency1($dep, $params = array()) {
+	function validateDependency1($dep, $params = array())
+	{
 		if (!isset($dep['optional'])) {
 			$dep['optional'] = 'no';
 		}
@@ -1167,12 +1188,13 @@ class PEAR_Dependency2 {
 	/**
 	 * Convert a 1.0 dep into a 2.0 dep
 	 */
-	function normalizeDep($dep) {
+	function normalizeDep($dep)
+	{
 		$types = array(
-			'pkg' => 'Package',
-			'ext' => 'Extension',
-			'os' => 'Os',
-			'php' => 'Php'
+		    'pkg' => 'Package',
+		    'ext' => 'Extension',
+		    'os' => 'Os',
+		    'php' => 'Php'
 		);
 		if (isset($types[$dep['type']])) {
 			$type = $types[$dep['type']];
@@ -1241,7 +1263,8 @@ class PEAR_Dependency2 {
 	 * @param  string Operator
 	 * @return string Sign equivalent
 	 */
-	function signOperator($operator) {
+	function signOperator($operator)
+	{
 		switch ($operator) {
 			case 'lt': return '<';
 			case 'le': return '<=';
@@ -1254,19 +1277,20 @@ class PEAR_Dependency2 {
 		}
 	}
 
-	function raiseError($msg) {
+	function raiseError($msg)
+	{
 		if (isset($this->_options['ignore-errors'])) {
 			return $this->warning($msg);
 		}
 		return PEAR::raiseError(sprintf($msg, $this->_registry->parsedPackageNameToString(
-						$this->_currentPackage, true)));
+				$this->_currentPackage, true)));
 	}
 
-	function warning($msg) {
+	function warning($msg)
+	{
 		return array(sprintf($msg, $this->_registry->parsedPackageNameToString(
-					$this->_currentPackage, true)));
+			    $this->_currentPackage, true)));
 	}
-
 }
 
 ?>

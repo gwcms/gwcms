@@ -1,8 +1,10 @@
 <?php
 
-class GW_File_Helper {
+class GW_File_Helper
+{
 
-	static function reorderFilesArray($name) {
+	static function reorderFilesArray($name)
+	{
 		$files = array();
 		foreach ($_FILES[$name]['name'] as $num_key => $dummy) {
 			foreach ($_FILES[$name] as $txt_key => $dummy) {
@@ -13,7 +15,8 @@ class GW_File_Helper {
 		return $files;
 	}
 
-	function createZip($files = array(), $destination = '', $overwrite = false) {
+	function createZip($files = array(), $destination = '', $overwrite = false)
+	{
 		//if the zip file already exists and overwrite is false, return false
 		if (file_exists($destination) && !$overwrite) {
 			return false;
@@ -53,7 +56,8 @@ class GW_File_Helper {
 		}
 	}
 
-	function unlinkOldTempFiles($dir, $expire_time = '7 day') {
+	function unlinkOldTempFiles($dir, $expire_time = '7 day')
+	{
 		$files = glob($dir . '/*');
 		$expire_time = strtotime('-' . $expire_time);
 
@@ -63,7 +67,8 @@ class GW_File_Helper {
 		}
 	}
 
-	function cleanName($name) {
+	function cleanName($name)
+	{
 		$name = str_replace(' ', '_', $name);
 		setlocale(LC_CTYPE, 'en_GB.utf8');
 		$name = iconv('UTF-8', 'us-ascii//TRANSLIT//IGNORE', $name);
@@ -71,7 +76,8 @@ class GW_File_Helper {
 		return $name;
 	}
 
-	function output($file) {
+	function output($file)
+	{
 		header('HTTP/1.0 200 OK', true, 200);
 		header("Content-Type: application/x-download");
 		header('Content-Disposition: attachment; filename="' . basename($file) . '";');
@@ -92,5 +98,4 @@ class GW_File_Helper {
 
 		exit;
 	}
-
 }

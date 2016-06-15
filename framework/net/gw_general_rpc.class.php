@@ -1,6 +1,7 @@
 <?php
 
-class GW_General_RPC {
+class GW_General_RPC
+{
 
 	public $url;
 	public $debug = false;
@@ -8,7 +9,8 @@ class GW_General_RPC {
 	public $last_url;
 	public $timeout = 500;
 
-	public function call($name, $get = [], $post = []) {
+	public function call($name, $get = [], $post = [])
+	{
 		//open connection
 		$ch = curl_init();
 		//set the url, number of POST vars, POST data
@@ -54,19 +56,20 @@ class GW_General_RPC {
 		return $json_result;
 	}
 
-	public function __call($name, $args) {
+	public function __call($name, $args)
+	{
 		$get = isset($args[0]) ? $args[0] : [];
 		$post = isset($args[1]) ? $args[1] : [];
 
 		return $this->call($name, $get, $post);
 	}
 
-	function sysUserCall($name, $get = [], $post = [], $uid = GW_USER_SYSTEM_ID) {
+	function sysUserCall($name, $get = [], $post = [], $uid = GW_USER_SYSTEM_ID)
+	{
 		$token = GW::getInstance('gw_temp_access')->getToken($uid);
 
 		$get['temp_access'] = $uid . ',' . $token;
 
 		return $this->call($name, $get, $post);
 	}
-
 }

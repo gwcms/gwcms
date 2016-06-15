@@ -1,12 +1,14 @@
 <?php
 
-class GW_Permissions {
+class GW_Permissions
+{
 
 	static $table = 'gw_permissions';
 	static $root_group_id = 1;
 	static $cache = [];
 
-	function __construct() {
+	function __construct()
+	{
 		
 	}
 
@@ -14,11 +16,13 @@ class GW_Permissions {
 	 * 
 	 * @return DB
 	 */
-	static function getDB() {
+	static function getDB()
+	{
 		return GW::$context->db;
 	}
 
-	static function save($group_id, $path_access) {
+	static function save($group_id, $path_access)
+	{
 		$group_id = (int) $group_id;
 		$db = self::getDB();
 
@@ -31,15 +35,18 @@ class GW_Permissions {
 		$db->_multi_insert(self::$table, $list);
 	}
 
-	static function deleteAll($group_id) {
+	static function deleteAll($group_id)
+	{
 		self::getDB()->delete(self::$table, ['group_id=?', $group_id]);
 	}
 
-	static function getByGroupId($group_id) {
+	static function getByGroupId($group_id)
+	{
 		return self::getDB()->fetch_assoc("SELECT path,access_level FROM `" . self::$table . "` WHERE group_id=" . (int) $group_id);
 	}
 
-	static function &__getPrmByMltGrpIds($gids, $path = false) {
+	static function &__getPrmByMltGrpIds($gids, $path = false)
+	{
 
 		if (!count($gids)) {
 			$empty = [];
@@ -62,7 +69,8 @@ class GW_Permissions {
 		return $data;
 	}
 
-	static function &getPrmByMltGrpIds($gids) {
+	static function &getPrmByMltGrpIds($gids)
+	{
 		$cache_id = implode(',', (array) $gids);
 		if ($cache_var = & self::$cache[$cache_id])
 			return $cache_var;
@@ -71,7 +79,8 @@ class GW_Permissions {
 		return $cache_var;
 	}
 
-	static function canAccess($path, $gids, $load_once = true) {
+	static function canAccess($path, $gids, $load_once = true)
+	{
 		if (self::isRoot($gids))
 			return true;
 
@@ -83,19 +92,21 @@ class GW_Permissions {
 		return isset($paths[$path]);
 	}
 
-	static function isRoot($gids) {
+	static function isRoot($gids)
+	{
 		if (in_array(self::$root_group_id, (array) $gids)) // root group has access to anything
 			return true;
 	}
 
-	static function checkPages(&$list, $user) {
+	static function checkPages(&$list, $user)
+	{
 		foreach ($list as $i => $item)
 			if (!self::canAccess($item->path, $user->group_ids))
 				unset($list[$i]);
 	}
 
-	static function deleteByPath($path) {
+	static function deleteByPath($path)
+	{
 		self::getDB()->delete(self::$table, ['path=?', $path]);
 	}
-
 }

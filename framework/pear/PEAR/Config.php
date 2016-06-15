@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Config, customized configuration handling for the PEAR Installer
  *
@@ -97,7 +96,7 @@ if (getenv('PHP_PEAR_EXTENSION_DIR')) {
 	if (ini_get('extension_dir')) {
 		define('PEAR_CONFIG_DEFAULT_EXT_DIR', ini_get('extension_dir'));
 	} elseif (defined('PEAR_EXTENSION_DIR') &&
-		file_exists(PEAR_EXTENSION_DIR) && is_dir(PEAR_EXTENSION_DIR)) {
+	    file_exists(PEAR_EXTENSION_DIR) && is_dir(PEAR_EXTENSION_DIR)) {
 		define('PEAR_CONFIG_DEFAULT_EXT_DIR', PEAR_EXTENSION_DIR);
 	} elseif (defined('PHP_EXTENSION_DIR')) {
 		define('PEAR_CONFIG_DEFAULT_EXT_DIR', PHP_EXTENSION_DIR);
@@ -139,7 +138,7 @@ if (getenv('PHP_PEAR_TEMP_DIR')) {
 	define('PEAR_CONFIG_DEFAULT_TEMP_DIR', getenv('PHP_PEAR_TEMP_DIR'));
 } else {
 	define('PEAR_CONFIG_DEFAULT_TEMP_DIR', System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
-		DIRECTORY_SEPARATOR . 'temp');
+	    DIRECTORY_SEPARATOR . 'temp');
 }
 
 // Default for cache_dir
@@ -147,7 +146,7 @@ if (getenv('PHP_PEAR_CACHE_DIR')) {
 	define('PEAR_CONFIG_DEFAULT_CACHE_DIR', getenv('PHP_PEAR_CACHE_DIR'));
 } else {
 	define('PEAR_CONFIG_DEFAULT_CACHE_DIR', System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
-		DIRECTORY_SEPARATOR . 'cache');
+	    DIRECTORY_SEPARATOR . 'cache');
 }
 
 // Default for download_dir
@@ -155,7 +154,7 @@ if (getenv('PHP_PEAR_DOWNLOAD_DIR')) {
 	define('PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR', getenv('PHP_PEAR_DOWNLOAD_DIR'));
 } else {
 	define('PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR', System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
-		DIRECTORY_SEPARATOR . 'download');
+	    DIRECTORY_SEPARATOR . 'download');
 }
 
 // Default for php_bin
@@ -163,7 +162,7 @@ if (getenv('PHP_PEAR_PHP_BIN')) {
 	define('PEAR_CONFIG_DEFAULT_PHP_BIN', getenv('PHP_PEAR_PHP_BIN'));
 } else {
 	define('PEAR_CONFIG_DEFAULT_PHP_BIN', PEAR_CONFIG_DEFAULT_BIN_DIR .
-		DIRECTORY_SEPARATOR . 'php' . (OS_WINDOWS ? '.exe' : ''));
+	    DIRECTORY_SEPARATOR . 'php' . (OS_WINDOWS ? '.exe' : ''));
 }
 
 // Default for verbose
@@ -206,7 +205,7 @@ if (getenv('PHP_PEAR_SIG_BIN')) {
 	define('PEAR_CONFIG_DEFAULT_SIG_BIN', getenv('PHP_PEAR_SIG_BIN'));
 } else {
 	define('PEAR_CONFIG_DEFAULT_SIG_BIN', System::which(
-			'gpg', OS_WINDOWS ? 'c:\gnupg\gpg.exe' : '/usr/local/bin/gpg'));
+		'gpg', OS_WINDOWS ? 'c:\gnupg\gpg.exe' : '/usr/local/bin/gpg'));
 }
 
 // Default for sig_keydir
@@ -229,7 +228,8 @@ if (getenv('PHP_PEAR_SIG_KEYDIR')) {
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
-class PEAR_Config extends PEAR {
+class PEAR_Config extends PEAR
+{
 	// {{{ properties
 
 	/**
@@ -238,8 +238,8 @@ class PEAR_Config extends PEAR {
 	 * @var array layer => config file
 	 */
 	var $files = array(
-		'system' => '',
-		'user' => '',
+	    'system' => '',
+	    'user' => '',
 	);
 	var $layers = array();
 
@@ -256,9 +256,9 @@ class PEAR_Config extends PEAR {
 	 * @var array layer => array(keyname => value, ...)
 	 */
 	var $configuration = array(
-		'user' => array(),
-		'system' => array(),
-		'default' => array(),
+	    'user' => array(),
+	    'system' => array(),
+	    'default' => array(),
 	);
 
 	/**
@@ -269,9 +269,9 @@ class PEAR_Config extends PEAR {
 	 * @access private
 	 */
 	var $_channelConfigInfo = array(
-		'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
-		'test_dir', 'php_bin', 'username', 'password', 'verbose',
-		'preferred_state', 'umask', 'preferred_mirror',
+	    'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
+	    'test_dir', 'php_bin', 'username', 'password', 'verbose',
+	    'preferred_state', 'umask', 'preferred_mirror',
 	);
 
 	/**
@@ -325,208 +325,208 @@ class PEAR_Config extends PEAR {
 	 * @var array layer => array(infotype => value, ...)
 	 */
 	var $configuration_info = array(
-		// Channels/Internet Access
-		'default_channel' => array(
-			'type' => 'string',
-			'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
-			'doc' => 'the default channel to use for all non explicit commands',
-			'prompt' => 'Default Channel',
-			'group' => 'Internet Access',
-		),
-		'preferred_mirror' => array(
-			'type' => 'string',
-			'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
-			'doc' => 'the default server or mirror to use for channel actions',
-			'prompt' => 'Default Channel Mirror',
-			'group' => 'Internet Access',
-		),
-		'remote_config' => array(
-			'type' => 'password',
-			'default' => '',
-			'doc' => 'ftp url of remote configuration file to use for synchronized install',
-			'prompt' => 'Remote Configuration File',
-			'group' => 'Internet Access',
-		),
-		'auto_discover' => array(
-			'type' => 'integer',
-			'default' => 0,
-			'doc' => 'whether to automatically discover new channels',
-			'prompt' => 'Auto-discover new Channels',
-			'group' => 'Internet Access',
-		),
-		// Internet Access
-		'master_server' => array(
-			'type' => 'string',
-			'default' => 'pear.php.net',
-			'doc' => 'name of the main PEAR server [NOT USED IN THIS VERSION]',
-			'prompt' => 'PEAR server [DEPRECATED]',
-			'group' => 'Internet Access',
-		),
-		'http_proxy' => array(
-			'type' => 'string',
-			'default' => PEAR_CONFIG_DEFAULT_HTTP_PROXY,
-			'doc' => 'HTTP proxy (host:port) to use when downloading packages',
-			'prompt' => 'HTTP Proxy Server Address',
-			'group' => 'Internet Access',
-		),
-		// File Locations
-		'php_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_PHP_DIR,
-			'doc' => 'directory where .php files are installed',
-			'prompt' => 'PEAR directory',
-			'group' => 'File Locations',
-		),
-		'ext_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_EXT_DIR,
-			'doc' => 'directory where loadable extensions are installed',
-			'prompt' => 'PHP extension directory',
-			'group' => 'File Locations',
-		),
-		'doc_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_DOC_DIR,
-			'doc' => 'directory where documentation is installed',
-			'prompt' => 'PEAR documentation directory',
-			'group' => 'File Locations',
-		),
-		'bin_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_BIN_DIR,
-			'doc' => 'directory where executables are installed',
-			'prompt' => 'PEAR executables directory',
-			'group' => 'File Locations',
-		),
-		'data_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_DATA_DIR,
-			'doc' => 'directory where data files are installed',
-			'prompt' => 'PEAR data directory',
-			'group' => 'File Locations (Advanced)',
-		),
-		'test_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_TEST_DIR,
-			'doc' => 'directory where regression tests are installed',
-			'prompt' => 'PEAR test directory',
-			'group' => 'File Locations (Advanced)',
-		),
-		'cache_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
-			'doc' => 'directory which is used for XMLRPC cache',
-			'prompt' => 'PEAR Installer cache directory',
-			'group' => 'File Locations (Advanced)',
-		),
-		'temp_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_TEMP_DIR,
-			'doc' => 'directory which is used for all temp files',
-			'prompt' => 'PEAR Installer temp directory',
-			'group' => 'File Locations (Advanced)',
-		),
-		'download_dir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
-			'doc' => 'directory which is used for all downloaded files',
-			'prompt' => 'PEAR Installer download directory',
-			'group' => 'File Locations (Advanced)',
-		),
-		'php_bin' => array(
-			'type' => 'file',
-			'default' => PEAR_CONFIG_DEFAULT_PHP_BIN,
-			'doc' => 'PHP CLI/CGI binary for executing scripts',
-			'prompt' => 'PHP CLI/CGI binary',
-			'group' => 'File Locations (Advanced)',
-		),
-		'php_ini' => array(
-			'type' => 'file',
-			'default' => '',
-			'doc' => 'location of php.ini in which to enable PECL extensions on install',
-			'prompt' => 'php.ini location',
-			'group' => 'File Locations (Advanced)',
-		),
-		// Maintainers
-		'username' => array(
-			'type' => 'string',
-			'default' => '',
-			'doc' => '(maintainers) your PEAR account name',
-			'prompt' => 'PEAR username (for maintainers)',
-			'group' => 'Maintainers',
-		),
-		'password' => array(
-			'type' => 'password',
-			'default' => '',
-			'doc' => '(maintainers) your PEAR account password',
-			'prompt' => 'PEAR password (for maintainers)',
-			'group' => 'Maintainers',
-		),
-		// Advanced
-		'verbose' => array(
-			'type' => 'integer',
-			'default' => PEAR_CONFIG_DEFAULT_VERBOSE,
-			'doc' => 'verbosity level
+	    // Channels/Internet Access
+	    'default_channel' => array(
+		'type' => 'string',
+		'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
+		'doc' => 'the default channel to use for all non explicit commands',
+		'prompt' => 'Default Channel',
+		'group' => 'Internet Access',
+	    ),
+	    'preferred_mirror' => array(
+		'type' => 'string',
+		'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
+		'doc' => 'the default server or mirror to use for channel actions',
+		'prompt' => 'Default Channel Mirror',
+		'group' => 'Internet Access',
+	    ),
+	    'remote_config' => array(
+		'type' => 'password',
+		'default' => '',
+		'doc' => 'ftp url of remote configuration file to use for synchronized install',
+		'prompt' => 'Remote Configuration File',
+		'group' => 'Internet Access',
+	    ),
+	    'auto_discover' => array(
+		'type' => 'integer',
+		'default' => 0,
+		'doc' => 'whether to automatically discover new channels',
+		'prompt' => 'Auto-discover new Channels',
+		'group' => 'Internet Access',
+	    ),
+	    // Internet Access
+	    'master_server' => array(
+		'type' => 'string',
+		'default' => 'pear.php.net',
+		'doc' => 'name of the main PEAR server [NOT USED IN THIS VERSION]',
+		'prompt' => 'PEAR server [DEPRECATED]',
+		'group' => 'Internet Access',
+	    ),
+	    'http_proxy' => array(
+		'type' => 'string',
+		'default' => PEAR_CONFIG_DEFAULT_HTTP_PROXY,
+		'doc' => 'HTTP proxy (host:port) to use when downloading packages',
+		'prompt' => 'HTTP Proxy Server Address',
+		'group' => 'Internet Access',
+	    ),
+	    // File Locations
+	    'php_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_PHP_DIR,
+		'doc' => 'directory where .php files are installed',
+		'prompt' => 'PEAR directory',
+		'group' => 'File Locations',
+	    ),
+	    'ext_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_EXT_DIR,
+		'doc' => 'directory where loadable extensions are installed',
+		'prompt' => 'PHP extension directory',
+		'group' => 'File Locations',
+	    ),
+	    'doc_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_DOC_DIR,
+		'doc' => 'directory where documentation is installed',
+		'prompt' => 'PEAR documentation directory',
+		'group' => 'File Locations',
+	    ),
+	    'bin_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_BIN_DIR,
+		'doc' => 'directory where executables are installed',
+		'prompt' => 'PEAR executables directory',
+		'group' => 'File Locations',
+	    ),
+	    'data_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_DATA_DIR,
+		'doc' => 'directory where data files are installed',
+		'prompt' => 'PEAR data directory',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'test_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_TEST_DIR,
+		'doc' => 'directory where regression tests are installed',
+		'prompt' => 'PEAR test directory',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'cache_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
+		'doc' => 'directory which is used for XMLRPC cache',
+		'prompt' => 'PEAR Installer cache directory',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'temp_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_TEMP_DIR,
+		'doc' => 'directory which is used for all temp files',
+		'prompt' => 'PEAR Installer temp directory',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'download_dir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
+		'doc' => 'directory which is used for all downloaded files',
+		'prompt' => 'PEAR Installer download directory',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'php_bin' => array(
+		'type' => 'file',
+		'default' => PEAR_CONFIG_DEFAULT_PHP_BIN,
+		'doc' => 'PHP CLI/CGI binary for executing scripts',
+		'prompt' => 'PHP CLI/CGI binary',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    'php_ini' => array(
+		'type' => 'file',
+		'default' => '',
+		'doc' => 'location of php.ini in which to enable PECL extensions on install',
+		'prompt' => 'php.ini location',
+		'group' => 'File Locations (Advanced)',
+	    ),
+	    // Maintainers
+	    'username' => array(
+		'type' => 'string',
+		'default' => '',
+		'doc' => '(maintainers) your PEAR account name',
+		'prompt' => 'PEAR username (for maintainers)',
+		'group' => 'Maintainers',
+	    ),
+	    'password' => array(
+		'type' => 'password',
+		'default' => '',
+		'doc' => '(maintainers) your PEAR account password',
+		'prompt' => 'PEAR password (for maintainers)',
+		'group' => 'Maintainers',
+	    ),
+	    // Advanced
+	    'verbose' => array(
+		'type' => 'integer',
+		'default' => PEAR_CONFIG_DEFAULT_VERBOSE,
+		'doc' => 'verbosity level
 0: really quiet
 1: somewhat quiet
 2: verbose
 3: debug',
-			'prompt' => 'Debug Log Level',
-			'group' => 'Advanced',
-		),
-		'preferred_state' => array(
-			'type' => 'set',
-			'default' => PEAR_CONFIG_DEFAULT_PREFERRED_STATE,
-			'doc' => 'the installer will prefer releases with this state when installing packages without a version or state specified',
-			'valid_set' => array(
-				'stable', 'beta', 'alpha', 'devel', 'snapshot'),
-			'prompt' => 'Preferred Package State',
-			'group' => 'Advanced',
-		),
-		'umask' => array(
-			'type' => 'mask',
-			'default' => PEAR_CONFIG_DEFAULT_UMASK,
-			'doc' => 'umask used when creating files (Unix-like systems only)',
-			'prompt' => 'Unix file mask',
-			'group' => 'Advanced',
-		),
-		'cache_ttl' => array(
-			'type' => 'integer',
-			'default' => PEAR_CONFIG_DEFAULT_CACHE_TTL,
-			'doc' => 'amount of secs where the local cache is used and not updated',
-			'prompt' => 'Cache TimeToLive',
-			'group' => 'Advanced',
-		),
-		'sig_type' => array(
-			'type' => 'set',
-			'default' => PEAR_CONFIG_DEFAULT_SIG_TYPE,
-			'doc' => 'which package signature mechanism to use',
-			'valid_set' => array('gpg'),
-			'prompt' => 'Package Signature Type',
-			'group' => 'Maintainers',
-		),
-		'sig_bin' => array(
-			'type' => 'string',
-			'default' => PEAR_CONFIG_DEFAULT_SIG_BIN,
-			'doc' => 'which package signature mechanism to use',
-			'prompt' => 'Signature Handling Program',
-			'group' => 'Maintainers',
-		),
-		'sig_keyid' => array(
-			'type' => 'string',
-			'default' => '',
-			'doc' => 'which key to use for signing with',
-			'prompt' => 'Signature Key Id',
-			'group' => 'Maintainers',
-		),
-		'sig_keydir' => array(
-			'type' => 'directory',
-			'default' => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
-			'doc' => 'directory where signature keys are located',
-			'prompt' => 'Signature Key Directory',
-			'group' => 'Maintainers',
-		),
-		// __channels is reserved - used for channel-specific configuration
+		'prompt' => 'Debug Log Level',
+		'group' => 'Advanced',
+	    ),
+	    'preferred_state' => array(
+		'type' => 'set',
+		'default' => PEAR_CONFIG_DEFAULT_PREFERRED_STATE,
+		'doc' => 'the installer will prefer releases with this state when installing packages without a version or state specified',
+		'valid_set' => array(
+		    'stable', 'beta', 'alpha', 'devel', 'snapshot'),
+		'prompt' => 'Preferred Package State',
+		'group' => 'Advanced',
+	    ),
+	    'umask' => array(
+		'type' => 'mask',
+		'default' => PEAR_CONFIG_DEFAULT_UMASK,
+		'doc' => 'umask used when creating files (Unix-like systems only)',
+		'prompt' => 'Unix file mask',
+		'group' => 'Advanced',
+	    ),
+	    'cache_ttl' => array(
+		'type' => 'integer',
+		'default' => PEAR_CONFIG_DEFAULT_CACHE_TTL,
+		'doc' => 'amount of secs where the local cache is used and not updated',
+		'prompt' => 'Cache TimeToLive',
+		'group' => 'Advanced',
+	    ),
+	    'sig_type' => array(
+		'type' => 'set',
+		'default' => PEAR_CONFIG_DEFAULT_SIG_TYPE,
+		'doc' => 'which package signature mechanism to use',
+		'valid_set' => array('gpg'),
+		'prompt' => 'Package Signature Type',
+		'group' => 'Maintainers',
+	    ),
+	    'sig_bin' => array(
+		'type' => 'string',
+		'default' => PEAR_CONFIG_DEFAULT_SIG_BIN,
+		'doc' => 'which package signature mechanism to use',
+		'prompt' => 'Signature Handling Program',
+		'group' => 'Maintainers',
+	    ),
+	    'sig_keyid' => array(
+		'type' => 'string',
+		'default' => '',
+		'doc' => 'which key to use for signing with',
+		'prompt' => 'Signature Key Id',
+		'group' => 'Maintainers',
+	    ),
+	    'sig_keydir' => array(
+		'type' => 'directory',
+		'default' => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
+		'doc' => 'directory where signature keys are located',
+		'prompt' => 'Signature Key Directory',
+		'group' => 'Maintainers',
+	    ),
+	    // __channels is reserved - used for channel-specific configuration
 	);
 
 	// }}}
@@ -546,7 +546,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @see PEAR_Config::singleton
 	 */
-	function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false, $strict = true) {
+	function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false, $strict = true)
+	{
 		$this->PEAR();
 		PEAR_Installer_Role::initializeConfig($this);
 		$sl = DIRECTORY_SEPARATOR;
@@ -601,7 +602,6 @@ class PEAR_Config extends PEAR {
 		$this->_regInitialized['default'] = false;
 		//$GLOBALS['_PEAR_Config_instance'] = &$this;
 	}
-
 	// }}}
 	// {{{ singleton([file], [defaults_file])
 
@@ -620,7 +620,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @see PEAR_Config::PEAR_Config
 	 */
-	function &singleton($user_file = '', $system_file = '', $strict = true) {
+	function &singleton($user_file = '', $system_file = '', $strict = true)
+	{
 		if (is_object($GLOBALS['_PEAR_Config_instance'])) {
 			return $GLOBALS['_PEAR_Config_instance'];
 		}
@@ -633,7 +634,6 @@ class PEAR_Config extends PEAR {
 		$GLOBALS['_PEAR_Config_instance'] = &$t_conf;
 		return $GLOBALS['_PEAR_Config_instance'];
 	}
-
 	// }}}
 	// {{{ validConfiguration()
 
@@ -643,13 +643,13 @@ class PEAR_Config extends PEAR {
 	 * @return bool
 	 * @since PEAR 1.4.0a1
 	 */
-	function validConfiguration() {
+	function validConfiguration()
+	{
 		if ($this->isDefinedLayer('user') || $this->isDefinedLayer('system')) {
 			return true;
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ readConfigFile([file], [layer])
 
@@ -662,7 +662,8 @@ class PEAR_Config extends PEAR {
 	 * @param string config layer to insert data into ('user' or 'system')
 	 * @return bool TRUE on success or a PEAR error on failure
 	 */
-	function readConfigFile($file = null, $layer = 'user', $strict = true) {
+	function readConfigFile($file = null, $layer = 'user', $strict = true)
+	{
 		if (empty($this->files[$layer])) {
 			return $this->raiseError("unknown config layer `$layer'");
 		}
@@ -698,14 +699,14 @@ class PEAR_Config extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 
 	/**
 	 * @param string url to the remote config file, like ftp://www.example.com/pear/config.ini
 	 * @return true|PEAR_Error
 	 */
-	function readFTPConfigFile($path) {
+	function readFTPConfigFile($path)
+	{
 		do { // poor man's try
 			if (!class_exists('PEAR_FTP')) {
 				if (!class_exists('PEAR_Common')) {
@@ -726,7 +727,7 @@ class PEAR_Config extends PEAR {
 				$tmp = System::mktemp('-d');
 				PEAR_Common::addTempFile($tmp);
 				$e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
-					'pear.ini', false, FTP_BINARY);
+				    'pear.ini', false, FTP_BINARY);
 				if (PEAR::isError($e)) {
 					$this->_ftp->popErrorHandling();
 					return $e;
@@ -742,7 +743,7 @@ class PEAR_Config extends PEAR {
 				$fail = array();
 				foreach ($this->configuration_info as $key => $val) {
 					if (in_array($this->getGroup($key), array('File Locations', 'File Locations (Advanced)')) &&
-						$this->getType($key) == 'directory') {
+					    $this->getType($key) == 'directory') {
 						// any directory configs must be set for this to work
 						if (!isset($this->configuration['ftp'][$key])) {
 							$fail[] = $key;
@@ -754,8 +755,8 @@ class PEAR_Config extends PEAR {
 					unset($this->files['ftp']);
 					unset($this->configuration['ftp']);
 					return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
-							'directory configuration variables.  These variables were not set: ' .
-							$fail);
+						'directory configuration variables.  These variables were not set: ' .
+						$fail);
 				} else {
 					return true;
 				}
@@ -766,13 +767,13 @@ class PEAR_Config extends PEAR {
 		unset($this->files['ftp']);
 		return PEAR::raiseError('no remote host specified');
 	}
-
 	// {{{ _setupChannels()
 
 	/**
 	 * Reads the existing configurations and creates the _channels array from it
 	 */
-	function _setupChannels() {
+	function _setupChannels()
+	{
 		$set = array_flip(array_values($this->_channels));
 		foreach ($this->configuration as $layer => $data) {
 			$i = 1000;
@@ -789,7 +790,8 @@ class PEAR_Config extends PEAR {
 	// }}}
 	// {{{ deleteChannel(channel)
 
-	function deleteChannel($channel) {
+	function deleteChannel($channel)
+	{
 		foreach ($this->configuration as $layer => $data) {
 			if (isset($data['__channels'])) {
 				if (isset($data['__channels'][strtolower($channel)])) {
@@ -801,7 +803,6 @@ class PEAR_Config extends PEAR {
 		unset($this->_channels[strtolower($channel)]);
 		$this->_channels = array_flip($this->_channels);
 	}
-
 	// }}}
 	// {{{ mergeConfigFile(file, [override], [layer])
 
@@ -815,7 +816,8 @@ class PEAR_Config extends PEAR {
 	 * @param string if true, errors are returned if file opening fails
 	 * @return bool TRUE on success or a PEAR error on failure
 	 */
-	function mergeConfigFile($file, $override = true, $layer = 'user', $strict = true) {
+	function mergeConfigFile($file, $override = true, $layer = 'user', $strict = true)
+	{
 		if (empty($this->files[$layer])) {
 			return $this->raiseError("unknown config layer `$layer'");
 		}
@@ -858,7 +860,8 @@ class PEAR_Config extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function arrayMergeRecursive($arr2, $arr1) {
+	function arrayMergeRecursive($arr2, $arr1)
+	{
 		$ret = array();
 		foreach ($arr2 as $key => $data) {
 			if (!isset($arr1[$key])) {
@@ -878,7 +881,6 @@ class PEAR_Config extends PEAR {
 		}
 		return array_merge($ret, $arr1);
 	}
-
 	// }}}
 	// {{{ writeConfigFile([file], [layer])
 
@@ -891,7 +893,8 @@ class PEAR_Config extends PEAR {
 	 * @param string|null data to write to config file or null for internal data [DEPRECATED]
 	 * @return bool TRUE on success or a PEAR error on failure
 	 */
-	function writeConfigFile($file = null, $layer = 'user', $data = null) {
+	function writeConfigFile($file = null, $layer = 'user', $data = null)
+	{
 		$this->_lazyChannelSetup($layer);
 		if ($layer == 'both' || $layer == 'all') {
 			foreach ($this->files as $type => $file) {
@@ -927,7 +930,6 @@ class PEAR_Config extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ _readConfigDataFrom(file)
 
@@ -941,7 +943,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _readConfigDataFrom($file) {
+	function _readConfigDataFrom($file)
+	{
 		$fp = false;
 		if (file_exists($file)) {
 			$fp = @fopen($file, "r");
@@ -1009,10 +1012,10 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @param string $layer 'user' or 'system'
 	 */
-	function getConfFile($layer) {
+	function getConfFile($layer)
+	{
 		return $this->files[$layer];
 	}
-
 	// }}}
 
 	/**
@@ -1020,7 +1023,8 @@ class PEAR_Config extends PEAR {
 	 * @return true|PEAR_Error
 	 * @access private
 	 */
-	function _addConfigVars($vars) {
+	function _addConfigVars($vars)
+	{
 		if (count($vars) > 3) {
 			return $this->raiseError('Roles can only define 3 new config variables or less');
 		}
@@ -1033,13 +1037,13 @@ class PEAR_Config extends PEAR {
 			} else {
 				if (!in_array($var['type'], array('string', 'mask', 'password', 'directory', 'file', 'set'))) {
 					return $this->raiseError(
-							'Configuration type must be one of directory, file, string, ' .
-							'mask, set, or password');
+						'Configuration type must be one of directory, file, string, ' .
+						'mask, set, or password');
 				}
 			}
 			if (!isset($var['default'])) {
 				return $this->raiseError(
-						'Configuration information must contain a default value ("default" index)');
+					'Configuration information must contain a default value ("default" index)');
 			} else {
 				if (is_array($var['default'])) {
 					$real_default = '';
@@ -1051,18 +1055,18 @@ class PEAR_Config extends PEAR {
 								$real_default .= constant($val);
 							} else {
 								return $this->raiseError(
-										'Unknown constant "' . $val . '" requested in ' .
-										'default value for configuration variable "' .
-										$name . '"');
+									'Unknown constant "' . $val . '" requested in ' .
+									'default value for configuration variable "' .
+									$name . '"');
 							}
 						} elseif (isset($this->configuration_info[$config_var])) {
 							$real_default .=
-								$this->configuration_info[$config_var]['default'];
+							    $this->configuration_info[$config_var]['default'];
 						} else {
 							return $this->raiseError(
-									'Unknown request for "' . $config_var . '" value in ' .
-									'default value for configuration variable "' .
-									$name . '"');
+								'Unknown request for "' . $config_var . '" value in ' .
+								'default value for configuration variable "' .
+								$name . '"');
 						}
 					}
 					$var['default'] = $real_default;
@@ -1073,19 +1077,19 @@ class PEAR_Config extends PEAR {
 			}
 			if (!isset($var['doc'])) {
 				return $this->raiseError(
-						'Configuration information must contain a summary ("doc" index)');
+					'Configuration information must contain a summary ("doc" index)');
 			}
 			if (!isset($var['prompt'])) {
 				return $this->raiseError(
-						'Configuration information must contain a simple prompt ("prompt" index)');
+					'Configuration information must contain a simple prompt ("prompt" index)');
 			}
 			if (!isset($var['group'])) {
 				return $this->raiseError(
-						'Configuration information must contain a simple group ("group" index)');
+					'Configuration information must contain a simple group ("group" index)');
 			}
 			if (isset($this->configuration_info[$name])) {
 				return $this->raiseError('Configuration variable "' . $name .
-						'" already exists');
+					'" already exists');
 			}
 			$this->configuration_info[$name] = $var;
 			// fix bug #7351: setting custom config variable in a channel fails
@@ -1093,7 +1097,6 @@ class PEAR_Config extends PEAR {
 		}
 		return true;
 	}
-
 	// {{{ _encodeOutput(&data)
 
 	/**
@@ -1107,7 +1110,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _encodeOutput(&$data) {
+	function _encodeOutput(&$data)
+	{
 		foreach ($data as $key => $value) {
 			if ($key == '__channels') {
 				foreach ($data['__channels'] as $channel => $blah) {
@@ -1133,7 +1137,6 @@ class PEAR_Config extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ _decodeInput(&data)
 
@@ -1148,7 +1151,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @see PEAR_Config::_encodeOutput
 	 */
-	function _decodeInput(&$data) {
+	function _decodeInput(&$data)
+	{
 		if (!is_array($data)) {
 			return true;
 		}
@@ -1186,7 +1190,8 @@ class PEAR_Config extends PEAR {
 	 * @param string registry layer
 	 * @return string|false
 	 */
-	function getDefaultChannel($layer = null) {
+	function getDefaultChannel($layer = null)
+	{
 		$ret = false;
 		if ($layer === null) {
 			foreach ($this->layers as $layer) {
@@ -1221,7 +1226,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function get($key, $layer = null, $channel = false) {
+	function get($key, $layer = null, $channel = false)
+	{
 		if (!isset($this->configuration_info[$key])) {
 			return null;
 		}
@@ -1239,12 +1245,12 @@ class PEAR_Config extends PEAR {
 		$channel = strtolower($channel);
 
 		$test = (in_array($key, $this->_channelConfigInfo)) ?
-			$this->_getChannelValue($key, $layer, $channel) :
-			null;
+		    $this->_getChannelValue($key, $layer, $channel) :
+		    null;
 		if ($test !== null) {
 			if ($this->_installRoot) {
 				if (in_array($this->getGroup($key), array('File Locations', 'File Locations (Advanced)')) &&
-					$this->getType($key) == 'directory') {
+				    $this->getType($key) == 'directory') {
 					return $this->_prependPath($test, $this->_installRoot);
 				}
 			}
@@ -1256,7 +1262,7 @@ class PEAR_Config extends PEAR {
 					$test = $this->configuration[$layer][$key];
 					if ($this->_installRoot) {
 						if (in_array($this->getGroup($key), array('File Locations', 'File Locations (Advanced)')) &&
-							$this->getType($key) == 'directory') {
+						    $this->getType($key) == 'directory') {
 							return $this->_prependPath($test, $this->_installRoot);
 						}
 					}
@@ -1279,7 +1285,7 @@ class PEAR_Config extends PEAR {
 			$test = $this->configuration[$layer][$key];
 			if ($this->_installRoot) {
 				if (in_array($this->getGroup($key), array('File Locations', 'File Locations (Advanced)')) &&
-					$this->getType($key) == 'directory') {
+				    $this->getType($key) == 'directory') {
 					return $this->_prependPath($test, $this->_installRoot);
 				}
 			}
@@ -1312,7 +1318,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _getChannelValue($key, $layer, $channel) {
+	function _getChannelValue($key, $layer, $channel)
+	{
 		if ($key == '__channels' || $channel == 'pear.php.net') {
 			return null;
 		}
@@ -1350,7 +1357,6 @@ class PEAR_Config extends PEAR {
 		}
 		return $ret;
 	}
-
 	// }}}
 	// {{{ set(key, value, [layer])
 
@@ -1366,7 +1372,8 @@ class PEAR_Config extends PEAR {
 	 * @param string channel to set this value for, or null for global value
 	 * @return bool TRUE on success, FALSE on failure
 	 */
-	function set($key, $value, $layer = 'user', $channel = false) {
+	function set($key, $value, $layer = 'user', $channel = false)
+	{
 		if ($key == '__channels') {
 			return false;
 		}
@@ -1410,7 +1417,7 @@ class PEAR_Config extends PEAR {
 					if ($valid_set) {
 						reset($valid_set);
 						if ((key($valid_set) === 0 && !in_array($value, $valid_set)) ||
-							(key($valid_set) !== 0 && empty($valid_set[$value]))) {
+						    (key($valid_set) !== 0 && empty($valid_set[$value]))) {
 							return false;
 						}
 					}
@@ -1456,7 +1463,7 @@ class PEAR_Config extends PEAR {
 		$this->configuration[$layer][$key] = $value;
 		if ($key == 'php_dir' && !$this->_noRegistry) {
 			if (!isset($this->_registry[$layer]) ||
-				$value != $this->_registry[$layer]->install_dir) {
+			    $value != $this->_registry[$layer]->install_dir) {
 				$this->_registry[$layer] = &new PEAR_Registry($value);
 				$this->_regInitialized[$layer] = false;
 				$this->_registry[$layer]->setConfig($this);
@@ -1466,7 +1473,8 @@ class PEAR_Config extends PEAR {
 	}
 
 	// }}}
-	function _lazyChannelSetup($uselayer = false) {
+	function _lazyChannelSetup($uselayer = false)
+	{
 		if ($this->_noRegistry) {
 			return;
 		}
@@ -1477,7 +1485,7 @@ class PEAR_Config extends PEAR {
 			}
 			if (!$this->_regInitialized[$layer]) {
 				if ($layer == 'default' && isset($this->_registry['user']) ||
-					isset($this->_registry['system'])) {
+				    isset($this->_registry['system'])) {
 					// only use the default registry if there are no alternatives
 					continue;
 				}
@@ -1497,7 +1505,6 @@ class PEAR_Config extends PEAR {
 			}
 		}
 	}
-
 	// {{{ setChannels()
 
 	/**
@@ -1508,7 +1515,8 @@ class PEAR_Config extends PEAR {
 	 * @param bool
 	 * @return bool success of operation
 	 */
-	function setChannels($channels, $merge = false) {
+	function setChannels($channels, $merge = false)
+	{
 		if (!is_array($channels)) {
 			return false;
 		}
@@ -1533,7 +1541,6 @@ class PEAR_Config extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ getType(key)
 
@@ -1548,13 +1555,13 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getType($key) {
+	function getType($key)
+	{
 		if (isset($this->configuration_info[$key])) {
 			return $this->configuration_info[$key]['type'];
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ getDocs(key)
 
@@ -1568,13 +1575,13 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getDocs($key) {
+	function getDocs($key)
+	{
 		if (isset($this->configuration_info[$key])) {
 			return $this->configuration_info[$key]['doc'];
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ getPrompt(key)
 
@@ -1588,13 +1595,13 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getPrompt($key) {
+	function getPrompt($key)
+	{
 		if (isset($this->configuration_info[$key])) {
 			return $this->configuration_info[$key]['prompt'];
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ getGroup(key)
 
@@ -1608,13 +1615,13 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getGroup($key) {
+	function getGroup($key)
+	{
 		if (isset($this->configuration_info[$key])) {
 			return $this->configuration_info[$key]['group'];
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ getGroups()
 
@@ -1626,14 +1633,14 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getGroups() {
+	function getGroups()
+	{
 		$tmp = array();
 		foreach ($this->configuration_info as $key => $info) {
 			$tmp[$info['group']] = 1;
 		}
 		return array_keys($tmp);
 	}
-
 	// }}}
 	// {{{ getGroupKeys()
 
@@ -1647,7 +1654,8 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getGroupKeys($group) {
+	function getGroupKeys($group)
+	{
 		$keys = array();
 		foreach ($this->configuration_info as $key => $info) {
 			if ($info['group'] == $group) {
@@ -1656,7 +1664,6 @@ class PEAR_Config extends PEAR {
 		}
 		return $keys;
 	}
-
 	// }}}
 	// {{{ getSetValues(key)
 
@@ -1672,10 +1679,11 @@ class PEAR_Config extends PEAR {
 	 * @access public
 	 *
 	 */
-	function getSetValues($key) {
+	function getSetValues($key)
+	{
 		if (isset($this->configuration_info[$key]) &&
-			isset($this->configuration_info[$key]['type']) &&
-			$this->configuration_info[$key]['type'] == 'set') {
+		    isset($this->configuration_info[$key]['type']) &&
+		    $this->configuration_info[$key]['type'] == 'set') {
 			$valid_set = $this->configuration_info[$key]['valid_set'];
 			reset($valid_set);
 			if (key($valid_set) === 0) {
@@ -1685,7 +1693,6 @@ class PEAR_Config extends PEAR {
 		}
 		return null;
 	}
-
 	// }}}
 	// {{{ getKeys()
 
@@ -1696,7 +1703,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function getKeys() {
+	function getKeys()
+	{
 		$keys = array();
 		foreach ($this->layers as $layer) {
 			$test = $this->configuration[$layer];
@@ -1710,7 +1718,6 @@ class PEAR_Config extends PEAR {
 		}
 		return array_keys($keys);
 	}
-
 	// }}}
 	// {{{ remove(key, [layer])
 
@@ -1725,7 +1732,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function remove($key, $layer = 'user') {
+	function remove($key, $layer = 'user')
+	{
 		$channel = $this->getDefaultChannel();
 		if ($channel !== 'pear.php.net') {
 			if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
@@ -1739,7 +1747,6 @@ class PEAR_Config extends PEAR {
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ removeLayer(layer)
 
@@ -1754,14 +1761,14 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function removeLayer($layer) {
+	function removeLayer($layer)
+	{
 		if (isset($this->configuration[$layer])) {
 			$this->configuration[$layer] = array();
 			return true;
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ store([layer])
 
@@ -1774,10 +1781,10 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function store($layer = 'user', $data = null) {
+	function store($layer = 'user', $data = null)
+	{
 		return $this->writeConfigFile(null, $layer, $data);
 	}
-
 	// }}}
 	// {{{ toDefault(key)
 
@@ -1791,11 +1798,11 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function toDefault($key) {
+	function toDefault($key)
+	{
 		trigger_error("PEAR_Config::toDefault() deprecated, use PEAR_Config::remove() instead", E_USER_NOTICE);
 		return $this->remove($key, 'user');
 	}
-
 	// }}}
 	// {{{ definedBy(key)
 
@@ -1812,7 +1819,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function definedBy($key, $returnchannel = false) {
+	function definedBy($key, $returnchannel = false)
+	{
 		foreach ($this->layers as $layer) {
 			$channel = $this->getDefaultChannel();
 			if ($channel !== 'pear.php.net') {
@@ -1832,7 +1840,6 @@ class PEAR_Config extends PEAR {
 		}
 		return '';
 	}
-
 	// }}}
 	// {{{ isDefaulted(key)
 
@@ -1847,11 +1854,11 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @deprecated
 	 */
-	function isDefaulted($key) {
+	function isDefaulted($key)
+	{
 		trigger_error("PEAR_Config::isDefaulted() deprecated, use PEAR_Config::definedBy() instead", E_USER_NOTICE);
 		return $this->definedBy($key) == 'system';
 	}
-
 	// }}}
 	// {{{ isDefined(key)
 
@@ -1864,7 +1871,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function isDefined($key) {
+	function isDefined($key)
+	{
 		foreach ($this->layers as $layer) {
 			if (isset($this->configuration[$layer][$key])) {
 				return true;
@@ -1872,7 +1880,6 @@ class PEAR_Config extends PEAR {
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ isDefinedLayer(key)
 
@@ -1885,10 +1892,10 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @access public
 	 */
-	function isDefinedLayer($layer) {
+	function isDefinedLayer($layer)
+	{
 		return isset($this->configuration[$layer]);
 	}
-
 	// }}}
 	// {{{ getLayers()
 
@@ -1897,7 +1904,8 @@ class PEAR_Config extends PEAR {
 	 *
 	 * @return array of the defined layers
 	 */
-	function getLayers() {
+	function getLayers()
+	{
 		$cf = $this->configuration;
 		unset($cf['default']);
 		return array_keys($cf);
@@ -1905,16 +1913,17 @@ class PEAR_Config extends PEAR {
 
 	// }}}
 	// {{{ apiVersion()
-	function apiVersion() {
+	function apiVersion()
+	{
 		return '1.1';
 	}
-
 	// }}}
 
 	/**
 	 * @return PEAR_Registry
 	 */
-	function &getRegistry($use = null) {
+	function &getRegistry($use = null)
+	{
 		if ($use === null) {
 			$layer = 'user';
 		} else {
@@ -1941,7 +1950,8 @@ class PEAR_Config extends PEAR {
 	 * @param PEAR_Registry
 	 * @return bool
 	 */
-	function setRegistry(&$reg, $layer = 'user') {
+	function setRegistry(&$reg, $layer = 'user')
+	{
 		if ($this->_noRegistry) {
 			return false;
 		}
@@ -1955,14 +1965,16 @@ class PEAR_Config extends PEAR {
 		return true;
 	}
 
-	function noRegistry() {
+	function noRegistry()
+	{
 		$this->_noRegistry = true;
 	}
 
 	/**
 	 * @return PEAR_Remote
 	 */
-	function &getRemote() {
+	function &getRemote()
+	{
 		$remote = &new PEAR_Remote($this);
 		return $remote;
 	}
@@ -1970,7 +1982,8 @@ class PEAR_Config extends PEAR {
 	/**
 	 * @return PEAR_REST
 	 */
-	function &getREST($version, $options = array()) {
+	function &getREST($version, $options = array())
+	{
 		$version = str_replace('.', '', $version);
 		if (!class_exists($class = 'PEAR_REST_' . $version)) {
 			require_once 'PEAR/REST/' . $version . '.php';
@@ -1984,7 +1997,8 @@ class PEAR_Config extends PEAR {
 	 * remote configuration file has been specified
 	 * @return PEAR_FTP|false
 	 */
-	function &getFTP() {
+	function &getFTP()
+	{
 		if (isset($this->_ftp)) {
 			return $this->_ftp;
 		} else {
@@ -1995,7 +2009,8 @@ class PEAR_Config extends PEAR {
 
 	// {{{ _prependPath($path, $prepend)
 
-	function _prependPath($path, $prepend) {
+	function _prependPath($path, $prepend)
+	{
 		if (strlen($prepend) > 0) {
 			if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
 				if (preg_match('/^[a-z]:/i', $prepend)) {
@@ -2010,14 +2025,14 @@ class PEAR_Config extends PEAR {
 		}
 		return $path;
 	}
-
 	// }}}
 
 	/**
 	 * @param string|false installation directory to prepend to all _dir variables, or false to
 	 *                     disable
 	 */
-	function setInstallRoot($root) {
+	function setInstallRoot($root)
+	{
 		if (substr($root, -1) == DIRECTORY_SEPARATOR) {
 			$root = substr($root, 0, -1);
 		}
@@ -2034,7 +2049,6 @@ class PEAR_Config extends PEAR {
 			}
 		}
 	}
-
 }
 
 ?>

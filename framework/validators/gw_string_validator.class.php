@@ -1,13 +1,16 @@
 <?php
 
-class GW_String_Validator extends GW_Validator {
+class GW_String_Validator extends GW_Validator
+{
 
-	function init() {
+	function init()
+	{
 		$this->setParam('error_min_length', '/G/VALIDATION/STRING/MIN_LENGTH');
 		$this->setParam('error_max_length', '/G/VALIDATION/STRING/MAX_LENGTH');
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$value = $this->validation_object;
 
 		$this->reset();
@@ -40,7 +43,8 @@ class GW_String_Validator extends GW_Validator {
 		return false;
 	}
 
-	function __countWords($value) {
+	function __countWords($value)
+	{
 		$words = 0;
 
 		foreach (explode(' ', $value) as $word)
@@ -49,5 +53,4 @@ class GW_String_Validator extends GW_Validator {
 
 		return $words;
 	}
-
 }

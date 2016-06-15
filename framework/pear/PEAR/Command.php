@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Command, command pattern class
  *
@@ -104,7 +103,8 @@ $GLOBALS['_PEAR_Command_objects'] = array();
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
-class PEAR_Command {
+class PEAR_Command
+{
 	// {{{ factory()
 
 	/**
@@ -118,7 +118,8 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function &factory($command, &$config) {
+	function &factory($command, &$config)
+	{
 		if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
 			PEAR_Command::registerCommands();
 		}
@@ -144,7 +145,8 @@ class PEAR_Command {
 
 	// }}}
 	// {{{ & getObject()
-	function &getObject($command) {
+	function &getObject($command)
+	{
 		$class = $GLOBALS['_PEAR_Command_commandlist'][$command];
 		if (!class_exists($class)) {
 			require_once $GLOBALS['_PEAR_Command_objects'][$class];
@@ -157,7 +159,6 @@ class PEAR_Command {
 		$obj = &new $class($ui, $config);
 		return $obj;
 	}
-
 	// }}}
 	// {{{ & getFrontendObject()
 
@@ -167,11 +168,11 @@ class PEAR_Command {
 	 * @return object|PEAR_Error
 	 * @static
 	 */
-	function &getFrontendObject() {
+	function &getFrontendObject()
+	{
 		$a = &PEAR_Frontend::singleton();
 		return $a;
 	}
-
 	// }}}
 	// {{{ & setFrontendClass()
 
@@ -183,11 +184,11 @@ class PEAR_Command {
 	 * @return object the frontend object, or a PEAR error
 	 * @static
 	 */
-	function &setFrontendClass($uiclass) {
+	function &setFrontendClass($uiclass)
+	{
 		$a = &PEAR_Frontend::setFrontendClass($uiclass);
 		return $a;
 	}
-
 	// }}}
 	// {{{ setFrontendType()
 
@@ -199,11 +200,11 @@ class PEAR_Command {
 	 * @return object the frontend object, or a PEAR error
 	 * @static
 	 */
-	function setFrontendType($uitype) {
+	function setFrontendType($uitype)
+	{
 		$uiclass = 'PEAR_Frontend_' . $uitype;
 		return PEAR_Command::setFrontendClass($uiclass);
 	}
-
 	// }}}
 	// {{{ registerCommands()
 
@@ -225,7 +226,8 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function registerCommands($merge = false, $dir = null) {
+	function registerCommands($merge = false, $dir = null)
+	{
 		$parser = new PEAR_XMLParser;
 		if ($dir === null) {
 			$dir = dirname(__FILE__) . '/Command';
@@ -251,7 +253,7 @@ class PEAR_Command {
 			// List of commands
 			if (empty($GLOBALS['_PEAR_Command_objects'][$class])) {
 				$GLOBALS['_PEAR_Command_objects'][$class] = "$dir/" . substr($entry, 0, -4) .
-					'.php';
+				    '.php';
 			}
 			foreach ($implements as $command => $desc) {
 				if ($command == 'attribs') {
@@ -259,7 +261,7 @@ class PEAR_Command {
 				}
 				if (isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
 					return PEAR::raiseError('Command "' . $command . '" already registered in ' .
-							'class "' . $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+						'class "' . $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
 				}
 				$GLOBALS['_PEAR_Command_commandlist'][$command] = $class;
 				$GLOBALS['_PEAR_Command_commanddesc'][$command] = $desc['summary'];
@@ -267,8 +269,8 @@ class PEAR_Command {
 					$shortcut = $desc['shortcut'];
 					if (isset($GLOBALS['_PEAR_Command_shortcuts'][$shortcut])) {
 						return PEAR::raiseError('Command shortcut "' . $shortcut . '" already ' .
-								'registered to command "' . $command . '" in class "' .
-								$GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+							'registered to command "' . $command . '" in class "' .
+							$GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
 					}
 					$GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
 				}
@@ -276,9 +278,9 @@ class PEAR_Command {
 					foreach ($desc['options'] as $oname => $option) {
 						if (isset($option['shortopt']) && strlen($option['shortopt']) > 1) {
 							return PEAR::raiseError('Option "' . $oname . '" short option "' .
-									$option['shortopt'] . '" must be ' .
-									'only 1 character in Command "' . $command . '" in class "' .
-									$class . '"');
+								$option['shortopt'] . '" must be ' .
+								'only 1 character in Command "' . $command . '" in class "' .
+								$class . '"');
 						}
 					}
 				}
@@ -289,7 +291,6 @@ class PEAR_Command {
 		@closedir($dp);
 		return true;
 	}
-
 	// }}}
 	// {{{ getCommands()
 
@@ -302,13 +303,13 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function getCommands() {
+	function getCommands()
+	{
 		if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
 			PEAR_Command::registerCommands();
 		}
 		return $GLOBALS['_PEAR_Command_commandlist'];
 	}
-
 	// }}}
 	// {{{ getShortcuts()
 
@@ -320,13 +321,13 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function getShortcuts() {
+	function getShortcuts()
+	{
 		if (empty($GLOBALS['_PEAR_Command_shortcuts'])) {
 			PEAR_Command::registerCommands();
 		}
 		return $GLOBALS['_PEAR_Command_shortcuts'];
 	}
-
 	// }}}
 	// {{{ getGetoptArgs()
 
@@ -342,7 +343,8 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function getGetoptArgs($command, &$short_args, &$long_args) {
+	function getGetoptArgs($command, &$short_args, &$long_args)
+	{
 		if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
 			PEAR_Command::registerCommands();
 		}
@@ -355,7 +357,6 @@ class PEAR_Command {
 		$obj = &PEAR_Command::getObject($command);
 		return $obj->getGetoptArgs($command, $short_args, $long_args);
 	}
-
 	// }}}
 	// {{{ getDescription()
 
@@ -369,13 +370,13 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function getDescription($command) {
+	function getDescription($command)
+	{
 		if (!isset($GLOBALS['_PEAR_Command_commanddesc'][$command])) {
 			return null;
 		}
 		return $GLOBALS['_PEAR_Command_commanddesc'][$command];
 	}
-
 	// }}}
 	// {{{ getHelp()
 
@@ -387,7 +388,8 @@ class PEAR_Command {
 	 * @access public
 	 * @static
 	 */
-	function getHelp($command) {
+	function getHelp($command)
+	{
 		$cmds = PEAR_Command::getCommands();
 		if (isset($GLOBALS['_PEAR_Command_shortcuts'][$command])) {
 			$command = $GLOBALS['_PEAR_Command_shortcuts'][$command];
@@ -398,7 +400,6 @@ class PEAR_Command {
 		}
 		return false;
 	}
-
 	// }}}
 }
 

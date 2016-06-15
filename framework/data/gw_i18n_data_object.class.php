@@ -1,28 +1,33 @@
 <?php
 
-class GW_i18n_Data_Object extends GW_Composite_Data_Object {
+class GW_i18n_Data_Object extends GW_Composite_Data_Object
+{
 
 	var $i18n_fields = Array();
 	var $_lang; //i18n
 
-	function __construct($values = Array(), $load = false, $lang = false) {
+	function __construct($values = Array(), $load = false, $lang = false)
+	{
 		if ($lang)
 			$this->_lang = $lang;
 
 		parent::__construct($values, $load);
 	}
 
-	function createNewObject($values = array(), $load = false, $lang = false) {
+	function createNewObject($values = array(), $load = false, $lang = false)
+	{
 		$class = get_class($this);
 		$o = new $class($values, $load, $lang);
 		return $o;
 	}
 
-	function isI18NField($name) {
+	function isI18NField($name)
+	{
 		return isset($this->i18n_fields[$name]);
 	}
 
-	function getDefaultLn() {
+	function getDefaultLn()
+	{
 		if ($this->_lang)
 			return $this->_lang;
 
@@ -32,7 +37,8 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object {
 		return GW::$settings['LANGS'][0];
 	}
 
-	function getI18NFieldName($name, $ln = false) {
+	function getI18NFieldName($name, $ln = false)
+	{
 		if (!$this->isI18NField($name))
 			return $name;
 
@@ -41,7 +47,8 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object {
 		return "{$name}_{$ln}";
 	}
 
-	function set($name, $value, $ln = false) {
+	function set($name, $value, $ln = false)
+	{
 		/*
 		  if($key=='_lang')
 		  {
@@ -52,16 +59,19 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object {
 		return parent::set($this->getI18NFieldName($name, $ln), $value);
 	}
 
-	function get($name, $ln = false) {
+	function get($name, $ln = false)
+	{
 		return parent::get($this->getI18NFieldName($name, $ln));
 	}
 
-	function setValues($vals, $ln = false) {
+	function setValues($vals, $ln = false)
+	{
 		foreach ($vals as $key => $val)
 			$this->set($key, $val, $ln);
 	}
 
-	function addLang($default_lang, $create_lang) {
+	function addLang($default_lang, $create_lang)
+	{
 		$list = $this->getDB()->fetch_rows_key("SHOW COLUMNS FROM `$this->table`", 'Field');
 
 		$copy = [];
@@ -93,7 +103,8 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object {
 		return $sqls;
 	}
 
-	function dropLang($lang) {
+	function dropLang($lang)
+	{
 		$del = [];
 
 		$sqls = [];
@@ -106,5 +117,4 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object {
 
 		return $sqls;
 	}
-
 }

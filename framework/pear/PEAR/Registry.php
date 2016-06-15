@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Registry
  *
@@ -47,7 +46,8 @@ define('PEAR_REGISTRY_ERROR_CHANNEL_FILE', -6);
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_Registry extends PEAR {
+class PEAR_Registry extends PEAR
+{
 	// {{{ properties
 
 	/**
@@ -136,7 +136,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access public
 	 */
-	function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false, $pecl_channel = false) {
+	function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false, $pecl_channel = false)
+	{
 		parent::PEAR();
 		$ds = DIRECTORY_SEPARATOR;
 		$this->install_dir = $pear_install_dir;
@@ -149,7 +150,8 @@ class PEAR_Registry extends PEAR {
 		$this->_config = false;
 	}
 
-	function hasWriteAccess() {
+	function hasWriteAccess()
+	{
 		if (!file_exists($this->install_dir)) {
 			$dir = $this->install_dir;
 			while ($dir && $dir != '.') {
@@ -167,19 +169,21 @@ class PEAR_Registry extends PEAR {
 		return is_writeable($this->install_dir);
 	}
 
-	function setConfig(&$config) {
+	function setConfig(&$config)
+	{
 		$this->_config = &$config;
 	}
 
-	function _initializeChannelDirs() {
+	function _initializeChannelDirs()
+	{
 		static $running = false;
 		if (!$running) {
 			$running = true;
 			$ds = DIRECTORY_SEPARATOR;
 			if (!is_dir($this->channelsdir) ||
-				!file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
-				!file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
-				!file_exists($this->channelsdir . $ds . '__uri.reg')) {
+			    !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
+			    !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
+			    !file_exists($this->channelsdir . $ds . '__uri.reg')) {
 				if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
 					$pear_channel = $this->_pearChannel;
 					if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
@@ -239,12 +243,13 @@ class PEAR_Registry extends PEAR {
 		}
 	}
 
-	function _initializeDirs() {
+	function _initializeDirs()
+	{
 		$ds = DIRECTORY_SEPARATOR;
 		// XXX Compatibility code should be removed in the future
 		// rename all registry files if any to lowercase
 		if (!OS_WINDOWS && file_exists($this->statedir) && is_dir($this->statedir) &&
-			$handle = opendir($this->statedir)) {
+		    $handle = opendir($this->statedir)) {
 			$dest = $this->statedir . $ds;
 			while (false !== ($file = readdir($handle))) {
 				if (preg_match('/^.*[A-Z].*\.reg\\z/', $file)) {
@@ -260,7 +265,8 @@ class PEAR_Registry extends PEAR {
 		$this->_initializeDepDB();
 	}
 
-	function _initializeDepDB() {
+	function _initializeDepDB()
+	{
 		if (!isset($this->_dependencyDB)) {
 			static $initializing = false;
 			if (!$initializing) {
@@ -272,7 +278,7 @@ class PEAR_Registry extends PEAR {
 						$file = '.pearrc';
 					}
 					$this->_config = &new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
-						$file);
+					    $file);
 					$this->_config->setRegistry($this);
 					$this->_config->set('php_dir', $this->install_dir);
 				}
@@ -280,9 +286,9 @@ class PEAR_Registry extends PEAR {
 				if (PEAR::isError($this->_dependencyDB)) {
 					// attempt to recover by removing the dep db
 					if (file_exists($this->_config->get('php_dir', null, 'pear.php.net') .
-							DIRECTORY_SEPARATOR . '.depdb')) {
+						DIRECTORY_SEPARATOR . '.depdb')) {
 						@unlink($this->_config->get('php_dir', null, 'pear.php.net') .
-								DIRECTORY_SEPARATOR . '.depdb');
+							DIRECTORY_SEPARATOR . '.depdb');
 					}
 					$this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
 					if (PEAR::isError($this->_dependencyDB)) {
@@ -295,7 +301,6 @@ class PEAR_Registry extends PEAR {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ destructor
 
@@ -304,13 +309,13 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _PEAR_Registry() {
+	function _PEAR_Registry()
+	{
 		parent::_PEAR();
 		if (is_resource($this->lock_fp)) {
 			$this->_unlock();
 		}
 	}
-
 	// }}}
 	// {{{ _assertStateDir()
 
@@ -322,7 +327,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _assertStateDir($channel = false) {
+	function _assertStateDir($channel = false)
+	{
 		if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
 			return $this->_assertChannelStateDir($channel);
 		}
@@ -338,18 +344,18 @@ class PEAR_Registry extends PEAR {
 			$init = true;
 		} elseif (!is_dir($this->statedir)) {
 			return $this->raiseError('Cannot create directory ' . $this->statedir . ', ' .
-					'it already exists and is not a directory');
+				'it already exists and is not a directory');
 		}
 		$ds = DIRECTORY_SEPARATOR;
 		if (!file_exists($this->channelsdir)) {
 			if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
-				!file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
-				!file_exists($this->channelsdir . $ds . '__uri.reg')) {
+			    !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
+			    !file_exists($this->channelsdir . $ds . '__uri.reg')) {
 				$init = true;
 			}
 		} elseif (!is_dir($this->channelsdir)) {
 			return $this->raiseError('Cannot create directory ' . $this->channelsdir . ', ' .
-					'it already exists and is not a directory');
+				'it already exists and is not a directory');
 		}
 		if ($init) {
 			static $running = false;
@@ -364,7 +370,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ _assertChannelStateDir()
 
@@ -377,7 +382,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _assertChannelStateDir($channel) {
+	function _assertChannelStateDir($channel)
+	{
 		$ds = DIRECTORY_SEPARATOR;
 		if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
 			if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
@@ -387,7 +393,7 @@ class PEAR_Registry extends PEAR {
 		}
 		$channelDir = $this->_channelDirectoryName($channel);
 		if (!is_dir($this->channelsdir) ||
-			!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
+		    !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
 			$this->_initializeChannelDirs();
 		}
 		if (!file_exists($channelDir)) {
@@ -397,15 +403,14 @@ class PEAR_Registry extends PEAR {
 			require_once 'System.php';
 			if (!System::mkdir(array('-p', $channelDir))) {
 				return $this->raiseError("could not create directory '" . $channelDir .
-						"'");
+					"'");
 			}
 		} elseif (!is_dir($channelDir)) {
 			return $this->raiseError("could not create directory '" . $channelDir .
-					"', already exists and is not a directory");
+				"', already exists and is not a directory");
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ _assertChannelDir()
 
@@ -417,7 +422,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _assertChannelDir() {
+	function _assertChannelDir()
+	{
 		if (!file_exists($this->channelsdir)) {
 			if (!$this->hasWriteAccess()) {
 				return false;
@@ -428,7 +434,7 @@ class PEAR_Registry extends PEAR {
 			}
 		} elseif (!is_dir($this->channelsdir)) {
 			return $this->raiseError("could not create directory '{$this->channelsdir}" .
-					"', it already exists and is not a directory");
+				"', it already exists and is not a directory");
 		}
 		if (!file_exists($this->channelsdir . DIRECTORY_SEPARATOR . '.alias')) {
 			if (!$this->hasWriteAccess()) {
@@ -440,11 +446,10 @@ class PEAR_Registry extends PEAR {
 			}
 		} elseif (!is_dir($this->channelsdir . DIRECTORY_SEPARATOR . '.alias')) {
 			return $this->raiseError("could not create directory '{$this->channelsdir}" .
-					"/.alias', it already exists and is not a directory");
+				"/.alias', it already exists and is not a directory");
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ _packageFileName()
 
@@ -458,14 +463,14 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access public
 	 */
-	function _packageFileName($package, $channel = false) {
+	function _packageFileName($package, $channel = false)
+	{
 		if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
 			return $this->_channelDirectoryName($channel) . DIRECTORY_SEPARATOR .
-				strtolower($package) . '.reg';
+			    strtolower($package) . '.reg';
 		}
 		return $this->statedir . DIRECTORY_SEPARATOR . strtolower($package) . '.reg';
 	}
-
 	// }}}
 	// {{{ _channelFileName()
 
@@ -474,7 +479,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string channel name
 	 * @return string registry file name
 	 */
-	function _channelFileName($channel, $noaliases = false) {
+	function _channelFileName($channel, $noaliases = false)
+	{
 		if (!$noaliases) {
 			if (file_exists($this->_getChannelAliasFileName($channel))) {
 				$channel = implode('', file($this->_getChannelAliasFileName($channel)));
@@ -482,7 +488,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $this->channelsdir . DIRECTORY_SEPARATOR . str_replace('/', '_', strtolower($channel)) . '.reg';
 	}
-
 	// }}}
 	// {{{ getChannelAliasFileName()
 
@@ -490,18 +495,19 @@ class PEAR_Registry extends PEAR {
 	 * @param string
 	 * @return string
 	 */
-	function _getChannelAliasFileName($alias) {
+	function _getChannelAliasFileName($alias)
+	{
 		return $this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
-			DIRECTORY_SEPARATOR . str_replace('/', '_', strtolower($alias)) . '.txt';
+		    DIRECTORY_SEPARATOR . str_replace('/', '_', strtolower($alias)) . '.txt';
 	}
-
 	// }}}
 	// {{{ _getChannelFromAlias()
 
 	/**
 	 * Get the name of a channel from its alias
 	 */
-	function _getChannelFromAlias($channel) {
+	function _getChannelFromAlias($channel)
+	{
 		if (!$this->_channelExists($channel)) {
 			if ($channel == 'pear.php.net') {
 				return 'pear.php.net';
@@ -522,14 +528,14 @@ class PEAR_Registry extends PEAR {
 			return $channel;
 		}
 	}
-
 	// }}}
 	// {{{ _getChannelFromAlias()
 
 	/**
 	 * Get the alias of a channel from its alias or its name
 	 */
-	function _getAlias($channel) {
+	function _getAlias($channel)
+	{
 		if (!$this->_channelExists($channel)) {
 			if ($channel == 'pear.php.net') {
 				return 'pear';
@@ -545,7 +551,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $channel->getAlias();
 	}
-
 	// }}}
 	// {{{ _channelDirectoryName()
 
@@ -559,7 +564,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access public
 	 */
-	function _channelDirectoryName($channel) {
+	function _channelDirectoryName($channel)
+	{
 		if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
 			return $this->statedir;
 		} else {
@@ -568,14 +574,15 @@ class PEAR_Registry extends PEAR {
 				$ch = $channel;
 			}
 			return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' .
-					str_replace('/', '_', $ch));
+				str_replace('/', '_', $ch));
 		}
 	}
 
 	// }}}
 	// {{{ _openPackageFile()
 
-	function _openPackageFile($package, $mode, $channel = false) {
+	function _openPackageFile($package, $mode, $channel = false)
+	{
 		if (!$this->_assertStateDir($channel)) {
 			return null;
 		}
@@ -596,14 +603,16 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _closePackageFile()
 
-	function _closePackageFile($fp) {
+	function _closePackageFile($fp)
+	{
 		fclose($fp);
 	}
 
 	// }}}
 	// {{{ _openChannelFile()
 
-	function _openChannelFile($channel, $mode) {
+	function _openChannelFile($channel, $mode)
+	{
 		if (!$this->_assertChannelDir()) {
 			return null;
 		}
@@ -624,14 +633,16 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _closePackageFile()
 
-	function _closeChannelFile($fp) {
+	function _closeChannelFile($fp)
+	{
 		fclose($fp);
 	}
 
 	// }}}
 	// {{{ _rebuildFileMap()
 
-	function _rebuildFileMap() {
+	function _rebuildFileMap()
+	{
 		if (!class_exists('PEAR_Installer_Role')) {
 			require_once 'PEAR/Installer/Role.php';
 		}
@@ -668,7 +679,7 @@ class PEAR_Registry extends PEAR {
 					$file = preg_replace(',^/+,', '', $file);
 					if ($channel != 'pear.php.net') {
 						$files[$attrs['role']][$file] = array(strtolower($channel),
-							strtolower($package));
+						    strtolower($package));
 					} else {
 						if (!is_array($files)) {
 							$file = array();
@@ -698,7 +709,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _readFileMap()
 
-	function _readFileMap() {
+	function _readFileMap()
+	{
 		if (!file_exists($this->filemap)) {
 			return array();
 		}
@@ -720,7 +732,6 @@ class PEAR_Registry extends PEAR {
 		$this->filemap_cache = $tmp;
 		return true;
 	}
-
 	// }}}
 	// {{{ _lock()
 
@@ -736,7 +747,8 @@ class PEAR_Registry extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _lock($mode = LOCK_EX) {
+	function _lock($mode = LOCK_EX)
+	{
 		if (!eregi('Windows 9', php_uname())) {
 			if ($mode != LOCK_UN && is_resource($this->lock_fp)) {
 				// XXX does not check type of lock (LOCK_SH/LOCK_EX)
@@ -764,7 +776,7 @@ class PEAR_Registry extends PEAR {
 
 			if (!is_resource($this->lock_fp)) {
 				return $this->raiseError("could not create lock file" .
-						(isset($php_errormsg) ? ": " . $php_errormsg : ""));
+					(isset($php_errormsg) ? ": " . $php_errormsg : ""));
 			}
 			if (!(int) flock($this->lock_fp, $mode)) {
 				switch ($mode) {
@@ -786,7 +798,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _unlock()
 
-	function _unlock() {
+	function _unlock()
+	{
 		$ret = $this->_lock(LOCK_UN);
 		if (is_resource($this->lock_fp)) {
 			fclose($this->lock_fp);
@@ -798,10 +811,10 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _packageExists()
 
-	function _packageExists($package, $channel = false) {
+	function _packageExists($package, $channel = false)
+	{
 		return file_exists($this->_packageFileName($package, $channel));
 	}
-
 	// }}}
 	// {{{ _channelExists()
 
@@ -811,7 +824,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool if true, then aliases will be ignored
 	 * @return boolean
 	 */
-	function _channelExists($channel, $noaliases = false) {
+	function _channelExists($channel, $noaliases = false)
+	{
 		$a = file_exists($this->_channelFileName($channel, $noaliases));
 		if (!$a && $channel == 'pear.php.net') {
 			return true;
@@ -821,7 +835,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $a;
 	}
-
 	// }}}
 	// {{{ _addChannel()
 
@@ -831,7 +844,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string Last-Modified HTTP tag from remote request
 	 * @return boolean|PEAR_Error True on creation, false if it already exists
 	 */
-	function _addChannel($channel, $update = false, $lastmodified = false) {
+	function _addChannel($channel, $update = false, $lastmodified = false)
+	{
 		if (!is_a($channel, 'PEAR_ChannelFile')) {
 			return false;
 		}
@@ -866,7 +880,7 @@ class PEAR_Registry extends PEAR {
 		}
 		if ($channel->getAlias() != $channel->getName()) {
 			if (file_exists($this->_getChannelAliasFileName($channel->getAlias())) &&
-				$this->_getChannelFromAlias($channel->getAlias()) != $channel->getName()) {
+			    $this->_getChannelFromAlias($channel->getAlias()) != $channel->getName()) {
 				$channel->setAlias($channel->getName());
 			}
 			if (!$this->hasWriteAccess()) {
@@ -896,7 +910,6 @@ class PEAR_Registry extends PEAR {
 		fclose($fp);
 		return true;
 	}
-
 	// }}}
 	// {{{ _deleteChannel()
 
@@ -905,7 +918,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string|PEAR_ChannelFile channel name
 	 * @return boolean|PEAR_Error True on deletion, false if it doesn't exist
 	 */
-	function _deleteChannel($channel) {
+	function _deleteChannel($channel)
+	{
 		if (!is_string($channel)) {
 			if (is_a($channel, 'PEAR_ChannelFile')) {
 				if (!$channel->validate()) {
@@ -954,7 +968,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $ret;
 	}
-
 	// }}}
 	// {{{ _isChannelAlias()
 
@@ -963,10 +976,10 @@ class PEAR_Registry extends PEAR {
 	 * @param string Channel Alias
 	 * @return boolean
 	 */
-	function _isChannelAlias($alias) {
+	function _isChannelAlias($alias)
+	{
 		return file_exists($this->_getChannelAliasFileName($alias));
 	}
-
 	// }}}
 	// {{{ _packageInfo()
 
@@ -977,7 +990,8 @@ class PEAR_Registry extends PEAR {
 	 * @return array|null
 	 * @access private
 	 */
-	function _packageInfo($package = null, $key = null, $channel = 'pear.php.net') {
+	function _packageInfo($package = null, $key = null, $channel = 'pear.php.net')
+	{
 		if ($package === null) {
 			if ($channel === null) {
 				$channels = $this->_listChannels();
@@ -1021,7 +1035,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return null;
 	}
-
 	// }}}
 	// {{{ _channelInfo()
 
@@ -1030,7 +1043,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool whether to strictly retrieve info of channels, not just aliases
 	 * @return array|null
 	 */
-	function _channelInfo($channel, $noaliases = false) {
+	function _channelInfo($channel, $noaliases = false)
+	{
 		if (!$this->_channelExists($channel, $noaliases)) {
 			return null;
 		}
@@ -1051,7 +1065,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _listChannels()
 
-	function _listChannels() {
+	function _listChannels()
+	{
 		$channellist = array();
 		if (!file_exists($this->channelsdir) || !is_dir($this->channelsdir)) {
 			return array('pear.php.net', 'pecl.php.net', '__uri');
@@ -1083,7 +1098,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _listPackages()
 
-	function _listPackages($channel = false) {
+	function _listPackages($channel = false)
+	{
 		if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
 			return $this->_listChannelPackages($channel);
 		}
@@ -1108,10 +1124,11 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ _listChannelPackages()
 
-	function _listChannelPackages($channel) {
+	function _listChannelPackages($channel)
+	{
 		$pkglist = array();
 		if (!file_exists($this->_channelDirectoryName($channel)) ||
-			!is_dir($this->_channelDirectoryName($channel))) {
+		    !is_dir($this->_channelDirectoryName($channel))) {
 			return array();
 		}
 		$dp = opendir($this->_channelDirectoryName($channel));
@@ -1130,7 +1147,8 @@ class PEAR_Registry extends PEAR {
 
 	// }}}
 
-	function _listAllPackages() {
+	function _listAllPackages()
+	{
 		$ret = array();
 		foreach ($this->_listChannels() as $channel) {
 			$ret[$channel] = $this->_listPackages($channel);
@@ -1145,7 +1163,8 @@ class PEAR_Registry extends PEAR {
 	 * @return bool success of saving
 	 * @access private
 	 */
-	function _addPackage($package, $info) {
+	function _addPackage($package, $info)
+	{
 		if ($this->_packageExists($package)) {
 			return false;
 		}
@@ -1167,7 +1186,8 @@ class PEAR_Registry extends PEAR {
 	 * @return bool
 	 * @access private
 	 */
-	function _addPackage2($info) {
+	function _addPackage2($info)
+	{
 		if (!$info->validate()) {
 			if (class_exists('PEAR_Common')) {
 				$ui = PEAR_Frontend::singleton();
@@ -1209,7 +1229,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool this parameter is only here for BC.  Don't use it.
 	 * @access private
 	 */
-	function _updatePackage($package, $info, $merge = true) {
+	function _updatePackage($package, $info, $merge = true)
+	{
 		$oldinfo = $this->_packageInfo($package);
 		if (empty($oldinfo)) {
 			return false;
@@ -1241,7 +1262,8 @@ class PEAR_Registry extends PEAR {
 	 * @return bool
 	 * @access private
 	 */
-	function _updatePackage2($info) {
+	function _updatePackage2($info)
+	{
 		if (!$this->_packageExists($info->getPackage(), $info->getChannel())) {
 			return false;
 		}
@@ -1264,7 +1286,8 @@ class PEAR_Registry extends PEAR {
 	 * @return PEAR_PackageFile_v1|PEAR_PackageFile_v2|null
 	 * @access private
 	 */
-	function &_getPackage($package, $channel = 'pear.php.net') {
+	function &_getPackage($package, $channel = 'pear.php.net')
+	{
 		$info = $this->_packageInfo($package, null, $channel);
 		if ($info === null) {
 			return $info;
@@ -1288,7 +1311,8 @@ class PEAR_Registry extends PEAR {
 	 * @return PEAR_ChannelFile|PEAR_Error
 	 * @access private
 	 */
-	function &_getChannel($channel, $noaliases = false) {
+	function &_getChannel($channel, $noaliases = false)
+	{
 		$ch = false;
 		if ($this->_channelExists($channel, $noaliases)) {
 			$chinfo = $this->_channelInfo($channel, $noaliases);
@@ -1351,7 +1375,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $ch;
 	}
-
 	// {{{ packageExists()
 
 	/**
@@ -1359,7 +1382,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string Channel name
 	 * @return bool
 	 */
-	function packageExists($package, $channel = 'pear.php.net') {
+	function packageExists($package, $channel = 'pear.php.net')
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1367,7 +1391,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ channelExists()
 
@@ -1376,7 +1399,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool if true, then aliases will be ignored
 	 * @return bool
 	 */
-	function channelExists($channel, $noaliases = false) {
+	function channelExists($channel, $noaliases = false)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1384,7 +1408,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ isAlias()
 
@@ -1393,7 +1416,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string
 	 * @return bool
 	 */
-	function isAlias($alias) {
+	function isAlias($alias)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1401,7 +1425,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ packageInfo()
 
@@ -1411,7 +1434,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string
 	 * @return array|null
 	 */
-	function packageInfo($package = null, $key = null, $channel = 'pear.php.net') {
+	function packageInfo($package = null, $key = null, $channel = 'pear.php.net')
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1419,7 +1443,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ channelInfo()
 
@@ -1432,7 +1455,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool whether to strictly retrieve information only on non-aliases
 	 * @return array|null|PEAR_Error
 	 */
-	function channelInfo($channel = null, $noaliases = false) {
+	function channelInfo($channel = null, $noaliases = false)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1440,13 +1464,13 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 
 	/**
 	 * @param string
 	 */
-	function channelName($channel) {
+	function channelName($channel)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1458,7 +1482,8 @@ class PEAR_Registry extends PEAR {
 	/**
 	 * @param string
 	 */
-	function channelAlias($channel) {
+	function channelAlias($channel)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1469,7 +1494,8 @@ class PEAR_Registry extends PEAR {
 
 	// {{{ listPackages()
 
-	function listPackages($channel = false) {
+	function listPackages($channel = false)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1481,7 +1507,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ listAllPackages()
 
-	function listAllPackages() {
+	function listAllPackages()
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1493,7 +1520,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ listChannel()
 
-	function listChannels() {
+	function listChannels()
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1501,7 +1529,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ addPackage()
 
@@ -1512,7 +1539,8 @@ class PEAR_Registry extends PEAR {
 	 * @param array package info (parsed by PEAR_Common::infoFrom*() methods)
 	 * @return bool success of saving
 	 */
-	function addPackage($package, $info) {
+	function addPackage($package, $info)
+	{
 		if (is_object($info)) {
 			return $this->addPackage2($info);
 		}
@@ -1537,7 +1565,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ addPackage2()
 
-	function addPackage2($info) {
+	function addPackage2($info)
+	{
 		if (!is_object($info)) {
 			return $this->addPackage($info['package'], $info);
 		}
@@ -1552,7 +1581,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $ret;
 	}
-
 	// }}}
 	// {{{ updateChannel()
 
@@ -1560,13 +1588,13 @@ class PEAR_Registry extends PEAR {
 	 * For future expandibility purposes, separate this
 	 * @param PEAR_ChannelFile
 	 */
-	function updateChannel($channel, $lastmodified = null) {
+	function updateChannel($channel, $lastmodified = null)
+	{
 		if ($channel->getName() == '__uri') {
 			return false;
 		}
 		return $this->addChannel($channel, $lastmodified, true);
 	}
-
 	// }}}
 	// {{{ deleteChannel()
 
@@ -1575,7 +1603,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string|PEAR_ChannelFile channel name
 	 * @return boolean|PEAR_Error True on deletion, false if it doesn't exist
 	 */
-	function deleteChannel($channel) {
+	function deleteChannel($channel)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
 			return $e;
 		}
@@ -1586,7 +1615,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $ret;
 	}
-
 	// }}}
 	// {{{ addChannel()
 
@@ -1595,7 +1623,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string Last-Modified header from HTTP for caching
 	 * @return boolean|PEAR_Error True on creation, false if it already exists
 	 */
-	function addChannel($channel, $lastmodified = false, $update = false) {
+	function addChannel($channel, $lastmodified = false, $update = false)
+	{
 		if (!is_a($channel, 'PEAR_ChannelFile')) {
 			return false;
 		}
@@ -1616,7 +1645,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ deletePackage()
 
-	function deletePackage($package, $channel = 'pear.php.net') {
+	function deletePackage($package, $channel = 'pear.php.net')
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
 			return $e;
 		}
@@ -1636,7 +1666,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ updatePackage()
 
-	function updatePackage($package, $info, $merge = true) {
+	function updatePackage($package, $info, $merge = true)
+	{
 		if (is_object($info)) {
 			return $this->updatePackage2($info, $merge);
 		}
@@ -1661,7 +1692,8 @@ class PEAR_Registry extends PEAR {
 	// }}}
 	// {{{ updatePackage2()
 
-	function updatePackage2($info) {
+	function updatePackage2($info)
+	{
 		if (!is_object($info)) {
 			return $this->updatePackage($info['package'], $info, $merge);
 		}
@@ -1687,7 +1719,8 @@ class PEAR_Registry extends PEAR {
 	 * @param bool whether to strictly return raw channels (no aliases)
 	 * @return PEAR_ChannelFile|PEAR_Error
 	 */
-	function &getChannel($channel, $noaliases = false) {
+	function &getChannel($channel, $noaliases = false)
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1706,7 +1739,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string channel name
 	 * @return PEAR_PackageFile_v1|PEAR_PackageFile_v2|null
 	 */
-	function &getPackage($package, $channel = 'pear.php.net') {
+	function &getPackage($package, $channel = 'pear.php.net')
+	{
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
 		}
@@ -1714,7 +1748,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $pf;
 	}
-
 	// }}}
 
 	/**
@@ -1725,7 +1758,8 @@ class PEAR_Registry extends PEAR {
 	 * @param array
 	 * @return array|false
 	 */
-	function getInstalledGroup($group) {
+	function getInstalledGroup($group)
+	{
 		$ret = array();
 		if (isset($group['package'])) {
 			if (!isset($group['package'][0])) {
@@ -1764,7 +1798,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string channel name
 	 * @return PEAR_Validate|false
 	 */
-	function &getChannelValidator($channel) {
+	function &getChannelValidator($channel)
+	{
 		$chan = $this->getChannel($channel);
 		if (PEAR::isError($chan)) {
 			return $chan;
@@ -1779,7 +1814,8 @@ class PEAR_Registry extends PEAR {
 	 * @param string channel name
 	 * @return array an array of PEAR_ChannelFile objects representing every installed channel
 	 */
-	function &getChannels() {
+	function &getChannels()
+	{
 		$ret = array();
 		if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
 			return $e;
@@ -1794,7 +1830,6 @@ class PEAR_Registry extends PEAR {
 		$this->_unlock();
 		return $ret;
 	}
-
 	// }}}
 	// {{{ checkFileMap()
 
@@ -1812,7 +1847,8 @@ class PEAR_Registry extends PEAR {
 	 *                     string if the file does not belong to an installed package,
 	 *                     or belongs to the second parameter's package
 	 */
-	function checkFileMap($path, $package = false, $api = '1.0', $attrs = false) {
+	function checkFileMap($path, $package = false, $api = '1.0', $attrs = false)
+	{
 		if (is_array($path)) {
 			static $notempty;
 			if (empty($notempty)) {
@@ -1884,7 +1920,8 @@ class PEAR_Registry extends PEAR {
 	 * Force a reload of the filemap
 	 * @since 1.5.0RC3
 	 */
-	function flushFileMap() {
+	function flushFileMap()
+	{
 		$this->filemap_cache = null;
 		clearstatcache(); // ensure that the next read gets the full, current filemap
 	}
@@ -1896,10 +1933,10 @@ class PEAR_Registry extends PEAR {
 	 * compatible with 1.0
 	 * @return string
 	 */
-	function apiVersion() {
+	function apiVersion()
+	{
 		return '1.1';
 	}
-
 	// }}}
 
 	/**
@@ -1915,7 +1952,8 @@ class PEAR_Registry extends PEAR {
 	 *                     [channel://][channame/]pname[-version|-state][/group=groupname]
 	 * @return array|PEAR_Error
 	 */
-	function parsePackageName($param, $defaultchannel = 'pear.php.net') {
+	function parsePackageName($param, $defaultchannel = 'pear.php.net')
+	{
 		$saveparam = $param;
 		if (is_array($param)) {
 			// convert to string for error messages
@@ -1923,7 +1961,7 @@ class PEAR_Registry extends PEAR {
 			// process the array
 			if (!isset($param['package'])) {
 				return PEAR::raiseError('parsePackageName(): array $param ' .
-						'must contain a valid package name in index "param"', 'package', null, null, $param);
+					'must contain a valid package name in index "param"', 'package', null, null, $param);
 			}
 			if (!isset($param['uri'])) {
 				if (!isset($param['channel'])) {
@@ -1940,12 +1978,12 @@ class PEAR_Registry extends PEAR {
 					$param = array('uri' => $param, 'channel' => '__uri');
 				} elseif ($components['scheme'] != 'channel') {
 					return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
-							'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
+						'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
 				}
 			}
 			if (!isset($components['path'])) {
 				return PEAR::raiseError('parsePackageName(): array $param ' .
-						'must contain a valid package name in "' . $param . '"', 'package', null, null, $param);
+					'must contain a valid package name in "' . $param . '"', 'package', null, null, $param);
 			}
 			if (isset($components['host'])) {
 				// remove the leading "/"
@@ -1955,7 +1993,7 @@ class PEAR_Registry extends PEAR {
 				if (strpos($components['path'], '/') !== false) {
 					if ($components['path']{0} == '/') {
 						return PEAR::raiseError('parsePackageName(): this is not ' .
-								'a package name, it begins with "/" in "' . $param . '"', 'invalid', null, null, $param);
+							'a package name, it begins with "/" in "' . $param . '"', 'invalid', null, null, $param);
 					}
 					$parts = explode('/', $components['path']);
 					$components['host'] = array_shift($parts);
@@ -1980,7 +2018,7 @@ class PEAR_Registry extends PEAR {
 				$param['package'] = $components['path'];
 			} else {
 				$param = array(
-					'package' => $components['path']
+				    'package' => $components['path']
 				);
 				if (isset($components['host'])) {
 					$param['channel'] = $components['host'];
@@ -2001,7 +2039,7 @@ class PEAR_Registry extends PEAR {
 			// check for extension
 			$pathinfo = pathinfo($param['package']);
 			if (isset($pathinfo['extension']) &&
-				in_array(strtolower($pathinfo['extension']), array('tgz', 'tar'))) {
+			    in_array(strtolower($pathinfo['extension']), array('tgz', 'tar'))) {
 				$param['extension'] = $pathinfo['extension'];
 				$param['package'] = substr($pathinfo['basename'], 0, strlen($pathinfo['basename']) - 4);
 			}
@@ -2010,7 +2048,7 @@ class PEAR_Registry extends PEAR {
 				$test = explode('-', $param['package']);
 				if (count($test) != 2) {
 					return PEAR::raiseError('parsePackageName(): only one version/state ' .
-							'delimiter "-" is allowed in "' . $saveparam . '"', 'version', null, null, $param);
+						'delimiter "-" is allowed in "' . $saveparam . '"', 'version', null, null, $param);
 				}
 				list($param['package'], $param['version']) = $test;
 			}
@@ -2022,7 +2060,7 @@ class PEAR_Registry extends PEAR {
 		}
 		if (!$info) {
 			return PEAR::raiseError('unknown channel "' . $param['channel'] .
-					'" in "' . $saveparam . '"', 'channel', null, null, $param);
+				'" in "' . $saveparam . '"', 'channel', null, null, $param);
 		}
 		$chan = $this->getChannel($param['channel']);
 		if (PEAR::isError($chan)) {
@@ -2030,7 +2068,7 @@ class PEAR_Registry extends PEAR {
 		}
 		if (!$chan) {
 			return PEAR::raiseError("Exception: corrupt registry, could not " .
-					"retrieve channel " . $param['channel'] . " information", 'registry', null, null, $param);
+				"retrieve channel " . $param['channel'] . " information", 'registry', null, null, $param);
 		}
 		$param['channel'] = $chan->getName();
 		$validate = $chan->getValidationObject();
@@ -2038,24 +2076,24 @@ class PEAR_Registry extends PEAR {
 		// validate package name
 		if (!$validate->validPackageName($param['package'], $vpackage['_content'])) {
 			return PEAR::raiseError('parsePackageName(): invalid package name "' .
-					$param['package'] . '" in "' . $saveparam . '"', 'package', null, null, $param);
+				$param['package'] . '" in "' . $saveparam . '"', 'package', null, null, $param);
 		}
 		if (isset($param['group'])) {
 			if (!PEAR_Validate::validGroupName($param['group'])) {
 				return PEAR::raiseError('parsePackageName(): dependency group "' . $param['group'] .
-						'" is not a valid group name in "' . $saveparam . '"', 'group', null, null, $param);
+					'" is not a valid group name in "' . $saveparam . '"', 'group', null, null, $param);
 			}
 		}
 		if (isset($param['state'])) {
 			if (!in_array(strtolower($param['state']), $validate->getValidStates())) {
 				return PEAR::raiseError('parsePackageName(): state "' . $param['state']
-						. '" is not a valid state in "' . $saveparam . '"', 'state', null, null, $param);
+					. '" is not a valid state in "' . $saveparam . '"', 'state', null, null, $param);
 			}
 		}
 		if (isset($param['version'])) {
 			if (isset($param['state'])) {
 				return PEAR::raiseError('parsePackageName(): cannot contain both ' .
-						'a version and a stability (state) in "' . $saveparam . '"', 'version/state', null, null, $param);
+					'a version and a stability (state) in "' . $saveparam . '"', 'version/state', null, null, $param);
 			}
 			// check whether version is actually a state
 			if (in_array(strtolower($param['version']), $validate->getValidStates())) {
@@ -2064,8 +2102,8 @@ class PEAR_Registry extends PEAR {
 			} else {
 				if (!$validate->validVersion($param['version'])) {
 					return PEAR::raiseError('parsePackageName(): "' . $param['version'] .
-							'" is neither a valid version nor a valid state in "' .
-							$saveparam . '"', 'version/state', null, null, $param);
+						'" is neither a valid version nor a valid state in "' .
+						$saveparam . '"', 'version/state', null, null, $param);
 				}
 			}
 		}
@@ -2076,16 +2114,17 @@ class PEAR_Registry extends PEAR {
 	 * @param array
 	 * @return string
 	 */
-	function parsedPackageNameToString($parsed, $brief = false) {
+	function parsedPackageNameToString($parsed, $brief = false)
+	{
 		if (is_string($parsed)) {
 			return $parsed;
 		}
 		if (is_object($parsed)) {
 			$p = $parsed;
 			$parsed = array(
-				'package' => $p->getPackage(),
-				'channel' => $p->getChannel(),
-				'version' => $p->getVersion(),
+			    'package' => $p->getPackage(),
+			    'channel' => $p->getChannel(),
+			    'version' => $p->getVersion(),
 			);
 		}
 		if (isset($parsed['uri'])) {
@@ -2125,7 +2164,6 @@ class PEAR_Registry extends PEAR {
 		}
 		return $ret;
 	}
-
 }
 
 ?>

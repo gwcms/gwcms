@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_RunTest
  *
@@ -48,36 +47,38 @@ putenv("PHP_PEAR_RUNTESTS=1");
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.3.3
  */
-class PEAR_RunTest {
+class PEAR_RunTest
+{
 
 	var $_logger;
 	var $_options;
 	var $ini_overwrites = array(
-		'output_handler=',
-		'open_basedir=',
-		'safe_mode=0',
-		'disable_functions=',
-		'output_buffering=Off',
-		'display_errors=1',
-		'log_errors=0',
-		'html_errors=0',
-		'track_errors=1',
-		'report_memleaks=0',
-		'report_zend_debug=0',
-		'docref_root=',
-		'docref_ext=.html',
-		'error_prepend_string=',
-		'error_append_string=',
-		'auto_prepend_file=',
-		'auto_append_file=',
-		'magic_quotes_runtime=0',
+	    'output_handler=',
+	    'open_basedir=',
+	    'safe_mode=0',
+	    'disable_functions=',
+	    'output_buffering=Off',
+	    'display_errors=1',
+	    'log_errors=0',
+	    'html_errors=0',
+	    'track_errors=1',
+	    'report_memleaks=0',
+	    'report_zend_debug=0',
+	    'docref_root=',
+	    'docref_ext=.html',
+	    'error_prepend_string=',
+	    'error_append_string=',
+	    'auto_prepend_file=',
+	    'auto_append_file=',
+	    'magic_quotes_runtime=0',
 	);
 
 	/**
 	 * An object that supports the PEAR_Common->log() signature, or null
 	 * @param PEAR_Common|null
 	 */
-	function PEAR_RunTest($logger = null, $options = array()) {
+	function PEAR_RunTest($logger = null, $options = array())
+	{
 		$this->ini_overwrites[] = 'error_reporting=' . E_ALL;
 		if (is_null($logger)) {
 			require_once 'PEAR/Common.php';
@@ -95,21 +96,22 @@ class PEAR_RunTest {
 	 * @param string $stdin standard input to pass to the command
 	 * @return unknown
 	 */
-	function system_with_timeout($commandline, $env = null, $stdin = null) {
+	function system_with_timeout($commandline, $env = null, $stdin = null)
+	{
 		$data = '';
 
 		if (version_compare(phpversion(), '5.0.0', '<')) {
 			$proc = proc_open($commandline, array(
-				0 => array('pipe', 'r'),
-				1 => array('pipe', 'w'),
-				2 => array('pipe', 'w')
-				), $pipes);
+			    0 => array('pipe', 'r'),
+			    1 => array('pipe', 'w'),
+			    2 => array('pipe', 'w')
+			    ), $pipes);
 		} else {
 			$proc = proc_open($commandline, array(
-				0 => array('pipe', 'r'),
-				1 => array('pipe', 'w'),
-				2 => array('pipe', 'w')
-				), $pipes, null, $env, array("suppress_errors" => true));
+			    0 => array('pipe', 'r'),
+			    1 => array('pipe', 'w'),
+			    2 => array('pipe', 'w')
+			    ), $pipes, null, $env, array("suppress_errors" => true));
 		}
 
 		if (!$proc) {
@@ -155,7 +157,8 @@ class PEAR_RunTest {
 		return array($code, $data);
 	}
 
-	function settings2array($settings, $ini_settings) {
+	function settings2array($settings, $ini_settings)
+	{
 		foreach ($settings as $setting) {
 			if (strpos($setting, '=') !== false) {
 				$setting = explode("=", $setting, 2);
@@ -167,7 +170,8 @@ class PEAR_RunTest {
 		return $ini_settings;
 	}
 
-	function settings2params($ini_settings) {
+	function settings2params($ini_settings)
+	{
 		$settings = '';
 		foreach ($ini_settings as $name => $value) {
 			$value = addslashes($value);
@@ -180,7 +184,8 @@ class PEAR_RunTest {
 	//  Run an individual test case.
 	//
 
-    function run($file, $ini_settings = '') {
+    function run($file, $ini_settings = '')
+	{
 		$cwd = getcwd();
 		$conf = &PEAR_Config::singleton();
 		$php = $conf->get('php_bin');
@@ -206,14 +211,14 @@ class PEAR_RunTest {
 
 		// Load the sections of the test file.
 		$section_text = array(
-			'TEST' => '(unnamed test)',
-			'SKIPIF' => '',
-			'GET' => '',
-			'COOKIE' => '',
-			'POST' => '',
-			'ARGS' => '',
-			'INI' => '',
-			'CLEAN' => '',
+		    'TEST' => '(unnamed test)',
+		    'SKIPIF' => '',
+		    'GET' => '',
+		    'COOKIE' => '',
+		    'POST' => '',
+		    'ARGS' => '',
+		    'INI' => '',
+		    'CLEAN' => '',
 		);
 
 		$file = realpath($file);
@@ -259,8 +264,8 @@ class PEAR_RunTest {
 			$tested = trim($section_text['TEST']) . ' ';
 		}
 		if (!empty($section_text['GET']) || !empty($section_text['POST']) ||
-			!empty($section_text['POST_RAW']) || !empty($section_text['COOKIE']) ||
-			!empty($section_text['UPLOAD'])) {
+		    !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE']) ||
+		    !empty($section_text['UPLOAD'])) {
 			if (empty($this->_options['cgi'])) {
 				if (!isset($this->_options['quiet'])) {
 					$this->_logger->log(0, "SKIP $tested (reason: --cgi option needed for this test, type 'pear help run-tests')");
@@ -385,7 +390,7 @@ class PEAR_RunTest {
 			$upload_files = explode("\n", $upload_files);
 
 			$request = "Content-Type: multipart/form-data; boundary=---------------------------20896060251896012921717172737\n" .
-				"-----------------------------20896060251896012921717172737\n";
+			    "-----------------------------20896060251896012921717172737\n";
 			foreach ($upload_files as $fileinfo) {
 				$fileinfo = explode('=', $fileinfo);
 				if (count($fileinfo) != 2) {
@@ -393,14 +398,14 @@ class PEAR_RunTest {
 				}
 				if (!realpath(dirname($file) . '/' . $fileinfo[1])) {
 					return PEAR::raiseError("File for upload does not exist: $fileinfo[1] " .
-							"in test file: $file");
+						"in test file: $file");
 				}
 				$file_contents = file_get_contents(dirname($file) . '/' . $fileinfo[1]);
 				$fileinfo[1] = basename($fileinfo[1]);
 				$request .= "Content-Disposition: form-data; name=\"$fileinfo[0]\"; filename=\"$fileinfo[1]\"\n";
 				$request .= "Content-Type: text/plain\n\n";
 				$request .= $file_contents . "\n" .
-					"-----------------------------20896060251896012921717172737\n";
+				    "-----------------------------20896060251896012921717172737\n";
 			}
 			if (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
 				// encode POST raw
@@ -418,7 +423,7 @@ class PEAR_RunTest {
 				foreach ($post as $post_info) {
 					$request .= "Content-Disposition: form-data; name=\"$post_info[0]\"\n\n";
 					$request .= $post_info[1] . "\n" .
-						"-----------------------------20896060251896012921717172737\n";
+					    "-----------------------------20896060251896012921717172737\n";
 				}
 				unset($section_text['POST']);
 			}
@@ -432,7 +437,7 @@ class PEAR_RunTest {
 			$started = false;
 			foreach ($raw_lines as $i => $line) {
 				if (empty($env['CONTENT_TYPE']) &&
-					preg_match('/^Content-Type:(.*)/i', $line, $res)) {
+				    preg_match('/^Content-Type:(.*)/i', $line, $res)) {
 					$env['CONTENT_TYPE'] = trim(str_replace("\r", '', $res[1]));
 					continue;
 				}
@@ -500,8 +505,8 @@ class PEAR_RunTest {
 		/* when using CGI, strip the headers from the output */
 		$headers = "";
 		if (!empty($this->_options['cgi']) &&
-			$php == $this->_options['cgi'] &&
-			preg_match("/^(.*?)\r?\n\r?\n(.*)/s", $out, $match)) {
+		    $php == $this->_options['cgi'] &&
+		    preg_match("/^(.*?)\r?\n\r?\n(.*)/s", $out, $match)) {
 			$output = trim($match[2]);
 			$rh = preg_split("/[\n\r]+/", $match[1]);
 			$headers = array();
@@ -586,7 +591,7 @@ class PEAR_RunTest {
 			// we expect a particular failure
 			// this is only used for testing PEAR_RunTest
 			$faildiff = $this->generate_diff(
-				$wanted, $output, null, isset($section_text['EXPECTF']) ? $wanted_re : null);
+			    $wanted, $output, null, isset($section_text['EXPECTF']) ? $wanted_re : null);
 			$wanted = preg_replace('/\r/', '', trim($section_text['FAIL']));
 			$faildiff = preg_replace('/\r/', '', $faildiff);
 			if ($faildiff == $wanted) {
@@ -605,7 +610,7 @@ class PEAR_RunTest {
 			$output = $faildiff;
 			if (isset($section_text['RETURNS'])) {
 				return PEAR::raiseError('Cannot have both RETURNS and FAIL in the same test: ' .
-						$file);
+					$file);
 			}
 		}
 
@@ -618,20 +623,20 @@ class PEAR_RunTest {
 
 		if (isset($section_text['RETURNS'])) {
 			$GLOBALS['__PHP_FAILED_TESTS__'][] = array(
-				'name' => $file,
-				'test_name' => $tested,
-				'output' => $log_filename,
-				'diff' => $diff_filename,
-				'info' => $info,
-				'return' => $return_value
+			    'name' => $file,
+			    'test_name' => $tested,
+			    'output' => $log_filename,
+			    'diff' => $diff_filename,
+			    'info' => $info,
+			    'return' => $return_value
 			);
 		} else {
 			$GLOBALS['__PHP_FAILED_TESTS__'][] = array(
-				'name' => $file,
-				'test_name' => $tested,
-				'output' => $output_filename,
-				'diff' => $diff_filename,
-				'info' => $info,
+			    'name' => $file,
+			    'test_name' => $tested,
+			    'output' => $output_filename,
+			    'diff' => $diff_filename,
+			    'info' => $info,
 			);
 		}
 
@@ -662,8 +667,8 @@ class PEAR_RunTest {
 				return PEAR::raiseError("Cannot create test log - $logname");
 			}
 			fwrite($log, $this->generate_diff(
-					$wanted, $output, isset($section_text['RETURNS']) ?
-						array(trim($section_text['RETURNS']), $return_value) : null, isset($section_text['EXPECTF']) ? $wanted_re : null)
+				$wanted, $output, isset($section_text['RETURNS']) ?
+				    array(trim($section_text['RETURNS']), $return_value) : null, isset($section_text['EXPECTF']) ? $wanted_re : null)
 			);
 			fclose($log);
 		}
@@ -707,7 +712,8 @@ $return_value
 		return $warn ? 'WARNED' : 'FAILED';
 	}
 
-	function generate_diff($wanted, $output, $return_value, $wanted_re) {
+	function generate_diff($wanted, $output, $return_value, $wanted_re)
+	{
 		$w = explode("\n", $wanted);
 		$o = explode("\n", $output);
 		$wr = explode("\n", $wanted_re);
@@ -717,13 +723,13 @@ $return_value
 		$o2 = array();
 		foreach ($w1 as $idx => $val) {
 			if (!$wanted_re || !isset($wr[$idx]) || !isset($o1[$idx]) ||
-				!preg_match('/^' . $wr[$idx] . '\\z/', $o1[$idx])) {
+			    !preg_match('/^' . $wr[$idx] . '\\z/', $o1[$idx])) {
 				$w2[sprintf("%03d<", $idx)] = sprintf("%03d- ", $idx + 1) . $val;
 			}
 		}
 		foreach ($o1 as $idx => $val) {
 			if (!$wanted_re || !isset($wr[$idx]) ||
-				!preg_match('/^' . $wr[$idx] . '\\z/', $val)) {
+			    !preg_match('/^' . $wr[$idx] . '\\z/', $val)) {
 				$o2[sprintf("%03d>", $idx)] = sprintf("%03d+ ", $idx + 1) . $val;
 			}
 		}
@@ -741,7 +747,8 @@ $return_value
 	//  Write the given text to a temporary file, and return the filename.
 	//
 
-    function save_text($filename, $text) {
+    function save_text($filename, $text)
+	{
 		if (!$fp = fopen($filename, 'w')) {
 			return PEAR::raiseError("Cannot open file '" . $filename . "' (save_text)");
 		}
@@ -754,7 +761,6 @@ $text
 }}}
 ";
 	}
-
 }
 
 ?>

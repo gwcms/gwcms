@@ -2,9 +2,11 @@
 
 //example usage - artistdb/participants
 
-trait Module_Export_Photos {
+trait Module_Export_Photos
+{
 
-	function __importExportGetCols() {
+	function __importExportGetCols()
+	{
 		$cols = $this->model->getColumns();
 
 		foreach ($cols as $col => $d)
@@ -19,11 +21,13 @@ trait Module_Export_Photos {
 	public $export_process = [];
 	public $export_translate_fields = 1;
 
-	function displayOptions($field, $value, $context_obj) {
+	function displayOptions($field, $value, $context_obj)
+	{
 		return $this->options[$field][$value];
 	}
 
-	function __list2Str($list) {
+	function __list2Str($list)
+	{
 		$data = "";
 
 		$cols = $this->__importExportGetCols();
@@ -63,7 +67,8 @@ trait Module_Export_Photos {
 		return $data;
 	}
 
-	function viewExportData() {
+	function viewExportData()
+	{
 		$params = [];
 		$cond = '';
 		$this->initListParams(false, 'list');
@@ -82,13 +87,15 @@ trait Module_Export_Photos {
 		$this->tpl_vars['fields'] = $this->__importExportGetCols();
 	}
 
-	function viewImportData() {
+	function viewImportData()
+	{
 		$this->tpl_vars['fields'] = $this->__importExportGetCols();
 
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/generic_import';
 	}
 
-	function doImportData() {
+	function doImportData()
+	{
 		$rawdata = $_REQUEST['data'];
 
 		$data = explode("\n", $rawdata);
@@ -135,12 +142,11 @@ trait Module_Export_Photos {
 
 		d::ldump($counts);
 		d::ldump([
-			'error_rows' => $error_rows,
-			'header' => $header,
-			'saved' => $saved
+		    'error_rows' => $error_rows,
+		    'header' => $header,
+		    'saved' => $saved
 		]);
 
 		$this->tpl_vars['data'] = $rawdata;
 	}
-
 }

@@ -1,12 +1,15 @@
 <?php
 
-class GW_Image_Validator Extends GW_Validator {
+class GW_Image_Validator Extends GW_Validator
+{
 
-	function __splitDimensionStr($string) {
+	function __splitDimensionStr($string)
+	{
 		return explode('x', $string);
 	}
 
-	function isValidDimensions($min_dim = false, $max_dim = false) {
+	function isValidDimensions($min_dim = false, $max_dim = false)
+	{
 		$w = $this->validation_object->get('width');
 		$h = $this->validation_object->get('height');
 
@@ -25,7 +28,8 @@ class GW_Image_Validator Extends GW_Validator {
 		return true;
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$item = & $this->validation_object;
 		$im_vali = & $item->validators['image_file'];
 
@@ -45,5 +49,4 @@ class GW_Image_Validator Extends GW_Validator {
 		if (isset($im_vali['dimensions_max']) && !self::isValidDimensions(false, $im_vali['dimensions_max']))
 			return ($item->errors[] = '/G/GENERAL/IMAGE/ERR_DIMENSIONS_MAX') && false;
 	}
-
 }

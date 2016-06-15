@@ -1,8 +1,10 @@
 <?php
 
-class GW_Date_Validator extends GW_Validator {
+class GW_Date_Validator extends GW_Validator
+{
 
-	function isValid() {
+	function isValid()
+	{
 
 		$value = $this->validation_object;
 
@@ -20,5 +22,4 @@ class GW_Date_Validator extends GW_Validator {
 		if (!preg_match('/^(\d{4}-\d{2}-\d{2})$/', $value))
 			return $this->setErrorMessage('/G/VALIDATION/DATE/INVALID_DATE') && false;
 	}
-
 }

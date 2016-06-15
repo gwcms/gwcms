@@ -1,8 +1,10 @@
 <?php
 
-class GW_Mail {
+class GW_Mail
+{
 
-	static function remoteMail($args) {
+	static function remoteMail($args)
+	{
 		$http = new GW_Http_Agent;
 
 		$t = new GW_Timer;
@@ -20,7 +22,8 @@ class GW_Mail {
 			trigger_error("Remote mail service returns error: " . $body, E_USER_ERROR);
 	}
 
-	static function simple($msg) {
+	static function simple($msg)
+	{
 		if (!isset($msg['headers']))
 			$msg['headers'] = '';
 
@@ -39,7 +42,6 @@ class GW_Mail {
 
 		return 0;
 	}
-
 }
 
 ?>

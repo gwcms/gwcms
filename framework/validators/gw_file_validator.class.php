@@ -1,12 +1,15 @@
 <?php
 
-class GW_File_Validator Extends GW_Validator {
+class GW_File_Validator Extends GW_Validator
+{
 
-	function __splitDimensionStr($string) {
+	function __splitDimensionStr($string)
+	{
 		return explode('x', $string);
 	}
 
-	function isValidExtension($allowed) {
+	function isValidExtension($allowed)
+	{
 		$item = $this->validation_object;
 
 		//pravaliduot extensiona
@@ -16,7 +19,8 @@ class GW_File_Validator Extends GW_Validator {
 		return in_array($ext, $allowed);
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$item = & $this->validation_object;
 		$file_vali = & $item->validators['file'];
 
@@ -33,5 +37,4 @@ class GW_File_Validator Extends GW_Validator {
 		if (isset($file_vali['allowed_extensions']) && !self::isValidExtension(explode(',', $file_vali['allowed_extensions'])))
 			return ($item->errors[] = '/G/GENERAL/FILE_EXTENSION_NOT_ALLOWED') && false;
 	}
-
 }

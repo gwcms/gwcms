@@ -1,12 +1,15 @@
 <?php
 
-class GW_Numeric_Validator extends GW_Validator {
+class GW_Numeric_Validator extends GW_Validator
+{
 
-	function init() {
+	function init()
+	{
 		$this->setParam('error_message', '/G/VALIDATION/NUMERIC_FAIL');
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$value = $this->validation_object;
 
 		$this->reset();
@@ -24,7 +27,8 @@ class GW_Numeric_Validator extends GW_Validator {
 		return true;
 	}
 
-	function __countWords($value) {
+	function __countWords($value)
+	{
 		$words = 0;
 
 		foreach (explode(' ', $value) as $word)
@@ -33,5 +37,4 @@ class GW_Numeric_Validator extends GW_Validator {
 
 		return $words;
 	}
-
 }

@@ -6,6 +6,7 @@
  * @author wdm
  *
  */
-class BH {
+class BH
+{
 	
 }

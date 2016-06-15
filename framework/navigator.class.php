@@ -1,8 +1,10 @@
 <?php
 
-class Navigator {
+class Navigator
+{
 
-	static public function __getAbsBase() {
+	static public function __getAbsBase()
+	{
 		$arr = & $_SERVER;
 
 		$HTTP_HOST = $arr['HTTP_HOST'];
@@ -32,7 +34,8 @@ class Navigator {
 		return $base;
 	}
 
-	static private function __getRelBase() {
+	static private function __getRelBase()
+	{
 		static $base;
 
 		if ($base)
@@ -54,12 +57,13 @@ class Navigator {
 		return $base;
 	}
 
-	static function getBase($absolute = false) {
-		
+	static function getBase($absolute = false)
+	{
+
 		//cli
-		if(!isset($_SERVER['HTTP_HOST']))
+		if (!isset($_SERVER['HTTP_HOST']))
 			return GW::s("SITE_URL");
-		
+
 		$arr = & $_SERVER;
 		$base = '';
 
@@ -72,11 +76,13 @@ class Navigator {
 		return $base;
 	}
 
-	static function getUri() {
+	static function getUri()
+	{
 		return $_SERVER['REQUEST_URI'];
 	}
 
-	static function jump($url, $params = array()) {
+	static function jump($url, $params = array())
+	{
 		$uri = self::buildURI($url, $params);
 
 		/*
@@ -94,13 +100,15 @@ class Navigator {
 		exit;
 	}
 
-	static function &explodeURI($url) {
+	static function &explodeURI($url)
+	{
 		$parts = parse_url($url);
 		parse_str($parts['query'], $parts['query']);
 		return $parts;
 	}
 
-	static function implodeURI(&$parsed) {
+	static function implodeURI(&$parsed)
+	{
 		if (!is_array($parsed))
 			return false;
 
@@ -111,7 +119,7 @@ class Navigator {
 
 		if (isset($parsed['path'])) {
 			$uri .= (substr($parsed['path'], 0, 1) == '/') ?
-				$parsed['path'] : ((!empty($uri) ? '/' : '' ) . $parsed['path']);
+			    $parsed['path'] : ((!empty($uri) ? '/' : '' ) . $parsed['path']);
 		}
 
 		$uri .= isset($parsed['query']) ? '?' . http_build_query($parsed['query']) : '';
@@ -120,7 +128,8 @@ class Navigator {
 		return $uri;
 	}
 
-	static function buildURI($url, $params = Array()) {
+	static function buildURI($url, $params = Array())
+	{
 		if (!$url)
 			$url = $_SERVER['REQUEST_URI'];
 
@@ -134,38 +143,39 @@ class Navigator {
 		return self::implodeURI($url);
 	}
 
-	static function mergeGetParams($str_params) {
+	static function mergeGetParams($str_params)
+	{
 		parse_str($str_params, $params);
 		$params = $params + $_GET;
 		return http_build_query($params);
 	}
-	
+
 	/**
 	 * Is limited to http. 
 	 * https request does not works
 	 */
-	static function backgroundRequest($path, $get_args = []) {
+	static function backgroundRequest($path, $get_args = [])
+	{
 		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
 
 		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
-		$get_args['sys_call']=1;
-		
+		$get_args['sys_call'] = 1;
+
 		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
-		
-		if(GW::s('APP_BACKGROUND_REQ_TYPE')=='localhost_base'){
+
+		if (GW::s('APP_BACKGROUND_REQ_TYPE') == 'localhost_base') {
 			$base = GW::s("SITE_LOCAL_URL");
-		}elseif(GW::s('APP_BACKGROUND_REQ_TYPE')=='force_http'){
+		} elseif (GW::s('APP_BACKGROUND_REQ_TYPE') == 'force_http') {
 			$base = Navigator::getBase(true);
-			$base = str_replace('https://','http://', $base);
-		}else{
+			$base = str_replace('https://', 'http://', $base);
+		} else {
 			$base = Navigator::getBase(true);
-		}		
-		
-		$url = $base. $path;
-		
+		}
+
+		$url = $base . $path;
+
 		GW_Http_Agent::impuls($url);
 
 		return $url;
-	}	
-
+	}
 }

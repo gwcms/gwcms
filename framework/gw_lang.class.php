@@ -1,6 +1,7 @@
 <?php
 
-class GW_Lang {
+class GW_Lang
+{
 
 	static $cache;
 	static $ln;
@@ -8,15 +9,18 @@ class GW_Lang {
 	static $module_dir;
 	static $module;
 
-	static function getGlobalLangFile($file_id) {
+	static function getGlobalLangFile($file_id)
+	{
 		return (self::$langf_dir ? self::$langf_dir : GW::s('DIR/ADMIN/LANG')) . "{$file_id}.lang.xml";
 	}
 
-	static function getModuleLangFile($module) {
+	static function getModuleLangFile($module)
+	{
 		return self::$module_dir . $module . "/lang.xml";
 	}
 
-	static function loadFile($file_id, $modulename = '') {
+	static function loadFile($file_id, $modulename = '')
+	{
 		//$file_id=strtolower($file_id);
 		$cid = $file_id . '/' . $modulename;
 
@@ -42,7 +46,8 @@ class GW_Lang {
 		return true;
 	}
 
-	static function &getFromCache($file_id, $module, $path, $create = false) {
+	static function &getFromCache($file_id, $module, $path, $create = false)
+	{
 		$false = false;
 		$var = & self::$cache[$file_id . '/' . $module];
 
@@ -62,7 +67,8 @@ class GW_Lang {
 		return $var;
 	}
 
-	static function &readG($file_id, $module, $path, $create = false) {
+	static function &readG($file_id, $module, $path, $create = false)
+	{
 		$null = null;
 
 		$file_id = strtolower($file_id);
@@ -94,7 +100,8 @@ class GW_Lang {
 	// /M/modulis/kelias
 	// /A/alternatyvus vertimas - jei ras modulyje ims is modulio, jei neras ieskos application.lang.xml
 	// key butinai turi prasidet ne "/" - tuo atveju bus rodomas pats key	
-	static function &readWrite($key, $write = null) {
+	static function &readWrite($key, $write = null)
+	{
 		if ($key[0] != '/')
 			return $key;
 
@@ -137,5 +144,4 @@ class GW_Lang {
 		else
 			return $key;
 	}
-
 }

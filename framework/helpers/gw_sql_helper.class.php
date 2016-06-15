@@ -1,8 +1,10 @@
 <?php
 
-class GW_SQL_Helper {
+class GW_SQL_Helper
+{
 
-	static function condition_str($array, $implode = ' AND ') {
+	static function condition_str($array, $implode = ' AND ')
+	{
 		$str = '';
 
 		foreach ($array as $key => $val) {
@@ -11,5 +13,4 @@ class GW_SQL_Helper {
 
 		return $str;
 	}
-
 }

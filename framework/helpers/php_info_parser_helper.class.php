@@ -1,8 +1,10 @@
 <?php
 
-class PHP_Info_Parser_Helper {
+class PHP_Info_Parser_Helper
+{
 
-	function parse() {
+	function parse()
+	{
 		ob_start();
 		phpinfo();
 		$phpinfo = array('phpinfo' => array());
@@ -17,5 +19,4 @@ class PHP_Info_Parser_Helper {
 
 		return $phpinfo;
 	}
-
 }

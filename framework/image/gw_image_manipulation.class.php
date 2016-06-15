@@ -1,6 +1,7 @@
 <?php
 
-class GW_Image_Manipulation {
+class GW_Image_Manipulation
+{
 
 	var $width;
 	var $height;
@@ -8,12 +9,14 @@ class GW_Image_Manipulation {
 	var $type;
 	var $im;
 
-	function __construct($file) {
+	function __construct($file)
+	{
 		$this->file = $file;
 		$this->initImage();
 	}
 
-	function initImage() {
+	function initImage()
+	{
 
 		list( $this->width, $this->height, $type) = @getimagesize($this->file);
 
@@ -46,7 +49,8 @@ class GW_Image_Manipulation {
 	 * method - auto | crop | strict | fill | forcrop
 	 * 
 	 */
-	function resize($params = Array()) {
+	function resize($params = Array())
+	{
 		$w = (int) $params['width'];
 		$h = (int) $params['height'];
 
@@ -140,7 +144,8 @@ class GW_Image_Manipulation {
 	 * @param string $method resize method
 	 * @return array items: 0 - width, 1 - height, 2 - reserved for future, 3 - img attributes
 	 */
-	function calcResizedSize($w, $h, $cw, $ch, $method = 'auto') {
+	function calcResizedSize($w, $h, $cw, $ch, $method = 'auto')
+	{
 		switch ($method) {
 			case 'crop':
 			case 'strict':
@@ -182,17 +187,20 @@ class GW_Image_Manipulation {
 		return array($rw, $rh, NULL, "width='{$rw}' height='{$rh}'");
 	}
 
-	function clean() {
+	function clean()
+	{
 		imagedestroy($this->im);
 	}
 
-	function hex2array($hex_color) {
+	function hex2array($hex_color)
+	{
 		$hex_color = str_replace('#', '', $hex_color);
 		sscanf($hex_color, "%2x%2x%2x", $red, $green, $blue);
 		return array($red, $green, $blue);
 	}
 
-	function save($file, $type = 'auto', $file_mode = 0666) {
+	function save($file, $type = 'auto', $file_mode = 0666)
+	{
 		// if ( $this->type == "gif" ) $this->convert("png");
 
 		if ($type == 'auto')
@@ -213,7 +221,8 @@ class GW_Image_Manipulation {
 		return $file;
 	}
 
-	function isAnimatedGif($filename) {
+	function isAnimatedGif($filename)
+	{
 		$filecontents = file_get_contents($filename);
 
 		$str_loc = 0;
@@ -236,10 +245,10 @@ class GW_Image_Manipulation {
 		return $count > 1;
 	}
 
-	function rotateSelf($degree) {
+	function rotateSelf($degree)
+	{
 		$this->im = imagerotate($this->im, $degree, 0);
 
 		$this->save($this->file);
 	}
-
 }

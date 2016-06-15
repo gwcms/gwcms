@@ -1,6 +1,7 @@
 <?php
 
-class GW_Auth {
+class GW_Auth
+{
 
 	/**
 	 * 
@@ -10,7 +11,8 @@ class GW_Auth {
 	var $session;
 	var $error;
 
-	function __construct(&$user0) {
+	function __construct(&$user0)
+	{
 		$this->user0 = & $user0;
 
 		if (get_class($this->user0) == "GW_User")
@@ -19,11 +21,13 @@ class GW_Auth {
 			$this->session = & $_SESSION[PUBLIC_AUTH_SESSION_KEY];
 	}
 
-	function getUserByUserID($id) {
+	function getUserByUserID($id)
+	{
 		return $this->user0->find(Array('id=?', $id));
 	}
 
-	function setError($err_str) {
+	function setError($err_str)
+	{
 		$this->error = $err_str;
 		return false;
 	}
@@ -32,7 +36,8 @@ class GW_Auth {
 	 * if user is logged returns user object
 	 * else - false
 	 */
-	function isLogged() {
+	function isLogged()
+	{
 		$cookiePass = isset($_COOKIE['login_7']) ? $_COOKIE['login_7'] : false; // is autologin pass
 		$cookieUsername = isset($_COOKIE['login_0']) ? $_COOKIE['login_0'] : false; // is username
 		$autologin = isset($_COOKIE['login_7']) && $_COOKIE['login_7'] && self::isAutologinEnabled();
@@ -43,12 +48,12 @@ class GW_Auth {
 		if (isset($_GET['temp_access'])) {
 			list($uid, $token) = explode(',', $_GET['temp_access']);
 
-			if (GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token)){
+			if (GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token)) {
 				$user = GW::getInstance('GW_User')->createNewObject($uid, 1);
-			}else{
-				die(json_encode(['error'=>16532,'error_message'=>'Invalid token']));
+			} else {
+				die(json_encode(['error' => 16532, 'error_message' => 'Invalid token']));
 			}
-		}elseif ($logedin) {
+		} elseif ($logedin) {
 			$user = $this->getUserByUserID($user_id);
 		} elseif ($autologin) {
 			$user = $this->loginAuto($cookieUsername, $cookiePass);
@@ -82,7 +87,8 @@ class GW_Auth {
 		return $user;
 	}
 
-	function loginPass($username, $password) {
+	function loginPass($username, $password)
+	{
 		if (!$user = $this->user0->getByUsernamePass($username, $password)) {
 			//$this->logout();
 			return $this->setError('/G/GENERAL/LOGIN_FAIL');
@@ -96,7 +102,8 @@ class GW_Auth {
 		return $this->login($user);
 	}
 
-	function loginAuto($username, $pass) {
+	function loginAuto($username, $pass)
+	{
 		if (!$user = $this->user0->getUserByAutologinPass($username, $pass))
 			return false;
 
@@ -105,12 +112,14 @@ class GW_Auth {
 		return $this->login($user);
 	}
 
-	function loginApi($param) {
+	function loginApi($param)
+	{
 		list($username, $api_key) = explode(':', $param, 2);
 		return $this->user0->getUserByApiKey($username, $api_key);
 	}
 
-	function login($user) {
+	function login($user)
+	{
 		$this->session["user_id"] = $user->get('id');
 		$this->session['ip_address'] = $_SERVER['REMOTE_ADDR'];
 
@@ -119,7 +128,8 @@ class GW_Auth {
 		return $user;
 	}
 
-	function logout() {
+	function logout()
+	{
 
 		setcookie('login_7', '---', time(), GW::$context->app->sys_base);
 		$_COOKIE['login_7'] = false;
@@ -130,7 +140,8 @@ class GW_Auth {
 		//$_SESSION=Array();
 	}
 
-	static function isAutologinEnabled() {
+	static function isAutologinEnabled()
+	{
 		static $cache;
 
 		if (!$cache)
@@ -139,16 +150,17 @@ class GW_Auth {
 		return $cache;
 	}
 
-	function switchUser($id) {
+	function switchUser($id)
+	{
 		if (!$this->session['switchUser'])
 			$this->session['switchUser'] = $this->session['user_id'];
 
 		$this->session['user_id'] = $id;
 	}
 
-	function switchUserReturn() {
+	function switchUserReturn()
+	{
 		$this->session['user_id'] = $this->session['switchUser'];
 		unset($this->session['switchUser']);
 	}
-
 }

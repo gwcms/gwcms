@@ -1,6 +1,7 @@
 <?php
 
-interface GW_Composite_Slave {
+interface GW_Composite_Slave
+{
 
 	//paruosimas slave domenu operacijos
 	public function setParams($params);

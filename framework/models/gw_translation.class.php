@@ -1,15 +1,18 @@
 <?php
 
-class GW_Translation extends GW_i18n_Data_Object {
+class GW_Translation extends GW_i18n_Data_Object
+{
 
 	public $table = 'gw_translations';
 	public $i18n_fields = ['value' => 1];
 
-	function storeOne($db, $module, $key, $lang, $value) {
+	function storeOne($db, $module, $key, $lang, $value)
+	{
 		$db->save($this->table, ['module' => $module, 'key' => $key, 'value_' . $lang => $value]);
 	}
 
-	function store($module, $key, $value, $lang) {
+	function store($module, $key, $value, $lang)
+	{
 		$db = $this->getDB();
 
 
@@ -22,5 +25,4 @@ class GW_Translation extends GW_i18n_Data_Object {
 			$this->storeOne($db, $module, $key, $lang, $value);
 		}
 	}
-
 }

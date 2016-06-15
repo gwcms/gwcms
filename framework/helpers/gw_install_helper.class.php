@@ -1,8 +1,10 @@
 <?php
 
-class GW_Install_Helper {
+class GW_Install_Helper
+{
 
-	function recursiveChmod($file, $files_mod = 0666, $dirs_mod = 0777, &$info) {
+	function recursiveChmod($file, $files_mod = 0666, $dirs_mod = 0777, &$info)
+	{
 
 		if (is_dir($file)) {
 			$handle = opendir($file);
@@ -21,7 +23,8 @@ class GW_Install_Helper {
 		}
 	}
 
-	function recursiveUnlink($file, &$info = false) {
+	function recursiveUnlink($file, &$info = false)
+	{
 		if (is_dir($file)) {
 			$handle = opendir($file);
 			while ($filename = readdir($handle)) {
@@ -38,13 +41,15 @@ class GW_Install_Helper {
 		}
 	}
 
-	function createDir($dir, $perm = 0777) {
+	function createDir($dir, $perm = 0777)
+	{
 		$old = umask(0);
 		mkdir($dir, $perm);
 		umask($old);
 	}
 
-	function CheckFolders() {
+	function CheckFolders()
+	{
 		$info = Array();
 
 
@@ -74,5 +79,4 @@ class GW_Install_Helper {
 
 		return $info;
 	}
-
 }

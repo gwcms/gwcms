@@ -1,8 +1,10 @@
 <?php
 
-class GW_Request_Helper {
+class GW_Request_Helper
+{
 
-	static function visitorInfo() {
+	static function visitorInfo()
+	{
 		static $info;
 
 		if ($info)
@@ -31,10 +33,10 @@ class GW_Request_Helper {
 
 		$info = Array();
 		$info = Array
-			(
-			'ip' => $IP,
-			'host' => $HOST,
-			'browser' => $_SERVER['HTTP_USER_AGENT']
+		    (
+		    'ip' => $IP,
+		    'host' => $HOST,
+		    'browser' => $_SERVER['HTTP_USER_AGENT']
 		);
 
 		if (isset($_SERVER['HTTP_REFERER']))
@@ -45,5 +47,4 @@ class GW_Request_Helper {
 
 		return $info;
 	}
-
 }

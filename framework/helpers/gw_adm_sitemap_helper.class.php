@@ -1,12 +1,15 @@
 <?php
 
-class GW_ADM_Sitemap_Helper {
+class GW_ADM_Sitemap_Helper
+{
 
-	static function __listModules($search = '*') {
+	static function __listModules($search = '*')
+	{
 		return glob(GW::s('DIR/ADMIN/MODULES') . $search . '/lang.xml');
 	}
 
-	static function listModules() {
+	static function listModules()
+	{
 		foreach (self::__listModules() as $mapfile) {
 			$id = basename(dirname($mapfile));
 			$list[$id] = $mapfile;
@@ -15,14 +18,16 @@ class GW_ADM_Sitemap_Helper {
 		return $list;
 	}
 
-	static function treeToArray(&$tree) {
+	static function treeToArray(&$tree)
+	{
 		$rez = Array();
 		self::__treeToArray($tree, $rez, '');
 
 		return $rez;
 	}
 
-	static function __treeToArray(&$tree, &$array, $path) {
+	static function __treeToArray(&$tree, &$array, $path)
+	{
 		$item = $tree;
 		unset($item['childs']);
 		$array[$path] = $item;
@@ -32,7 +37,8 @@ class GW_ADM_Sitemap_Helper {
 				self::__treeToArray($child, $array, $path . '/' . $key);
 	}
 
-	static function loadModuleMap($pathname) {
+	static function loadModuleMap($pathname)
+	{
 		$tmp = GW_Lang_XML::getAllLn(GW::s('ADMIN/LANGS'), GW::s('DIR/ADMIN/MODULES') . $pathname . '/lang.xml');
 
 
@@ -45,7 +51,8 @@ class GW_ADM_Sitemap_Helper {
 		return $map;
 	}
 
-	static function syncModule($pathname) {
+	static function syncModule($pathname)
+	{
 		if (!$all_ln_tree = self::loadModuleMap($pathname))
 			return false;
 
@@ -88,7 +95,8 @@ class GW_ADM_Sitemap_Helper {
 		//-----------------------------------
 	}
 
-	static function updateSitemap($force = false) {
+	static function updateSitemap($force = false)
+	{
 		$page0 = new GW_ADM_Page;
 		$root_pages = $page0->getChilds(Array('check_permissions' => false, 'menu' => false));
 
@@ -114,11 +122,12 @@ class GW_ADM_Sitemap_Helper {
 
 
 		self::updateParentIds();
-		
+
 		return [$msg];
 	}
 
-	static function updateParentIds($force = false) {
+	static function updateParentIds($force = false)
+	{
 		$page = new GW_ADM_Page();
 		$cond = $force ? '' : 'parent_id = -1';
 		$list = $page->findAll($cond);
@@ -135,5 +144,4 @@ class GW_ADM_Sitemap_Helper {
 			$item->update(Array('parent_id'));
 		}
 	}
-
 }

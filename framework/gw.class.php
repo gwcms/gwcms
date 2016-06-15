@@ -8,61 +8,70 @@
  * 
  */
 /* GW Context */
-class GW_Context {
+class GW_Context
+{
 
 	public $vars;
 
-	function __set($var, $value) {
+	function __set($var, $value)
+	{
 		$this->vars[$var] = $value;
 	}
 
-	function &__get($var) {
+	function &__get($var)
+	{
 		return $this->vars[$var];
 	}
-
 }
 
-class GW_Tree_Data_Elm {
+class GW_Tree_Data_Elm
+{
 
 	private $data_link;
 
-	function __construct(&$data_link) {
+	function __construct(&$data_link)
+	{
 		$this->data_link = & $data_link;
 	}
 
-	function __get($name) {
+	function __get($name)
+	{
 		if (isset($this->data_link[$name]) && is_array($this->data_link[$name]))
 			return new GW_Tree_Data_Elm($this->data_link[$name]);
 		else
 			return $this->data_link[$name];
 	}
-
 }
 
 class GW_l_Object_Call
 {
-	public $base=[];
 
-	function __construct($base=false) {
+	public $base = [];
+
+	function __construct($base = false)
+	{
 		$this->base = $base;
 	}
 
-	function __get($name) {
+	function __get($name)
+	{
 		$this->base[] = $name;
 		return new GW_l_Object_Call($this->base);
 	}
 
-	function __toString() {
-		
-		$x= GW::l('/'.implode('/', $this->base));
-		
-		GW::$l->base=[];
-		
+	function __toString()
+	{
+
+		$x = GW::l('/' . implode('/', $this->base));
+
+		GW::$l->base = [];
+
 		return $x;
 	}
 }
 
-class GW {
+class GW
+{
 
 	//nekintantys parametrai per visas aplikacijas
 	static $settings;
@@ -72,6 +81,7 @@ class GW {
 	static $context;
 	//jeigu prisijunges vartotojas developeris
 	static $devel_debug;
+
 	/**
 	 *
 	 * @var GW_Logger
@@ -82,21 +92,24 @@ class GW {
 	 * 
 	 * @return GW_DB
 	 */
-	function db() {
+	function db()
+	{
 		if (!self::$context->db)
 			self::$context->db = new GW_DB();
 
 		return self::$context->db;
 	}
 
-	static function initClass($name) {
+	static function initClass($name)
+	{
 		$o = new $name();
 		$o->db = self::$context->db;
 
 		return $o;
 	}
 
-	static function getInstance($class, $file = false) {
+	static function getInstance($class, $file = false)
+	{
 		static $cache;
 
 		if (isset($cache[$class]))
@@ -110,18 +123,21 @@ class GW {
 		return $cache[$class];
 	}
 
-	function &_($varname) {
+	function &_($varname)
+	{
 		return self::$$varname;
 	}
 
-	function init() {
+	function init()
+	{
 		self::$context = new GW_Context;
 		self::$s = new GW_Tree_Data_Elm(self::$settings);
 		self::$l = new GW_l_Object_Call;
-		self::$lgr = new GW_Logger(GW::s('DIR/LOGS').'system.log');			
+		self::$lgr = new GW_Logger(GW::s('DIR/LOGS') . 'system.log');
 	}
 
-	function request($args = Array()) {
+	function request($args = Array())
+	{
 		if (!isset($args['path']))
 			$args['path'] = isset($_GET['url']) ? $_GET['url'] : '';
 
@@ -139,10 +155,10 @@ class GW {
 		}
 
 		$context = Array(
-			'path_arr' => $path_arr,
-			'app_base' => $base_path,
-			'args' => $args['args'],
-			'sys_base' => Navigator::getBase()
+		    'path_arr' => $path_arr,
+		    'app_base' => $base_path,
+		    'args' => $args['args'],
+		    'sys_base' => Navigator::getBase()
 		);
 
 		$app_class = "GW_{$app}_application";
@@ -162,7 +178,8 @@ class GW {
 		$app_o->process();
 	}
 
-	static function &s($var_name, $value = Null) {
+	static function &s($var_name, $value = Null)
+	{
 		$var = & self::$settings;
 		$explode = explode('/', $var_name);
 
@@ -179,7 +196,8 @@ class GW {
 	 * 
 	 * @param type $key
 	 */
-	static function &l($key, $write = null) {
+	static function &l($key, $write = null)
+	{
 
 		return GW_Lang::readWrite($key, $write);
 	}
@@ -189,7 +207,8 @@ class GW {
 	 * jei nera duombazeje tada pakrauna is 
 	 * lang failu arba pacio templeito jei vartotojas developeris
 	 */
-	static function ln($fullkey, $valueifnotfound = false) {
+	static function ln($fullkey, $valueifnotfound = false)
+	{
 		static $cache;
 
 		list(, $module, $key) = explode('/', $fullkey, 3);
@@ -256,5 +275,4 @@ class GW {
 
 		return $vr;
 	}
-
 }

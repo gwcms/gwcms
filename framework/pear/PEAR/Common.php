@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Common, the base class for the PEAR Installer
  *
@@ -43,9 +42,9 @@ define('PEAR_COMMON_PACKAGE_VERSION_PREG', '/^' . _PEAR_COMMON_PACKAGE_VERSION_P
 
 // XXX far from perfect :-)
 define('_PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '(' . _PEAR_COMMON_PACKAGE_NAME_PREG .
-	')(-([.0-9a-zA-Z]+))?');
+    ')(-([.0-9a-zA-Z]+))?');
 define('PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '/^' . _PEAR_COMMON_PACKAGE_DOWNLOAD_PREG .
-	'\\z/');
+    '\\z/');
 
 define('_PEAR_CHANNELS_NAME_PREG', '[A-Za-z][a-zA-Z0-9\.]+');
 define('PEAR_CHANNELS_NAME_PREG', '/^' . _PEAR_CHANNELS_NAME_PREG . '\\z/');
@@ -55,11 +54,11 @@ define('_PEAR_CHANNELS_SERVER_PREG', '[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(\/[a-z
 define('PEAR_CHANNELS_SERVER_PREG', '/^' . _PEAR_CHANNELS_SERVER_PREG . '\\z/i');
 
 define('_PEAR_CHANNELS_PACKAGE_PREG', '(' . _PEAR_CHANNELS_SERVER_PREG . ')\/('
-	. _PEAR_COMMON_PACKAGE_NAME_PREG . ')');
+    . _PEAR_COMMON_PACKAGE_NAME_PREG . ')');
 define('PEAR_CHANNELS_PACKAGE_PREG', '/^' . _PEAR_CHANNELS_PACKAGE_PREG . '\\z/i');
 
 define('_PEAR_COMMON_CHANNEL_DOWNLOAD_PREG', '(' . _PEAR_CHANNELS_NAME_PREG . ')::('
-	. _PEAR_COMMON_PACKAGE_NAME_PREG . ')(-([.0-9a-zA-Z]+))?');
+    . _PEAR_COMMON_PACKAGE_NAME_PREG . ')(-([.0-9a-zA-Z]+))?');
 define('PEAR_COMMON_CHANNEL_DOWNLOAD_PREG', '/^' . _PEAR_COMMON_CHANNEL_DOWNLOAD_PREG . '\\z/');
 
 /**
@@ -134,7 +133,8 @@ $GLOBALS['_PEAR_Common_script_phases'] = array('pre-install', 'post-install', 'p
  * @deprecated This class will disappear, and its components will be spread
  *             into smaller classes, like the AT&T breakup, as of Release 1.4.0a1
  */
-class PEAR_Common extends PEAR {
+class PEAR_Common extends PEAR
+{
 	// {{{ properties
 
 	/** stack of elements, gives some sort of XML context */
@@ -184,12 +184,12 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function PEAR_Common() {
+	function PEAR_Common()
+	{
 		parent::PEAR();
 		$this->config = &PEAR_Config::singleton();
 		$this->debug = $this->config->get('verbose');
 	}
-
 	// }}}
 	// {{{ destructor
 
@@ -198,7 +198,8 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access private
 	 */
-	function _PEAR_Common() {
+	function _PEAR_Common()
+	{
 		// doesn't work due to bug #14744
 		//$tempfiles = $this->_tempfiles;
 		$tempfiles = & $GLOBALS['_PEAR_Common_tempfiles'];
@@ -213,7 +214,6 @@ class PEAR_Common extends PEAR {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ addTempFile()
 
@@ -228,13 +228,13 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function addTempFile($file) {
+	function addTempFile($file)
+	{
 		if (!class_exists('PEAR_Frontend')) {
 			require_once 'PEAR/Frontend.php';
 		}
 		PEAR_Frontend::addTempFile($file);
 	}
-
 	// }}}
 	// {{{ mkDirHier()
 
@@ -248,14 +248,14 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function mkDirHier($dir) {
+	function mkDirHier($dir)
+	{
 		$this->log(2, "+ create dir $dir");
 		if (!class_exists('System')) {
 			require_once 'System.php';
 		}
 		return System::mkDir(array('-p', $dir));
 	}
-
 	// }}}
 	// {{{ log()
 
@@ -270,7 +270,8 @@ class PEAR_Common extends PEAR {
 	 * @access public
 	 * @static
 	 */
-	function log($level, $msg, $append_crlf = true) {
+	function log($level, $msg, $append_crlf = true)
+	{
 		if ($this->debug >= $level) {
 			if (!class_exists('PEAR_Frontend')) {
 				require_once 'PEAR/Frontend.php';
@@ -283,7 +284,6 @@ class PEAR_Common extends PEAR {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ mkTempDir()
 
@@ -298,7 +298,8 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function mkTempDir($tmpdir = '') {
+	function mkTempDir($tmpdir = '')
+	{
 		if ($tmpdir) {
 			$topt = array('-t', $tmpdir);
 		} else {
@@ -314,7 +315,6 @@ class PEAR_Common extends PEAR {
 		$this->addTempFile($tmpdir);
 		return $tmpdir;
 	}
-
 	// }}}
 	// {{{ setFrontendObject()
 
@@ -325,10 +325,10 @@ class PEAR_Common extends PEAR {
 	 * @return void
 	 * @access public
 	 */
-	function setFrontendObject(&$ui) {
+	function setFrontendObject(&$ui)
+	{
 		$this->ui = &$ui;
 	}
-
 	// }}}
 	// {{{ infoFromTgzFile()
 
@@ -344,7 +344,8 @@ class PEAR_Common extends PEAR {
 	 * @deprecated use PEAR_PackageFile->fromTgzFile() instead
 	 *
 	 */
-	function infoFromTgzFile($file) {
+	function infoFromTgzFile($file)
+	{
 		$packagefile = &new PEAR_PackageFile($this->config);
 		$pf = &$packagefile->fromTgzFile($file, PEAR_VALIDATE_NORMAL);
 		if (PEAR::isError($pf)) {
@@ -358,7 +359,6 @@ class PEAR_Common extends PEAR {
 		}
 		return $this->_postProcessValidPackagexml($pf);
 	}
-
 	// }}}
 	// {{{ infoFromDescriptionFile()
 
@@ -374,7 +374,8 @@ class PEAR_Common extends PEAR {
 	 * @deprecated use PEAR_PackageFile->fromPackageFile() instead
 	 *
 	 */
-	function infoFromDescriptionFile($descfile) {
+	function infoFromDescriptionFile($descfile)
+	{
 		$packagefile = &new PEAR_PackageFile($this->config);
 		$pf = &$packagefile->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
 		if (PEAR::isError($pf)) {
@@ -388,7 +389,6 @@ class PEAR_Common extends PEAR {
 		}
 		return $this->_postProcessValidPackagexml($pf);
 	}
-
 	// }}}
 	// {{{ infoFromString()
 
@@ -404,7 +404,8 @@ class PEAR_Common extends PEAR {
 	 * @deprecated use PEAR_PackageFile->fromXmlstring() instead
 	 *
 	 */
-	function infoFromString($data) {
+	function infoFromString($data)
+	{
 		$packagefile = &new PEAR_PackageFile($this->config);
 		$pf = &$packagefile->fromXmlString($data, PEAR_VALIDATE_NORMAL, false);
 		if (PEAR::isError($pf)) {
@@ -418,14 +419,14 @@ class PEAR_Common extends PEAR {
 		}
 		return $this->_postProcessValidPackagexml($pf);
 	}
-
 	// }}}
 
 	/**
 	 * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
 	 * @return array
 	 */
-	function _postProcessValidPackagexml(&$pf) {
+	function _postProcessValidPackagexml(&$pf)
+	{
 		if (is_a($pf, 'PEAR_PackageFile_v2')) {
 			// sort of make this into a package.xml 1.0-style array
 			// changelog is not converted to old format.
@@ -456,7 +457,6 @@ class PEAR_Common extends PEAR {
 			return $this->pkginfo;
 		}
 	}
-
 	// {{{ infoFromAny()
 
 	/**
@@ -470,7 +470,8 @@ class PEAR_Common extends PEAR {
 	 * @return string
 	 * @deprecated use PEAR_PackageFile->fromAnyFile() instead
 	 */
-	function infoFromAny($info) {
+	function infoFromAny($info)
+	{
 		if (is_string($info) && file_exists($info)) {
 			$packagefile = &new PEAR_PackageFile($this->config);
 			$pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
@@ -487,7 +488,6 @@ class PEAR_Common extends PEAR {
 		}
 		return $info;
 	}
-
 	// }}}
 	// {{{ xmlFromInfo()
 
@@ -502,14 +502,14 @@ class PEAR_Common extends PEAR {
 	 * @access public
 	 * @deprecated use a PEAR_PackageFile_v* object's generator instead
 	 */
-	function xmlFromInfo($pkginfo) {
+	function xmlFromInfo($pkginfo)
+	{
 		$config = &PEAR_Config::singleton();
 		$packagefile = &new PEAR_PackageFile($config);
 		$pf = &$packagefile->fromArray($pkginfo);
 		$gen = &$pf->getDefaultGenerator();
 		return $gen->toXml(PEAR_VALIDATE_PACKAGING);
 	}
-
 	// }}}
 	// {{{ validatePackageInfo()
 
@@ -526,7 +526,8 @@ class PEAR_Common extends PEAR {
 	 * @return boolean
 	 * @deprecated use the validation of PEAR_PackageFile objects
 	 */
-	function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '') {
+	function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '')
+	{
 		$config = &PEAR_Config::singleton();
 		$packagefile = &new PEAR_PackageFile($config);
 		PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
@@ -551,7 +552,6 @@ class PEAR_Common extends PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ buildProvidesArray()
 
@@ -574,7 +574,8 @@ class PEAR_Common extends PEAR {
 	 * @access public
 	 *
 	 */
-	function buildProvidesArray($srcinfo) {
+	function buildProvidesArray($srcinfo)
+	{
 		$file = basename($srcinfo['source_file']);
 		$pn = '';
 		if (isset($this->_packageName)) {
@@ -596,7 +597,7 @@ class PEAR_Common extends PEAR {
 				$function = "$class::$method";
 				$key = "function;$function";
 				if ($method{0} == '_' || !strcasecmp($method, $class) ||
-					isset($this->pkginfo['provides'][$key])) {
+				    isset($this->pkginfo['provides'][$key])) {
 					continue;
 				}
 				$this->pkginfo['provides'][$key] = array('file' => $file, 'type' => 'function', 'name' => $function);
@@ -614,7 +615,6 @@ class PEAR_Common extends PEAR {
 			$this->pkginfo['provides'][$key] = array('file' => $file, 'type' => 'function', 'name' => $function);
 		}
 	}
-
 	// }}}
 	// {{{ analyzeSourceCode()
 
@@ -625,7 +625,8 @@ class PEAR_Common extends PEAR {
 	 * @return mixed
 	 * @access public
 	 */
-	function analyzeSourceCode($file) {
+	function analyzeSourceCode($file)
+	{
 		if (!function_exists("token_get_all")) {
 			return false;
 		}
@@ -742,10 +743,10 @@ class PEAR_Common extends PEAR {
 				case T_STRING:
 					if (version_compare(zend_version(), '2.0', '<')) {
 						if (in_array(strtolower($data), array('public', 'private', 'protected', 'abstract',
-								'interface', 'implements', 'throw')
-							)) {
+							'interface', 'implements', 'throw')
+						    )) {
 							PEAR::raiseError('Error: PHP5 token encountered in ' . $file .
-								'packaging should be done in PHP 5');
+							    'packaging should be done in PHP 5');
 							return false;
 						}
 					}
@@ -804,17 +805,16 @@ class PEAR_Common extends PEAR {
 			}
 		}
 		return array(
-			"source_file" => $file,
-			"declared_classes" => $declared_classes,
-			"declared_interfaces" => $declared_interfaces,
-			"declared_methods" => $declared_methods,
-			"declared_functions" => $declared_functions,
-			"used_classes" => array_diff(array_keys($used_classes), $nodeps),
-			"inheritance" => $extends,
-			"implements" => $implements,
+		    "source_file" => $file,
+		    "declared_classes" => $declared_classes,
+		    "declared_interfaces" => $declared_interfaces,
+		    "declared_methods" => $declared_methods,
+		    "declared_functions" => $declared_functions,
+		    "used_classes" => array_diff(array_keys($used_classes), $nodeps),
+		    "inheritance" => $extends,
+		    "implements" => $implements,
 		);
 	}
-
 	// }}}
 	// {{{  betterStates()
 
@@ -826,7 +826,8 @@ class PEAR_Common extends PEAR {
 	 * @param boolean Determines whether to include $state in the list
 	 * @return false|array False if $state is not a valid release state
 	 */
-	function betterStates($state, $include = false) {
+	function betterStates($state, $include = false)
+	{
 		static $states = array('snapshot', 'devel', 'alpha', 'beta', 'stable');
 		$i = array_search($state, $states);
 		if ($i === false) {
@@ -841,7 +842,8 @@ class PEAR_Common extends PEAR {
 	// }}}
 	// {{{ detectDependencies()
 
-	function detectDependencies($any, $status_callback = null) {
+	function detectDependencies($any, $status_callback = null)
+	{
 		if (!function_exists("token_get_all")) {
 			return false;
 		}
@@ -865,14 +867,13 @@ class PEAR_Common extends PEAR {
 		$decl_c = array_unique($decl_c);
 		$undecl_c = array_diff($used_c, $decl_c);
 		return array('used_classes' => $used_c,
-			'declared_classes' => $decl_c,
-			'declared_methods' => $decl_m,
-			'declared_functions' => $decl_f,
-			'undeclared_classes' => $undecl_c,
-			'inheritance' => $inheri,
+		    'declared_classes' => $decl_c,
+		    'declared_methods' => $decl_m,
+		    'declared_functions' => $decl_f,
+		    'undeclared_classes' => $undecl_c,
+		    'inheritance' => $inheri,
 		);
 	}
-
 	// }}}
 	// {{{ getUserRoles()
 
@@ -882,10 +883,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getUserRoles() {
+	function getUserRoles()
+	{
 		return $GLOBALS['_PEAR_Common_maintainer_roles'];
 	}
-
 	// }}}
 	// {{{ getReleaseStates()
 
@@ -895,10 +896,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getReleaseStates() {
+	function getReleaseStates()
+	{
 		return $GLOBALS['_PEAR_Common_release_states'];
 	}
-
 	// }}}
 	// {{{ getDependencyTypes()
 
@@ -908,10 +909,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getDependencyTypes() {
+	function getDependencyTypes()
+	{
 		return $GLOBALS['_PEAR_Common_dependency_types'];
 	}
-
 	// }}}
 	// {{{ getDependencyRelations()
 
@@ -921,10 +922,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getDependencyRelations() {
+	function getDependencyRelations()
+	{
 		return $GLOBALS['_PEAR_Common_dependency_relations'];
 	}
-
 	// }}}
 	// {{{ getFileRoles()
 
@@ -934,10 +935,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getFileRoles() {
+	function getFileRoles()
+	{
 		return $GLOBALS['_PEAR_Common_file_roles'];
 	}
-
 	// }}}
 	// {{{ getReplacementTypes()
 
@@ -947,10 +948,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getReplacementTypes() {
+	function getReplacementTypes()
+	{
 		return $GLOBALS['_PEAR_Common_replacement_types'];
 	}
-
 	// }}}
 	// {{{ getProvideTypes()
 
@@ -960,10 +961,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getProvideTypes() {
+	function getProvideTypes()
+	{
 		return $GLOBALS['_PEAR_Common_provide_types'];
 	}
-
 	// }}}
 	// {{{ getScriptPhases()
 
@@ -973,10 +974,10 @@ class PEAR_Common extends PEAR {
 	 * @return array
 	 * @static
 	 */
-	function getScriptPhases() {
+	function getScriptPhases()
+	{
 		return $GLOBALS['_PEAR_Common_script_phases'];
 	}
-
 	// }}}
 	// {{{ validPackageName()
 
@@ -989,10 +990,10 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function validPackageName($name) {
+	function validPackageName($name)
+	{
 		return (bool) preg_match(PEAR_COMMON_PACKAGE_NAME_PREG, $name);
 	}
-
 	// }}}
 	// {{{ validPackageVersion()
 
@@ -1005,10 +1006,10 @@ class PEAR_Common extends PEAR {
 	 *
 	 * @access public
 	 */
-	function validPackageVersion($ver) {
+	function validPackageVersion($ver)
+	{
 		return (bool) preg_match(PEAR_COMMON_PACKAGE_VERSION_PREG, $ver);
 	}
-
 	// }}}
 	// {{{ downloadHttp()
 
@@ -1057,13 +1058,13 @@ class PEAR_Common extends PEAR {
 	 * @access public
 	 * @deprecated in favor of PEAR_Downloader::downloadHttp()
 	 */
-	function downloadHttp($url, &$ui, $save_dir = '.', $callback = null) {
+	function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
+	{
 		if (!class_exists('PEAR_Downloader')) {
 			require_once 'PEAR/Downloader.php';
 		}
 		return PEAR_Downloader::downloadHttp($url, $ui, $save_dir, $callback);
 	}
-
 	// }}}
 
 	/**
@@ -1071,7 +1072,8 @@ class PEAR_Common extends PEAR {
 	 * @return boolean
 	 * @static
 	 */
-	function isIncludeable($path) {
+	function isIncludeable($path)
+	{
 		if (file_exists($path) && is_readable($path)) {
 			return true;
 		}
@@ -1084,9 +1086,9 @@ class PEAR_Common extends PEAR {
 		}
 		return false;
 	}
-
 }
 
 require_once 'PEAR/Config.php';
 require_once 'PEAR/PackageFile.php';
+
 ?>

@@ -1,8 +1,10 @@
 <?php
 
-class GW_XML {
+class GW_XML
+{
 
-	private function __array2XML($c, $a) {
+	private function __array2XML($c, $a)
+	{
 		foreach ($a as $v) {
 			if (isset($v["@text"])) {
 				$ch = $c->addChild($v["@tag"], $v["@text"]);
@@ -19,7 +21,6 @@ class GW_XML {
 			}
 		}
 	}
-
 	/*
 	  Array
 	  (
@@ -32,14 +33,16 @@ class GW_XML {
 	  )
 	 */
 
-	static function array2XML($arr, $root) {
+	static function array2XML($arr, $root)
+	{
 		$xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\" ?><{$root}></{$root}>");
 
 		self:: __array2XML($xml, $arr);
 		return $xml->asXML();
 	}
 
-	static function humanReadable($xml, $html_output = false) {
+	static function humanReadable($xml, $html_output = false)
+	{
 		$xml_obj = new SimpleXMLElement($xml);
 		$level = 4;
 		$indent = 0; // current indentation level  
@@ -71,7 +74,6 @@ class GW_XML {
 		$xml = implode("\n", $pretty);
 		return ($html_output) ? htmlentities($xml) : $xml;
 	}
-
 	/* 	
 	 * Function assocToXML($theArray)
 	 * 
@@ -104,7 +106,8 @@ class GW_XML {
 	  </demo>
 	 */
 
-	static function assocToXML($theArray) {
+	static function assocToXML($theArray)
+	{
 		// parse the array for data and output xml
 		foreach ($theArray as $tag => $val) {
 			if (!is_array($val)) {
@@ -126,5 +129,4 @@ class GW_XML {
 
 		return $theXML;
 	}
-
 }

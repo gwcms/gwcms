@@ -1,6 +1,7 @@
 <?php
 
-class GW_Links implements GW_Composite_Slave {
+class GW_Links implements GW_Composite_Slave
+{
 
 	var $owner_obj;
 	var $values;
@@ -14,30 +15,36 @@ class GW_Links implements GW_Composite_Slave {
 	 * @return DB
 	 */
 
-	function &getDB() {
+	function &getDB()
+	{
 		return GW::$context->vars['db'];
 	}
 
-	public function getByOwnerObject($master, $fieldname) {
+	public function getByOwnerObject($master, $fieldname)
+	{
 		$this->setOwnerObject($master, $fieldname);
 		return $this;
 	}
 
-	public function setOwnerObject($master, $fieldname) {
+	public function setOwnerObject($master, $fieldname)
+	{
 		$this->owner_obj = $master;
 		$this->owner_obj_id = $master->get($master->primary_fields[0]);
 	}
 
-	public function save() {
+	public function save()
+	{
 		if (!is_null($this->values))
 			$this->updateBinds($this->values);
 	}
 
-	public function setValues($values) {
+	public function setValues($values)
+	{
 		$this->values = $values;
 	}
 
-	public function setParams($params) {
+	public function setParams($params)
+	{
 		$this->params = $params;
 
 		if (!isset($this->params['table']))
@@ -49,20 +56,24 @@ class GW_Links implements GW_Composite_Slave {
 			list($this->id1, $this->id2) = $this->params['fieldnames'];
 	}
 
-	public function deleteComposite() {
+	public function deleteComposite()
+	{
 		$db = $this->getDB();
 		$db->delete($this->table, Array($this->id1 . '=?', $this->owner_obj_id));
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		return $this->getBinds();
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		return true;
 	}
 
-	private function getBinds() {
+	private function getBinds()
+	{
 		$db = $this->getDB();
 		$list = $db->fetch_rows(Array("SELECT {$this->id2} FROM $this->table WHERE $this->id1=?", $this->owner_obj_id), false);
 
@@ -76,7 +87,8 @@ class GW_Links implements GW_Composite_Slave {
 		return $list1;
 	}
 
-	private function removeBinds($binds) {
+	private function removeBinds($binds)
+	{
 		if (!count($binds))
 			return;
 
@@ -94,7 +106,8 @@ class GW_Links implements GW_Composite_Slave {
 		$db->delete($this->table, $filter);
 	}
 
-	private function addBinds($binds) {
+	private function addBinds($binds)
+	{
 		if (!count($binds))
 			return;
 
@@ -108,7 +121,8 @@ class GW_Links implements GW_Composite_Slave {
 		$db->multi_insert($this->table, $list);
 	}
 
-	private function updateBinds($newbinds) {
+	private function updateBinds($newbinds)
+	{
 		$newbinds = (array) $newbinds;
 		$oldbinds = (array) $this->getBinds();
 
@@ -118,5 +132,4 @@ class GW_Links implements GW_Composite_Slave {
 		$this->removeBinds($remove);
 		$this->addBinds($add);
 	}
-
 }

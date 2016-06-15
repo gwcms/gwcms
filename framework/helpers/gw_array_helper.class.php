@@ -1,13 +1,15 @@
 <?php
 
-class GW_Array_Helper {
+class GW_Array_Helper
+{
 
 	/**
 	 * access value in array by key array
 	 * exmpl: $x[a][b][c] = array_key($x, [a,b,c])
 	 * @return mixed
 	 */
-	static function valByArrKey($arr, $key_arr) {
+	static function valByArrKey($arr, $key_arr)
+	{
 		$x = & $arr;
 
 		if (is_string($key_arr))
@@ -26,18 +28,21 @@ class GW_Array_Helper {
 	/**
 	 * get value from array1 if is empty - array2
 	 */
-	static function altValue($key_arr, &$arr1, &$arr2) {
+	static function altValue($key_arr, &$arr1, &$arr2)
+	{
 		if ($tmp = self::valByArrKey($arr1, $key_arr))
 			return $tmp;
 
 		return self::valByArrKey($arr2, $key_arr);
 	}
 
-	static function strKeyToArrKey($str) {
+	static function strKeyToArrKey($str)
+	{
 		return explode('/', $str);
 	}
 
-	static function arrayFlattenSep($sep, $array) {
+	static function arrayFlattenSep($sep, $array)
+	{
 		$result = array();
 		$stack = array();
 		array_push($stack, array("", $array));
@@ -57,7 +62,6 @@ class GW_Array_Helper {
 
 		return $result;
 	}
-
 	/*
 	 *  $source = Array('a'=>123,'b'=>'abc','c'=>'nothing')
 	 *  $destination=Array();
@@ -66,13 +70,15 @@ class GW_Array_Helper {
 	 * 
 	 * */
 
-	static function copy($source, &$destination, $keys) {
+	static function copy($source, &$destination, $keys)
+	{
 		foreach ($keys as $key)
 			if (isset($source[$key]))
 				$destination[$key] = $source[$key];
 	}
 
-	static function objectCopy($source, &$destination, $keys) {
+	static function objectCopy($source, &$destination, $keys)
+	{
 		foreach ($keys as $key)
 			$destination->$key = $source->$key;
 	}
@@ -84,7 +90,8 @@ class GW_Array_Helper {
 	 * 
 	 * result = Array('a'=>'test','b'=>'best')
 	 */
-	static function buildAssociative($names, $values) {
+	static function buildAssociative($names, $values)
+	{
 		$new = Array();
 
 		foreach ($names as $i => $key)
@@ -93,12 +100,12 @@ class GW_Array_Helper {
 		return $new;
 	}
 
-	static function arrArr2ArrObj($arr) {
+	static function arrArr2ArrObj($arr)
+	{
 		$tmp = [];
 		foreach ($arr as $key => $itm)
 			$arr[$key] = (object) $itm;
 
 		return $arr;
 	}
-
 }

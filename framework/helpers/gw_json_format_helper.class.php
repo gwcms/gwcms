@@ -1,6 +1,7 @@
 <?php
 
-class GW_Json_Format_Helper {
+class GW_Json_Format_Helper
+{
 
 	/**
 	 * Indents a flat JSON string to make it more human-readable
@@ -8,7 +9,8 @@ class GW_Json_Format_Helper {
 	 * @param string $json The original JSON string to process
 	 * @return string Indented version of the original JSON string
 	 */
-	static function format($json) {
+	static function format($json)
+	{
 		$result = '';
 		$pos = 0;
 		$strLen = strlen($json);
@@ -54,8 +56,8 @@ class GW_Json_Format_Helper {
 		return $result;
 	}
 
-	static function f($arr) {
+	static function f($arr)
+	{
 		return self::format(json_encode($arr, JSON_UNESCAPED_UNICODE));
 	}
-
 }

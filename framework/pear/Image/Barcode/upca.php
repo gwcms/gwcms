@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -47,7 +46,8 @@ require_once 'Image/Barcode.php';
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/Image_Barcode
  */
-class Image_Barcode_upca extends Image_Barcode {
+class Image_Barcode_upca extends Image_Barcode
+{
 
 	/**
 	 * Barcode type
@@ -81,68 +81,68 @@ class Image_Barcode_upca extends Image_Barcode {
 	 * @var array
 	 */
 	var $_number_set = array(
-		'0' => array(
-			'A' => array(0, 0, 0, 1, 1, 0, 1),
-			'B' => array(0, 1, 0, 0, 1, 1, 1),
-			'C' => array(1, 1, 1, 0, 0, 1, 0)
-		),
-		'1' => array(
-			'A' => array(0, 0, 1, 1, 0, 0, 1),
-			'B' => array(0, 1, 1, 0, 0, 1, 1),
-			'C' => array(1, 1, 0, 0, 1, 1, 0)
-		),
-		'2' => array(
-			'A' => array(0, 0, 1, 0, 0, 1, 1),
-			'B' => array(0, 0, 1, 1, 0, 1, 1),
-			'C' => array(1, 1, 0, 1, 1, 0, 0)
-		),
-		'3' => array(
-			'A' => array(0, 1, 1, 1, 1, 0, 1),
-			'B' => array(0, 1, 0, 0, 0, 0, 1),
-			'C' => array(1, 0, 0, 0, 0, 1, 0)
-		),
-		'4' => array(
-			'A' => array(0, 1, 0, 0, 0, 1, 1),
-			'B' => array(0, 0, 1, 1, 1, 0, 1),
-			'C' => array(1, 0, 1, 1, 1, 0, 0)
-		),
-		'5' => array(
-			'A' => array(0, 1, 1, 0, 0, 0, 1),
-			'B' => array(0, 1, 1, 1, 0, 0, 1),
-			'C' => array(1, 0, 0, 1, 1, 1, 0)
-		),
-		'6' => array(
-			'A' => array(0, 1, 0, 1, 1, 1, 1),
-			'B' => array(0, 0, 0, 0, 1, 0, 1),
-			'C' => array(1, 0, 1, 0, 0, 0, 0)
-		),
-		'7' => array(
-			'A' => array(0, 1, 1, 1, 0, 1, 1),
-			'B' => array(0, 0, 1, 0, 0, 0, 1),
-			'C' => array(1, 0, 0, 0, 1, 0, 0)
-		),
-		'8' => array(
-			'A' => array(0, 1, 1, 0, 1, 1, 1),
-			'B' => array(0, 0, 0, 1, 0, 0, 1),
-			'C' => array(1, 0, 0, 1, 0, 0, 0)
-		),
-		'9' => array(
-			'A' => array(0, 0, 0, 1, 0, 1, 1),
-			'B' => array(0, 0, 1, 0, 1, 1, 1),
-			'C' => array(1, 1, 1, 0, 1, 0, 0)
-		)
+	    '0' => array(
+		'A' => array(0, 0, 0, 1, 1, 0, 1),
+		'B' => array(0, 1, 0, 0, 1, 1, 1),
+		'C' => array(1, 1, 1, 0, 0, 1, 0)
+	    ),
+	    '1' => array(
+		'A' => array(0, 0, 1, 1, 0, 0, 1),
+		'B' => array(0, 1, 1, 0, 0, 1, 1),
+		'C' => array(1, 1, 0, 0, 1, 1, 0)
+	    ),
+	    '2' => array(
+		'A' => array(0, 0, 1, 0, 0, 1, 1),
+		'B' => array(0, 0, 1, 1, 0, 1, 1),
+		'C' => array(1, 1, 0, 1, 1, 0, 0)
+	    ),
+	    '3' => array(
+		'A' => array(0, 1, 1, 1, 1, 0, 1),
+		'B' => array(0, 1, 0, 0, 0, 0, 1),
+		'C' => array(1, 0, 0, 0, 0, 1, 0)
+	    ),
+	    '4' => array(
+		'A' => array(0, 1, 0, 0, 0, 1, 1),
+		'B' => array(0, 0, 1, 1, 1, 0, 1),
+		'C' => array(1, 0, 1, 1, 1, 0, 0)
+	    ),
+	    '5' => array(
+		'A' => array(0, 1, 1, 0, 0, 0, 1),
+		'B' => array(0, 1, 1, 1, 0, 0, 1),
+		'C' => array(1, 0, 0, 1, 1, 1, 0)
+	    ),
+	    '6' => array(
+		'A' => array(0, 1, 0, 1, 1, 1, 1),
+		'B' => array(0, 0, 0, 0, 1, 0, 1),
+		'C' => array(1, 0, 1, 0, 0, 0, 0)
+	    ),
+	    '7' => array(
+		'A' => array(0, 1, 1, 1, 0, 1, 1),
+		'B' => array(0, 0, 1, 0, 0, 0, 1),
+		'C' => array(1, 0, 0, 0, 1, 0, 0)
+	    ),
+	    '8' => array(
+		'A' => array(0, 1, 1, 0, 1, 1, 1),
+		'B' => array(0, 0, 0, 1, 0, 0, 1),
+		'C' => array(1, 0, 0, 1, 0, 0, 0)
+	    ),
+	    '9' => array(
+		'A' => array(0, 0, 0, 1, 0, 1, 1),
+		'B' => array(0, 0, 1, 0, 1, 1, 1),
+		'C' => array(1, 1, 1, 0, 1, 0, 0)
+	    )
 	);
 	var $_number_set_left_coding = array(
-		'0' => array('A', 'A', 'A', 'A', 'A', 'A'),
-		'1' => array('A', 'A', 'B', 'A', 'B', 'B'),
-		'2' => array('A', 'A', 'B', 'B', 'A', 'B'),
-		'3' => array('A', 'A', 'B', 'B', 'B', 'A'),
-		'4' => array('A', 'B', 'A', 'A', 'B', 'B'),
-		'5' => array('A', 'B', 'B', 'A', 'A', 'B'),
-		'6' => array('A', 'B', 'B', 'B', 'A', 'A'),
-		'7' => array('A', 'B', 'A', 'B', 'A', 'B'),
-		'8' => array('A', 'B', 'A', 'B', 'B', 'A'),
-		'9' => array('A', 'B', 'B', 'A', 'B', 'A')
+	    '0' => array('A', 'A', 'A', 'A', 'A', 'A'),
+	    '1' => array('A', 'A', 'B', 'A', 'B', 'B'),
+	    '2' => array('A', 'A', 'B', 'B', 'A', 'B'),
+	    '3' => array('A', 'A', 'B', 'B', 'B', 'A'),
+	    '4' => array('A', 'B', 'A', 'A', 'B', 'B'),
+	    '5' => array('A', 'B', 'B', 'A', 'A', 'B'),
+	    '6' => array('A', 'B', 'B', 'B', 'A', 'A'),
+	    '7' => array('A', 'B', 'A', 'B', 'A', 'B'),
+	    '8' => array('A', 'B', 'A', 'B', 'B', 'A'),
+	    '9' => array('A', 'B', 'B', 'A', 'B', 'A')
 	);
 
 	/**
@@ -159,7 +159,8 @@ class Image_Barcode_upca extends Image_Barcode {
 	 * @author  Didier Fournout <didier.fournout@nyc.fr>
 	 *
 	 */
-	function &draw($text, $imgtype = 'png') {
+	function &draw($text, $imgtype = 'png')
+	{
 		$error = false;
 		if ((is_numeric($text) == false) || (strlen($text) != 12)) {
 			$barcodewidth = (12 * 7 * $this->_barwidth) + 3 + 5 + 3 + 2 * (imagefontwidth($this->_font) + 1);
@@ -167,9 +168,9 @@ class Image_Barcode_upca extends Image_Barcode {
 		} else {
 			// Calculate the barcode width
 			$barcodewidth = (strlen($text)) * (7 * $this->_barwidth) + 3 // left
-				+ 5 // center
-				+ 3 // right
-				+ imagefontwidth($this->_font) + 1 + imagefontwidth($this->_font) + 1   // check digit's padding
+			    + 5 // center
+			    + 3 // right
+			    + imagefontwidth($this->_font) + 1 + imagefontwidth($this->_font) + 1   // check digit's padding
 			;
 		}
 
@@ -192,7 +193,7 @@ class Image_Barcode_upca extends Image_Barcode {
 			imagefill($imgerror, 0, 0, $red);
 
 			imagestring(
-				$imgerror, $this->_font, $barcodewidth / 2 - (10 / 2 * imagefontwidth($this->_font)), $this->_barcodeheight / 2, 'Code Error', $black
+			    $imgerror, $this->_font, $barcodewidth / 2 - (10 / 2 * imagefontwidth($this->_font)), $this->_barcodeheight / 2, 'Code Error', $black
 			);
 		}
 
@@ -306,9 +307,9 @@ class Image_Barcode_upca extends Image_Barcode {
 			return $img;
 		}
 	}
-
 // function create
 }
 
 // class
+
 ?>

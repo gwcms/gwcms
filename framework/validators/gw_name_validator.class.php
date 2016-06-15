@@ -1,14 +1,17 @@
 <?php
 
-class GW_Name_Validator extends GW_Validator {
+class GW_Name_Validator extends GW_Validator
+{
 
-	function init() {
+	function init()
+	{
 		$this->setParam('error_min_length', '/G/VALIDATION/NAME/MIN_LENGTH');
 		$this->setParam('error_max_length', '/G/VALIDATION/NAME/MAX_LENGTH');
 		$this->setParam('error_illegal_name_format', '/G/VALIDATION/NAME/ILLEGAL_NAME_FORMAT');
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$value = $this->validation_object;
 
 		$this->reset();
@@ -44,7 +47,8 @@ class GW_Name_Validator extends GW_Validator {
 		return false;
 	}
 
-	function __countWords($value) {
+	function __countWords($value)
+	{
 		$words = 0;
 
 		foreach (explode(' ', $value) as $word)
@@ -53,5 +57,4 @@ class GW_Name_Validator extends GW_Validator {
 
 		return $words;
 	}
-
 }

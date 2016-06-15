@@ -1,11 +1,13 @@
 <?php
 
-class GW_Test_Internet {
+class GW_Test_Internet
+{
 
 	/**
 	 * Patikrinti ar galima susijungti su serveriu
 	 */
-	function checkOne($domain, $port = 80, &$error) {
+	function checkOne($domain, $port = 80, &$error)
+	{
 		return (bool) @fsockopen($domain, $port, $num, $error, 5);
 	}
 
@@ -13,7 +15,8 @@ class GW_Test_Internet {
 	 * Patirkinti ar eina uzmegzti rysi su pora serveriu
 	 * ihardcodinti populiarus
 	 */
-	function __check(&$error) {
+	function __check(&$error)
+	{
 		if (!self::checkOne('www.delfi.lt', 80, $error))
 			if (!self::checkOne('www.google.com', 80, $error))
 				return false;
@@ -24,7 +27,8 @@ class GW_Test_Internet {
 	/**
 	 * Patikrinti būklę ir išsaugoti į gw_config
 	 */
-	function check(&$error) {
+	function check(&$error)
+	{
 		$state = self::__check($error);
 
 		self::saveState($state);
@@ -32,7 +36,8 @@ class GW_Test_Internet {
 		return $state;
 	}
 
-	function saveState($state) {
+	function saveState($state)
+	{
 		$cfg = GW::getInstance('GW_Config');
 		;
 		$cfg->set('system/internet', (int) $state . '|' . date('Y-m-d H:i:s'));
@@ -43,7 +48,8 @@ class GW_Test_Internet {
 	 * jei paskutinis tikrinimas buvo veliau nei pries 2 minutes
 	 * padaryti tikrinima
 	 */
-	function lastCheck() {
+	function lastCheck()
+	{
 		$cfg = GW::getInstance('GW_Config');
 		;
 		list($state, $time) = explode('|', $cfg->get('system/internet'));
@@ -55,5 +61,4 @@ class GW_Test_Internet {
 
 		return $state;
 	}
-
 }

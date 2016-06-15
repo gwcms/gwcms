@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -51,7 +50,8 @@ require_once 'Image/Barcode.php';
  * @version    CVS: $Id: postnet.php,v 1.3 2006/12/13 19:29:30 cweiske Exp $
  * @link       http://pear.php.net/package/Image_Barcode
  */
-class Image_Barcode_postnet extends Image_Barcode {
+class Image_Barcode_postnet extends Image_Barcode
+{
 
 	/**
 	 * Barcode type
@@ -85,16 +85,16 @@ class Image_Barcode_postnet extends Image_Barcode {
 	 * @var array
 	 */
 	var $_coding_map = array(
-		'0' => '11000',
-		'1' => '00011',
-		'2' => '00101',
-		'3' => '00110',
-		'4' => '01001',
-		'5' => '01010',
-		'6' => '01100',
-		'7' => '10001',
-		'8' => '10010',
-		'9' => '10100'
+	    '0' => '11000',
+	    '1' => '00011',
+	    '2' => '00101',
+	    '3' => '00110',
+	    '4' => '01001',
+	    '5' => '01010',
+	    '6' => '01100',
+	    '7' => '10001',
+	    '8' => '10010',
+	    '9' => '10100'
 	);
 
 	/**
@@ -110,7 +110,8 @@ class Image_Barcode_postnet extends Image_Barcode {
 	 * @author Josef "Jeff" Sipek <jeffpc@optonline.net>
 	 * @since  Image_Barcode 0.3
 	 */
-	function draw($text, $imgtype = 'png') {
+	function draw($text, $imgtype = 'png')
+	{
 		$text = trim($text);
 
 		if (!preg_match('/[0-9]/', $text)) {
@@ -154,9 +155,9 @@ class Image_Barcode_postnet extends Image_Barcode {
 
 		return $img;
 	}
-
 // function create
 }
 
 // class
+
 ?>

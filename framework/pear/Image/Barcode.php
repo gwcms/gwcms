@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -38,7 +37,8 @@ require_once 'PEAR.php';
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/Image_Barcode
  */
-class Image_Barcode extends PEAR {
+class Image_Barcode extends PEAR
+{
 
 	/**
 	 * Draws a image barcode
@@ -61,7 +61,8 @@ class Image_Barcode extends PEAR {
 	 * @author Marcelo Subtil Marcal <msmarcal@php.net>
 	 * @since  Image_Barcode 0.3
 	 */
-	function &draw($text, $type = 'int25', $imgtype = 'png', $bSendToBrowser = true) {
+	function &draw($text, $type = 'int25', $imgtype = 'png', $bSendToBrowser = true)
+	{
 		//Make sure no bad files are included
 		if (!preg_match('/^[a-zA-Z0-9_-]+$/', $type)) {
 			return PEAR::raiseError('Invalid barcode type ' . $type);
@@ -109,7 +110,6 @@ class Image_Barcode extends PEAR {
 			return $img;
 		}
 	}
-
 }
 
 ?>

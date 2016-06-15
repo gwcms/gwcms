@@ -1,6 +1,7 @@
 <?php
 
-class GW_Application {
+class GW_Application
+{
 
 	public $app_name;
 	public $path;
@@ -28,7 +29,6 @@ class GW_Application {
 	public $carry_params = Array();
 	public $inner_request = false;
 	public $user_class = "GW_User";
-	
 	public $sess; //application session - to avoid conflicts with site - admin apps
 
 	/*
@@ -36,22 +36,26 @@ class GW_Application {
 	 * */
 	var $errors;
 
-	function loadConfig() {
+	function loadConfig()
+	{
 		include GW::s('DIR/APPLICATIONS') . strtolower($this->app_name) . '/config/main.php';
 	}
 
-	function initSession() {
+	function initSession()
+	{
 		ob_start();
 		session_start();
-		
-		$this->sess =& $_SESSION[$this->app_name];//to avoid conflicts with site - admin apps
+
+		$this->sess = & $_SESSION[$this->app_name]; //to avoid conflicts with site - admin apps
 	}
 
-	function initDB() {
+	function initDB()
+	{
 		$this->db = GW::db();
 	}
 
-	function initAuth() {
+	function initAuth()
+	{
 		$this->auth = new GW_Auth(new $this->user_class());
 		$this->user = $this->auth->isLogged();
 
@@ -59,7 +63,8 @@ class GW_Application {
 			$this->user->onRequest();
 	}
 
-	function initSmarty() {
+	function initSmarty()
+	{
 		require GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
 		$s = & $this->smarty;
 
@@ -90,10 +95,11 @@ class GW_Application {
 		$s->assignByRef('lang', $this->lang);
 		$s->assignByRef('page', $this->page);
 		$s->assignByRef('footer_hidden', new stdClass);
-		$s->merge_compiled_includes = true; 
+		$s->merge_compiled_includes = true;
 	}
 
-	function initLang() {
+	function initLang()
+	{
 		GW_Lang::$ln = $this->ln;
 		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
 		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
@@ -101,12 +107,14 @@ class GW_Application {
 		$this->lang = GW::l('/g/');
 	}
 
-	function __construct($context) {
+	function __construct($context)
+	{
 		foreach ($context as $key => $value)
 			$this->$key = $value;
 	}
 
-	function init() {
+	function init()
+	{
 		$this->loadConfig();
 		$this->initDB();
 		$this->initSession();
@@ -122,7 +130,8 @@ class GW_Application {
 		$this->initSmarty();
 	}
 
-	function buildUri($path = false, $getparams = Array(), $params = []) {
+	function buildUri($path = false, $getparams = Array(), $params = [])
+	{
 		$ln = isset($params['ln']) ? $params['ln'] : $this->ln;
 
 		unset($getparams['url']);
@@ -134,17 +143,18 @@ class GW_Application {
 			$path = $this->path;
 
 		return
-			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-			(isset($params['app'])? $params['app'].'/' : $this->app_base) .
-			$ln .
-			($path ? '/' : '') . $path .
-			($getparams ? '?' . http_build_query($getparams) : '');
+		    (isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
+		    (isset($params['app']) ? $params['app'] . '/' : $this->app_base) .
+		    $ln .
+		    ($path ? '/' : '') . $path .
+		    ($getparams ? '?' . http_build_query($getparams) : '');
 	}
 
 	/**
 	 * returns $_GET parameters which is configured to carry through jumps
 	 */
-	function carryParams() {
+	function carryParams()
+	{
 		static $cache;
 
 		if ($cache)
@@ -153,7 +163,8 @@ class GW_Application {
 		return $cache = array_intersect_key($_GET, $this->carry_params);
 	}
 
-	function jump($path = false, $params = Array()) {
+	function jump($path = false, $params = Array())
+	{
 		if (!is_array($params))
 			backtrace();
 
@@ -164,7 +175,8 @@ class GW_Application {
 	//sitemap/templates/15/tplvars/form jei bus toks - sitemap/templates/tplvars tai supras
 	//users/users/form 
 
-	function getPage() {
+	function getPage()
+	{
 		$this->page = new GW_ADM_Page();
 
 		for ($i = count($this->path_arr) - 1; $i >= 0; $i--) {
@@ -177,25 +189,29 @@ class GW_Application {
 		return false;
 	}
 
-	function moduleExists($dirname, $name = '') {
+	function moduleExists($dirname, $name = '')
+	{
 		return file_exists(GW::s("DIR/{$this->app_name}/MODULES") . "$dirname/module_" . ($name ? $name : $dirname) . ".class.php");
 	}
 
-	function preRun() {
+	function preRun()
+	{
 		$files = glob(GW::s("DIR/{$this->app_name}/MODULES") . '*/zz_event_prerun*');
 
 		foreach ($files as $file)
 			include($file);
 	}
 
-	function postRun() {
+	function postRun()
+	{
 		$files = glob(GW::s("DIR/{$this->app_name}/MODULES") . '*/zz_event_postrun*');
 
 		foreach ($files as $file)
 			include($file);
 	}
 
-	function ifAjaxCallProcess() {
+	function ifAjaxCallProcess()
+	{
 		if ($_GET['act'] != 'do:json')
 			return;
 
@@ -204,7 +220,8 @@ class GW_Application {
 		$this->processModule($path_info);
 	}
 
-	function requestInfoInnerDataObject(&$name, &$item) {
+	function requestInfoInnerDataObject(&$name, &$item)
+	{
 		if (is_numeric($name) && $item) {
 			$item['data_object_id'] = (int) $name;
 			$data_object_id = $item['data_object_id'];
@@ -220,7 +237,8 @@ class GW_Application {
 	 * b - users/users.class.php
 	 */
 	//returns url
-	function requestInfoInner() {
+	function requestInfoInner()
+	{
 		$parr = $this->path_arr;
 		$ln = array_shift($parr);
 
@@ -246,7 +264,7 @@ class GW_Application {
 		}
 
 		$path_arr_parent = count($path_arr) >= 2 ?
-			$path_arr[count($path_arr) - 2] : Array();
+		    $path_arr[count($path_arr) - 2] : Array();
 
 
 		//jeigu bus path articles/items/132
@@ -261,7 +279,8 @@ class GW_Application {
 		return compact('ln', 'path', 'path_arr', 'path_clean', 'data_object_id', 'path_arr_parent');
 	}
 
-	function requestInfo() {
+	function requestInfo()
+	{
 		$pack = $this->requestInfoInner();
 
 		if (isset($this->args['test_request_info']))
@@ -291,7 +310,8 @@ class GW_Application {
 			$_GET['id'] = $data_object_id;
 	}
 
-	function getModulePathInfo($path) {
+	function getModulePathInfo($path)
+	{
 		$level = 0;
 		$info = Array();
 		$path_arr = explode('/', $path);
@@ -322,7 +342,8 @@ class GW_Application {
 		return $info;
 	}
 
-	function &constructModule($dir, $name) {
+	function &constructModule($dir, $name)
+	{
 		include_once GW::s("DIR/{$this->app_name}/MODULES") . "{$dir}/module_{$name}.class.php";
 		$name = "Module_{$name}";
 
@@ -332,7 +353,8 @@ class GW_Application {
 		return $obj;
 	}
 
-	function constructModule1($path_info) {
+	function constructModule1($path_info)
+	{
 		$module = $this->constructModule($path_info['dirname'], $path_info['module']);
 
 		$module->module_name = $path_info['module'];
@@ -344,7 +366,8 @@ class GW_Application {
 		return $module;
 	}
 
-	function processModule($path_info, $request_params) {
+	function processModule($path_info, $request_params)
+	{
 		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
 			$this->jumpToFirstChild();
 
@@ -365,12 +388,12 @@ class GW_Application {
 
 		$module->process();
 	}
-
 	/*
 	 * sms/mass?act=update
 	 * */
 
-	function innerProcess($path) {
+	function innerProcess($path)
+	{
 		$path_e = explode('?', $path, 2);
 
 		if (count($path_e) > 1) {
@@ -383,20 +406,23 @@ class GW_Application {
 		return $this->processModule($path_info, $request_args);
 	}
 
-	function setMessage($msg, $status_id = 0) {
+	function setMessage($msg, $status_id = 0)
+	{
 		$this->sess['messages'][] = Array($status_id, $msg);
 	}
 
-	function setMessages($msgs = Array()) {
+	function setMessages($msgs = Array())
+	{
 		foreach ((array) $msgs as $field => $msg)
 			$this->sess['messages'][$field] = Array(0, $msg);
 	}
 
-	function acceptMessages() {
-		if(!isset($this->sess['messages']) || ! ($data=$this->sess['messages']))
+	function acceptMessages()
+	{
+		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
 			return false;
-		
-		
+
+
 		$this->sess['messages'] = Null;
 
 		//copy errors
@@ -410,7 +436,8 @@ class GW_Application {
 	/**
 	 * level 2=error, 1=warning, 3=info
 	 */
-	function setErrors($errors = Array(), $level = 2) {
+	function setErrors($errors = Array(), $level = 2)
+	{
 		foreach ((array) $errors as $field => $error_str)
 			if (is_numeric($field))
 				$this->sess['messages'][] = Array($level, $error_str);
@@ -418,7 +445,8 @@ class GW_Application {
 				$this->sess['messages'][$field] = Array($level, $error_str);
 	}
 
-	function fatalError($message) {
+	function fatalError($message)
+	{
 		$this->setErrors(Array($message));
 
 		$path_info = Array();
@@ -432,7 +460,8 @@ class GW_Application {
 		exit;
 	}
 
-	function process() {
+	function process()
+	{
 
 		if (!$this->canAccess($this->page))
 			if ($this->user)
@@ -449,7 +478,8 @@ class GW_Application {
 		$this->processModule($path_info, $_REQUEST);
 	}
 
-	function FH() {
+	function FH()
+	{
 		$fh = GW::getInstance('FH');
 
 		if (!$fh->app)
@@ -457,6 +487,4 @@ class GW_Application {
 
 		return $fh;
 	}
-
-	
 }

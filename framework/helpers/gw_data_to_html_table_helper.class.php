@@ -1,8 +1,10 @@
 <?php
 
-class GW_Data_to_Html_Table_Helper {
+class GW_Data_to_Html_Table_Helper
+{
 
-	static function doTable($data, $font_size = 10) {
+	static function doTable($data, $font_size = 10)
+	{
 		if (!is_array($data))
 			return;
 
@@ -22,5 +24,4 @@ class GW_Data_to_Html_Table_Helper {
 		$str.="</table>";
 		return $str;
 	}
-
 }

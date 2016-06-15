@@ -1,5 +1,4 @@
 <?php
-
 $GLOBALS['smarty_vars_store'] = Array();
 
 /**
@@ -8,11 +7,13 @@ $GLOBALS['smarty_vars_store'] = Array();
  * @author wdm
  *
  */
-class FH {
+class FH
+{
 
 	public $app;
 
-	static function &getTplVars(&$template_obj, $vars_arr) {
+	static function &getTplVars(&$template_obj, $vars_arr)
+	{
 		$res = Array();
 
 		foreach ($vars_arr as $key)
@@ -21,7 +22,8 @@ class FH {
 		return $res;
 	}
 
-	static function out($var) {
+	static function out($var)
+	{
 		if (is_array($var) || is_object($var))
 			return dump($var);
 
@@ -30,17 +32,20 @@ class FH {
 
 	//alternative lang files use
 	//if no value in module lang file, take it from main lang file
-	function altLang($key_arr) {
+	function altLang($key_arr)
+	{
 		return GW_Array_Helper::altValue($key_arr, $this->app->module->lang, $this->app->lang);
 	}
 
-	function fieldTitle($key) {
+	function fieldTitle($key)
+	{
 		$title = GW::l($fkey = '/A/FIELDS/' . $key);
 
 		return $title != $fkey ? $title : $key;
 	}
 
-	function shortFieldTitle($key) {
+	function shortFieldTitle($key)
+	{
 		$title = self::fieldTitle($key);
 
 		if ($tmp = $this->app->module->lang['FIELDS_SHORT'][$key])
@@ -52,7 +57,8 @@ class FH {
 	/**
 	 * should be called in smarty only
 	 */
-	function smarty_vars_push($keys) {
+	function smarty_vars_push($keys)
+	{
 		$vars = explode(',', $keys);
 		foreach ($vars as $key)
 			$GLOBALS['smarty_vars_store'][$key] = $GLOBALS['smarty']->_tpl_vars[$key];
@@ -61,7 +67,8 @@ class FH {
 	/**
 	 * should be called in smarty only
 	 */
-	function smarty_vars_pull($keys) {
+	function smarty_vars_pull($keys)
+	{
 		$vars = explode(',', $keys);
 		foreach ($vars as $key) {
 			$GLOBALS['smarty']->_tpl_vars[$key] = $GLOBALS['smarty_vars_store'][$key];
@@ -69,7 +76,8 @@ class FH {
 		}
 	}
 
-	function maxUploadSize() {
+	function maxUploadSize()
+	{
 		$cache;
 		if ($cache)
 			return $cache;
@@ -77,14 +85,16 @@ class FH {
 		return $cache = sprintf($this->app->lang['MAX_UPLOAD_SIZE'], ini_get('upload_max_filesize'));
 	}
 
-	function gw_path($params) {
+	function gw_path($params)
+	{
 		$this->gw_link_po($params);
 
 		return isset($params['path']) ? $params['path'] : false;
 	}
 
 	//path only
-	function gw_link_po(&$params) {
+	function gw_link_po(&$params)
+	{
 		$params['params'] = (isset($params['params']) ? $params['params'] : []) + $this->app->carryParams();
 		$params['params'] = http_build_query($params['params']);
 
@@ -115,20 +125,23 @@ class FH {
 		$params['path'] = $params['path'] . ($params['params'] ? '?' : '') . $params['params'];
 	}
 
-	function gw_link_confirm($include_onclick = true) {
+	function gw_link_confirm($include_onclick = true)
+	{
 		$title_or_inner_txt = "(this.title ? this.title : this.textContent)";
 		$str = "return confirm('" . $this->app->lang['ACTION_CONFIRM_REQUIRED'] . "\\n" . $this->app->lang['ACTION'] . ": '+$title_or_inner_txt)";
 
 		return $include_onclick ? 'onclick="' . $str . '"' : $str;
 	}
 
-	function gw_link_prompt($question, $url, $include_onclick = true) {
+	function gw_link_prompt($question, $url, $include_onclick = true)
+	{
 		$str = "var ss=window.prompt('{$question}');if(ss)location.href='" . $url . "'+ss;return false;";
 
 		return $include_onclick ? 'href="#" onclick="' . $str . '"' : $str;
 	}
 
-	function gw_link($params) {
+	function gw_link($params)
+	{
 		if (!isset($params['show_title']))
 			$params['show_title'] = 1;
 
@@ -174,13 +187,12 @@ class FH {
 		$a_end = '</a>';
 
 		$contents .=
-			($img ? $a . $img . $a_end : '') .
-			($img && $params['show_title'] ? ' ' : '') .
-			($params['show_title'] ? $a . $params['title'] . $a_end : '');
+		    ($img ? $a . $img . $a_end : '') .
+		    ($img && $params['show_title'] ? ' ' : '') .
+		    ($params['show_title'] ? $a . $params['title'] . $a_end : '');
 
 		return $contents;
 	}
-
 	/*
 	 * time: only Y-m-d H:i:s (mysql) time format
 	 * 
@@ -192,7 +204,8 @@ class FH {
 	 * "2005 Oct 10" if else 
 	 */
 
-	function shortTime($time) {
+	function shortTime($time)
+	{
 		if ($time == '0000-00-00 00:00:00')
 			return '';
 
@@ -207,8 +220,8 @@ class FH {
 		return (date('Y') != $y ? $y . ' ' : '') . $lang['MONTHS_SHORT'][$m - 1] . ' ' . $d;
 	}
 
-	function dateFormate($date, $format) {
+	function dateFormate($date, $format)
+	{
 		return date($format, strtotime($date));
 	}
-
 }

@@ -1,14 +1,16 @@
 <?php
 
-class d {
+class d
+{
 
 	static $html = Array(
-		"<pre style='background:transparent;margin:5px;border:0;border-left: solid 10px ",
-		";padding-left:15px;padding:10px 0px 0px 15px'>",
-		"</pre>"
+	    "<pre style='background:transparent;margin:5px;border:0;border-left: solid 10px ",
+	    ";padding-left:15px;padding:10px 0px 0px 15px'>",
+	    "</pre>"
 	);
 
-	static function ldump($x, $add = '', $color = 'orange') {
+	static function ldump($x, $add = '', $color = 'orange')
+	{
 		if (!headers_sent())
 			header('content-type: text/html; charset=UTF-8');
 
@@ -27,17 +29,20 @@ class d {
 		echo self::$html[2];
 	}
 
-	static function vdump($x, $add = '', $color = 'orange') {
+	static function vdump($x, $add = '', $color = 'orange')
+	{
 		echo self::$html[0] . $color . self::$html[1];
 		var_dump($x);
 		echo self::$html[2];
 	}
 
-	static function dump($x, $color = 'orange') {
+	static function dump($x, $color = 'orange')
+	{
 		self::ldump($x, self::fbacktrace(debug_backtrace()), $color);
 	}
 
-	static function fbacktrace($bt) {
+	static function fbacktrace($bt)
+	{
 		//limit size, sometimes can kill memory
 		//$bt = array_slice($bt, 0, 4);
 
@@ -83,22 +88,26 @@ class d {
 		return $str;
 	}
 
-	static function dumpas($x) {
+	static function dumpas($x)
+	{
 		self::dump($x);
 		exit;
 	}
 
-	static function backtrace() {
+	static function backtrace()
+	{
 		echo "<pre>";
 		debug_print_backtrace();
 		echo "</pre>";
 	}
 
-	static function jsonNice($array) {
+	static function jsonNice($array)
+	{
 		return json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
 
-	static function htmlNice($html) {
+	static function htmlNice($html)
+	{
 		$dom = new DOMDocument();
 		$dom->preserveWhiteSpace = FALSE;
 		$dom->loadHTML($html);
@@ -107,8 +116,8 @@ class d {
 		d::ldump(htmlspecialchars($dom->saveHTML()));
 	}
 
-	static function htmldumpas($html) {
+	static function htmldumpas($html)
+	{
 		d::dumpas(htmlspecialchars($html));
 	}
-
 }

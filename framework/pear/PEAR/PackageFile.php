@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_PackageFile, package.xml parsing utility class
  *
@@ -46,7 +45,8 @@ define('PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION', 2);
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_PackageFile {
+class PEAR_PackageFile
+{
 
 	/**
 	 * @var PEAR_Config
@@ -73,7 +73,8 @@ class PEAR_PackageFile {
 	 * @param   string @tmpdir Optional temporary directory for uncompressing
 	 *          files
 	 */
-	function PEAR_PackageFile(&$config, $debug = false, $tmpdir = false) {
+	function PEAR_PackageFile(&$config, $debug = false, $tmpdir = false)
+	{
 		$this->_config = $config;
 		$this->_debug = $debug;
 		$this->_tmpdir = $tmpdir;
@@ -84,11 +85,13 @@ class PEAR_PackageFile {
 	 *
 	 * This is used by the package-validate command
 	 */
-	function rawReturn() {
+	function rawReturn()
+	{
 		$this->_rawReturn = true;
 	}
 
-	function setLogger(&$l) {
+	function setLogger(&$l)
+	{
 		$this->_logger = &$l;
 	}
 
@@ -97,7 +100,8 @@ class PEAR_PackageFile {
 	 * @param   int $version
 	 * @return  PEAR_PackageFile_Parser_v1|PEAR_PackageFile_Parser_v1
 	 */
-	function &parserFactory($version) {
+	function &parserFactory($version)
+	{
 		if (!in_array($version{0}, array('1', '2'))) {
 			$a = false;
 			return $a;
@@ -113,7 +117,8 @@ class PEAR_PackageFile {
 	 * For simpler unit-testing
 	 * @return string
 	 */
-	function getClassPrefix() {
+	function getClassPrefix()
+	{
 		return 'PEAR_PackageFile_v';
 	}
 
@@ -122,7 +127,8 @@ class PEAR_PackageFile {
 	 * @param   int $version
 	 * @return  PEAR_PackageFile_v1|PEAR_PackageFile_v1
 	 */
-	function &factory($version) {
+	function &factory($version)
+	{
 		if (!in_array($version{0}, array('1', '2'))) {
 			$a = false;
 			return $a;
@@ -143,7 +149,8 @@ class PEAR_PackageFile {
 	 * @return PEAR_PackageFileManager_v1|PEAR_PackageFileManager_v2
 	 * @uses    factory() to construct the returned object.
 	 */
-	function &fromArray($arr) {
+	function &fromArray($arr)
+	{
 		if (isset($arr['xsdversion'])) {
 			$obj = &$this->factory($arr['xsdversion']);
 			if ($this->_logger) {
@@ -179,11 +186,12 @@ class PEAR_PackageFile {
 	 * @return  PEAR_PackageFile_v1|PEAR_PackageFile_v2
 	 * @uses    parserFactory() to construct a parser to load the package.
 	 */
-	function &fromXmlString($data, $state, $file, $archive = false) {
+	function &fromXmlString($data, $state, $file, $archive = false)
+	{
 		if (preg_match('/<package[^>]+version="([0-9]+\.[0-9]+)"/', $data, $packageversion)) {
 			if (!in_array($packageversion[1], array('1.0', '2.0', '2.1'))) {
 				return PEAR::raiseError('package.xml version "' . $packageversion[1] .
-						'" is not supported, only 1.0, 2.0, and 2.1 are supported.');
+					'" is not supported, only 1.0, 2.0, and 2.1 are supported.');
 			}
 			$object = &$this->parserFactory($packageversion[1]);
 			if ($this->_logger) {
@@ -224,14 +232,14 @@ class PEAR_PackageFile {
 			}
 		} elseif (preg_match('/<package[^>]+version="([^"]+)"/', $data, $packageversion)) {
 			$a = PEAR::raiseError('package.xml file "' . $file .
-					'" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
+				'" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
 			return $a;
 		} else {
 			if (!class_exists('PEAR_ErrorStack')) {
 				require_once 'PEAR/ErrorStack.php';
 			}
 			PEAR_ErrorStack::staticPush('PEAR_PackageFile', PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION, 'warning', array('xml' => $data), 'package.xml "' . $file .
-				'" has no package.xml <package> version');
+			    '" has no package.xml <package> version');
 			$object = &$this->parserFactory('1.0');
 			$object->setConfig($this->_config);
 			$pf = $object->parse($data, $file, $archive);
@@ -268,7 +276,8 @@ class PEAR_PackageFile {
 	 * @param string  $file  name of file or directory
 	 * @return  void
 	 */
-	function addTempFile($file) {
+	function addTempFile($file)
+	{
 		$GLOBALS['_PEAR_Common_tempfiles'][] = $file;
 	}
 
@@ -282,7 +291,8 @@ class PEAR_PackageFile {
 	 * @using   fromPackageFile() to load the package after the package.xml
 	 *          file is extracted.
 	 */
-	function &fromTgzFile($file, $state) {
+	function &fromTgzFile($file, $state)
+	{
 		if (!class_exists('Archive_Tar')) {
 			require_once 'Archive/Tar.php';
 		}
@@ -296,13 +306,13 @@ class PEAR_PackageFile {
 		}
 		if (!is_array($content)) {
 			if (is_string($file) && strlen($file < 255) &&
-				(!file_exists($file) || !@is_file($file))) {
+			    (!file_exists($file) || !@is_file($file))) {
 				$ret = PEAR::raiseError("could not open file \"$file\"");
 				return $ret;
 			}
 			$file = realpath($file);
 			$ret = PEAR::raiseError("Could not get contents of package \"$file\"" .
-					'. Invalid tgz file.');
+				'. Invalid tgz file.');
 			return $ret;
 		} else {
 			if (!count($content) && !@is_file($file)) {
@@ -341,7 +351,7 @@ class PEAR_PackageFile {
 			}
 			PEAR::staticPopErrorHandling();
 			$ret = PEAR::raiseError('could not extract the package.xml file from "' .
-					$origfile . '"' . $extra);
+				$origfile . '"' . $extra);
 			return $ret;
 		}
 		PEAR::staticPopErrorHandling();
@@ -363,7 +373,8 @@ class PEAR_PackageFile {
 	 * @return array
 	 * @access private
 	 */
-	function _extractErrors($err = null) {
+	function _extractErrors($err = null)
+	{
 		static $errors = array();
 		if ($err === null) {
 			$e = $errors;
@@ -385,10 +396,11 @@ class PEAR_PackageFile {
 	 * @uses    PEAR_PackageFile::fromXmlString to create the oject after the
 	 *          XML is loaded from the package.xml file.
 	 */
-	function &fromPackageFile($descfile, $state, $archive = false) {
+	function &fromPackageFile($descfile, $state, $archive = false)
+	{
 		if (is_string($descfile) && strlen($descfile) < 255 &&
-			(!file_exists($descfile) || !is_file($descfile) || !is_readable($descfile) ||
-			(!$fp = @fopen($descfile, 'r')))) {
+		    (!file_exists($descfile) || !is_file($descfile) || !is_readable($descfile) ||
+		    (!$fp = @fopen($descfile, 'r')))) {
 			$a = PEAR::raiseError("Unable to open $descfile");
 			return $a;
 		}
@@ -414,7 +426,8 @@ class PEAR_PackageFile {
 	 * @uses    fromPackageFile() if the file appears to be XML
 	 * @uses    fromTgzFile() to load all non-XML files
 	 */
-	function &fromAnyFile($info, $state) {
+	function &fromAnyFile($info, $state)
+	{
 		if (is_dir($info)) {
 			$dir_name = realpath($info);
 			if (file_exists($dir_name . '/package.xml')) {
@@ -429,7 +442,7 @@ class PEAR_PackageFile {
 
 		$fp = false;
 		if (is_string($info) && strlen($info) < 255 &&
-			(file_exists($info) || ($fp = @fopen($info, 'r')))) {
+		    (file_exists($info) || ($fp = @fopen($info, 'r')))) {
 			if ($fp) {
 				fclose($fp);
 			}
@@ -454,7 +467,6 @@ class PEAR_PackageFile {
 		}
 		return $info;
 	}
-
 }
 
 ?>

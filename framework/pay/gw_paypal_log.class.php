@@ -1,6 +1,7 @@
 <?php
 
-class GW_PayPal_Log extends GW_Data_Object {
+class GW_PayPal_Log extends GW_Data_Object
+{
 
 	public $table = 'gw_paypal_log';
 	public $encode_fields = ['extra' => 'json'];

@@ -6,14 +6,16 @@
 //running = -2 // paimti vykdymui
 
 
-class GW_Task extends GW_Data_Object {
+class GW_Task extends GW_Data_Object
+{
 
 	var $table = 'gw_tasks';
 	var $encode_fields = Array('arguments' => 'json');
 	var $calculate_fields = Array('list_color' => 'listColor');
 
-	function getForExecution() {
-		$list = $this->findAll('time < "'.date('Y-m-d H:i:s').'" AND running = -1');
+	function getForExecution()
+	{
+		$list = $this->findAll('time < "' . date('Y-m-d H:i:s') . '" AND running = -1');
 
 		foreach ($list as $item) {
 			$item->running = -2;
@@ -23,11 +25,13 @@ class GW_Task extends GW_Data_Object {
 		return $list;
 	}
 
-	function canSingleInstanceRun() {
+	function canSingleInstanceRun()
+	{
 		return $this->count(Array('name=? AND (running =-1 OR running > 0) AND id!=?', $this->name, $this->id)) == 0;
 	}
 
-	function add($name, $args = Array()) {
+	function add($name, $args = Array())
+	{
 		$item = $this->createNewObject();
 		$item->set('name', $name);
 		$item->set('arguments', $args);
@@ -42,39 +46,45 @@ class GW_Task extends GW_Data_Object {
 		GW_App_System::triggerUSR1();
 	}
 
-	function addSingle($name, $args = Array()) {
+	function addSingle($name, $args = Array())
+	{
 		if (!$this->count(Array("name=? AND running=-1", $name)))
 			$this->add($name, $args);
 		else
 			GW_App_System::triggerUSR1();
 	}
 
-	function isRunning() {
+	function isRunning()
+	{
 		return $this->running > 0;
 	}
 
-	function checkRunning() {
+	function checkRunning()
+	{
 		if ($this->isRunning())
 			return GW_Proc_Ctrl::isRunning($this->running, 'task.php');
 	}
 
-	function procKill($hard = false) {
+	function procKill($hard = false)
+	{
 		if ($this->checkRunning())
 			posix_kill($this->running, $hard ? 9 : 15);
 	}
 
-	function listColor() {
+	function listColor()
+	{
 		if ($this->isRunning())
 			return $this->checkRunning() ? '#dfd' : '#fdd';
 	}
 
-	function getOverTimeLimit() {
-		return $this->findAll('running!=0 AND halt_time>time AND halt_time<"'.date('Y-m-d H:i:s').'"');
+	function getOverTimeLimit()
+	{
+		return $this->findAll('running!=0 AND halt_time>time AND halt_time<"' . date('Y-m-d H:i:s') . '"');
 	}
 
-	function setAsNewest() {
+	function setAsNewest()
+	{
 		$this->getDB()->update($this->table, ['`name`=?', $this->name], ['newest' => 0]);
 		$this->newest = 1;
 	}
-
 }

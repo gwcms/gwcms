@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Packager for generating releases
  *
@@ -41,7 +40,8 @@ require_once 'System.php';
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
-class PEAR_Packager extends PEAR_Common {
+class PEAR_Packager extends PEAR_Common
+{
 
 	/**
 	 * @var PEAR_Registry
@@ -50,7 +50,8 @@ class PEAR_Packager extends PEAR_Common {
 
 	// {{{ package()
 
-	function package($pkgfile = null, $compress = true, $pkg2 = null) {
+	function package($pkgfile = null, $compress = true, $pkg2 = null)
+	{
 		// {{{ validate supplied package.xml file
 		if (empty($pkgfile)) {
 			$pkgfile = 'package.xml';
@@ -94,7 +95,7 @@ class PEAR_Packager extends PEAR_Common {
 				}
 			}
 			if ($pf2->getPackagexmlVersion() == '2.0' ||
-				$pf2->getPackagexmlVersion() == '2.1') {
+			    $pf2->getPackagexmlVersion() == '2.1') {
 				$main = &$pf2;
 				$other = &$pf;
 			} else {
@@ -102,13 +103,13 @@ class PEAR_Packager extends PEAR_Common {
 				$other = &$pf2;
 			}
 			if ($main->getPackagexmlVersion() != '2.0' &&
-				$main->getPackagexmlVersion() != '2.1') {
+			    $main->getPackagexmlVersion() != '2.1') {
 				return PEAR::raiseError('Error: cannot package two package.xml version 1.0, can ' .
-						'only package together a package.xml 1.0 and package.xml 2.0');
+					'only package together a package.xml 1.0 and package.xml 2.0');
 			}
 			if ($other->getPackagexmlVersion() != '1.0') {
 				return PEAR::raiseError('Error: cannot package two package.xml version 2.0, can ' .
-						'only package together a package.xml 1.0 and package.xml 2.0');
+					'only package together a package.xml 1.0 and package.xml 2.0');
 			}
 		}
 		$main->setLogger($this);
@@ -155,7 +156,7 @@ class PEAR_Packager extends PEAR_Common {
 				$cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
 				$cvstag = "RELEASE_$cvsversion";
 				$this->log(1, 'Tag the released code with "pear cvstag ' .
-					$main->getPackageFile() . '"');
+				    $main->getPackageFile() . '"');
 				$this->log(1, "(or set the CVS tag $cvstag by hand)");
 			}
 		} else { // this branch is executed for single packagefile packaging
@@ -179,14 +180,14 @@ class PEAR_Packager extends PEAR_Common {
 		}
 		return $dest_package;
 	}
-
 	// }}}
 }
 
 // {{{ md5_file() utility function
 if (!function_exists('md5_file')) {
 
-	function md5_file($file) {
+	function md5_file($file)
+	{
 		if (!$fd = @fopen($file, 'r')) {
 			return false;
 		}
@@ -194,7 +195,7 @@ if (!function_exists('md5_file')) {
 		$md5 = md5(file_get_contents($file));
 		return $md5;
 	}
-
 }
 // }}}
+
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -46,7 +45,8 @@ if (!function_exists('str_split')) {
  * @link       http://pear.php.net/package/Image_Barcode
  * @since      Image_Barcode 0.5
  */
-class Image_Barcode_Code39 extends Image_Barcode {
+class Image_Barcode_Code39 extends Image_Barcode
+{
 
 	/**
 	 * Barcode type
@@ -80,50 +80,50 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 * @var array
 	 */
 	var $_coding_map = array(
-		'0' => '000110100',
-		'1' => '100100001',
-		'2' => '001100001',
-		'3' => '101100000',
-		'4' => '000110001',
-		'5' => '100110000',
-		'6' => '001110000',
-		'7' => '000100101',
-		'8' => '100100100',
-		'9' => '001100100',
-		'A' => '100001001',
-		'B' => '001001001',
-		'C' => '101001000',
-		'D' => '000011001',
-		'E' => '100011000',
-		'F' => '001011000',
-		'G' => '000001101',
-		'H' => '100001100',
-		'I' => '001001100',
-		'J' => '000011100',
-		'K' => '100000011',
-		'L' => '001000011',
-		'M' => '101000010',
-		'N' => '000010011',
-		'O' => '100010010',
-		'P' => '001010010',
-		'Q' => '000000111',
-		'R' => '100000110',
-		'S' => '001000110',
-		'T' => '000010110',
-		'U' => '110000001',
-		'V' => '011000001',
-		'W' => '111000000',
-		'X' => '010010001',
-		'Y' => '110010000',
-		'Z' => '011010000',
-		'-' => '010000101',
-		'*' => '010010100',
-		'+' => '010001010',
-		'$' => '010101000',
-		'%' => '000101010',
-		'/' => '010100010',
-		'.' => '110000100',
-		' ' => '011000100'
+	    '0' => '000110100',
+	    '1' => '100100001',
+	    '2' => '001100001',
+	    '3' => '101100000',
+	    '4' => '000110001',
+	    '5' => '100110000',
+	    '6' => '001110000',
+	    '7' => '000100101',
+	    '8' => '100100100',
+	    '9' => '001100100',
+	    'A' => '100001001',
+	    'B' => '001001001',
+	    'C' => '101001000',
+	    'D' => '000011001',
+	    'E' => '100011000',
+	    'F' => '001011000',
+	    'G' => '000001101',
+	    'H' => '100001100',
+	    'I' => '001001100',
+	    'J' => '000011100',
+	    'K' => '100000011',
+	    'L' => '001000011',
+	    'M' => '101000010',
+	    'N' => '000010011',
+	    'O' => '100010010',
+	    'P' => '001010010',
+	    'Q' => '000000111',
+	    'R' => '100000110',
+	    'S' => '001000110',
+	    'T' => '000010110',
+	    'U' => '110000001',
+	    'V' => '011000001',
+	    'W' => '111000000',
+	    'X' => '010010001',
+	    'Y' => '110010000',
+	    'Z' => '011010000',
+	    '-' => '010000101',
+	    '*' => '010010100',
+	    '+' => '010001010',
+	    '$' => '010101000',
+	    '%' => '000101010',
+	    '/' => '010100010',
+	    '.' => '110000100',
+	    ' ' => '011000100'
 	);
 
 	/**
@@ -136,7 +136,8 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 * @author Ryan Briones <ryanbriones@webxdesign.org>
 	 *
 	 */
-	function Image_Barcode_Code39($text = '', $wThin = 0, $wThick = 0) {
+	function Image_Barcode_Code39($text = '', $wThin = 0, $wThick = 0)
+	{
 		// Check $text for invalid characters
 		if ($this->checkInvalid($text)) {
 			return false;
@@ -161,7 +162,8 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 * @author   Ryan Briones <ryanbriones@webxdesign.org>
 	 *
 	 */
-	function plot($noText = false, $bHeight = 0) {
+	function plot($noText = false, $bHeight = 0)
+	{
 		// add start and stop * characters
 		$final_text = '*' . $this->text . '*';
 
@@ -215,7 +217,7 @@ class Image_Barcode_Code39 extends Image_Barcode {
 
 			// draw text under barcode
 			imagestring(
-				$img, 'gdFontSmall', ( $barcode_len - $font_width * strlen($this->text) ) / 2, $this->_barcodeheight - $font_height, $this->text, $black
+			    $img, 'gdFontSmall', ( $barcode_len - $font_width * strlen($this->text) ) / 2, $this->_barcodeheight - $font_height, $this->text, $black
 			);
 		}
 
@@ -234,7 +236,8 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 * @author   Ryan Briones <ryanbriones@webxdesign.org>
 	 *
 	 */
-	function &draw($text, $imgtype = 'png', $noText = false, $bHeight = 0) {
+	function &draw($text, $imgtype = 'png', $noText = false, $bHeight = 0)
+	{
 		// Check $text for invalid characters
 		if ($this->checkInvalid($text)) {
 			return PEAR::raiseError('Invalid text');
@@ -260,7 +263,8 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 *
 	 *
 	 */
-	function _dumpCode($code) {
+	function _dumpCode($code)
+	{
 		$result = '';
 		$color = 1; // 1: Black, 0: White
 		// if $bit is 1, line is wide; if $bit is 0 line is thin
@@ -281,10 +285,10 @@ class Image_Barcode_Code39 extends Image_Barcode {
 	 * @author  Ryan Briones <ryanbriones@webxdesign.org>
 	 *
 	 */
-	function checkInvalid($text) {
+	function checkInvalid($text)
+	{
 		return preg_match("/[^0-9A-Z\-*+\$%\/. ]/", $text);
 	}
-
 }
 
 ?>

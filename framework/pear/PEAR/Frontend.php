@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR_Frontend, the singleton-based frontend for user input/output
  *
@@ -44,14 +43,16 @@ $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = null;
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_Frontend extends PEAR {
+class PEAR_Frontend extends PEAR
+{
 
 	/**
 	 * Retrieve the frontend object
 	 * @return PEAR_Frontend_CLI|PEAR_Frontend_Web|PEAR_Frontend_Gtk
 	 * @static
 	 */
-	function &singleton($type = null) {
+	function &singleton($type = null)
+	{
 		if ($type === null) {
 			if (!isset($GLOBALS['_PEAR_FRONTEND_SINGLETON'])) {
 				$a = false;
@@ -73,9 +74,10 @@ class PEAR_Frontend extends PEAR {
 	 * @return PEAR_Frontend
 	 * @static
 	 */
-	function &setFrontendClass($uiclass) {
+	function &setFrontendClass($uiclass)
+	{
 		if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&
-			is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], $uiclass)) {
+		    is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], $uiclass)) {
 			return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
 		}
 		if (!class_exists($uiclass)) {
@@ -109,14 +111,15 @@ class PEAR_Frontend extends PEAR {
 	 * @return PEAR_Frontend
 	 * @static
 	 */
-	function &setFrontendObject($uiobject) {
+	function &setFrontendObject($uiobject)
+	{
 		if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&
-			is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], get_class($uiobject))) {
+		    is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], get_class($uiobject))) {
 			return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
 		}
 		if (!is_a($uiobject, 'PEAR_Frontend')) {
 			$err = PEAR::raiseError('not a valid frontend class: (' .
-					get_class($uiobject) . ')');
+				get_class($uiobject) . ')');
 			return $err;
 		}
 		$GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$uiobject;
@@ -129,7 +132,8 @@ class PEAR_Frontend extends PEAR {
 	 * @return boolean
 	 * @static
 	 */
-	function isIncludeable($path) {
+	function isIncludeable($path)
+	{
 		if (file_exists($path) && is_readable($path)) {
 			return true;
 		}
@@ -149,7 +153,8 @@ class PEAR_Frontend extends PEAR {
 	/**
 	 * @param PEAR_Config
 	 */
-	function setConfig(&$config) {
+	function setConfig(&$config)
+	{
 		
 	}
 
@@ -160,7 +165,8 @@ class PEAR_Frontend extends PEAR {
 	 * needs to be able to sustain a list over many sessions in order to support
 	 * user interaction with install scripts
 	 */
-	function addTempFile($file) {
+	function addTempFile($file)
+	{
 		$GLOBALS['_PEAR_Common_tempfiles'][] = $file;
 	}
 
@@ -172,7 +178,8 @@ class PEAR_Frontend extends PEAR {
 	 * @return boolean true
 	 * @abstract
 	 */
-	function log($msg, $append_crlf = true) {
+	function log($msg, $append_crlf = true)
+	{
 		
 	}
 
@@ -182,7 +189,8 @@ class PEAR_Frontend extends PEAR {
 	 * @param array $scripts array of post-install scripts
 	 * @abstract
 	 */
-	function runPostinstallScripts(&$scripts) {
+	function runPostinstallScripts(&$scripts)
+	{
 		
 	}
 
@@ -195,7 +203,8 @@ class PEAR_Frontend extends PEAR {
 	 * @param string $command command from which this method was called
 	 * @abstract
 	 */
-	function outputData($data, $command = '_default') {
+	function outputData($data, $command = '_default')
+	{
 		
 	}
 
@@ -216,10 +225,10 @@ class PEAR_Frontend extends PEAR {
 	 * @return array input sent by the user
 	 * @abstract
 	 */
-	function userDialog($command, $prompts, $types = array(), $defaults = array()) {
+	function userDialog($command, $prompts, $types = array(), $defaults = array())
+	{
 		
 	}
-
 }
 
 ?>

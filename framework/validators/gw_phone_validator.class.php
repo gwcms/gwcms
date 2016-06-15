@@ -1,14 +1,17 @@
 <?php
 
-class GW_Phone_Validator extends GW_String_Validator {
+class GW_Phone_Validator extends GW_String_Validator
+{
 
-	function init() {
+	function init()
+	{
 		$this->setParam('error_min_length', '/G/VALIDATION/PHONE/MIN_LENGTH');
 		$this->setParam('error_max_length', '/G/VALIDATION/PHONE/MAX_LENGTH');
 		$this->setParam('error_illegal_phone_format', '/G/VALIDATION/PHONE/ILLEGAL_PHONE_FORMAT');
 	}
 
-	function isValid() {
+	function isValid()
+	{
 
 		$value = $this->validation_object;
 
@@ -34,5 +37,4 @@ class GW_Phone_Validator extends GW_String_Validator {
 		if (!preg_match('/^([+]?)( ?)([0-9]+)(( ?)([0-9]+))*$/', $value))
 			return $this->setErrorMessage($this->getParam('error_illegal_phone_format')) && false;
 	}
-
 }

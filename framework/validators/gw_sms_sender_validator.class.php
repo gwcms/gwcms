@@ -1,12 +1,15 @@
 <?php
 
-class GW_SMS_Sender_Validator extends GW_Validator {
+class GW_SMS_Sender_Validator extends GW_Validator
+{
 
-	function init() {
+	function init()
+	{
 		$this->setParam('error_invalid', '/G/VALIDATION/INVALID_SMS_SENDER');
 	}
 
-	function isValid() {
+	function isValid()
+	{
 		$value = $this->validation_object;
 
 		$this->reset();
@@ -18,8 +21,8 @@ class GW_SMS_Sender_Validator extends GW_Validator {
 
 
 		if (
-			(is_numeric($value) && strlen($value) > 16) ||
-			(!is_numeric($value) && strlen($value) > 11)
+		    (is_numeric($value) && strlen($value) > 16) ||
+		    (!is_numeric($value) && strlen($value) > 11)
 		) {
 			$this->setErrorMessage($this->getParam('error_invalid'));
 			return false;
@@ -32,5 +35,4 @@ class GW_SMS_Sender_Validator extends GW_Validator {
 
 		return false;
 	}
-
 }

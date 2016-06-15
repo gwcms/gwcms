@@ -1,6 +1,7 @@
 <?php
 
-class GW_User extends GW_Composite_Data_Object {
+class GW_User extends GW_Composite_Data_Object
+{
 
 	public $table = 'gw_users';
 	public $min_pass_length = 4;
@@ -10,33 +11,35 @@ class GW_User extends GW_Composite_Data_Object {
 	public $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1);
 	public $encode_fields = Array('info' => 'serialize');
 	public $composite_map = Array
-		(
-		'group_ids' => Array('gw_links', Array('table' => 'gw_link_user_groups')),
+	    (
+	    'group_ids' => Array('gw_links', Array('table' => 'gw_link_user_groups')),
 	);
 	public $autologgedin = false;
 	public $validators_def;
 	public $validators_set;
 
-	function loadValidators() {
+	function loadValidators()
+	{
 		$this->validators_def = Array(
-			'username' => Array('gw_string', Array('min_length' => 3, 'max_length' => 20, 'required' => 1)),
-			'email' => Array('gw_email', Array('required' => 1)),
-			'pass_old' => 1,
-			'pass_new' => Array('gw_string', Array('min_length' => 6, 'max_length' => 200)),
-			'pass_new_repeat' => 1,
-			'unique_username' => 1,
+		    'username' => Array('gw_string', Array('min_length' => 3, 'max_length' => 20, 'required' => 1)),
+		    'email' => Array('gw_email', Array('required' => 1)),
+		    'pass_old' => 1,
+		    'pass_new' => Array('gw_string', Array('min_length' => 6, 'max_length' => 200)),
+		    'pass_new_repeat' => 1,
+		    'unique_username' => 1,
 		);
 
 		$this->validators_set = Array
-			(
-			'change_pass_check_old' => Array('pass_old', 'pass_new', 'pass_new_repeat'),
-			'change_pass' => Array('pass_new'),
-			'insert' => Array('username', 'unique_username', 'email', 'pass_new'),
-			'update' => Array('username', 'email', 'pass_new')
+		    (
+		    'change_pass_check_old' => Array('pass_old', 'pass_new', 'pass_new_repeat'),
+		    'change_pass' => Array('pass_new'),
+		    'insert' => Array('username', 'unique_username', 'email', 'pass_new'),
+		    'update' => Array('username', 'email', 'pass_new')
 		);
 	}
 
-	function setValidators($set) {
+	function setValidators($set)
+	{
 		if (!$set)
 			return $this->validators = Array(); //remove validators
 
@@ -52,7 +55,8 @@ class GW_User extends GW_Composite_Data_Object {
 			$this->validators['pass_new'][1]['required'] = 1;
 	}
 
-	function validate() {
+	function validate()
+	{
 		parent::validate();
 
 		if (isset($this->validators['pass_old']))
@@ -70,13 +74,15 @@ class GW_User extends GW_Composite_Data_Object {
 		return $this->errors ? false : true;
 	}
 
-	function logLogin() {
+	function logLogin()
+	{
 		$inf = GW_Request_Helper::visitorInfo();
 		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
 		GW_DB_Logger::msg($msg, 'user', 'login', $this->id, $inf['browser']);
 	}
 
-	function onLogin() {
+	function onLogin()
+	{
 		$this->set('login_time', date('Y-m-d H:i:s'));
 		$this->set('login_count', $this->get('login_count') + 1);
 		$this->set('last_ip', $_SERVER['REMOTE_ADDR']);
@@ -87,7 +93,8 @@ class GW_User extends GW_Composite_Data_Object {
 		$this->logLogin();
 	}
 
-	function onRequest($db_update = true) {
+	function onRequest($db_update = true)
+	{
 		$_SESSION[AUTH_SESSION_KEY]['last_request'] = time();
 		$this->set('last_request_time', date('Y-m-d H:i:s'));
 
@@ -95,12 +102,14 @@ class GW_User extends GW_Composite_Data_Object {
 			$this->update(Array('last_request_time'));
 	}
 
-	function canAccess($key) {
+	function canAccess($key)
+	{
 		$has_keys = ';' . $this->get('rights') . ';';
 		return (strpos($has_keys, ";$key;") !== false) || (strpos($has_keys, ';su;') !== false);
 	}
 
-	function cryptPass($pass, $salt = null) {
+	function cryptPass($pass, $salt = null)
+	{
 		if ($pass) {//cant be empty
 			return $salt ? crypt($pass, $salt) : crypt($pass, 'salt');
 		} else {
@@ -109,7 +118,8 @@ class GW_User extends GW_Composite_Data_Object {
 		}
 	}
 
-	function checkPass($pass) {
+	function checkPass($pass)
+	{
 		if (!$pass)
 			return false;
 
@@ -118,7 +128,8 @@ class GW_User extends GW_Composite_Data_Object {
 		return $tmp == $this->cryptPass($pass, $tmp);
 	}
 
-	function eventHandler($event, &$context_data = []) {
+	function eventHandler($event, &$context_data = [])
+	{
 		switch ($event) {
 			case 'BEFORE_SAVE':
 				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new'])
@@ -130,11 +141,13 @@ class GW_User extends GW_Composite_Data_Object {
 		parent::eventHandler($event, $context_data);
 	}
 
-	function isRoot() {
+	function isRoot()
+	{
 		return $this->id == GW_USER_SYSTEM_ID || GW_Permissions::isRoot($this->group_ids);
 	}
 
-	function delete() {
+	function delete()
+	{
 		$this->fireEvent('BEFORE_DELETE');
 		$this->set('removed', 1);
 		$this->set('active', 0);
@@ -143,7 +156,8 @@ class GW_User extends GW_Composite_Data_Object {
 		$this->fireEvent('AFTER_DELETE');
 	}
 
-	function isParent($parent_id) {
+	function isParent($parent_id)
+	{
 		if ($parent_id < 1)
 			return false;
 
@@ -160,7 +174,8 @@ class GW_User extends GW_Composite_Data_Object {
 	 * can user view,edit,this item
 	 * @param GW_User
 	 */
-	function canBeAccessedByUser($user) {
+	function canBeAccessedByUser($user)
+	{
 		if ($user->isRoot())
 			return true;
 
@@ -175,22 +190,26 @@ class GW_User extends GW_Composite_Data_Object {
 		return true;
 	}
 
-	function inGroup($group_id) {
+	function inGroup($group_id)
+	{
 		return in_array($group_id, $this->group_ids);
 	}
 
-	function getByUsername($username) {
+	function getByUsername($username)
+	{
 		return $this->find(Array('username=? AND active=1', $username));
 	}
 
-	function getByUsernamePass($username, $pass) {
+	function getByUsernamePass($username, $pass)
+	{
 		$user = $this->getByUsername($username);
 
 		if ($user && $user->checkPass($pass))
 			return $user;
 	}
 
-	function isSessionNotExpired() {
+	function isSessionNotExpired()
+	{
 		if ($this->id == GW_USER_SYSTEM_ID)
 			return true;
 
@@ -201,7 +220,8 @@ class GW_User extends GW_Composite_Data_Object {
 	/**
 	 * returns seconds
 	 */
-	function remainingSessionTime() {
+	function remainingSessionTime()
+	{
 		$session_validity = (int) $this->get('session_validity');
 
 		if ($session_validity == -1 || $this->autologgedin)
@@ -213,7 +233,8 @@ class GW_User extends GW_Composite_Data_Object {
 		return $last_request - strtotime("-$session_validity minute");
 	}
 
-	function calculateField($key) {
+	function calculateField($key)
+	{
 		$cache = & $this->cache['calcf'];
 
 		if (isset($cache[$key]))
@@ -234,52 +255,54 @@ class GW_User extends GW_Composite_Data_Object {
 		return $cache[$key] = $val;
 	}
 
-	
 	/**
 	 * 
 	 * @return GW_User_Extended
 	 */
 	function getExt()
 	{
-		$cache =& $this->cache['gw_user_extended'];
-				
-		if(!$cache)
+		$cache = & $this->cache['gw_user_extended'];
+
+		if (!$cache)
 			$cache = new GW_User_Extended($this->id);
-		
+
 		return $cache;
 	}
-	
+
 	/**
 	 * Delete expired keys
 	 */
-	function __autologinExpired() {
+	function __autologinExpired()
+	{
 		$how_old = str_replace('+', '-', GW::s('GW_AUTOLOGIN_EXPIRATION'));
 		$this->getExt()->deleteOld('autologin', $how_old);
 	}
 
-	function getAutologinPass() 
+	function getAutologinPass()
 	{
 		$pass = md5(rand(1, 99999999)) . md5($this->get('username'));
 
 		$this->getExt()->insert("autologin", $pass);
 		$this->__autologinExpired();
-		
+
 		return $pass;
 	}
 
-	function getUserByAutologinPass($username, $pass) {
-		
-		if(!($item=$this->getByUsername($username)))
+	function getUserByAutologinPass($username, $pass)
+	{
+
+		if (!($item = $this->getByUsername($username)))
 			return false;
-		
-		
-		if($item->getExt()->exists("autologin", $pass)){
+
+
+		if ($item->getExt()->exists("autologin", $pass)) {
 			$item->getExt()->touch("autologin", $pass);
 			return $item;
 		}
 	}
 
-	function getUserByApiKey($username, $api_key) {
+	function getUserByApiKey($username, $api_key)
+	{
 		$user = $this->find(Array('username=?', $username));
 
 
@@ -290,7 +313,8 @@ class GW_User extends GW_Composite_Data_Object {
 		return $user;
 	}
 
-	function onLogout() {
+	function onLogout()
+	{
 		$info = $this->get('info');
 		unset($info['autologin'][md5($_COOKIE['login_7'])]);
 
@@ -298,7 +322,8 @@ class GW_User extends GW_Composite_Data_Object {
 		$this->update(Array('info'));
 	}
 
-	function getOptions($active = true, $other_cond = '') {
+	function getOptions($active = true, $other_cond = '')
+	{
 		$cond = $active ? 'active!=0 AND removed=0' : '';
 
 		$cond .= ($other_cond && $cond ? ' AND ' : '') . $other_cond;
@@ -306,8 +331,8 @@ class GW_User extends GW_Composite_Data_Object {
 		return $this->getAssoc(Array('id', 'username'), $cond);
 	}
 
-	function countNewMessages() {
+	function countNewMessages()
+	{
 		return GW_Message::countStatic(Array('user_id=? AND seen=0', $this->id));
 	}
-
 }

@@ -4,7 +4,8 @@
  * TODO: dont halt execution if it is not debug mode
  * 
  */
-class GW_DB {
+class GW_DB
+{
 
 	/**
 	 *
@@ -13,11 +14,11 @@ class GW_DB {
 	public $link = false;
 	public $uphd = Array();
 	public $conf = Array
-		(
-		'logfile' => '',
-		'errshow' => true,
-		'errtags' => true,
-		'lang' => 'lt',
+	    (
+	    'logfile' => '',
+	    'errshow' => true,
+	    'errtags' => true,
+	    'lang' => 'lt',
 	);
 	public $result = false;
 	public $last_query;
@@ -28,7 +29,8 @@ class GW_DB {
 	public $error;
 	public $error_query;
 
-	function parse_uphd($uphd) {
+	function parse_uphd($uphd)
+	{
 		list($user, $uphd) = explode(':', $uphd, 2);
 		list($pass, $uphd) = explode('@', $uphd, 2);
 		list($host, $database) = explode('/', $uphd, 2);
@@ -36,7 +38,8 @@ class GW_DB {
 		return Array($user, $pass, $host, $database);
 	}
 
-	function connect($updh, $newlink = false) {
+	function connect($updh, $newlink = false)
+	{
 		list($user, $pass, $host, $database) = $updh;
 
 		$this->link = new mysqli($host, $user, $pass, $newlink) or $this->trigger_error();
@@ -45,29 +48,30 @@ class GW_DB {
 
 		//comment next line if mysql v < 4.1
 		$this->link->query('SET names "UTF8"');
-		
-		if(isset($this->conf['INIT_SQLS']))
-		{
+
+		if (isset($this->conf['INIT_SQLS'])) {
 			$list = explode(',', $this->conf['INIT_SQLS']);
-			
-			foreach($list as $sql)
+
+			foreach ($list as $sql)
 				$this->link->query($sql);
 		}
-		
+
 		//$this->test();
 	}
 
-	function __construct($conf = Array()) {
+	function __construct($conf = Array())
+	{
 		$this->conf['logfile'] = GW::s('DIR/LOGS') . 'MySQL.log';
 		$this->uphd = is_array(GW::$settings['DB']['UPHD']) ? GW::$settings['DB']['UPHD'] : self::parse_uphd(GW::$settings['DB']['UPHD']);
-		
+
 		$conf = array_merge(GW::$settings['DB'], $conf);
 		$this->conf = array_merge($this->conf, (array) $conf);
 
 		$this->connect($this->uphd);
 	}
 
-	function trigger_error($cmd = '', $msg = Null, $soft_error = false) {
+	function trigger_error($cmd = '', $msg = Null, $soft_error = false)
+	{
 		$this->conf['errshow'] = 1;
 		$this->debug = 1;
 
@@ -81,11 +85,13 @@ class GW_DB {
 			trigger_error("ERROR: $msg \nCMD: $cmd", E_USER_ERROR);
 	}
 
-	function getError() {
+	function getError()
+	{
 		return $this->link->error;
 	}
 
-	function error($query = '', $nodie = false) {
+	function error($query = '', $nodie = false)
+	{
 		if (!$this->conf['errshow'])
 			return;
 
@@ -100,13 +106,15 @@ class GW_DB {
 		return $errorMsg;
 	}
 
-	function logint($msg, $delim = '') {
+	function logint($msg, $delim = '')
+	{
 		if (!$this->conf['logfile'])
 			return;
 		file_put_contents($this->conf['logfile'], '[' . date('y-m-d H:i:s') . ']' . (($delim) ? '[' . $delim . ']' : '') . ' ' . $msg . "\r\n", FILE_APPEND);
 	}
 
-	function query($cmd, $nodie = false) {
+	function query($cmd, $nodie = false)
+	{
 		$this->error = false;
 
 		$tmp = new GW_Timer();
@@ -122,20 +130,22 @@ class GW_DB {
 		return $this->result;
 	}
 
-	function fetch_row($cmd = '', $assoc = 1, $nodie = false) {
+	function fetch_row($cmd = '', $assoc = 1, $nodie = false)
+	{
 		if (!$cmd)
 			return;
 
 		$this->query(self::prepare_query($cmd), $nodie);
-		
-		
-		if(!is_object($this->result))
+
+
+		if (!is_object($this->result))
 			return false; //avoid error if cmd is DELETE FROM ..
 
 		return $assoc ? $this->result->fetch_assoc() : $this->result->fetch_row();
 	}
 
-	function fetch_rows($cmd = '', $assoc = 1, $nodie = false) {
+	function fetch_rows($cmd = '', $assoc = 1, $nodie = false)
+	{
 		if (!$cmd)
 			return;
 
@@ -143,10 +153,10 @@ class GW_DB {
 
 		//if (!is_resource($this->result))
 		//	return Null;
-		
-		if(!is_object($this->result))
+
+		if (!is_object($this->result))
 			return false; //avoid error if cmd is DELETE FROM ..		
-		
+
 
 		$result = Array();
 
@@ -163,7 +173,8 @@ class GW_DB {
 		return $result;
 	}
 
-	function fetch_rows_key($cmd, $key, $nodie = false) {
+	function fetch_rows_key($cmd, $key, $nodie = false)
+	{
 		if (!$cmd || !$key)
 			die('unspecified sql or key');
 
@@ -188,7 +199,8 @@ class GW_DB {
 	 * associative array key - $fields[0]
 	 * associative array values - $fields[1]
 	 */
-	function fetch_assoc($cmd, $nodie = false) {
+	function fetch_assoc($cmd, $nodie = false)
+	{
 		$cmd = self::prepare_query($cmd);
 
 		$this->query($cmd, $nodie);
@@ -201,7 +213,8 @@ class GW_DB {
 		return $result;
 	}
 
-	function fetch_one_column($cmd, $nodie = false) {
+	function fetch_one_column($cmd, $nodie = false)
+	{
 		if (!$cmd)
 			die('unspecified sql');
 
@@ -217,18 +230,20 @@ class GW_DB {
 		return $result;
 	}
 
-	function fetch_result($cmd = '', $nodie = false) {
+	function fetch_result($cmd = '', $nodie = false)
+	{
 		$cmd = self::prepare_query($cmd);
 
 		if ($cmd)
 			$this->query($cmd, $nodie);
-		
+
 		$row = $this->result->fetch_array();
-		
+
 		return isset($row[0]) ? $row[0] : Null;
 	}
 
-	function insert($table, $entry, $nodie = false, $replaceinto = false) {
+	function insert($table, $entry, $nodie = false, $replaceinto = false)
+	{
 		$names = '';
 		$values = '';
 		foreach ($entry as $elemRak => $vert) {
@@ -241,7 +256,8 @@ class GW_DB {
 		return $this->link->affected_rows;
 	}
 
-	function save($table, $entry, $nodie = false) {
+	function save($table, $entry, $nodie = false)
+	{
 		$names = '';
 		$values = '';
 		foreach ($entry as $elemRak => $vert) {
@@ -260,7 +276,8 @@ class GW_DB {
 	}
 
 	//required that all entries have set full keys
-	function _multi_insert($table, $entries, $replace = false, $nodie = false) {
+	function _multi_insert($table, $entries, $replace = false, $nodie = false)
+	{
 		$keys = Array();
 		$keys1 = Array();
 
@@ -296,7 +313,8 @@ class GW_DB {
 		return $this->link->affected_rows;
 	}
 
-	function multi_insert($table, $entries, $replace = false, $nodie = false) {
+	function multi_insert($table, $entries, $replace = false, $nodie = false)
+	{
 		$peace = 100;
 		$afRows = 0;
 		$loops = ceil(count($entries) / $peace);
@@ -308,7 +326,8 @@ class GW_DB {
 		return $afRows;
 	}
 
-	function __update_set($entry) {
+	function __update_set($entry)
+	{
 		$parts = [];
 
 		foreach ($entry as $elemRak => $vert)
@@ -318,7 +337,8 @@ class GW_DB {
 		return implode(', ', $parts);
 	}
 
-	function update($table, $filter, $entry, $nodie = false) {
+	function update($table, $filter, $entry, $nodie = false)
+	{
 		$filter = self::prepare_query($filter);
 
 
@@ -339,7 +359,8 @@ class GW_DB {
 		return $this->link->affected_rows;
 	}
 
-	function delete($table, $filter, $nodie = false) {
+	function delete($table, $filter, $nodie = false)
+	{
 		$filter = self::prepare_query($filter);
 
 		if (!$table)
@@ -353,7 +374,8 @@ class GW_DB {
 		return $this->link->affected_rows;
 	}
 
-	function count($tbl, $filter = '', $nodie = false) {
+	function count($tbl, $filter = '', $nodie = false)
+	{
 		$filter = self::prepare_query($filter);
 
 		if (!$tbl)
@@ -367,7 +389,8 @@ class GW_DB {
 		return $this->fetch_result($Q, 0, $nodie);
 	}
 
-	function increase($table, $where, $field, $x = 1, $nodie = false) {
+	function increase($table, $where, $field, $x = 1, $nodie = false)
+	{
 		$query = "UPDATE $table SET $field = $field + $x WHERE $where";
 
 		$this->result = $this->query($query, $nodie);
@@ -375,23 +398,28 @@ class GW_DB {
 		return $this->affected();
 	}
 
-	function affected() {
+	function affected()
+	{
 		return $this->link->affected_rows;
 	}
 
-	function fatalError($msg) {
+	function fatalError($msg)
+	{
 		$this->trigger_error('', $msg);
 	}
 
-	function insert_id() {
+	function insert_id()
+	{
 		return $this->link->insert_id;
 	}
 
-	function num_rows() {
+	function num_rows()
+	{
 		return $this->result->num_rows;
 	}
 
-	function getSQLResultsCount($sql = null) {
+	function getSQLResultsCount($sql = null)
+	{
 		if (is_null($sql))
 			$sql = $this->last_query;
 
@@ -404,15 +432,18 @@ class GW_DB {
 		return $this->num_rows();
 	}
 
-	function close() {
+	function close()
+	{
 		$this->link->close();
 	}
 
-	function ping() {
+	function ping()
+	{
 		return $this->link->ping();
 	}
 
-	function check_connection() {
+	function check_connection()
+	{
 		if (!$this->ping()) {
 			$this->close();
 			$this->connect();
@@ -420,7 +451,8 @@ class GW_DB {
 		}
 	}
 
-	static function prepare_query($params) {
+	static function prepare_query($params)
+	{
 		if (!$params || !is_array($params))
 			return $params;
 
@@ -431,7 +463,8 @@ class GW_DB {
 		return preg_replace_callback('/(\?)/', Array(&$ho, 'replace'), $query);
 	}
 
-	static function buidConditions($conds, $operator = 'AND') {
+	static function buidConditions($conds, $operator = 'AND')
+	{
 		$conditions = [];
 		foreach ($conds as $field => $val) {
 			$conditions[0][] = "`$field`=?";
@@ -443,7 +476,8 @@ class GW_DB {
 		return $conditions;
 	}
 
-	static function inCondition($fieldname, $ids) {
+	static function inCondition($fieldname, $ids)
+	{
 		if (!$ids)
 			return '1=0';
 
@@ -455,7 +489,8 @@ class GW_DB {
 		return $fieldname . ' IN (' . implode(',', $ids) . ')';
 	}
 
-	static function inConditionStr($fieldname, $ids) {
+	static function inConditionStr($fieldname, $ids)
+	{
 		if (!$ids)
 			return '1=0';
 
@@ -469,15 +504,18 @@ class GW_DB {
 		return $fieldname . ' IN ("' . implode('","', $ids) . '")';
 	}
 
-	static function escape($mixed) {
+	static function escape($mixed)
+	{
 		return addslashes($mixed);
 	}
 
-	static function timeString($time = false) {
+	static function timeString($time = false)
+	{
 		return date(self::$datetime_format, $time ? $time : time());
 	}
 
-	function getLongQueries($time = 1, $clean = 1) {
+	function getLongQueries($time = 1, $clean = 1)
+	{
 		$list = Array();
 
 		foreach ((array) $this->query_times as $query)
@@ -489,8 +527,7 @@ class GW_DB {
 
 		return $list;
 	}
-	
-	
+
 	function test()
 	{
 		$this->query("CREATE TABLE IF NOT EXISTS `db_test` (
@@ -500,38 +537,39 @@ class GW_DB {
   `insert_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
-		
-		$this->insert('db_test', ['title'=>($test="inserttest".rand(0,100000))]);
+
+		$this->insert('db_test', ['title' => ($test = "inserttest" . rand(0, 100000))]);
 		$insert_id = $this->insert_id();
-		
-		$r = $this->fetch_rows($sql1="SELECT * FROM db_test WHERE title LIKE '$test'");
-		$r1 = $this->fetch_result($sql="SELECT title FROM db_test WHERE title LIKE '$test'");
+
+		$r = $this->fetch_rows($sql1 = "SELECT * FROM db_test WHERE title LIKE '$test'");
+		$r1 = $this->fetch_result($sql = "SELECT title FROM db_test WHERE title LIKE '$test'");
 		$r2 = $this->fetch_row($sql1);
-		
+
 		$tests['insert_id'] = $insert_id == $r[0]['id'];
 		//$tests['insert_id_d'] = [$insert_id, $r[0]['id']];
-		$tests['fetch_rows']=$r[0]['title']==$test;
+		$tests['fetch_rows'] = $r[0]['title'] == $test;
 		$tests['fetch_result'] = $r1 == $test;
-		$tests['fetch_row'] = $r2['title']==$test;
-		
+		$tests['fetch_row'] = $r2['title'] == $test;
+
 		//$this->query("DROP TABLE `db_test`");
-		
+
 		d::dumpas($tests);
 	}
-
 }
 
-class db_query_prep_helper {
+class db_query_prep_helper
+{
 
 	var $data;
 
-	function __construct(&$data) {
+	function __construct(&$data)
+	{
 		$this->data = & $data;
 	}
 
-	function replace($arg) {
+	function replace($arg)
+	{
 		$curr = array_shift($this->data);
 		return is_numeric($curr) ? $curr : '"' . addslashes($curr) . '"';
 	}
-
 }

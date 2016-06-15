@@ -1,6 +1,7 @@
 <?php
 
-class GW_Image2_Validator Extends GW_Validator {
+class GW_Image2_Validator Extends GW_Validator
+{
 	/*
 	  function isValid()
 	  {

@@ -2,9 +2,11 @@
 
 //example usage - artistdb/participants
 
-trait Module_Import_Export_Trait {
+trait Module_Import_Export_Trait
+{
 
-	function __importExportGetCols() {
+	function __importExportGetCols()
+	{
 		$cols = $this->model->getColumns();
 
 		foreach ($cols as $col => $d)
@@ -19,11 +21,13 @@ trait Module_Import_Export_Trait {
 	public $export_process = [];
 	public $export_translate_fields = 0;
 
-	function displayOptions($field, $value, $context_obj) {
+	function displayOptions($field, $value, $context_obj)
+	{
 		return $this->options[$field][$value];
 	}
 
-	function __list2Str($list) {
+	function __list2Str($list)
+	{
 		$data = "";
 
 		$cols = $this->__importExportGetCols();
@@ -54,9 +58,9 @@ trait Module_Import_Export_Trait {
 				if (isset($this->export_process[$sysname]))
 					$val = call_user_func(['self', $this->export_process[$sysname]], $sysname, $val, $item);
 
-				if(is_array($val))
-					$val=json_encode($val);
-				
+				if (is_array($val))
+					$val = json_encode($val);
+
 				$row[] = str_replace($this->importexport_replacibles[0], $this->importexport_replacibles[1], $val);
 			}
 
@@ -66,7 +70,8 @@ trait Module_Import_Export_Trait {
 		return $data;
 	}
 
-	function viewExportData() {
+	function viewExportData()
+	{
 		$params = [];
 		$cond = '';
 		$this->initListParams(false, 'list');
@@ -85,13 +90,15 @@ trait Module_Import_Export_Trait {
 		$this->tpl_vars['fields'] = $this->__importExportGetCols();
 	}
 
-	function viewImportData() {
+	function viewImportData()
+	{
 		$this->tpl_vars['fields'] = $this->__importExportGetCols();
 
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/generic_import';
 	}
 
-	function doImportData() {
+	function doImportData()
+	{
 		$rawdata = $_REQUEST['data'];
 
 		$data = explode("\n", $rawdata);
@@ -138,12 +145,11 @@ trait Module_Import_Export_Trait {
 
 		d::ldump($counts);
 		d::ldump([
-			'error_rows' => $error_rows,
-			'header' => $header,
-			'saved' => $saved
+		    'error_rows' => $error_rows,
+		    'header' => $header,
+		    'saved' => $saved
 		]);
 
 		$this->tpl_vars['data'] = $rawdata;
 	}
-
 }

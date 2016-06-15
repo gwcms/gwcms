@@ -1,6 +1,7 @@
 <?php
 
-class GW_DB_Logger {
+class GW_DB_Logger
+{
 
 	static public $table = 'gw_log';
 
@@ -9,7 +10,8 @@ class GW_DB_Logger {
 	 * to define log entry
 	 * type = modem | user | proc.ctrl | mysql | frontend | backend
 	 */
-	static function msg($entry = Array(), $type = '', $action = '', $status = '', $add_info) {
+	static function msg($entry = Array(), $type = '', $action = '', $status = '', $add_info)
+	{
 
 
 		if (!is_array($entry))
@@ -31,5 +33,4 @@ class GW_DB_Logger {
 
 		GW::$context->db->insert(self::$table, $entry);
 	}
-
 }

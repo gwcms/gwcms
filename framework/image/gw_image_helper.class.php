@@ -1,49 +1,55 @@
 <?php
 
-class GW_Image_Helper {
+class GW_Image_Helper
+{
 
-	static function formFromPhpInfoArr($php_info_arr) {
+	static function formFromPhpInfoArr($php_info_arr)
+	{
 		$vals = Array
-			(
-			'new_file' => $php_info_arr['tmp_name'],
-			'size' => $php_info_arr['size'],
-			'original_filename' => $php_info_arr['name'],
+		    (
+		    'new_file' => $php_info_arr['tmp_name'],
+		    'size' => $php_info_arr['size'],
+		    'original_filename' => $php_info_arr['name'],
 		);
 
 
 		return $vals;
 	}
 
-	static function formFromFile($file) {
+	static function formFromFile($file)
+	{
 		$vals = Array
-			(
-			'new_file' => $file,
-			'size' => filesize($file),
-			'original_filename' => pathinfo($file, PATHINFO_BASENAME),
+		    (
+		    'new_file' => $file,
+		    'size' => filesize($file),
+		    'original_filename' => pathinfo($file, PATHINFO_BASENAME),
 		);
 
 		return $vals;
 	}
 
-	static function __setFiles(&$item) {
+	static function __setFiles(&$item)
+	{
 		foreach ($_FILES as $name => $value)
 		//dump($name + "=>" + $value);                                                                                                                   
 			if ($item->isCompositeField($name))
 				self::__setFile($item, $name);
 	}
 
-	static function __setFile(&$item, $fieldname) {
+	static function __setFile(&$item, $fieldname)
+	{
 		if (($file = $_FILES[$fieldname]) && ($file['error'] != UPLOAD_ERR_NO_FILE))
 			return $item->set($fieldname, self::formFromPhpInfoArr($_FILES[$fieldname]));
 	}
 
-	static function setFileFromURL(&$item, $name, $url, $dim = NULL) {
+	static function setFileFromURL(&$item, $name, $url, $dim = NULL)
+	{
 		if ($url == 'http://')
 			return;
 
 		$file = array(
-			'name' => basename($url),
-			'tmp_name' => tempnam(_TEMP_DIR, "web_file"),
+		    'name' => basename($url),
+		    'tmp_name' => tempnam(_TEMP_DIR, "web_file"),
 		);
 
 		$file['error'] = UPLOAD_ERR_NO_FILE;
@@ -60,7 +66,8 @@ class GW_Image_Helper {
 		return self::checkAndSetFile($item, $name, $file, $dim);
 	}
 
-	static function __RemoteFileExists($url) {
+	static function __RemoteFileExists($url)
+	{
 		$url_info = parse_url($url);
 
 		if (empty($url_info['host']))
@@ -85,5 +92,4 @@ class GW_Image_Helper {
 			return 0;
 		}
 	}
-
 }

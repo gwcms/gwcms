@@ -1,6 +1,7 @@
 <?php
 
-class Rsync_Helper {
+class Rsync_Helper
+{
 
 	/**
 	 * Required params
@@ -11,12 +12,13 @@ class Rsync_Helper {
 	 *   dry_run
 	 *   excludes example "Array('.svn','repository/*')"
 	 */
-	static function exec($params) {
+	static function exec($params)
+	{
 		$rsync_params = "Ovrtgoz";
 
 		$cmd = "rsync " .
-			(isset($params['remote_ssh_port']) ? "-e 'ssh -p $params[remote_ssh_port]'" : '') .
-			" -$rsync_params ";
+		    (isset($params['remote_ssh_port']) ? "-e 'ssh -p $params[remote_ssh_port]'" : '') .
+		    " -$rsync_params ";
 
 		if (isset($params['dry_run']))
 			$cmd.="--dry-run ";
@@ -43,5 +45,4 @@ class Rsync_Helper {
 			dump(print_r(explode("\n", $m[1]), true));
 		}
 	}
-
 }

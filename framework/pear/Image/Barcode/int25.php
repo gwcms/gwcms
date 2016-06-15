@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
 
 /**
@@ -39,7 +38,8 @@ require_once "Image/Barcode.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/Image_Barcode
  */
-class Image_Barcode_int25 extends Image_Barcode {
+class Image_Barcode_int25 extends Image_Barcode
+{
 
 	/**
 	 * Barcode type
@@ -73,16 +73,16 @@ class Image_Barcode_int25 extends Image_Barcode {
 	 * @var array
 	 */
 	var $_coding_map = array(
-		'0' => '00110',
-		'1' => '10001',
-		'2' => '01001',
-		'3' => '11000',
-		'4' => '00101',
-		'5' => '10100',
-		'6' => '01100',
-		'7' => '00011',
-		'8' => '10010',
-		'9' => '01010'
+	    '0' => '00110',
+	    '1' => '10001',
+	    '2' => '01001',
+	    '3' => '11000',
+	    '4' => '00101',
+	    '5' => '10100',
+	    '6' => '01100',
+	    '7' => '00011',
+	    '8' => '10010',
+	    '9' => '01010'
 	);
 
 	/**
@@ -98,7 +98,8 @@ class Image_Barcode_int25 extends Image_Barcode {
 	 * @author Marcelo Subtil Marcal <msmarcal@php.net>
 	 * @since  Image_Barcode 0.3
 	 */
-	function &draw($text, $imgtype = 'png') {
+	function &draw($text, $imgtype = 'png')
+	{
 
 		$text = trim($text);
 
@@ -110,8 +111,8 @@ class Image_Barcode_int25 extends Image_Barcode {
 
 		// Calculate the barcode width
 		$barcodewidth = (strlen($text)) * (3 * $this->_barthinwidth + 2 * $this->_barthickwidth) +
-			(strlen($text)) * 2.5 +
-			(7 * $this->_barthinwidth + $this->_barthickwidth) + 3;
+		    (strlen($text)) * 2.5 +
+		    (7 * $this->_barthinwidth + $this->_barthickwidth) + 3;
 
 		// Create the image
 		$img = ImageCreate($barcodewidth, $this->_barcodeheight);
@@ -166,9 +167,9 @@ class Image_Barcode_int25 extends Image_Barcode {
 
 		return $img;
 	}
-
 // function create
 }
 
 // class
+
 ?>

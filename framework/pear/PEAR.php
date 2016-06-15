@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PEAR, the PHP Extension and Application Repository
  *
@@ -40,7 +39,7 @@ define('PEAR_ERROR_CALLBACK', 16);
 define('PEAR_ERROR_EXCEPTION', 32);
 /* * #@- */
 define('PEAR_ZE2', (function_exists('version_compare') &&
-	version_compare(zend_version(), "2-dev", "ge")));
+    version_compare(zend_version(), "2-dev", "ge")));
 
 if (substr(PHP_OS, 0, 3) == 'WIN') {
 	define('OS_WINDOWS', true);
@@ -99,7 +98,8 @@ $GLOBALS['_PEAR_error_handler_stack'] = array();
  * @since      Class available since PHP 4.0.2
  * @link        http://pear.php.net/manual/en/core.pear.php#core.pear.pear
  */
-class PEAR {
+class PEAR
+{
 	// {{{ properties
 
 	/**
@@ -165,7 +165,8 @@ class PEAR {
 	 * @access public
 	 * @return void
 	 */
-	function PEAR($error_class = null) {
+	function PEAR($error_class = null)
+	{
 		$classname = strtolower(get_class($this));
 		if ($this->_debug) {
 			print "PEAR constructor called, class=$classname\n";
@@ -188,7 +189,6 @@ class PEAR {
 			}
 		}
 	}
-
 	// }}}
 	// {{{ destructor
 
@@ -203,12 +203,12 @@ class PEAR {
 	 * @access public
 	 * @return void
 	 */
-	function _PEAR() {
+	function _PEAR()
+	{
 		if ($this->_debug) {
 			printf("PEAR destructor called, class=%s\n", strtolower(get_class($this)));
 		}
 	}
-
 	// }}}
 	// {{{ getStaticProperty()
 
@@ -224,7 +224,8 @@ class PEAR {
 	 * @return mixed   A reference to the variable. If not set it will be
 	 *                 auto initialised to NULL.
 	 */
-	function &getStaticProperty($class, $var) {
+	function &getStaticProperty($class, $var)
+	{
 		static $properties;
 		if (!isset($properties[$class])) {
 			$properties[$class] = array();
@@ -234,7 +235,6 @@ class PEAR {
 		}
 		return $properties[$class][$var];
 	}
-
 	// }}}
 	// {{{ registerShutdownFunc()
 
@@ -247,7 +247,8 @@ class PEAR {
 	 * @param  mixed $args  The arguments to pass to the function
 	 * @return void
 	 */
-	function registerShutdownFunc($func, $args = array()) {
+	function registerShutdownFunc($func, $args = array())
+	{
 		// if we are called statically, there is a potential
 		// that no shutdown func is registered.  Bug #6445
 		if (!isset($GLOBALS['_PEAR_SHUTDOWN_REGISTERED'])) {
@@ -256,7 +257,6 @@ class PEAR {
 		}
 		$GLOBALS['_PEAR_shutdown_funcs'][] = array($func, $args);
 	}
-
 	// }}}
 	// {{{ isError()
 
@@ -271,7 +271,8 @@ class PEAR {
 	 * @access  public
 	 * @return  bool    true if parameter is an error
 	 */
-	function isError($data, $code = null) {
+	function isError($data, $code = null)
+	{
 		if (is_a($data, 'PEAR_Error')) {
 			if (is_null($code)) {
 				return true;
@@ -283,7 +284,6 @@ class PEAR {
 		}
 		return false;
 	}
-
 	// }}}
 	// {{{ setErrorHandling()
 
@@ -325,7 +325,8 @@ class PEAR {
 	 *
 	 * @since PHP 4.0.5
 	 */
-	function setErrorHandling($mode = null, $options = null) {
+	function setErrorHandling($mode = null, $options = null)
+	{
 		if (isset($this) && is_a($this, 'PEAR')) {
 			$setmode = &$this->_default_error_mode;
 			$setoptions = &$this->_default_error_options;
@@ -360,7 +361,6 @@ class PEAR {
 				break;
 		}
 	}
-
 	// }}}
 	// {{{ expectError()
 
@@ -379,7 +379,8 @@ class PEAR {
 	 * @return int     the new depth of the "expected errors" stack
 	 * @access public
 	 */
-	function expectError($code = '*') {
+	function expectError($code = '*')
+	{
 		if (is_array($code)) {
 			array_push($this->_expected_errors, $code);
 		} else {
@@ -387,7 +388,6 @@ class PEAR {
 		}
 		return sizeof($this->_expected_errors);
 	}
-
 	// }}}
 	// {{{ popExpect()
 
@@ -397,10 +397,10 @@ class PEAR {
 	 *
 	 * @return array   the list of error codes that were popped
 	 */
-	function popExpect() {
+	function popExpect()
+	{
 		return array_pop($this->_expected_errors);
 	}
-
 	// }}}
 	// {{{ _checkDelExpect()
 
@@ -412,7 +412,8 @@ class PEAR {
 	 * @access private
 	 * @since PHP 4.3.0
 	 */
-	function _checkDelExpect($error_code) {
+	function _checkDelExpect($error_code)
+	{
 		$deleted = false;
 
 		foreach ($this->_expected_errors AS $key => $error_array) {
@@ -428,7 +429,6 @@ class PEAR {
 		}
 		return $deleted;
 	}
-
 	// }}}
 	// {{{ delExpect()
 
@@ -441,7 +441,8 @@ class PEAR {
 	 * @access public
 	 * @since PHP 4.3.0
 	 */
-	function delExpect($error_code) {
+	function delExpect($error_code)
+	{
 		$deleted = false;
 
 		if ((is_array($error_code) && (0 != count($error_code)))) {
@@ -468,7 +469,6 @@ class PEAR {
 			return PEAR::raiseError("The expected error you submitted is empty"); // IMPROVE ME
 		}
 	}
-
 	// }}}
 	// {{{ raiseError()
 
@@ -509,7 +509,8 @@ class PEAR {
 	 * @see PEAR::setErrorHandling
 	 * @since PHP 4.0.5
 	 */
-	function &raiseError($message = null, $code = null, $mode = null, $options = null, $userinfo = null, $error_class = null, $skipmsg = false) {
+	function &raiseError($message = null, $code = null, $mode = null, $options = null, $userinfo = null, $error_class = null, $skipmsg = false)
+	{
 		// The error is yet a PEAR error object
 		if (is_object($message)) {
 			$code = $message->getCode();
@@ -521,8 +522,8 @@ class PEAR {
 
 		if (isset($this) && isset($this->_expected_errors) && sizeof($this->_expected_errors) > 0 && sizeof($exp = end($this->_expected_errors))) {
 			if ($exp[0] == "*" ||
-				(is_int(reset($exp)) && in_array($code, $exp)) ||
-				(is_string(reset($exp)) && in_array($message, $exp))) {
+			    (is_int(reset($exp)) && in_array($code, $exp)) ||
+			    (is_string(reset($exp)) && in_array($message, $exp))) {
 				$mode = PEAR_ERROR_RETURN;
 			}
 		}
@@ -554,7 +555,6 @@ class PEAR {
 			return $a;
 		}
 	}
-
 	// }}}
 	// {{{ throwError()
 
@@ -565,7 +565,8 @@ class PEAR {
 	 * @param string $message
 	 *
 	 */
-	function &throwError($message = null, $code = null, $userinfo = null) {
+	function &throwError($message = null, $code = null, $userinfo = null)
+	{
 		if (isset($this) && is_a($this, 'PEAR')) {
 			$a = &$this->raiseError($message, $code, null, null, $userinfo);
 			return $a;
@@ -576,7 +577,8 @@ class PEAR {
 	}
 
 	// }}}
-	function staticPushErrorHandling($mode, $options = null) {
+	function staticPushErrorHandling($mode, $options = null)
+	{
 		$stack = &$GLOBALS['_PEAR_error_handler_stack'];
 		$def_mode = &$GLOBALS['_PEAR_default_error_mode'];
 		$def_options = &$GLOBALS['_PEAR_default_error_options'];
@@ -610,7 +612,8 @@ class PEAR {
 		return true;
 	}
 
-	function staticPopErrorHandling() {
+	function staticPopErrorHandling()
+	{
 		$stack = &$GLOBALS['_PEAR_error_handler_stack'];
 		$setmode = &$GLOBALS['_PEAR_default_error_mode'];
 		$setoptions = &$GLOBALS['_PEAR_default_error_options'];
@@ -644,7 +647,6 @@ class PEAR {
 		}
 		return true;
 	}
-
 	// {{{ pushErrorHandling()
 
 	/**
@@ -659,7 +661,8 @@ class PEAR {
 	 *
 	 * @see PEAR::setErrorHandling
 	 */
-	function pushErrorHandling($mode, $options = null) {
+	function pushErrorHandling($mode, $options = null)
+	{
 		$stack = &$GLOBALS['_PEAR_error_handler_stack'];
 		if (isset($this) && is_a($this, 'PEAR')) {
 			$def_mode = &$this->_default_error_mode;
@@ -678,7 +681,6 @@ class PEAR {
 		$stack[] = array($mode, $options);
 		return true;
 	}
-
 	// }}}
 	// {{{ popErrorHandling()
 
@@ -689,7 +691,8 @@ class PEAR {
 	 *
 	 * @see PEAR::pushErrorHandling
 	 */
-	function popErrorHandling() {
+	function popErrorHandling()
+	{
 		$stack = &$GLOBALS['_PEAR_error_handler_stack'];
 		array_pop($stack);
 		list($mode, $options) = $stack[sizeof($stack) - 1];
@@ -701,7 +704,6 @@ class PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 	// {{{ loadExtension()
 
@@ -712,7 +714,8 @@ class PEAR {
 	 * @param string $ext The extension name
 	 * @return bool Success or not on the dl() call
 	 */
-	function loadExtension($ext) {
+	function loadExtension($ext)
+	{
 		if (!extension_loaded($ext)) {
 			// if either returns true dl() will produce a FATAL error, stop that
 			if ((ini_get('enable_dl') != 1) || (ini_get('safe_mode') == 1)) {
@@ -733,16 +736,16 @@ class PEAR {
 		}
 		return true;
 	}
-
 	// }}}
 }
 
 // {{{ _PEAR_call_destructors()
 
-function _PEAR_call_destructors() {
+function _PEAR_call_destructors()
+{
 	global $_PEAR_destructor_object_list;
 	if (is_array($_PEAR_destructor_object_list) &&
-		sizeof($_PEAR_destructor_object_list)) {
+	    sizeof($_PEAR_destructor_object_list)) {
 		reset($_PEAR_destructor_object_list);
 		if (PEAR::getStaticProperty('PEAR', 'destructlifo')) {
 			$_PEAR_destructor_object_list = array_reverse($_PEAR_destructor_object_list);
@@ -790,7 +793,8 @@ function _PEAR_call_destructors() {
  * @see        PEAR::raiseError(), PEAR::throwError()
  * @since      Class available since PHP 4.0.2
  */
-class PEAR_Error {
+class PEAR_Error
+{
 
 	// {{{ properties
 
@@ -825,7 +829,8 @@ class PEAR_Error {
 	 * @access public
 	 *
 	 */
-	function PEAR_Error($message = 'unknown error', $code = null, $mode = null, $options = null, $userinfo = null) {
+	function PEAR_Error($message = 'unknown error', $code = null, $mode = null, $options = null, $userinfo = null)
+	{
 		if ($mode === null) {
 			$mode = PEAR_ERROR_RETURN;
 		}
@@ -882,7 +887,6 @@ class PEAR_Error {
 			eval('$e = new Exception($this->message, $this->code);throw($e);');
 		}
 	}
-
 	// }}}
 	// {{{ getMode()
 
@@ -892,10 +896,10 @@ class PEAR_Error {
 	 * @return int error mode
 	 * @access public
 	 */
-	function getMode() {
+	function getMode()
+	{
 		return $this->mode;
 	}
-
 	// }}}
 	// {{{ getCallback()
 
@@ -905,10 +909,10 @@ class PEAR_Error {
 	 * @return mixed callback function or object/method array
 	 * @access public
 	 */
-	function getCallback() {
+	function getCallback()
+	{
 		return $this->callback;
 	}
-
 	// }}}
 	// {{{ getMessage()
 
@@ -918,10 +922,10 @@ class PEAR_Error {
 	 * @return  string  full error message
 	 * @access public
 	 */
-	function getMessage() {
+	function getMessage()
+	{
 		return ($this->error_message_prefix . $this->message);
 	}
-
 	// }}}
 	// {{{ getCode()
 
@@ -931,10 +935,10 @@ class PEAR_Error {
 	 * @return int error code
 	 * @access public
 	 */
-	function getCode() {
+	function getCode()
+	{
 		return $this->code;
 	}
-
 	// }}}
 	// {{{ getType()
 
@@ -944,10 +948,10 @@ class PEAR_Error {
 	 * @return string error/exception name (type)
 	 * @access public
 	 */
-	function getType() {
+	function getType()
+	{
 		return get_class($this);
 	}
-
 	// }}}
 	// {{{ getUserInfo()
 
@@ -957,10 +961,10 @@ class PEAR_Error {
 	 * @return string user-supplied information
 	 * @access public
 	 */
-	function getUserInfo() {
+	function getUserInfo()
+	{
 		return $this->userinfo;
 	}
-
 	// }}}
 	// {{{ getDebugInfo()
 
@@ -970,10 +974,10 @@ class PEAR_Error {
 	 * @return string debug information
 	 * @access public
 	 */
-	function getDebugInfo() {
+	function getDebugInfo()
+	{
 		return $this->getUserInfo();
 	}
-
 	// }}}
 	// {{{ getBacktrace()
 
@@ -985,7 +989,8 @@ class PEAR_Error {
 	 * @return array Backtrace, or NULL if not available.
 	 * @access public
 	 */
-	function getBacktrace($frame = null) {
+	function getBacktrace($frame = null)
+	{
 		if (defined('PEAR_IGNORE_BACKTRACE')) {
 			return null;
 		}
@@ -998,14 +1003,14 @@ class PEAR_Error {
 	// }}}
 	// {{{ addUserInfo()
 
-	function addUserInfo($info) {
+	function addUserInfo($info)
+	{
 		if (empty($this->userinfo)) {
 			$this->userinfo = $info;
 		} else {
 			$this->userinfo .= " ** $info";
 		}
 	}
-
 	// }}}
 	// {{{ toString()
 
@@ -1015,22 +1020,23 @@ class PEAR_Error {
 	 * @return string a string with an object summary
 	 * @access public
 	 */
-	function toString() {
+	function toString()
+	{
 		$modes = array();
 		$levels = array(E_USER_NOTICE => 'notice',
-			E_USER_WARNING => 'warning',
-			E_USER_ERROR => 'error');
+		    E_USER_WARNING => 'warning',
+		    E_USER_ERROR => 'error');
 		if ($this->mode & PEAR_ERROR_CALLBACK) {
 			if (is_array($this->callback)) {
 				$callback = (is_object($this->callback[0]) ?
-						strtolower(get_class($this->callback[0])) :
-						$this->callback[0]) . '::' .
-					$this->callback[1];
+					strtolower(get_class($this->callback[0])) :
+					$this->callback[0]) . '::' .
+				    $this->callback[1];
 			} else {
 				$callback = $this->callback;
 			}
 			return sprintf('[%s: message="%s" code=%d mode=callback ' .
-				'callback=%s prefix="%s" info="%s"]', strtolower(get_class($this)), $this->message, $this->code, $callback, $this->error_message_prefix, $this->userinfo);
+			    'callback=%s prefix="%s" info="%s"]', strtolower(get_class($this)), $this->message, $this->code, $callback, $this->error_message_prefix, $this->userinfo);
 		}
 		if ($this->mode & PEAR_ERROR_PRINT) {
 			$modes[] = 'print';
@@ -1045,9 +1051,8 @@ class PEAR_Error {
 			$modes[] = 'return';
 		}
 		return sprintf('[%s: message="%s" code=%d mode=%s level=%s ' .
-			'prefix="%s" info="%s"]', strtolower(get_class($this)), $this->message, $this->code, implode("|", $modes), $levels[$this->level], $this->error_message_prefix, $this->userinfo);
+		    'prefix="%s" info="%s"]', strtolower(get_class($this)), $this->message, $this->code, implode("|", $modes), $levels[$this->level], $this->error_message_prefix, $this->userinfo);
 	}
-
 	// }}}
 }
 
@@ -1058,4 +1063,5 @@ class PEAR_Error {
  * c-basic-offset: 4
  * End:
  */
+
 ?>

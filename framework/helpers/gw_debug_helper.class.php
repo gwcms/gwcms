@@ -1,8 +1,10 @@
 <?php
 
-class GW_Debug_Helper {
+class GW_Debug_Helper
+{
 
-	static function backtrace_soft($level_cut = 1) {
+	static function backtrace_soft($level_cut = 1)
+	{
 		$str = '';
 		$backtrace = debug_backtrace();
 		$backtrace = array_slice($backtrace, $level_cut);
@@ -13,7 +15,7 @@ class GW_Debug_Helper {
 
 		foreach ($backtrace as $i => $trace) {
 			$str.="#$i " . (isset($trace['file']) ? $trace['file'] : '-') . ':' .
-				(isset($trace['line']) ? $trace['line'] : '-') . ", ";
+			    (isset($trace['line']) ? $trace['line'] : '-') . ", ";
 			$str.=@$trace['object'] ? '$' . get_class(@$trace['object']) . $trace['type'] . "{$trace['function']}" : "function $trace[function]";
 
 			if (isset($_REQUEST['showargs']) || 1)
@@ -25,7 +27,8 @@ class GW_Debug_Helper {
 		return $str;
 	}
 
-	static function show_debug_info() {
+	static function show_debug_info()
+	{
 		$test = GW::$context->db->query_times;
 
 
@@ -48,5 +51,4 @@ class GW_Debug_Helper {
 			dump($info);
 		}
 	}
-
 }

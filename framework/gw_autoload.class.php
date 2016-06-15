@@ -1,11 +1,13 @@
 <?php
 
-class GW_Autoload {
+class GW_Autoload
+{
 
 	static $dirs = Array();
 	static $search_timer;
 
-	static function tryLoad($file, $dir = '') {
+	static function tryLoad($file, $dir = '')
+	{
 		$file = $dir . $file;
 
 		if (is_file($file)) {
@@ -14,7 +16,8 @@ class GW_Autoload {
 		}
 	}
 
-	static function tryLoadDirArray($file, $dirs) {
+	static function tryLoadDirArray($file, $dirs)
+	{
 		foreach ($dirs as $dir) {
 			if (self::tryLoad($file, $dir))
 				return true;
@@ -24,7 +27,8 @@ class GW_Autoload {
 		}
 	}
 
-	static function load($class) {
+	static function load($class)
+	{
 		$file = strtolower($class) . '.class.php';
 
 		//do not try load smarty classes, smarty has own autoloader
@@ -46,7 +50,8 @@ class GW_Autoload {
 		self::searchSubDirs(GW::s('DIR/AUTOLOAD_RECURSIVE'), $file);
 	}
 
-	static function searchSubdirs($root_dir, $file) {
+	static function searchSubdirs($root_dir, $file)
+	{
 		self::$search_timer->start();
 		$files = glob($root_dir . "*/" . $file);
 		self::$search_timer->pause();
@@ -64,10 +69,10 @@ class GW_Autoload {
 		}
 	}
 
-	static function init() {
+	static function init()
+	{
 		spl_autoload_register(Array('self', 'load'));
 
 		self::$search_timer = new GW_Timer;
 	}
-
 }
