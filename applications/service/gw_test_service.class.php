@@ -14,7 +14,7 @@ class GW_Test_service extends GW_Common_Service
 		if($this->user)
 			return true;
 		
-		return true;
+		die($this->getStdAuthUserPass());
 	}
 	
 	function pactDateTime($args)
