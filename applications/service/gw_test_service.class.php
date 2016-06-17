@@ -9,7 +9,13 @@
 
 class GW_Test_service extends GW_Common_Service
 {
-
+	function checkAuth()
+	{
+		if($this->user)
+			return true;
+		
+		return true;
+	}
 	
 	function pactDateTime($args)
 	{
