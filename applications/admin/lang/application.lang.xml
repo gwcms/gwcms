@@ -115,6 +115,10 @@
 	<en>Data successfully saved</en>
 	<lt>Duomenys išsaugoti</lt>
 </i>
+<i id="NO_CHANGES">
+	<en>No data changes</en>
+	<lt>Duomenų pakeitimų nėra</lt>
+</i>
 <i id="ITEM_REMOVE_SUCCESS">
 	<en>Item removed</en>
 	<lt>Įrašas panaikintas</lt>

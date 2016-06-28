@@ -386,7 +386,8 @@ class GW_Data_Object
 
 	function updateChanged()
 	{
-		return $this->update(array_keys($this->changed_fields));
+		if($this->changed_fields)
+			return $this->update(array_keys($this->changed_fields));
 	}
 
 	function showChanged()
