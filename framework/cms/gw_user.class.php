@@ -131,7 +131,7 @@ class GW_User extends GW_Composite_Data_Object
 	function eventHandler($event, &$context_data = [])
 	{
 		switch ($event) {
-			case 'BEFORE_SAVE':
+			case 'PREPARE_SAVE':
 				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new'])
 					$this->set('pass', $this->cryptPass($this->get('pass_new')));
 

@@ -197,11 +197,13 @@ class GW_Common_Module extends GW_Module
 		//	<input type="hidden" name="SAVE-TYPE" value="INSERT">
 		//{/if}
 		//isvengsime sio nesklandumo
+		$item->prepareSave();
 
 		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT") {
 			$item->insert();
 			$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
 		} else {
+			
 			if ($item->changed_fields) {
 				$item->updateChanged();
 				$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);

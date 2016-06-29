@@ -798,4 +798,9 @@ class GW_Data_Object
 		$this->errors[$field] = $msg;
 		$this->error_codes[$error_code] = ($field ? $field . '::' : '') . $msg;
 	}
+	
+	function prepareSave()
+	{
+		$this->fireEvent('PREPARE_SAVE');
+	}
 }
