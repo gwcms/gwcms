@@ -199,7 +199,7 @@ class GW_Common_Module extends GW_Module
 		//isvengsime sio nesklandumo
 		$item->prepareSave();
 
-		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT") {
+		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT" || !$item->id) {
 			$item->insert();
 			$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
 		} else {
