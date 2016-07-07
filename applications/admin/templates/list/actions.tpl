@@ -32,7 +32,7 @@
 
 {function name=dl_actions_ext_actions}
 <div class="unhideroot2">
-	<img class="dropdown-trigger ajax-fill-dd" align="absmiddle" src="{$app_root}img/icons/action_expand.png" data-url="{$m->buildURI('itemactions',[id=>$item->id])}" data-id="{$item->id}">
+	<img class="dropdown-trigger ajax-fill-dd" align="absmiddle" src="{$app->icon_root}action_expand.png" data-url="{$m->buildURI('itemactions',[id=>$item->id])}" data-id="{$item->id}">
 	
 	<div class="dropdown" id="dropdown-{$item->id}"><i class="fa fa-spinner fa-pulse"></i></div>
 </div>
@@ -49,5 +49,5 @@
 
 {function dl_actions_inlineedit}
 	<a class="inline_edit_trigger" data-id="{$item->id}" data-url="{$m->buildUri("`$item->id`/form",[ajax=>1])}"><img 
-			align="absmiddle" src="{$app_root}img/icons/action_edit.png"></a>
+			align="absmiddle" src="{$app->icon_root}action_edit.png"></a>
 {/function}

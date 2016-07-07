@@ -13,7 +13,7 @@
 
 		<a href="#"
 onclick="if (!confirm('{$app->lang.CONFIRM_DELETE}'))return;jserver.callmodule('{$m->name}','{$remove_act}', 'id={$item->get('id')}&name={$name}');Element.hide('{$preview_container_id}');return false;"
-><img src="{$app_root}img/icons/image_delete.gif" border="0" width="18" height="18" /></a>
+><img src="{$app->icon_root}image_delete.gif" border="0" width="18" height="18" /></a>
   			{/if}
   		</p>
 {/if}

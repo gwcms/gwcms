@@ -2,7 +2,7 @@
 	<img 
 		align="absmiddle" 
 		title="{$lang.CREATE_NEW}" 
-		src="{$app_root}img/icons/action_file_add.png" 
+		src="{$app->icon_root}action_file_add.png" 
 		onclick="$(this).next().trigger('click');
 				location.href = $(this).next().attr('href')" vspace="3" />
 	<a href="{gw_link relative_path=form  icon="action_file_add" params=[id=>0] path_only=1}">{$lang.CREATE_NEW}</a>	
@@ -12,7 +12,7 @@
 
 {function name=dl_toolbar_buttons_filters}
 	{if $dl_filters}
-		<img src="{$app_root}img/icons/search.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
+		<img src="{$app->icon_root}search.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
 		<a href="#show_filters" onclick="$('#filters').toggle();
 				return false">{$lang.SEARCH}</a>	
 		&nbsp;&nbsp;&nbsp;
@@ -20,7 +20,7 @@
 {/function}	
 
 {function name=dl_toolbar_buttons_print}
-	<img src="{$app_root}img/icons/print.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
+	<img src="{$app->icon_root}print.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
 	<a href="{$app->buildUri(false,[print_view=>1],[carry_params=>1])}">{$lang.PRINT_VIEW}</a>
 	&nbsp;&nbsp;&nbsp;
 {/function}
@@ -28,7 +28,7 @@
 
 {function name=dl_toolbar_buttons_info}
 	{if $page->notes}
-		<img src="{$app_root}img/icons/action_info.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
+		<img src="{$app->icon_root}action_info.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
 		<a href="#show_about" onclick="open_notes({$page->id});return false">{$lang.ABOUT}</a>	
 		&nbsp;&nbsp;&nbsp;
 
@@ -43,7 +43,7 @@
 				gw_dialog.open('{$m->buildURI('dialogconfig')}', { width: 400 })
 		}
 	</script>
-	<img src="{$app_root}img/icons/settings.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
+	<img src="{$app->icon_root}settings.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
 	<a href="#" onclick="lds_config();
 			return false">{$lang.LIST_DISPLAY_SETTINGS}</a>	
 	&nbsp;&nbsp;&nbsp;
@@ -52,7 +52,7 @@
 {function name=dl_toolbar_buttons_hidden}
 
 	<div class="unhideroot" style="">
-		<img class="visible unhidetrigger" align="absmiddle" src="{$app_root}img/icons/action_down24.png">
+		<img class="visible unhidetrigger" align="absmiddle" src="{$app->icon_root}action_down24.png">
 
 		<div class="dropdown">
 			{foreach $dl_toolbar_buttons_hidden as $button_func}

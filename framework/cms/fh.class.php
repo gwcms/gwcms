@@ -158,7 +158,7 @@ class FH
 			return $params['path'];
 
 
-		$params['img'] = $this->app->app_root . 'img/icons/' . $params['icon'] . '.png';
+		$params['img'] = $this->app->icon_root . $params['icon'] . '.png';
 
 		if (!$params['html'])
 			return Array('link' => $params['path'], 'img' => $params['img'], 'title' => $params['title']);

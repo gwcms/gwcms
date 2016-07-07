@@ -5,7 +5,7 @@
 
 	{function name=dl_toolbar_buttons_log}
 		{if $dl_filters}
-			<img src="{$app_root}img/icons/action_log.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
+			<img src="{$app->icon_root}action_log.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
 			<a href="#show_filters" onclick="open_rtlogview('system.log'); return false">Log</a>	
 			&nbsp;&nbsp;&nbsp;
 		{/if}

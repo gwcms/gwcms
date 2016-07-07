@@ -2,6 +2,9 @@
 
 class GW_Admin_Application extends GW_Application
 {	
+	
+	public $icon_root = 'img/icons/';
+
 	function checkCompatability()
 	{
 		//NO MSIE 6
@@ -59,6 +62,8 @@ class GW_Admin_Application extends GW_Application
 		
 		if($msgs)
 			$this->setMessages($msgs);
+		
+		$this->icon_root = $this->app_root . $this->icon_root;
 	}
 	
 	

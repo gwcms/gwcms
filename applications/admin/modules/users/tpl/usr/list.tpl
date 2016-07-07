@@ -35,7 +35,7 @@
 	{/function}	
 	
 	{function dl_cell_online}
-		<img src="{$app_root}img/icons/{if $item->online}dot_green{else}dot_white{/if}.png">
+		<img src="{$app->icon_root}{if $item->online}dot_green{else}dot_white{/if}.png">
 	{/function}			
 	
 	
@@ -46,7 +46,7 @@
 	
 	{function dl_actions_message}
 		<a href="{$m->buildURI('messages/form', [item=>[user_id=>$item->id]],[level=>1])}" title="write message">
-			<img src="{$app_root}img/icons/message.png" title="write message" align="absmiddle"></a>
+			<img src="{$app->icon_root}message.png" title="write message" align="absmiddle"></a>
 	{/function}
 	
 	{$dl_filters=$display_fields}
