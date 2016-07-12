@@ -35,6 +35,8 @@ class GW_Http_Agent
 	public $request_context = [];
 	public $lgr;
 	public $tidy_html = false;
+	public $last_error = false;
+	public $ssl_errors_ignore = false;
 
 	function __construct($headers = Array())
 	{
@@ -162,7 +164,7 @@ class GW_Http_Agent
 
 		restore_error_handler();
 
-		return Array($body, $error, $http_response_header);
+		return Array($body, $error, isset($http_response_header) ? $http_response_header : false);
 	}
 
 	function postRequest($url, $post_vars, $headers = [])
@@ -207,6 +209,12 @@ class GW_Http_Agent
 		    //'max_redirects'=>$this->max_redirects,
 		    'follow_location' => false
 		);
+		
+		if($this->ssl_errors_ignore)
+		{
+			$context_options['ssl']['verify_peer'] = false;
+			$context_options['ssl']['verify_peer_name'] = false;
+		}
 
 		if (count($post_params)) {
 			$context['method'] = 'POST';
@@ -237,6 +245,7 @@ class GW_Http_Agent
 		$this->last_request = $header;
 		$this->last_request_time = time();
 		$this->last_response_header = Null;
+		$this->last_error = false;
 
 		$timer = new GW_Timer;
 
@@ -258,12 +267,12 @@ class GW_Http_Agent
 			}
 		} else {
 			list($body, $error, $http_response_header) = self::file_get_contents($url, $context_options);
+			
+			if($error)
+				$this->last_error = $error;
 		}
 
-
-
-		if (count($http_response_header))
-			$this->last_response_header = implode("\n", $http_response_header) . "\n";
+		$this->last_response_header = is_array($http_response_header) ? implode("\n", $http_response_header) . "\n" : '';
 
 		$this->parseCookies();
 
