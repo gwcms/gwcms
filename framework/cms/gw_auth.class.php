@@ -123,7 +123,14 @@ class GW_Auth
 		$this->session["user_id"] = $user->get('id');
 		$this->session['ip_address'] = $_SERVER['REMOTE_ADDR'];
 
-		$user->onLogin();
+		$user->onLogin($_SERVER['REMOTE_ADDR']);
+		
+		$this->session['last_request'] = time();
+		
+		//store some login info
+		$inf = GW_Request_Helper::visitorInfo();
+		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
+		GW_DB_Logger::msg($msg, 'user', 'login', $this->id, $inf['browser']);		
 
 		return $user;
 	}

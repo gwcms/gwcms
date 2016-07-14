@@ -74,28 +74,22 @@ class GW_User extends GW_Composite_Data_Object
 		return $this->errors ? false : true;
 	}
 
-	function logLogin()
-	{
-		$inf = GW_Request_Helper::visitorInfo();
-		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
-		GW_DB_Logger::msg($msg, 'user', 'login', $this->id, $inf['browser']);
-	}
 
-	function onLogin()
+
+	function onLogin($ip)
 	{
 		$this->set('login_time', date('Y-m-d H:i:s'));
 		$this->set('login_count', $this->get('login_count') + 1);
-		$this->set('last_ip', $_SERVER['REMOTE_ADDR']);
+		$this->set('last_ip', $ip);
 
 		$this->onRequest();
 
 		$this->update(Array('login_time', 'login_count', 'last_ip', 'last_request_time'));
-		$this->logLogin();
 	}
 
 	function onRequest($db_update = true)
 	{
-		$_SESSION[AUTH_SESSION_KEY]['last_request'] = time();
+		
 		$this->set('last_request_time', date('Y-m-d H:i:s'));
 
 		if ($db_update)
@@ -197,7 +191,7 @@ class GW_User extends GW_Composite_Data_Object
 
 	function getByUsername($username)
 	{
-		return $this->find(Array('username=? AND active=1', $username));
+		return $this->find(Array('username=? AND active=1 AND removed=0', $username));
 	}
 
 	function getByUsernamePass($username, $pass)
