@@ -15,6 +15,16 @@
 {include file="list/actions.tpl"}
 
 {*functions*}
+{function dl_proc_row_cell}
+	{if isset($dl_smart_fields.$field)}
+		{call name="dl_cell_$field"}
+	{elseif isset($dl_output_filters.$field)}
+		{call name="dl_output_filters_`$dl_output_filters.$field`"}
+	{else}
+		{$item->get($field)|escape}
+	{/if}	
+{/function}
+
 {function dl_list_proc_rows}
 
 	{foreach from=$list item=item}
@@ -23,6 +33,13 @@
 
 
 	{call name="dl_prepare_item" ifexists=1}
+	
+	{if $dl_group_list_by && $last_gl_m != $item->get($dl_group_list_by[0])}
+		<tr>
+			<td colspan='100' class="groupedrow">{call dl_proc_row_cell field=$dl_group_list_by[0]}</td>
+		</tr>
+		{$last_gl_m=$item->get($dl_group_list_by[0])}
+	{/if}
 
 	<tr data-id="{$item->id}" id="list_row_{$item->id}" class="list_row{if $item->row_class} {$item->row_class}{/if}{if $id && $smarty.get.id==$id} gw_active_row{/if}" 
 		{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
@@ -30,13 +47,7 @@
 		{block name="item_row"}
 			{foreach $dl_fields as $field}
 				<td>
-					{if isset($dl_smart_fields.$field)}
-						{call name="dl_cell_$field"}
-					{elseif isset($dl_output_filters.$field)}
-						{call name="dl_output_filters_`$dl_output_filters.$field`"}
-					{else}
-						{$item->get($field)|escape}
-					{/if}
+					{call dl_proc_row_cell}
 				</td>
 			{/foreach}
 

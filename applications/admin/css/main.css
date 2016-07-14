@@ -447,3 +447,8 @@ p{}
 .bg-gray{background-color: #777}
 .nounderline{text-decoration: none}
 
+.groupedrow{
+	text-align: center;
+	font-style: italic;
+	color: #0000C0;
+}
