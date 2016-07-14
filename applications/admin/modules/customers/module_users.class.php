@@ -20,6 +20,8 @@ class Module_Users extends GW_Common_Module
 		$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);		
 		
 		$this->options['sms_pricing_plan']=GW::getInstance('GW_Pricing_Item')->getAllPricingPlans();
+		
+		$this->list_params['paging_enabled']=1;
 	}
 	
 	function viewDefault()
