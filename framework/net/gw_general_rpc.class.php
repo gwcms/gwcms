@@ -72,4 +72,11 @@ class GW_General_RPC
 
 		return $this->call($name, $get, $post);
 	}
+	
+	
+	function basicAuthSetUserPass($user, $pass)
+	{
+		$parts = parse_url($this->url);
+		$this->url = $parts['scheme'].'://'.$user.':'.$pass.'@'.$parts['host'].$parts['path'];
+	}
 }
