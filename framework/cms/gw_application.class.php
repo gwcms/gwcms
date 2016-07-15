@@ -94,7 +94,9 @@ class GW_Application
 		$s->assignByRef('l', GW::$l);
 		$s->assignByRef('lang', $this->lang);
 		$s->assignByRef('page', $this->page);
-		$s->assignByRef('footer_hidden', new stdClass);
+		
+		$x = new stdClass;
+		$s->assignByRef('footer_hidden', $x);
 		$s->merge_compiled_includes = true;
 	}
 
@@ -143,11 +145,11 @@ class GW_Application
 			$path = $this->path;
 
 		return
-		    (isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-		    (isset($params['app']) ? $params['app'] . '/' : $this->app_base) .
-		    $ln .
-		    ($path ? '/' : '') . $path .
-		    ($getparams ? '?' . http_build_query($getparams) : '');
+			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
+			(isset($params['app']) ? $params['app'] . '/' : $this->app_base) .
+			$ln .
+			($path ? '/' : '') . $path .
+			($getparams ? '?' . http_build_query($getparams) : '');
 	}
 
 	/**
@@ -264,7 +266,7 @@ class GW_Application
 		}
 
 		$path_arr_parent = count($path_arr) >= 2 ?
-		    $path_arr[count($path_arr) - 2] : Array();
+			$path_arr[count($path_arr) - 2] : Array();
 
 
 		//jeigu bus path articles/items/132
