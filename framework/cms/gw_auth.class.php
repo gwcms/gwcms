@@ -11,9 +11,9 @@ class GW_Auth
 	var $session;
 	var $error;
 
-	function __construct(&$user0)
+	function __construct($user0)
 	{
-		$this->user0 = & $user0;
+		$this->user0 =  $user0;
 
 		if (get_class($this->user0) == "GW_User")
 			$this->session = & $_SESSION[AUTH_SESSION_KEY];
