@@ -42,8 +42,8 @@ class GW_TestClass
 		}
 	}
 	
-	function __assertTrue($state, &$err=false){
-		
+	function __assertTrue($state, &$err=false)
+	{
 		$callee = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 	
 		
