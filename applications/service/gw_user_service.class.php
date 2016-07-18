@@ -68,32 +68,40 @@ class GW_User_service extends GW_Common_Service
 	
 	function actInfo()
 	{
-		$userid = $_POST['userid'];
-		$token = $_POST['token'];
-		
-		if (!($user = GW_Customer::singleton()->getByToken($userid, $token))){
-			$resp['error_msgid'] = '/G/GENERAL/TOKEN_FAIL';
-			$resp['error']=1;
-		}else{
+		if ($user = $this->__getUser($resp)){
+			
 			$resp['user'] = $user->toArray();
 			$this->unsetUserAdminFields($resp['user']);
 		}
+		
 		return $resp;
+	}
+	
+	function __getUser(&$resp)
+	{
+		$userid = $_POST['userid'];
+		$token = $_POST['token'];
+		
+		if(!($user = GW_Customer::singleton()->getByToken($userid, $token))){
+			$resp['error_msgid'] = '/G/GENERAL/TOKEN_FAIL';
+			$resp['error']=1;
+		}
+		
+		return $user;
 	}
 	
 	function actUpdate()
 	{
 		$vals = $_POST['user'];
-		$userid = $vals['id'];
-		$token = $_POST['token'];
-		
+		$resp = [];
 		//return [$userid, $token, GW_Customer::singleton()->getByToken($userid, $token)];
 		
 		
-		if (!($user = GW_Customer::singleton()->getByToken($userid, $token))){
-			$resp['error_msgid'] = '/G/GENERAL/TOKEN_FAIL';
-		}else{
-			$this->unsetUserAdminFields($vals);	
+		if ($user = $this->__getUser($resp))
+		{
+			$this->unsetUserAdminFields($vals);
+			
+			unset($vals['id']);
 			$user->setValues($vals);
 			
 			$resp['vals']=$vals;
@@ -113,6 +121,49 @@ class GW_User_service extends GW_Common_Service
 			
 		}	
 		return $resp;
+	}
+	
+	
+	function actRegister()
+	{
+		$vals = $_POST['user'];
+		$this->unsetUserAdminFields($vals);	
+		
+		$user = GW_Customer::singleton()->createNewObject($vals);
+		$user->setValidators('register');
+		
+		$resp = [];
+		
+		if(!$user->validate())
+		{
+			$resp['errors'] = $user->errors;
+			$resp['register']='FAIL';
+		}else{
+			$resp['user_id']=$user->insert();
+			
+			$user->setRandToken();
+		
+			$resp['token']=$user->token;
+			$resp['register']='OK';
+		}
+		
+		return $resp;
+	}
+	
+	function actLogout()
+	{
+		
+		$resp=[];
+		
+		if($user = $this->__getUser($resp))
+		{
+			$user->saveValues(['token'=>'-']);
+			
+			$resp['logout']='OK';
+		}
+
+		
+		return $resp;		
 	}
 
 

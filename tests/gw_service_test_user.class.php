@@ -1,81 +1,97 @@
 <?php
 
 
-class gw_service_test_user extends gw_testservice
+class GW_TestService extends GW_TestClass
 {
+	public $test_result=[];
 	
+	function __construct($testclass)
+	{
+		$this->testobj = new GW_General_RPC;
+
+		//get service name from test class name
+		$servicename = preg_replace('/^gw_service_test_/','',get_called_class());
+		
+		$this->testobj->url = GW::s("SITE_URL") . 'service/'.$servicename;
+		
+				
+		
+		$this->init();
+		
+	}
+	
+	/**
+	 * override it // use for authentification
+	 */
 	function init()
 	{
-		$this->testobj->basicAuthSetUserPass('aaa','bbb');
+		
 	}
 	
 	
-	function randStr($length=15)
+	function process()
 	{
-		$set="ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-		$str = date('YmdHi').'00';
+		$timer = new GW_Timer();
 		
-		for($i=0;$i<$length;$i++)
-			$str.=$set[rand(0,34)];
+		$list = get_class_methods($this);
+		
+		foreach($list as $func)
+		{
+			if(strpos($func,'test')===0)
+			{
+				$this->$func();
+			}
+			
+		}
+		
+		$this->test_result['speed'] = $timer->stop(5);
+		
+		return $this->test_result;
+	}
+	
+	function assertEquals($testval, $expectedval)
+	{	$err =[];
+	
+		if(!$this->__assertTrue($testval == $expectedval, $err)){
 
-		return $str;
+			$err['val']=$testval;
+			$err['expected_val']=$expectedval;
+		}
 	}
 	
-	
-	
-	private $userid;
-	private $token;
-	
-	function testGoodLogin()
-	{
-		//test good login
+	function __assertTrue($state, &$err=false){
 		
-		$resp = $this->testobj->login([],['user'=>'demo','pass'=>'123456','ip'=>$_SERVER['REMOTE_ADDR']]);
+		$callee = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+	
+		
+		
+		if($state)
+		{
+			@$this->test_result['success']++;
+			//@$this->test_result[$callee['function']]['success']++;
+		}else{
+			@$this->test_result['fail']++;
+			
+			
+			$lines = file_get_contents($callee[1]['file']);
+			$lines = explode("\n", $lines);
+			$linenr=$callee[1]['line'];
+			$line = trim($lines[ $linenr-1 ]);
+			
+			//d::dumpas([$lines, $linenr, $callee]);
+			
+			
+			
+			$err = ['func' => $callee[2]['function'],'line'=>$line, 'lineno'=>$linenr, 'file'=>$callee[1]['file'], 'testmeth'=>$callee[1]['function']];
+			
+			@$this->test_result['fails'][] =& $err;
+		}
 
-		$this->assertEquals($resp->user->username, 'demo');
-		
-		$this->userid = $resp->user->id;
-		$this->token = $resp->user->token;
-		
-		
+		return $state;
 	}
 	
-	function testBadLogin()
+	function assertTrue($state)
 	{
-		//test bad login
-		
-		$resp = $this->testobj->login([],['user'=>'demo','pass'=>'123456aaa','ip'=>$_SERVER['REMOTE_ADDR']]);
-		
-		$this->assertEquals($resp->error, '1');		
-	}	
-	
-	function testUpdate()
-	{
-		$testval = 'Service testing '.$this->randStr();
-		$resp2 = $this->testobj->update([],['user'=>['id'=>$this->userid, 'description'=>$testval], 'token'=>$this->token]);
-		
-		
-		$respinf = $this->testobj->info([], ['userid'=>$this->userid, 'token'=>$this->token]);
-		
-		$this->assertEquals($respinf->user->description, $testval);
-	}
-	
-	function testErrorOnUpdate()
-	{
-		$resp3 = $this->testobj->update([],['user'=>['id'=>$this->userid, 'email'=>'asdfs'], 'token'=>$this->token]);
-		
-		
-		$this->assertEquals($resp3->updateuser, 'FAIL');
-		$this->assertEquals($resp3->errors->email, '/G/VALIDATION/EMAIL/INVALID_EMAIL');
-	}
-	
-	function testRegister()
-	{
-		
-	}
-	
-	function testLogout()
-	{
-		
+		$this->__assertTrue($state);
 	}
 }
