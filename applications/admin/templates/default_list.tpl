@@ -158,7 +158,8 @@
 		{include "list/filters.tpl"}
 	{/if}
 
-
+	{block name="before_list"}
+	{/block}
 
 
 	</td></tr><tr><td>{*1*}
