@@ -21,6 +21,7 @@ class GW_Data_Object
 	static $_instance;
 	public $cache;
 	public $changed_fields = [];
+	public $changed=false; //indicates if changed related composite objects
 
 	/**
 	 * pvz 
@@ -348,7 +349,7 @@ class GW_Data_Object
 	 * @param Array $field_names
 	 * @return unknown_type
 	 */
-	function update($field_names = [])
+	function update($field_names = [], $params = [])
 	{
 		if ($this->auto_validation && !$this->validate())
 			return false;
@@ -365,6 +366,14 @@ class GW_Data_Object
 
 		$this->fireEvent(['BEFORE_UPDATE', 'BEFORE_SAVE'], $context);
 
+		if(isset($params['onlychanged']))
+		{
+			$field_names = array_keys($this->changed_fields);
+			
+			if(! $field_names)
+				return false;
+		}
+		
 		$entry = Array();
 		$idfield = $this->primary_fields[0];
 		$field_names = count($field_names) ? $field_names : array_keys($this->content_base);
@@ -386,8 +395,7 @@ class GW_Data_Object
 
 	function updateChanged()
 	{
-		if($this->changed_fields)
-			return $this->update(array_keys($this->changed_fields));
+		return $this->update([], ['onlychanged'=>1]);
 	}
 
 	function showChanged()

@@ -120,9 +120,25 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		$this->composite_content_base[$field] = $item;
 	}
 
+	function updateChanged()
+	{
+		parent::updateChanged();
+		
+		$this->fireEvent('AFTER_SAVE');
+	}	
+	
+	
 	function eventHandler($event, &$context_data = [])
 	{
 		switch ($event) {
+			case 'PREPARE_SAVE':
+				
+				if($this->composite_content_base || isset($this->content_base['delete_composite'])){
+					$this->changed=1;
+				}
+
+			break;
+			
 			case 'BEFORE_DELETE':
 				$this->removeAllCompositeItems();
 				break;
