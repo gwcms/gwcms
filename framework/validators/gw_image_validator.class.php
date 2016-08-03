@@ -44,9 +44,9 @@ class GW_Image_Validator Extends GW_Validator
 			return ($item->errors[] = '/G/GENERAL/FILE/TOO_LARGE') && false;
 
 		if (isset($im_vali['dimensions_min']) && !self::isValidDimensions($im_vali['dimensions_min']))
-			return ($item->errors[] = '/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN') && false;
+			return ($item->errors[] = sprintf(GW::l('/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN'), $im_vali['dimensions_min']) ) && false;
 
 		if (isset($im_vali['dimensions_max']) && !self::isValidDimensions(false, $im_vali['dimensions_max']))
-			return ($item->errors[] = '/G/GENERAL/IMAGE/ERR_DIMENSIONS_MAX') && false;
+			return ($item->errors[] = sprintf(GW::l('/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN'), $im_vali['dimensions_max']) ) && false;
 	}
 }

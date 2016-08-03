@@ -29,8 +29,8 @@
 	
 
 	<i id="IMAGE">
-		<i id="ERR_DIMENSIONS_MAX">Image dimensions exceeds the maximum dimensions</i>
-		<i id="ERR_DIMENSIONS_MIN">Image dimensions does not meet the minimum dimensions condition</i>
+		<i id="ERR_DIMENSIONS_MAX">Image dimensions exceeds the maximum (%s) pixels dimensions</i>
+		<i id="ERR_DIMENSIONS_MIN">Image dimensions does not meet the minimum dimensions (%s) pixels condition</i>
 	</i>
 	
 	<i id="FILE">
