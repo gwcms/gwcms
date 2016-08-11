@@ -202,8 +202,9 @@ class GW_Common_Module extends GW_Module
 		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT" || !$item->id) {
 			$item->insert();
 			$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
-		} else {		
-			if ($item->changed_fields || $item->changed) {
+		} else {
+			
+			if ($item->changed_fields || $item->changed)  {
 				$item->updateChanged();
 				$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
 			} else {
@@ -337,7 +338,7 @@ class GW_Common_Module extends GW_Module
 			$cond .= ($cond ? ' AND ' : '') . $this->list_params['views']['conditions'];
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
-		
+
 
 		foreach ($this->filters as $key => $val)
 			$search[$key] = ['=', $val];
@@ -385,7 +386,6 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
-		
 
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
 			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page'] - 1 : 0;
@@ -730,31 +730,4 @@ class GW_Common_Module extends GW_Module
 			parent::setErrors($errors, $level);
 		}
 	}
-	
-	/**
-	 * 
-	 * @param type $name
-	 * @param type $type js|css
-	 * @param type $src
-	 */
-	function addIncludes($name=false, $type, $src)
-	{
-		$this->includes[$name] = [$type, $src];
-	}
-	
-	
-	function doGetFilters()
-	{
-		$filters_config = $this->getFiltersConfig();
-		
-		$filtername = isset($_GET['fieldname']) ? $_GET['fieldname'] : false;
-		
-		if(isset($filters_config[$filtername]))
-			$filters_config = [$filtername => $filters_config[$filtername]];
-		
-		$this->tpl_vars['dl_filters'] = $filters_config;
-				
-		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") ."list/filtersajax";
-		$this->processTemplate();
-	}	
 }

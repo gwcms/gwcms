@@ -16,14 +16,14 @@ define('GW_SYS_IMAGES_DIR', GW::s('DIR/SYS_IMAGES'));
 class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 {
 
-	var $table = 'gw_images';
-	var $dir = GW_SYS_IMAGES_DIR;
-	var $file_permissions = 0666;
-	var $auto_validation = false;
-	var $auto_fields = false;
-	var $original_file = false; //used with resize
-	var $ignore_fields = Array('new_file' => 1);
-	var $validators = Array
+	public $table = 'gw_images';
+	public $dir = GW_SYS_IMAGES_DIR;
+	public $file_permissions = 0666;
+	public $auto_validation = false;
+	public $auto_fields = false;
+	public $original_file = false; //used with resize
+	public $ignore_fields = Array('new_file' => 1);
+	public $validators = Array
 	    (
 	    'image_file' => Array
 		(
@@ -33,6 +33,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 		'size_max' => 20971520, //if greater - throw error
 	    )
 	);
+	public $original;
 
 	function getFilename()
 	{

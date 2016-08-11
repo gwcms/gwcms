@@ -2,9 +2,6 @@
 
 
 
-{extends file="default_list.tpl"}
-
-
 {block name="init"}
 
 	
