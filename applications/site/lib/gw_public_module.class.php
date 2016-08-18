@@ -209,8 +209,9 @@ class GW_Public_Module {
 		return $vals;
 	}
 
-	function links($name) {
-		return $this->app->buildUri($this->links[$name], [], ['carry_params' => 1]);
+	function links($name, $args=[])
+	{
+		return $this->app->buildUri($this->links[$name],$args,['carry_params'=>1]);
 	}
 
 	function buildDirectUri($path = false, $getparams = [], $params = []) {
