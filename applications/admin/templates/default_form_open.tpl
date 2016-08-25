@@ -5,9 +5,9 @@
 {$default_form_before_form}
 
 
-<form id="itemform" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" >
+<form id="itemform" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data"  >
 
-<table style="width:{if $form_width}{$form_width}{else}600px{/if}">
+<table style="width:{if $form_width}{$form_width}{else}600px{/if}" >
 <tr>
 <td>
 
@@ -39,4 +39,8 @@
 	
 </script>
 
-<table class="gwTable" style="width:100%">
+	<div class="row panel gwlistpanel">
+		<div class="panel-body">
+			
+			<table class="gwTable gwcmsTableForm">
+				<tbody>

@@ -4,17 +4,18 @@ class GW_Common_Module extends GW_Module
 {
 
 	public $allow_auto_actions = [
-	    'dosave' => 1,
-	    'dodelete' => 1,
-	    'doinvertactive' => 1,
-	    'domove' => 1,
-	    'viewform' => 1,
-	    'viewitem' => 1,
-	    'viewitemactions' => 1,
-	    'viewlist' => 1,
-	    'viewdialogconfig' => 1,
-	    'dodialogconfigsave' => 1,
-	    'doclone' => 1,
+		'dosave' => 1,
+		'dodelete' => 1,
+		'doinvertactive' => 1,
+		'domove' => 1,
+		'viewform' => 1,
+		'viewitem' => 1,
+		'viewitemactions' => 1,
+		'viewlist' => 1,
+		'viewdialogconfig' => 1,
+		'viewdialogremove' => 1,
+		'dodialogconfigsave' => 1,
+		'doclone' => 1,
 	];
 	public $filters = [];
 	//to easy adjust list for printing
@@ -53,6 +54,13 @@ class GW_Common_Module extends GW_Module
 			if ($_GET['sys_call'] == 2)
 				header('Content-type: text/plain');
 		}
+		
+		
+		if(isset($this->app->path_arr[count($this->app->path_arr)-1]['data_object_id'])){
+			$this->acive_object_id = $this->app->path_arr[count($this->app->path_arr)-1]['data_object_id'];
+		}elseif(isset($_GET['id'])){
+			$this->acive_object_id = $_GET['id'];
+		}
 	}
 
 	function initLogger()
@@ -67,6 +75,8 @@ class GW_Common_Module extends GW_Module
 
 		if ($id)
 			return $id;
+		
+		
 
 		if (isset($this->app->path_arr_parent['data_object_id']) && $tmp = $this->app->path_arr_parent['data_object_id'])
 			$id = $tmp;
@@ -90,7 +100,7 @@ class GW_Common_Module extends GW_Module
 
 
 		if (!$id)
-			return $this->setErrors('/g/GENERAL/BAD_ARGUMENTS');
+			return $this->setError('/g/GENERAL/BAD_ARGUMENTS');
 
 		if ($class)
 			$item = new $class($id);
@@ -98,7 +108,7 @@ class GW_Common_Module extends GW_Module
 			$item = $this->model->createNewObject($id);
 
 		if ($load && !$item->load())
-			return $this->setErrors('/g/GENERAL/ITEM_NOT_EXISTS');
+			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
 
 		$this->canBeAccessed($item, true);
 
@@ -116,7 +126,7 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('BEFORE_DELETE', $item);
 
 		$item->delete();
-		$this->app->setMessage($this->app->lang['ITEM_REMOVE_SUCCESS']);
+		$this->setMessage(["text"=>"/g/ITEM_REMOVE_SUCCESS", "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id]);
 
 		$this->fireEvent('AFTER_DELETE', $item);
 
@@ -179,7 +189,7 @@ class GW_Common_Module extends GW_Module
 
 		if (!$item->validate()) {
 			if (!isset($_POST['ajax'])) {
-				$this->setErrors($item->errors);
+				$this->setItemErrors($item);
 			} else {
 				$this->error_fields = array_merge($this->error_fields, $item->errors);
 			}
@@ -199,18 +209,24 @@ class GW_Common_Module extends GW_Module
 		//isvengsime sio nesklandumo
 		$item->prepareSave();
 
+		$message = ["title"=>$item->title];
+		
 		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT" || !$item->id) {
 			$item->insert();
-			$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+			$message["text"]="/g/SAVE_SUCCESS";
 		} else {
-			
-			if ($item->changed_fields || $item->changed)  {
+			if ($item->changed_fields || $item->changed) {
 				$item->updateChanged();
-				$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+				$message["text"]="/g/SAVE_SUCCESS";
 			} else {
-				$this->app->setMessage($this->app->lang['NO_CHANGES']);
+				
+				$message['text']="/g/NO_CHANGES";
+				$message['type']=GW_MSG_INFO;
 			}
 		}
+		
+		$message["id"]=$item->id;
+		$this->setMessage($message);
 
 		$this->fireEvent('AFTER_SAVE', $item);
 
@@ -221,6 +237,8 @@ class GW_Common_Module extends GW_Module
 		} else {
 			header("GW_AJAX_FORM: OK");
 			header("GW_AJAX_FORM_ITEM_ID: " . $item->id);
+			header("GW_AJAX_FORM_ITEM_TITLE: " . $item->title);
+			header("GW_AJAX_MESSAGES: ".json_encode($this->app->acceptMessages(true)));
 
 			$this->tpl_vars['ajax_rows_only'] = 1;
 			$this->processView('list', ['ajax_one_item_list' => $item->id]);
@@ -291,7 +309,15 @@ class GW_Common_Module extends GW_Module
 		}
 
 		$this->fireEvent("AFTER_FORM", $item);
+		
 
+		if(isset($_GET['ajax']))
+			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
+		
+		$this->prepareListConfig();
+		
+		
+		
 		return ['update' => (int) $item->get('id'), 'item' => $item];
 	}
 
@@ -323,15 +349,55 @@ class GW_Common_Module extends GW_Module
 		$this->canBeAccessed($item, true);
 
 		if (!$item->invertActive())
-			return $this->setErrors('/g/GENERAL/ACTION_FAIL');
+			return $this->setError('/g/GENERAL/ACTION_FAIL');
 
 		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);
 
 		$this->jump();
 	}
 
+	function buildCond($field, $compare_type, $value, $encap_val=true, $encap_fld=true)
+	{
+		$encapChr = $encap_val ? "'" : '';
+		
+		$cond = ($encap_fld ? "`$field`" : $field). ' ';
+		
+		switch ($compare_type) {
+			case 'LT':
+				$cond .= "< $encapChr" . $value . "$encapChr";
+				break;
+			case 'GT':
+				$cond .= "> $encapChr" . $value . "$encapChr";
+				break;
+			case 'NEQ':
+				$cond .= "!= $encapChr" . $value . "$encapChr";
+				break;
+			case 'IN':
+				$cond .= "IN ('" . implode("','", $value) . "')";
+				break;
+			case 'NOTIN':
+				$cond .= "NOT IN ('" . implode("','", $value) . "')";
+				break;			
+			case 'LIKE':
+				$cond .= "LIKE ".($encap_val ? "'%" . $value . "%'" : $value);
+				break;
+			case 'LIKE%,,%':
+				$cond .= "LIKE ".($encap_val ? "'%," . $value . ",%'" : $value);
+			case 'EQ':
+			default:
+				$cond .= "= $encapChr" . $value . "$encapChr";
+				break;
+		}
+
+		return "($cond)";
+	}
+
 	function setListParams(&$params = [])
 	{
+		
+		$this->prepareListConfig();
+		$this->tpl_vars+=$this->list_config;
+		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
 
 		if (isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
@@ -339,19 +405,22 @@ class GW_Common_Module extends GW_Module
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
 
-
 		foreach ($this->filters as $key => $val)
-			$search[$key] = ['=', $val];
+			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
 
-		foreach ($search as $field => $val) {
-			$compare_type = isset($val[0]) ? $val[0] : '=';
-			$value = isset($val[1]) ? $val[1] : null;
 
-			if ($value === '' || $value === null)
-				continue;
+		
 
-			if ($compare_type == "IN") {
-				$value = array_splice($val, 1);
+		foreach ($search as $filter) {
+
+			$compare_type = $filter['ct'];
+			$value = $filter['value'];
+			$field = $filter['field'];
+
+			if ($compare_type == "IN" || $compare_type == "NOTIN") {
+				
+				//d::dumpas($filter);
+				$value = json_decode($value);
 			} else {
 				$value = GW_DB::escape($value);
 			}
@@ -360,32 +429,12 @@ class GW_Common_Module extends GW_Module
 
 			if (method_exists($this, $ofmethod = "overrideFilter$field")) {
 
-				$cond.=$this->$ofmethod($value);
+				$cond.=$this->$ofmethod($value, $compare_type);
 			} else {
-				switch ($compare_type) {
-					case '<':
-						$cond .= "(`$field` < ('" . $value . "'))";
-						break;
-					case '>':
-						$cond .= "(`$field` > ('" . $value . "'))";
-						break;
-					case '!=':
-						$cond .= "(`$field` != ('" . $value . "'))";
-						break;
-					case 'IN':
-						$cond .= "(`$field` IN ('" . implode("','", $value) . "'))";
-						break;
-					case 'LIKE':
-						$cond.="(`$field` LIKE '%" . $value . "%')";
-						break;
-					case 'LIKE%,,%':
-						$cond.="(`$field` LIKE '%," . $value . ",%')";
-					default:
-						$cond.="(`$field` = '" . $value . "')";
-						break;
-				}
+				$cond.=$this->buildCond($field, $compare_type, $value);
 			}
 		}
+
 
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
 			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page'] - 1 : 0;
@@ -413,7 +462,8 @@ class GW_Common_Module extends GW_Module
 	function setDefaultOrder()
 	{
 		if (!isset($this->list_params['order']) || !$this->list_params['order'])
-			$this->list_params['order'] = $this->model->getDefaultOrderBy();
+			if (method_exists($this->model, 'getDefaultOrderBy'))
+				$this->list_params['order'] = $this->model->getDefaultOrderBy();
 	}
 
 	//uzkrauna sarasui viewsus
@@ -463,7 +513,8 @@ class GW_Common_Module extends GW_Module
 
 		$defi18n_name = $this->app->lang['DEFAULT'];
 
-		$orders = ['default' => ['name' => $defi18n_name, 'order' => $this->model->getDefaultOrderBy(), 'default' => 1]] + (array) $orders;
+		$deford = method_exists($this->model, 'getDefaultOrderBy') ? $this->model->getDefaultOrderBy() : false;
+		$orders = ['default' => ['name' => $defi18n_name, 'order' => $deford, 'default' => 1]] + (array) $orders;
 
 		foreach ($orders as $i => $order)
 			if (isset($order['default']))
@@ -479,6 +530,8 @@ class GW_Common_Module extends GW_Module
 				$orders[$i]['active'] = 1;
 			}
 		}
+
+
 
 		$this->tpl_vars['list_orders'] = & $orders;
 	}
@@ -504,7 +557,8 @@ class GW_Common_Module extends GW_Module
 
 	function doSetOrder()
 	{
-
+		$this->prepareListConfig();
+		
 		$orders = $this->app->page->ORDERS;
 
 		$foundorder = false;
@@ -521,7 +575,7 @@ class GW_Common_Module extends GW_Module
 					$foundorder = $order;
 
 			if (!$foundorder) {
-				$this->setErrors('/g/GENERAL/ORDER_NOT_FOUND');
+				$this->setError('/g/GENERAL/ORDER_NOT_FOUND');
 				$this->jump();
 			}
 
@@ -530,8 +584,8 @@ class GW_Common_Module extends GW_Module
 			$this->list_params['orders']['name'] = $_REQUEST['name'];
 		} elseif (isset($_REQUEST['order'])) {
 
-			if (!$this->__validateOrder($_REQUEST['order'], $this->allowed_order_columns + $this->model->getColumns())) {
-				$this->setErrors('/g/GENERAL/BAD_ORDER_FIELD');
+			if (!$this->__validateOrder($_REQUEST['order'], $this->list_config['dl_order_enabled_fields'] + $this->model->getColumns())) {
+				$this->setError('/g/GENERAL/BAD_ORDER_FIELD');
 				$this->jump();
 			} else {
 				$this->list_params['orders']['name'] = 'NIEKAS';
@@ -550,22 +604,27 @@ class GW_Common_Module extends GW_Module
 	{
 		preg_match_all('/(\w+) (ASC|DESC)/i', $order, $matches, PREG_SET_ORDER);
 
-		return $matches;
+		$orders = [];
+
+		foreach ($matches as $match)
+			$orders[$match[1]] = $match[2];
+
+		return $orders;
 	}
 
 	//pereina per visus stulpelius (norimus rikiuoti) ir patikrina ar yra stulpeliu sarase
 	//jei nera arba jei nematchina grazina false
 	function __validateOrder(&$order, $columns)
 	{
-		if ($matches = $this->__parseOrders($order)) {
-			foreach ($matches as $match)
-				if (!isset($columns[$match[1]]))
+		if ($parsed = $this->__parseOrders($order)) {
+			$orders = [];
+
+			foreach ($parsed as $fieldname => $dir) {
+				if (!isset($columns[$fieldname]))
 					return false;
 
-
-			$orders = [];
-			foreach ($matches as $match)
-				$orders[] = $match[1] . ' ' . $match[2];
+				$orders[] = "$fieldname $dir";
+			}
 
 			$order = implode(',', $orders);
 
@@ -605,9 +664,12 @@ class GW_Common_Module extends GW_Module
 			$this->list_params = [];
 
 			if ($this->app->user->isRoot())
-				$this->setErrors("Last query: " . $this->model->getDB()->error_query);
+				$this->setError("Last query: " . $this->model->getDB()->error_query);
 
-			return $this->setErrors($this->model->errors);
+			foreach($this->model->errors as $error)
+				$this->setError($error);
+			
+			return false;
 		}
 
 		$this->setDefaultOrder(); //for template
@@ -618,6 +680,11 @@ class GW_Common_Module extends GW_Module
 			$this->tpl_vars['query_info'] = $this->model->lastRequestInfo();
 
 
+
+		
+	
+		
+		
 		$this->fireEvent('AFTER_LIST', $list);
 
 
@@ -638,11 +705,17 @@ class GW_Common_Module extends GW_Module
 	//used to allow user edit field list	
 	function getDisplayFields($fields)
 	{
-		$this->app->sess['current_module_fields'] = $fields;
-
-
-		if ($saved = (array) $this->app->page->fields)
-			$fields = $saved + $fields; //prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
+		$saved = (array) $this->app->page->fields;
+		
+		//prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
+		if ($saved){
+			//bet neturi likti neegzistuojanciu
+			foreach($saved as $fieldname => $x)
+				if(!isset($fields[$fieldname]))
+					unset($saved[$fieldname]);
+			
+			$fields = $saved + $fields;
+		}
 
 		$rez = [];
 
@@ -653,30 +726,129 @@ class GW_Common_Module extends GW_Module
 		return $rez;
 	}
 
+	
+	function __doDialogConfigPrepareOrders(){
+		$neworders = [];
+		foreach ($_REQUEST['order_fields'] as $fieldname => $info)
+			if ($info['enabled'])
+				$neworders[] = "$fieldname " . $info['dir'];
+		
+			
+		$neworders = implode(', ', $neworders);
+		
+		
+		$orders = json_decode($this->app->page->orders, true);
+		
+		//pasalinti issaugotus orderius
+		if (is_array($remove = json_decode($_REQUEST['remove_saved_filters'])))
+			foreach ($remove as $itm)
+				unset($orders[$itm]);		
+
+		if($neworders) {
+			$drop = $_REQUEST['existing_order_name'];
+
+			if (isset($orders[$drop]))
+				$orders[$drop]['order'] = $neworders;
+			else {
+				$name = trim($_REQUEST['new_order_name']);
+				$orders[$newordersavename = 'listcfg_' . strtolower($name)] = ['name' => $name, 'order' => $neworders];
+			}		
+		}
+		
+		//pakeisti default orderi
+		if($default = $_REQUEST['default_filter']) {
+			if (!$default && $newordersavename)
+				$default = $newordersavename;
+
+			if ($default) {
+				foreach ($orders as $key => $ordervals)
+					if ($key == $default)
+						$orders[$key]['default'] = 1;
+					else
+						unset($orders[$key]['default']);
+			}		
+		}
+		
+		$this->app->page->orders = json_encode($orders);		
+	}
+	
 	function common_doDialogConfigSave()
 	{
 
 		//atstatyti numatytuosius nustatymus
+		/////////////////////////////////////////////////////////FIELDS
 		if ($_REQUEST['defaults'])
-			$fields = $this->app->sess['current_module_fields'];
+			$fields = $this->list_config['display_fields'];
 		else
 			$fields = $_REQUEST['fields'];
 
-
 		$this->app->page->fields = $fields;
-		$this->app->page->update(['fields']);
+
+
+
+		$this->__doDialogConfigPrepareOrders();
+
+
+		$this->app->page->updateChanged();
 
 		$this->jump();
 	}
 
+	function __viewDialogConfigPrepareOrders()
+	{
+		$orders = json_decode($this->app->page->orders, true);
+
+
+		$editorder = false;
+		$edit_orders = false;
+
+		if($orders)
+			foreach ($orders as $id => $ordervals) {
+				if (isset($ordervals['default'])) {
+					$editorder = $id;
+					$this->tpl_vars['default_filter'] = $id;
+				}
+			}
+		if (!$editorder)
+			$editorder = isset($id) ? $id : false;
+
+		if ($editorder)
+			$edit_orders = $this->__parseOrders($orders[$editorder]['order']);
+
+
+		$formatorders = [];
+		if($edit_orders)
+			foreach ($edit_orders as $fieldname => $dir)
+				$formatorders[$fieldname] = ['enabled' => 1, 'dir' => $dir];
+
+		$order_enabled_fields = [];
+		foreach ($this->list_config['dl_order_enabled_fields'] as $fieldname => $x)
+			$order_enabled_fields[$fieldname] = ['enabled' => 0, 'dir' => 'ASC'];
+
+
+		$this->tpl_vars['saved_orders'] = $orders;
+		$this->tpl_vars['order_fields'] = $formatorders + $order_enabled_fields;
+		$this->tpl_vars['editorder'] = $editorder;		
+	}
+	
 	function common_viewDialogConfig()
 	{
-		$fields = $this->app->sess['current_module_fields'] ? $this->app->sess['current_module_fields'] : [];
+		$this->prepareListConfig();
+		
+		$fields = $this->list_config['display_fields'];
+		
 		$saved = $this->app->page->fields ? (array) $this->app->page->fields : [];
+		
+		foreach($saved as $fieldname => $x)
+			if(!isset($fields[$fieldname]))
+				unset($saved[$fieldname]);		
 
+		
 		$this->tpl_vars['fields'] = $saved + $fields;
+		
+		$this->__viewDialogConfigPrepareOrders();
 
-		ob_flush();
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/dialogconfig";
 	}
 
 	function getMoveCondition($item)
@@ -696,7 +868,7 @@ class GW_Common_Module extends GW_Module
 		if (!$die || $result)
 			return $result;
 
-		$this->setErrors('/g/GENERAL/ACTION_RESTRICTED');
+		$this->setError('/g/GENERAL/ACTION_RESTRICTED');
 		$this->jump();
 	}
 
@@ -710,24 +882,140 @@ class GW_Common_Module extends GW_Module
 			trigger_error('method "' . $name . '" not exists', E_USER_NOTICE);
 	}
 
-	function setMessage($message)
-	{
-		if (is_array($message))
-			$message = json_encode($message);
 
-		if ($this->sys_call) {
-			$this->lgr->msg($message);
-		} else {
-			$this->app->setMessage($message);
-		}
+	/**
+	 * 
+	 * @param type $name
+	 * @param type $type js|css
+	 * @param type $src
+	 */
+	function addIncludes($name = false, $type, $src)
+	{
+		$this->includes[$name] = [$type, $src];
 	}
 
-	function setErrors($errors, $level = 2)
+	function doGetFilters()
 	{
-		if ($this->sys_call) {
-			$this->lgr->msg($errors);
-		} else {
-			parent::setErrors($errors, $level);
-		}
+		$this->prepareListConfig();
+		
+		$filters_config = $this->list_config['dl_filters'];
+
+		$filtername = isset($_GET['fieldname']) ? $_GET['fieldname'] : false;
+
+		if (isset($filters_config[$filtername]))
+			$filters_config = [$filtername => $filters_config[$filtername]];
+
+		
+		
+		$this->tpl_vars['dl_filters'] = $filters_config;
+
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/filtersajax";
+		$this->processTemplate();
 	}
+	
+	function viewDialogRemove()
+	{
+		$items = explode(',',$_GET['ids']);
+		$this->tpl_vars['ids']=$_GET['ids'];
+		$this->tpl_vars['items_count']=count($items);
+		
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/dialogremove";
+	}
+	
+	function doDialogRemove()
+	{
+		$ids = explode(',',$_REQUEST['ids']);
+		
+		
+		foreach($ids as $id)
+		{
+			$item = $this->model->createNewObject($id, true);
+			$item->delete();
+		}
+		
+		$this->setPlainMessage(sprintf(GW::l('/g/SELECTED_ITEMS_REMOVED'), count($ids)), GW_MSG_SUCC);
+
+		
+		$this->jump($this->app->path_arr_parent['path']);
+	}	
+	
+	
+	function prepareListConfig()
+	{
+		//neuzkraut jei jau uzkrautas
+		if(isset($this->list_config['dl_fields']))
+			return false;
+		
+		$conf = $this->getListConfig();
+		
+		$display_fields = [];
+		$order_enabled = [];
+		$filters = [];
+ 
+		foreach($conf['fields'] as $fieldname => $set){
+			if(strpos($set,'L')!==false)
+				$display_fields[$fieldname] = 1;
+			if(strpos($set,'l')!==false)
+				$display_fields[$fieldname] = 0;
+			if(strpos($set,'o')!==false)
+				$order_enabled[$fieldname] = 1;	
+			if(strpos($set,'f')!==false)
+				//if there is extra config on filters it is loaed from getListConfig['filters'][$fieldname]
+				$filters[$fieldname] = isset($conf['filters'][$fieldname]) ? $conf['filters'][$fieldname]: 1;					
+		}
+		
+		$vars['display_fields'] = $display_fields;
+		$vars['dl_fields'] = $this->getDisplayFields($display_fields);
+	
+		$vars['dl_order_enabled_fields'] = $order_enabled;
+		$vars['dl_filters'] = $filters;
+		
+		$this->list_config = $vars;
+		
+		return true;
+	}
+	
+	
+	/**
+	 * saraso laukeliu konfiguracija
+	 *
+	 * l - yra sarase ir po defaultu nera matomas reikia isijungt matomuma
+	 * L - yra sarase ir po defaultu matomas
+	 * f - standartinis filtras
+	 * o - galima panaudot rikiavimui
+	 *
+	 * laukelis => lLfo
+	 * 
+	 * override me
+	 * @return array
+	 */
+	function getListConfig()
+	{
+		$cfg = [
+			'fields'=>[
+				/*
+				'id'=>'Lof',
+				'name'=>'Lof',
+				'insert_time'=>'Lof'
+				 * 
+				 */
+			]
+		];
+		
+		foreach($this->model->getColumns() as $fieldname => $x)
+		{
+			$cfg['fields'][$fieldname] = 'Lof';
+		}
+		
+		return $cfg;
+	}
+	
+	
+	function viewIframeClose()
+	{
+		echo "<script type='text/javascript'>window.parent.iframeClose()</script>";
+		exit;
+	}
+	
+	
 }

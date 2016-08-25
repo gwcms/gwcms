@@ -1,4 +1,5 @@
-{$dl_toolbar_buttons=[addnew,filters,info]}
+{$do_toolbar_buttons=[addnew,filters,info]}
+
 
 {block name="init"}
 	{$dl_fields=[title,insert_time,update_time]}
@@ -11,20 +12,11 @@
 	{$x=array_unshift($dl_fields, mark)}
 	{$dl_smart_fields.mark=1}
 {/if}
-	
+
 {include file="list/actions.tpl"}
 
-{*functions*}
-{function dl_proc_row_cell}
-	{if isset($dl_smart_fields.$field)}
-		{call name="dl_cell_$field"}
-	{elseif isset($dl_output_filters.$field)}
-		{call name="dl_output_filters_`$dl_output_filters.$field`"}
-	{else}
-		{$item->get($field)|escape}
-	{/if}	
-{/function}
 
+{*functions*}
 {function dl_list_proc_rows}
 
 	{foreach from=$list item=item}
@@ -32,33 +24,32 @@
 		{$list_row_id=$list_row_id+1}
 
 
-	{call name="dl_prepare_item" ifexists=1}
-	
-	{if $dl_group_list_by && $last_gl_m != $item->get($dl_group_list_by[0])}
-		<tr>
-			<td colspan='100' class="groupedrow">{call dl_proc_row_cell field=$dl_group_list_by[0]}</td>
+		{call name="dl_prepare_item" ifexists=1}
+
+		<tr data-id="{$item->id}" id="list_row_{$item->id}" class="list_row{if $item->row_class} {$item->row_class}{/if}{if $id && $m->acive_object_id==$id} gw_active_row{/if}" 
+			{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
+
+			{block name="item_row"}
+				{foreach $dl_fields as $field}
+					<td>
+						{if isset($dl_smart_fields.$field)}
+							{call name="dl_cell_$field"}
+						{elseif isset($dl_output_filters.$field)}
+							{call name="dl_output_filters_`$dl_output_filters.$field`"}
+						{else}
+							{$item->get($field)|escape}
+						{/if}
+					</td>
+				{/foreach}
+
+				{if count($dl_actions) && !$smarty.get.print_view}
+					<td nowrap class="gw_dl_actions">
+						{call dl_display_actions}
+					</td>
+				{/if}
+
+			{/block} 
 		</tr>
-		{$last_gl_m=$item->get($dl_group_list_by[0])}
-	{/if}
-
-	<tr data-id="{$item->id}" id="list_row_{$item->id}" class="list_row{if $item->row_class} {$item->row_class}{/if}{if $id && $smarty.get.id==$id} gw_active_row{/if}" 
-		{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
-
-		{block name="item_row"}
-			{foreach $dl_fields as $field}
-				<td>
-					{call dl_proc_row_cell}
-				</td>
-			{/foreach}
-
-			{if count($dl_actions) && !$smarty.get.print_view}
-				<td nowrap>
-					{call dl_display_actions}
-				</td>
-			{/if}
-
-		{/block} 
-	</tr>
 
 	{/foreach}	
 {/function}
@@ -72,21 +63,21 @@
 {/function}
 
 
-	{function name=dl_cell_mark}
-		<input type="checkbox" class="checklist_item" class="checklist" value="{$item->id}" />
-	{/function}
-	{function name=dl_custom_head_mark}
-		<input type="checkbox" id="checklist_toggle" />
-	{/function}
-	
-	
-	{function name=truncate_hint}
-		{if mb_strlen($value) > $length}
-			<span title="{$value}">{$value|truncate:$length}</span>
-		{else}
-			{$value|truncate:$length}
-		{/if}
-	{/function}	
+{function name=dl_cell_mark}
+	<input type="checkbox" class="checklist_item" class="checklist" value="{$item->id}" />
+{/function}
+{function name=dl_custom_head_mark}
+	<input type="checkbox" id="checklist_toggle" />
+{/function}
+
+
+{function name=truncate_hint}
+	{if mb_strlen($value) > $length}
+		<span title="{$value}">{$value|truncate:$length}</span>
+	{else}
+		{$value|truncate:$length}
+	{/if}
+{/function}	
 {*/functions*}
 
 
@@ -97,142 +88,124 @@
 
 	{/block}
 
+	{if $m->list_params.paging_enabled && count($list)}
+		{$do_display_toolbar_pull_right[]=['file',"list/page_by.tpl"]}
+	{/if}	
+
 	{block name="open_tpl"}
-			{include file="default_open.tpl"}
+		{include file="default_open.tpl"}
 	{/block}
 
 
+	{include file="list/output_filters.tpl"}	
 
-
-
-		<div>
-
-		{include file="list/toolbar_buttons.tpl"}
-
-		{include file="list/output_filters.tpl"}	
-
-
-	<table><tr><td>{*1*}
-
-
-	{block name="toolbar"}
-		{if !$smarty.get.print_view}
-		<table style="width:100%">
-		<tr>
-			<td>
-				{call dl_display_toolbar_buttons}
-			</td>
-
-			{if $m->list_params.paging_enabled && count($list)}
-			<td	align="right" width="1%">
-				{include file="list/page_by.tpl"}
-			</td>
-			{/if}
-		</tr>
-		</table>
-		{/if}
-	{/block}
-
-
-	</td></tr><tr><td>{*1*}
 
 	{if !$smarty.get.print_view}
-	<table>
-		<tr>
-			<td>
-			{if count($views) > 1}
-				{include "list/views.tpl"}
-			{/if}
-			</td>
-			<td>
-			{if count($list_orders) > 1}
-				{include "list/orders.tpl"}
-			{/if}
-			</td>
-		</tr>
-	</table>
+		<div class="row gwViewsOrdersCont">
+			<div>
+				{if count($views) > 1}
+					{include "list/views.tpl"}
+				{/if}
+			</div>
+			<div>
+				{if count($list_orders) > 1}
+					{include "list/orders.tpl"}
+				{/if}
+			</div>
+		</div>
 	{/if}
 
 
-	{if $dl_filters && !$smarty.get.print_view}
-		{include "list/filters.tpl"}
-	{/if}
+	<div id="additemscontainer" style="display:none"></div>
 
 	{block name="before_list"}
 	{/block}
-
-
-	</td></tr><tr><td>{*1*}
-
-	{if !count($list)}
-		<p>{$lang.NO_ITEMS}</p>
-	{else}
-
-	<table class="gwTable gwActiveTable activeList">
-
-
-	<tr>	
-
-		{$dl_order_enabled_fields=array_flip($dl_order_enabled_fields|default:[])}
-
-		{foreach $dl_fields as $field}
-			<th>
-				{if isset($dl_custom_head.$field)}
-					{call name="dl_custom_head_$field"}
-				{else}
-					{$title=$app->fh()->shortFieldTitle($field)}
-					{if isset($dl_order_enabled_fields.$field)}
-						{include file="list/order.tpl" name=$field title=$title}
-					{else}
-						{$title}
-					{/if}
-				{/if}
-			</th>
-		{/foreach}	
-		{if count($dl_actions) && !$smarty.get.print_view}
-			<th>{call name="dl_actions_head"}</th>
-		{/if}
-	</tr>
-		<tr id="list_row_0" data-id="0" style="display:none"></tr>
 	
-		{call name="dl_list_proc_rows"}
-	</table>
-
-	{/if}
-
-	</td></tr></table>{*1*}
+	
 
 
-	{if $dl_checklist_enabled}
-	<br />
-		<div id="checklist_actions" style="display:none">
-			{$lang.CHECKLIST_SELECT_ACTION}:
+	{capture append=footer_hidden}
+		<link href="{$app_root}static/css/list.css" rel="stylesheet" />
+	{/capture}
 
-			<select name="action" onchange="eval(this.value);this.selectedIndex=0">
-				<option value="">{$lang.EMPTY_OPTION.0}</option>
-				{foreach $dl_checklist_actions as $action}
-					{$action}
-				{/foreach}
-				{*
-				<option value="if(!confirm('Turbut šis veiksmas iššauktas per klaidą! Ar norite atšaukti užsakymų trinimą?'))gw_checklist.submit('delete')">!Trinti</option>
-				*}
-			</select>
+
+	<div class="row">
+
+
+		{if $dl_filters && !$smarty.get.print_view && (count($list) || $m->list_params.filters)}
+			<div class="col-xs-auto" id="gwFiltersContainer">
+				{include "list/filters.tpl"}
+			</div>	
+		{/if}		
+
+		<div>
+			{if !count($list)}
+				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
+			{else}
+
+				
+
+					<table class=" table-condensed table-hover table-vcenter table-bordered gwlisttable">
+						<tr>	
+
+
+							{foreach $dl_fields as $field}
+								<th>
+									{if isset($dl_custom_head.$field)}
+										{call name="dl_custom_head_$field"}
+									{else}
+										{$coltitle=$app->fh()->shortFieldTitle($field)}
+										{if isset($dl_order_enabled_fields.$field)}
+											{include file="list/order.tpl" name=$field title=$coltitle}
+										{else}
+											{$coltitle}
+										{/if}
+									{/if}
+								</th>
+							{/foreach}	
+							{if count($dl_actions) && !$smarty.get.print_view}
+								<th>{call name="dl_actions_head"}</th>
+								{/if}
+						</tr>
+						<tr id="list_row_0" data-id="0" style="display:none"></tr>
+
+						{call name="dl_list_proc_rows"}
+
+
+
+
+					</table>
+						
+					{if $dl_checklist_enabled}
+						{include "list/checklist.tpl"}
+					{/if}
+					{if $dl_inline_edit}
+						<script type="text/javascript">
+							var inline_edit_form_url = '{$m->buildUri("form")}';
+							
+							
+							
+							require(['js/gwcms_inline_edit'], function(){
+								initActiveList();
+							});
+						</script>							
+					{/if}
+				
+
+			{/if}
 		</div>
 
 
-		<script type="text/javascript">
-			gw_checklist.init();
-		</script>
-	</script>
-	{/if}
+		
 
-	{block name="after_list"}
-	{/block}
+		{block name="after_list"}
+		{/block}
+
 
 	</div>
 
 	{block name="close_tpl"}
-			{include file="default_close.tpl"}
+		{include file="default_close.tpl"}
 	{/block}	
 {/if}
 

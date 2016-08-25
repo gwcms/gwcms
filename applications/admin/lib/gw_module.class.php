@@ -98,6 +98,11 @@ class GW_Module
 		$this->__processViewSolveViewName();
 		
 		$this->loadErrorFields();
+		
+		
+		
+		
+		
 		$this->initListParams();
 		
 		$this->tpl_vars['messages'] =& $this->messages;
@@ -143,31 +148,25 @@ class GW_Module
 		return (stripos($name,'view')===0 || stripos($name,'do')===0) && $this->methodExists($name);
 	}
  
-	/*
-	 * use error key, to declare error field id.
-	 * example
-	 * Array
-	 * (
-	 * 		'email'=>'Invalid email',
-	 * 		'password'=>'Too short'
-	 * )
-	 * */
-	function setErrors($errors, $level=2)
-	{
-		$this->app->setErrors($errors, $level);			
-		$this->loadErrorFields();
-	}
+	
+	
+
 	
 	function loadErrorFields()
 	{		
+
+		
+		
                 if(!isset($this->app->sess['messages']))
                     return;
                 
-		foreach((array)$this->app->sess['messages'] as $field => $error)
+		foreach((array)$this->app->sess['messages'] as $msg)
 		{
-			if($error[0]===2)
-				$this->error_fields[$field]=$field;
+			if($msg["type"]==2 && isset($msg["field"]))
+				$this->error_fields[$msg["field"]] = $msg["field"];
 		}
+		
+		
 	}	
 	
   
@@ -187,8 +186,8 @@ class GW_Module
 		}
 		else
 		{
-			$this->setErrors("Invalid action: \"$act\"");
-			$this->processView();
+			$this->setError("Invalid action: \"$act\"");
+			//$this->processView();
 		}
 		
 	}
@@ -198,6 +197,14 @@ class GW_Module
 	function __processViewSolveViewName()
 	{
 		$params = $this->_args['params'];
+		
+		
+		//jei paduodama 100/form/abc - 100 kontekstinio objekto id, form - viewsas, abc viewso paramsas
+		while(isset($params[0]) && is_numeric($params[0]))
+			$erase=array_shift($params);
+		
+		//nuimti pirmus paramsus kurie yra number
+		//nuimta paramsa pastatyti kaip kontekstini objekto id
 		
 		$name = self::__funcVN(isset($params[0]) ? $params[0] : false);
 		
@@ -321,14 +328,34 @@ class GW_Module
 		if(method_exists($this, 'getCurrentItemId') && $this->getCurrentItemId())
 			$params['id']=$this->getCurrentItemId();
 		
+		
+		if(isset($_GET['return_to']))
+			$path = $_GET['return_to'];
+		
+		if(isset($_REQUEST['dialog_iframe'])){
+			echo "<script>window.parent.gwcms.dialogClose();</script>";
+			exit;
+		}
+		
 		$this->app->jump($path, $params);
 	}
 	
 	function doSetFilters()
 	{		
-		$this->list_params['filters'] = $_REQUEST['filters_unset'] ? [] : $_REQUEST['filters'];
-		$this->list_params['page']=0;
+		$formatedfilters = [];
+		
+		foreach($_REQUEST['filters']['vals'] as $fieldname => $filters)
+			foreach($filters as $idx => $value)
+				$formatedfilters[] = [
+					'field'=>$fieldname, 
+					'value'=>$value, 
+					'ct'=>$_REQUEST['filters']['ct'][$fieldname][$idx]
+				];
+		
 				
+		$this->list_params['filters'] = isset($_REQUEST['filters_unset']) && $_REQUEST['filters_unset']  ? [] : $formatedfilters;
+		$this->list_params['page']=0;
+		
 		$this->jump();
 	}	
 	
@@ -401,16 +428,40 @@ class GW_Module
 	
 	function buildUri($path=false,$getparams=[], $params=[])
 	{
+		
+			
+		
 		if(!isset($params['level']))
 			$params['level']=2;
 		
 		
-		if($params['level']==2)
-		{
-			$path = implode('/',$this->module_path) . ($path?'/':''). $path;
-		}elseif($params['level']==1){
-			$path = $this->module_path[0] . ($path?'/':''). $path;
+		if($path==false && !isset($getparams['act']) && isset($getparams['return_to'])) {
+			$path=$getparams['return_to'];
+		} else {
+			if($params['level']==2)
+			{
+				$path = implode('/',$this->module_path) . ($path?'/':''). $path;
+			}elseif($params['level']==1){
+				$path = $this->module_path[0] . ($path?'/':''). $path;
+			}
 		}
+		
+		$params['carry_params'] = 1;
+		
+		/*
+		if(isset($params['relative_path']))
+		{
+			d::ldump([$this->module_path,$path, $params['relative_path']]);
+			//pvz jeigu path = sitemap/pages/15 o relative_path = 10/form
+			//padaryt sitemap/pages/10/form			
+			$tmp = is_numeric(pathinfo($params['relative_path'], PATHINFO_FILENAME)) ? dirname($params['relative_path']) : $params['relative_path'];
+
+			// extend path
+			$path = $tmp . '/' . $path;			
+		}	
+		*/
+		
+		
 		
 		return $this->app->buildURI($path, $getparams, $params);
 	}
@@ -430,8 +481,8 @@ class GW_Module
 			'current'=>$current,
 			'length'=>$length,
 			'first'=> $current < 2 ? 0 : 1,
-			'prev'=>  $current <= 2 ? 0 : $current-1,
-			'next'=>  $current >= $length-1 ? 0 : $current+1,
+			'prev'=>  $current <= 1 ? 0 : $current-1,
+			'next'=>  $current >= $length ? 0 : $current+1,
 			'last'=>  $current >= $length   ? 0 : $length,
 		];			
 	}
@@ -475,6 +526,35 @@ class GW_Module
 			'current'=>in_array($order, $variants) ? $curr_dir : false,
 			'multiorder'=>count($orders) > 1 ? $multiorder_index : false
 		];		
+	}
+	
+	
+	function setError($text)
+	{
+		$this->setMessage(["text"=>$text,"type"=>GW_MSG_ERR]);
+	}
+	
+	
+	function setMessage($message)
+	{
+		if ($this->sys_call) {
+			$this->lgr->msg(json_encode($message));
+		} else {
+			$this->app->setMessage($message);
+		}
+		
+		$this->loadErrorFields();
+	}
+	
+	function setPlainMessage($text, $type=GW_MSG_SUCC)
+	{
+		$this->setMessage(["text"=>$text, "type"=>$type]);
+	}
+
+	function setItemErrors($item)
+	{
+		foreach($item->errors as $field => $error)
+			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
 	}
 		
 }

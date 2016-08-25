@@ -24,7 +24,7 @@
 		<div class="editable" ajaxsaveargs="{ name: 'text', vals: {  id: {$item->id} } }">
 		
 		{if $item->type!=0}
-			<img align="absmiddle" onclick="$(this).next().click()" src="{$app_root}/img/icons/folder.png">
+			<img align="absmiddle" onclick="$(this).next().click()" src="{$app->icon_root}folder.png">
 			<a href="{gw_link params=[pid=>$id] path_only=1}">{$item->text} ({$item->child_count})</a>
 		{else}
 			{GW_Link_Helper::parse($item->text)}
@@ -40,7 +40,7 @@
 	
 	
 	{$dl_fields=$m->getDisplayFields([text=>1,time=>1,insert_time=>0,update_time=>0])}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
 	

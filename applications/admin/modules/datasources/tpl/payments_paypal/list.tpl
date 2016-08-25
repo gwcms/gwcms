@@ -59,7 +59,7 @@
 
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[]=dialogconf}	
+	{$do_toolbar_buttons[]=dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
 	

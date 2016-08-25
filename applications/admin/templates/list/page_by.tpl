@@ -1,30 +1,28 @@
-<table class="gwTable" cellspacing="0" cellpadding="0">
-	<tr>
 		{include file="list/paging.tpl" assign=pages}
-						
+					
+<table cellspacing="0" cellpadding="0">
+					<tr>		
+		
 		{if $paging_tpl_page_count>1}
-			<td>{$pages}</td>
+			{$pages}
 		{/if}
-		<td>
-			<table class="gw_clean_tbl" cellspacing="" cellpadding="1">
-				<tr>
-					<td nowrap="norwap" class="fontsz5">{$lang.PAGE_BY}:</td>
-					<td nowrap="norwap">
+		
+			<td style="padding-right:5px;" >
+					{$lang.PAGE_BY}:
+			</td>
+			<td style="padding-right:15px;">		
 						<form method="get" action="{$smarty.server.REQUEST_URI}" style="display:inline">
 						<input type="hidden" name="act" value="do:setListParams" />
-						<input onchange="this.form.submit()" name="list_params[page_by]" size=5 value="{$m->list_params.page_by}" />
+						<input class="gwPageBy form-control" onchange="this.form.submit()" name="list_params[page_by]" size=2 value="{$m->list_params.page_by}" />
 						<input type="hidden" name="list_params[page]" value="0" />
 						</form>	
-					</td>
-				</tr>
-			</table>
-		</td>
+			</td>	
+			
 		{if $query_info}
-			<td nowrap="norwap">
-				<table class="gw_clean_tbl" cellspacing="" cellpadding="1"><tr><td nowrap="norwap">
-					{$lang.ITEM_COUNT}: <b>{$query_info.item_count}</b>
-				</td></tr></table>
-			</td>
+					<td style="padding-right:5px;">{$lang.ITEM_COUNT}</td>
+					<td style="padding-right:5px;"><b>{$query_info.item_count}</b></td>
+				
+
 		{/if}
-	</tr>
+</tr>
 </table>

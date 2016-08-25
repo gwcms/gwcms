@@ -3,7 +3,9 @@
 
 class GW_Todo_Project extends GW_Data_Object
 {
-	var $table = 'gw_todo_projects';
+	public $table = 'gw_todo_projects';
+	
+	public $validators = ['title' => ['gw_string', [ 'required'=>1 ]]];	
 	
 	
 	function getOptions()

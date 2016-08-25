@@ -1,19 +1,25 @@
 {extends file="default_list.tpl"}
 
 {block name="init"}
-	<style>
+	{capture append=footer_hidden}
+		<style type="text/css">
 		.row-inprogress td{ font-weight: bold; }
+		.hoverfolder .fa:before {
+			content: "\f07b";
+		}
+		.hoverfolder:hover .fa:before {
+			content: "\f07c";
+		}	
+		.hoverfolder span{
+			margin-left:2px
+		}
+		.hoverfolder .fa{
+			vertical-align: middle;
+		}
 	</style>
+	{/capture}
 
 
-{*Laikinas reikalas*}
-	{*Little hack for server to display current task*}
-	{if $smarty.server.HTTP_HOST=="localhost"}
-		<script type="text/javascript">
-			setTimeout('location=location',60000);
-		</script>
-	{/if}
-{*Laikinas reikalas END*}
 
 {$link=$app->fh()->gw_link([params=>[pid=>$item->id], path_only=>1])}
 
@@ -32,10 +38,9 @@
 		{$link=$app->fh()->gw_link([params=>[pid=>$item->id], path_only=>1])}
 		
 		{if $item->type==1}
-			<a href="{$link}">{$item->title} (Enter)</a>
+			<a href="{$link}" class="hoverfolder"><i class="fa text-mint fa-fw"></i><span>{$item->title} {$tmp=$item->child_count}{if $tmp}({$tmp}){/if}</span></a>
 		{else}
 			{$item->title}
-			{if $item->comments_count}<span title="Komentarai">({$item->comments_count}){/if}
 		{/if}
 	{/function}
 
@@ -52,28 +57,38 @@
 		
 		
 		
-		{if $item->state<12}{$is_white=''}{else}{$is_white='_0'}{/if}
-		{if $item->state==15}{$is_violet=''}{else}{$is_violet='_0'}{/if}
-		{if $item->state==50}{$is_orange=''}{else}{$is_orange='_0'}{/if}
-		{if $item->state==12}{$is_yellow=''}{else}{$is_yellow='_0'}{/if}
-		{if $item->state==100}{$is_green=''}{else}{$is_green='_0'}{/if}
-		{if $item->state===200}{$is_red=''}{else}{$is_red='_0'}{/if}
+		{if $item->state<12}{$is_new=''}{else}{$is_new='text-muted1'}{/if}
+		{if $item->state==15}{$is_running=''}{else}{$is_running='text-muted1'}{/if}
+		{if $item->state==50}{$is_bug=''}{else}{$is_bug='text-muted1'}{/if}
+		{if $item->state==12}{$is_paused=''}{else}{$is_paused='text-muted1'}{/if}
+		{if $item->state==100}{$is_finished=''}{else}{$is_finished='text-muted1'}{/if}
+		{if $item->state===200}{$is_canceled=''}{else}{$is_canceled='text-muted1'}{/if}
 		
 
 		{if $item->state >= 100}
-			{gw_link do=switch_state params=[id=>$item->id,state=>50] icon="dot_orange`$is_orange`" title=$states.50 show_title=0}
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>50]] iconclass="fa fa-bug text-purple" title=$m->lang.CHANGE_STATE_TO.50}
 			
-			
-			{gw_link do=switch_state params=[id=>$item->id,state=>$item->state] icon="dot_`$curr_color`" title=$states[$item->state] show_title=0}
+			{if $item->state==100}
+				{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>100]] iconclass="fa fa-check-circle `$is_finished` text-success"}
+			{else}
+				{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>200]] iconclass="fa fa-times-circle `$is_canceled` text-danger"}			
+			{/if}
 		{else}
-			{gw_link do=switch_state params=[id=>$item->id,state=>10] icon="dot_white`$is_white`" title=$states.5 show_title=0}
+			
+			
+			{*
 			{gw_link do=switch_state params=[id=>$item->id,state=>15] icon="dot_violet`$is_violet`" title=$states.15 show_title=0}
-
-			{gw_link do=switch_state params=[id=>$item->id,state=>50] icon="dot_orange`$is_orange`" title=$states.50 show_title=0}
-			{gw_link do=switch_state params=[id=>$item->id,state=>12] icon="dot_yellow`$is_yellow`" title=$states.12 show_title=0}
-
-			{gw_link do=switch_state params=[id=>$item->id,state=>100] icon="dot_green`$is_green`" title=$states.100 show_title=0}
-			{gw_link do=switch_state params=[id=>$item->id,state=>200] icon="dot_red`$is_red`" title=$states.200 show_title=0}			
+			*}
+			
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>10]] iconclass="fa fa-stop-circle text-primary `$is_new`" title=$m->lang.CHANGE_STATE_TO.10}
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>15]] iconclass="fa fa-play-circle text-success `$is_running`" title=$m->lang.CHANGE_STATE_TO.15}
+			
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>12]] iconclass="fa fa-pause-circle `$is_paused` text-warning" title=$m->lang.CHANGE_STATE_TO.12}
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>50]] iconclass="fa fa-bug `$is_bug` text-purple" title=$m->lang.CHANGE_STATE_TO.50}
+			
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>100]] iconclass="fa fa-check-circle `$is_finished` text-success"  title=$m->lang.CHANGE_STATE_TO.100}
+			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>200]] iconclass="fa fa-times-circle `$is_canceled` text-danger"  title=$m->lang.CHANGE_STATE_TO.200}
+						
 		{/if}
 		
 
@@ -84,7 +99,7 @@
 				{$users[$item->user_exec]}
 	{/function}
 	{function name=dl_cell_deadline}
-			{if $item->deadline!='0000-00-00 00:00:00'}
+			{if $item->deadline!='0000-00-00'}
 				{date('Y-m-d',strtotime($item->deadline))}
 			{else}
 				-
@@ -110,37 +125,26 @@
 	{/function}	
 	{function name=dl_cell_last_comment}
 		{$item->last_comment|strip_tags|truncate:40}
-	{/function}		
+		{$tmp=$item->comments_count}
+		{if $tmp>1}<span class="text-muted" title="{GW::l('/m/FIELDS/comments')}">+{$tmp-1}</span>{/if}		
+	{/function}
+	{function name=dl_cell_description}
+		{$item->description|strip_tags|truncate:40}
+	{/function}	
+	
+	{function name=dl_cell_info}
+		{if $item->hasAttachments()}<span class="badge badge-primary"><i class="fa fa-paperclip"></i></span>{/if}
+	{/function}			
 
-	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment]}
+	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment,info,description]}
+	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}
 	
+
 	
-	{$display_fields = 	[
-			id=>1,
-			priority=>1,
-			project_id=>0,
-			title=>1,
-			time_have=>1,
-			deadline=>1,
-			insert_time=>1,
-			update_time=>1,
-			user_create=>1,
-			user_exec=>1,
-			week=>1,
-			state=>1,
-			last_comment=>0
-		]}	
+	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = print}
 	
-	{$dl_fields=$m->getDisplayFields($display_fields)}
+	{$dl_actions=[edit,delete]}
 	
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[dialogconf,print]}
-	
-	{$dl_actions=[edit, delete]}
-	
-	
-	{$dl_filters=array_merge($display_fields,['description'=>1,'comments'=>1])}
-	
-	{$dl_order_enabled_fields=array_keys($display_fields)}
 	
 {/block}	

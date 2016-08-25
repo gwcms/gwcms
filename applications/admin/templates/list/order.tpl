@@ -7,6 +7,6 @@
 {if $smarty.get.print_view}
 	{$title}
 {else}
-	{if $order.current}<img style="padding: 2px" src="{$app->icon_root}order_{$order.current}.png" align="absmiddle" onclick="$(this).next().click()" />{/if}
+	{if $order.current}<i class="fa fa-sort-amount-{$order.current}" onclick="$(this).next().click()" ></i>{/if}
 	<a href="{$order.uri}" {if $order.current}style="font-weight:bold"{/if}>{$title}{if $order.multiorder} ({$order.multiorder}){/if}</a>
 {/if}

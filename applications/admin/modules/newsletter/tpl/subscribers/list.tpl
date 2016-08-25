@@ -3,13 +3,13 @@
 
 {block name="init"}
 
-	{function name=dl_toolbar_buttons_import} 
+	{function name=do_toolbar_buttons_import} 
 		{gw_link relative_path=import title=Importuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
 	{/function}
-	{function name=dl_toolbar_buttons_export} 
+	{function name=do_toolbar_buttons_export} 
 		{gw_link relative_path=export title=Eksportuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
 	{/function}
-	{function name=dl_toolbar_buttons_emailsfromtext} 
+	{function name=do_toolbar_buttons_emailsfromtext} 
 		{gw_link relative_path=emailsfromtext title="Gavėjai iš teksto" icon="action_action"} &nbsp;&nbsp;&nbsp; 
 	{/function}	
 	
@@ -23,8 +23,8 @@
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[import,export,dialogconf,emailsfromtext,print]}	
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[import,export,dialogconf,emailsfromtext,print]}	
 	
 	{$dl_actions=[invert_active,edit,delete]}
 	

@@ -31,7 +31,7 @@ oneline example
 	]}
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$dl_smart_fields=[name,insert_time,sms_allow_credit,online]}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[add, balance_log,invert_active,edit,delete]}
 	

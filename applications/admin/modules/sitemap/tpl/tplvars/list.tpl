@@ -7,8 +7,8 @@
 	{/function}	
 	
 	
-	{$dl_toolbar_buttons = [addnew,hidden]}
-	{$dl_toolbar_buttons_hidden=[exportdata,importdata,print]}
+	{$do_toolbar_buttons = [addnew,hidden]}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,print]}
 	{*dialogconf*}
 	
 	

@@ -1,81 +1,130 @@
-{if !isset($gw_layout_nohead)}
-	{include file="head.tpl"}
-{/if}
+{include file="head.tpl"}
 
-<body>
-    
-{if !isset($smarty.get.clean) && !$no_standart_cms_frame && !$smarty.get.print_view}
 
-<div id="wrap">
-    <div id="header">
-        <div class="space1">
-            <a href="{$app->app_base}{$ln}" title="{GW::s('SITE_TITLE_DETAIL')}">{GW::s('SITE_TITLE')}{*<img src="{$app_root}img/logo.png">*}</a>
-        </div>
-        
-	{include file="submenu.tpl"}
-	
-		{if $app->user}
-        <div id="login-info">
-        	<i class="fa fa-user"></i>
-        	<a href="{$app->app_base}{$app->ln}/users/profile">{$app->user->title|default:$app->user->get('username')} 
-        	 
-        	</a> 
-        	{if $smarty.session.cms_auth.switchUser}
-        	<a href="{$app->app_base}{$app->ln}/users/profile?act=do:switch_user_return"  style="font-weight:normal;color:orange">
-        		{$sw_usr_return=$app->user->find(['id=?',$smarty.session.cms_auth.switchUser])}
-        		({$lang.SWITCH_USER_RETURN|sprintf:$sw_usr_return->name})
-        	</a>
-        	{/if}
-        	| 
-            	<a href="{$app->app_base}{$app->ln}/users/login/logout" id="logout"><i class="fa fa-sign-out"></i> {$lang.LOGOUT}</a>
-            	
-			{$new_messages=$app->user->countNewMessages()}
-			<div id="new_messages_block" {if !$new_messages}style="display:none"{/if}>
-	            				
-			<a href="#show_msg" onclick="open_iframe({ url:'{$app->app_base}{$ln}/users/messages/new', title:'{$lang.NEW_MESSAGES}' }); return false">
-				{$lang.NEW_MESSAGES} (<font color="#ffff99" id="drop_new_messages_count">{$new_messages}</font>)
-			</a>
-			</div>
-		</div>
-		{/if}
-    </div>
-
-    <div id="sidebar">
-		{if $app->user}
-			{include file="menu.tpl"}
-
-			{gw_display_plugins id="after_menu"}
-		{/if}
+<body >
+	{if !isset($smarty.get.clean) && !$no_standart_cms_frame && !$smarty.get.print_view}
+    <div id="container" class="effect mainnav-lg">
 		
-    </div>
+		
+        <!--NAVBAR-->
+        <!--===================================================-->
+        <header id="navbar">
+            <div id="navbar-container" class="boxed">
 
-	{if $app->user}
-		{include file="breadcrumbs.tpl"}
-	{/if}
-	
-	{if $toolbar}{include file="toolbar.tpl"}{/if}
-    
-    <div id="content">
-
-{/if}
-
-{if $smarty.get.print_view}
-	<h3>
-	{include file="breadcrumbs.tpl" nobreadcrumbscontainer=1}
-	</h3>
-{/if}
-
-
-{include file="messages.tpl"}
+                <!--Brand logo & name-->
+                <!--================================-->
+                <div class="navbar-header">
+                    <a href="{$app->buildUri('')}" class="navbar-brand">
+                        <img src="{$app->app_root}static/img/logo.png" alt="{GW::s('SITE_TITLE')}" class="brand-icon">
+                        <div class="brand-title">
+                            <span class="brand-text" title="{GW::s('SITE_TITLE_DETAIL')}"><i>{GW::s('SITE_TITLE')}</i></span>
+                        </div>
+                    </a>
+                </div>
+                <!--================================-->
+                <!--End brand logo & name-->
 
 
-{*<h2 class="top">Page title</h2>*}
+                <!--Navbar Dropdown-->
+                <!--================================-->
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links pull-left">
 
-{* SHOW OUTPUT FROM MODULE *}
+                        <!--Navigation toogle button-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li class="tgl-menu-btn">
+                            <a class="mainnav-toggle" href="#">
+                                <i class="ti-view-list icon-lg"></i>
+                            </a>
+                        </li>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End Navigation toogle button-->
+
+						{*include "do_notifications.tpl"*}
+                        {*include "do_mega_dropdown.tpl"*}
+
+                    </ul>
+                    <ul class="nav navbar-top-links pull-right">
+
+                        {include "langselect.tpl"}
+
+
+
+                        {include "do_userdropdown.tpl"}
+
+						{*
+                        <li>
+                            <a href="#" class="aside-toggle navbar-aside-icon">
+                                <i class="pci-ver-dots"></i>
+                            </a>
+                        </li>
+						*}
+                    </ul>
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+            </div>
+        </header>
+        <!--===================================================-->
+        <!--END NAVBAR-->		
+		
+
+        <div class="boxed">
+
+            <!--CONTENT CONTAINER-->
+            <!--===================================================-->
+            <div id="content-container">	
+				
+				{*
+                <div id="page-title">
+                    <h1 class="page-header text-overflow">{$app->page->title}</h1>
+
+					
+                    <!--Searchbox-->
+                    <div class="searchbox">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search..">
+							
+							
+                            <span class="input-group-btn">
+                                <button class="text-muted" type="button"><i class="ti-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+					
+                </div>	
+				*}
+				
+				
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <!--End page title-->
+
+				
+				{if $app->user}
+					{include file="breadcrumbs.tpl"}
+				{/if}
+		
+			
+
+                <!--Page content-->
+                <!--===================================================-->
+                <div id="page-content">	
+					
+				{else}
+					<body class="gwBodyClean" data-clean="1">
+				{/if}	
+				{include "messages.tpl"}
+				
+
+
+{include "do_toolbar.tpl"}
+
+<div id='gwcms-dynamic-alerts-container'></div>
+
 {foreach $log as $item}
 	{if $item}
 		{d::ldump($item)}
 	{/if}
 {/foreach}
-
 

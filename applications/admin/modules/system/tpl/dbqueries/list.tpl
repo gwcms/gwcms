@@ -6,7 +6,7 @@
 	{$dl_actions=[run,invert_active,edit,delete]}
 	
 	{function dl_actions_run}
-		{gw_link do=executeQuery params=[id=>$item->id] title="Run!"}
+		{list_item_action_m url=[false,[act=>doExecuteQuery]] iconclass="fa fa-caret-square-o-right"}
 	{/function}	
 	
 {/block}

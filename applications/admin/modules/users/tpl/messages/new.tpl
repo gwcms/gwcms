@@ -1,4 +1,4 @@
-{include file="default_open.tpl" no_standart_cms_frame=1}
+{include file="head.tpl"}
 
 
 <br />
@@ -39,5 +39,7 @@
 	}
 	
 </script>
+<style>
+	body{ background-color: white; }
+</style>
 
-{include file="default_close.tpl" no_standart_cms_frame=1}

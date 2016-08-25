@@ -1,7 +1,9 @@
-
-
-
+	</tbody>
 </table>
+</div>
+</div>
+
+
 	{include file="tools/form_submit_buttons.tpl"}
 
 

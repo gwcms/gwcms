@@ -3,19 +3,15 @@
 
 {block name="init"}
 
-	{function name=dl_toolbar_buttons_log}
-		{if $dl_filters}
-			<img src="{$app->icon_root}action_log.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
-			<a href="#show_filters" onclick="open_rtlogview('system.log'); return false">Log</a>	
-			&nbsp;&nbsp;&nbsp;
-		{/if}
+	{function name=do_toolbar_buttons_log}
+			{toolbar_button title=Log iconclass='gwico-Console' onclick="gwcms.open_rtlogview('system.log'); return false"}
 	{/function}	
 	
 	{function name=dl_actions_halt}
 		{if $item->running > 0}
 			{gw_link do="haltTask" icon="action_halt" params=[id=>$item->id,sigkill=>1] show_title=0}
 
-			<a href="#" onclick="open_rtlogview('task_{$item->id}.log'); return false">Realtime</a>
+			<a href="#" onclick="gwcms.open_rtlogview('task_{$item->id}.log'); return false">Realtime</a>
 		{/if}
 	{/function}
 	
@@ -37,8 +33,8 @@
 	]}
 	
 	{$dl_fields=$m->getDisplayFields($fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
-	{$dl_toolbar_buttons[] = log}	
+	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = log}	
 	{$dl_smart_fields=[name,running]}
 	
 	{function dl_cell_name}
@@ -72,7 +68,7 @@
 {block name="after_list"}
 	<br /><br />
 	
-	<table class="gwTable">
+	<table class="gwTable gwBGWhite">
 		<tr>
 			<th colspan=3>Dashboard</th>
 		</tr>

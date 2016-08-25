@@ -1,7 +1,11 @@
 {extends file="default_list.tpl"}
 
 {block name="init"}
-	{$dl_fields=[title,insert_time,update_time]}
+		
+	
+	{$dl_inline_edit=1}
+	
+	{$do_toolbar_buttons = [addinlist]}
 	{$dl_actions=[invert_active,edit,delete]}
 	
 	{$dl_smart_fields=[title]}

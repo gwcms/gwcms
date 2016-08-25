@@ -132,7 +132,7 @@ class GW_Gallery_Item extends GW_Composite_Data_Object
 		return $cache = $this->config()->store_size;
 	}
 	
-	function eventHandler($event, $context_data=[])
+	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
 		{

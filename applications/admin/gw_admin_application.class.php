@@ -3,7 +3,7 @@
 class GW_Admin_Application extends GW_Application
 {	
 	
-	public $icon_root = 'img/icons/';
+	public $icon_root = 'static/img/icons/';
 
 	function checkCompatability()
 	{
@@ -45,9 +45,7 @@ class GW_Admin_Application extends GW_Application
 	{
 		$params['can_access']=[$this, 'canAccess'];
 		
-		$tmp = GW::getInstance('GW_ADM_Page')->getChilds($params);
-		
-		//d::dumpas($tmp);
+		$tmp = GW_Adm_Page::singleton()->getChilds($params);
 		
 		return $tmp;
 	}
@@ -61,7 +59,8 @@ class GW_Admin_Application extends GW_Application
 		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
 		
 		if($msgs)
-			$this->setMessages($msgs);
+			foreach($msgs as $msg)
+				$this->setMessage($msg);
 		
 		$this->icon_root = $this->app_root . $this->icon_root;
 	}

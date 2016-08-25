@@ -14,7 +14,7 @@
 	]}
 	
 	{$dl_fields=array_keys($fields)}
-	{$dl_toolbar_buttons=[]}
+	{$do_toolbar_buttons=[]}
 	
 	{$dl_actions=[halt]}
 	

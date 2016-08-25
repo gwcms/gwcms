@@ -15,6 +15,19 @@
 		<lt>Pakeisti slaptažodį</lt>
 	</i>
 	
+	<i id="OPTIONS">
+		<i id="gender">
+			<i id="m">
+				<lt>Vyras</lt>
+				<en>Male</en>
+			</i>
+			<i id="f">
+				<lt>Moteris</lt>
+				<en>Female</en>
+			</i>
+		</i>
+	</i>
+	
 	<i id="FIELDS">
 		<i id="email">
 			<en>E-mail</en>
@@ -28,6 +41,7 @@
 			<en>Surname</en>
 			<lt>Pavardė</lt>
 		</i>
+		<i id="birth_date">Birth date</i>
 		<i id="phone">
 			<en>Phone</en>
 			<lt>Tel. nr.</lt>
@@ -132,17 +146,74 @@
 			<en>Root user</en>
 			<lt>Aukštesnis vartotojas</lt>
 		</i>
+		<i id="is_admin">
+			<lt>Administratorius</lt>
+			<en>Administrator</en>
+		</i>
+		<i id="ip">
+			<lt>Ip adresas</lt>
+			<en>Ip address</en>
+		</i>
+		<i id="user_agent">
+			<lt>Naršyklės pavad.</lt>
+			<en>Browser</en>
+		</i>
 		
+		<i id="person_id">
+			<lt>Asmens kodas</lt>
+			<en>Person id</en>
+		</i>
+		<i id="person_document_id">
+			<lt>Tapatybės dokumento nr</lt>
+			<en>Id document num.</en>
+		</i>
+		<i id="gender">
+			<lt>Lytis</lt>
+			<en>Gender</en>
+		</i>
+		
+		<i id="actual_addr_city">Actual address - city</i>
+		<i id="actual_addr_street">Actual address - street</i>
+		<i id="legal_addr_city">Legal address - city</i>
+		<i id="legal_addr_street">Legal address - street</i>
+		<i id="bank_account">Bank account</i>
+		<i id="bank_account_confirmed">Bank account is confirmed</i>
+		<i id="salary">Salary</i>
+		<i id="workplace">Workplace</i>
+
+		<i id="workplace_occupation">Occupation</i>
+		<i id="workplace_phone">Workplace phone</i>
+		<i id="is_blocked">Blocked</i>
+		<i id="contact_person">Contact person name, surname</i>
+		<i id="contact_person_phone">Contact person phone</i>
+		<i id="referer">Registration referer</i>
+		<i id="notes">Notes</i>
+				
 	</i>
 	
 	<i id="FIELDS_SHORT">
 		<i id="online">O</i>
+		<i id="parent_user_id">PU</i>
+		<i id="image"><![CDATA[<i class="fa fa-picture-o"></i>]]></i>
 	</i>
+	
 
 	<i id="VIEWS">
 		<i id="message">
 			<lt>Siųsti žinutę</lt>
 			<en>Send message</en>
+		</i>
+		<i id="permissions">
+			<lt>Leidimai</lt>
+			<en>Permissions</en>
+		</i>
+		<i id="doInvertSeen">
+			<lt>Pažymėti kaip perskaitytą / neperskaitytą</lt>
+			<en>Mark as read / unread</en>
+		</i>
+		<i id="iplog">
+			<en>Access log</en>
+			<lt>Prisijungimų žurnalas</lt>
 		</i>
 	</i>
 			
@@ -193,6 +264,15 @@
 		<lt>Pažymėti visas kaip perskaitytas</lt>
 		<en>Mark all as read</en>
 	</i>
+	<i id="UPDATED">
+		<lt>Atnaujinta: </lt>
+		<en>Updated: </en>
+	</i>
+	<i id="LOGIN_AS">
+		<lt>Prisijungti į paskyrą</lt>
+		<en>Login as</en>
+	</i>
+	
 	<i id="SESSION_VALIDITY_OPT">
 		<i id="30">30 min</i>
 		<i id="60">60 min</i>

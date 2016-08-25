@@ -71,7 +71,7 @@ class Module_Tools extends Module_Config
 			if($db->error)
 				$this->app->setErrors($db->error .' Query: '.$db->error_query);
 			
-			$this->app->setMessage("<pre>".htmlspecialchars($sql).";\n<b># Affected rows:</b> ".$aff."</pre>");
+			$this->setPlainMessage("<pre>".htmlspecialchars($sql).";\n<b># Affected rows:</b> ".$aff."</pre>");
 		}
 	}	
 	
@@ -111,10 +111,12 @@ class Module_Tools extends Module_Config
 	}
 	
 	
-	function viewPHPinfo()
+	public $viewtestViewPHPinfo = ["info"=>"phpinfo()"];
+	
+	function viewtestViewPHPinfo()
 	{
 		//
-		phpinfo();
+		echo phpinfo();
 		
 	}
 	function viewCompatability()
@@ -149,8 +151,65 @@ class Module_Tools extends Module_Config
 		$this->log[]=$comp;
 	}
 	
-
 	
+	public $viewTestListIcons = ["info"=>"Shows gwcms icons list"];
+	
+	function viewTestListIcons()
+	{
+		
+		$data = file_get_contents(GW::s('DIR/ADMIN/ROOT').'static/fonts/gwcms/style.css');
+		
+		//d::dumpas($data);
+		
+		preg_match_all('/\.(gwico\-.*?):before/', $data, $matches);
+		
+		$this->tpl_vars['list'] = $matches[1];
+		
+		
+	}
+	
+	public $viewTestFavIco = ["info"=>"FavIcon editor"];
+	
+	function viewTestFavIco()
+	{
+		
+		$fontsdir=GW::s('DIR/APPLICATIONS').'admin/static/fonts/';		
+		$fnts =  glob($fontsdir.'*.{ttf,otf}', GLOB_BRACE);
+		$fnts = array_map('basename', $fnts);
+		
+		$this->tpl_vars['fonts'] = $fnts;
+	}	
+	
+	function doParseIcons()
+	{
+		header('Content-type: text/plain');
+
+
+		$data = $_POST['data'];
+
+		preg_match_all("/(<svg.*?<\/svg>)/is", $data, $svgs, PREG_SET_ORDER);
+		preg_match_all("/(<div class=\"icons-set__icon-title\">(.*?)<\/div>)/is", $data, $titles);
+
+		$info = [];
+		
+
+		$titles = $titles[2];
+		
+
+
+		@mkdir($dir='/tmp/icons/');
+
+		foreach ($svgs as $i => $svg) {
+			$filename = $titles[$i] . '.svg';
+			file_put_contents($dir . $filename, $svg[0]);
+		}
+		
+		$info = ['files'=>count($svgs), 'titles'=>$titles, 'store_location'=>$dir];
+		
+		$this->log[] = $info;
+		
+	}
+
 	public $doTestBackgroundRequest = ["info"=>"Tests ability to perform scripts with get-conection-close"];
 	
 	function doTestBackgroundRequest()
@@ -196,7 +255,7 @@ class Module_Tools extends Module_Config
 	{
 		$stat = mail($this->app->user->email, "test mail", "test mail body");
 		
-		$this->app->setMessage("Test mail to: {$this->app->user->email} status ".  var_export($stat, true));
+		$this->setPlainMessage("Test mail to: {$this->app->user->email} status ".  var_export($stat, true));
 		$this->jump();
 	}
 	
@@ -216,7 +275,7 @@ class Module_Tools extends Module_Config
 		
 		
 
-		$this->app->setMessage("mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
+		$this->setPlainMessage("mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
 		
 		$mailer->clearAllRecipients();
 		
@@ -224,7 +283,7 @@ class Module_Tools extends Module_Config
 		$mailer->addAddress($to="gwcmsmailtest@mailinator.com");
 		$status = $mailer->send();
 		
-		$this->app->setMessage("2nd mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
+		$this->setPlainMessage("2nd mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
 		
 			
 	}
@@ -261,9 +320,9 @@ class Module_Tools extends Module_Config
 	function doTestGeoip()
 	{
 		if(function_exists('geoip_country_code_by_name')){
-			$this->app->setMessage("Feature available. Jour country ".geoip_country_code_by_name($_SERVER['REMOTE_ADDR']));
+			$this->setPlainMessage("Feature available. Jour country ".geoip_country_code_by_name($_SERVER['REMOTE_ADDR']));
 		}else{
-			$this->app->setMessage("Feature not enabled. <a target='_blank' href='http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip'>More info</a>");
+			$this->setPlainMessage("Feature not enabled. <a target='_blank' href='http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip'>More info</a>");
 		}
 		
 	}

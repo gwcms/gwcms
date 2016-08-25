@@ -101,7 +101,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		$this->model->savePositions($positions, $this->getMoveCondition($item));
 		
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);	
+		$this->setPlainMessage('/g/SAVE_SUCCESS');	
 		
 		unset($_GET['positions']);
 		$this->jump();

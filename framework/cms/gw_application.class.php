@@ -139,7 +139,7 @@ class GW_Application
 		unset($getparams['url']);
 
 		if (isset($params['carry_params']))
-			$getparams = $getparams + $this->carryParams();
+			$getparams = (is_array($getparams) ? $getparams : []) + $this->carryParams();
 
 		if ($path === false)
 			$path = $this->path;
@@ -317,7 +317,8 @@ class GW_Application
 		$level = 0;
 		$info = Array();
 		$path_arr = explode('/', $path);
-		$path_arr_clean = array_map(Array('GW_Validation_Helper', 'classFileName'), $path_arr);
+		$path_arr_clean = $path_arr;
+		//array_map(Array('GW_Validation_Helper', 'classFileName'), $path_arr);
 
 		if (is_dir($dirname = GW::s("DIR/{$this->app_name}/MODULES") . $path_arr[0]))
 			$info['dirname'] = $path_arr[0];
@@ -358,7 +359,7 @@ class GW_Application
 	function constructModule1($path_info)
 	{
 		$module = $this->constructModule($path_info['dirname'], $path_info['module']);
-
+		
 		$module->module_name = $path_info['module'];
 		$module->module_path = $path_info['path'];
 		$module->module_dir = GW::s("DIR/{$this->app_name}/MODULES") . $path_info['dirname'] . '/';
@@ -380,6 +381,8 @@ class GW_Application
 
 		$path_info['params'] = isset($path_info['params']) ? $path_info['params'] : [];
 
+		//d::dumpas($path_info);
+		
 		$module->_args = ['params' => $path_info['params'], 'request_params' => $request_params];
 		$module->init();
 
@@ -408,48 +411,64 @@ class GW_Application
 		return $this->processModule($path_info, $request_args);
 	}
 
-	function setMessage($msg, $status_id = 0)
+	function setMessage($msg, $type = 0, $title=false, $field=false, $obj_id=false)
 	{
-		$this->sess['messages'][] = Array($status_id, $msg);
+		if(is_array($msg))
+		{
+			if(!isset($msg['type']))
+				$msg['type'] = $type;			
+			
+			$this->sess['messages'][] = $msg;
+		}else{
+		
+			$data = ['type' => $type, 'text'=>$msg];
+
+			if($title)
+				$data['title'] = $title;
+
+			if($field)
+				$data['field'] = $title;
+
+			if($obj_id)
+				$data['obj_id'] = $obj_id;		
+
+			$this->sess['messages'][] = $data;
+		}
+	}
+	
+	function setError($message)
+	{
+		$this->setMessage(['type'=>GW_MSG_ERR, 'text'=>$message]);
 	}
 
-	function setMessages($msgs = Array())
-	{
-		foreach ((array) $msgs as $field => $msg)
-			$this->sess['messages'][$field] = Array(0, $msg);
-	}
 
-	function acceptMessages()
+	function acceptMessages($prepare = false)
 	{
+		
 		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
 			return false;
 
-
+		if($prepare)
+			foreach($data as $i => $msg)
+				if(substr($data[$i]['text'],0,1) == '/')
+					$data[$i]['text'] = GW::ln($data[$i]['text']);
+		
 		$this->sess['messages'] = Null;
 
 		//copy errors
 		foreach ($data as $key => $item)
-			if ($item[0] == 2)
+			if ($item['type'] == 2)
 				$this->errors[$key] = $item;
 
 		return $data;
 	}
 
-	/**
-	 * level 2=error, 1=warning, 3=info
-	 */
-	function setErrors($errors = Array(), $level = 2)
-	{
-		foreach ((array) $errors as $field => $error_str)
-			if (is_numeric($field))
-				$this->sess['messages'][] = Array($level, $error_str);
-			else
-				$this->sess['messages'][$field] = Array($level, $error_str);
-	}
+
+	
 
 	function fatalError($message)
 	{
-		$this->setErrors(Array($message));
+		$this->setError($message);
 
 		$path_info = Array();
 
@@ -473,9 +492,9 @@ class GW_Application
 
 
 
-		$path_info = $this->getModulePathInfo($this->path_clean);
-
-
+		$path_info = $this->getModulePathInfo($this->path);
+		
+		
 
 		$this->processModule($path_info, $_REQUEST);
 	}

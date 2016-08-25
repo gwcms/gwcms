@@ -48,6 +48,71 @@ class Module_Modules extends GW_Common_Module
 		exit;
 	}	
 	
+	
+	function viewRearange()
+	{
+		$list = $this->model->getChilds(Array('menu'=>false));
+		
+		return ['list'=>$list];		
+	}
+	
+	function doSavePositions()
+	{
+		$positions = json_decode($_POST['positions'], true);
+		
+		$items = $this->model->findAll('parent_id=0', ['key_field'=>'id']);
+				
+		
+		$debug=[];
+		
+		$idx=0;
+		$updated=0;
+		foreach($positions as $row)
+		{
+			if(isset($row['id']) && $row['id']!='0')
+			{
+				
+				$itm = $items[$row['id']];
+				
+				if($itm->priority != $idx){
+					$itm->saveValues(['priority'=>$idx]);
+					$updated++;
+				}
+				$idx++;
+				
+				$debug[]=[$itm->title, $idx, $itm->errors];
+				
+			}
+			
+		}
+		
+		
+		echo "Updated: $updated";
+		exit;
+	}
+	
+	function doAddSeparator()
+	{
+		$itm = $this->model->createNewObject();
+
+		
+		foreach(GW::$settings['LANGS'] as $lncode){
+			$itm->set("title", $_GET['title'], $lncode);
+		}		
+		
+		$itm->path = 'separator';
+		$itm->parent_id = 0;
+		$itm->priority = -1;
+		$itm->insert();
+		
+		$this->setPlainMessage("/g/SAVE_SUCCESS");
+		
+
+		
+		$this->jump();
+	}
+	
+	
 }
 
 ?>

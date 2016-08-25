@@ -50,7 +50,9 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		$check_perm	= isset($params['check_permissions']) ? $params['check_permissions'] : true;			
 		$pid = isset($params['parent_id']) ? $params['parent_id'] : 0;
 		
-		$cond = ['parent_id=?'.($menu?' AND active AND in_menu':''), $pid];
+		$nosep = isset($params['return_first_only']) ? ' AND path!="separator"' : '';
+		$inmenu = ($menu?' AND active AND in_menu':'');
+		$cond = ['parent_id=?'.$inmenu.$nosep, $pid];
 		
 		
 		if(isset($params['test']))

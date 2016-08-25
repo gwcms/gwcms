@@ -10,7 +10,7 @@ currency=>1,country=>1,test=>1,payment=>1,m_pay_restored=>1,status=>1,requestid=
 type=>1,handler_state=>1,insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
 	

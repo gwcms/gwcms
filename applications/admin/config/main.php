@@ -21,7 +21,7 @@ $dir['TEMPLATES'] = $dir['ROOT'].'templates/';
 $rdir['AUTOLOAD'][] = $dir['LIB'];
 $rdir['AUTOLOAD_RECURSIVE'] = $dir['MODULES'];
 
-GW::s('ADMIN/LANGS', ['lt']);
+GW::s('ADMIN/LANGS', ['lt','en']);
 GW::s('ADMIN/PATH_LOGIN', 'users/login');
 
 

@@ -1,27 +1,16 @@
-{$tmp=$app->acceptMessages()}
+{$tmp=$app->acceptMessages(1)}
 {if $tmp}
 
-{$classes=[0=>'sbrsucc', 1=>'sbrwarn', 2=>'sbrerror', 3=>'sbrinfo']}
+	{$classes=[0=>'alert-success', 1=>'alert-warning', 2=>'alert-danger', 3=>'alert-info']}
 
 
-{foreach $tmp as $field => $msg}
-	{$msg_type_id=$msg.0}
-	<div class="status_bx1 {$classes.$msg_type_id}" style="display:none" title="{$field}">
-		{if !is_numeric($field)}<small>"<b>{$app->fh()->fieldTitle($field)}</b>" {$lang.ERROR}: </small> {/if}{GW::l($msg.1)}
-	</div>
-{/foreach}
+	{foreach $tmp as $field => $msg}
+		<div class="alert {$classes[$msg.type]}" data-objid="{$msg.obj_id}" {if $msg.title}title="{$msg.title|escape}"{/if}>
+			<button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
+			
+			{if isset($msg.field)}<small>"<b>{$app->fh()->fieldTitle($msg.field)}</b>" {$lang.ERROR}: </small> {/if}{$msg.text}
+		</div>	
+	{/foreach}
 
-
-<script type="text/javascript">
-{literal}
-$(document).ready(function() {
-	$('.status_bx1').fadeIn("slow");
-});
-{/literal}
-
-</script>
-
-
-<br />
 
 {/if}

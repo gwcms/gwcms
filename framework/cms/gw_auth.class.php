@@ -123,7 +123,7 @@ class GW_Auth
 		$this->session["user_id"] = $user->get('id');
 		$this->session['ip_address'] = $_SERVER['REMOTE_ADDR'];
 
-		$user->onLogin($_SERVER['REMOTE_ADDR']);
+		$user->onLogin($_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT']);
 		
 		$this->session['last_request'] = time();
 		

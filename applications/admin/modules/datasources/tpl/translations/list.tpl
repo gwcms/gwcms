@@ -2,15 +2,18 @@
 
 
 
+{extends file="default_list.tpl"}
+
+
 {block name="init"}
 
 	
-	{function name=dl_toolbar_buttons_synchronizefromxml} 
+	{function name=do_toolbar_buttons_synchronizefromxml} 
 		{gw_link relative_path=synchronizefromxml title=GW::l('/m/VIEWS/synchronizefromxml') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 	{/function}	
 	
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
 	
 	
 	{$display_fields=[module=>1,key=>1]}

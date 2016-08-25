@@ -16,7 +16,7 @@ class Module_Groups extends GW_Common_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		
 		
 		$this->jump($this->app->page->path);
@@ -69,7 +69,7 @@ class Module_Groups extends GW_Common_Module
 		
 		if(!$this->app->user->isRoot() && $this->app->user->inGroup($vals['id']))
 		{
-			$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
+			$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 			$this->jump(dirname($this->app->path), array('id'=> $item->get('id')));	
 		}
 		
@@ -88,7 +88,7 @@ class Module_Groups extends GW_Common_Module
 		
 		GW_Permissions::save($vals['id'], $vals['paths']);
 		
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+		$this->setPlainMessage('/g/SAVE_SUCCESS');
 		$this->jumpAfterSave($item);		
 	}
 	
@@ -100,7 +100,7 @@ class Module_Groups extends GW_Common_Module
 
 		//dont allow remove group which is set to current user
 		if($this->app->user->inGroup($item->get('id')))
-			return $this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
+			return $this->setError('/G/GENERAL/ACTION_RESTRICTED');
 			
 		parent::doDelete();
 	}

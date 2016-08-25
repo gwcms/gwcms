@@ -79,7 +79,8 @@ class Module_i18n extends GW_Common_Module
 			
 		$sqls = $model->addLang(GW::$settings['LANGS'][0], $_GET['modlang']);
 		
-		$this->app->setMessages($sqls);
+		
+		echo implode(";\n ",$sqls);
 	}
 	
 	function doDropLang()
@@ -92,7 +93,7 @@ class Module_i18n extends GW_Common_Module
 		
 		$sqls = $model->dropLang($_GET['modlang']);
 		
-		$this->app->setMessages($sqls);
+		echo implode(";\n ",$sqls);
 	}	
 	
 }

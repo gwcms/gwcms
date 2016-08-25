@@ -13,8 +13,8 @@
             update_time=>0
         ])}
         
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}        
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,divider,print]}        
 
 	{$dl_actions=[timematch,invert_active,edit,delete,clone]}
 	
@@ -23,8 +23,8 @@
 	{$dl_order_enabled_fields=$dl_fields}
 	
 	{function dl_actions_timematch}
-		{gw_link do=test_time_match params=[id=>$item->id] title="timeTest"}
-		{gw_link do=run params=[id=>$item->id] title="Run!"}
+		{list_item_action_m url=[false,[act=>doRun]] iconclass="fa fa-caret-square-o-right" title="Run!"}
+		{list_item_action_m url=[false,[act=>doTestTimeMatch,id=>$item->id]] caption=TTM title="Test time match"}	
 	{/function}	
 	
 {/block}

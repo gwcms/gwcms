@@ -1,6 +1,6 @@
 {function df_actions_save}
 	<a href="#" onclick="submitInlineForm(this); return false" title="{GW::l('/g/SAVE')}">
-		<img align="absmiddle" src="{$app_root}img/icons/action_save.png">
+		<img align="absmiddle" src="{$app->icon_root}action_save.png">
 	</a>
 {/function}
 

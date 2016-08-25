@@ -43,7 +43,7 @@ class Module_Messages extends GW_Common_Module
 		$this->jump(implode('/',$this->module_path).'/new');
 	}
 	
-	function doMarkasreadall()
+	function doMarkasReadAll()
 	{
 		$params = [];
 		$cond = '';
@@ -53,11 +53,18 @@ class Module_Messages extends GW_Common_Module
 
 		$list = $this->model->findAll($cond, $params);
 		
+		$cnt=0;
+		
 		foreach($list as $item)
 		{
-			if(!$item->seen)
+			if(!$item->seen){
 				$item->saveValues(['seen'=>1]);
+				$cnt++;
+			}
 		}
+		
+		if($cnt)
+			$this->setPlainMessage($this->lang['UPDATED'].$cnt);
 
 		$this->jump();
 	}
@@ -113,7 +120,7 @@ class Module_Messages extends GW_Common_Module
 
 
 		if(!$item->invert('seen')) 
-			return $this->setErrors('/G/GENERAL/ACTION_FAIL'); 
+			return $this->setError('/G/GENERAL/ACTION_FAIL'); 
 	 	 
 		$this->jump(); 		
 	}
@@ -130,7 +137,7 @@ class Module_Messages extends GW_Common_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		
 		
 		$this->jump($this->app->page->path);

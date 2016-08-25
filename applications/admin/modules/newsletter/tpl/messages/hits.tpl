@@ -13,7 +13,7 @@
 	
 	
 	{$dl_fields=$display_fields}
-	{$dl_toolbar_buttons = ['filters']}	
+	{$do_toolbar_buttons = ['filters']}	
 	
 	{$dl_actions=[]}
 	

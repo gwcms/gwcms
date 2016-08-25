@@ -5,7 +5,7 @@
 
 {block name="init"}	
 	{$dl_fields=$m->getDisplayFields([title=>1,name=>1,time_match=>1,insert_time=>0,update_time=>0])}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 
 	{$dl_actions=[timematch,invert_active,edit,delete]}
 	

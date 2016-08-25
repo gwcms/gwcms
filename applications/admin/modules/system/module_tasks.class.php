@@ -20,7 +20,7 @@ class Module_Tasks extends GW_Common_Module
 		$this->loadTasksList();		
 		
 		if(!GW_App_System::getRunningPid())
-			$this->setErrors("admin/cli/system.php is not running", 2);
+			$this->setError("admin/cli/system.php is not running");
 		
 		
 		if($this->tpl_vars['grouped'])
@@ -82,7 +82,7 @@ class Module_Tasks extends GW_Common_Module
 			$count +=count($list);
 		}
 			
-		$this->app->setMessage("Removed items: ".$count);
+		$this->setPlainMessage("Removed items: ".$count);
 		$this->jump();
 	}
 	
@@ -112,7 +112,7 @@ class Module_Tasks extends GW_Common_Module
 			
 			if($runningpid && $runningpid!=$oldpid)
 			{
-				$this->app->setMessage('Restart ok - '.$t->stop().'s');
+				$this->setPlainMessage('Restart ok - '.$t->stop().'s');
 				break;
 			}
 			
@@ -147,7 +147,7 @@ class Module_Tasks extends GW_Common_Module
 		
 		if(!isset($all[$pid]))
 		{
-			$this->setErrors("Fail to terminate. Process ($pid) not found");
+			$this->setError("Fail to terminate. Process ($pid) not found");
 			$this->jump();
 		}
 		
@@ -157,7 +157,7 @@ class Module_Tasks extends GW_Common_Module
 			$return=posix_kill($pid, 15); //soft
 			
 			
-		$this->app->setMessage("Task done: ".$return);
+		$this->setPlainMessage("Task done: ".$return);
 		
 		$this->jump();
 	}

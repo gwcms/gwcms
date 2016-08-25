@@ -1,0 +1,522 @@
+@font-face {
+    font-family: 'gwcms';
+    src:    url('fonts/gwcms.eot?oocsxr');
+    src:    url('fonts/gwcms.eot?oocsxr#iefix') format('embedded-opentype'),
+        url('fonts/gwcms.ttf?oocsxr') format('truetype'),
+        url('fonts/gwcms.woff?oocsxr') format('woff'),
+        url('fonts/gwcms.svg?oocsxr#gwcms') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="gwico-"], [class*=" gwico-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'gwcms' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.gwico-Read-Message:before {
+    content: "\e9a3";
+}
+.gwico-Read-Message-Filled:before {
+    content: "\e9a4";
+}
+.gwico-Sorting-Arrows:before {
+    content: "\e9a1";
+}
+.gwico-Sorting-Arrows-Filled:before {
+    content: "\e9a2";
+}
+.gwico-Menu:before {
+    content: "\e99f";
+}
+.gwico-Menu-Filled:before {
+    content: "\e9a0";
+}
+.gwico-Create-New:before {
+    content: "\e99e";
+}
+.gwico-Print:before {
+    content: "\e997";
+}
+.gwico-Print-Filled:before {
+    content: "\e998";
+}
+.gwico-Open-Folder:before {
+    content: "\e999";
+}
+.gwico-Open-Folder-Filled:before {
+    content: "\e99a";
+}
+.gwico-File:before {
+    content: "\e99b";
+}
+.gwico-File-Filled:before {
+    content: "\e99c";
+}
+.gwico-Vertical-Settings-Mixer2:before {
+    content: "\e99d";
+}
+.gwico-Vertical-Settings-Mixer:before {
+    content: "\e990";
+}
+.gwico-Vertical-Settings-Mixer-Filled:before {
+    content: "\e991";
+}
+.gwico-Upload-SVG2:before {
+    content: "\e992";
+}
+.gwico-Settings:before {
+    content: "\e993";
+}
+.gwico-Settings-Filled:before {
+    content: "\e994";
+}
+.gwico-Horizontal-Settings-Mixer:before {
+    content: "\e995";
+}
+.gwico-Horizontal-Settings-Mixer-Filled:before {
+    content: "\e996";
+}
+.gwico-Cancel-Filled:before {
+    content: "\e900";
+}
+.gwico-Plus:before {
+    content: "\e901";
+}
+.gwico-Process-Filled:before {
+    content: "\e902";
+}
+.gwico-Process:before {
+    content: "\e903";
+}
+.gwico-Refresh-Filled:before {
+    content: "\e904";
+}
+.gwico-Refresh:before {
+    content: "\e905";
+}
+.gwico-Restart-Filled:before {
+    content: "\e906";
+}
+.gwico-Restart:before {
+    content: "\e907";
+}
+.gwico-Rotate-Left-Filled:before {
+    content: "\e908";
+}
+.gwico-Rotate-Left:before {
+    content: "\e909";
+}
+.gwico-Rotate-Right-Filled:before {
+    content: "\e90a";
+}
+.gwico-Rotate-Right:before {
+    content: "\e90b";
+}
+.gwico-Upload-SVG:before {
+    content: "\e90c";
+}
+.gwico-AddFileFilled:before {
+    content: "\e90d";
+}
+.gwico-AddFile:before {
+    content: "\e90e";
+}
+.gwico-AdministrativeTools:before {
+    content: "\e90f";
+}
+.gwico-AirportFilled:before {
+    content: "\e910";
+}
+.gwico-Airport:before {
+    content: "\e911";
+}
+.gwico-APISettings:before {
+    content: "\e912";
+}
+.gwico-BriefcaseFilled:before {
+    content: "\e913";
+}
+.gwico-Briefcase:before {
+    content: "\e914";
+}
+.gwico-CalendarFilled:before {
+    content: "\e915";
+}
+.gwico-Calendar:before {
+    content: "\e916";
+}
+.gwico-Cancel:before {
+    content: "\e917";
+}
+.gwico-CellPhone:before {
+    content: "\e918";
+}
+.gwico-ChatFilled:before {
+    content: "\e919";
+}
+.gwico-Checklist:before {
+    content: "\e91a";
+}
+.gwico-ChristmasStar:before {
+    content: "\e91b";
+}
+.gwico-CircledChevronDownFilled:before {
+    content: "\e91c";
+}
+.gwico-CircledChevronDown:before {
+    content: "\e91d";
+}
+.gwico-CircledChevronUpFilled:before {
+    content: "\e91e";
+}
+.gwico-CircledChevronUp:before {
+    content: "\e91f";
+}
+.gwico-CircledDown2Filled:before {
+    content: "\e920";
+}
+.gwico-CircledDown2:before {
+    content: "\e921";
+}
+.gwico-CircledUp2Filled:before {
+    content: "\e922";
+}
+.gwico-CircledUp2:before {
+    content: "\e923";
+}
+.gwico-ClearFiltersFilled:before {
+    content: "\e924";
+}
+.gwico-ClearFilters:before {
+    content: "\e925";
+}
+.gwico-Cloud:before {
+    content: "\e926";
+}
+.gwico-Code:before {
+    content: "\e927";
+}
+.gwico-Coins:before {
+    content: "\e928";
+}
+.gwico-CommentsFilled:before {
+    content: "\e929";
+}
+.gwico-Comments:before {
+    content: "\e92a";
+}
+.gwico-ConferenceCall:before {
+    content: "\e92b";
+}
+.gwico-Console:before {
+    content: "\e92c";
+}
+.gwico-DeleteFilled:before {
+    content: "\e92d";
+}
+.gwico-Delete:before {
+    content: "\e92e";
+}
+.gwico-Diamond:before {
+    content: "\e92f";
+}
+.gwico-Domain:before {
+    content: "\e930";
+}
+.gwico-Download:before {
+    content: "\e931";
+}
+.gwico-EditFileFilled:before {
+    content: "\e932";
+}
+.gwico-EditFile:before {
+    content: "\e933";
+}
+.gwico-EditFilled:before {
+    content: "\e934";
+}
+.gwico-Edit:before {
+    content: "\e935";
+}
+.gwico-EnterFilled:before {
+    content: "\e936";
+}
+.gwico-Enter:before {
+    content: "\e937";
+}
+.gwico-ErrorFilled:before {
+    content: "\e938";
+}
+.gwico-Error:before {
+    content: "\e939";
+}
+.gwico-ExportFilled:before {
+    content: "\e93a";
+}
+.gwico-Export:before {
+    content: "\e93b";
+}
+.gwico-FAQ:before {
+    content: "\e93c";
+}
+.gwico-FilterFilled:before {
+    content: "\e93d";
+}
+.gwico-Filter:before {
+    content: "\e93e";
+}
+.gwico-Fingerprint:before {
+    content: "\e93f";
+}
+.gwico-FinishFlagFilled:before {
+    content: "\e940";
+}
+.gwico-Genealogy:before {
+    content: "\e941";
+}
+.gwico-GlobeAsiaFilled:before {
+    content: "\e942";
+}
+.gwico-GlobeAsia:before {
+    content: "\e943";
+}
+.gwico-GraduationCap:before {
+    content: "\e944";
+}
+.gwico-Hearts:before {
+    content: "\e945";
+}
+.gwico-HourglassSandTop:before {
+    content: "\e946";
+}
+.gwico-Idea:before {
+    content: "\e947";
+}
+.gwico-ImportFilled:before {
+    content: "\e948";
+}
+.gwico-Import:before {
+    content: "\e949";
+}
+.gwico-InfoFilled:before {
+    content: "\e94a";
+}
+.gwico-Info:before {
+    content: "\e94b";
+}
+.gwico-InvisibleFilled:before {
+    content: "\e94c";
+}
+.gwico-Invisible:before {
+    content: "\e94d";
+}
+.gwico-LaunchedRocketFilled:before {
+    content: "\e94e";
+}
+.gwico-LaunchedRocket:before {
+    content: "\e94f";
+}
+.gwico-LineChart:before {
+    content: "\e950";
+}
+.gwico-LockFilled:before {
+    content: "\e951";
+}
+.gwico-Lock:before {
+    content: "\e952";
+}
+.gwico-LoginRoundedRightFilled:before {
+    content: "\e953";
+}
+.gwico-LoginRoundedRight:before {
+    content: "\e954";
+}
+.gwico-LogoutRoundedFilled:before {
+    content: "\e955";
+}
+.gwico-LogoutRounded:before {
+    content: "\e956";
+}
+.gwico-Maintenance:before {
+    content: "\e957";
+}
+.gwico-MapMarker:before {
+    content: "\e958";
+}
+.gwico-MessageFilled:before {
+    content: "\e959";
+}
+.gwico-Message:before {
+    content: "\e95a";
+}
+.gwico-Module:before {
+    content: "\e95b";
+}
+.gwico-Money:before {
+    content: "\e95c";
+}
+.gwico-MoreThan:before {
+    content: "\e95d";
+}
+.gwico-NegativeDynamic:before {
+    content: "\e95e";
+}
+.gwico-NeutralTrading:before {
+    content: "\e95f";
+}
+.gwico-NewsFilled:before {
+    content: "\e960";
+}
+.gwico-News:before {
+    content: "\e961";
+}
+.gwico-OkHand:before {
+    content: "\e962";
+}
+.gwico-PaperPlaneFilled:before {
+    content: "\e963";
+}
+.gwico-PaperPlane:before {
+    content: "\e964";
+}
+.gwico-Password1Filled:before {
+    content: "\e965";
+}
+.gwico-Password1:before {
+    content: "\e966";
+}
+.gwico-Pencil:before {
+    content: "\e967";
+}
+.gwico-PositiveDynamic:before {
+    content: "\e968";
+}
+.gwico-Private2Filled:before {
+    content: "\e969";
+}
+.gwico-Private2:before {
+    content: "\e96a";
+}
+.gwico-Processor:before {
+    content: "\e96b";
+}
+.gwico-Queue:before {
+    content: "\e96c";
+}
+.gwico-QuickModeOnFilled:before {
+    content: "\e96d";
+}
+.gwico-QuickModeOn:before {
+    content: "\e96e";
+}
+.gwico-RegistryEditor:before {
+    content: "\e96f";
+}
+.gwico-Rename:before {
+    content: "\e970";
+}
+.gwico-RubyProgrammingLanguage:before {
+    content: "\e971";
+}
+.gwico-Save:before {
+    content: "\e972";
+}
+.gwico-SearchFilled:before {
+    content: "\e973";
+}
+.gwico-Search:before {
+    content: "\e974";
+}
+.gwico-Settings3:before {
+    content: "\e975";
+}
+.gwico-Shutdown:before {
+    content: "\e976";
+}
+.gwico-SourceCode:before {
+    content: "\e977";
+}
+.gwico-StandingManFilled:before {
+    content: "\e978";
+}
+.gwico-StandingMan:before {
+    content: "\e979";
+}
+.gwico-StandingWomanFilled:before {
+    content: "\e97a";
+}
+.gwico-StandingWoman:before {
+    content: "\e97b";
+}
+.gwico-StarFilled:before {
+    content: "\e97c";
+}
+.gwico-Star:before {
+    content: "\e97d";
+}
+.gwico-Statistics:before {
+    content: "\e97e";
+}
+.gwico-Support:before {
+    content: "\e97f";
+}
+.gwico-ThumbUp:before {
+    content: "\e980";
+}
+.gwico-ThumbsDown:before {
+    content: "\e981";
+}
+.gwico-TrashFilled:before {
+    content: "\e982";
+}
+.gwico-Trash:before {
+    content: "\e983";
+}
+.gwico-Umbrella:before {
+    content: "\e984";
+}
+.gwico-UnlockFilled:before {
+    content: "\e985";
+}
+.gwico-Unlock:before {
+    content: "\e986";
+}
+.gwico-UploadSVG:before {
+    content: "\e987";
+}
+.gwico-Upload:before {
+    content: "\e988";
+}
+.gwico-UserGroupManManFilled:before {
+    content: "\e989";
+}
+.gwico-UserGroupManMan:before {
+    content: "\e98a";
+}
+.gwico-UserGroups:before {
+    content: "\e98b";
+}
+.gwico-VisibleFilled:before {
+    content: "\e98c";
+}
+.gwico-Visible:before {
+    content: "\e98d";
+}
+.gwico-Wi-Fi:before {
+    content: "\e98e";
+}
+.gwico-XlargeIcons:before {
+    content: "\e98f";
+}
+

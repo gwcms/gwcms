@@ -19,7 +19,10 @@
         </i>
     </i>
 	
-
+	<i id="ITEM_STATUS_CHANGED">
+		<en>Item(%s) status changed</en>
+		<lt>Įrašo(%s) būklė pakeista</lt>
+	</i>
 
     <i id="FIELDS">
         <i id="description">
@@ -70,7 +73,15 @@
         <i id="priority">P</i>
         <i id="user_exec">Vykdo</i>
         <i id="time_have">Laikas</i>
+		<i id="update_time">R <![CDATA[<i class="fa fa-clock-o"></i>]]></i>
+		<i id="insert_time">S <![CDATA[<i class="fa fa-clock-o"></i>]]></i>
+		<i id="info"><![CDATA[<i class="fa fa-info-circle"></i>]]></i>
+		<i id="last_comment"><![CDATA[<i class="fa fa-comments-o"></i>]]></i>
     </i>
+	
+	<i id="FIELD_NOTE">
+		<i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>
+	</i>
 	
 	
     <i id="PRIORITY_OPT">
@@ -149,6 +160,33 @@
         </i>
     </i>
 	
+	<i id="CHANGE_STATE_TO">
+		<i id="10">
+			<lt>Pažymėti kaip naują</lt>
+			<en>Mark as new</en>
+		</i>		
+		<i id="15">
+			<lt>Pradėti vykdyti</lt>
+			<en>Start working</en>
+		</i>
+		<i id="12">
+			<lt>Pristabdyti darbą</lt>
+			<en>Pause working</en>
+		</i>		
+		<i id="50">
+			<en>Return for bugfixing</en>
+			<lt>Gražinti pataisymams</lt>
+		</i>
+		<i id="100">
+			<en>Mark as complete</en>
+			<lt>Pažymėti kaip atliktą</lt>
+		</i>
+		<i id="200">
+			<en>Cancel</en>
+			<lt>Atmesti</lt>
+		</i>				
+	</i>
+	
     <i id="TODO_ITEM_TYPE_OPT">
         <i id="0">
             <lt>Įrašas</lt>
@@ -172,6 +210,16 @@
         </i>
     </i>		
 	
+	<i id="VIEWS">
+		<i id="comments">
+			<en>Comments</en>
+			<lt>Komentarai</lt>
+		</i>
+		<i id="addcomment">
+			<en>Add comment</en>
+			<lt>Pridėti komentarą</lt>			
+		</i>
+	</i>
 	
     <!-- =============== MODULE MAP START =================== -->
     <i id="MAP">
@@ -196,13 +244,13 @@
 [
 	{
 		"name":"Eilė",
-		"conditions":"state<100 AND type=0",
+		"conditions":"state<100 AND type IN (1,0)",
 		"calculate":1,
 		"default":1
 	},
 	{
 		"name":"Atlikti",
-		"conditions":"state>=100 AND type=0",
+		"conditions":"state>=100 AND type IN (1,0)",
 		"calculate":1
 	}
 ]

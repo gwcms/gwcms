@@ -21,7 +21,7 @@ class GW_User_service extends GW_Common_Service
 	
 	function unsetUserAdminFields(&$user, $update=false)
 	{
-		foreach(['pass','admin_access','site_verif_key','site_passchange','removed','session_validity'] as $fld)
+		foreach(['pass','admin_access','site_verif_key','site_passchange','removed','session_validity','parent_user_id','is_blocked'] as $fld)
 			unset($user[$fld]);		
 		
 		//fields cant be updated
@@ -35,19 +35,20 @@ class GW_User_service extends GW_Common_Service
 		$username = $_POST['user'];
 		$password = $_POST['pass'];
 		$ip = $_POST['ip'];
+		$user_agent = $_POST['user_agent'];
 			
 		
 		if (!$user = GW_Customer::singleton()->getByUsernamePass($username, $password)){
 			$resp['error_msgid'] = '/G/GENERAL/LOGIN_FAIL';
 		}else{
-			if ($user->banned == 1){
-				$resp['error_msgid'] = '/G/GENERAL/USER_BANNED';
+			if ($user->is_blocked == 1){
+				$resp['error_msgid'] = '/G/GENERAL/USER_BLOCKED';
 			}elseif ($user->active == 0) {
-				$resp['error_msgid'] = '/G/GENERAL/USER_BANNED';
+				$resp['error_msgid'] = '/G/GENERAL/USER_NOT_ACTIVE';
 			}else{
 				//user is ok
 				$user->setRandToken();
-				$user->onLogin($ip);
+				$user->onLogin($ip, $user_agent);
 				
 				$resp['token']=$user->token;
 			}
@@ -103,10 +104,13 @@ class GW_User_service extends GW_Common_Service
 			
 			unset($vals['id']);
 			$user->setValues($vals);
+			$user->prepareSave();
 			
 			$resp['vals']=$vals;
 			
 			$resp['changed_fields']=array_keys($user->changed_fields);
+			
+			
 			
 			if(!$user->validate())
 			{
@@ -131,6 +135,7 @@ class GW_User_service extends GW_Common_Service
 		
 		$user = GW_Customer::singleton()->createNewObject($vals);
 		$user->setValidators('register');
+		$user->prepareSave();
 		
 		$resp = [];
 		

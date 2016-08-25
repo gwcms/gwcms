@@ -288,6 +288,18 @@ class GW_Data_Object
 
 		return $this->findAll($conditions, $options);
 	}
+	
+	function getDistinctVals($fieldname, $conditions = '', $options = Array())
+	{
+		$options['return_simple'] = 1;
+		$options['assoc_fields'] = [$fieldname,1];
+		$options['select'] = "DISTINCT `$fieldname`, 1";
+
+		$arr = $this->findAll($conditions, $options);
+		
+		return array_keys($arr);		
+	}
+	
 
 	function find($conditions = Null, $options = Array())
 	{

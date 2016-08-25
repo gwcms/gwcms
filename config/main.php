@@ -1,5 +1,9 @@
 <?php
 
+define('GW_MSG_SUCC',0);
+define('GW_MSG_WARN',1);
+define('GW_MSG_ERR',2);
+define('GW_MSG_INFO',3);
 
 
 $dir =& GW::s('DIR');
@@ -39,7 +43,7 @@ define('GW_GENERIC_ERROR', 100);
 define("AUTH_SESSION_KEY", "cms_auth");
 define("PUBLIC_AUTH_SESSION_KEY", "site_auth");
 
-GW::s('GW_CMS_VERSION', '2.3');
+GW::s('GW_CMS_VERSION', '3.0');
 
 include $dir['ROOT'].'config/project.php';
 include $dir['ROOT'].'config/environment.php';

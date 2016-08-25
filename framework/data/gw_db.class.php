@@ -257,11 +257,15 @@ class GW_DB
 	}
 
 	function save($table, $entry, $nodie = false)
-	{
+	{		
 		$names = '';
 		$values = '';
 		foreach ($entry as $elemRak => $vert) {
 			$names[] = '`' . $elemRak . '`';
+			
+			//if(is_object($vert))
+			//	d::dumpas($vert);
+			
 			$values[] = "'" . addslashes($vert) . "'";
 		}
 		$query = "INSERT INTO $table (" . implode($names, ',') . ") VALUES (" . implode($values, ',') . ") ON DUPLICATE KEY UPDATE ";

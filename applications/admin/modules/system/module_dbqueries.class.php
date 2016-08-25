@@ -8,7 +8,7 @@ class Module_DBQueries extends GW_Common_Module
 		$item = $this->getDataObjectById();
 
 		if(!$item->get('active'))
-			return $this->setErrors("Can't run. Switch query state to active");
+			return $this->setError("Can't run. Switch query state to active");
 		
 		$sqls = explode(';', $item->get('sql'));
 		

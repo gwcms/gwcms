@@ -6,7 +6,8 @@ define('GW_ENV_PROD',3);
 
 
 GW::s("APP_BACKGROUND_REQ_TYPE", 'force_http'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
-
+GW::s('PROJECT_FAVICO_ARGS', 'text=GW&text2=CMS&fs=50&font=EncodeSansNarrow-ExtraLight.ttf');
+GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
 
 if(__DIR__=='/var/www/prodpath'){
 	GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);

@@ -26,15 +26,16 @@
 {include file="elements/input.tpl" type=select name=priority options=$m->lang.PRIORITY_OPT default=5 data_type=numeric}
 {include file="elements/input.tpl" type=date name=deadline}
 
-{$users = $app->user->getOptions(true)}
 
 
-{include file="elements/input.tpl" type=select name=user_create empty_option=1 options=$users default=$app->user->id data_type=numeric}
+{include file="elements/input.tpl" type=select name=user_create empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
 
-{include file="elements/input.tpl" type=select name=user_exec empty_option=1 options=$users default=$app->user->id data_type=numeric}
+{include file="elements/input.tpl" type=select name=user_exec empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
 
 
 </table>
+</div> {*-end of panel body-*}
+</div> {*-end of panel-*}
 
 	{include file="tools/form_submit_buttons.tpl"}
 
@@ -45,21 +46,20 @@
 
 
 {if $item->id}
-<br />
+<br /><br />
 
-<table class="gwTable" style="width:100%">
-	<th colspan="2" class="th_h3 th_single">Comments:</th>
+<table class="gwTable mar-top" style="width:100%">
+	<th colspan="2" class="th_h3 th_single">{GW::l('/m/VIEWS/comments')}:</th>
 
 	<tr>
-		<td>
-			<script src="{$app->sys_base}vendor/jslibs/browser.js"></script>
-			<script type="text/javascript" src="{$app_root}js/jquery.iframe-auto-height.plugin.1.5.0.js"></script>
+		<td style="border: 1px solid white;background-color:#f9f9f9">
+
 			
-			<iframe id="comments" style="width:100%;height:250px" src="{$app->buildURI("todo/items/`$item->id`/form/`$m->parent->id`/comments")}" frameborder="0"></iframe>
+			<iframe id="comments" style="width:100%;height:250px;" src="{$app->buildURI("todo/items/`$item->id`/form/`$m->parent->id`/comments")}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+			
 			
 			<script type="text/javascript">
-
-				$('#comments').iframeAutoHeight({ minHeight: 100, heightOffset: 20, debug:true });
+				gwcms.initAutoresizeIframe('#comments', { minHeight: 100, heightOffset: 20, debug:true })
 				
 			</script>			
 			

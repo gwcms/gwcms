@@ -152,8 +152,8 @@ class Module_Translations extends GW_Common_Module
 		
 		
 		
-		$this->app->setMessage(json_encode($counts));
-		$this->app->setMessage("xmlnotfound: <br/>".implode("<br />", $xml_not_found));
+		$this->setPlainMessage(json_encode($counts));
+		$this->setPlainMessage("xmlnotfound: <br/>".implode("<br />", $xml_not_found));
 		
 		//d::ldump(['xmlnotfound'=>$xml_not_found]);
 		

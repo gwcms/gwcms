@@ -2,17 +2,24 @@
 
 {$width_title=100px}
 
-{include file="elements/input.tpl" name=path}
-{include file="elements/input.tpl" name=pathname}
+{if $item->path==separator}
+	{foreach GW::$settings.LANGS as $lncode}
+		{include file="elements/input.tpl" name="title_$lncode"}
+	{/foreach}	
 
-{include file="elements/input.tpl"  name=views type=code_json height=200px nopading=1}  
-{include file="elements/input.tpl"  name=orders type=code_json height=200px nopading=1}  
+{else}
+	{include file="elements/input.tpl" name=path}
+	{include file="elements/input.tpl" name=pathname}
+
+	{include file="elements/input.tpl"  name=views type=code_json height=200px nopading=1}  
+	{include file="elements/input.tpl"  name=orders type=code_json height=200px nopading=1}  
 
 
-{$ck_options=[toolbarStartupExpanded=>false]}
-{include file="elements/input.tpl" name=notes type=htmlarea width="100%"}
-{include file="elements/input.tpl" name=active type="bool"}
+	{$ck_options=[toolbarStartupExpanded=>false]}
+	{include file="elements/input.tpl" name=notes type=htmlarea width="100%"}
+	{include file="elements/input.tpl" name=active type="bool"}
 
+{/if}
 
 
 {$item->set('fields_str',str_replace('"','',json_encode($item->fields)))}

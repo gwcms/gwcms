@@ -20,8 +20,8 @@
 	
 	{$dl_smart_fields=[templatevars]}
 
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons = [addinlist,hidden]}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 	
 	
 	{$dl_actions=[invert_active,edit,delete,clone]}

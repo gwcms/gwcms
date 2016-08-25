@@ -8,8 +8,8 @@
 
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 
-	{$dl_toolbar_buttons[] = hidden}
-	{$dl_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 
 	{$dl_actions=[imagesactions,edit,delete]}
 

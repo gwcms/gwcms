@@ -302,9 +302,9 @@ class Module_Messages extends GW_Common_Module
 		$info = $this->__doSend($item, [$recipient]);
 		
 		if($info['sent_count']) {
-			$this->app->setMessage('Testinis laiškas išsiųstas į: '.$mail);
+			$this->setPlainMessage('Testinis laiškas išsiųstas į: '.$mail);
 		} else {
-			$this->app->setMessage('Testinis laiško siuntimas nepavyko. Gavėjas: '.$mail);
+			$this->setPlainMessage('Testinis laiško siuntimas nepavyko. Gavėjas: '.$mail);
 		}
 		$this->jump();
 	}

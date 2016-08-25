@@ -4,17 +4,17 @@
 
 
 {function name=df_submit_button_save}
-	<input onclick="" type="submit" value="{$lang.SAVE}" /> 
+	<button class="btn btn-primary"><i class="fa fa-save"></i> {$lang.SAVE}</button>
 {/function}
 
 
 {function name=df_submit_button_apply}
-	<input onclick="this.form.elements['submit_type'].value=1;" type="submit" value="{$lang.APPLY}"/> 
+	<button class="btn btn-info" onclick="this.form.elements['submit_type'].value=1;"><i class="fa fa-save"></i> {$lang.APPLY}</button>
 {/function}
 
 {function name=df_submit_button_cancel}
 	{*location.href='{gw_link levelup=1 path_only=1}'*}
-		<input onclick="history.go(-1);return false" type="submit" value="{$lang.CANCEL}" />
+	<button class="btn btn-default pull-right" onclick="{if isset($smarty.get.RETURN_TO)}location.href='{$smarty.get.RETURN_TO}';{else}history.go(-1);{/if}return false"><i class="fa fa-times" aria-hidden="true"></i> {$lang.CANCEL}</button>
 {/function}
 
 <div class="form_action_buttons">

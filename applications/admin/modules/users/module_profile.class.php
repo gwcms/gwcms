@@ -42,13 +42,14 @@ class Module_Profile extends GW_Module
 		$item->setValidators('change_pass_check_old');
 		
 		if(!$item->validate()){
-			$this->setErrors($item->errors);
+			$this->setItemErrors($item);
+			
 			$this->processView('default');
 			exit;	
 		}else{
 			$item->setValidators(false);
 			if($item->update(Array('pass')))
-				$this->app->setMessage($this->lang['PASS_UPDATED']);
+				$this->setPlainMessage($this->lang['PASS_UPDATED']);
 		}
 		
 		$this->jump();
@@ -66,13 +67,13 @@ class Module_Profile extends GW_Module
 			
 		
 		if(!$item->validate()){
-			$this->setErrors($item->errors);
+			$this->setItemErrors($item);
 			
 			$this->processView('default');
 			exit;	
 		}else{
 			if($item->update($fields))
-				$this->app->setMessage($this->smarty->_tpl_vars['lang']['UPDATE_SUCCESS']);
+				$this->setPlainMessage($this->smarty->_tpl_vars['lang']['UPDATE_SUCCESS']);
 		}
 		
 		$this->jump();		

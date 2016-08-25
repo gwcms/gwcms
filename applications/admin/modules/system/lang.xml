@@ -52,12 +52,44 @@
 		</i>
 	</i>
 	
+	
+	
+	<i id="VIEWS">
+		<i id="TestListIcons">List gwcms icons</i>
+		<i id="rearange">Rearange structure</i>
+		<i id="addseparator">Add separator</i>
+		<i id="iframe">Log view realtime</i>
+		<i id="doExecuteQuery">Execute query</i>
+	</i>
+	
+	<i id="FIELD_NOTE">
+		<i id="time_match">
+			<![CDATA[
+		<b>hh:mm:ss#interval</b> 
+		<ul>
+		<li><b>hh</b> - valanda(du skaitmenys); </li>
+		<li><b>mm</b> -minutė(du skaitmenys); </li>
+		<li><b>ss</b> -sekundė(su skaitmenys); </li>
+		<li><b>.</b> -betkokia verte </li>
+		<li><b>[0-5]</b> -verciu intervalas </li>
+		<li><b>[135]</b> - verciu isvardinimas</li>
+		</ul>
+		Pvz:
+		<ul>
+			<li><b>.[02468]:..:#7200</b> - kas dvi valandas</li>
+			<li><b>03:0.:..#86400</b> - 3 nakties butinai per pirmas desimt minuciu</li>
+			<li><b>..:0.:..#60</b> - kas valanda - butinai per pirmas desimt minuciu</li>
+			<li><b>..:..:..#1</b> - kas minute</li>
+		</ul>
+		]]>
+		</i>
+	</i>
+	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
 			<en>System</en>
 			<lt>System</lt>
-			<no>System</no>	
 		</i>	
 		
 		<i id="info">
@@ -89,7 +121,11 @@
 			</i>	
 			<i id="cfg">
 				<i id="title">Nustatymai</i>
-			</i>				
+			</i>	
+			<i id="i18n">
+				<i id="title">i18n</i>
+
+			</i>							
 					
 		</i>
 					
