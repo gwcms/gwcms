@@ -9,6 +9,8 @@ GW::s("APP_BACKGROUND_REQ_TYPE", 'force_http'); // can be force_http or localhos
 GW::s('PROJECT_FAVICO_ARGS', 'text=GW&text2=CMS&fs=50&font=EncodeSansNarrow-ExtraLight.ttf');
 GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
 
+GW::s('DB/INIT_SQLS',"SET SESSION sql_mode = '';"); // automatycaly turned to strict in mysql 5.7 which causes default errors and others
+
 if(__DIR__=='/var/www/prodpath'){
 	GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);
 
