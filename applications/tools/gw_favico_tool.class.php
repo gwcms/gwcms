@@ -85,7 +85,7 @@ class GW_FavIco_Tool
 		}
 
 		// look for cached copy, send if it exists
-		$hash = md5(basename($font_file) . $font_size . $font_color . $background_color . $transparent_background . $text);
+		$hash = md5(json_encode($_GET));
 		$cache_filename = $cache_folder . '/' . 'favico_'.$hash . $extension;
 		if ($cache_images && ($file = @fopen($cache_filename, 'rb'))) {
 			header('Content-type: ' . $mime_type);
