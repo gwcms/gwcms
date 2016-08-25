@@ -3,14 +3,14 @@
 
 {block name="init"}
 
-
+	{capture append=footer_hidden}
 	<style>
 		.editable{
 			max-width: 1400px;
 			word-wrap: break-word;			
 		}
 	</style>
-
+	{/capture}
 	
 
 	{function name=dl_cell_text}
