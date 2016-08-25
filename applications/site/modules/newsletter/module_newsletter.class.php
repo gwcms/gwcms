@@ -207,7 +207,7 @@ class Module_NewsLetter extends GW_Public_Module {
 			/*
 			  if($_POST['email']!=$item->email)
 			  {
-			  $this->app->setErrors("Neteisingai nurodytas el. pašto adresas");
+			  $this->app->setError("Neteisingai nurodytas el. pašto adresas");
 			  $success = false;
 			  } */
 

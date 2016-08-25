@@ -69,7 +69,7 @@ class Module_Tools extends Module_Config
 
 			
 			if($db->error)
-				$this->app->setErrors($db->error .' Query: '.$db->error_query);
+				$this->app->setError($db->error .' Query: '.$db->error_query);
 			
 			$this->setPlainMessage("<pre>".htmlspecialchars($sql).";\n<b># Affected rows:</b> ".$aff."</pre>");
 		}

@@ -36,7 +36,7 @@ class Module_Support  extends GW_Public_Module {
 			
 			$this->app->jump(false,['success'=>1]);
 		} else {
-			$this->app->setErrors($msg->errors);
+			$this->app->setError($msg->errors);
 		}
 
 		
