@@ -451,7 +451,7 @@ class GW_Application
 		if($prepare)
 			foreach($data as $i => $msg)
 				if(substr($data[$i]['text'],0,1) == '/')
-					$data[$i]['text'] = GW::ln($data[$i]['text']);
+					$data[$i]['text'] = GW::l($data[$i]['text']);
 		
 		$this->sess['messages'] = Null;
 

@@ -12,8 +12,7 @@ class Module_Login extends GW_Module
 	}
 
 	function viewLogin()
-	{
-		
+	{		
 		return ['autologin'=>GW_Auth::isAutologinEnabled()];	
 	}
 

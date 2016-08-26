@@ -37,6 +37,7 @@ class GW_Module
 	public $tpl_vars;
 	public $default_view='default';
 	public $_args=[];//data passed from application params, request_params
+	public $sys_call = false;
 	
 	
 	function viewModInfo()
