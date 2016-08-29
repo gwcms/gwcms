@@ -48,6 +48,22 @@ function getLastCommitWhenVersionsWereSynced($repos_local=true, $bydate=false){
 	];	
 }
 
+/**
+ * will return last comit since specified time
+ */
+function getOneCommitBefore($repos_local, $date)
+{
+	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
+	
+	$commits = explode("\n", trim(my_shell_exec($enter_repos.'git log -n 1 --reverse  --until="'.$date.'" --pretty=format:"%H %s %ai"')));
+	
+	if(!isset($commits[0]))
+		return false;
+	
+	list($commitid,$whatever) = explode(' ', $commits[0],2);
+		
+	return $commitid;
+}
 
 
 function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
@@ -58,12 +74,18 @@ function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
 	$format='--pretty=format:"%H %s %ai"';	
 	
 	$newcommits = explode("\n", trim(my_shell_exec($enter_repos.'git log  --since="' . $lastcommit_date . '" '.$format)));
-	$updates_from_commit = explode(' ', $newcommits[count($newcommits) - 1], 2);
-	$updates_from_commit_com = $updates_from_commit[0];
+	
+	
+	//$updates_from_commit = explode(' ', $newcommits[count($newcommits) - 1], 2);
+	//$updates_from_commit_com = $updates_from_commit[0];
+	
+	
+	$updates_from_commit_com = getOneCommitBefore($repos_local, $lastcommit_date);
+	
 	return [
 		'newcommits'=>$newcommits,
-		'updates_from_commit'=>$updates_from_commit,
-		'commit_id'=>$updates_from_commit_com
+		'updates_from_commit'=>$updates_from_commit_com,
+		
 		];
 }
 
@@ -145,6 +167,8 @@ function gitshow($repos_local, $commit_id)
 
 
 
+
+
 function processCommand($line, $repos_local=true){
 	echo "Processing command: " . $line."\n";
 	$line = trim($line);
@@ -193,7 +217,7 @@ function processCommand($line, $repos_local=true){
 			//to check updates before get updates
 			
 			$new_commits = getNewCommitsFromDate(false, $datefrom);
-			$changed_files = getChangedFiles(false, $new_commits['commit_id']);
+			$changed_files = getChangedFiles(false, $new_commits['updates_from_commit']);
 			
 			print_r(['last_sync'=>isset($last_sync) ? $last_sync : false,
 				'new_commits'=>$new_commits,
@@ -212,7 +236,7 @@ function processCommand($line, $repos_local=true){
 			//intended to get updates from core gwcms
 			
 			$new_commits = getNewCommitsFromDate(false, $datefrom);
-			$dir = exportExtract2Tmp(false, $new_commits['commit_id'], ['new_commits'=>$new_commits]);
+			$dir = exportExtract2Tmp(false, $new_commits['updates_from_commit'], ['new_commits'=>$new_commits]);
 			
 			shell_exec("krusader --left=$dir --right='".__DIR__."'");
 		break;
@@ -222,6 +246,7 @@ function processCommand($line, $repos_local=true){
 			$last_sync = getLastCommitWhenVersionsWereSynced();
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info
 			$changed_files = getChangedFiles(true, $last_sync['lastcommit']);
+			
 			print_r(['$last_sync'=>$last_sync, '$newcommits'=>$newcommits, 'changed_files'=>$changed_files]);	
 			
 			if(!$changed_files)
