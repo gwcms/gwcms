@@ -99,7 +99,7 @@
 				{$users[$item->user_exec]}
 	{/function}
 	{function name=dl_cell_deadline}
-			{if $item->deadline!='0000-00-00' && $item->deadline!=''}
+			{if $item->deadline!='0000-00-00 00:00:00' && $item->deadline!=''}
 				{date('Y-m-d',strtotime($item->deadline))}
 			{else}
 				-
@@ -147,4 +147,4 @@
 	{$dl_actions=[edit,delete]}
 	
 	
-{/block}	
+{/block}
