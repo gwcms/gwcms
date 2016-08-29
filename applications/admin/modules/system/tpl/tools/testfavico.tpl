@@ -16,7 +16,7 @@
 	
 	<div class="col-md-3 imgcont">
 		
-	<img src="{$app_base}tools/favico?text={$smarty.get.text|default:"GW"}{if $smarty.get.text2}&text2={$smarty.get.text2}{/if}&fs={$smarty.get.fontsize|default:5}&font={$font}&nocache=1" style="width:16px;height:16px;background-color:white" />
+	<img src="{$app->sys_base}tools/favico?text={$smarty.get.text|default:"GW"}{if $smarty.get.text2}&text2={$smarty.get.text2}{/if}&fs={$smarty.get.fontsize|default:5}&font={$font}&nocache=1" style="width:16px;height:16px;background-color:white" />
 	
 	{$font}
 	

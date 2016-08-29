@@ -15,7 +15,7 @@
 		
 	<base href="{$sys_base}" />
 	
-	<link rel="shortcut icon" href="{$app_base}tools/favico?{GW::s('PROJECT_FAVICO_ARGS')}" type="image/x-icon" />
+	<link rel="shortcut icon" href="{$app->sys_base}tools/favico?{GW::s('PROJECT_FAVICO_ARGS')}" type="image/x-icon" />
 	
     {*<meta name="viewport" content="width=device-width, initial-scale=1.0">*}
 	<meta name="viewport" content="width=1400">

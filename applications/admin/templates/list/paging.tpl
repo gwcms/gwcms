@@ -27,7 +27,7 @@
 				{else}
 					
 					<div class="btn-group">
-						{if $paging.first}<a class="btn btn-default" href="#{$paging.first}" onclick="return gw_adm_sys.change_page(1)">1</a>{/if}
+						{if $paging.first && $paging.prev!=1}<a class="btn btn-default" href="#{$paging.first}" onclick="return gw_adm_sys.change_page(1)">1</a>{/if}
 						{if $paging.prev}<a class="btn btn-default" href="#{$paging.prev}" onclick="return gw_adm_sys.change_page({$paging.prev})">{$paging.prev}</a>{/if}
 					
 
@@ -40,7 +40,7 @@
 
 
 					{if $paging.next}<a class="btn btn-default" href="#{$paging.next}" onclick="return gw_adm_sys.change_page({$paging.next})">{$paging.next}</a>{/if}
-					{if $paging.last}<a class="btn btn-default" href="#{$paging.last}" onclick="return gw_adm_sys.change_page({$paging.last})">{$paging.last}</a>{/if}
+					{if $paging.last && $paging.next != $paging.last}<a class="btn btn-default" href="#{$paging.last}" onclick="return gw_adm_sys.change_page({$paging.last})">{$paging.last}</a>{/if}
 				</div>
 
 			{/if}
