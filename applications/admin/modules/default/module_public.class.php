@@ -28,7 +28,7 @@ class Module_Public extends GW_Common_Module
 			"name"=> GW::s('SITE_TITLE'),
 			"short_name"=> GW::s('SITE_TITLE'),
 			"icons"=> [[
-				"src"=>$this->app->app_root.'img/logo/logo_with_ltr_color.png',
+				"src"=>$this->app->app_root.'static/img/logo_push_messages.png',
 				'sizes'=>"192x192",
 				'type'=>'image/png']],
 			"start_url"=>$this->app->app_base,
