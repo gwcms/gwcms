@@ -139,22 +139,18 @@ class GW_Public_Module {
 		$this->processView($view_name, $params);
 	}
 
-	function setErrors($errors, $level = 2) {
-		$this->app->setErrors($errors, $level);
 
-		$this->errors = array_merge($this->errors, (array) $errors);
-
-		$this->loadErrorFields();
-	}
 
 	function loadErrorFields() {
-		if (!isset($_SESSION['messages']))
-			return false;
-
-		foreach ((array) $_SESSION['messages'] as $field => $error) {
-			if ($error[0] === 2)
-				$this->error_fields[$field] = $_SESSION['messages'][$field][1];
+                if(!isset($this->app->sess['messages']))
+                    return;
+                
+		foreach((array)$this->app->sess['messages'] as $msg)
+		{
+			if($msg["type"]==2 && isset($msg["field"]))
+				$this->error_fields[$msg["field"]] = $msg["field"];
 		}
+		
 	}
 
 	function fireEvent($event, &$context = false) {
@@ -197,15 +193,15 @@ class GW_Public_Module {
 	}
 
 	function setErrorItem($vals, $name) {
-		$_SESSION['error_item_vals_' . $name] = $vals;
+		$this->app->sess['error_item_vals_' . $name] = $vals;
 	}
 
 	function getErrorItem($name) {
-		if (!isset($_SESSION['error_item_vals_' . $name]))
+		if (!isset($this->app->sess['error_item_vals_' . $name]))
 			return null;
 
-		$vals = $_SESSION['error_item_vals_' . $name];
-		unset($_SESSION['error_item_vals_' . $name]);
+		$vals = $this->app->sess['error_item_vals_' . $name];
+		unset($this->app->sess['error_item_vals_' . $name]);
 		return $vals;
 	}
 
@@ -251,5 +247,34 @@ class GW_Public_Module {
 			'last' => $current >= $length ? 0 : $length,
 		));
 	}	
+	
+	function setError($text)
+	{
+		$this->setMessage(["text"=>$text,"type"=>GW_MSG_ERR]);
+	}
+	
+	
+	function setMessage($message)
+	{
+		if ($this->sys_call) {
+			$this->lgr->msg(json_encode($message));
+		} else {
+			$this->app->setMessage($message);
+		}
+		
+		$this->loadErrorFields();
+	}
+	
+	function setPlainMessage($text, $type=GW_MSG_SUCC)
+	{
+		$this->setMessage(["text"=>$text, "type"=>$type]);
+	}
+
+	function setItemErrors($item)
+	{
+		foreach($item->errors as $field => $error)
+			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
+	}	
+	
 
 }
