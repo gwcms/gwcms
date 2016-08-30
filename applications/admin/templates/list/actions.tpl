@@ -3,6 +3,7 @@
 	<a  class="{$action_class|default:gwcmsAction}"
 		{if $onclick}onclick="{$onclick};return false"{/if} 
 		href="{$href|default:'#'}"
+		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		{if $title}title="{$title|escape}"{/if}
 		
 		{if $confirm}{$app->fh()->gw_link_confirm()}{/if}>{if $iconclass}<i class="{$iconclass}"></i>{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
