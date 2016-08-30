@@ -21,7 +21,7 @@
 	{/function}
 	
 	{function name=dl_cell_title}
-		<a href="{$ln}/{$app->page->path}/{$item->id}/form" class="tooltip" title="{$item->description}">{$item->title|default:"No title"}</a>		
+		<a href="{$ln}/{$app->page->path}/{$item->id}/form" title="{$item->description}">{$item->title|default:"No title"}</a>		
 	{/function}
 	
 	{function dl_cell_insert_time}
@@ -30,10 +30,6 @@
 		
 
 	{$dl_smart_fields=[image,title,insert_time]}
-	
-	
-	
-	{$dl_fields=$m->getDisplayFields([image=>1, title=>1,rate=>1,insert_time=>1,update_time=>1])}
 	
 	
 	

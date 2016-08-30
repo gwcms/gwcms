@@ -13,6 +13,26 @@ class Module_Movies extends GW_Common_Module
 		
 	}	
 	
+	function getListConfig()
+	{
+		
+		$cfg = array('fields' => [
+			'id' => 'Lof', 
+			'title' => 'Lof',
+			'image'=> 'L',
+			'rate' => 'lof',
+			'insert_time'=>'lof',
+			'update_time'=>'lof'	
+			]
+		);
+		
+		//$cfg['filters']['project_id'] = ['type'=>'select','options'=>$this->options['project_id']];
+			
+			
+		return $cfg;
+	}	
+	
+	
 	function doGetImdb()
 	{
 		$imdb = $imdb = new Imdb();
