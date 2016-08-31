@@ -20,6 +20,7 @@ class GW_Public_Module {
 	public $links;
 	// pvz news/list bus modulis/viewsas, news/view/1/images bus - modulis,viewsas o params = [1,'images']
 	public $params;
+	public $sys_call = false;
 
 	function __construct($variables = Array()) {
 
