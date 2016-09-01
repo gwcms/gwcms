@@ -44,23 +44,23 @@ class GW_Public_Module {
 		//nekviecia sitos funkcijos
 	}
 
-	function processTemplate($name) {
-
-		$this->fireEvent("BEFORE_TEMPLATE");
-
+	function processTemplate($name, $fetch=false)
+	{
+		$this->fireEvent("BEFORE_TEMPLATE");		
+		
 		$this->smarty->assignByRef('messages', $this->messages);
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
-
+		
 		if ($this->tpl_name)
 			$file = $this->tpl_dir . $this->tpl_name;
 		else
 			$file = $this->tpl_dir . $name;
-
+		
 		if (!file_exists($tmp = $file . '.tpl'))
 			die("Template $tmp not found");
-
-		$this->smarty->display($tmp);
+			
+		return $this->smarty->{$fetch?'fetch':'display'}($tmp);
 	}
 
 	function processView($name, $params = Array()) {
