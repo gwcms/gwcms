@@ -541,6 +541,8 @@ class GW_Common_Module extends GW_Module
 		$this->list_params['views']['name'] = $_REQUEST['name'];
 		$this->loadViews();
 
+		//jump to first page
+		$this->list_params['page']=1;
 
 		if (isset($this->list_params['views']['order']) && $ord = $this->list_params['views']['order']) {
 			$this->list_params['order'] = $ord;
