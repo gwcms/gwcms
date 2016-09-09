@@ -1019,6 +1019,16 @@ class GW_Common_Module extends GW_Module
 		exit;
 	}
 	
+	/**
+	* to extend simple table with related objects
+	 * example use add related users after list
+	function __eventAfterList(&$list)
+	{
+		$this->attachFieldOptions($list, 'user_id', 'GW_User');
+		
+	}
+	 */
+	
 	function attachFieldOptions($list, $fieldname, $obj_classname)
 	{
 		$ids = [];
@@ -1030,4 +1040,6 @@ class GW_Common_Module extends GW_Module
 		$cond = GW_DB::inCondition('id', $ids);
 		$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
 	}	
+	
+	
 }
