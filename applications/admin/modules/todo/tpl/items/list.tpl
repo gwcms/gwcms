@@ -1,6 +1,10 @@
 {extends file="default_list.tpl"}
 
 {block name="init"}
+	
+	{$dl_checklist_enabled=1}
+	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
+	
 	{capture append=footer_hidden}
 		<style type="text/css">
 		.row-inprogress td{ font-weight: bold; }
