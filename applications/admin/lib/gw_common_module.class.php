@@ -1019,5 +1019,15 @@ class GW_Common_Module extends GW_Module
 		exit;
 	}
 	
-	
+	function attachFieldOptions($list, $fieldname, $obj_classname)
+	{
+		$ids = [];
+		foreach($list as $itm)
+			$ids[]=$itm->$fieldname;
+		
+		$o = new $obj_classname;
+			
+		$cond = GW_DB::inCondition('id', $ids);
+		$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
+	}	
 }
