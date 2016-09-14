@@ -448,10 +448,17 @@ class GW_Application
 		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
 			return false;
 
-		if($prepare)
-			foreach($data as $i => $msg)
+		if($prepare){
+			foreach($data as $i => $msg){
+				//translate error message if it is translation path
 				if(substr($data[$i]['text'],0,1) == '/')
 					$data[$i]['text'] = GW::l($data[$i]['text']);
+				
+				//get field captions
+				if(isset($data[$i]['field']))
+					$data[$i]['field_title'] = $this->fh()->fieldTitle($data[$i]['field']);
+			}
+		}
 		
 		$this->sess['messages'] = Null;
 
@@ -499,6 +506,10 @@ class GW_Application
 		$this->processModule($path_info, $_REQUEST);
 	}
 
+	/**
+	 * 
+	 * @return FH
+	 */
 	function FH()
 	{
 		$fh = GW::getInstance('FH');
