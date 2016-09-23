@@ -116,6 +116,15 @@ class GW_User_Extended
 
 		return $list;
 	}
+	
+	function getAll()
+	{
+		$db = $this->getDB();
+		
+		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE `user_id`=?", $this->user_id]);
+
+		return $rez;
+	}	
 	/*
 
 	  function preload($key, &$time = 0) {
