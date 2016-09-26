@@ -342,4 +342,11 @@ class GW_User extends GW_Composite_Data_Object
 	{
 		return GW_Message::countStatic(Array('user_id=? AND seen=0', $this->id));
 	}
+	
+	//allowed ips can be separated in comma
+	//you should add allowed_ips varchar(255) to gw_user table
+	function checkAllowedIp($ip)
+	{
+		return strpos($this->allowed_ips,$ip)!==false;
+	}
 }
