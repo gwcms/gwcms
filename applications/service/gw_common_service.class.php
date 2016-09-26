@@ -21,6 +21,7 @@ class GW_Common_Service
 
 	function init()
 	{
+		$this->initLang();
 		$this->app->initDB();
 	}
 
@@ -69,6 +70,18 @@ class GW_Common_Service
 	function checkBasicUser($user, $pass)
 	{
 		return $user === $this->username && $pass === $this->pass;
+	}
+
+	function checkBasicSystemUser($user, $pass)
+	{
+		$usr = GW_user::singleton()->find(['username=? AND active=1', $user]);
+
+
+		if (!$usr->checkAllowedIp($_SERVER['REMOTE_ADDR'])) {
+			$this->output(['error_code' => '/G/USER/IP_ADDRESS_NOT_ALLOWED_OR_UNCONFIGURED']);
+		}
+
+		return $user === $usr->username && $pass === $usr->api_key;
 	}
 
 	function actPublic($args)
@@ -144,8 +157,23 @@ class GW_Common_Service
 		}
 
 
+		$this->output($response);
+	}
+
+	function output($response)
+	{
 		header('Content-type: text/plain');
+
+		if (isset($response['error_code']) && strpos($response['error_code'], '/') === 0)
+			$response['error_human'] = GW::l($response['error_code']);
+
 		echo json_encode($response, JSON_PRETTY_PRINT);
 		exit;
+	}
+
+	function initLang($appname = "admin")
+	{
+		GW_Lang::$ln = 'en';
+		GW_Lang::$langf_dir = GW::s("DIR/APPLICATIONS") . $appname . '/lang/';
 	}
 }
