@@ -77,11 +77,11 @@ class GW_Common_Service
 		$usr = GW_user::singleton()->find(['username=? AND active=1', $user]);
 
 
-		if (!$usr->checkAllowedIp($_SERVER['REMOTE_ADDR'])) {
+		if ($usr && !$usr->checkAllowedIp($_SERVER['REMOTE_ADDR'])) {
 			$this->output(['error_code' => '/G/USER/IP_ADDRESS_NOT_ALLOWED_OR_UNCONFIGURED']);
 		}
 
-		return $user === $usr->username && $pass === $usr->api_key;
+		return $usr && $user === $usr->username && $pass === $usr->api_key;
 	}
 
 	function actPublic($args)
