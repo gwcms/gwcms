@@ -49,6 +49,7 @@ class GW_Auth
 			list($uid, $token) = explode(',', $_GET['temp_access']);
 
 			if (GW::getInstance('GW_Temp_Access')->getTempAccess($uid, $token)) {
+				$autologin = 1; 
 				$user = GW::getInstance('GW_User')->createNewObject($uid, 1);
 			} else {
 				die(json_encode(['error' => 16532, 'error_message' => 'Invalid token']));
@@ -64,14 +65,14 @@ class GW_Auth
 
 			unset($_GET['GW_CMS_API_AUTH']);
 		}
-
+		
 
 		if (!isset($user) || !$user)
 			return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
 
 		if (!$autologin && !$user->isSessionNotExpired()) { //jei autologin neveikia tai sesijos galiojimas yra
 			$this->logout();
-			$_SESSION['messages'][] = Array(1, '/G/GENERAL/SESSION_EXPIRED');
+			
 			return $this->setError('/G/GENERAL/SESSION_EXPIRED');
 		}
 
