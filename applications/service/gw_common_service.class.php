@@ -75,6 +75,7 @@ class GW_Common_Service
 	function checkBasicSystemUser($user, $pass)
 	{
 		$usr = GW_user::singleton()->find(['username=? AND active=1', $user]);
+		$this->user = $usr;
 
 
 		if ($usr && !$usr->checkAllowedIp($_SERVER['REMOTE_ADDR'])) {
