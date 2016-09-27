@@ -154,11 +154,11 @@ class Navigator
 	 * Is limited to http. 
 	 * https request does not works
 	 */
-	static function backgroundRequest($path, $get_args = [])
+	static function tempAccessUrl($user_id, $path, $get_args = [])
 	{
-		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
+		$token = GW_Temp_Access::singleton()->getToken($user_id, '10 minute', $path);
 
-		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
+		$get_args['temp_access'] = $user_id . ',' . $token;
 		$get_args['sys_call'] = 1;
 
 		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
@@ -173,8 +173,12 @@ class Navigator
 		}
 
 		$url = $base . $path;
-
-		GW_Http_Agent::impuls($url);
+		return $url;
+	}
+	
+	static function backgroundRequest($path, $get_args = [])
+	{
+		GW_Http_Agent::impuls($url=self::tempAccessUrl(GW_USER_SYSTEM_ID, $path, $get_args));
 
 		return $url;
 	}
