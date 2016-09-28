@@ -64,6 +64,30 @@ class GW_Auth
 			$user = $this->loginApi($tmp);
 
 			unset($_GET['GW_CMS_API_AUTH']);
+		} elseif(isset($_GET['REMOTE_AUTH_USER'])) {
+			
+			//remote authentification, user has predefined url, which is endpoint where
+			//gwcms asks wheather authorise user or not
+			$tmpuser = $this->user0->getByUsername($_GET['REMOTE_AUTH_USER']);
+			
+			if($tmpuser && $tmpuser->remote_auth_url)
+			{
+				
+				//d::dumpas($_GET['REMOTE_AUTH_USER']);
+				$url = Navigator::buildURI($tmpuser->remote_auth_url, ['SESSID'=>@$_GET['SESSID'],'REMOTE_AUTH_USER'=>$_GET['REMOTE_AUTH_USER']]);
+				$resp = file_get_contents($url);
+			
+				if($resp == md5($tmpuser->username))
+				{
+					$user = $tmpuser;
+					$autologin = 1;
+					
+					$this->login($user);
+				}else{
+					$this->setError('/G/GENERAL/REMOTE_AUTH_FAILED');
+				}
+			}
+			
 		}
 		
 
