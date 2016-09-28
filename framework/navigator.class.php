@@ -103,7 +103,13 @@ class Navigator
 	static function &explodeURI($url)
 	{
 		$parts = parse_url($url);
-		parse_str($parts['query'], $parts['query']);
+		
+		if(isset($parts['query'])){
+			parse_str($parts['query'], $parts['query']);
+		}else{
+			$parts['query'] = [];
+		}
+		
 		return $parts;
 	}
 
