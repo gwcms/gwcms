@@ -36,7 +36,7 @@ class GW_Request_Helper
 		    (
 		    'ip' => $IP,
 		    'host' => $HOST,
-		    'browser' => $_SERVER['HTTP_USER_AGENT']
+		    'browser' => @$_SERVER['HTTP_USER_AGENT']
 		);
 
 		if (isset($_SERVER['HTTP_REFERER']))
