@@ -64,5 +64,9 @@
 		<en>Wrong username or password</en>
 		<lt>Neteisingas vartotojo vardas arba slaptažodis</lt>
 	</i>
+	<i id="REMOTE_AUTH_FAILED">
+		<en>Remote authorisation failed</en>
+		<lt>Nuotolinė autorizacija nepavyko</lt>
+	</i>
 	
 </xml>
