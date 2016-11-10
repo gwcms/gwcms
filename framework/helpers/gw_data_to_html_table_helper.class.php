@@ -24,4 +24,23 @@ class GW_Data_to_Html_Table_Helper
 		$str.="</table>";
 		return $str;
 	}
+	
+	static function doTableSingleRecord($data, $font_size = 10)
+	{
+		if (!is_array($data))
+			return;
+
+		$str = "";
+		$str.= "<table class='gwTable'>";
+		
+		foreach($data as $fieldname => $value)
+		{
+			$str.="<tr><th>".htmlspecialchars($fieldname)."</th><td>".htmlspecialchars($value)."</td></tr>";
+			
+		}
+		
+
+		$str.="</table>";
+		return $str;
+	}	
 }
