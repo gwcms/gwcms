@@ -28,27 +28,30 @@
 
 
 {if !$readonly}
-	<input id="{$inp_file_id}" type="file" name="{$name}" />
+	<input id="{$inp_file_id}" class="imageinputwithpreview" type="file" name="{$name}" data-container="{$preview_container_id}" onchange="readURL(this)" />
 {/if}
 
 <script>
 	function readURL(input) {
 
+		var container = $(input).data('container');
+		
 		if (input.files && input.files[0]) {
 
 			var reader = new FileReader();
 
 			reader.onload = function (e) {
-				$('#{$preview_container_id} .gwcms-iinp-prev-new img').attr('src', e.target.result);
-				$('.gwcms-iinp-prev-new').fadeIn();
-				$('.gwcms-iinp-prev-exist').fadeOut();
+				
+				//alert(e.target.result)
+				
+				$('#'+container+' .gwcms-iinp-prev-new img').attr('src', e.target.result);
+				$('#'+container+' .gwcms-iinp-prev-new').fadeIn();
+				$('#'+container+' .gwcms-iinp-prev-exist').fadeOut();
 			}
 
 			reader.readAsDataURL(input.files[0]);
 		}
 	}
 
-	$("#{$inp_file_id}").change(function(){
-		readURL(this);
-	});
+
 </script>

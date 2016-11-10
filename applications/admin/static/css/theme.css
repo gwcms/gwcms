@@ -7751,3 +7751,12 @@ input[type="color"] {
 #mainnav-menu .fa{
 	margin-right: .3em; width: 1.28571429em;text-align: center;
 }
+
+
+.i18n_tag{font-size:70%;color: orange;font-weight: bold}
+
+.change_lang a.selected{ font-weight:bold;color:#000 }
+.change_lang a{ color:#555; }
+.change_lang a:hover{ color:#000; }
+
+.groupedrow{ font-weight:bold; text-align: center; font-style: italic; color: brown; }

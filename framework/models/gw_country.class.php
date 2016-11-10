@@ -23,4 +23,10 @@ class GW_Country extends GW_Data_Object
 			$new->insert();
 		}
 	}
+	
+	function getCountryByCode($cc,$lang)
+	{
+		$country = $this->getAssoc(['code', 'title_' . $lang], ['code=?',$cc], ['order' => 'title_' . $lang . ' ASC']);
+		return isset($country[$cc]) ? $country[$cc] : $cc;
+	}
 }
