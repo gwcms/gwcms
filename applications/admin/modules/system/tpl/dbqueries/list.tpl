@@ -6,7 +6,7 @@
 	{$dl_actions=[run,invert_active,edit,delete]}
 	
 	{function dl_actions_run}
-		{list_item_action_m url=[false,[act=>doExecuteQuery]] iconclass="fa fa-caret-square-o-right"}
+		{list_item_action_m url=[false,[act=>doExecuteQuery,id=>$item->id]] iconclass="fa fa-caret-square-o-right"}
 	{/function}	
 	
 {/block}
