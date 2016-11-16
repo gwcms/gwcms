@@ -91,8 +91,8 @@ class GW_Auth
 		}
 		
 		
-		if (!isset($user) || !$user)
-			return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
+		//if (!isset($user) || !$user)
+		//	return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
 		
 		if (!$autologin && !$user->isSessionNotExpired($this->session['last_request'])) { //jei autologin neveikia tai sesijos galiojimas yra
 			$this->logout();
