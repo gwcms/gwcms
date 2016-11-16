@@ -29,6 +29,9 @@ class GW_Auth
 	function setError($err_str)
 	{
 		$this->error = $err_str;
+		
+		
+		
 		return false;
 	}
 
@@ -41,6 +44,7 @@ class GW_Auth
 		$cookiePass = isset($_COOKIE['login_7']) ? $_COOKIE['login_7'] : false; // is autologin pass
 		$cookieUsername = isset($_COOKIE['login_0']) ? $_COOKIE['login_0'] : false; // is username
 		$autologin = isset($_COOKIE['login_7']) && $_COOKIE['login_7'] && self::isAutologinEnabled();
+
 
 		//request must be from same ip
 		$logedin = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int) $this->session["user_id"]);
@@ -91,8 +95,9 @@ class GW_Auth
 		}
 		
 		
-		//if (!isset($user) || !$user)
-		//	return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
+		if (!isset($user) || !$user)
+			return false;
+//			return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
 		
 		if (!$autologin && !$user->isSessionNotExpired($this->session['last_request'])) { //jei autologin neveikia tai sesijos galiojimas yra
 			$this->logout();
