@@ -215,19 +215,19 @@ class GW_User extends GW_Composite_Data_Object
 			return $user;
 	}
 
-	function isSessionNotExpired()
+	function isSessionNotExpired($last_request=false)
 	{
 		if ($this->id == GW_USER_SYSTEM_ID)
 			return true;
 
-		$tmp = $this->remainingSessionTime();
+		$tmp = $this->remainingSessionTime($last_request);
 		return $tmp > -2;
 	}
 
 	/**
 	 * returns seconds
 	 */
-	function remainingSessionTime()
+	function remainingSessionTime($last_request)
 	{
 		$session_validity = (int) $this->get('session_validity');
 
@@ -235,7 +235,6 @@ class GW_User extends GW_Composite_Data_Object
 			return -1;
 
 		//$last_request = strtotime($this->get('last_request_time'))
-		$last_request = $_SESSION[AUTH_SESSION_KEY]['last_request'];
 
 		return $last_request - strtotime("-$session_validity minute");
 	}

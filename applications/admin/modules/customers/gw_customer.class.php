@@ -196,28 +196,7 @@ class GW_Customer extends GW_User
 		//exit;
 	}
 
-	function isSessionNotExpired() 
-	{
-		$tmp = $this->remainingSessionTime();
-		return $tmp > -2;
-	}
 
-	/**
-	 * returns seconds
-	 */
-	function remainingSessionTime() 
-	{
-		$session_validity = (int) $this->get('session_validity');
-
-		if ($session_validity == -1 || $this->autologgedin)
-			return -1;
-
-		//$last_request = strtotime($this->get('last_request_time'))
-		$last_request = $_SESSION[AUTH_SESSION_KEY]['last_request'];
-
-		return $last_request - strtotime("-$session_validity minute");
-	}
-	
 	
 	function setPassChangeSecret()
 	{

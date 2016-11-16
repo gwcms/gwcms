@@ -58,6 +58,9 @@ class GW_Application
 	{
 		$this->auth = new GW_Auth(new $this->user_class());
 		$this->user = $this->auth->isLogged();
+		
+		if($this->auth->error)
+			$this->setError($this->auth->error);
 
 		if (!isset($GLOBALS['do_not_register_request']) && $this->user)
 			$this->user->onRequest();
