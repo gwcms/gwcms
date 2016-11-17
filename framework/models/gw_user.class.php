@@ -227,15 +227,16 @@ class GW_User extends GW_Composite_Data_Object
 	/**
 	 * returns seconds
 	 */
-	function remainingSessionTime($last_request)
+	function remainingSessionTime($last_request=false)
 	{
 		$session_validity = (int) $this->get('session_validity');
-
+		
 		if ($session_validity == -1 || $this->autologgedin)
 			return -1;
 
-		//$last_request = strtotime($this->get('last_request_time'))
-
+		if($last_request===false)
+			$last_request = strtotime($this->get('last_request_time'));
+		
 		return $last_request - strtotime("-$session_validity minute");
 	}
 

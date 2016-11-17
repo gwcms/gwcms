@@ -13,7 +13,7 @@ class Module_Login extends GW_Module
 
 	function viewLogin()
 	{		
-		return ['autologin'=>GW_Auth::isAutologinEnabled()];	
+		$this->tpl_vars['autologin'] = GW_Auth::isAutologinEnabled();
 	}
 
 	function doLogin()
@@ -68,5 +68,10 @@ class Module_Login extends GW_Module
 	function viewDialog()
 	{
 		//empty
+		$this->tpl_vars['dialog']=1;
+		$this->tpl_file_name=$this->tpl_dir.'login';		
+		
+		$this->viewLogin();
+
 	}
 }

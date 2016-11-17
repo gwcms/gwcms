@@ -4,7 +4,7 @@
 
 <html lang="en">
 {if $app->user}
-	{assign var="session_exp" value=$app->user->remainingSessionTime() scope=parent}
+	{assign var="session_exp" value=$app->user->remainingSessionTime() scope=global}
 {/if}
 
 {assign var="breadcrumbs" value=$app->getBreadcrumbs($breadcrumbs_attach) scope=parent}
@@ -100,7 +100,7 @@
 		});	
 		
 		
-		$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp}, server_time:'{"F d, Y H:i:s"|date}'});
+		$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
 		gw_adm_sys.init();		
 		
 		

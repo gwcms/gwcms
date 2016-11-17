@@ -1,8 +1,18 @@
 {include "head.tpl"}
 
+{if $success}
+	<br />
+	<div style="color:green">{$lang.SESSION_EXTEND_SUCCESS}</div>
+	<script type="text/javascript">
+		window.parent.gw_session.login_dialog_close();
+	</script>
+{else}
+	
 <body>
 	<div id="container" class="cls-container">
 		
+		
+		{if !$dialog}
 		<!-- BACKGROUND IMAGE -->
 		<!--===================================================-->
 		<div id="bg-overlay"></div>
@@ -10,11 +20,9 @@
 		<!-- BACKGROUND IMAGE -->
 		<!--===================================================-->
 		<div id="bg-overlay" class="bg-img" style="background-image: url({$app_root}static/img/bg-img/bg-img-{rand(1,7)}.jpg)"></div>	
-	
+		{/if}
 		
-		
-		
-		
+			
 		<!-- LOGIN FORM -->
 		<!--===================================================-->
 		<div class="cls-content">
@@ -84,3 +92,5 @@
 
 
 {include "default_close_clean.tpl"}
+
+{/if}

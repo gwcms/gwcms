@@ -137,7 +137,7 @@ var gw_adm_sys = {
 	},
 	init_after_load: function ()
 	{
-		//gw_session.init();
+		gw_session.init();
 		gw_server_time.init();
 		/*USED*/
 
@@ -158,6 +158,130 @@ var gw_adm_sys = {
 	}
 
 }
+
+var gw_session =
+		{
+				upd_time: 0,
+				display_timer60: 0,
+				display_timer1: 0,
+				keep_timer: 0,
+				exp: 1,
+				dialog_open_state:false,
+				
+				process_notifications: function (response)
+				{
+						gw_adm_sys.updateNotifications(response.new_messages ? response.new_messages : 0);
+				},
+				ping: function (response) {
+						$.ajax({url: 'tools/ping', success: gw_session.process_notifications, dataType: 'json'});
+				},
+				keep: function (response)
+				{
+						if (!response) {
+							return $.ajax({url: 'tools/ping', success: gw_session.keep, dataType: 'json'});
+						} else {
+							gw_session.process_notifications(response);
+						}
+
+						gw_session.time_left(response.sess_expires);
+
+						if (gw_session.exp < 0) {
+								//clearInterval(gw_session.keep_timer);
+								gw_session.login_dialog_open();
+						}
+				},
+				time_left: function (set)
+				{
+						if (typeof (set) != 'undefined')
+						{
+								gw_session.exp = set - 1 + 1;
+								gw_session.upd_time = new Date().getTime();
+						}
+
+						return Math.floor((gw_session.upd_time + gw_session.exp * 1000 - new Date().getTime()) / 1000);
+				},
+				timer_update: function ()
+				{
+						var left_secs = gw_session.time_left();
+
+						if (left_secs < 180 && gw_session.display_timer60) // < 3 min
+						{
+								clearInterval(gw_session.display_timer60);
+								gw_session.display_timer60 = 0;
+								gw_session.display_timer1 = setInterval(gw_session.timer_update, 1000);
+						}
+
+						if (left_secs < 0) {
+							
+								clearInterval(gw_session.display_timer1);
+								setTimeout(gw_session.keep, 3000);
+								
+								left_secs = 0;
+						}
+
+
+						var m = Math.floor(left_secs / 60);
+						var s = left_secs - m * 60;
+						var str = (m ? m + ' m ' : '') + (m < 3 ? s + ' s' : '');
+
+						$('#session_exp_t').html(str);
+				},
+				login_dialog_open: function ()
+				{
+						//if (!gw_login_dialog.is_open())
+						//		gw_login_dialog.open();
+							
+						if(gw_session.dialog_open_state)
+							return false;
+						
+							
+						gw_session.dialog_open_state=1;
+						
+						gwcms.open_dialog2({ url: GW.app_base+GW.ln+'/users/login/dialog', iframe:1, title:'Login dialog'})							
+							
+				},
+				login_dialog_close: function()
+				{
+					gwcms.close_dialog2();
+					gw_session.dialog_open_state = false;
+					
+					gw_session.extend_success();
+				},
+				
+				extend_success: function ()
+				{
+						gw_session.keep(0);
+						setTimeout('gw_session.init(1)', 2000);
+				},
+				init: function (extend)
+				{
+					//user is not logged
+					if(GW.session_exp==0)
+						return false;
+					
+					
+					if (!extend)
+					{
+							gw_session.upd_time = GW.init_time;
+							gw_session.exp = GW.session_exp;
+					}
+
+
+
+					if (GW.session_exp != -1)
+					{
+
+							gw_session.keep_timer = setInterval('gw_session.keep(0)', 1 * 60 * 1000);//1min
+							gw_session.display_timer60 = setInterval(gw_session.timer_update, 5 * 1000);//1min
+							gw_session.timer_update();
+					} else {
+
+							setInterval('gw_session.ping()', 60 * 5 * 1000);//1min
+					}
+				}
+
+		}
+
 
 /*USED*/
 var gw_server_time = {
@@ -226,7 +350,7 @@ var gwcms = {
 					</div></div></div></div>'
 					);
 
-			$("#gwDialogConfiFrm").iframeAutoHeight({minHeight: 200, maxHeight: $("body").innerHeight() - 250, minWidth: 200, maxWidth: $("body").innerWidth() - 250, heightOffset: 0, widthOffset: 60/*, debug:true */});
+			$("#gwDialogConfiFrm").iframeAutoHeight({minHeight: 200, minWidth: 200, heightOffset: 0, widthOffset: 60/*, debug:true */});
 			$("#gwDialogConfiFrm").load(function () {
 				$("#gwcmsDialog").modal({backdrop: 'static'}).on('hidden.bs.modal', function () {
 					$('#gwcmsDialog').remove();
@@ -235,6 +359,11 @@ var gwcms = {
 
 			});
 		});
+	},
+	close_dialog2: function()
+	{
+		$('#gwcmsDialog').remove();
+		$('.modal-backdrop').fadeOut();
 	},
 	
 	initAutoresizeIframe: function(selector, cfg, callback)
@@ -534,6 +663,16 @@ function checked_action(action) {
 	});
 
 	gw_dialog.open(GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','))
+}
+
+function checked_action2(action, title) {
+
+	var selected = [];
+	$.each($('.checklist_item:checked'), function () {
+		selected.push($(this).val());
+	});
+
+	gwcms.open_dialog2({url: GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','), title: title});
 }
 
 
