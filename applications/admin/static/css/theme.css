@@ -7760,3 +7760,11 @@ input[type="color"] {
 .change_lang a:hover{ color:#000; }
 
 .groupedrow{ font-weight:bold; text-align: center; font-style: italic; color: brown; }
+
+.bg-bro{background-color: brown;}
+.bg-blu{background-color: #0099DA;}
+.bg-succ{background-color: #02C66C;}/*green*/
+.bg-warn{background-color: #F0AD4E;}/*orange*/
+.bg-dang{background-color: #D9534F;}/*red*/
+.bg-info{background-color: #54C8EB}/*lighblue*/
+.bg-gray{background-color: #777}
