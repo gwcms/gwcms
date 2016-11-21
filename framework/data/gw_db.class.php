@@ -186,9 +186,18 @@ class GW_DB
 			return Null;
 
 		$result = Array();
+		
+		if(is_array($key) && count($key)==2)
+		{
+			while ($row = $this->result->fetch_assoc())
+				$result[$row[$key[0]]][$row[$key[1]]] = $row;				
+		}else{
+			while ($row = $this->result->fetch_assoc())
+				$result[$row[$key]] = $row;			
+		}
+		
 
-		while ($row = $this->result->fetch_assoc())
-			$result[$row[$key]] = $row;
+
 
 
 		return $result;
