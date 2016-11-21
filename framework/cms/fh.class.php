@@ -224,4 +224,18 @@ class FH
 	{
 		return date($format, strtotime($date));
 	}
+	
+	//to use in javascript
+	//get lang strings
+	//var lang={FH::printLangStrings('FIELDS/title','BUTTONS/OK','BUTTONS/CANCEL')}
+	function printLangStrings()
+	{
+		$arr=Array();
+
+		foreach(func_get_args() as $arrkey)
+			$arr[$arrkey]=$this->altLang($arrkey);
+			
+		echo json_encode($arr);
+	}	
+	
 }
