@@ -341,7 +341,7 @@ var gwcms = {
 	{
 		gwcms.dialog_cnt++;
 
-		require(["js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
+		require(["js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin", "js/bootstrap.min"], function (test) {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
 
