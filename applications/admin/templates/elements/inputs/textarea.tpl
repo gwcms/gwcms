@@ -4,7 +4,9 @@
 
 
 {if $autoresize}
-	{$m->addIncludes("jq/autoresize", 'js', "`$app_root`static/js/jq/autoresize.jquery.min.js")}
+	<script>
+		require(['js/jq/autoresize.jquery.min']);
+	</script>
 {/if}
 
 
