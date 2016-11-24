@@ -96,15 +96,35 @@ function smarty_function_html_options($params)
 
             case 'disabled':
             case 'readonly':
+				/**************************************************
+				 * Handle the disabled option just like selected option
+				 * strict must be enabled
+				 * ***************************************************/
+				$disabled = array();
                 if (!empty($params['strict'])) {
-                    if (!is_scalar($_val)) {
-                        trigger_error("html_options: $_key attribute must be a scalar, only boolean true or string '$_key' will actually add the attribute", E_USER_NOTICE);
+		 				if (is_array($_val)) {
+                    		foreach ($_val as $_sel) {
+                        		if (is_object($_sel)) {
+                        	    	if (method_exists($_sel, "__toString")) {
+                        	        	$_sel = smarty_function_escape_special_chars((string) $_sel->__toString());
+                        	    	} else {
+                        	        	trigger_error("html_options: selected attribute contains an object of class '" . get_class($_sel) . "' without __toString() method", E_USER_NOTICE);
+                        	        	continue;
                     }
-
-                    if ($_val === true || $_val === $_key) {
-                        $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
+                        		} else {
+                        	    	$_sel = smarty_function_escape_special_chars((string) $_sel);
                     }
-
+                        		$disabled[$_sel] = true;
+                    		}
+                		} elseif (is_object($_val)) {
+                    		if (method_exists($_val, "__toString")) {
+                    	    	$disabled = smarty_function_escape_special_chars((string) $_val->__toString());
+                    		} else {
+                    	    	trigger_error("html_options: selected attribute is an object of class '" . get_class($_val) . "' without __toString() method", E_USER_NOTICE);
+                    		}
+                		} else {
+                    		$disabled = smarty_function_escape_special_chars((string) $_val);
+                		}
                     break;
                 }
             // omit break; to fall through!
@@ -130,12 +150,12 @@ function smarty_function_html_options($params)
 
     if (isset($options)) {
         foreach ($options as $_key => $_val) {
-            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx);
+            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx, $disabled);
         }
     } else {
         foreach ($values as $_i => $_key) {
             $_val = isset($output[$_i]) ? $output[$_i] : '';
-            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx);
+            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx, $disabled);
         }
     }
 
@@ -148,7 +168,8 @@ function smarty_function_html_options($params)
     return $_html_result;
 }
 
-function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx)
+//Added the $disabled parameter
+function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx, $disabled)
 {
     if (!is_array($value)) {
         $_key = smarty_function_escape_special_chars($key);
@@ -160,6 +181,14 @@ function smarty_function_html_options_optoutput($key, $value, $selected, $id, $c
         } elseif ($_key === $selected) {
             $_html_result .= ' selected="selected"';
         }
+		//And handle it
+		if (is_array($disabled)){
+			if(isset($disabled[$_key])){
+				$_html_result .= ' disabled';
+			}
+		} elseif($_key === $disabled){
+			$_html_result .= ' disabled';
+		}
         $_html_class = !empty($class) ? ' class="' . $class . ' option"' : '';
         $_html_id = !empty($id) ? ' id="' . $id . '-' . $idx . '"' : '';
         if (is_object($value)) {
@@ -184,11 +213,12 @@ function smarty_function_html_options_optoutput($key, $value, $selected, $id, $c
     return $_html_result;
 }
 
-function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx)
+//Added the $disabled parameter
+function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx, $disabled)
 {
     $optgroup_html = '<optgroup label="' . smarty_function_escape_special_chars($key) . '">' . "\n";
     foreach ($values as $key => $value) {
-        $optgroup_html .= smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, $idx);
+        $optgroup_html .= smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, $idx, $disabled);
     }
     $optgroup_html .= "</optgroup>\n";
 

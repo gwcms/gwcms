@@ -15,7 +15,8 @@
 {if !$gwcms_input_select_loaded}
 	{$m->addIncludes("bs/selectcss", 'css', "`$app_root`static/vendor/bootstrap-select/css.css")}
 	<script src="{$app_root}vendor/bootstrap-select/js.js"></script>
-	<script type="text/javascript">$(function(){ $('.selectpicker').selectpicker(); });</script>
+	<script type="text/javascript">$(function(){ $('.selectpicker').selectpicker(); });</script>	
+	<script type="text/javascript">require(['vendor/bootstrap-select/js'], function(){ $('.selectpicker').selectpicker(); });</script>
 	
 	
 	{assign var=gwcms_input_select_loaded value=1 scope=global}	
