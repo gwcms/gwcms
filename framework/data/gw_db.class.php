@@ -187,10 +187,19 @@ class GW_DB
 
 		$result = Array();
 		
-		if(is_array($key) && count($key)==2)
+		if(is_array($key))
 		{
-			while ($row = $this->result->fetch_assoc())
-				$result[$row[$key[0]]][$row[$key[1]]] = $row;				
+			switch(count($key)){
+				case 2:
+					while ($row = $this->result->fetch_assoc())
+						$result[$row[$key[0]]][$row[$key[1]]] = $row;	
+				break;
+				case 3:
+					while ($row = $this->result->fetch_assoc())
+						$result[$row[$key[0]]][$row[$key[1]]][$row[$key[2]]] = $row;
+				break;
+		
+			}
 		}else{
 			while ($row = $this->result->fetch_assoc())
 				$result[$row[$key]] = $row;			
