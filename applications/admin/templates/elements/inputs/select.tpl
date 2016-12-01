@@ -1,13 +1,4 @@
-{if $empty_option}
-	{$options=$lang.EMPTY_OPTION+$options}
-{/if}
-
-<select  id="{$id}" class="selectpicker {if $class} {$class}{/if}" {if $required}required="required"{/if} name="{$input_name}" onchange="{$onchange}" 
-		 {if $enable_search}data-live-search="true"{/if} 
-		 >
-	{html_options  selected=$value options=$options disabled=$disabled strict=1}
-</select>
-
+{include file="elements/inputs/select_plain.tpl" class="`$class` selectpicker"}
 
 {*{$m->addIncludes("bs/select", 'js', "`$app_root`static/vendor/bootstrap-select/js.js")}*}
 
