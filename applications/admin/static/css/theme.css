@@ -58,7 +58,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 	height: auto;
 	min-height: 100vh;
 	min-width: 290px;
-	overflow: hidden;
+	//overflow: hidden;
 	position: relative;
 }
 #container.boxed-layout

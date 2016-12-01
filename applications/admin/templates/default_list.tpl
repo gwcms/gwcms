@@ -151,7 +151,7 @@
 			</div>	
 		{/if}		
 
-		<div style="overflow-x: auto">
+		<div>
 			{if !count($list)}
 				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
 			{else}
