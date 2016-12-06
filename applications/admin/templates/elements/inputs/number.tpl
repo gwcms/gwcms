@@ -16,4 +16,4 @@
 	{$input_extra_params=implode(' ',$input_extra_params)}
 {/if}
 
-{include file="elements/inputs/text.tpl" type="number"}
+{include file="elements/inputs/text.tpl"}
