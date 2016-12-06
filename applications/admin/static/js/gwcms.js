@@ -612,6 +612,12 @@ var gwcms = {
 			
 			$.niftyNoty(data);			
 		}
+	},
+	
+	beforeFormSubmit: function(obj)
+	{
+		
+		$(obj).find(':disabled').removeAttr('disabled');
 	}
 	
 }
