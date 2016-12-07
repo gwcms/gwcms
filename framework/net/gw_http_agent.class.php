@@ -113,13 +113,16 @@ class GW_Http_Agent
 		$header = [$this->last_response_header];
 		//$header = explode('Location: ', $this->last_response_header);
 
-		preg_match_all('/Set-Cookie: ([^=]*)=([^;]*)/i', $header[0], $m, PREG_SET_ORDER);
-
-
+		$this->setCookiesFromRaw($header[0]);
+		$this->saveCookies();
+	}
+	
+	function setCookiesFromRaw($raw)
+	{
+		preg_match_all('/Set-Cookie: ([^=]*)=([^;]*)/i', $raw , $m, PREG_SET_ORDER);
+		
 		foreach ($m as $i => $tmp)
 			$this->cookies[rawurldecode($tmp[1])] = $tmp[2];
-
-		$this->saveCookies();
 	}
 
 	function &getCookies()
