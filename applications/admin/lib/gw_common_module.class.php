@@ -372,13 +372,16 @@ class GW_Common_Module extends GW_Module
 			case 'NEQ':
 				$cond .= "!= $encapChr" . $value . "$encapChr";
 				break;
+			case 'INSTR':
+				$value = explode(",", $value);		
 			case 'IN':
 				if(is_array($value))
-					$cond .= "IN ('" . implode("','", $value) . "')";
+					$cond .= "IN ('" . implode("','", GW_DB::escape($value)) . "')";
 				break;
 			case 'NOTIN':
-				$cond .= "NOT IN ('" . implode("','", $value) . "')";
-				break;			
+				if(is_array($value))
+					$cond .= "NOT IN ('" . implode("','", GW_DB::escape($value)) . "')";
+				break;
 			case 'LIKE':
 				$cond .= "LIKE ".($encap_val ? "'%" . $value . "%'" : $value);
 				break;
@@ -413,7 +416,7 @@ class GW_Common_Module extends GW_Module
 		
 
 		foreach ($search as $filter) {
-
+			
 			$compare_type = $filter['ct'];
 			$value = $filter['value'];
 			$field = $filter['field'];
@@ -425,11 +428,10 @@ class GW_Common_Module extends GW_Module
 			} else {
 				$value = GW_DB::escape($value);
 			}
-
+			
 			$cond.= ($cond ? ' AND ' : '');
 
 			if (method_exists($this, $ofmethod = "overrideFilter$field")) {
-
 				$cond.=$this->$ofmethod($value, $compare_type);
 			} else {
 				$cond.=$this->buildCond($field, $compare_type, $value);

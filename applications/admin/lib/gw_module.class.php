@@ -343,22 +343,48 @@ class GW_Module
 	
 	function doSetFilters()
 	{		
-		$formatedfilters = [];
+		$this->list_params['filters'] = [];
+		$filts=$_REQUEST['filters'];
 		
-		foreach($_REQUEST['filters']['vals'] as $fieldname => $filters)
-			foreach($filters as $idx => $value)
-				$formatedfilters[] = [
-					'field'=>$fieldname, 
-					'value'=>$value, 
-					'ct'=>$_REQUEST['filters']['ct'][$fieldname][$idx]
-				];
-		
+		if(! (isset($_REQUEST['filters_unset']) && $_REQUEST['filters_unset']) ) //if unset is passed skip setting
+			foreach($filts['vals'] as $field => $filters)
+				foreach($filters as $idx => $value)
+					$this->setFilter($field, $value, isset($filts['ct'][$field][$idx]) ? $filts['ct'][$field][$idx] : 'EQ');
 				
-		$this->list_params['filters'] = isset($_REQUEST['filters_unset']) && $_REQUEST['filters_unset']  ? [] : $formatedfilters;
+		
+		
 		$this->list_params['page']=0;
 		
 		$this->jump();
-	}	
+	}
+	
+	function getFiltersByField($field)
+	{
+		$foundfilters = [];
+		
+		if(isset($this->list_params['filters'])){
+			foreach($this->list_params['filters'] as $filter)
+				if($filter['field']==$field){
+					$foundfilters[]=$filter['value'];
+				}
+		}
+		
+		return $foundfilters;
+	}
+	
+	
+	/**
+	 * if $comparetype = IN value must be json_encoded
+	 */
+	function setFilter($field, $value, $comparetype='EQ')
+	{		
+		$this->list_params['filters'][] = [
+					'field'=>$field, 
+					'value'=>$value, 
+					'ct'=>$comparetype
+				];
+	}
+	
 	
 	function fireEvent($event, &$context=false)
 	{
