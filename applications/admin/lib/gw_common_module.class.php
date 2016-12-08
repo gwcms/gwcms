@@ -361,7 +361,7 @@ class GW_Common_Module extends GW_Module
 		$encapChr = $encap_val ? "'" : '';
 		
 		$cond = ($encap_fld ? "`$field`" : $field). ' ';
-		
+				
 		switch ($compare_type) {
 			case 'LT':
 				$cond .= "< $encapChr" . $value . "$encapChr";
@@ -420,9 +420,14 @@ class GW_Common_Module extends GW_Module
 			$compare_type = $filter['ct'];
 			$value = $filter['value'];
 			$field = $filter['field'];
+			
+			if($value==="" || $value===null)
+				continue;			
 
 			if ($compare_type == "IN" || $compare_type == "NOTIN") {
 				
+				if($value==='null')
+					continue;
 				//d::dumpas($filter);
 				$value = json_decode($value);
 			} else {
@@ -437,7 +442,6 @@ class GW_Common_Module extends GW_Module
 				$cond.=$this->buildCond($field, $compare_type, $value);
 			}
 		}
-
 
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
 			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page'] - 1 : 0;
