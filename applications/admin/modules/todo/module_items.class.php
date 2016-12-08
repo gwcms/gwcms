@@ -11,8 +11,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		parent::init();
 
-		$this->options['project_id'] = GW::getInstance('gw_todo_project')->getOptions();
-		$this->options['project'] = GW::getInstance('gw_todo_project')->findAll(['active=1'], ['key_field' => 'id']);	
+		$this->options['project_id'] = GW_Todo_Project::singleton()->getOptions('active=1');
+		$this->options['project'] = GW::getInstance('gw_todo_project')->findAll(null, ['key_field' => 'id']);	
 		
 		$this->options['users'] = GW_User::singleton()->getOptions(true, 'is_admin=1');
 		
