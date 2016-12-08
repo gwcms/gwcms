@@ -373,7 +373,8 @@ class GW_Common_Module extends GW_Module
 				$cond .= "!= $encapChr" . $value . "$encapChr";
 				break;
 			case 'IN':
-				$cond .= "IN ('" . implode("','", $value) . "')";
+				if(is_array($value))
+					$cond .= "IN ('" . implode("','", $value) . "')";
 				break;
 			case 'NOTIN':
 				$cond .= "NOT IN ('" . implode("','", $value) . "')";
@@ -389,7 +390,7 @@ class GW_Common_Module extends GW_Module
 				break;
 		}
 
-		return "($cond)";
+		return $cond ? "($cond)" : "";
 	}
 
 	function setListParams(&$params = [])
