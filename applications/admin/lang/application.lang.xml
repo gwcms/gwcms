@@ -610,6 +610,7 @@
 	<i id="LT"><![CDATA[&lt;]]></i>
 	<i id="GT"><![CDATA[&gt;]]></i>
 	<i id="NEQ"><![CDATA[&ne;]]></i>
+	<i id="INSTR">x,y,z,..</i>
 </i>
 
 
