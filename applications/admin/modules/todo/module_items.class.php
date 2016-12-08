@@ -34,7 +34,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		//leaving old option
 		$tmp = GW_Todo_Project::singleton()->getOptions('active=1');
 		
-		if(!isset($tmp[$item->project_id]))
+		if(!isset($tmp[$item->project_id]) && isset($this->options['project_id'][$item->project_id]))
 			$tmp[$item->project_id]=$this->options['project_id'][$item->project_id];
 			
 			
