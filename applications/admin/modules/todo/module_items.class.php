@@ -11,7 +11,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		parent::init();
 
-		$this->options['project_id'] = GW_Todo_Project::singleton()->getOptions('active=1');
+		$this->options['project_id'] = GW_Todo_Project::singleton()->getOptions();
 		$this->options['project'] = GW::getInstance('gw_todo_project')->findAll(null, ['key_field' => 'id']);	
 		
 		$this->options['users'] = GW_User::singleton()->getOptions(true, 'is_admin=1');
@@ -29,6 +29,16 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	function __eventAfterForm($item)
 	{
 		//d::dumpas($item->file1);
+		
+		//allow select only active projects
+		//leaving old option
+		$tmp = GW_Todo_Project::singleton()->getOptions('active=1');
+		
+		if(!isset($tmp[$item->project_id]))
+			$tmp[$item->project_id]=$this->options['project_id'][$item->project_id];
+			
+			
+		$this->options['project_id'] = $tmp;
 	}
 
 	function doSwitchState()
