@@ -979,8 +979,9 @@ class GW_Common_Module extends GW_Module
 		$vars['dl_order_enabled_fields'] = $order_enabled;
 		
 		
-		//padaryti kad filtrai susirikiuotu pagal per "Rodymo parinktys" sustatyta eiliÅ¡kumÄ
-		$filters = $this->app->page->fields + $filters;
+		//padaryti kad filtrai susirikiuotu pagal per "Rodymo parinktys" sustatyta eiliškumą
+		if(is_array($this->app->page->fields))
+			$filters = $this->app->page->fields + $filters;
 		
 		$vars['dl_filters'] = $filters;
 		
