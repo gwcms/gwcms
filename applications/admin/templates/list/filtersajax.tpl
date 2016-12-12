@@ -12,9 +12,7 @@
 	{/foreach}
 {else}
 	{foreach $dl_filters as $filter}
-		{if $filter}
-			{include file="elements/input_filter.tpl" name=$filter@key params=$filter}
-		{/if}
+		{include file="elements/input_filter.tpl" name=$filter@key params=$filter muted=!$filter}
 	{/foreach}
 
 

@@ -21,7 +21,7 @@
 
 {$inp_type=$type|default:'text'}
 
-<div class="filterRow filterRow{$name}">
+<div class="filterRow filterRow{$name} {if $muted}filterRowMuted{/if}">
 	
 	<div class="col-xs-auto gwFiltLabel" style="display: table-cell;">{$title}</div>
 	<div class="col-xs-auto row">

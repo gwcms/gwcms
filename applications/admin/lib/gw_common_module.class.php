@@ -908,16 +908,16 @@ class GW_Common_Module extends GW_Module
 		$this->prepareListConfig();
 		
 		$filters_config = $this->list_config['dl_filters'];
-
+		
 		$filtername = isset($_GET['fieldname']) ? $_GET['fieldname'] : false;
 
 		if (isset($filters_config[$filtername]))
 			$filters_config = [$filtername => $filters_config[$filtername]];
-
 		
 		
+				
 		$this->tpl_vars['dl_filters'] = $filters_config;
-
+		
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/filtersajax";
 		$this->processTemplate();
 	}
@@ -977,7 +977,15 @@ class GW_Common_Module extends GW_Module
 		$vars['dl_fields'] = $this->getDisplayFields($display_fields);
 	
 		$vars['dl_order_enabled_fields'] = $order_enabled;
+		
+		
+		//padaryti kad filtrai susirikiuotu pagal per "Rodymo parinktys" sustatyta eiliÅ¡kumÄ
+		$filters = $this->app->page->fields + $filters;
+		
 		$vars['dl_filters'] = $filters;
+		
+		
+		
 		
 		$this->list_config = $vars;
 		
