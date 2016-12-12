@@ -699,37 +699,39 @@ var gw_dialog = {
 	},
 	__open: function (content, options)
 	{
-		$("#gw_dialog").remove();
+		require(['vendor/jqueryui/jquery-ui.min'], function(){
+			$("#gw_dialog").remove();
 
-		if (!$('#gw_dialog').size())
-			$('body').append('<div id="gw_dialog" style="display:none"></div>');
+			if (!$('#gw_dialog').size())
+				$('body').append('<div id="gw_dialog" style="display:none"></div>');
 
-		$('#gw_dialog').html(content);
+			$('#gw_dialog').html(content);
 
 
-		var buttons = {}
+			var buttons = {}
 
-		var button_obj = $("#gw_dialog_buttons button");
+			var button_obj = $("#gw_dialog_buttons button");
 
-		for (var i = 0; i < button_obj.size(); i++)
-			buttons[$(button_obj[i]).text()] = button_obj[i].onclick
+			for (var i = 0; i < button_obj.size(); i++)
+				buttons[$(button_obj[i]).text()] = button_obj[i].onclick
 
-		var title = $('#gw_dialog #title').text();
+			var title = $('#gw_dialog #title').text();
 
-		var options = {
-			modal: true,
-			autoOpen: false,
-			buttons: buttons,
-			width: 300,
-			title: title
-					//beforeclose: gw_login_dialog.cancel
-		}
+			var options = {
+				modal: true,
+				autoOpen: false,
+				buttons: buttons,
+				width: 300,
+				title: title
+						//beforeclose: gw_login_dialog.cancel
+			}
 
-		$.extend(options, gw_dialog.options);
+			$.extend(options, gw_dialog.options);
 
-		$("#gw_dialog").dialog(options);
+			$("#gw_dialog").dialog(options);
 
-		$("#gw_dialog").dialog('open');
+			$("#gw_dialog").dialog('open');
+		});
 	},
 }
 
