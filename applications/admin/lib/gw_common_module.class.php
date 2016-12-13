@@ -475,9 +475,13 @@ class GW_Common_Module extends GW_Module
 
 	//uzkrauna sarasui viewsus
 	//viewsai savyje turi pavadinima, salyga, rikiavima, suskaiciuoti direktyva, 
-	function loadViews()
-	{
-		$views = $this->app->page->VIEWS;
+	function loadViews($page=false)
+	{		
+		if(!$page)
+			$page = $this->app->page;
+			
+		
+		$views = $page->VIEWS;
 		$store = & $this->list_params['views'];
 		$default = false;
 
@@ -512,9 +516,15 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars['views'] = & $views;
 	}
 
-	function loadOrders()
+	function loadOrders($page=false)
 	{
-		$orders = $this->app->page->ORDERS;
+		if(!$page)
+			$page = $this->app->page;		
+		
+		$orders = $page->ORDERS;
+		
+		
+		
 		$store = & $this->list_params['orders'];
 		$default = false;
 
@@ -537,8 +547,6 @@ class GW_Common_Module extends GW_Module
 				$orders[$i]['active'] = 1;
 			}
 		}
-
-
 
 		$this->tpl_vars['list_orders'] = & $orders;
 	}
@@ -568,8 +576,9 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->prepareListConfig();
 		
-		$orders = $this->app->page->ORDERS;
-
+		$this->loadOrders();
+		$orders = $this->tpl_vars['list_orders'];
+		
 		$foundorder = false;
 
 		if (isset($_REQUEST['name'])) {
