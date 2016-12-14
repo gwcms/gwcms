@@ -119,6 +119,27 @@ class Module_Movies extends GW_Common_Module
 			$imdb_api['runtime'] = $imdb->getRuntime();
 			$imdb_api['title'] = $imdb->getTitle();
 			$imdb_api['year'] = $imdb->getYear();
+			
+			
+			$item->name_orig = $imdb_api['title'].' '.$imdb_api['year'];
+			$tmpfilename=GW::s('DIR/TEMP').date('Ymd_His').'_imdbposter.jpg';
+			
+			$data=file_get_contents($imdb_api['poster']);
+			
+			file_put_contents($tmpfilename, $data);
+			
+			$image = Array
+			    (
+			    'new_file' => $tmpfilename,
+			    'size' => filesize($tmpfilename),
+			    'original_filename' => GW_File_Helper::cleanName($item->name_orig).'.jpg',
+			);;
+
+			$item->set('image1', $image);	
+			
+			$item->update();
+			
+			
 		}else{
 			$imdb_api=['error'=>$imdb->status];
 		}
