@@ -9,7 +9,7 @@
 	<div style="width:300px;overflow: auto;">
 	<table style="max-width:500px">
 {foreach $imdb as $key => $val}
-	<tr><th>{$key}</th><td>{$val}</td></tr>
+	<tr><th>{$key}</th><td style="white-space: normal">{$val}</td></tr>
 {/foreach}
 	</table>
 	</div>
