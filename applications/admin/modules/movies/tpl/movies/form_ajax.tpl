@@ -7,7 +7,7 @@
 		{if $field=='title'}
 			{include file="elements/input.tpl" name=title}
 		{elseif $field=='description'}
-			{include file="elements/input.tpl" type=textarea name=description height=20px}
+			{include file="elements/input.tpl" type=textarea name=description height=50px}
 		{elseif $field=='rate'}
 			{include file="elements/input.tpl" name=rate type=select_plain options=[0,1,2,3,4,5,6,7,8,9,10]}
 		{elseif $field=='recommend'}
