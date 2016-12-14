@@ -4,6 +4,8 @@ include_once __DIR__.'/gw_movie.class.php';
 
 class Module_Movies extends GW_Common_Module
 {	
+	
+	use Module_Import_Export_Trait;		
 
 	function init()
 	{	
