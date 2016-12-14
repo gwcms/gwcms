@@ -1,4 +1,5 @@
 {include file="default_form_open.tpl" form_width="100%"}
+{$width_title=100px}
 
 
 {include file="elements/input.tpl" name=title}
