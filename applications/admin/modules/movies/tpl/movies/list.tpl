@@ -3,7 +3,7 @@
 
 {block name="init"}
 
-
+	{$dl_inline_edit=1}
 
 	{function name=dl_cell_image}		
 			{$img=$item->image1}
