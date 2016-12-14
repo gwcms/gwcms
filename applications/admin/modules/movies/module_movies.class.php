@@ -102,6 +102,36 @@ class Module_Movies extends GW_Common_Module
 		
 	}
 	
+	function doBackgroundAterInsert()
+	{
+		$item = $this->getDataObjectById();
+		
+		$imdb = new IMDB2($item->title);
+		$imdb_api = [];
+		if($imdb->isReady){
+			$imdb_api = array();
+			$imdb_api['genreString'] = $imdb->getGenreString();
+			$imdb_api['description'] = $imdb->getDescription();
+			$imdb_api['plot'] = $imdb->getPlot();
+			$imdb_api['imdbID'] = $imdb->getImdbID();
+			$imdb_api['poster'] = $imdb->getPoster();
+			$imdb_api['rating'] = $imdb->getRating();
+			$imdb_api['runtime'] = $imdb->getRuntime();
+			$imdb_api['title'] = $imdb->getTitle();
+			$imdb_api['year'] = $imdb->getYear();
+		}else{
+			$imdb_api=['error'=>$imdb->status];
+		}
+		
+		$item->imdb= json_encode($imdb_api);
+		$item->updateChanged();
+	}
+	
+	function __eventAfterSave($item)
+	{
+		Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
+	}
+	
 }
 
 ?>
