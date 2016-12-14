@@ -168,7 +168,7 @@ class Module_Movies extends GW_Common_Module
 			Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
 		}
 		
-		$this->setMessage("Passed for execution ".count($item).' background processes');
+		$this->setMessage("Passed for execution ".count($list).' background processes');
 	}
 	
 }
