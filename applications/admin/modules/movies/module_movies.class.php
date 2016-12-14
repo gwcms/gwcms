@@ -63,7 +63,7 @@ class Module_Movies extends GW_Common_Module
 		
 		
 		
-		$imdb = new IMDB("Avatar 2009");
+		$imdb = new IMDB2("Avatar 2009");
 		if($imdb->isReady){
 			$imdb_api = array();
 			$imdb_api['castArray'] = $imdb->getCastArray();
