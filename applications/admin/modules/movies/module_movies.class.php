@@ -122,7 +122,7 @@ class Module_Movies extends GW_Common_Module
 			
 			
 			$item->name_orig = $imdb_api['title'].' '.$imdb_api['year'];
-			$tmpfilename=GW::s('DIR/TEMP').date('Ymd_His').'_imdbposter.jpg';
+			$tmpfilename=GW::s('DIR/TEMP').'imdbposter_'.GW_File_Helper::cleanName($item->name_orig).'.jpg';
 			
 			$data=file_get_contents($imdb_api['poster']);
 			
