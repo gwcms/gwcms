@@ -63,7 +63,7 @@ class Module_Movies extends GW_Common_Module
 		
 		
 		
-		$imdb = new IMDB2("Avatar 2009");
+		$imdb = new IMDB2($item->title);
 		if($imdb->isReady){
 			$imdb_api = array();
 			$imdb_api['castArray'] = $imdb->getCastArray();
@@ -91,11 +91,15 @@ class Module_Movies extends GW_Common_Module
 			echo "<PRE>";
 			print_r($imdb_api);
 			echo "</PRE>";
+			
+			$item->image = $imdb->getPoster();
+			$item->updateChanged();
 		}else{
 			echo $imdb->status;
 		}
 		
-		d::dumpas($item);
+
+		
 	}
 	
 }
