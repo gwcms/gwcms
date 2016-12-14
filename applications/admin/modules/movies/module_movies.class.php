@@ -119,7 +119,7 @@ class Module_Movies extends GW_Common_Module
 			$imdb_api['runtime'] = $imdb->getRuntime();
 			$imdb_api['title'] = $imdb->getTitle();
 			$imdb_api['year'] = $imdb->getYear();
-			
+			$imdb_api['time'] = date('Ymd');
 			
 			
 			if($imdb_api['imdbID'] && $imdb_api['poster'] != 'N/A'){	
