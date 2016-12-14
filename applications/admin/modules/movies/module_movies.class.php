@@ -138,7 +138,7 @@ class Module_Movies extends GW_Common_Module
 			
 			
 			$item->set('image1', $image);	
-			$item->validate();
+			$item->validate();//resizes image
 			
 			$item->update();
 			
