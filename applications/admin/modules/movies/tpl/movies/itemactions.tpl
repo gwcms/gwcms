@@ -8,7 +8,7 @@
 {if $imdb}
 	<table>
 {foreach $imdb as $key => $val}
-	<tr><th>{$key}</th><td style="width:200px">{$val}</td></tr>
+	<tr><th>{$key}</th><td style="max-width:200px">{$val}</td></tr>
 {/foreach}
 	</table>
 {/if}
