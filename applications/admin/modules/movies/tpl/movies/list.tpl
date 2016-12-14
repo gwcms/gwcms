@@ -35,7 +35,7 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}			
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete,ext_actions]}
 	
 	{$dl_filters=[image=>1, title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
 	
