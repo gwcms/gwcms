@@ -135,9 +135,10 @@ class Module_Movies extends GW_Common_Module
 			    'original_filename' => GW_File_Helper::cleanName($item->name_orig).'.jpg',
 			);;
 
-			$item->validate();
+			
 			
 			$item->set('image1', $image);	
+			$item->validate();
 			
 			$item->update();
 			
