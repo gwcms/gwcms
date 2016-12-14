@@ -14,9 +14,11 @@
 			{include file="elements/input.tpl" name=recommend}
 		{elseif $field=='image'}
 			{$img=$item->image1}
+			<td>
 			{if $img}
 				<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
 			{/if}
+			</td>
 		{elseif $field=='name_orig'}
 			{include file="elements/input.tpl" name=name_orig}
 		{else}
