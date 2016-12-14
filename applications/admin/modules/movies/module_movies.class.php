@@ -150,7 +150,7 @@ class Module_Movies extends GW_Common_Module
 			$imdb_api=['error'=>$imdb->status];
 		}
 		
-		$item->imdb= json_encode($imdb_api);
+		$item->imdb= json_encode($imdb_api, JSON_UNESCAPED_SLASHES);
 		$item->updateChanged();
 	}
 	
