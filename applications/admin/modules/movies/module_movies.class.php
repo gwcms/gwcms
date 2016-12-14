@@ -142,6 +142,8 @@ class Module_Movies extends GW_Common_Module
 			
 			$item->update();
 			
+			unlink($tmpfilename);
+			
 			
 		}else{
 			$imdb_api=['error'=>$imdb->status];
@@ -153,7 +155,20 @@ class Module_Movies extends GW_Common_Module
 	
 	function __eventAfterSave($item)
 	{
-		Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
+		if(!$item->imdb)
+			Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
+	}
+	
+	function doUpdateAllWithoutImdb()
+	{
+		$list = $this->model->findAll('imdb=""',['limit'=>10]);
+		
+		foreach($list as $item)
+		{
+			Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
+		}
+		
+		$this->setMessage("Passed for execution ".count($item).' background processes');
 	}
 	
 }

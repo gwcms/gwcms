@@ -25,17 +25,14 @@
 		
 
 	{$dl_smart_fields=[image,title,insert_time]}
-	
-	
+		
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}			
-	
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,updateimdball]}			
 	{$dl_actions=[edit,delete,ext_actions]}
-	
-	{$dl_filters=[image=>1, title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
-	
 
-
+{function name=do_toolbar_buttons_updateimdball}
 	
-	{$dl_order_enabled_fields=[title,insert_time,update_time,rate]}
+	{toolbar_button title="Update all not updated imdb" iconclass='gwico-Download' href=$m->buildUri(false,[act=>doUpdateAllWithoutImdb])}
+{/function}
+	
 {/block}
