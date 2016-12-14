@@ -19,8 +19,8 @@
 			{/if}
 	{/function}
 	
-	{function name=dl_cell_title}
-		<a href="{$ln}/{$app->page->path}/{$item->id}/form" title="{$item->description}">{$item->title|default:"No title"}</a>		
+	{function name=dl_cell_description}
+		<span title="{$item->description|escape}">{$item->description|truncate:40}</a>		
 	{/function}
 	
 	{function dl_cell_insert_time}
@@ -28,7 +28,7 @@
 	{/function}
 		
 
-	{$dl_smart_fields=[image,title,insert_time]}
+	{$dl_smart_fields=[image,description,insert_time]}
 		
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,updateimdball]}			
