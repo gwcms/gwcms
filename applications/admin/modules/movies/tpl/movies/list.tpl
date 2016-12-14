@@ -6,7 +6,9 @@
 
 
 	{function name=dl_cell_image}
+		
 		{$image=$item->image}
+		{d::ldump($image)}
 		{if $image}
 
 			{capture assign="poptext"}<img src="{$app->sys_base}repository/{$item->image}" />{/capture}
