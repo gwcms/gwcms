@@ -13,7 +13,7 @@
 				
 				
 				
-				<a href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
+				<a target="_blank" href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
 					<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
 				</a>
 			{/if}
