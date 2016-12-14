@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" width="900px"}
+{include file="default_form_open.tpl" form_width="100%"}
 
 
 {include file="elements/input.tpl" name=title}
