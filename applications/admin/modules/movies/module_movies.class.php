@@ -135,6 +135,7 @@ class Module_Movies extends GW_Common_Module
 				    'original_filename' => GW_File_Helper::cleanName($item->name_orig).'.jpg',
 				);;
 
+				d::dumpas($image);
 
 
 				$item->set('image1', $image);	
