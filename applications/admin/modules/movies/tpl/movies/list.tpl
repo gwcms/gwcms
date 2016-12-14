@@ -6,23 +6,11 @@
 
 
 	{function name=dl_cell_image}
-		
-		{$image=$item->image}
-		{if is_string($image)&& (strpos($image,'http://')===0 || strpos($image,'https://')===0)}
-			<img src="{$image}">
-		{else}
-			{if $image}
-
-				{capture assign="poptext"}<img src="{$app->sys_base}repository/{$item->image}" />{/capture}
-				<img src="{$app->sys_base}repository/{$item->image}" class="tooltip" title="{$poptext|escape}" height="50px" align="absmiddle" vspace="2" title="{$item->title|escape}" />
-			{else}
-				{$img=$item->image1}
-				{if $img->id}
-				{capture assign="poptext"}<img src="{$app->sys_base}tools/imga/{$img->id}" />{/capture}
-				<img src="{$app->sys_base}tools/imga/{$img->id}&size=50x50" class="tooltip" title="{$poptext|escape}" />
-				{/if}
+			{$img=$item->image1}
+			{if $img->id}
+			{capture assign="poptext"}<img src="{$app->sys_base}tools/imga/{$img->id}" />{/capture}
+			<img src="{$app->sys_base}tools/imga/{$img->id}&size=50x50" class="tooltip" title="{$poptext|escape}" />
 			{/if}
-		{/if}
 	{/function}
 	
 	{function name=dl_cell_title}
