@@ -32,8 +32,8 @@
 	{$dl_smart_fields=[image,title,insert_time]}
 	
 	
-	
-	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}			
 	
 	{$dl_actions=[edit,delete]}
 	
