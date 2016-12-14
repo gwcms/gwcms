@@ -6,9 +6,11 @@
 
 {$imdb = json_decode($item->imdb)}
 {if $imdb}
+	<div style="width:300px;overflow: auto;">
 	<table>
 {foreach $imdb as $key => $val}
-	<tr><th>{$key}</th><td style="max-width:200px">{$val}</td></tr>
+	<tr><th>{$key}</th><td>{$val}</td></tr>
 {/foreach}
 	</table>
+	</div>
 {/if}
