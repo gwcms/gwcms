@@ -23,6 +23,7 @@ class Module_Movies extends GW_Common_Module
 			'title' => 'Lof',
 			'image'=> 'L',
 			'rate' => 'lof',
+			'description'=>'lof',
 			'insert_time'=>'lof',
 			'update_time'=>'lof'	
 			]
@@ -178,6 +179,7 @@ class Module_Movies extends GW_Common_Module
 		
 		$this->setMessage("Passed for execution ".count($list).' background processes');
 	}
+	
 	
 }
 
