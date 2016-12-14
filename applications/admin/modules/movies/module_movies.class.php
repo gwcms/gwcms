@@ -122,7 +122,7 @@ class Module_Movies extends GW_Common_Module
 			
 			
 			
-			if($imdb_api['imdbID']){	
+			if($imdb_api['imdbID'] && $imdb_api['poster'] != 'N/A'){	
 				$item->name_orig = $imdb_api['title'].' '.$imdb_api['year'];
 				$tmpfilename=GW::s('DIR/TEMP').'imdbposter_'.GW_File_Helper::cleanName($item->name_orig).'_'.date('Ymd_hmi').'.jpg';
 
