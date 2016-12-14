@@ -7,9 +7,11 @@
 
 	{function name=dl_cell_image}
 			{$img=$item->image1}
+			{d::ldump($img)}
 			{if $img->id}
-			{capture assign="poptext"}<img src="{$app->sys_base}tools/imga/{$img->id}" />{/capture}
-			<img src="{$app->sys_base}tools/imga/{$img->id}&size=50x50" class="tooltip" title="{$poptext|escape}" />
+				<a href="{$app->sys_base}tools/imga/{$img->id}v={$item->v}">
+					<img src="{$app->sys_base}tools/imga/{$img->id}?size=32x32" align="absmiddle" vspace="2"  />
+				</a>
 			{/if}
 	{/function}
 	
