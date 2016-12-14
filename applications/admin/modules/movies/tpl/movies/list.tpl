@@ -9,7 +9,11 @@
 			{$img=$item->image1}
 			
 			{if $img->id}
-				<a href="{$app->sys_base}tools/imga/{$img->id}">
+				{$imdb = json_decode($item->imdb)}
+				
+				
+				
+				<a href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
 					<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
 				</a>
 			{/if}
