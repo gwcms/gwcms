@@ -154,6 +154,11 @@ class Module_Movies extends GW_Common_Module
 		$item->updateChanged();
 	}
 	
+	function __eventBeforeSave($item)
+	{
+		$item->title = str_replace('.', ' ', $item->title);
+	}
+	
 	function __eventAfterSave($item)
 	{
 		if(!$item->imdb){
