@@ -113,12 +113,14 @@ class Module_Movies extends GW_Common_Module
 			$imdb_api['genreString'] = $imdb->getGenreString();
 			$imdb_api['description'] = $imdb->getDescription();
 			$imdb_api['plot'] = $imdb->getPlot();
-			$imdb_api['imdbID'] = (int)$imdb->getImdbID();
+			$imdb_api['imdbID'] = $imdb->getImdbID();
 			$imdb_api['poster'] = $imdb->getPoster();
 			$imdb_api['rating'] = $imdb->getRating();
 			$imdb_api['runtime'] = $imdb->getRuntime();
 			$imdb_api['title'] = $imdb->getTitle();
 			$imdb_api['year'] = $imdb->getYear();
+			
+			
 			
 			if($imdb_api['imdbID']){	
 				$item->name_orig = $imdb_api['title'].' '.$imdb_api['year'];
@@ -133,10 +135,7 @@ class Module_Movies extends GW_Common_Module
 				    'new_file' => $tmpfilename,
 				    'size' => filesize($tmpfilename),
 				    'original_filename' => GW_File_Helper::cleanName($item->name_orig).'.jpg',
-				);;
-
-				d::dumpas($image);
-
+				);
 
 				$item->set('image1', $image);	
 				$item->validate();//resizes image
