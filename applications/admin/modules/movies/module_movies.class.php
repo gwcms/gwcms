@@ -107,7 +107,9 @@ class Module_Movies extends GW_Common_Module
 	{
 		$item = $this->getDataObjectById();
 		
-		$imdb = new IMDB2($item->title);
+		$search = str_replace(['(',')'], ' ', $item->title);
+		
+		$imdb = new IMDB2($search);
 		$imdb_api = [];
 		if($imdb->isReady){
 			$imdb_api = array();
