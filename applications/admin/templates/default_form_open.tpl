@@ -5,7 +5,7 @@
 {$default_form_before_form}
 
 
-<form id="itemform" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" onsubmit="gwcms.beforeFormSubmit(this)"  >
+<form id="itemform" action="{$formendpoint|default:$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data"  >
 
 <table style="width:{if $form_width}{$form_width}{else}600px{/if}" >
 <tr>
