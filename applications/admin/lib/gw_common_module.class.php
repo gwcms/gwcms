@@ -1110,7 +1110,7 @@ class GW_Common_Module extends GW_Module
 		if($ids)
 			return GW_DB::inCondition($field, array_keys($ids));
 		
-		return "1=0";		
+		return "`$field`=0";		
 	}
 	
 	
@@ -1145,7 +1145,7 @@ class GW_Common_Module extends GW_Module
 		if($ids)
 			return GW_DB::inConditionStr($field, $ids);
 		
-		return "1=0";		
+		return "`$field`=0";		
 	}	
 	
 }

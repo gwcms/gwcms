@@ -178,7 +178,7 @@ class Module_Usr extends GW_Common_Module
 			'id' => 'Lof', 
 			'username' => 'Lof',
 			'name'=> 'Lof',
-			'group_ids' => 'L',
+			'group_ids' => 'Lf',
 			'online'=>'Lof',
 			'insert_time'=>'lof',
 			'update_time'=>'lof',
@@ -188,11 +188,20 @@ class Module_Usr extends GW_Common_Module
 			]
 		);
 		
-		//$cfg['filters']['project_id'] = ['type'=>'select','options'=>$this->options['project_id']];
+		$cfg['filters']['group_ids'] = ['type'=>'multiselect','options'=>$this->options['group_ids']];
 			
 			
 		return $cfg;
 	}
+	
+	function overrideFilterGroup_Ids($value,$compare_type){
+		
+		$incond = GW_DB::inCondition("`lug`.`id1`", $value);
+		$sql = "(SELECT count(*) FROM `gw_link_user_groups` AS lug WHERE `lug`.`id`=`a`.`id` AND $incond) > 0";
+		
+		return $sql;
+	}	
+	
 	
 	function viewIpLog()
 	{
