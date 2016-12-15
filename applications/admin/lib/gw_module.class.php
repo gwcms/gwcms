@@ -350,11 +350,8 @@ class GW_Module
 			foreach($filts['vals'] as $field => $filters)
 				foreach($filters as $idx => $value)
 					$this->setFilter($field, $value, isset($filts['ct'][$field][$idx]) ? $filts['ct'][$field][$idx] : 'EQ');
-				
-		
 		
 		$this->list_params['page']=0;
-		
 		$this->jump();
 	}
 	
@@ -377,7 +374,10 @@ class GW_Module
 	 * if $comparetype = IN value must be json_encoded
 	 */
 	function setFilter($field, $value, $comparetype='EQ')
-	{		
+	{	
+		if(!$value || ($comparetype=="IN" && $value=='null'))
+			return false;
+			
 		$this->list_params['filters'][] = [
 					'field'=>$field, 
 					'value'=>$value, 
