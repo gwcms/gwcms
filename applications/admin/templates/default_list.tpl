@@ -178,7 +178,7 @@
 			<table class="table-condensed table-hover table-vcenter table-bordered gwlisttable">
 				
 			{foreach $equal_fields as $field => $tmp}
-				<tr><th>{dl_proc_th_cell}{$field}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
+				<tr><th>{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
 			{/foreach}	
 				
 			</table>
