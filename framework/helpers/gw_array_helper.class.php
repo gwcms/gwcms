@@ -108,4 +108,20 @@ class GW_Array_Helper
 
 		return $arr;
 	}
+	
+	static function sortByField($field, &$array)
+	{
+		uasort($array, function($a, $b) use ($field)
+		{
+		    if ($a[$field] == $b[$field]){
+			return 0;
+		    }else if ($a[$field] > $b[$field]){
+			return -1;
+		    }else {             
+			return 1;
+		    }
+		});
+
+		return true;
+	}	
 }
