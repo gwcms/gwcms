@@ -677,6 +677,16 @@ class GW_Common_Module extends GW_Module
 		} else {
 			$list = $this->model->findAll($cond, $params);
 		}
+		
+		$last_querty=$this->model->getDB()->last_query;
+		
+		if(isset($_GET['verbose']) && $this->app->user->isRoot())
+		{
+			print_r([
+			    'last_query'=>$last_querty
+			]);
+		}
+		
 
 		if ($list === null) {
 			$this->list_params = [];
@@ -1075,5 +1085,67 @@ class GW_Common_Module extends GW_Module
 		$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
 	}	
 	
+	
+	/**
+	 * 
+	 Naudoti filtravimui susijusio objekto laukelius kai duomenyse turime tik asociacija su objektu
+	 Example use:
+		function overrideFilterInstrument_id($value, $compare_type)
+		{		
+			return $this->__overrideFilterExObject("GW_Data_Instrument", "instrument_id", ["title_lt","title_en"], $value, $compare_type);
+		}
+
+	 */
+	function __overrideFilterExObject($object, $field, $searchInFields, $value, $compare_type)
+	{
+		$cond = [];
+		foreach($searchInFields as $fieldname){
+			$cond[] = $this->buildCond($fieldname, $compare_type, $value);
+		}
+		
+		$cond = '('.implode(' OR ', $cond).')';
+		
+		$ids = $object::singleton()->findAll($cond,['select'=>'id','return_simple'=>1,'key_field'=>'id']);
+		
+		if($ids)
+			return GW_DB::inCondition($field, array_keys($ids));
+		
+		return "1=0";		
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 Example use:
+		function overrideFilterInstrument_id($value,$compare_type){
+			return $this->__overrideFilterOptions('instrument_id', $value, $compare_type);
+		}
+	 Init:
+		$this->options['instrument_id'] = GW_Data_Instrument::singleton()->getOptions($this->app->ln);
+	 */
+	function __overrideFilterOptions($field, $value, $compare_type, $options_index=false)
+	{		
+		$ids = [];
+		
+		$index = $options_index ? $options_index : $field;
+		
+		
+		if($compare_type=='EQ'){
+			foreach($this->options[$index] as $id => $v)
+				if(mb_strtolower($v)==mb_strtolower($value))
+					$ids[] = $id;
+		}else{
+			//$compare_type=='LIKE'
+			foreach($this->options[$index] as $id => $v)
+				if(mb_stripos($v, $value)!==false)
+					$ids[] = $id;			
+		}
+			
+		if($ids)
+			return GW_DB::inConditionStr($field, $ids);
+		
+		return "1=0";		
+	}	
 	
 }
