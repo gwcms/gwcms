@@ -108,7 +108,5 @@
 
 
 {function dl_actions_inlineedit}
-	<a class="inline_edit_trigger" data-id="{$item->id}" data-url="{$m->buildUri("`$item->id`/form",[ajax=>1])}"><img 
-			align="absmiddle" src="{$app->icon_root}action_edit.png"></a>
-						
+	{list_item_action_m action_class="inline_edit_trigger" iconclass="fa fa-pencil-square-o text-brown" onclick="return false" tag_params=["data-id"=>$item->id]}
 {/function}
