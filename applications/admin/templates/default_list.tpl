@@ -27,6 +27,19 @@
 	{/if}
 {/function}
 
+{function dl_proc_th_cell}
+		{if isset($dl_custom_head.$field)}
+			{call name="dl_custom_head_$field"}
+		{else}
+			{$coltitle=$app->fh()->shortFieldTitle($field)}
+			{if isset($dl_order_enabled_fields.$field)}
+				{include file="list/order.tpl" name=$field title=$coltitle}
+			{else}
+				{$coltitle}
+			{/if}
+		{/if}
+{/function}
+
 
 {function dl_list_proc_rows}
 
@@ -140,6 +153,38 @@
 	{capture append=footer_hidden}
 		<link href="{$app_root}static/css/list.css" rel="stylesheet" />
 	{/capture}
+	
+	{if $dl_same_values_ontop}
+		{$equal_fields=[]}
+
+		{foreach $dl_fields as $field}
+			{$valuecheck=null}
+			{$allequals=1}
+			
+			{foreach $list as $item}
+				{if $valuecheck===null}{$valuecheck=$item->$field}{/if}
+				{if $valuecheck!=$item->$field}{$allequals=0}{/if}
+			{/foreach}
+			
+			{if $allequals}
+				{$equal_fields[$field]=1}
+				{$dl_fields=array_flip($dl_fields)}
+				{gw_unassign var=$dl_fields[$field]}
+				{$dl_fields=array_flip($dl_fields)}
+			{/if}
+		{/foreach}
+		
+		{if $equal_fields}
+			<table class="table-condensed table-hover table-vcenter table-bordered gwlisttable">
+				
+			{foreach $equal_fields as $field => $tmp}
+				<tr><th>{dl_proc_th_cell}{$field}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
+			{/foreach}	
+				
+			</table>
+			<br />
+		{/if}
+	{/if}
 
 
 	<div class="row">
@@ -155,38 +200,18 @@
 			{if !count($list)}
 				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
 			{else}
-
-				
-
-					<table class=" table-condensed table-hover table-vcenter table-bordered gwlisttable">
+					<table class="table-condensed table-hover table-vcenter table-bordered gwlisttable">
 						<tr>	
-
-
 							{foreach $dl_fields as $field}
-								<th>
-									{if isset($dl_custom_head.$field)}
-										{call name="dl_custom_head_$field"}
-									{else}
-										{$coltitle=$app->fh()->shortFieldTitle($field)}
-										{if isset($dl_order_enabled_fields.$field)}
-											{include file="list/order.tpl" name=$field title=$coltitle}
-										{else}
-											{$coltitle}
-										{/if}
-									{/if}
-								</th>
+								<th>{dl_proc_th_cell}</th>
 							{/foreach}	
 							{if count($dl_actions) && !$smarty.get.print_view}
 								<th>{call name="dl_actions_head"}</th>
-								{/if}
+							{/if}
 						</tr>
 						<tr id="list_row_0" data-id="0" style="display:none"></tr>
 
 						{call name="dl_list_proc_rows"}
-
-
-
-
 					</table>
 						
 					{if $dl_checklist_enabled}
@@ -195,8 +220,6 @@
 					{if $dl_inline_edit}
 						<script type="text/javascript">
 							var inline_edit_form_url = '{$m->buildUri("form")}';
-							
-							
 							
 							require(['js/gwcms_inline_edit'], function(){
 								initActiveList();
