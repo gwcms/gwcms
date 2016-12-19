@@ -242,24 +242,14 @@ class GW_User extends GW_Composite_Data_Object
 
 	function calculateField($key)
 	{
-		$cache = & $this->cache['calcf'];
-
-		if (isset($cache[$key]))
-			return $cache[$key];
-
 		switch ($key) {
 			case 'title':
-				$val = ($this->name || $this->surname ? $this->name . ' ' . $this->surname : $this->username);
-				break;
+				return ($this->name || $this->surname ? $this->name . ' ' . $this->surname : $this->username);
 			case 'api_key':
-				$val = md5($this->get('password'));
-				break;
+				return md5($this->get('password'));
 			case 'online':
 				return $this->last_request_time > date('Y-m-d H:i:s', strtotime('-10 minute'));
-				break;
 		}
-
-		return $cache[$key] = $val;
 	}
 
 	/**
