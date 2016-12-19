@@ -161,6 +161,23 @@ class Module_Translations extends GW_Common_Module
 		
 	}
 	
+	function getListConfig()
+	{
+		$cfg = array('fields' => [
+			'id'=>'lof',
+			'module'=>'Lof',
+			'key'=>'Lof'
+			]
+		);
+		
+		foreach(GW::s("LANGS") as $lang)
+			$cfg["fields"]["value_".$lang]="Lof";
+			
+		
+		return $cfg;
+	}		
+	
+	
 /*	
 	function __eventAfterList(&$list)
 	{

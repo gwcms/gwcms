@@ -5,7 +5,7 @@
 
 
 {foreach GW::$settings.LANGS as $lncode}
-	{include file="elements/input.tpl" name="value_$lncode"}
+	{include file="elements/input.tpl" name="value_$lncode" type=textarea height="50px"}
 {/foreach}	
 
 
