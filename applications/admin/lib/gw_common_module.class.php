@@ -360,7 +360,7 @@ class GW_Common_Module extends GW_Module
 	{
 		$encapChr = $encap_val ? "'" : '';
 		
-		$cond = ($encap_fld ? "`$field`" : $field). ' ';
+		$cond = ($encap_fld ? "a.`$field`" : $field). ' ';
 				
 		switch ($compare_type) {
 			case 'LT':
