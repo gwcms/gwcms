@@ -33,30 +33,43 @@ function initActiveList()
 	initActiveListRows();
 }
 
+
+function fireInlineEdit(trigger)
+{
+	
+	
+	var id = trigger.data('id');
+	var url = trigger.data('url') ? trigger.data('url') : gw_navigator.url(inline_edit_form_url, {id:id,ajax:1})
+
+	var name = 'list_row_' + id;
+	var trobject = $('#'+name)
+
+	$('.inlineFormRow').remove();
+	$('.inlineFormRowHidd').show().removeClass('inlineFormRowHidd');
+
+	triggerLoading(trigger,1);
+
+	$.get(url, function (data) {
+			loadRowAfterAjx(trobject, data);
+			$('#' + name).hide().addClass('inlineFormRowHidd');	
+			triggerLoading(trigger, 0);
+	});	
+}
+
 function initActiveListRows()
 {
 	//po to kai perkraus eilute	
 	$( ".list_row:not([data-initdone='1'])" ).dblclick(function() {
-		var id = $(this).data('id');
-		var url = gw_navigator.url(inline_edit_form_url, {id:id,ajax:1})
-
-		var name = 'list_row_' + id;
-		var trobject = $('#'+name)
-		var trigger = $(this);
-
-		$('.inlineFormRow').remove();
-		$('.inlineFormRowHidd').show().removeClass('inlineFormRowHidd');
-
-		triggerLoading(trigger,1);
-
-		$.get(url, function (data) {
-				loadRowAfterAjx(trobject, data);
-				$('#' + name).hide().addClass('inlineFormRowHidd');	
-				triggerLoading(trigger, 0);
-		});
-
+		
+		fireInlineEdit($(this));
 		
 	}).attr('data-initdone',1);	
+	
+	$('.inline_edit_trigger').unbind('click').click(function () {
+		fireInlineEdit($(this));
+	}
+	);	
+	
 }
 
 
@@ -111,7 +124,11 @@ function submitInlineForm()
 						{
 							
 								rowobj.after(data);
-								rowobj.remove();
+								
+								
+								if(inlineformrow.attr('data-id')!='0')
+									rowobj.remove();
+								
 								inlineformrow.remove();
 								$('.activeList').trigger( "updated");//call init list
 								
@@ -169,7 +186,7 @@ function triggerExpanded(obj, state)
 
 
 
-function openIframeUnderThisTr(trig, url){
+function openIframeUnderThisTr(trig, url, afterclose){
 		
 		var rowobj = $(trig).closest('tr');
 		var id = $(rowobj).attr('data-id');
@@ -179,6 +196,10 @@ function openIframeUnderThisTr(trig, url){
 		{
 			triggerExpanded(trig, 0);
 			$('#'+rowaftername).remove();
+			
+			if(afterclose)
+					eval(afterclose);
+			
 			return false;
 		}
 				
@@ -201,17 +222,26 @@ function openIframeUnderThisTr(trig, url){
 					
 					
 					var iframe_content = $(this).contents().find('body');
+					var src =  this.contentWindow.location.href
+					
+					if(src.indexOf('iframeclose=1')!=-1)
+					{
+												
+							//this will close iframe
+							openIframeUnderThisTr(trig, url, afterclose);
+					}
+							
 					
 					iframe_content.resize(function(){ 
-						$(ifrm).height(ifrmcont.height());
+						$(ifrm).height(ifrmcont.height()+20);
 					});
 					
 					iframe_content.resize();
-					//setInterval(function(){
-					//		iframe_content.resize()
-					//},500);
+					setTimeout(function(){
+							iframe_content.resize()
+					},1000);
 					
 				//$('.iframe_auto_sz').attr('data-ifrm_auto_sz_init'))
-		})	
+		})		
 				
 }
