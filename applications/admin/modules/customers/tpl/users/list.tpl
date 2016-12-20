@@ -33,7 +33,7 @@ oneline example
 	{$dl_smart_fields=[name,insert_time,sms_allow_credit,online]}
 	{$do_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[add, balance_log,invert_active,edit,delete]}
+	{$dl_actions=[invert_active,edit,delete,ext_actions]}
 	
 	{$dl_filters=$display_fields}
 	

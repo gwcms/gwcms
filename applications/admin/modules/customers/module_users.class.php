@@ -13,18 +13,31 @@ class Module_Users extends GW_Common_Module
 		
 		$this->rootadmin = $this->app->user->isRoot();
 		
-		if(!$this->rootadmin){
-			$this->filters['parent_user_id'] = $this->app->user->id;
-		}
+
 		
-		$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);		
 		
-		$this->options['sms_pricing_plan']=GW::getInstance('GW_Pricing_Item')->getAllPricingPlans();
+		//d::dumpas($this->options['languages']);
+		
+		$this->list_params['paging_enabled']=1;
+		
+
+	}
+	
+	function __eventAfterForm($item)
+	{
+		
 	}
 	
 	function viewDefault()
 	{
 		$this->viewList();
+	}
+	
+	function doLoginAs()
+	{
+		$_SESSION[PUBLIC_AUTH_SESSION_KEY] = ['user_id'=>$_GET['user_id'], 'ip_address'=>$_SERVER['REMOTE_ADDR']];
+		
+		Header('Location: '.Navigator::getBase().$_GET['redirect_url']);
 	}
 	
 	function eventHandler($event, &$context) 
@@ -51,9 +64,6 @@ class Module_Users extends GW_Common_Module
 		
 		parent::eventHandler($event, $context);
 	}
-
-
-	
 
 }
 
