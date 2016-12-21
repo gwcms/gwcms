@@ -27,7 +27,7 @@
 	<div class="col-xs-auto row">
 		<div class="col-xs-auto gwFiltCT">
 			
-		{if strpos($type,'select')!==false}
+		{if strpos($type,'multiselect')!==false}
 			{$compare_opt=GW::l('/g/FILTERS_SELECT_COMPARE_TYPES')}
 		{else}
 			{$compare_opt=GW::l('/g/FILTERS_COMPARE_TYPES')}
