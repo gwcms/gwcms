@@ -660,7 +660,7 @@ var gw_checklist = {
 
 
 
-
+//atsargiai sitas per ajax veikia, jei includins galva mes errorus
 function checked_action(action) {
 
 	var selected = [];
