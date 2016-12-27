@@ -192,7 +192,7 @@ class GW_DB
 			switch(count($key)){
 				case 2:
 					while ($row = $this->result->fetch_assoc())
-						$result[$row[$key[0]]][$row[$key[1]]] = $row;				
+						$result[$row[$key[0]]][$row[$key[1]]] = $row;	
 				break;
 				case 3:
 					while ($row = $this->result->fetch_assoc())
@@ -223,19 +223,10 @@ class GW_DB
 
 		$this->query($cmd, $nodie);
 
-		$result = [];
-		
-		switch(mysqli_num_fields($this->result)){
-			case 2:
-				while ($row = $this->result->fetch_array())
-					$result[$row[0]] = $row[1];
-			break;
+		$result = Array();
 
-			case 3:
-				while ($row = $this->result->fetch_array())
-					$result[$row[0]][$row[1]] = $row[2];
-			break;
-		}
+		while ($row = $this->result->fetch_array())
+			$result[$row[0]] = $row[1];
 
 		return $result;
 	}
@@ -534,16 +525,17 @@ class GW_DB
 
 		return $fieldname . ' IN ("' . implode('","', $ids) . '")';
 	}
+	
+	/**
+	 * similar to buidConditions its just allows $condition1 or $condition2 to be empty, and conditions simple strings
+	 */
+	static function mergeConditions($condition1, $condition2, $operator="AND")
+	{
+		return ($condition1 ? "($condition1)":"").($condition1 && $condition2 ? " $operator ":"").($condition2 ? "($condition2)":"");
+	}
 
 	static function escape($mixed)
 	{
-		if(is_array($mixed)){
-			foreach($mixed as $indx => $val)
-				$mixed[$indx] = self::escape($val);
-			
-			return $mixed;
-		}
-		
 		return addslashes($mixed);
 	}
 
