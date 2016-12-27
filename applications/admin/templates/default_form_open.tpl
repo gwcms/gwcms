@@ -21,6 +21,10 @@
 {/if}
 
 
+{if $item->id}
+	<input type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
+{/if}
+
 <script>
 	
 	$(function(){

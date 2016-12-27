@@ -590,6 +590,17 @@ class GW_Data_Object
 			if ($err = GW_Validator::getErrors($validator, $this->get($fieldname), $params))
 				$this->setError($err[0], $fieldname);
 		}
+		
+		if(isset($this->update_time) && $this->update_time!=$this->update_time_check)
+		{
+			$this->errors["update_time"]="/g/ITEM_CHANGE_INTERUPED";
+		}else{
+			unset($this->content_base['update_time_check']);
+		}
+		
+		unset($this->changed_fields['update_time_check']);
+		
+		
 		return $this->errors ? false : true;
 	}
 
