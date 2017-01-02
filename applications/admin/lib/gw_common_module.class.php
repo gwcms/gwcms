@@ -166,6 +166,7 @@ class GW_Common_Module extends GW_Module
 	 */
 	function common_doSave()
 	{
+		
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 
@@ -177,7 +178,7 @@ class GW_Common_Module extends GW_Module
 		if ($this->load_before_save)
 			$item->load();
 
-
+		
 
 		$this->canBeAccessed($item, true);
 		$item->setValues($vals);
@@ -190,13 +191,12 @@ class GW_Common_Module extends GW_Module
 		if (!$item->validate()) {
 			if (!isset($_POST['ajax'])) {
 				$this->setItemErrors($item);
+				
+				$this->processView('form');
+				exit;
 			} else {
 				$this->error_fields = array_merge($this->error_fields, $item->errors);
 			}
-
-
-			$this->processView('form');
-			exit;
 		}
 
 		$this->fireEvent('BEFORE_SAVE', $item);
@@ -240,9 +240,14 @@ class GW_Common_Module extends GW_Module
 			header("GW_AJAX_FORM_ITEM_TITLE: " . $item->title);
 			header("GW_AJAX_MESSAGES: ".json_encode($this->app->acceptMessages(true)));
 
-			$this->tpl_vars['ajax_rows_only'] = 1;
-			$this->processView('list', ['ajax_one_item_list' => $item->id]);
-			exit;
+			if(isset($_POST['inlistform'])){
+				$this->tpl_vars['ajax_rows_only'] = 1;
+				$this->processView('list', ['ajax_one_item_list' => $item->id]);
+				exit;
+			}else{
+				echo json_encode($vals);
+			}
+			
 		}
 	}
 

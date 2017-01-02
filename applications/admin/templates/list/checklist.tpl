@@ -17,7 +17,9 @@
 
 {capture append="footer_hidden"}
 	<script type="text/javascript">
-		gw_checklist.init();
+		require(['gwcms'],function(){
+			gw_checklist.init();
+		})
 	</script>
 {/capture}
 

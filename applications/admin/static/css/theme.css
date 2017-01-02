@@ -7725,6 +7725,11 @@ input[type="color"] {
 	cursor: pointer;
 }
 
+.gwinput-label-modified span
+{
+	color: orange;
+}
+
 
 .brand-icon {
 	height:40px;

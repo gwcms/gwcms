@@ -117,7 +117,7 @@ function submitInlineForm()
 		
 		//triggerLoading(trigg, 1);
 
-		$.post($("#inlineForm").attr('action'), $("#inlineForm").serialize(),
+		$.post($("#inlineForm").attr('action'), $("#inlineForm").serialize()+'&inlistform=1&ajax=1',
 				function (data, status, request) {
 						
 						if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
@@ -136,6 +136,7 @@ function submitInlineForm()
 								var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
 								var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
 								
+																
 								gwcms.showMessages(JSON.parse(messages), title);
 								
 								

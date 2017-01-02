@@ -202,7 +202,6 @@ class Module_Usr extends GW_Common_Module
 		return $sql;
 	}	
 	
-	
 	function viewIpLog()
 	{
 		$item = $this->getDataObjectById();

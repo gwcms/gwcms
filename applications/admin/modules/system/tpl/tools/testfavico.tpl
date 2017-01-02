@@ -30,17 +30,20 @@
 {/foreach}
 </div>
 	<script>
-		$(function(){
-		
-		$('.imgcont').each(function(){
-			var im = $(this).find('img').get(0)
-			$(this).find('span').text(im.height + 'x'+ im.width);
-			
-			if(im.height <=16 && im.width<= 16)
-				$(this).find('span').css({ color: 'green' })
-			
-		})
-		})
+		require(['gwcms'],function(){
+			$(function(){
+
+				$('.imgcont').each(function(){
+					var im = $(this).find('img').get(0)
+					$(this).find('span').text(im.height + 'x'+ im.width);
+
+					if(im.height <=16 && im.width<= 16)
+						$(this).find('span').css({ color: 'green' })
+
+				})
+			})		
+		})		
+
 	</script>
 	<style>
 		.imgcont img{ border:0px solid gray }

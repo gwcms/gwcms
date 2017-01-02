@@ -14,6 +14,7 @@
 	{$id=str_replace(["[","]"],'_',$input_name)}
 {/if}
 
+{assign var="input_id" value=$id scope=parent}
 
 {if !$value}
 	{$value=$item->$name}

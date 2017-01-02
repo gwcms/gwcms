@@ -167,8 +167,9 @@
 
 
 <script>
-	
+require(["gwcms"], function(){	
 	$(function() {
+		
 		$( ".sortable" ).sortable({
 			placeholder: "ui-state-highlight"
 		});
@@ -246,18 +247,20 @@
 	})
 
 
-$('input[type=radio][name=existing_order_name]').on('change', function() {
-    $('input[name="new_order_name"]').attr("required", $(this).val()=='' ? "true" : false);
-});	
+	$('input[type=radio][name=existing_order_name]').on('change', function() {
+		$('input[name="new_order_name"]').attr("required", $(this).val()=='' ? "true" : false);
+	});	
 
-$('.orderrow input[type=checkbox]').on('change', function() {
-   $('#newOrder').attr("required", $('.orderrow input[type=checkbox]').length > 0 ? 'true' : false)
-});	
+	$('.orderrow input[type=checkbox]').on('change', function() {
+	   $('#newOrder').attr("required", $('.orderrow input[type=checkbox]').length > 0 ? 'true' : false)
+	});	
 
 
-	
 
-$('.switchDefault').attr('title', "{GW::l('/g/SET_AS_DEFAULT')}")
+
+	$('.switchDefault').attr('title', "{GW::l('/g/SET_AS_DEFAULT')}")
+
+});
 </script>
 
 

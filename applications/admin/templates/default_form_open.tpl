@@ -5,7 +5,7 @@
 {$default_form_before_form}
 
 
-<form id="itemform" action="{$formendpoint|default:$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" onsubmit="gwcms.beforeFormSubmit(this)"  >
+<form id="itemform" class="itemform" action="{$formendpoint|default:$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" onsubmit="gwcms.beforeFormSubmit(this)"  >
 
 <table style="width:{if $form_width}{$form_width}{else}600px{/if}" >
 <tr>
@@ -14,34 +14,51 @@
 {assign var="width_title" value="30%" scope="root"}
 
 
-<input type="hidden" name="act" value="do:{$action|default:"save"}" />
+<input class="gwSysFields" type="hidden" name="act" value="do:{$action|default:"save"}" />
 
 {if !$nohiddenitemid}
-<input type="hidden" name="item[id]" value="{$item->id}" />
+<input class="gwSysFields" type="hidden" name="item[id]" value="{$item->id}" />
 {/if}
 
 
 {if $item->id}
-	<input type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
+	<input class="gwSysFields" type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
 {/if}
 
+{capture append=footer_hidden}
+		<script src="{$app_root}static/js/forms.js"></script>
+{/capture}
+
 <script>
+	var changes_track={if $changes_track}1{else}0{/if};
 	
-	$(function(){
-		$('#itemform').attr('rel', $('#itemform').serialize());	
+	
+	require(['gwcms'], function(){
+	
+		$(function(){
+			$('#itemform').attr('rel', $('#itemform').serialize());	
+
+			if(changes_track){
+					gw_changetrack.init('.itemform');
+			}
+		})
+
+		$('#itemform').submit(function() {
+			window.onbeforeunload = null;
+		});	
+
+
+		window.onbeforeunload = function() {
+			if($('#itemform').attr('rel') != $('#itemform').serialize())
+				return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
+		}	
+	
 	})
 	
-	$('#itemform').submit(function() {
-		window.onbeforeunload = null;
-	});	
-
-	
-	window.onbeforeunload = function() {
-		if($('#itemform').attr('rel') != $('#itemform').serialize())
-			return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
-	}	
-	
 </script>
+
+
+
 
 	<div class="row panel gwlistpanel">
 		<div class="panel-body">

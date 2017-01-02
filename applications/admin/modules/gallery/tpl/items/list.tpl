@@ -78,15 +78,22 @@
 {$dl_actions=[invert_active,edit,delete]}
 
 	<script type="text/javascript">
-		$(function() {
-			$("#sortable").sortable({ items: 'li.sortable', update: function(){ $('#sortable_actions').fadeIn() } });
-			$("#sortable").disableSelection();
-			$('#sortable li')
-				.mouseover(function(){  $(this).find('td:eq(2)').show() })
-				.mouseout(function(){  $(this).find('td:eq(2)').hide() })
+		require(['gwcms'],function(){
+			$(function() {
+				$("#sortable").sortable({ items: 'li.sortable', update: function(){ $('#sortable_actions').fadeIn() } });
+				$("#sortable").disableSelection();
+				$('#sortable li')
+					.mouseover(function(){  $(this).find('td:eq(2)').show() })
+					.mouseout(function(){  $(this).find('td:eq(2)').hide() })
+
+				$('#sortable .inactive').css('opacity', '0.5')
 				
-			$('#sortable .inactive').css('opacity', '0.5')
-		});
+				$('#applysort').click(function(){ gw_sortable.apply('#sortable') })
+			});	
+			
+			
+		})		
+
 	</script>
 	<style type="text/css">
 		#sortable { list-style-type: none; margin: 0; padding: 0; }
@@ -94,7 +101,7 @@
 	</style>
 
 	<div id="sortable_actions"  style="display:none">
-		<button onclick="gw_sortable.apply('#sortable')">{$lang.APPLY_SORT}</button>
+		<button id="applysort">{$lang.APPLY_SORT}</button>
 		<button onclick="location.href=location.href">{$lang.CANCEL}</button>
 	</div>
 	

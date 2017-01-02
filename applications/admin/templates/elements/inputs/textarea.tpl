@@ -5,7 +5,10 @@
 
 {if $autoresize}
 	<script>
-		require(['js/jq/autoresize.jquery.min']);
+		require(['gwcms'], function(){
+			require(['js/jq/autoresize.jquery.min']);
+		})
+		
 	</script>
 {/if}
 

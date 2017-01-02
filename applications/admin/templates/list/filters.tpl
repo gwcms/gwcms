@@ -46,7 +46,9 @@
 {if $m->list_params.filters}
 	{capture append=footer_hidden}
 		<script>
-			$(function(){ gwcms.filtersInit() })
+			require(['gwcms'],function(){
+				gwcms.filtersInit()
+			})			
 		</script>
 	{/capture}
 {/if}

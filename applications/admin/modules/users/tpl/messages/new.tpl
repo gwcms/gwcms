@@ -26,10 +26,6 @@
 
 
 <script>
-	$(function(){
-		parent.window.gw_session.ping();
-	})
-	
 	function markAsRead()
 	{
 		jQuery.ajax({
@@ -37,6 +33,10 @@
 			async:false
 		}); 
 	}
+	
+		require(['gwcms'],function(){
+			parent.window.gw_session.ping();
+		})	
 	
 </script>
 <style>

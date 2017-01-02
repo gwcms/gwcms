@@ -158,8 +158,11 @@
 		{$equal_fields=[]}
 
 		{foreach $dl_fields as $field}
+
 			{$valuecheck=null}
 			{$allequals=1}
+			
+			{if $dl_checklist_enabled && $field=="mark"}{$allequals=0}{*bypass*}{/if}
 			
 			{foreach $list as $item}
 				{if $valuecheck===null}{$valuecheck=$item->$field}{/if}
@@ -178,7 +181,7 @@
 			<table class="table-condensed table-hover table-vcenter table-bordered gwlisttable">
 				
 			{foreach $equal_fields as $field => $tmp}
-				<tr><th>{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
+				<tr><th data-field="{$field}">{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
 			{/foreach}	
 				
 			</table>
@@ -218,10 +221,11 @@
 						{include "list/checklist.tpl"}
 					{/if}
 					{if $dl_inline_edit}
+						<script src="{$app_root}static/js/gwcms_inline_edit.js"></script>
 						<script type="text/javascript">
 							var inline_edit_form_url = '{$m->buildUri("form")}';
 							
-							require(['js/gwcms_inline_edit'], function(){
+							require(['gwcms'], function(){
 								initActiveList();
 							});
 						</script>							

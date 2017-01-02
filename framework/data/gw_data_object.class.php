@@ -591,7 +591,8 @@ class GW_Data_Object
 				$this->setError($err[0], $fieldname);
 		}
 		
-		if(isset($this->update_time) && $this->update_time!=$this->update_time_check)
+		
+		if(isset($this->content_base['update_time']) && isset($this->content_base['update_time_check']) && $this->update_time!=$this->update_time_check)
 		{
 			$this->errors["update_time"]="/g/ITEM_CHANGE_INTERUPED";
 		}else{

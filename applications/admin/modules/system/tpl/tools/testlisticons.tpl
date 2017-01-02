@@ -53,15 +53,12 @@
 			.testicoc .gwtoolbarbtn{ margin-bottom:2px; color: #000; }
 		</style>
 		<script>
-
-
-
-			$(function () {
+			require(['gwcms'],function(){
 				$('.testicoc a').each(function () {
 					$(this).click(function () {
 						GW.copy_to_clipboard($(this).find('span').text());
 						//gw_adm_sys.notify('success', $(this).find('span').text() + ' copied to clipboard');
-						
+
 						$.niftyNoty({
 							type: 'dark',
 							title: 'Copied to clipboard',
@@ -69,11 +66,10 @@
 							container: 'floating',
 							timer: 5000
 						});
-						
+
 					})
-				})
-			}
-			);
+				})		
+			})
 		</script>
 		{/capture}
 

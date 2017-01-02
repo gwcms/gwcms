@@ -41,7 +41,7 @@ define('GW_GENERIC_ERROR', 100);
 
 //padaryt vienodus jei reikia kad administravimo vartotojai butu priloginti svetaineje
 define("AUTH_SESSION_KEY", "cms_auth");
-define("PUBLIC_AUTH_SESSION_KEY", "site_auth");
+define("PUBLIC_AUTH_SESSION_KEY", "cms_auth");
 
 GW::s('GW_CMS_VERSION', '3.0');
 

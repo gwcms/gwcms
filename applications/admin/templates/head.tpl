@@ -67,21 +67,23 @@
 	
 	<link href="{$app_root}static/css/theme.css" rel="stylesheet">
 
-    <!--jQuery [ REQUIRED ]-->
+    <!--jQuery [ REQUIRED ]-->{*
     <script src="{$app_root}static/js/jquery-2.2.4.min.js"></script>
+	*}
 	
     <!--BootstrapJS [ RECOMMENDED ]-->
-    <script src="{$app_root}static/js/bootstrap.min.js"></script>
+   {* <script src="{$app_root}static/js/bootstrap.min.js"></script>*}
 	
 	{*load after bootstrap*}
 	<link href="{$app_root}static/vendor/jqueryui/jquery-ui.min.css" rel="stylesheet">
-	<script  src="{$app_root}static/vendor/jqueryui/jquery-ui.min.js" type="text/javascript"></script>		
+	{*<script  src="{$app_root}static/vendor/jqueryui/jquery-ui.min.js" type="text/javascript"></script>		*}
 
     
     <!--Nifty Admin [ RECOMMENDED ]-->
+	{*
     <script src="{$app_root}static/js/nifty.min.js"></script>
     <script src="{$app_root}static/js/gwcms.js"></script>
-	
+	*}
 	
 	
 	<link rel="stylesheet" href="{$app->sys_base}vendor/font-awesome/css/font-awesome.min.css">	
@@ -89,19 +91,32 @@
 	
 
  	<script type="text/javascript">
-
-
-			
 		require.config({ 
 			baseUrl: '{$app_root}static',
+			shim : {
+				bootstrap : { "deps" :['jquery'] },
+				jqueryui: { "deps" : ['jquery'] },
+				nifty: { "deps" : ['jquery'] },
+				gwcms: { "deps" : ['jquery','nifty','bootstrap','jqueryui'] },
+				sortable: { deps: ['gwcms'] }
+			},			
 			paths: {
                 jquery: 'js/jquery-2.2.4.min',
+				bootstrap :  "js/bootstrap.min",
+				jqueryui: "vendor/jqueryui/jquery-ui.min",
+				nifty: "js/nifty.min",
+				gwcms: "js/gwcms",
+				sortable: "js/jq/jquery-sortable"
 			}
 		});	
 		
+		require(['gwcms'], function(){
+			$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
+			gw_adm_sys.init();		
+		});
 		
-		$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
-		gw_adm_sys.init();		
+		
+		
 		
 		
 		translations = {};

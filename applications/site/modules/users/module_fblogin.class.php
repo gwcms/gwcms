@@ -1,19 +1,22 @@
 <?php
 
-class Module_FBLogin extends GW_Public_Module {
+class Module_FBLogin extends GW_Public_Module 
+{
 
-	function init() {
+	function init() 
+	{
 		
 	}
 
-	function viewLogin() {
+	function viewLogin() 
+	{
 
 		$fb = new Facebook\Facebook($test = [
-			'app_id' => $this->app->user_cfg->fb_app_id,
-			'app_secret' => $this->app->user_cfg->fb_app_secret,
-			'default_graph_version' => 'v2.4',
+		    'app_id' => $this->app->user_cfg->fb_app_id,
+		    'app_secret' => $this->app->user_cfg->fb_app_secret,
+		    'default_graph_version' => 'v2.4',
 		]);
-
+		
 
 		$helper = $fb->getRedirectLoginHelper();
 
@@ -62,80 +65,90 @@ class Module_FBLogin extends GW_Public_Module {
 
 
 		$_SESSION['fb_user'] = $user;
-		$_SESSION['fb_access_token'] = $accessToken;
+		$_SESSION['fb_access_token']=$accessToken;
 
 
 		$this->app->jump('direct/users/fblogin/signInOrRegister');
 	}
 
-	function viewSignInOrRegister() {
+	
+	
+	
+	function viewSignInOrRegister() 
+	{
 		/*
-		  d::dumpas($_SESSION);
-		  [fb_user] => Facebook\GraphNodes\GraphUser Object
-		  (
-		  [items:protected] => Array
-		  (
-		  [id] => 414849898720939
-		  [name] => Vidmantas Work
-		  [email] => vidmantas.work@gmail.com
-		  [first_name] => Vidmantas
-		  [gender] => male
-		  [birthday] => DateTime Object
-		  (
-		  [date] => 1984-04-05 00:00:00
-		  [timezone_type] => 3
-		  [timezone] => Europe/Helsinki
-		  )
+		d::dumpas($_SESSION);
+    [fb_user] => Facebook\GraphNodes\GraphUser Object
+        (
+            [items:protected] => Array
+                (
+                    [id] => 414849898720939
+                    [name] => Vidmantas Work
+                    [email] => vidmantas.work@gmail.com
+                    [first_name] => Vidmantas
+                    [gender] => male
+                    [birthday] => DateTime Object
+                        (
+                            [date] => 1984-04-05 00:00:00
+                            [timezone_type] => 3
+                            [timezone] => Europe/Helsinki
+                        )
 
-		  )
+                )
 
-		  )
+        )
 
-		  [fb_access_token] => Facebook\Authentication\AccessToken Object
-		  (
-		  [value:protected] => CAAMlXpgZByg4BADwB8chhHZAyZCtYVDyqCrQumwueO5iIoHwBVaHcrqeiZC1PCbV2KLGQgeIBHvfZCZB3KRAviRXGITLhVtpDsDPSJyST5hVhNKH7mdz1k4EINGL6ecYGYtEhTnVyZBe0qPDyYyZB5Cfum4fEgd4Xo8F9PN9rHNJmvzV0AXXrOYOKSzePFOjm8ZACrGgdTWLeqQZDZD
-		  [expiresAt:protected] => DateTime Object
-		  (
-		  [date] => 2015-12-19 16:38:34
-		  [timezone_type] => 3
-		  [timezone] => Europe/Helsinki
-		  )
+    [fb_access_token] => Facebook\Authentication\AccessToken Object
+        (
+            [value:protected] => CAAMlXpgZByg4BADwB8chhHZAyZCtYVDyqCrQumwueO5iIoHwBVaHcrqeiZC1PCbV2KLGQgeIBHvfZCZB3KRAviRXGITLhVtpDsDPSJyST5hVhNKH7mdz1k4EINGL6ecYGYtEhTnVyZBe0qPDyYyZB5Cfum4fEgd4Xo8F9PN9rHNJmvzV0AXXrOYOKSzePFOjm8ZACrGgdTWLeqQZDZD
+            [expiresAt:protected] => DateTime Object
+                (
+                    [date] => 2015-12-19 16:38:34
+                    [timezone_type] => 3
+                    [timezone] => Europe/Helsinki
+                )
 
-		  )
+        )
 		 * 
-		 */
-
-		if (!$_SESSION['fb_user'] instanceof Facebook\GraphNodes\GraphUser || !$_SESSION['fb_user']->getId()) {
-			$this->app->setErrors("/m/LOGIN_FAIL");
+		 */		
+		
+		if(! $_SESSION['fb_user'] instanceof Facebook\GraphNodes\GraphUser || !$_SESSION['fb_user']->getId())
+		{
+			$this->setError("/M/USERS/LOGIN_FAIL");
 			$this->app->jump('');
 		}
-
+		
 		$fbusr = $_SESSION['fb_user'];
-
+		
 		//https://developers.facebook.com/docs/reference/android/3.0/interface/GraphUser/
-
-		if ($this->app->user->id && !$this->app->user->fbid) {
+		
+		if($this->app->user->id && !$this->app->user->fbid)
+		{
 			$this->app->user->fbid = $fbusr->getId();
-
+			
 			$this->app->user->updateChanged();
-
-			$this->app->setMessage(sprintf(gw::l("/M/USERS/PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT"), $fbusr->getName()));
-
+			
+			$this->app->setMessage( sprintf(GW::ln("/M/USERS/PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT"), $fbusr->getName()));
+			
 			$this->app->jump(GW::s('SITE/PATH_USERZONE'));
-		} else {
-
-
-			if ($user = GW_Customer::singleton()->find(['fbid=? AND active=1', $fbusr->getId()])) {
+		}else{
+			
+			
+			if($user=GW_Customer::singleton()->find(['fbid=? AND active=1', $fbusr->getId()])) 
+			{
 				$this->app->user = $user;
 				$this->app->auth->login($user);
 
 				//GW::$app->setMessage("/m/USERS/LOGIN_WELCOME");
 				$this->app->jump(GW::s('SITE/PATH_USERZONE'));
 			} else {
-				$this->app->setMessage("Create account then press [F] button to link accout with fb profile - then you can use quick login feature");
-				$this->app->jump(GW::s('SITE/PATH_TRANS/users/users/register/_'));
-			}
+				$this->setError("/M/USERS/LOGIN_FAIL");
+				$this->app->jump('');
+			}		
+			
 		}
+		
+		
 	}
 
 }

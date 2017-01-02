@@ -22,13 +22,14 @@
 
 
 				}
-				$(function(){
-				{foreach GW::$settings.LANGS as $idx => $ln_code}
+				
+			require(['gwcms'],function(){
+			{foreach GW::$settings.LANGS as $idx => $ln_code}
 					{if $idx!=0}
 						tooglei18nCol('{$ln_code}');
 					{/if}
-				{/foreach}
-				});
+				{/foreach}		
+			})
 		</script>
 	{/capture}
 

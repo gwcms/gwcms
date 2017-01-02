@@ -341,7 +341,8 @@ var gwcms = {
 	{
 		gwcms.dialog_cnt++;
 
-		require(["js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin", "js/bootstrap.min"], function (test) {
+		
+		require(["gwcms","js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
 
@@ -661,14 +662,16 @@ var gw_checklist = {
 
 
 //atsargiai sitas per ajax veikia, jei includins galva mes errorus
-function checked_action(action) {
+function checked_action(actionOrUrl) {
 
 	var selected = [];
 	$.each($('.checklist_item:checked'), function () {
 		selected.push($(this).val());
 	});
 
-	gw_dialog.open(GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','))
+	var url = actionOrUrl.indexOf('/')==-1 ? GW.app_base + GW.ln + '/' + GW.path + '/' + actionOrUrl : actionOrUrl
+	
+	gw_dialog.open(gw_navigator.url(url, {'ids': selected.join(',')}))
 }
 
 function checked_action2(action, title) {
@@ -699,7 +702,7 @@ var gw_dialog = {
 	},
 	__open: function (content, options)
 	{
-		require(['vendor/jqueryui/jquery-ui.min'], function(){
+		require(['gwcms'], function(){
 			$("#gw_dialog").remove();
 
 			if (!$('#gw_dialog').size())
@@ -735,6 +738,37 @@ var gw_dialog = {
 	},
 }
 
+var gw_sortable =
+		{
+				parse_id: function (str)
+				{
+						var splits = str.split('_');
+
+						return {id: splits[splits.length - 1], index: splits[splits.length - 2] - 1 + 1}
+				},
+				apply: function (selector)
+				{
+						var serialize = $(selector).sortable('toArray');
+
+						var info, params = {}, chang_ind = 0;
+
+						for (i in serialize)
+						{
+								info = gw_sortable.parse_id(serialize[i]);
+								if (info.index == i)
+										continue;
+
+								info.change = i - info.index;
+								params['positions[' + info.id + ']'] = info.change;
+						}
+
+						params['act'] = 'do:set_positions';
+
+						gw_navigator.jump(false, params);
+				}
+		}
 
 
 
+
+	

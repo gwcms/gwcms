@@ -3,7 +3,7 @@
 
 {block name="init"}
 
-	{$m->addIncludes('js/sortable','js',"`$app_root`static/js/jq/jquery-sortable.js")}
+
 	{capture append="footer_hidden"}
 		<style>
 			.gwroot_node{ color: silver}
@@ -64,26 +64,33 @@
 				})	
 			}
 			
+			
+		require(['sortable'],function(){
 			$(function () {
-				var sortabegroup=$('.gwlisttable').sortable({
-					containerSelector: 'table',
-					itemPath: '> tbody',
-					itemSelector: 'tr',
-					placeholder: '<tr class="placeholder"/>',
-					
-					onDrop: function ($item, container, _super) {
-					  
-					  sortabledata = sortabegroup.sortable("serialize").get();
-					  
-					  saveSortings();
-					 _super($item, container);
-					}					
-				});
+					var sortabegroup=$('.gwlisttable').sortable({
+						containerSelector: 'table',
+						itemPath: '> tbody',
+						itemSelector: 'tr',
+						placeholder: '<tr class="placeholder"/>',
+
+						onDrop: function ($item, container, _super) {
+
+						  sortabledata = sortabegroup.sortable("serialize").get();
+
+						  saveSortings();
+						 _super($item, container);
+						}					
+					});		
+			})			
+			
+			
 
 				// Sortable column heads
 
 
-			});
+		});		
+		
+
 		</script>
 	{/capture}
 

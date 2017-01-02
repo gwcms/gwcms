@@ -255,9 +255,18 @@ function processCommand($line, $repos_local=true){
 	
 		case '4':
 		case 'exportupdates2core':
-			$last_sync = getLastCommitWhenVersionsWereSynced();
-			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info			
-			$dir = exportExtract2Tmp(true, $newcommits['commit_id']);
+			if(isset($args[0]))
+				$datefrom = $args[0];
+			else{
+				$last_sync = getLastCommitWhenVersionsWereSynced();
+				$datefrom = $last_sync['lastcommit_date'];
+			}		
+			
+			
+			
+			$newcommits = getNewCommitsFromDate(true, $datefrom);//just for info			
+			
+			$dir = exportExtract2Tmp(true, $newcommits['updates_from_commit']);
 			
 			shell_exec("krusader --left=$dir --right=../gwcms");
 		break;
@@ -270,7 +279,7 @@ function processCommand($line, $repos_local=true){
 			echo "1 - showupdates[;2016-01-01] - get info when was last 'gwcms uptodate' named commit\n";
 			echo "2 - importupdatesfromcore[;2016-01-01] - get info when was last 'gwcms uptodate' named commit - or enter date from\n";
 			echo "3 - showupdates2core - get info when was last 'gwcms uptodate' named commit\n";
-			echo "4 - exportupdates2core - export files when was last 'gwcms uptodate' named commit\n";
+			echo "4 - exportupdates2core[;2016-01-01] - export files when was last 'gwcms uptodate' named commit\n";
 		break;
 	}	
 	

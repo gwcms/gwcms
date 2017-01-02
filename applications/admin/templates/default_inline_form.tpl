@@ -7,9 +7,12 @@
 <form id="inlineForm" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" >
 
 <input type="hidden" name="act" value="do:{$action|default:"save"}" />
-<input type="hidden" name="ajax" value="1" />
 <input type="hidden" name="item[id]" value="{$item->id}" />
+<input type="hidden" name="ajax" value="1" />
 
+{if $item->id && $item->update_time}
+	<input class="gwSysFields" type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
+{/if}
 
 	{*block name="inputs"}
 		{$if_actions=[save]}
