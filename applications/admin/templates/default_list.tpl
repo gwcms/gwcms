@@ -63,7 +63,7 @@
 
 			{block name="item_row"}
 				{foreach $dl_fields as $field}
-					<td>
+					<td class="dl_cell_{$field}">
 						{call dl_proc_row_cell}
 					</td>
 				{/foreach}
