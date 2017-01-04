@@ -21,9 +21,9 @@
 {/if}
 
 
-{if $item->id}
+{*if $item->id}
 	<input class="gwSysFields" type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
-{/if}
+{/if*}
 
 {capture append=footer_hidden}
 		<script src="{$app_root}static/js/forms.js"></script>

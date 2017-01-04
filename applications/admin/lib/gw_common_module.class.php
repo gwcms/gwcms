@@ -167,24 +167,35 @@ class GW_Common_Module extends GW_Module
 	function common_doSave()
 	{
 		
+		//TODO : palyginti senas vertes, jei bus pakitusios mest errora
+		/*
+		$original_vals = json_decode($_POST['original_values'], true);
+		
+		foreach($original_vals as $key => $val)
+			$data[]=  urlencode($key).'='.urlencode($val);
+		
+		parse_str(implode('&',$data), $original_vals);
+		d::dumpas($original_vals);
+		*/
+		
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 
 		if ($vals['id'] === '')
 			unset($vals['id']);
 
-		$item = $this->model->createNewObject($vals, false, $this->lang());
+		$item = $this->model->createNewObject(isset($vals['id']) ? ['id'=>$vals['id']]: [], false, $this->lang());
 
 		if ($this->load_before_save)
 			$item->load();
 
-		
+		$this->fireEvent('BEFORE_SAVE_00', $item);
 
 		$this->canBeAccessed($item, true);
 		$item->setValues($vals);
 
 		$this->fireEvent('BEFORE_SAVE_0', $item);
-
+		
 		if ($this->auto_images && count($_FILES))
 			GW_Image_Helper::__setFiles($item);
 
@@ -210,7 +221,7 @@ class GW_Common_Module extends GW_Module
 		$item->prepareSave();
 
 		$message = ["title"=>$item->title];
-		
+				
 		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT" || !$item->id) {
 			$item->insert();
 			$message["text"]="/g/SAVE_SUCCESS";

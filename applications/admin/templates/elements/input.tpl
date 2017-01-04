@@ -28,7 +28,7 @@
 
 {if !$hideifempty || $value || $item->$name}
 	
-{$title=$title|default:$app->fh()->fieldTitle($name)}
+{$title=$title|default:$m->fieldTitle($name)}
 
 
 {function input_label}

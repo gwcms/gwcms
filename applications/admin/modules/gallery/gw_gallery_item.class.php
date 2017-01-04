@@ -3,7 +3,7 @@
 define('GW_GALLERY_ITEM_FOLDER', 1);
 define('GW_GALLERY_ITEM_IMAGE', 0);
 
-class GW_Gallery_Item extends GW_Composite_Data_Object
+class GW_Gallery_Item extends GW_i18n_Data_Object
 {
 	public $table = 'gw_gallery_items';
 	public $composite_map = Array
@@ -14,6 +14,12 @@ class GW_Gallery_Item extends GW_Composite_Data_Object
 	public $calculate_fields = Array('child_count'=>1, 'path'=>'getPath');
 	public $default_order = 'type DESC, priority ASC';		
 	public $order_limit_fields=['parent_id'];
+	
+	public $i18n_fields = Array(
+		'title' => 1,
+		'description' => 1,
+	);	
+	
 	
 	function config()
 	{

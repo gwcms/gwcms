@@ -11,7 +11,8 @@
 {$input_name=$input_name_pattern|sprintf:$name}
 
 {if !$id}
-	{$id=str_replace(["[","]"],'_',$input_name)}
+	{$id=str_replace(["[","]"],'__',$input_name)}
+	{$id=str_replace("/",'___',$id)}
 {/if}
 
 {assign var="input_id" value=$id scope=parent}
@@ -37,5 +38,5 @@
 {$inp_type=$type|default:'text'}
 
 {if $type=='password'}{$inp_type='text'}{/if}
-{include file="elements/inputs/`$inp_type`.tpl"}  
+{include file="elements/inputs/`$inp_type`.tpl"}
 

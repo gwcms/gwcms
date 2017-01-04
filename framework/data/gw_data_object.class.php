@@ -93,7 +93,7 @@ class GW_Data_Object
 			$func = $func == 1 ? 'calculateFieldCache' : $func;
 			return $this->$func($key);
 		}
-
+		
 		return isset($this->content_base[$key]) ? $this->content_base[$key] : false;
 	}
 
@@ -591,15 +591,6 @@ class GW_Data_Object
 				$this->setError($err[0], $fieldname);
 		}
 		
-		
-		if(isset($this->content_base['update_time']) && isset($this->content_base['update_time_check']) && $this->update_time!=$this->update_time_check)
-		{
-			$this->errors["update_time"]="/g/ITEM_CHANGE_INTERUPED";
-		}else{
-			unset($this->content_base['update_time_check']);
-		}
-		
-		unset($this->changed_fields['update_time_check']);
 		
 		
 		return $this->errors ? false : true;

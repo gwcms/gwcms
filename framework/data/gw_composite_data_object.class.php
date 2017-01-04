@@ -93,6 +93,14 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 
 	function get($field)
 	{
+		if(strpos($field, '/')!==false)
+		{
+			list($obj,$key) = explode('/', $field, 2);
+			
+			if(is_object($this->$obj))
+				return $this->$obj->$key;
+		}		
+		
 		if (!$this->isCompositeField($field))
 			return parent::get($field);
 
@@ -100,10 +108,22 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	}
 
 	function set($field, $value)
-	{
+	{	
+		
+		if(strpos($field, '/')!==false)
+		{
+			
+			
+			list($obj,$key) = explode('/', $field, 2);
+			
+			$obj = $this->$obj;
+			//d::dumpas([$obj,$key]);
+			
+			return $obj->set($key, $value);
+		}		
+		
 		if (!$this->isCompositeField($field))
 			return parent::set($field, $value);
-
 
 		$descript = $this->composite_map[$field];
 		$classname = $descript[0];
@@ -130,6 +150,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	
 	function eventHandler($event, &$context_data = [])
 	{
+		
 		switch ($event) {
 			case 'PREPARE_SAVE':
 				
@@ -137,17 +158,6 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 					$this->changed=1;
 				}
 
-			break;
-			
-			case 'BEFORE_DELETE':
-				$this->removeAllCompositeItems();
-				break;
-
-			case 'AFTER_SAVE':
-				$this->saveCompositeItems($context_data);
-				break;
-
-			case 'BEFORE_SAVE':
 				if (isset($this->content_base['delete_composite'])) {
 					foreach ($this->content_base['delete_composite'] as $field => $checked) {
 						if (!$checked)
@@ -158,8 +168,20 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 					}
 
 					unset($this->content_base['delete_composite']);
-				}
+					unset($this->changed_fields['delete_composite']);
+				}				
+				
+			break;
+			
+			case 'BEFORE_DELETE':
+				$this->removeAllCompositeItems();
 				break;
+
+			case 'AFTER_SAVE':
+				$this->saveCompositeItems($context_data);
+				break;
+
+
 		}
 
 		parent::EventHandler($event, $context_data);

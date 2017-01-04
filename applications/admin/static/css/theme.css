@@ -7727,7 +7727,8 @@ input[type="color"] {
 
 .gwinput-label-modified span
 {
-	color: orange;
+	font-weight: bold;
+	color: navy;
 }
 
 

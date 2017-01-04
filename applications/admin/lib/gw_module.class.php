@@ -583,6 +583,18 @@ class GW_Module
 		foreach($item->errors as $field => $error)
 			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
 	}
+	
+	
+	function fieldTitle($field)
+	{
+		if(strpos($field,'/')!==false)
+		{
+			// user/name -> name
+			$field = explode('/', $field);
+			$field = $field[count($field)-1];//return last section
+		}
 		
+		return $this->app->fh()->fieldTitle($field);
+	}
 }
 
