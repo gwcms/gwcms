@@ -14,7 +14,8 @@
 
 {function name=df_submit_button_cancel}
 	{*location.href='{gw_link levelup=1 path_only=1}'*}
-	<button class="btn btn-default pull-right" onclick="{if isset($smarty.get.RETURN_TO)}location.href='{$smarty.get.RETURN_TO}';{else}history.go(-1);{/if}return false"><i class="fa fa-times" aria-hidden="true"></i> {$lang.CANCEL}</button>
+
+	<button class="btn btn-default pull-right" onclick="{if $smarty.get.dialog}window.parent.gwcms.close_dialog_all_types();{else}{if isset($smarty.get.RETURN_TO)}location.href='{$smarty.get.RETURN_TO}';{else}history.go(-1);{/if}{/if}return false"><i class="fa fa-times" aria-hidden="true"></i> {$lang.CANCEL}</button>
 {/function}
 
 <div class="form_action_buttons">

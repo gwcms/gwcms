@@ -242,7 +242,15 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('AFTER_SAVE', $item);
 
 		//jeigu saugome tai reiskia kad validacija praejo
-		if (!isset($_POST['ajax'])) {
+		if(isset($_GET['reloadparent']) && $_REQUEST['submit_type'] != 1)
+		{
+			echo "<script type='text/javascript'>parent.location.reload()</script>";
+			exit;
+		}
+		if(isset($_GET['dialog']) && $_REQUEST['submit_type'] != 1) {
+			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2()</script>";
+			exit;
+		}elseif(!isset($_POST['ajax'])) {
 
 			$this->jumpAfterSave($item);
 		} else {

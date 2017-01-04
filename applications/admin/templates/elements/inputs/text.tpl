@@ -4,7 +4,7 @@
 	class="form-control{if $class} {$class}{/if} "
 	{if $required}required="required"{/if} 
 	name="{$input_name}" 
-	type="{$type}" 
+	type="{$type|default:text}" 
 	value="{$value|escape}" 
 	onchange="this.value=$.trim(this.value);" 
 	{if $readonly}readonly{/if}

@@ -367,6 +367,11 @@ var gwcms = {
 		$('.modal-backdrop').fadeOut();
 	},
 	
+	close_dialog_all_types: function()
+	{
+		gwcms.close_dialog2();
+	},
+	
 	initAutoresizeIframe: function(selector, cfg, callback)
 	{
 		require(["js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function () {

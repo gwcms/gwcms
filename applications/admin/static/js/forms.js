@@ -3,6 +3,16 @@
 var gw_changetrack = {
 	
 	
+	readValue: function(selector)
+	{
+		var o=$(selector);
+		
+		if(o.attr('type')=='checkbox')
+			return o.is(":checked") ? 1 : 0;
+		
+		return o.val();
+	},
+	
 	init: function(formclass)
 	{
 		
@@ -14,9 +24,10 @@ var gw_changetrack = {
 		var ovals=$('<input class="original_values" name="original_values" type="hidden">').appendTo(formclass)
 				
 		
-		$(formclass).find("input[type='radio'], input[type='checkox'], input[type='radio'], select, textarea").each(function(){
+		$(formclass).find("input[type='text'], input[type='radio'], input[type='radio'], select, textarea, .gwcheckboxinput").each(function(){
 
-			$(this).attr('data-origval', $(this).val());
+			
+			$(this).attr('data-origval', gw_changetrack.readValue(this));
 
 			data = $(this).serializeArray();
 			
@@ -29,8 +40,13 @@ var gw_changetrack = {
 			
 					
 			ovals.val(JSON.stringify(vals));
+			
+			//console.log(JSON.stringify(vals))
+			
+			
+			
 
-		}).on('input propertychange change', function() {
+		}).on('input propertychange change click', function() {
 
 			console.log($(this).attr('id')+' changed');
 			changedobj = $(this);
@@ -63,9 +79,12 @@ var gw_changetrack = {
 	
 	isChanged: function(obj)
 	{
-		if(obj.attr('data-origval')!=obj.val())
+		
+		if(obj.attr('data-origval')!=gw_changetrack.readValue(obj))
 		{
 			$('#'+obj.attr('id')+'_inputLabel').addClass("gwinput-label-modified");
+			
+			console.log('changed');
 		}else{
 			$('#'+obj.attr('id')+'_inputLabel').removeClass("gwinput-label-modified");
 		}
