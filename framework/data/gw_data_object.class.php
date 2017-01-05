@@ -73,6 +73,17 @@ class GW_Data_Object
 	 */
 	function set($key, $val)
 	{
+		if(strpos($key, '/')!==false)
+		{
+			$keys=explode('/', $key);
+			$k1= array_shift($keys);
+	
+			$this->__objAccessWrite($this->content_base[$k1], $keys, $val);
+			$this->changed_fields[$k1] = 1;
+			return true;
+		}		
+		
+		
 		if (!isset($this->content_base[$key]) || $this->content_base[$key] !== $val) {
 			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
 
@@ -85,9 +96,40 @@ class GW_Data_Object
 	{
 		$this->changed_fields = [];
 	}
-
+	
+	function __objAccessRead($o, $keys)
+	{
+		$key=  array_shift($keys);
+		
+		if(is_object($o->$key))
+			return $this->__objAccessRead ($o->$key, $keys);
+		
+		return $o->$key;
+	}
+	
+	function __objAccessWrite(&$o, $keys, $val)
+	{
+		
+		$key=  array_shift($keys);
+		
+		if(!is_object($o))
+			$o = new stdClass();
+		
+		if(!isset($o->$key))
+			$o->$key = new stdClass();
+			
+		if(count($keys) > 0)
+			return $this->__objAccessWrite($o->$key, $keys, $val);
+		
+		return $o->$key = $val;
+	}
+	
 	function get($key)
 	{
+		
+		if(strpos($key, '/')!==false)			
+			return $this->__objAccessRead($this, explode('/', $key));
+		
 		if (isset($this->calculate_fields[$key])) {
 			$func = $this->calculate_fields[$key];
 			$func = $func == 1 ? 'calculateFieldCache' : $func;
@@ -732,7 +774,7 @@ class GW_Data_Object
 			if ($value)
 				return json_decode($value, !$object);
 		}else {
-			if (is_array($value))
+			if (is_array($value) || is_object($value))
 				return json_encode($value);
 
 			elseif (is_string($value)) // assume it is valid json

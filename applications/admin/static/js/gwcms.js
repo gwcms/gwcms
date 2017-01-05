@@ -340,6 +340,17 @@ var gwcms = {
 	open_dialog2: function (conf)
 	{
 		gwcms.dialog_cnt++;
+		
+		var defaults = {
+			 minHeight : 200,
+			 minWidth : 200,
+			 heightOffset : 0,
+			 widthOffset:60
+		 };
+		 
+		 var conf = $.extend({}, defaults, conf || {});		
+		 
+		 console.log(conf);
 
 		
 		require(["gwcms","js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
@@ -351,7 +362,7 @@ var gwcms = {
 					</div></div></div></div>'
 					);
 
-			$("#gwDialogConfiFrm").iframeAutoHeight({minHeight: 200, minWidth: 200, heightOffset: 0, widthOffset: 60/*, debug:true */});
+			$("#gwDialogConfiFrm").iframeAutoHeight(conf);
 			$("#gwDialogConfiFrm").load(function () {
 				$("#gwcmsDialog").modal({backdrop: 'static'}).on('hidden.bs.modal', function () {
 					$('#gwcmsDialog').remove();
@@ -365,6 +376,7 @@ var gwcms = {
 	{
 		$('#gwcmsDialog').remove();
 		$('.modal-backdrop').fadeOut();
+		$('body').removeClass('modal-open');
 	},
 	
 	close_dialog_all_types: function()

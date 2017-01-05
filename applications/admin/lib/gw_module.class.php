@@ -130,13 +130,10 @@ class GW_Module
 	
 	function doSetListParams()
 	{
-		if(isset($_GET['list_params']) && ($tmp = $_GET['list_params']))
+		if(isset($_REQUEST['list_params']) && ($tmp = $_REQUEST['list_params']))
 			$this->list_params = array_merge($this->list_params, $tmp);
-		
-		
-		unset($_GET['list_params']);
-		$this->jump();
-			
+				
+		$this->jump();	
 	}
 	
 	function methodExists($name)

@@ -24,11 +24,13 @@
 				}
 				
 			require(['gwcms'],function(){
-			{foreach GW::$settings.LANGS as $idx => $ln_code}
+				{if $hide_non_primary}
+				{foreach $langs as $ln_code}
 					{if $idx!=0}
 						tooglei18nCol('{$ln_code}');
 					{/if}
-				{/foreach}		
+				{/foreach}
+				{/if}
 			})
 		</script>
 	{/capture}
@@ -37,7 +39,7 @@
 	<td>
 		
 	</td>
-	{foreach GW::$settings.LANGS as $ln_code}
+	{foreach $langs as $ln_code}
 		{if $ln_code=='en'}{$flag_code='gb'}{else}{$flag_code=$ln_code}{/if}
 		<td>
 			<span class="gw_switch_ln" href="#" onclick="tooglei18nCol('{$ln_code}');return false">

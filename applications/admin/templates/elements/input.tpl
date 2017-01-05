@@ -59,7 +59,7 @@
 
 {capture assign=input_content}
 	{if $i18n==2}
-		{foreach GW::$settings.LANGS as $ln_code}
+		{foreach $langs as $ln_code}
 			
 			<td class="input_td col_i18n_{$ln_code}" width="{$width_input}" {if $wide}colspan="2"{/if}>
 				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
