@@ -103,9 +103,10 @@ class Module_Movies extends GW_Common_Module
 		
 	}
 	
-	function doBackgroundAterInsert()
+	function doBackgroundAterInsert($item)
 	{
-		$item = $this->getDataObjectById();
+		if(! $item)
+			$item = $this->getDataObjectById();
 		
 		$search = str_replace(['(',')'], ' ', $item->title);
 		
@@ -165,8 +166,9 @@ class Module_Movies extends GW_Common_Module
 	function __eventAfterSave($item)
 	{
 		if(!$item->imdb){
-			Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
-			$this->setMessage("Imdb update background process started");
+			//Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
+			//$this->setMessage("Imdb update background process started");
+			$this->doBackgroundAterInsert($item);
 		}
 	}
 	
