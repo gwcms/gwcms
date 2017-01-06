@@ -3,16 +3,18 @@
 
 <script src="{$app->sys_base}vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-	var {$id}editor = ace.edit("{$id}_aceeditor");
-	//editor.setTheme("ace/theme/twilight");
-	{$id}editor.session.setMode("ace/mode/{$codelang}");
-    
-    
-	var {$id}textarea = $('#{$id}');
-	{$id}editor.getSession().setValue({$id}textarea.val());
-	{$id}editor.getSession().on('change', function(){
-		{$id}textarea.val({$id}editor.getSession().getValue());
-	});   
+	require(['gwcms'], function(){
+		var {$id}editor = ace.edit("{$id}_aceeditor");
+		//editor.setTheme("ace/theme/twilight");
+		{$id}editor.session.setMode("ace/mode/{$codelang}");
+
+
+		var {$id}textarea = $('#{$id}');
+		{$id}editor.getSession().setValue({$id}textarea.val());
+		{$id}editor.getSession().on('change', function(){
+			{$id}textarea.val({$id}editor.getSession().getValue());
+		});   	
+	})
 </script>
 
 <style>
