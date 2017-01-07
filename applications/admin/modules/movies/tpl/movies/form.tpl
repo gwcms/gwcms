@@ -5,7 +5,7 @@
 {include file="elements/input.tpl" name=title}
 
 
-{include file="elements/input.tpl" type=textarea name=description autoresize=1}
+{include file="elements/input.tpl" type=textarea name=description autoresize=1 height=50px}
 {include file="elements/input.tpl" name=rate type=select options=[0,1,2,3,4,5,6,7,8,9,10]}
 
 {if $item->id}
