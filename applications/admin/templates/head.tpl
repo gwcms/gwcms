@@ -97,8 +97,8 @@
 			shim : {
 				bootstrap : { "deps" :['jquery'] },
 				jqueryui: { "deps" : ['jquery'] },
-				nifty: { "deps" : ['jquery'] },
-				gwcms: { "deps" : ['jquery','nifty','bootstrap','jqueryui'] },
+				nifty: { "deps" : ['jquery','bootstrap'] },
+				gwcms: { "deps" : ['jquery','bootstrap','nifty','jqueryui'] },
 				sortable: { deps: ['gwcms'] }
 			},			
 			paths: {
@@ -113,7 +113,7 @@
 		
 		require(['gwcms'], function(){
 			$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
-			gw_adm_sys.init();		
+			gw_adm_sys.init();	
 		});
 		
 		
