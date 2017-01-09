@@ -16,6 +16,8 @@ function shutdown()
   }
 }
 */
+$GLOBALS['version'] = is_file(__DIR__.'/version') ? file_get_contents(__DIR__.'/version') : -1;
+
 if(file_exists(__DIR__ . '/vendor/autoload.php'))
 	require_once __DIR__ . '/vendor/autoload.php';
 
