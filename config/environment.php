@@ -12,6 +12,7 @@ GW::s('PROJECT_FAVICO_ARGS', 'text=GW&text2=CMS&fs=50&font=EncodeSansNarrow-Extr
 GW::s('DB/INIT_SQLS',"SET SESSION sql_mode = '';"); // automatycaly turned to strict in mysql 5.7 which causes default errors and others
 
 $GLOBALS['version'] = trim(file_get_contents(GW::s('ROOT_DIR').'.git/ORIG_HEAD'));
+$GLOBALS['version_short'] = substr($GLOBALS['version'],0,8);
 
 if(__DIR__=='/var/www/gwcms/config'){
 	GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);

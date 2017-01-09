@@ -92,7 +92,7 @@
 
  	<script type="text/javascript">
 		require.config({ 
-			urlArgs: 'version={$GLOBALS.version}',			
+			urlArgs: 'version={$GLOBALS.version_short}',			
 			baseUrl: '{$app_root}static',
 			shim : {
 				bootstrap : { "deps" :['jquery'] },
