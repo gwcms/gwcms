@@ -93,12 +93,12 @@ class Module_Comments extends Module_Items
 	}
 	
 	//workaround kad nepaimtu is items
-	function loadViews()
+	function loadViews($page=false)
 	{
 		
 	}
 	
-	function loadOrders()
+	function loadOrders($page=false)
 	{
 		
 	}	
