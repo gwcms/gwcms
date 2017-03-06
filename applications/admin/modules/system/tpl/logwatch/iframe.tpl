@@ -41,11 +41,13 @@ span:last-child { background-color: orange;  display: inline; width:auto; }
 <div id="ta_container" style="background-color:red"></div>
 
 <script type="text/javascript">
-	var x = new rt_logwatch({ 
-		file: '{$smarty.request.id}', 
-		time: 3000,
-		container: $('#ta_container'),	
-		});
+	require(['gwcms'], function(){
+		var x = new rt_logwatch({ 
+			file: '{$smarty.request.id}', 
+			time: 3000,
+			container: $('#ta_container'),	
+			});
+	})
 </script>
 			
 

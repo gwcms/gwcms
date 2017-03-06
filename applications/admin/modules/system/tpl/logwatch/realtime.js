@@ -160,15 +160,3 @@ function substr_count( haystack, needle, offset, length ) {
 
     return cnt;
 }
-
-$(function(){
-	/*
-	$('head').append('\
-			<style>\
-				.rt_logwatch_ta{ display:block; resize:both; padding:0; }\
-				.rt_logwatch_ta span:last-child { background-color: orange; } \
-				.rt_logwatch_status{padding:5px;border:1px solid silver;background-color:#ddd;position:fixed;top:auto;left:auto;}\
-			</style>\
-			');
-	*/		
-})
