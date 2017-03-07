@@ -1,5 +1,4 @@
 {function list_item_action}
-	{$smallcap=$smallcap|default:mb_strlen($caption)<5}
 	<a  class="{$action_class|default:gwcmsAction}"
 		{if $onclick}onclick="{$onclick};return false"{/if} 
 		href="{$href|default:'#'}"

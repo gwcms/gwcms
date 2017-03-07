@@ -1,4 +1,4 @@
-{function name=dl_toolbar_buttons_addnew}
+{function name=do_toolbar_buttons_addnew}
 	<img 
 		align="absmiddle" 
 		title="{$lang.CREATE_NEW}" 
@@ -10,7 +10,7 @@
 	&nbsp;&nbsp;&nbsp;
 {/function}
 
-{function name=dl_toolbar_buttons_filters}
+{function name=do_toolbar_buttons_filters}
 	{if $dl_filters}
 		<img src="{$app->icon_root}search.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
 		<a href="#show_filters" onclick="$('#filters').toggle();
@@ -19,14 +19,14 @@
 	{/if}
 {/function}	
 
-{function name=dl_toolbar_buttons_print}
+{function name=do_toolbar_buttons_print}
 	<img src="{$app->icon_root}print.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3" /> 
 	<a href="{$app->buildUri(false,[print_view=>1],[carry_params=>1])}">{$lang.PRINT_VIEW}</a>
 	&nbsp;&nbsp;&nbsp;
 {/function}
 
 
-{function name=dl_toolbar_buttons_info}
+{function name=do_toolbar_buttons_info}
 	{if $page->notes}
 		<img src="{$app->icon_root}action_info.png"  align="absmiddle" onclick="$(this).next().click()" vspace="3"  /> 
 		<a href="#show_about" onclick="open_notes({$page->id});return false">{$lang.ABOUT}</a>	
@@ -36,7 +36,7 @@
 	{/if}
 {/function}
 
-{function name=dl_toolbar_buttons_dialogconf}
+{function name=do_toolbar_buttons_dialogconf}
 	<script type="text/javascript">
 		function lds_config()
 		{
@@ -49,15 +49,15 @@
 	&nbsp;&nbsp;&nbsp;
 {/function}	
 
-{function name=dl_toolbar_buttons_hidden}
+{function name=do_toolbar_buttons_hidden}
 
 	<div class="unhideroot" style="">
 		<img class="visible unhidetrigger" align="absmiddle" src="{$app->icon_root}action_down24.png">
 
 		<div class="dropdown">
-			{foreach $dl_toolbar_buttons_hidden as $button_func}
+			{foreach $do_toolbar_buttons_hidden as $button_func}
 				<div class="menuitem">
-					{call name="dl_toolbar_buttons_`$button_func`"}
+					{call name="do_toolbar_buttons_`$button_func`"}
 				</div>
 			{/foreach}	
 		</div>
@@ -66,20 +66,20 @@
 
 {/function}
 
-{function name=dl_toolbar_buttons_importdata} 
+{function name=do_toolbar_buttons_importdata} 
 	{gw_link relative_path=importdata title=GW::l('/A/VIEWS/importdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 {/function}	
-{function name=dl_toolbar_buttons_exportdata} 
+{function name=do_toolbar_buttons_exportdata} 
 	{gw_link relative_path=exportdata title=GW::l('/A/VIEWS/exportdata') icon="action_action"} &nbsp;&nbsp;&nbsp; 
 {/function}
 
-{function name=dl_toolbar_buttons_edit} 
+{function name=do_toolbar_buttons_edit} 
 	{gw_link relative_path=edit title=GW::l('/A/VIEWS/edit') icon="action_edit24"} &nbsp;&nbsp;&nbsp; 
 {/function}
 
 
 {function name=dl_display_toolbar_buttons}
-	{foreach $dl_toolbar_buttons as $button_func}
-		<span style="white-space: nowrap;">{call name="dl_toolbar_buttons_`$button_func`"}</span>
+	{foreach $do_toolbar_buttons as $button_func}
+		<span style="white-space: nowrap;">{call name="do_toolbar_buttons_`$button_func`"}</span>
 	{/foreach}	
 {/function}

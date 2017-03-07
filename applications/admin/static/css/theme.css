@@ -7401,7 +7401,7 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
 .clear{
 	clear:both;
 }
-.gwTable { border-spacing:0px;  border-collapse: collapse;  font-size: 12px; background-color:#fff; }
+.gwTable { border-spacing:0px;  border-collapse: collapse;  font-size: 12px; background-color:#fff; color: #333; }
 /* inside table header */
 .gwTable > tbody >  tr > th { border: 1px solid #fff;  padding: 2px 5px 2px 5px;  background: #efefef;}
 .input_label_td{padding: 5px !important}
@@ -7731,32 +7731,6 @@ input[type="color"] {
 	color: navy;
 }
 
-
-.brand-icon {
-	height:40px;
-	width: 40px;
-	padding: 7px;
-	filter: brightness(10000%);
-	filter: grayscale(100%);
-	margin-right:2px;
-	margin-left: 10px;
-	
-	
-	    -webkit-animation:spin 180s linear infinite;
-    -moz-animation:spin 180s linear infinite;
-    animation:spin 180s linear infinite;	
-}
-.brand-text{
-	margin-top: 1px;
-	font-size: 15px;
-}
-
-.spin{
-
-}
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 #mainnav-menu .fa{
 	margin-right: .3em; width: 1.28571429em;text-align: center;

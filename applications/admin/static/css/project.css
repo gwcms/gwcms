@@ -1,0 +1,25 @@
+.brand-icon {
+	height:40px;
+	width: 40px;
+	padding: 7px;
+	filter: brightness(10000%);
+	filter: grayscale(100%);
+	margin-right:2px;
+	margin-left: 10px;
+	
+	
+	    -webkit-animation:spin 180s linear infinite;
+    -moz-animation:spin 180s linear infinite;
+    animation:spin 180s linear infinite;	
+}
+.brand-text{
+	margin-top: 1px;
+	font-size: 15px;
+}
+
+.spin{
+
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

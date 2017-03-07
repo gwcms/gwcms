@@ -66,6 +66,7 @@
     <script src="{$app_root}static/js/pace.min.js"></script>
 	
 	<link href="{$app_root}static/css/theme.css" rel="stylesheet">
+	<link href="{$app_root}static/css/project.css" rel="stylesheet">
 
     <!--jQuery [ REQUIRED ]-->{*
     <script src="{$app_root}static/js/jquery-2.2.4.min.js"></script>
