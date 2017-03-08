@@ -13,7 +13,7 @@
 					 
 					 >
 			{else}
-				<i class="ti-face-smile ic-user"></i>
+				<i class="fa fa-user-circle-o ic-user"></i>
 			{/if}
 		</span>
 		<div class="username hidden-xs">{$app->user->title|default:$app->user->get('username')} </div>
