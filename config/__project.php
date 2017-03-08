@@ -11,3 +11,14 @@ GW::s('DEFAULT_APPLICATION','ADMIN');
 
 GW::s('SITE_TITLE', 'GW CMS '.GW::s('SYS_VERSION'));
 GW::s('SITE_TITLE_DETAIL', 'GateWay Content Management System. v'.GW::s('SYS_VERSION'));
+
+
+/*
+HOOKS EXAMPLE
+$hooks=[
+    'NAVBAR_LEFT_1'=>['customers/balance/navbarleft'],
+    'AFTER_MENU'=>['mass_messages/widgets/aftermenu'],
+];
+
+GW::s('ADMIN/HOOKS', $hooks);
+ */

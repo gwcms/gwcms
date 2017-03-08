@@ -1,6 +1,7 @@
 {function list_item_action}
 	<a  class="{$action_class|default:gwcmsAction}"
 		{if $onclick}onclick="{$onclick};return false"{/if} 
+		{if $shift_button}onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false }"{/if}
 		href="{$href|default:'#'}"
 		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		{if $title}title="{$title|escape}"{/if}
@@ -59,7 +60,7 @@
 {/function}
 
 {function name=dl_actions_editshift}
-	{gw_link relative_path="`$item->id`/form" icon="action_edit_shift" show_title=0 shift_button=1}
+	{list_item_action_m url=["`$item->id`/form"] iconclass="fa fa-pencil-square-o text-warning"  shift_button=1}
 {/function}
 
 {function name=dl_actions_invert_activeold}

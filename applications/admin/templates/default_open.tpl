@@ -40,11 +40,10 @@
 
                     </ul>
                     <ul class="nav navbar-top-links pull-right">
+						
+						{$app->processHook("NAVBAR_LEFT_1")}
 
                         {include "langselect.tpl"}
-
-
-
                         {include "do_userdropdown.tpl"}
 
 						{*

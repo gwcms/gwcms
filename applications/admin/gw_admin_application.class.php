@@ -124,4 +124,19 @@ class GW_Admin_Application extends GW_Application
 		}
 	}
 	
+	
+	function processHook($name)
+	{
+		$resore_module = GW_Lang::$module;
+		
+		if(is_array(GW::s("ADMIN/HOOKS/$name"))) {
+			
+			foreach(GW::s("ADMIN/HOOKS/$name") as $path)
+				$this->innerProcess($path);
+		}
+		
+		GW_Lang::$module  = $resore_module;
+
+	}
+	
 }

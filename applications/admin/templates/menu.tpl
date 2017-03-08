@@ -64,7 +64,7 @@
 
 					</ul>
 
-
+					{$app->processHook('AFTER_MENU')}
 
 
 				</div>

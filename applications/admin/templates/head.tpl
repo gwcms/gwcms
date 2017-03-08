@@ -32,7 +32,7 @@
     <!--=================================================-->
 
     <!--Open Sans Font [ OPTIONAL ] -->
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
 
 
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
@@ -54,8 +54,9 @@
 
 	<script type="text/javascript" src="{$app_root}js/jquery.selectboxes.min.js"></script>	
 	
-	<script type="text/javascript" src="{$app_root}js/set_sw_notifications.js"></script>	
+		
 	*}
+	
 
         
     <!--JAVASCRIPT-->
@@ -89,6 +90,7 @@
 	
 	<link rel="stylesheet" href="{$app->sys_base}vendor/font-awesome/css/font-awesome.min.css">	
 	<script src="{$app->sys_base}vendor/jslibs/require.js"></script>
+	<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
 	
 
  	<script type="text/javascript">

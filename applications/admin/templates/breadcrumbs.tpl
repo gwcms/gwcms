@@ -2,7 +2,7 @@
 	{if !$nobreadcrumbscontainer}<ol class="breadcrumb gwbreadrumb">{/if}
 	{foreach $breadcrumbs as $item}
 		{if $item@last}
-			<li class="active">{$item.title}</li>
+			<li class="active">{$item.title|escape}</li>
 		{else}
 			{if !$smarty.get.print_view}
 				<li><a href="{$app->buildURI($item.path)}">{$item.title|escape}</a></li>
@@ -16,7 +16,7 @@
 		::
 		{foreach $breadcrumbs_attach as $item}
 			{if !$smarty.get.print_view}
-				<a href="{$item.path}">{$item.title}</a> 
+				<a href="{$item.path}">{$item.title|escape}</a> 
 			{else}
 				{$item.title|escape} &raquo;
 			{/if}
