@@ -948,11 +948,11 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 }
 #container:not(.mainnav-sm) #mainnav-menu-wrap>.nano>.nano-content
 {
-	padding-top: 20px;
+	padding-top: 0px;
 }
 #container:not(.mainnav-sm) #mainnav-menu
 {
-	margin-top: 10px;
+	margin-top: 0px;
 }
 #container:not(.mainnav-sm) .mainnav-profile
 {
@@ -1101,7 +1101,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 }
 #mainnav-menu ul a,.menu-popover .sub-menu ul a
 {
-	padding: 10px 20px 12px 53px;
+	padding: 10px 20px 12px 40px;
 }
 #mainnav-menu ul a:hover,.menu-popover .sub-menu ul a:hover
 {
@@ -1116,6 +1116,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 	box-shadow: inset 2px 0 0 0 #0c80df;
 	color: #fff;
 	font-weight: 600;
+	background-color: #1B252A;
 }
 #container.mainnav-sm #mainnav-menu>.active-link>a,#container.mainnav-sm #mainnav-menu>.active-sub>a,#container.mainnav-sm #mainnav-menu>.active-link a:hover,#container.mainnav-sm #mainnav-menu>.active-sub a:hover
 {
@@ -7406,6 +7407,8 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
 .gwTable > tbody >  tr > th { border: 1px solid #fff;  padding: 2px 5px 2px 5px;  background: #efefef;}
 .input_label_td{padding: 5px !important}
 .gwTable > tbody >  tr > td { border: 1px solid #efefef; padding: 2px 5px 2px 5px;}
+
+.gwActiveTable tr:hover{ background-color:#efefef !important; } 
 
 .gwExtraInfo{
 	background-color:#FAFAFA;
