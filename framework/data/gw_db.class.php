@@ -512,8 +512,9 @@ class GW_DB
 		if (!$ids)
 			return '1=0';
 
-		$ids = array_filter($ids, 'intval');
-
+		foreach($ids as $i => $id)
+			$ids[$i] = (int)$id;
+		
 		if (strpos($fieldname, '`') === false)
 			$fieldname = '`' . $fieldname . '`';
 

@@ -100,14 +100,20 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		$cfg['filters']['project_id'] = ['type'=>'multiselect','options'=>$this->options['project_id']];
 		
-				
-		$exec_users = GW_user::singleton()->getOptions(true, GW_DB::inCondition("id", $this->model->getDistinctVals('user_exec') ));
-		$create_users= GW_user::singleton()->getOptions(true, GW_DB::inCondition("id", $this->model->getDistinctVals('user_create') ));
-				
-		$cfg['filters']['user_exec'] = ['type'=>'multiselect','options'=> $exec_users];
-		$cfg['filters']['user_create'] = ['type'=>'multiselect','options'=> $create_users];
+		$eu = $this->model->getDistinctVals('user_exec');	
+		$cu = $this->model->getDistinctVals('user_create');
+		
+
+		if($eu){
+			$exec_users = GW_user::singleton()->getOptions(true,  GW_DB::inCondition("id", $eu));
 			
-			
+			$cfg['filters']['user_exec'] = ['type'=>'multiselect','options'=> $exec_users];
+		}
+		if($cu){
+			$create_users= GW_user::singleton()->getOptions(true, GW_DB::inCondition("id", $cu));
+			$cfg['filters']['user_create'] = ['type'=>'multiselect','options'=> $create_users];			
+		}
+	
 		return $cfg;
 	}
 	
