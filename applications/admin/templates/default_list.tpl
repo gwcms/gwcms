@@ -178,7 +178,7 @@
 		{/foreach}
 		
 		{if $equal_fields}
-			<table class="table-condensed table-hover table-vcenter table-bordered gwlisttable">
+			<table class="table-condensed table-hover table-vcenter table-bordered gwListTable">
 				
 			{foreach $equal_fields as $field => $tmp}
 				<tr><th data-field="{$field}">{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
@@ -203,7 +203,7 @@
 			{if !count($list)}
 				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
 			{else}
-					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable">
+					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable">
 						<tr>	
 							{foreach $dl_fields as $field}
 								<th>{dl_proc_th_cell}</th>

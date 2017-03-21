@@ -632,6 +632,20 @@ var gwcms = {
 		}
 	},
 	
+	showMessage: function(msg, level, disapear)
+	{
+		var types = {'0':'success', '1':'warning', '2':'danger', '3':'info'}
+		
+			var data = {
+							type: types[level],
+							message: msg,
+							container: 'floating',
+							timer: disapear ? disapear: 5000
+						};
+			
+			$.niftyNoty(data);				
+	},
+	
 	beforeFormSubmit: function(obj)
 	{
 		

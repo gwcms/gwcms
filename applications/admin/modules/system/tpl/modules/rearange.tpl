@@ -58,20 +58,22 @@
 				var tmp = JSON.stringify(sortabledata[0], null, ' ');
 				
 				$.post(action_url, { 'positions':tmp }, function(data){ 
-					$('#updated_box').html(data);
-					$('#updated_box').show();
+
+					gwcms.showMessage(data, 0, 500);
 					setTimeout("$('#updated_box').fadeOut();",3000);
 				})	
 			}
 			
 			
 		require(['sortable'],function(){
+			
 			$(function () {
-					var sortabegroup=$('.gwlisttable').sortable({
+				
+					var sortabegroup=$('.gwListTable').sortable({
 						containerSelector: 'table',
 						itemPath: '> tbody',
 						itemSelector: 'tr',
-						placeholder: '<tr class="placeholder"/>',
+						placeholder: '<tr class="placeholder"><td colspan="99" style="background-color:yellow">&nbsp;</td></tr>',
 
 						onDrop: function ($item, container, _super) {
 
@@ -149,6 +151,3 @@
 	{$dl_action_return_to=$app->path}
 {/block}
 
-{block name="after_list"}
-<div id="updated_box" class='alert alert-success' style='display:none'>Updated!</div>
-{/block}
