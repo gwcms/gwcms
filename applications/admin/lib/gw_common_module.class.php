@@ -1072,11 +1072,12 @@ class GW_Common_Module extends GW_Module
 			]
 		];
 		
-		foreach($this->model->getColumns() as $fieldname => $x)
-		{
-			$cfg['fields'][$fieldname] = 'Lof';
-		}
-		
+		if($this->model)
+			foreach($this->model->getColumns() as $fieldname => $x)
+			{
+				$cfg['fields'][$fieldname] = 'Lof';
+			}
+
 		return $cfg;
 	}
 	

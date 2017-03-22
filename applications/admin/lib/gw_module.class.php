@@ -38,6 +38,7 @@ class GW_Module
 	public $default_view='default';
 	public $_args=[];//data passed from application params, request_params
 	public $sys_call = false;
+
 	
 	
 	function viewModInfo()
