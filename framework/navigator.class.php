@@ -190,7 +190,7 @@ class Navigator
 	}
 	
 	/**
-		request from any part of unauthorised zones
+		request from any part of unauthorised zones 2 admin section
 		expected result format: json
 	 */
 	static function sysRequest($path, $get_args=[])
