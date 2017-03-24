@@ -188,4 +188,21 @@ class Navigator
 
 		return $url;
 	}
+	
+	/**
+		request from any part of unauthorised zones
+		expected result format: json
+	 */
+	static function sysRequest($path, $get_args=[])
+	{
+		$path = Navigator::getBase(true).$path;
+		
+		$token = GW::getInstance('gw_temp_access')->getToken(GW_USER_SYSTEM_ID);
+		$get_args['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
+		$get_args['sys_call'] = 1;
+		
+		$path .= (strpos($path, '?')===false ? '?' : '&'). http_build_query($get_args);
+
+		return json_decode(file_get_contents($path));	
+	}
 }
