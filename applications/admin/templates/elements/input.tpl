@@ -84,16 +84,16 @@
 
 
 {if $layout=='wide'}
-	<tr>
+	<tr class="{$rowclass}">
 		{call input_label}
 	</tr>
-	<tr id="gw_input_{$name}">
+	<tr id="gw_input_{$name}"  class="{$rowclass}">
 		{$input_content}
 	</tr>
 {elseif $layout=='inline'}
 	{$input_content}
 {else}
-	<tr id="gw_input_{$name}">
+	<tr id="gw_input_{$name}"  class="{$rowclass}">
 		{call input_label}
 		{$input_content}
 	</tr>
