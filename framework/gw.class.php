@@ -210,6 +210,9 @@ class GW
 	static function ln($fullkey, $valueifnotfound = false)
 	{
 		static $cache;
+		
+		if($fullkey[0]!=='/')
+			return $fullkey;
 
 		list(, $module, $key) = explode('/', $fullkey, 3);
 
