@@ -30,6 +30,13 @@
 	{$value=GW_Json_Format_Helper::f($value)}
 {/if}
 
+{if $options_fix}
+	{$tmp=[]}
+	{foreach $options as $opt}
+		{$tmp[$opt]=$opt}
+	{/foreach}
+	{$options=$tmp}
+{/if}
 
 
 

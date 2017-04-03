@@ -602,6 +602,17 @@ class GW_DB
 
 		d::dumpas($tests);
 	}
+	
+	function getColumnOptions($table, $column)
+	{
+		$row = $this->fetch_row("SHOW COLUMNS FROM `$table` LIKE '$column'");
+		$type = $row['Type'];
+		preg_match('/enum\((.*)\)$/', $type, $matches);
+		
+		$opts = explode("','", trim($matches[1],"'"));
+				
+		return $opts;
+	}
 }
 
 class db_query_prep_helper
