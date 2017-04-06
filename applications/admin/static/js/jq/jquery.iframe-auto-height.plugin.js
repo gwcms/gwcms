@@ -61,6 +61,11 @@
 		
 		function needDelay(iframe)
 		{
+			if(options.delay){
+				
+				return true;
+			}
+			
 			try {
 				if( 
 					$(iframe, window.parent).contents().find('body')[0].scrollHeight == 0 &&
@@ -128,17 +133,17 @@
 			var iframeDoc = this.contentDocument || this.contentWindow.document;
 
 			// resizeHeight
-			function resizeHeight(iframe) {
+			function resizeHeight(iframe, delayed) {
 				if (options.diagnostics) {
 					showDiagnostics(iframe, "resizeHeight");
 				}
 				
-				if(needDelay(iframe))
+				if(needDelay(iframe) && !delayed)
 				{
 					debug('need delay');
-					setTimeout(function(){ resizeHeight(iframe) }, 100);
+					setTimeout(function(){ resizeHeight(iframe, true) }, 1000);
 					
-					return false;
+					//return false;
 				}
 
 				// set the iframe size to minHeight so it'll get smaller on resizes in FF and IE

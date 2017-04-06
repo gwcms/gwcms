@@ -345,7 +345,7 @@ var gwcms = {
 			 minHeight : 200,
 			 minWidth : 200,
 			 heightOffset : 0,
-			 widthOffset:60
+			 widthOffset:0
 		 };
 		 
 		 var conf = $.extend({}, defaults, conf || {});		
@@ -357,7 +357,7 @@ var gwcms = {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
 
-			$('body').append('<div class="modal fade" id="gwcmsDialog" role="dialog" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">\
+			$('body').append('<div class="modal fade" id="gwcmsDialog" role="dialog" tabindex="-1" aria-hidden="true"><div class="modal-dialog" style="width:auto"><div class="modal-content">\
 					<div class="modal-header"><button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
 					</div></div></div></div>'
 					);
@@ -630,20 +630,6 @@ var gwcms = {
 			
 			$.niftyNoty(data);			
 		}
-	},
-	
-	showMessage: function(msg, level, disapear)
-	{
-		var types = {'0':'success', '1':'warning', '2':'danger', '3':'info'}
-		
-			var data = {
-							type: types[level],
-							message: msg,
-							container: 'floating',
-							timer: disapear ? disapear: 5000
-						};
-			
-			$.niftyNoty(data);				
 	},
 	
 	beforeFormSubmit: function(obj)
