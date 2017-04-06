@@ -1073,11 +1073,11 @@ class GW_Common_Module extends GW_Module
 		];
 		
 		if($this->model)
-			foreach($this->model->getColumns() as $fieldname => $x)
-			{
-				$cfg['fields'][$fieldname] = 'Lof';
-			}
-
+		foreach($this->model->getColumns() as $fieldname => $x)
+		{
+			$cfg['fields'][$fieldname] = 'Lof';
+		}
+		
 		return $cfg;
 	}
 	
@@ -1105,7 +1105,10 @@ class GW_Common_Module extends GW_Module
 			$ids[]=$itm->$fieldname;
 		
 		$o = new $obj_classname;
-			
+		
+		if(!$ids)
+			return false;
+		
 		$cond = GW_DB::inCondition('id', $ids);
 		$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
 	}	
@@ -1135,7 +1138,7 @@ class GW_Common_Module extends GW_Module
 		if($ids)
 			return GW_DB::inCondition($field, array_keys($ids));
 		
-		return "`$field`=0";		
+		return "1=0";		
 	}
 	
 	
