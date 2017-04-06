@@ -1098,7 +1098,7 @@ class GW_Common_Module extends GW_Module
 	}
 	 */
 	
-	function attachFieldOptions($list, $fieldname, $obj_classname)
+	function attachFieldOptions($list, $fieldname, $obj_classname, $options=[])
 	{
 		$ids = [];
 		foreach($list as $itm)
@@ -1110,7 +1110,14 @@ class GW_Common_Module extends GW_Module
 			return false;
 		
 		$cond = GW_DB::inCondition('id', $ids);
-		$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
+		
+		if(isset($options['simple_options']))
+		{
+			$key=$options['simple_options'];
+			$this->options[$fieldname] = $o->getAssoc(['id', $key], $cond);
+		}else{
+			$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);	
+		}
 	}	
 	
 	
