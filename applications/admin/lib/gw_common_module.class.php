@@ -248,7 +248,9 @@ class GW_Common_Module extends GW_Module
 			exit;
 		}
 		if(isset($_GET['dialog']) && $_REQUEST['submit_type'] != 1) {
-			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2()</script>";
+			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
+			
+			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
 			exit;
 		}elseif(!isset($_POST['ajax'])) {
 
