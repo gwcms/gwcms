@@ -16,6 +16,7 @@
 	input_name_pattern - laukelio vardo formatas // pvz: input[section][%s]
 	options - select,multiselect,read tipams vertės
 	class - laukelio objektui uždedama klasė
+	after_input - turinys pridedamas po laukeliu
 *}
 
 {if $params_expand}
@@ -68,6 +69,11 @@
 	{else}
 		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
+			
+			<div class="input-group" style="width:100%">
+
+
+    
 			{include file="elements/input0.tpl"}
 			
 			{if $layout=='inline'}
@@ -75,6 +81,10 @@
 					<span class="error_label" style='display:block'>{GW::l($m->error_fields.$name)}</span>
 				{/if}
 			{/if}
+			
+			{$after_input}
+			
+			</div>
 		</td>
 	{/if}
 {/capture}
