@@ -337,6 +337,9 @@ var gwcms = {
 
 		$('#' + id).dialog(dconf);
 	},
+	
+	close_callback: false,
+	
 	open_dialog2: function (conf)
 	{
 		gwcms.dialog_cnt++;
@@ -348,11 +351,13 @@ var gwcms = {
 			 widthOffset:0
 		 };
 		 
-		 var conf = $.extend({}, defaults, conf || {});		
-		 
-		 console.log(conf);
+		var conf = $.extend({}, defaults, conf || {});		
 
-		
+		if(conf.close_callback)
+			gwcms.close_callback = conf.close_callback;
+
+		console.log(conf);
+		 
 		require(["gwcms","js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
@@ -372,11 +377,17 @@ var gwcms = {
 			});
 		});
 	},
-	close_dialog2: function()
+	close_dialog2: function(context)
 	{
 		$('#gwcmsDialog').remove();
 		$('.modal-backdrop').fadeOut();
 		$('body').removeClass('modal-open');
+		
+		if(gwcms.close_callback)
+		{
+			gwcms.close_callback(context)
+			gwcms.close_callback = false;
+		}
 	},
 	
 	close_dialog_all_types: function()
@@ -784,8 +795,3 @@ var gw_sortable =
 						gw_navigator.jump(false, params);
 				}
 		}
-
-
-
-
-	
