@@ -99,7 +99,7 @@ class GW_Auth
 			return false;
 //			return $this->setError('/G/GENERAL/NOT_LOGGEDIN');
 		
-		if (!$autologin && !$user->isSessionNotExpired($this->session['last_request'])) { //jei autologin neveikia tai sesijos galiojimas yra
+		if (!$autologin &&  !$user->isSessionNotExpired(isset($this->session['last_request']) ? $this->session['last_request']: -1) ) { //jei autologin neveikia tai sesijos galiojimas yra
 			$this->logout();
 			
 			return $this->setError('/G/GENERAL/SESSION_EXPIRED');
