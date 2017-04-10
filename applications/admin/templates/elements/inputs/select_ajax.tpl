@@ -4,7 +4,10 @@
 	{/foreach}
 {else}
 	
-<select {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control gwselect2 " name="{$input_name}" 
+DATASOURCE: {$datasource}
+	
+	
+<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}" 
 		style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
 		>
 	{html_options options=$options selected=$value}
@@ -13,7 +16,9 @@
 	
 {if !$gwcms_input_select2_loaded}
 	{$m->addIncludes("bs/select2css", 'css', "`$app_root`static/vendor/select2/css.css")}
-	
+	{assign var=gwcms_input_select2_loaded value=1 scope=global}		
+{/if}	
+
 	{capture append=footer_hidden}
 	<script type="text/javascript">
 		require(['vendor/select2/js'], function(){ 
@@ -39,7 +44,7 @@
       return item.title || item.text;
     }				
 				
-$(".gwselect2").select2({
+$("#{$id}").select2({
   ajax: {
 	{if $maximumSelectionLength>0}maximumSelectionLength: {$maximumSelectionLength},  {/if}	  
     url: "{$datasource}",
@@ -81,8 +86,7 @@ $(".gwselect2").select2({
 	</script>
 	{/capture}
 	
-	{assign var=gwcms_input_select2_loaded value=1 scope=global}	
-{/if}
+
 	
 
 
