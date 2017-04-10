@@ -1103,8 +1103,11 @@ class GW_Common_Module extends GW_Module
 	function attachFieldOptions($list, $fieldname, $obj_classname, $options=[])
 	{
 		$ids = [];
-		foreach($list as $itm)
-			$ids[]=$itm->$fieldname;
+		foreach($list as $itm){
+			if($itm->$fieldname)
+				$ids[]=$itm->$fieldname;
+		}
+		
 		
 		$o = new $obj_classname;
 		
