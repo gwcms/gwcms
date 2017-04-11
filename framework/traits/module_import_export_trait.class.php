@@ -75,11 +75,15 @@ trait Module_Import_Export_Trait
 		$params = [];
 		$cond = '';
 		$this->initListParams(false, 'list');
+		
+		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		$this->setListParams($params);
+		$this->fireEvent('AFTER_LIST_PARAMS', $params);
+		
 		$cond = $params['conditions'];
 
 		$list = $this->model->findAll($cond, $params);
-
+		
 		//d::Dumpas([$cond, $params]);
 
 		$data = $this->__list2Str($list);
