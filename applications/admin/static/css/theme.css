@@ -7755,3 +7755,11 @@ input[type="color"] {
 .bg-dang{background-color: #D9534F;}/*red*/
 .bg-info{background-color: #54C8EB}/*lighblue*/
 .bg-gray{background-color: #777}
+
+.gwTable a{
+	color: #333;
+}
+.gwTable a:hover{
+	color: green;
+	background-color: #fff;
+}
