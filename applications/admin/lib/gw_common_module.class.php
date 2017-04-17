@@ -6,7 +6,10 @@ class GW_Common_Module extends GW_Module
 	public $allow_auto_actions = [
 		'dosave' => 1,
 		'dodelete' => 1,
-		'doinvertactive' => 1,
+		'doseriesact' => 1,
+ 		'doinvertactive' => 1,
+		'dosetactive' => 1,
+		'doseriesact' => 1,
 		'domove' => 1,
 		'viewform' => 1,
 		'viewitem' => 1,
@@ -248,9 +251,7 @@ class GW_Common_Module extends GW_Module
 			exit;
 		}
 		if(isset($_GET['dialog']) && $_REQUEST['submit_type'] != 1) {
-			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
-			
-			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
+			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2()</script>";
 			exit;
 		}elseif(!isset($_POST['ajax'])) {
 
@@ -362,15 +363,63 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/item_actions_menu';
 	}
 
+	
+	function getDataObjectByIds() 
+	{
+		$ids = explode(',', $_GET['ids']);
+		$cond = GW_DB::inCondition('id', $ids);
+		$items = $this->model->findAll($cond);
+				
+		return $items;
+	}
+	
+	function common_doSeriesAct()
+	{
+		$items = $this->getDataObjectByIds();
+		$act = $_GET['action'];
+		$method = 'do'.$act;
+				
+		$prev_syscall = $this->sys_call;
+		$this->sys_call = true;
+		
+		foreach($items as $item)
+		{
+			$this->$method($item);
+		}
+		
+		$this->sys_call = false;
+		
+		$this->setMessage("Action \"$act\" performed on ".count($items));
+		
+		if(!$this->sys_call)
+			$this->jump();
+	}
+	
+	function common_doSetActive($item=false)
+	{
+		if(!$item)
+			if (!$item = $this->getDataObjectById())
+				return false;
+		
+		$this->canBeAccessed($item, true);
+		
+		$item->active = true;
+		$item->updateChanged();
+		
+		if(!$this->sys_call)
+			$this->jump();
+	}	
+	
 	/**
 	 * common action do:invert_active 
 	 * to forbid executing 
 	 * overload method 
 	 */
-	function common_doInvertActive()
+	function common_doInvertActive($item=false)
 	{
-		if (!$item = $this->getDataObjectById())
-			return false;
+		if(!$item)
+			if (!$item = $this->getDataObjectById())
+				return false;
 
 		$this->canBeAccessed($item, true);
 
@@ -379,7 +428,8 @@ class GW_Common_Module extends GW_Module
 
 		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);
 
-		$this->jump();
+		if(!$this->sys_call)
+			$this->jump();
 	}
 
 	function buildCond($field, $compare_type, $value, $encap_val=true, $encap_fld=true)
@@ -1074,7 +1124,6 @@ class GW_Common_Module extends GW_Module
 			]
 		];
 		
-		if($this->model)
 		foreach($this->model->getColumns() as $fieldname => $x)
 		{
 			$cfg['fields'][$fieldname] = 'Lof';
@@ -1105,12 +1154,12 @@ class GW_Common_Module extends GW_Module
 		$ids = [];
 		foreach($list as $itm){
 			if($itm->$fieldname)
-				$ids[]=$itm->$fieldname;
+			$ids[]=$itm->$fieldname;
 		}
 		
 		
 		$o = new $obj_classname;
-		
+			
 		if(!$ids)
 			return false;
 		
@@ -1121,8 +1170,8 @@ class GW_Common_Module extends GW_Module
 			$key=$options['simple_options'];
 			$this->options[$fieldname] = $o->getAssoc(['id', $key], $cond);
 		}else{
-			$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);	
-		}
+			$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
+		}	
 	}	
 	
 	
