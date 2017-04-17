@@ -7763,3 +7763,6 @@ input[type="color"] {
 	color: green;
 	background-color: #fff;
 }
+
+.dl_cell_mark input{ margin: 0px }
+.dl_cell_mark{ font-size: 1px; }
