@@ -718,6 +718,19 @@ function checked_action2(action, title) {
 	gwcms.open_dialog2({url: GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','), title: title});
 }
 
+function animateChangedRow(id,speed)
+{
+		var curr_bgcolor = $('#list_row_'+id).css("background-color");
+		var curr_color = $('#list_row_'+id).css("color");
+		
+        $('#list_row_'+id).animate({backgroundColor: "#003311",color: "#fff"}, 300 );
+				
+		setTimeout(function(){
+				$('#list_row_'+id).animate({backgroundColor: curr_bgcolor, color: curr_color}, 300 );
+		}, (speed ? speed : 300))
+	
+}
+
 
 var gw_dialog = {
 	options: {},

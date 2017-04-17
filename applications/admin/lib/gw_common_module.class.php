@@ -386,7 +386,12 @@ class GW_Common_Module extends GW_Module
 		
 		$this->sys_call = false;
 		
-		$this->setMessage("Action \"$method\" performed on ".count($items)." item".(count($items)>1?'s':''));
+		$script="<script>require(['gwcms'], function(){";
+		foreach($items as $item)
+			$script.="animateChangedRow($item->id, 1000);";
+		$script.="})</script>";
+		
+		$this->setMessage("Action <b>\"".GW::l("/A/VIEWS/$method")."\"</b> performed on ".count($items)." item".(count($items)>1?'s':'').$script);
 		
 		if(!$this->sys_call)
 			$this->jump();

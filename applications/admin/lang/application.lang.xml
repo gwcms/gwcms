@@ -252,6 +252,10 @@
 		<en>Invert active state</en>
 		<lt>Pakeisti aktyvumo būklę</lt>
 	</i>
+	<i id="doSetActive">
+		<en>Activate</en>
+		<lt>Aktyvuoti</lt>
+	</i>	
 	<i id="doClone">
 		<en>Clone</en>
 		<lt>Dublikuoti</lt>

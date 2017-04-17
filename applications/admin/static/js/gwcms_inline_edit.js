@@ -91,19 +91,6 @@ function loadRowAfter(trobject, data, classn)
 		trobject.after('<tr id="' + name + '_after" class="' + classn + '" data-id="' + id + '">' + data + '</tr>');
 }
 
-function animateChangedRow(id)
-{
-		var curr_bgcolor = $('#list_row_'+id).css("background-color");
-		var curr_color = $('#list_row_'+id).css("color");
-		
-        $('#list_row_'+id).animate({backgroundColor: "#003311",color: "#fff"}, 300 );
-		
-		setTimeout(function(){
-				$('#list_row_'+id).animate({backgroundColor: curr_bgcolor, color: curr_color}, 300 );
-		},300 )
-	
-}
-
 function submitInlineForm()
 {
 	
