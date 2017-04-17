@@ -351,13 +351,13 @@ var gwcms = {
 			 widthOffset:0
 		 };
 		 
-		var conf = $.extend({}, defaults, conf || {});		
-
+		 var conf = $.extend({}, defaults, conf || {});		
+		 
 		if(conf.close_callback)
 			gwcms.close_callback = conf.close_callback;
 
-		console.log(conf);
-		 
+		 console.log(conf);
+
 		require(["gwcms","js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
@@ -690,7 +690,7 @@ var gw_checklist = {
 
 
 //atsargiai sitas per ajax veikia, jei includins galva mes errorus
-function checked_action(actionOrUrl) {
+function checked_action(actionOrUrl, redirect) {
 
 	var selected = [];
 	$.each($('.checklist_item:checked'), function () {
@@ -699,7 +699,13 @@ function checked_action(actionOrUrl) {
 
 	var url = actionOrUrl.indexOf('/')==-1 ? GW.app_base + GW.ln + '/' + GW.path + '/' + actionOrUrl : actionOrUrl
 	
-	gw_dialog.open(gw_navigator.url(url, {'ids': selected.join(',')}))
+	url = gw_navigator.url(url, {'ids': selected.join(',')})
+	
+	if(redirect) {
+		location.href = url
+	} else {
+		gw_dialog.open()
+	}
 }
 
 function checked_action2(action, title) {
