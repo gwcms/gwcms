@@ -376,20 +376,17 @@ class GW_Common_Module extends GW_Module
 	function common_doSeriesAct()
 	{
 		$items = $this->getDataObjectByIds();
-		$act = $_GET['action'];
-		$method = 'do'.$act;
+		$method = $_GET['action'];
 				
 		$prev_syscall = $this->sys_call;
 		$this->sys_call = true;
 		
 		foreach($items as $item)
-		{
 			$this->$method($item);
-		}
 		
 		$this->sys_call = false;
 		
-		$this->setMessage("Action \"$act\" performed on ".count($items));
+		$this->setMessage("Action \"$method\" performed on ".count($items)." item".(count($items)>1?'s':''));
 		
 		if(!$this->sys_call)
 			$this->jump();
@@ -413,7 +410,8 @@ class GW_Common_Module extends GW_Module
 	/**
 	 * common action do:invert_active 
 	 * to forbid executing 
-	 * overload method 
+	 * remove from unset($this->allow_auto_actions['doinvertactive'])
+	 * supports seriesAct
 	 */
 	function common_doInvertActive($item=false)
 	{
