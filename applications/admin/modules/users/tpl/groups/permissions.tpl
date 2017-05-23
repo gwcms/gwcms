@@ -9,13 +9,14 @@
 <br />
 
 
+
 <form action="{$smarty.server.REQUEST_URI}" method="post">
 
 <input type="hidden" name="act" value="do:save_permissions" />
 <input type="hidden" name="item[id]" value="{$item->id}" />
 
 
-<table class="gwTable gwActiveTable">
+<table class="gwTable gwActiveTable gwlisttable">
 <tr>
 	<th width="20%">{$m->lang.FIELDS.id}</th>
 	<th width="80%">{$m->lang.FIELDS.title}</th>
@@ -44,7 +45,7 @@
 </table>
 <br />
 
-<p><input type="submit" value="{$lang.SAVE}"/></p>
+<p><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></p>
 
 </form>
 

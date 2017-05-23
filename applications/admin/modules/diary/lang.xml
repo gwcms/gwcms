@@ -22,7 +22,6 @@
 		<i id="page_by">
 			<en>0 - paging off</en>
 			<lt>0 - puslapiavimas išjungtas</lt>
-			<no>0 - sidedeling avslått</no>
 		</i>
 	</i>
 	
@@ -30,17 +29,13 @@
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">
-			Dienoraštis
-		</i>	
+		<i id="title">Užrašinė</i>	
 		<i id="info">
 			<i id="icon"><![CDATA[<i class="fa fa-book"></i>]]></i>
 		</i>			
 		<i id="childs">
 			<i id="items">
-				<i id="title">
-					Dienoraštis
-				</i>
+				<i id="title">Įrašai</i>
 				<i id="info">
 					<i id="model">Diary_Entry</i>
 				</i>

@@ -1,5 +1,7 @@
 {if !$input_name_pattern}
-	{$input_name_pattern="filters[%s][]"}
+	{$input_name_pattern="filters[vals][%s][]"}
+	{$inputct_name_pattern="filters[ct][%s][]"}
+	
 {/if}
 
 
@@ -8,37 +10,54 @@
 {/foreach}
 
 {$input_name=$input_name_pattern|sprintf:$name}
+{$inputct_name=$inputct_name_pattern|sprintf:$name}
 
-{$data=$m->list_params.filters.$name|default:[]}
+
+
 
 {$title=$title|default:$app->fh()->fieldTitle($name)}
-{$value=$data.1}
 {$filter_type=$data.0|default:$filter_type}
 
 
 {$inp_type=$type|default:'text'}
 
-<tr>
-	<td>{$title}</td>
-	<td>
-		{if strpos($type,'select')!==false}
-			<input type="hidden" name="{$input_name}" value="{if $type=="multiselect"}IN{else}={/if}" />
+<div class="filterRow filterRow{$name} {if $muted}filterRowMuted{/if}">
+	
+	<div class="col-xs-auto gwFiltLabel" style="display: table-cell;">{$title}</div>
+	<div class="col-xs-auto row">
+		<div class="col-xs-auto gwFiltCT">
+			
+		{if strpos($type,'multiselect')!==false}
+			{$compare_opt=GW::l('/g/FILTERS_SELECT_COMPARE_TYPES')}
 		{else}
-			{$compare_opt=['LIKE'=>'~', '='=>'=', '<'=>'<', '>'=>'>', '!='=>'&ne;']}
-			{html_options name=$input_name options=$compare_opt selected=$filter_type|default:'LIKE'}
-		{/if}
-	</td>
-	<td nowrap>
-		{if $type=='multiselect'}
-			{$input_name_pattern="`$input_name_pattern`[]"}
-			{$value=array_splice($data, 1)}
-		{elseif $type=='select'}
-			{*Add empty option*}
+			{$compare_opt=GW::l('/g/FILTERS_COMPARE_TYPES')}
+		{/if}	
+		
+		<label class="gwselect">
+		
+		<select name="{$inputct_name}" class="form-control"  >
+			{html_options options=$compare_opt selected=$compare_type|default:'LIKE'}
+		</select>
+		</label>
+		
+		
+		</div>
+		<div class="col-xs-auto gwFiltInput">
+			{if $type=='multiselect'}				
+				{$value=json_decode($value, true)}
+			{elseif $type=='select'}
+				{*Add empty option*}
 
-			{$options=$lang.FILTER_EMPTY_OPTION+$options|default:[]}
-		{/if}
+				{$options=$lang.FILTER_EMPTY_OPTION+$options|default:[]}
+			{/if}
+
+
+			{include file="elements/inputs/`$inp_type`.tpl"}    
+		</div>
+		<div class="col-xs-auto gwFiltActions" style="col-xs-autopadding:2px">
+			<a class="gwFilterDelIco" href="#" onclick="gwcms.removeFilter(this, '{$name}');return false"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+		</div>		
 		
 		
-		{include file="elements/inputs/`$inp_type`.tpl"}    
-	</td>
-</tr>
+	</div>
+</div>

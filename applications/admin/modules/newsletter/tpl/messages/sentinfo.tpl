@@ -7,7 +7,7 @@
 	{$dl_smart_fields=['email','status']}
 	
 	{$dl_fields=$display_fields}
-	{$dl_toolbar_buttons = ['filters']}	
+	{$do_toolbar_buttons = ['filters']}	
 	
 	{$dl_actions=[]}
 	

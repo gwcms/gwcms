@@ -22,4 +22,5 @@
 		<lt>Vartotojo e-pastas jau užimtas</lt>
 	</i>
 	<i id="INSUFFICIENT FUNDS">Nepakankamas likutis, reikia %s, yra: %s</i>
+	<i id="IP_ADDRESS_NOT_ALLOWED_OR_UNCONFIGURED">Ip address not allowed or not configured</i>
 </xml>

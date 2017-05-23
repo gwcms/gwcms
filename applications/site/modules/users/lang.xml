@@ -13,16 +13,237 @@
 		<i id="address">Adresas</i>
 		<i id="city">Miestas</i>
 		<i id="email">E-paštas</i>
-		<i id="name">Kontaktinio asmens vardas, pavardė</i>
-		<i id="first_name">Vardas</i>
-		<i id="second_name">Pavardė</i>
+		<i id="name">Vardas</i>
+		<i id="surname">Pavardė</i>
 		<i id="pass_new">Slaptažodis</i>
+		<i id="password">Slaptažodis</i>
 		<i id="pass_new_repeat">Pakartokite slaptažodį</i>
-
-
+		<i id="agree">Sutinku su taisyklėmis ir sąlygomis</i>
+		<i id="gender">Lytis</i>
+		<i id="birthdate">Gimimo data</i>
+		<i id="nationality_code">Pilietybė</i>
+		
+		<i id="address_l1">Adreso eilutė 1</i>
+		<i id="address_l2">Adreso eilutė 2</i>
+		<i id="city">Miestas</i>
+		<i id="zipcode">Pašto kodas</i>
+		<i id="country_code">Šalis</i>
+		<i id="phone">Mob. tel. nr.</i>
+		<i id="phone2">Telefono nr.</i>
+		<i id="region">
+			<lt>Valstija / Regionas</lt>
+			<en>State / Province / Region</en>
+		</i>
+		<i id="facebook_url">Facebook asmens paskyros nuoroda</i>
+		
+		<i id="video_url">Video</i>
+		<i id="video2_url">Video 2</i>
+		<i id="video3_url">Video 3</i>
+		<i id="audio_url">Audio</i>
+		<i id="homepage_url">Asmeninis puslapis</i>
+		<i id="biography_url">Biografija</i>
+		
+		<i id="edu_title">Mokymo įstaigos pavadinimas</i>
+		<i id="edu_city">Miestas</i>
+		<i id="edu_country">Šalis</i>
+		<i id="edu_year">Baigimo metai</i>
+		
+		<i id="edu_teacher_title">Titulas / laipsnis</i>
+		<i id="edu_teacher_fullname">Pilnas vardas</i>
+		<i id="professor_title">Titulas</i>
+		<i id="professor_name">Vardas (-ai)</i>
+		<i id="professor_surname">Pavardė (-ės)</i>
+		
+		
+		<i id="printprofilefoto">Foto spaudai</i>
+		<i id="passportscan">Nuskanuotas pasas</i>
+		<i id="languages">Kalbos</i>
+		<i id="languages_other">Kitos kalbos</i>
+		<i id="biography">Biografija</i>
+		<i id="biography_select">Pasirinkite formatą</i>
+		<i id="biography_file">Biografija faile</i>
+		<i id="biography_text">Biografija tekstas</i>
+		<i id="biography_link">Biografija nuoroda</i>
+		<i id="extra_info">Alergijos, maistas, kita </i>
+		<i id="payment_method">Apmokėjimo būdas</i>	
+		<i id="instrument_id">Instrumentas</i>
+		<i id="skype">Skype</i>
 	</i>
+	
+	<i id="FIELDS_HINT">
+		<i id="address_l1">
+			<lt>Pavadinimas, gatvė, namo numeris</lt>
+			<en>Street address, P.O. box, company name, c/o</en>
+		</i>
+		<i id="address_l2">
+			<lt>Sektorius, Aukštas, kodas ir t.t.</lt>
+			<en>Apartment, suite, unit, building, floor, etc.</en>
+		</i>
+		
+		<i id="printprofilefoto">min. rezuliucija 1000x1000, formatas: .jpg, .png</i>		
+		<i id="passportscan">formatas: .jpg, .png, .gif</i>	
+		<i id="biography_file">formatas .pdf, .odt, .docx, .doc</i>
+		<i id="extra_info">Čia galite parašyti ką Mes turėtume žinoti, kad Jūs konkurso metu jaustumėtės komfortiškai ir patogiai, arba tai ko nėra anketoje, o Jūsų manymu turėtų būti</i>
+		<i id="expirity_time">mėnuo / metai</i>
+	</i>
+	
+	<i id="CC_FIELDS">
+		<i id="name">Vardas</i>
+		<i id="surname">Pavardė</i>
+		<i id="card_type">Kortelės tipas</i>
+		<i id="number">Kortelės numeris</i>
+		<i id="year">Metai</i>
+		<i id="month">Mėnuo</i>
+		<i id="expirity_time">Galiojimo pabaiga</i>
+		<i id="cvc">CVC kodas</i>
+		
+	</i>
+		
+	<i id="OPTIONS">	
+		<i id="gender">
+			<i id="F">Moteris</i>
+			<i id="M">Vyras</i>
+		</i>
+		<i id="professor_title">
+			<i id="1">
+				<lt>Profesorius</lt>
+				<en>Professor</en>
+				<ru>Професор</ru>				
+			</i>
+			<i id="2">
+				<lt>Docentas</lt>
+				<en>Docent</en>
+				<ru>Доцент</ru>				
+			</i>
+			<i id="3">
+				<lt>Mokslų Daktaras</lt>
+				<en>Doctor</en>
+				<ru>Доктор наук</ru>				
+			</i>
+			<i id="4">
+				<lt>Maestro</lt>
+				<en>Maestro</en>
+				<ru>Маэстро</ru>
+			</i>
+			<i id="5">
+				<lt>Mokytojas</lt>
+				<en>Master</en>
+				<ru>Учитель</ru>
+			</i>
+			<i id="6">
+				<lt>Ponas</lt>
+				<en>Mr</en>
+				<ru>Господин</ru>
+			</i>
+			<i id="7">
+				<lt>Ponia</lt>
+				<en>Ms</en>
+				<ru>Госпожа</ru>
+			</i>		
+			<i id="80">Vyresnysis mokytojas</i>		
+			<i id="81">Mokytojas metodininkas</i>
+			<i id="82">Mokytojas ekspertas</i>
+			<i id="90">Lektorius</i>
+		</i>
+		
+		<i id="professor_title_short">
+			<i id="1">
+				<lt>Prof.</lt>			
+			</i>
+			<i id="2">
+				<lt>Doc.</lt>		
+			</i>
+			<i id="3">
+				<lt>Dr.</lt>			
+			</i>
+			<i id="4">
+				<lt>Maestro</lt>
+			</i>
+			<i id="5">
+				<lt>Mok.</lt>
+			</i>
+			<i id="6">
+				<lt>Ponas</lt>
+			</i>
+			<i id="7">
+				<lt>Ponia</lt>
+			</i>		
+			<i id="80">Vyr. mok.</i>		
+			<i id="81">Mok. met.</i>
+			<i id="82">Mok. eksp.</i>	
+			
+			<i id="90">Lekt.</i>					
+		</i>		
+		
+		<i id="biography_select">
+			<i id="link">Nuoroda</i>
+			<i id="text">Tekstas</i>
+			<i id="file">Failas</i>
+		</i>
+		<i id="payment_method">
+			<i id="banktransfer">Apmokėjau bankiniu pavedimu</i>
+			<i id="paysera">Paysera</i>
+			<i id="creditcard">Kreditine kortele</i>
+			<i id="paypal">Paypal</i>
+		</i>
+		
+		<i id="card_type">
+			<i id="VISA">VISA</i>
+			<i id="MASTERCARD">MASTERCARD</i>
+			<i id="MAESTRO">MAESTRO</i>
+			<i id="AMERICAN EXPRESS">AMERICAN EXPRESS</i>			
+		</i>
+		
+	</i>	
+	
+	
+	<i id="SIGNED_IN_AS"> </i>
+	<i id="LOGIN_FORM">Prisijungimo forma</i>
+	<i id="USERNAME_EMAIL">Vartotojo vardas / el. paštas</i>
+	<i id="REMEMBER_ME">Prisiminti</i>
+	<i id="PASSWORD_RECOVERY">Pamiršau slaptažodį</i>
+	<i id="CREATE_ACCOUNT">Sukurti paskyrą</i>
+	<i id="PASSWORD">Slaptažodis</i>
+	
+	<i id="LOGIN_WELCOME">Prisijungėte</i>
+	<i id="LOGIN_FAIL">Patikrinkite vartotojo vardą/slaptažodį</i>	
+	<i id="PASS_CHANGE_LINK_SENT">Slaptažodžio keitimo laiškas išsiųstas į %s</i>
+	<i id="PASSCHANGE_ALLREADY_SENT">Priminimo laiškas jau buvo išsiųstas anksčiau</i>	
+	<i id="REPEAT_PASS_BAD">Slaptažodžio pakartojimas nesutampa su slaptažodžiu</i>	
+	
 	
 	<i id="USER_REGISTER_SUCCESS">Vartotojas sukurtas sėkmingai</i>
 	<i id="LOGIN">Prisijungti</i>
-
+	<i id="SEND_PASS_RESET">Atsiųsti slaptažodžio pakeitimo nuorodą</i>
+	<i id="PASS_RESET_GO">Pirmyn</i>
+	<i id="NO_USER_BY_EMAIL">Patikrinkite vartotojo vardą / el. pašto adresą</i>
+	<i id="INVALID_PASSCHANGE_LINK">Neteisinga / nustojusi galioti slaptažodžio keitimo nuoroda</i>
+	<i id="INVALID_VERIFY_LINK">Neteisinga / nustojusi galioti registracijos patvirtinimo nuoroda</i>
+	<i id="ENTER_NEW_PASS_FORM">Slaptažodžio keitimo forma</i>
+	<i id="NEW_PASSWORD">Naujas slaptažodis</i>
+	<i id="PASSRESET_PASS_CHANGED">Slaptažodis pakeistas, galite prisijungti</i>
+	
+	<i id="VERIFY_SUCCESS">Jūsų paskyra aktyvuota dabar galite prisijungti</i>
+	
+	<i id="USER_PASSCHANGE_SUBJECT">Slaptažodžio keitimas</i>
+	<i id="USER_PASSCHANGE_EML"><![CDATA[
+		Slaptažodžio keitimo nuoroda: %s
+		--
+		Jei šis laiškas atėjo per klaida prašome ignuoroti.
+	]]></i>
+	<i id="USER_VERIFY_SUBJECT">Registracijos patvirtinimas</i>
+	<i id="USER_VERIFY_EML"><![CDATA[
+		Sveikiname prisijungus! patvirtinkite narystę su šia nuoroda: %s
+		--
+		Jei šis laiškas atėjo per klaida prašome ignuoroti.
+	]]></i>	
+	
+	<i id="ERRORS">
+		<i id="EMAIL_TAKEN">Prisijungimo vardas jau užimtas</i>
+	</i>
+	
+	<i id="CARD_EXPIRED">Kortelė negaliojanti</i>
+	
+	<i id="PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT">Jūsų profilis buvo susietas su Facebook paskyra "%s"</i>
+	<i id="LOGOUT_MESSAGE">You are logged out now</i>
 </xml>

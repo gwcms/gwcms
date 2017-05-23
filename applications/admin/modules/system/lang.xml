@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="READ_ALL">Read all</i>
+	
+
+	<i id="FIELDS">
+		<i id="name">Name</i>
+		<i id="sql">SQL</i>
+		<i id="time_match">Time match</i>
+		<i id="path">Path</i>
+		<i id="actions">Actions</i>
+		<i id="params">Parameters</i>
+		<i id="user_id">Gavėjas</i>
+		<i id="sender">Siuntėjas</i>
+		<i id="subject">Tema</i>
+		<i id="message">Žinutė</i>
+		
+		
+		<!--Tasks-->
+		<i id="output">Išvestis</i>
+		<i id="error_code">Klaidos kodas</i>
+		<i id="error_msg">Klaidos pranešimas</i>
+		<i id="finish_time">Baigimo laikas</i>
+		<i id="speed">Vykdymo trukmė</i>
+		<i id="running">Vykdomumas</i>
+		<i id="max_tasks_history_length">Maksimalus užduoties istorijos dydis</i>
+                <i id="separate_process">Atskirame procese vykdyti</i>
+	</i>
+	
+	<i id="FIELDS_SHORT">
+		<i id="error_code">Kodas</i>
+		<i id="error_msg">Pranešimas</i>
+		<i id="finish_time">Baig.</i>
+		<i id="speed">Trukmė</i>
+		<i id="running">Vyk.</i>
+		<i id="id">Id</i>
+		<i id="insert_time">Sukurta</i>
+                <i id="separate_process">AP</i>
+	</i>
+	
+	<i id="TASK_NAME">
+		Task name
+	</i>
+	
+	<i id="OPTIONS">
+		<i id="running">
+			<i id="-1">Waiting to start</i>
+			<i id="-2">In queue</i>
+			<i id="0">-</i>
+		</i>
+	</i>
+	
+	
+	
+	<i id="VIEWS">
+		<i id="TestListIcons">List gwcms icons</i>
+		<i id="rearange">Rearange structure</i>
+		<i id="addseparator">Add separator</i>
+		<i id="iframe">Log view realtime</i>
+		<i id="doExecuteQuery">Execute query</i>
+	</i>
+	
+	<i id="FIELD_NOTE">
+		<i id="time_match">
+			<![CDATA[
+		<b>hh:mm:ss#interval</b> 
+		<ul>
+		<li><b>hh</b> - valanda(du skaitmenys); </li>
+		<li><b>mm</b> -minutė(du skaitmenys); </li>
+		<li><b>ss</b> -sekundė(su skaitmenys); </li>
+		<li><b>.</b> -betkokia verte </li>
+		<li><b>[0-5]</b> -verciu intervalas </li>
+		<li><b>[135]</b> - verciu isvardinimas</li>
+		</ul>
+		Pvz:
+		<ul>
+			<li><b>.[02468]:..:#7200</b> - kas dvi valandas</li>
+			<li><b>03:0.:..#86400</b> - 3 nakties butinai per pirmas desimt minuciu</li>
+			<li><b>..:0.:..#60</b> - kas valanda - butinai per pirmas desimt minuciu</li>
+			<li><b>..:..:..#1</b> - kas minute</li>
+		</ul>
+		]]>
+		</i>
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>System</en>
+			<lt>System</lt>
+		</i>	
+		
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-tasks"></i>]]></i>
+		</i>
+				
+		<i id="childs">
+			<i id="modules">
+				<i id="title">Module Configuration</i>
+			</i>
+			<i id="tools">
+				<i id="title">Tools</i>
+			</i>
+			<i id="dbqueries">
+				<i id="title">DB Queries</i>
+				<i id="info"><i id="model">GW_DB_Queries</i></i>
+			</i>	
+			<i id="logwatch">
+				<i id="title">Log Watch</i>
+				<i id="info"><i id="model">GW_Log_Watch</i></i>				
+			</i>
+			<i id="tasks">
+				<i id="title">Tasks</i>
+				<i id="info"><i id="model">GW_Task</i></i>				
+			</i>
+			<i id="crontasks">
+				<i id="title">Cron Tasks</i>
+				<i id="info"><i id="model">GW_CronTask</i></i>
+			</i>	
+			<i id="cfg">
+				<i id="title">Nustatymai</i>
+			</i>	
+			<i id="i18n">
+				<i id="title">i18n</i>
+
+			</i>							
+					
+		</i>
+					
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

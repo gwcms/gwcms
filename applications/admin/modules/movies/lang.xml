@@ -27,11 +27,10 @@
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">
-			Filmai
-		</i>
+		<i id="title">Filmai</i>
 		<i id="info">
 			<i id="model">gw_movie</i>
+			<i id="icon"><![CDATA[<i class="fa fa-video-camera"></i>]]></i>
 		</i>
 
 

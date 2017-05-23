@@ -16,26 +16,40 @@
 	input_name_pattern - laukelio vardo formatas // pvz: input[section][%s]
 	options - select,multiselect,read tipams vertės
 	class - laukelio objektui uždedama klasė
+	after_input - turinys pridedamas po laukeliu
 *}
+
+{if $params_expand}
+	{foreach $params_expand as $k => $v}
+		{assign var=$k value=$v}
+	{/foreach}
+	{$params_expand=[]}
+{/if}
+
+
 {if !$hideifempty || $value || $item->$name}
 	
-{$title=$title|default:$app->fh()->fieldTitle($name)}
+{$title=$title|default:$m->fieldTitle($name)}
 
 
 {function input_label}
-	<td class="input_label_td {if $m->error_fields.$name}error_label{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
+	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if $m->lang.FIELD_NOTE.$name}
 					{$hidden_note=$m->lang.FIELD_NOTE.$name}
 				{/if}
 			{/if}
-			{if $hidden_note}
-				<span class="tooltip" title="{$hidden_note|escape}">
-			{else}
+			
+
 				<span>
-			{/if}
-				{$title}{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
+
+				{$title}
+				{if $hidden_note} 
+					<a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
+				{/if}
+
+				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
 			{if $i18n || $item->i18n_fields.$name}<sup title="International" class="i18n_tag">(Int)</sup>{/if}
 		</span>
 
@@ -44,32 +58,54 @@
 	</td>	
 {/function}
 
-{function input_content}
+{capture assign=input_content}
 	{if $i18n==2}
-		{foreach GW::$settings.LANGS as $ln_code}
+		{foreach $langs as $ln_code}
 			
 			<td class="input_td col_i18n_{$ln_code}" width="{$width_input}" {if $wide}colspan="2"{/if}>
 				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td" width="{$width_input}" {if $wide}colspan="2"{/if} style="{if $nopading}padding:0{/if}">
-			{include file="elements/input0.tpl"}  
+		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
+			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
+			
+			<div class="input-group" style="width:100%">
+
+
+    
+			{include file="elements/input0.tpl"}
+			
+			{if $layout=='inline'}
+				{if $m->error_fields.$name}
+					<span class="error_label" style='display:block'>{GW::l($m->error_fields.$name)}</span>
+				{/if}
+			{/if}
+			
+			{$after_input}
+			
+			</div>
 		</td>
 	{/if}
-{/function}
+{/capture}
 
-{if $wide}
-	<tr>
+
+	
+
+
+{if $layout=='wide'}
+	<tr class="{$rowclass}">
 		{call input_label}
 	</tr>
-	<tr id="gw_input_{$name}">
-		{call input_content}
-	</tr>	
+	<tr id="gw_input_{$name}"  class="{$rowclass}">
+		{$input_content}
+	</tr>
+{elseif $layout=='inline'}
+	{$input_content}
 {else}
-	<tr id="gw_input_{$name}">
+	<tr id="gw_input_{$name}"  class="{$rowclass}">
 		{call input_label}
-		{call input_content}
+		{$input_content}
 	</tr>
 {/if}
 {/if}

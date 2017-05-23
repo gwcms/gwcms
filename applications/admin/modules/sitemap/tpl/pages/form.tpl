@@ -1,4 +1,5 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="100%"}
+{$width_title=100px}
 
 {include file="tools/lang_select.tpl"}
 
@@ -27,7 +28,14 @@
 	
 	{$input_name_pattern="item[input_data][%s]"}
 	{foreach $item->getInputs() as $input}
-		{include file="elements/input.tpl" name=$input->get(title) type=$input->get(type) note=$input->get(note) title=$input->get(title) value=$item->getContent($input->get(title)) i18n=1}
+		{include file="elements/input.tpl" 
+			name=$input->get(name) 
+			type=$input->get(type) 
+			note=$input->get(note) 
+			title=$input->get(title) 
+			value=$item->getContent($input->get(name)) 
+			params_expand=$input->get(params)
+			i18n=1}
 	{/foreach}
 	
 {/if}

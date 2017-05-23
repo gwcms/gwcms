@@ -42,13 +42,14 @@ class Module_Profile extends GW_Module
 		$item->setValidators('change_pass_check_old');
 		
 		if(!$item->validate()){
-			$this->setErrors($item->errors);
+			$this->setItemErrors($item);
+			
 			$this->processView('default');
 			exit;	
 		}else{
 			$item->setValidators(false);
 			if($item->update(Array('pass')))
-				$this->app->setMessage($this->lang['PASS_UPDATED']);
+				$this->setPlainMessage($this->lang['PASS_UPDATED']);
 		}
 		
 		$this->jump();
@@ -66,13 +67,13 @@ class Module_Profile extends GW_Module
 			
 		
 		if(!$item->validate()){
-			$this->setErrors($item->errors);
+			$this->setItemErrors($item);
 			
 			$this->processView('default');
 			exit;	
 		}else{
 			if($item->update($fields))
-				$this->app->setMessage($this->smarty->_tpl_vars['lang']['UPDATE_SUCCESS']);
+				$this->setPlainMessage($this->smarty->_tpl_vars['lang']['UPDATE_SUCCESS']);
 		}
 		
 		$this->jump();		
@@ -82,7 +83,36 @@ class Module_Profile extends GW_Module
 	{
 		$this->app->auth->switchUserReturn();
 		$this->jump();
-	}	
+	}
+
+	function doStoreSubscription()
+	{
+		$subscription = GW_Android_Push_Notif::getRegistrationId($_GET["subscription"]);
+		$new = $this->app->user->getExt()->insertIfNotExists('android_subscription', $subscription);
+
+		echo "New: $new";
+		echo $subscription;
+		echo "\nOK";
+		exit;
+	}
+	
+	function doTestSubscription()
+	{
+		
+		GW_Message::singleton()->message([
+			'to'=>$this->app->user->id,
+			'subject'=>"Testing push message", 
+			'message'=>"If you see this text - it works!",
+			'level'=>10
+		]);		
+		
+		$data = GW_Android_Push_Notif::push($this->app->user);
+		
+		echo json_encode($data, JSON_PRETTY_PRINT);
+		
+		exit;
+			
+	}
 		
 }
 

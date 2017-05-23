@@ -1,5 +1,9 @@
 <?php
 
+define('GW_MSG_SUCC',0);
+define('GW_MSG_WARN',1);
+define('GW_MSG_ERR',2);
+define('GW_MSG_INFO',3);
 
 
 $dir =& GW::s('DIR');
@@ -7,6 +11,7 @@ $dir['ROOT']=dirname(__DIR__).'/';
 $dir['APPLICATIONS']=$dir['ROOT'].'applications/';
 
 $dir['LIB']=$dir['ROOT'].'framework/';
+$dir['VENDOR']=$dir['ROOT'].'vendor/';
 $dir['PEAR']=$dir['LIB'].'pear/';
 $dir['REPOSITORY']=$dir['ROOT'].'repository/';
 
@@ -36,11 +41,19 @@ define('GW_GENERIC_ERROR', 100);
 
 //padaryt vienodus jei reikia kad administravimo vartotojai butu priloginti svetaineje
 define("AUTH_SESSION_KEY", "cms_auth");
-define("PUBLIC_AUTH_SESSION_KEY", "site_auth");
+define("PUBLIC_AUTH_SESSION_KEY", "cms_auth");
 
-GW::s('GW_CMS_VERSION', '2.1');
+GW::s('GW_CMS_VERSION', '3.0');
 
 include $dir['ROOT'].'config/project.php';
+include $dir['ROOT'].'config/environment.php';
+
+
+$env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];
+GW::s('SITE/TITLE_MARK', $env_title[GW::s('PROJECT_ENVIRONMENT')]);
+
+//whereis php
+GW::s('PHP_CLI_LOCATION', '/usr/local/bin/php');
 
 /*
 echo "<pre>";

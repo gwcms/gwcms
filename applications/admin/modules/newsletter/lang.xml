@@ -126,9 +126,7 @@
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">
-			Naujienlaiškis
-		</i>
+		<i id="title">Naujienlaiškis</i>
 		
 		<i id="info">
 			<i id="icon"><![CDATA[<i class="fa fa-rss"></i>]]></i>

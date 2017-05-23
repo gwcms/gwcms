@@ -3,18 +3,21 @@
 
 class Module_Config extends GW_Common_Module
 {	
-
+	
+	public $default_view = 'default';
+	
 	function init()
 	{
-		$this->model = new GW_Config('gallery/');
+		
 		
 		parent::init();
+		$this->model = new GW_Config('gallery/');		
 	}
 
 	
 	function viewDefault()
 	{
-		$this->smarty->assign('item', $this->model);
+		$this->tpl_vars['item']=$this->model;
 	}
 	
 	function doSave()
@@ -24,11 +27,9 @@ class Module_Config extends GW_Common_Module
 		$this->model->setValues($vals);
 		
 		//jeigu saugome tai reiskia kad validacija praejo
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);		
+		$this->setPlainMessage('/g/SAVE_SUCCESS');
 		
 		$this->jump();
 	}
 
 }
-
-?>

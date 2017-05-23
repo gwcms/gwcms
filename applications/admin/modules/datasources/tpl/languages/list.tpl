@@ -7,7 +7,7 @@
 	{$display_fields=[iso639_1=>1,name=>1,native_name=>1,popularity=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
 	

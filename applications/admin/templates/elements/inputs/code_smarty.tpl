@@ -1,0 +1,1 @@
+{include file="elements/inputs/code.tpl" codelang=smarty nopading=1}

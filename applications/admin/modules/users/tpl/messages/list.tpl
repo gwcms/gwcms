@@ -17,14 +17,9 @@
 	
 
 	{function dl_cell_message}
-		{if $smarty.request.read_all}
-			<pre class="gw_pre">{$item->message}</pre>
-			{if !$item->seen}{$success=$item->saveValues([seen=>1])}{/if}
-		{else}
-			<a href="#show_msg" onclick="open_ajax({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{$m->lang.MESSAGES}' }); return false">
+			<a href="#show_msg" onclick="gwcms.open_iframe({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{$m->lang.MESSAGES}' }); return false">
 				{$item->message|truncate:'60'}
 			</a>		
-		{/if}
 	{/function}
 	
 
@@ -34,14 +29,10 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	
-	{$dl_toolbar_buttons[] = dialogconf}	
-	
-	
+
 	{function dl_actions_invert_seen}
-		{if $item->seen==0}{$color='orange'}{else}{$color='white'}{/if}
-		
-			{gw_link do=invert_seen params=[id=>$item->id] icon="dot_`$color`" title="Mark as read" show_title=0}
-		
+		{if $item->seen==0}{$tmp='fa fa-eye-slash'}{else}{$tmp='fa fa-eye'}{/if}
+		{list_item_action_m url=[false, [act=>doInvertSeen,id=>$item->id]] iconclass=$tmp}		
 	{/function}		
 	
 	{$dl_actions=[invert_seen,edit,delete]}
@@ -51,12 +42,19 @@
 	{$dl_filters=$display_fields}	
 	
 	
-	{$dl_toolbar_buttons[]=read_all}
+	
+	{if $m->admin}
+		{$do_toolbar_buttons[] = readall}
+		{$do_toolbar_buttons[] = hidden}
+		{$do_toolbar_buttons_hidden[]=dialogconf}	
+		{$do_toolbar_buttons_hidden[]=print}	
+	{else}
+		{$do_toolbar_buttons = [readall]}
+	{/if}	
 
 	
-	{function dl_toolbar_buttons_read_all}
-		{$readAll=!$smarty.request.read_all}
-		{gw_link title=$m->lang.READ_ALL params=[read_all=>$readAll]}
+	{function do_toolbar_buttons_readall}
+		{toolbar_button href=$m->buildUri(false, [act=>doMarkasReadAll]) title=$m->lang.MARK_AS_READ_ALL iconclass="gwico-Read-Message"}
 	{/function}
 	
 {/block}

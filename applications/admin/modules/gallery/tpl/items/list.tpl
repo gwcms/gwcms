@@ -39,7 +39,7 @@
 	
 	<td valign="center">
 		{if $item->type==1}
-			<img src="{$app_root}img/icons/folder.png" align="absmiddle" vspace="2" />
+			<img src="{$app->icon_root}folder.png" align="absmiddle" vspace="2" />
 		{else}
 			{$image=$item->image}
 			<img src="{$app->sys_base}tools/imga/{$image->id}?size={$thumbn_sz}" align="absmiddle" vspace="2" />
@@ -78,15 +78,22 @@
 {$dl_actions=[invert_active,edit,delete]}
 
 	<script type="text/javascript">
-		$(function() {
-			$("#sortable").sortable({ items: 'li.sortable', update: function(){ $('#sortable_actions').fadeIn() } });
-			$("#sortable").disableSelection();
-			$('#sortable li')
-				.mouseover(function(){  $(this).find('td:eq(2)').show() })
-				.mouseout(function(){  $(this).find('td:eq(2)').hide() })
+		require(['gwcms'],function(){
+			$(function() {
+				$("#sortable").sortable({ items: 'li.sortable', update: function(){ $('#sortable_actions').fadeIn() } });
+				$("#sortable").disableSelection();
+				$('#sortable li')
+					.mouseover(function(){  $(this).find('td:eq(2)').show() })
+					.mouseout(function(){  $(this).find('td:eq(2)').hide() })
+
+				$('#sortable .inactive').css('opacity', '0.5')
 				
-			$('#sortable .inactive').css('opacity', '0.5')
-		});
+				$('#applysort').click(function(){ gw_sortable.apply('#sortable') })
+			});	
+			
+			
+		})		
+
 	</script>
 	<style type="text/css">
 		#sortable { list-style-type: none; margin: 0; padding: 0; }
@@ -94,7 +101,7 @@
 	</style>
 
 	<div id="sortable_actions"  style="display:none">
-		<button onclick="gw_sortable.apply('#sortable')">{$lang.APPLY_SORT}</button>
+		<button id="applysort">{$lang.APPLY_SORT}</button>
 		<button onclick="location.href=location.href">{$lang.CANCEL}</button>
 	</div>
 	
@@ -108,7 +115,7 @@
 		<table>
 			<tr><td align="center" style="border:1px solid silver;height:136px">
 				{if $item->type==1}{*folder*}
-					{$src="{$app_root}img/icons/folder_128x128.png"}
+					{$src="{$app->icon_root}folder_128x128.png"}
 					{$link=$app->fh()->gw_path([params=>[pid=>$item->id]])}
 					
 					{include file="`$m->tpl_dir`/folder_icon.tpl"}

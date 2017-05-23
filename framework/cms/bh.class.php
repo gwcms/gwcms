@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * 
  * Backend Helper
@@ -9,6 +8,5 @@
  */
 class BH
 {
-
-
+	
 }

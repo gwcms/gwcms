@@ -129,4 +129,10 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 		
 		parent::eventHandler($event, $context_data);
 	}	
+	
+	function hasAttachments()
+	{
+		if($this->file1)
+			return true;
+	}	
 }

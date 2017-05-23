@@ -2,9 +2,8 @@
 
 class GW_Paysera_Log extends GW_Data_Object
 {
-	public $table = 'gw_paysera_log';
-	
 
+	public $table = 'gw_paysera_log';
 
 }
 

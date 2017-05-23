@@ -12,6 +12,8 @@ class Module_Comments extends Module_Items
  		$this->filters['parent_id']=$this->app->path_arr[1]['data_object_id'];
  		$this->filters['type']=2;
 		
+		//d::dumpas($this->filters);
+		
 		$this->model->default_order = 'id ASC';
   	}
   	
@@ -83,20 +85,20 @@ class Module_Comments extends Module_Items
 			$sent = GW_Mail::simple(Array('to'=>$email) + $msg);
 			
 			if(!$sent){
-				$this->setErrors("Notification failed");
+				$this->setError("Notification failed");
 			}else{
-				$this->app->setMessage("Notifcation sent($sent) to $email");
+				$this->setPlainMessage("Notifcation sent($sent) to $email");
 			}
 		}	
 	}
 	
 	//workaround kad nepaimtu is items
-	function loadViews()
+	function loadViews($page=false)
 	{
 		
 	}
 	
-	function loadOrders()
+	function loadOrders($page=false)
 	{
 		
 	}	
@@ -104,6 +106,11 @@ class Module_Comments extends Module_Items
 	function __eventBeforeListParams(&$params)
 	{
 		//nes module_items turi
-	}	
+	}
+	
+	function getListConfig()
+	{
+		return ['fields'=>[]];
+	}
 	
 }

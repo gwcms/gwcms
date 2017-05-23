@@ -1,14 +1,17 @@
-
-
-
+	</tbody>
 </table>
+</div>
+</div>
+
+
 	{include file="tools/form_submit_buttons.tpl"}
 
 
+	{function name="df_after_form"}
+	{/function}
 
-{if $app->smarty->template_functions.df_after_form}
 	{call name="df_after_form"}
-{/if}
+
 
 {if $update}
 	{include file="extra_info.tpl"}

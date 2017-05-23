@@ -4,15 +4,16 @@
 
 class Module_Login extends GW_Module
 {
+	public $default_view='login';
 
 	function init()
 	{
 		parent::init();
 	}
 
-	function viewDefault()
-	{
-		return ['autologin'=>GW_Auth::isAutologinEnabled()];	
+	function viewLogin()
+	{		
+		$this->tpl_vars['autologin'] = GW_Auth::isAutologinEnabled();
 	}
 
 	function doLogin()
@@ -26,12 +27,18 @@ class Module_Login extends GW_Module
 		//is request from dialog
 		$dialog = basename($this->app->path) == 'dialog';
 		
+		$params=[];
+		
 		
 		if(!$this->app->user = $this->app->auth->loginPass($user,$pass)){
-			$this->setErrors($this->app->auth->error);
+			$this->setError($this->app->auth->error);
+			$params['login_fail']=1;
+			$path = false;
+			
 		}else{
 			$this->tpl_vars['success']=1;
 			$success=true;
+			$path = "";
 			
 			//autologin
 			if($_REQUEST['login_auto'] && GW_Auth::isAutologinEnabled())
@@ -44,13 +51,11 @@ class Module_Login extends GW_Module
 			
 		}
 		
-		$ln=$_REQUEST['ln'] ? $_REQUEST['ln'] : Null;
-		
-		if($ln)
-			setcookie('login_ln', $ln, $keep_username, $this->app->sys_base);
 
+		
 		if(!$dialog)
-			$this->app->jump('', Array('ln'=>$ln));	
+			$this->app->jump($path,$params);	
+		
 	}
 
 	function viewLogout()
@@ -63,5 +68,10 @@ class Module_Login extends GW_Module
 	function viewDialog()
 	{
 		//empty
+		$this->tpl_vars['dialog']=1;
+		$this->tpl_file_name=$this->tpl_dir.'login';		
+		
+		$this->viewLogin();
+
 	}
 }

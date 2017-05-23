@@ -15,6 +15,19 @@
 		<lt>Pakeisti slaptažodį</lt>
 	</i>
 	
+	<i id="OPTIONS">
+		<i id="gender">
+			<i id="m">
+				<lt>Vyras</lt>
+				<en>Male</en>
+			</i>
+			<i id="f">
+				<lt>Moteris</lt>
+				<en>Female</en>
+			</i>
+		</i>
+	</i>
+	
 	<i id="FIELDS">
 		<i id="email">
 			<en>E-mail</en>
@@ -28,6 +41,7 @@
 			<en>Surname</en>
 			<lt>Pavardė</lt>
 		</i>
+		<i id="birth_date">Birth date</i>
 		<i id="phone">
 			<en>Phone</en>
 			<lt>Tel. nr.</lt>
@@ -132,17 +146,45 @@
 			<en>Root user</en>
 			<lt>Aukštesnis vartotojas</lt>
 		</i>
+		<i id="is_admin">
+			<lt>Administratorius</lt>
+			<en>Administrator</en>
+		</i>
+		<i id="ip">
+			<lt>Ip adresas</lt>
+			<en>Ip address</en>
+		</i>
+		<i id="user_agent">
+			<lt>Naršyklės pavad.</lt>
+			<en>Browser</en>
+		</i>
 		
+				
 	</i>
 	
 	<i id="FIELDS_SHORT">
 		<i id="online">O</i>
+		<i id="parent_user_id">PU</i>
+		<i id="image"><![CDATA[<i class="fa fa-picture-o"></i>]]></i>
 	</i>
+	
 
 	<i id="VIEWS">
 		<i id="message">
 			<lt>Siųsti žinutę</lt>
 			<en>Send message</en>
+		</i>
+		<i id="permissions">
+			<lt>Leidimai</lt>
+			<en>Permissions</en>
+		</i>
+		<i id="doInvertSeen">
+			<lt>Pažymėti kaip perskaitytą / neperskaitytą</lt>
+			<en>Mark as read / unread</en>
+		</i>
+		<i id="iplog">
+			<en>Access log</en>
+			<lt>Prisijungimų žurnalas</lt>
 		</i>
 	</i>
 			
@@ -185,6 +227,19 @@
 		<en>Mark as read</en>
 		<lt>Pažymėti kaip perskaitytą</lt>
 	</i>	
+	<i id="ALL_MESSAGES">
+		<en>All messages</en>
+		<lt>Visos žinutės</lt>
+	</i>
+	<i id="MARK_AS_READ_ALL">
+		<lt>Pažymėti visas kaip perskaitytas</lt>
+		<en>Mark all as read</en>
+	</i>
+	<i id="LOGIN_AS">
+		<lt>Prisijungti į paskyrą</lt>
+		<en>Login as</en>
+	</i>
+	
 	<i id="SESSION_VALIDITY_OPT">
 		<i id="30">30 min</i>
 		<i id="60">60 min</i>

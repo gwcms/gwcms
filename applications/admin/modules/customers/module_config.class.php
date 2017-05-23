@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Config extends Module_MIS_Common
+class Module_Config extends GW_Common_Module
 {	
 
 	public $default_view = 'default';
@@ -27,11 +27,7 @@ class Module_Config extends Module_MIS_Common
 	
 	
 	
-	function __afterSave(&$vals)
-	{
-		//;
-	}
-	
+
 	
 	function doSave()
 	{
@@ -40,7 +36,7 @@ class Module_Config extends Module_MIS_Common
 		$this->model->setValues($vals);
 		
 		//jeigu saugome tai reiskia kad validacija praejo
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+		$this->setMessage('/g/SAVE_SUCCESS');
 		
 		
 		

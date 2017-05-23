@@ -12,7 +12,7 @@
 	</td>
 	<td>
 		<a href="#add_level" onclick="gw_adm_sys.order_add_level();return false" >
-			<img src="{$app_root}img/icons/action_add.png" />
+			<img src="{$app->icon_root}action_add.png" />
 		</a>
 	</td>	
 </tr>

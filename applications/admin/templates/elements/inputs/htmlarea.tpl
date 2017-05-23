@@ -1,5 +1,5 @@
 
-{$dir = GW::$settings.DIR.LIB}
+{$dir = GW::$settings.DIR.VENDOR}
 {$ck = GW::getInstance('ckeditor',"`$dir`/ckeditor/ckeditor_php5_gw.php")}
 
 
@@ -26,16 +26,16 @@
 	{include file="elements/input0.tpl" type=hidden name="`$name`_editor_size" value={$item->$cusom_size_name} id=$remember_size_id}
 
 	<script type="text/javascript">
-		$(function(){
-			CKEDITOR.instances['{$input_name}'].on('instanceReady',function(ev) {
-			    ev.editor.on('resize',function(reEvent){
-				    var tmp=reEvent.sender.container.$
-				$('#{$remember_size_id}').val(tmp.clientWidth+'x'+tmp.clientHeight);
+		require(['gwcms'],function(){
+			CKEDITOR.instances['{$input_name}'].on('instanceReady', function (ev) {
+									ev.editor.on('resize', function (reEvent) {
+											var tmp = reEvent.sender.container.$
+											$('#{$remember_size_id}').val(tmp.clientWidth + 'x' + tmp.clientHeight);
 
-				//console.log(tmp.clientWidth+'x'+tmp.clientHeight)
-			    });
-			});
-		});
+											//console.log(tmp.clientWidth+'x'+tmp.clientHeight)
+									});		
+		});	
+
 	</script>	
 {/if}
 
@@ -51,7 +51,7 @@
 {elseif is_array($ck_options)}
 	{$ck_editor_opt=$ck_options+$ck_editor_opt}
 {else}
-	
+
 {/if}
 
 

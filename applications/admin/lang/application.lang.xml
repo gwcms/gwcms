@@ -5,7 +5,6 @@
 <i id="LANG">
 	<i id="lt">Lietuvių</i>
 	<i id="en">English</i>
-	<i id="no">Norwegian</i>
 	<i id="ru">Rusų</i>
 </i>
 
@@ -56,6 +55,11 @@
 	<en>Remove</en>
 	<lt>Panaikinti</lt>
 </i>
+<i id="SELECTED_ITEMS_REMOVED">
+	<lt>Pasirinkti įrašai (%s) pašalinti</lt>
+	<en>Removed selected items: %s</en> 
+</i>
+
 <i id="LOGOUT">
 	<en>Logout</en>
 	<lt>Atsijungti</lt>
@@ -63,7 +67,6 @@
 <i id="USER">
 	<en>Username</en>
 	<lt>Vartotojas</lt>
-	<no>Bruker</no>
 </i>
 <i id="PASS">
 	<en>Password</en>
@@ -73,6 +76,16 @@
 	<en>Change password</en>
 	<lt>Keisti slaptažodį</lt>
 </i>
+
+<i id="ACCOUNT_LOGIN">
+	<en>Account login</en>
+	<lt>Uždara zona</lt>
+</i>
+<i id="SIGN_IN_TO_YOUR_ACCOUNT">
+	<en>Sign In to your account</en>
+	<lt>Prisijunkite prie savo paskyros</lt>
+</i>
+
 <i id="DOLOGIN">
 	<en>Login</en>
 	<lt>Prisijungti</lt>
@@ -114,6 +127,10 @@
 <i id="SAVE_SUCCESS">
 	<en>Data successfully saved</en>
 	<lt>Duomenys išsaugoti</lt>
+</i>
+<i id="NO_CHANGES">
+	<en>No data changes</en>
+	<lt>Duomenų pakeitimų nėra</lt>
 </i>
 <i id="ITEM_REMOVE_SUCCESS">
 	<en>Item removed</en>
@@ -196,6 +213,7 @@
 		<en>Form</en>
 		<lt>Forma</lt>
 	</i>
+	
 	<i id="print">
 		<en>Print</en>
 		<lt>Spausdinti</lt>
@@ -211,6 +229,36 @@
 	<i id="exportdata">
 		<en>Export</en>
 		<lt>Eksportuoti</lt>
+	</i>
+	<i id="edit">
+		<en>Edit</en>
+		<lt>Redaguoti</lt>
+	</i>
+	<i id="item">
+		<en>Item</en>
+		<lt>Įrašas</lt>		
+	</i>
+	
+	<i id="dialogremove">
+		<en>Remove items</en>
+		<lt>Šalinti įrašus</lt>
+	</i>
+	
+	<i id="doDelete">
+		<en>Remove</en>
+		<lt>Šalinti</lt>
+	</i>
+	<i id="doInvertActive">
+		<en>Invert active state</en>
+		<lt>Pakeisti aktyvumo būklę</lt>
+	</i>
+	<i id="doSetActive">
+		<en>Activate</en>
+		<lt>Aktyvuoti</lt>
+	</i>	
+	<i id="doClone">
+		<en>Clone</en>
+		<lt>Dublikuoti</lt>
 	</i>
 </i>
 
@@ -252,6 +300,20 @@
 <i id="REMOVE_FILTER">
 	<en>Remove filters</en>
 	<lt>Nuimti filtrus</lt>	
+</i>
+
+<i id="UNHIDE_FILTER">
+	<en>Unhide hidden</en>
+	<lt>Atslėpti paslėptus</lt>	
+</i>
+
+<i id="ADD_FILTER_4_FIELD">
+	<en>Add filter for field</en>
+	<lt>Pridėti filtrą laukui</lt>
+</i>
+<i id="ADD_ALL_FILTERS">
+	<en>Add all filters</en>
+	<lt>Pridėti visus filtrus</lt>
 </i>
 
 <i id="COMPARE_TYPE">
@@ -314,6 +376,10 @@
 	<i id="action_edit">
 		<lt>Redaguoti</lt>
 		<en>Edit</en>
+	</i>
+	<i id="action_edit_shift">
+		<lt>Redaguoti (shift)</lt>
+		<en>Edit (shift)</en>		
 	</i>
 	<i id="copy">
 		<lt>Klonuoti</lt>
@@ -409,7 +475,7 @@
 
 <i id="FOOTER">
 	<![CDATA[
-		<a href="http://cms.gw.lt/">Gateway CMS</a><br />%year% ©	
+		<a href="http://cms.gw.lt/">Gateway CMS</a> <br>%year% ©	
 	]]>
 </i>
 
@@ -518,6 +584,41 @@
 	<lt>Spauzdinimo versija</lt>
 	<en>Print view</en>
 </i>
+<i id="LIST_CONFIG">
+	<lt>Sąrašo konfigūravimas</lt>
+	<en>List configūration</en>
+</i>
+<i id="SAVE_NAME">
+	<lt>Išsaugoti pavadinimu</lt>
+	<en>Name ordering</en>
+</i>
+<i id="MY_ORDERING">
+	<lt>Mano rikiavimas</lt>
+	<en>My ordering</en>
+</i>
 
+<i id="SET_AS_DEFAULT">
+	<lt>Nustatyti kaip pagrindinį</lt>
+	<en>Set as default</en>
+</i>
+
+<i id="FILTERS_SELECT_COMPARE_TYPES">
+	<i id="IN">=</i>
+	<i id="NOTIN"><![CDATA[&ne;]]></i>
+</i>
+
+<i id="FILTERS_COMPARE_TYPES">
+	<i id="LIKE">~</i>
+	<i id="EQ">=</i>
+	<i id="EQ">=</i>
+	<i id="LT"><![CDATA[&lt;]]></i>
+	<i id="GT"><![CDATA[&gt;]]></i>
+	<i id="NEQ"><![CDATA[&ne;]]></i>
+</i>
+
+<i id="ITEM_CHANGE_INTERUPED">
+	<lt>Duomenys pakeisti po formos atidarymo, įrašymas nutrauktas siekiant apsisaugoti nuo duomenų praradimo</lt>
+	<en>Data has been changed after form open, save was canceled to prevent data loss</en>
+</i>
 
 </xml>

@@ -3,25 +3,25 @@
 
 {block name="init"}
 
+	{$dl_inline_edit=1}
+	
 
-
-	{function name=dl_cell_image}
-		{$image=$item->image}
-		{if $image}
-
-			{capture assign="poptext"}<img src="{$app->sys_base}repository/{$item->image}" />{/capture}
-			<img src="{$app->sys_base}repository/{$item->image}" class="tooltip" title="{$poptext|escape}" height="50px" align="absmiddle" vspace="2" title="{$item->title|escape}" />
-		{else}
+	{function name=dl_cell_image}		
 			{$img=$item->image1}
+			
 			{if $img->id}
-			{capture assign="poptext"}<img src="{$app->sys_base}tools/imga/{$img->id}" />{/capture}
-			<img src="{$app->sys_base}tools/imga/{$img->id}&size=50x50" class="tooltip" title="{$poptext|escape}" />
+				{$imdb = json_decode($item->imdb)}
+				
+				
+				
+				<a target="_blank" href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
+					<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
+				</a>
 			{/if}
-		{/if}
 	{/function}
 	
-	{function name=dl_cell_title}
-		<a href="{$ln}/{$app->page->path}/{$item->id}/form" class="tooltip" title="{$item->description}">{$item->title|default:"No title"}</a>		
+	{function name=dl_cell_description}
+		<span title="{$item->description|escape}">{$item->description|truncate:40}</a>		
 	{/function}
 	
 	{function dl_cell_insert_time}
@@ -29,22 +29,16 @@
 	{/function}
 		
 
-	{$dl_smart_fields=[image,title,insert_time]}
-	
-	
-	
-	{$dl_fields=$m->getDisplayFields([image=>1, title=>1,rate=>1,insert_time=>1,update_time=>1])}
-	
-	
-	
-	{$dl_toolbar_buttons[] = dialogconf}	
-	
-	{$dl_actions=[edit,delete]}
-	
-	{$dl_filters=[image=>1, title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
-	
+	{$dl_smart_fields=[image,description,insert_time]}
+		
+	{$do_toolbar_buttons = [addinlist]}
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,updateimdball]}			
+	{$dl_actions=[edit,delete,ext_actions]}
 
-
+{function name=do_toolbar_buttons_updateimdball}
 	
-	{$dl_order_enabled_fields=[title,insert_time,update_time,rate]}
+	{toolbar_button title="Update all not updated imdb" iconclass='gwico-Download' href=$m->buildUri(false,[act=>doUpdateAllWithoutImdb])}
+{/function}
+	
 {/block}

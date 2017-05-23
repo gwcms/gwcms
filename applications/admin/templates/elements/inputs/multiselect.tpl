@@ -3,42 +3,28 @@
 		{$options[$selected]}{if !$selected@last},{/if}
 	{/foreach}
 {else}
-
-<div style="overflow-y:scroll;max-height:{$height|default:"80px"};width:auto;float:left;padding-right:5px;border:1px solid silver">
-<table class="gw_clean_tbl" cellspacing="0" cellpadding="0" style="width:auto">
-
-{if is_array($value)}
-	{$value = array_flip($value)}
-{else}
-	{$value=[]}
-{/if}
+	
+<select multiple="multiple" class="form-control gwselect2 " name="{$input_name}" 
+		style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
+		>
+	{html_options options=$options selected=$value}
+</select>
 
 	
-{if $selected_ontop}
-
-	{$selecteditems=[]}
-
-	{foreach $options as $key => $val}
-		{if isset($value.$key)}
-			{$selecteditems[$key]=$val}
-			{gw_unassign var=$options.$key}
-		{/if}
-	{/foreach}
-
-	{$optionss=$selecteditems+$options}
-{else}
-	{$optionss=$options}{*kad nenumustu aukstesniuose templeituose options kintamojo*}
+{if !$gwcms_input_select2_loaded}
+	{$m->addIncludes("bs/select2css", 'css', "`$app_root`static/vendor/select2/css.css")}
+	
+	{capture append=footer_hidden}
+	<script type="text/javascript">
+		require(['vendor/select2/js'], function(){ 
+			$('.gwselect2').select2(); 
+		});
+	</script>
+	{/capture}
+	
+	{assign var=gwcms_input_select2_loaded value=1 scope=global}	
 {/if}
+	
 
-{foreach $optionss as $key => $title}
-<tr>
-    <td width="10"><input type="checkbox" name="{$input_name}" value="{$key}" title="{$title|escape}" {if isset($value.$key)}CHECKED{/if} /></td>
-    <td>{$title}</td>
-</tr>
-{/foreach}
-</table>
-
-
-</div>
 
 {/if}

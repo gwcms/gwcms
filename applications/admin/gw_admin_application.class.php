@@ -2,6 +2,9 @@
 
 class GW_Admin_Application extends GW_Application
 {	
+	
+	public $icon_root = 'static/img/icons/';
+
 	function checkCompatability()
 	{
 		//NO MSIE 6
@@ -42,9 +45,7 @@ class GW_Admin_Application extends GW_Application
 	{
 		$params['can_access']=[$this, 'canAccess'];
 		
-		$tmp = GW::getInstance('GW_ADM_Page')->getChilds($params);
-		
-		//d::dumpas($tmp);
+		$tmp = GW_Adm_Page::singleton()->getChilds($params);
 		
 		return $tmp;
 	}
@@ -55,8 +56,13 @@ class GW_Admin_Application extends GW_Application
 		
 		$this->autoPrepare();
 		
-		GW_ADM_Sitemap_Helper::updateSitemap();
+		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
 		
+		if($msgs)
+			foreach($msgs as $msg)
+				$this->setMessage($msg);
+		
+		$this->icon_root = $this->app_root . $this->icon_root;
 	}
 	
 	
@@ -116,6 +122,21 @@ class GW_Admin_Application extends GW_Application
 		{
 			$this->setMessage('System process was just started');
 		}
+	}
+	
+	
+	function processHook($name)
+	{
+		$resore_module = GW_Lang::$module;
+		
+		if(is_array(GW::s("ADMIN/HOOKS/$name"))) {
+			
+			foreach(GW::s("ADMIN/HOOKS/$name") as $path)
+				$this->innerProcess($path);
+		}
+		
+		GW_Lang::$module  = $resore_module;
+
 	}
 	
 }

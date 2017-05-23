@@ -2,5 +2,7 @@
 
 class GW_Store extends GW_Config
 {
-	var $table='gw_store';
+
+	var $table = 'gw_store';
+
 }

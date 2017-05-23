@@ -3,6 +3,8 @@
 
 class Module_Usr extends GW_Common_Module
 {	
+	public $order_enabled_fields=['id','username','name'];
+	
 	function init()
 	{
 		$this->model = new GW_User();
@@ -10,14 +12,20 @@ class Module_Usr extends GW_Common_Module
 				
 		$this->rootadmin = $this->app->user->isRoot();
 		
+		$this->filters['removed'] = 0;
+		
 		if(!$this->rootadmin){
 			$this->filters['parent_user_id'] = $this->app->user->id;
 		}
 		
 		$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);
 		
+		
+		
 		$this->__initGroupOptions();
 		parent::init();
+		
+		$this->list_params['paging_enabled']=1;
 	}
 
 	function __initGroupOptions()
@@ -42,7 +50,7 @@ class Module_Usr extends GW_Common_Module
 		if(!$die || $result)
 			return $result;
 
-		$this->setErrors('/G/GENERAL/ACTION_RESTRICTED');
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		
 		
 		$this->jump($this->app->page->path);
@@ -58,11 +66,11 @@ class Module_Usr extends GW_Common_Module
 		$this->canBeAccessed($item, true);	
 			
 		if($item->get('id') == $this->app->user->get('id'))
-			return $this->setErrors($this->lang['ERR_DELETE_SELF']);	
+			return $this->setError($this->lang['ERR_DELETE_SELF']);	
 			
 
 		$item->delete();
-		$this->app->setMessage($this->app->lang['ITEM_REMOVE_SUCCESS']);
+		$this->setPlainMessage($this->app->lang['ITEM_REMOVE_SUCCESS']);
 		
 		$this->jump();
 	}
@@ -73,7 +81,7 @@ class Module_Usr extends GW_Common_Module
 			return;
 
 		if($item->get('id') == $this->app->user->get('id'))
-			return $this->setErrors($this->lang['ERR_DEACTIVATE_SELF']);
+			return $this->setError($this->lang['ERR_DEACTIVATE_SELF']);
 			
 		parent::doInvertActive();
 	}
@@ -115,11 +123,97 @@ class Module_Usr extends GW_Common_Module
 		
 		GW::getInstance('GW_Message')->msg($vals['user_id'], $vals['subject'], $vals['message'], $this->app->user->id);
 		
-		$this->app->setMessage($this->lang['SENT']);
+		$this->setPlainMessage($this->lang['SENT']);
 		
 		$this->jumpAfterSave();
 	}
+	
+	function getFiltersConfig()
+	{
+		return [
+			'id' => 1,
+			'username' => 1,
+			'name' => 0,
+			'insert_time' => 1,
+		];
+	}
+
+
+	function __eventAfterList(&$list)
+	{
+		//attach parent user titles
+		if($this->rootadmin){
+			#attach counts
+			$parentusers=[];
+
+			foreach($list as $item)
+				if($item->parent_user_id)
+					$parentusers[$item->parent_user_id]=1;
+			
+			foreach($parentusers as $key => $x)
+				$parentusers[$key] = GW_User::singleton()->find(['id=?', $key]);
+			
+			
+			foreach($list as $item)
+				if($item->parent_user_id)
+					$item->parent_user_title = isset($parentusers[$item->parent_user_id]) ? $parentusers[$item->parent_user_id]->title : '';
+				
+		}
+	}
+
+	
+	function overrideFilterOnline($value, $comparetype)
+	{
+		//$value = (int)$value;
+		$before10mins= date('Y-m-d H:i:s', strtotime('-10 minute'));
+		
+		if($value || $value==='0')
+			return "last_request_time ".($value  && $value!='0' ? '>' : '<')." '$before10mins'";
+	}
+	
+	function getListConfig()
+	{
+		
+		$cfg = array('fields' => [
+			'id' => 'Lof', 
+			'username' => 'Lof',
+			'name'=> 'Lof',
+			'group_ids' => 'Lf',
+			'online'=>'Lof',
+			'insert_time'=>'lof',
+			'update_time'=>'lof',
+			'parent_user_id'=>'lof',
+			'name'=>'lof',
+			'surname'=>'lof'	
+			]
+		);
+		
+		$cfg['filters']['group_ids'] = ['type'=>'multiselect','options'=>$this->options['group_ids']];
+			
+			
+		return $cfg;
+	}
+	
+	function overrideFilterGroup_Ids($value,$compare_type){
+		
+		$incond = GW_DB::inCondition("`lug`.`id1`", $value);
+		$sql = "(SELECT count(*) FROM `gw_link_user_groups` AS lug WHERE `lug`.`id`=`a`.`id` AND $incond) > 0";
+		
+		return $sql;
+	}	
+	
+	function viewIpLog()
+	{
+		$item = $this->getDataObjectById();
+		
+		$list = GW_User_Ip_Log::singleton()->findAll(['user_id=?', $item->id]);
+		
+		$this->tpl_vars['list'] = $list;
+	}
+	
+	
+
+	
 		
 }
 
-?>

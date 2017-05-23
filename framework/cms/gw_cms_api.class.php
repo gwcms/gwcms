@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * 
  * Pagalbinė cms_api klasė, siųsti užklausimus iš cli ar kitų sistemų
@@ -25,34 +24,34 @@
  * @author wdm
  *
  */
-
 class GW_Cms_Api
 {
+
 	var $api_key;
 	var $username;
 	var $lang;
 	var $base;
-	
-	function __construct($user,$api_key, $lang='en')
+
+	function __construct($user, $api_key, $lang = 'en')
 	{
 		$this->username = $user;
 		$this->api_key = $api_key;
 		$this->lang = $lang;
-		
+
 		$this->http = new GW_Http_Agent();
-		
-		$this->base=GW::s("PROJECT_ADDRESS");//for local access
+
+		$this->base = GW::s("PROJECT_ADDRESS"); //for local access
 	}
-	
-	function action($path, $action, $get_params=Array())
+
+	function action($path, $action, $get_params = Array())
 	{
-		$get_params['GW_CMS_API_AUTH']="$this->username:$this->api_key";
-		$get_params['act']='do:'.$action;
-		
-		$r= $this->http->getContents($this->base.$this->lang."/".$path.'?'.http_build_query($get_params));
-		
+		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
+		$get_params['act'] = 'do:' . $action;
+
+		$r = $this->http->getContents($this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params));
+
 		//dump($this->http->flushDebugInfo());
-		
+
 		return $r;
 	}
 

@@ -8,17 +8,17 @@
 
 class GW_ADM_Page extends GW_i18n_Data_Object
 {
-	var $table = 'gw_adm_sitemap';
-	var $i18n_fields = ['title'=>1];
-	var $validators = ['views'=>'gw_json','orders'=>'gw_json'];
+	public $table = 'gw_adm_sitemap';
+	public $i18n_fields = ['title'=>1];
+	public $validators = ['views'=>'gw_json','orders'=>'gw_json'];
 
-	var $default_order = 'priority ASC';
-	var $level=0;
-	var $data_object;
+	public $default_order = 'priority ASC';
+	public $level=0;
+	public $data_object;
 	
-	var $encode_fields=['info'=>'serialize', 'fields'=>'serialize'];
-	var $ignore_fields = ['data_object_id'=>1];
-	var $calculate_fields = ['VIEWS'=>'getViews', 'ORDERS'=>'getOrders'];
+	public $encode_fields=['info'=>'serialize', 'fields'=>'serialize'];
+	public $ignore_fields = ['data_object_id'=>1];
+	public $calculate_fields = ['VIEWS'=>'getViews', 'ORDERS'=>'getOrders'];
 
 	function getViews()
 	{
@@ -50,7 +50,9 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		$check_perm	= isset($params['check_permissions']) ? $params['check_permissions'] : true;			
 		$pid = isset($params['parent_id']) ? $params['parent_id'] : 0;
 		
-		$cond = ['parent_id=?'.($menu?' AND active AND in_menu':''), $pid];
+		$nosep = isset($params['return_first_only']) ? ' AND path!="separator"' : '';
+		$inmenu = ($menu?' AND active AND in_menu':'');
+		$cond = ['parent_id=?'.$inmenu.$nosep, $pid];
 		
 		
 		if(isset($params['test']))
@@ -136,7 +138,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		$info=$this->get('info');
 		
 		
-		if(!$Class=$info['model'])
+		if(!isset($info['model']) || !$Class=$info['model'])
 			return false;
 			
 			

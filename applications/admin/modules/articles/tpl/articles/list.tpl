@@ -17,7 +17,7 @@
 	{$display_fields=[image=>1,title=>1,insert_time=>1,update_time=>1]}
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[invert_active,edit,delete]}
 	

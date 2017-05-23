@@ -113,11 +113,12 @@ class GW_Page extends GW_i18n_Data_Object
 				$this->level = substr_count($this->get('path'), '/');
 				break;
 					
-			case 'BEFORE_UPDATE':
+			case 'BEFORE_UPDATE':	
 				if(isset($this->content_base['input_data']))
 				{
 					$this->saveContent($this->content_base['input_data']);
 					unset($this->content_base['input_data']);
+					unset($this->changed_fields['input_data']);
 				}
 				break;
 		}
@@ -167,6 +168,8 @@ class GW_Page extends GW_i18n_Data_Object
 
 		foreach($list as $inp_data)
 			$cache[$inp_data['key']]=$inp_data['content'];
+		
+		//d::ldump([$key, $cache, $list]);
 
 		return $cache[$key];
 	}

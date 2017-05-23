@@ -1,4 +1,4 @@
-{include file="default_open.tpl" no_standart_cms_frame=1}
+{include file="head.tpl"}
 
 
 <br />
@@ -17,6 +17,7 @@
 <br /><br />
 
 <button onclick="location.href='{gw_path do='SetSeen' params=[id=>$item->id]}'">{$m->lang.MARK_AS_READ}</button>
+<button onclick="location.href='{$m->buildUri('', [clean=>1])}'">{$m->lang.ALL_MESSAGES}</button>
 
 
 {else}
@@ -25,10 +26,6 @@
 
 
 <script>
-	$(function(){
-		parent.window.gw_session.ping();
-	})
-	
 	function markAsRead()
 	{
 		jQuery.ajax({
@@ -37,6 +34,12 @@
 		}); 
 	}
 	
+		require(['gwcms'],function(){
+			parent.window.gw_session.ping();
+		})	
+	
 </script>
+<style>
+	body{ background-color: white; }
+</style>
 
-{include file="default_close.tpl" no_standart_cms_frame=1}

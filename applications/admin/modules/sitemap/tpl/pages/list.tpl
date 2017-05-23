@@ -7,7 +7,7 @@
 
 
 	{function dl_cell_ico}
-		<img src="{$app_root}img/icons/{$icons[$item->type]}.png" align="absmiddle" vspace="2" />	
+		<img src="{$app->icon_root}{$icons[$item->type]}.png" align="absmiddle" vspace="2" />	
 	{/function}
 	{function dl_cell_title}
 		{if $item->type!=2}
@@ -44,7 +44,7 @@
 	
 	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}	
 	
-	{$dl_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = dialogconf}	
 	
 	
 	{if $m->filters.parent_id}

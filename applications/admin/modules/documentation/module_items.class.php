@@ -45,7 +45,17 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		
 		exit;
-	}	
+	}
+	
+	function getFiltersConfig()
+	{
+		return [
+			'text' => 1,
+			'time' => 1
+		];
+	}
+	
+
 	
 
 }

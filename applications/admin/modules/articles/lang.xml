@@ -29,6 +29,7 @@
 		</i>
 		<i id="info">
 			<i id="model">GW_Article</i>
+			<i id="icon"><![CDATA[<i class="fa fa-newspaper-o"></i>]]></i>		
 		</i>
 		
 		<i id="childs">

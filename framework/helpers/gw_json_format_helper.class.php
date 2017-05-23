@@ -2,6 +2,7 @@
 
 class GW_Json_Format_Helper
 {
+
 	/**
 	 * Indents a flat JSON string to make it more human-readable
 	 *
@@ -10,18 +11,18 @@ class GW_Json_Format_Helper
 	 */
 	static function format($json)
 	{
-		$result      = '';
-		$pos         = 0;
-		$strLen      = strlen($json);
-		$indentStr   = "\t";
-		$newLine     = "\n";
-		$prevChar    = '';
+		$result = '';
+		$pos = 0;
+		$strLen = strlen($json);
+		$indentStr = "\t";
+		$newLine = "\n";
+		$prevChar = '';
 		$outOfQuotes = true;
-		
+
 		for ($i = 0; $i <= $strLen; $i++) {
 			// Grab the next character in the string
 			$char = substr($json, $i, 1);
-			
+
 			// Are we inside a quoted string?
 			if ($char == '"' && $prevChar != '\\') {
 				$outOfQuotes = !$outOfQuotes;
@@ -37,7 +38,7 @@ class GW_Json_Format_Helper
 			}
 			// Add the character to the result string
 			$result .= $char;
-			
+
 			// If the last character was the beginning of an element,
 			// output a new line and indent the next line
 			if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes) {
@@ -51,13 +52,12 @@ class GW_Json_Format_Helper
 			}
 			$prevChar = $char;
 		}
-		
+
 		return $result;
 	}
-	
+
 	static function f($arr)
 	{
 		return self::format(json_encode($arr, JSON_UNESCAPED_UNICODE));
 	}
-		
 }

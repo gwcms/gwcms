@@ -1,11 +1,11 @@
 {if count($breadcrumbs)}
-	{if !$nobreadcrumbscontainer}<div id="breadcrumbs">{/if}
+	{if !$nobreadcrumbscontainer}<ol class="breadcrumb gwbreadrumb">{/if}
 	{foreach $breadcrumbs as $item}
 		{if $item@last}
-			{$item.title}
+			<li class="active">{$item.title|escape}</li>
 		{else}
 			{if !$smarty.get.print_view}
-			<a href="{$app->buildURI($item.path)}">{$item.title|escape}</a> &raquo;
+				<li><a href="{$app->buildURI($item.path)}">{$item.title|escape}</a></li>
 			{else}
 				{$item.title|escape} &raquo;
 			{/if}
@@ -16,7 +16,7 @@
 		::
 		{foreach $breadcrumbs_attach as $item}
 			{if !$smarty.get.print_view}
-				<a href="{$item.path}">{$item.title}</a> 
+				<a href="{$item.path}">{$item.title|escape}</a> 
 			{else}
 				{$item.title|escape} &raquo;
 			{/if}
@@ -25,6 +25,19 @@
 		{/foreach}		
 	{/if}
 	
-	{if !$nobreadcrumbscontainer}</div>{/if}
+	{if !$nobreadcrumbscontainer}</ol>{/if}
 {/if}
+
+{*
+                <!--Breadcrumb-->
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Library</a></li>
+                    <li class="active">Data</li>
+                </ol>
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <!--End breadcrumb-->	
+				
+*}
 
