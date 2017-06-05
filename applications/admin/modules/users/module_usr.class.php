@@ -43,9 +43,7 @@ class Module_Usr extends GW_Common_Module
 	{	
 		$item->load_if_not_loaded();
 		
-		$result = ($this->rootadmin) || ($item->parent_user_id == $this->app->user->id);
-		
-		
+		$result = ($this->rootadmin) || $item->id==0 || ($item->parent_user_id == $this->app->user->id);
 		
 		if(!$die || $result)
 			return $result;
@@ -160,7 +158,6 @@ class Module_Usr extends GW_Common_Module
 				
 		}
 	}
-
 	
 	function overrideFilterOnline($value, $comparetype)
 	{
@@ -209,11 +206,5 @@ class Module_Usr extends GW_Common_Module
 		$list = GW_User_Ip_Log::singleton()->findAll(['user_id=?', $item->id]);
 		
 		$this->tpl_vars['list'] = $list;
-	}
-	
-	
-
-	
-		
+	}	
 }
-
