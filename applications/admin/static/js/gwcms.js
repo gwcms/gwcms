@@ -363,7 +363,7 @@ var gwcms = {
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
 
 			$('body').append('<div class="modal fade" id="gwcmsDialog" role="dialog" tabindex="-1" aria-hidden="true"><div class="modal-dialog" style="width:auto"><div class="modal-content">\
-					<div class="modal-header"><button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
+					<div class="modal-header"><button type="button" class="close" data-dismiss="modal" onclick="gwcms.close_dialog2()"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
 					</div></div></div></div>'
 					);
 
