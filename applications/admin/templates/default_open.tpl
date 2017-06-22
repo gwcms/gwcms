@@ -1,8 +1,10 @@
 {include file="head.tpl"}
 
 
-<body >
-	{if !isset($smarty.get.clean) && !$no_standart_cms_frame && !$smarty.get.print_view}
+
+{if !isset($smarty.get.clean) && !$no_standart_cms_frame && !$smarty.get.print_view}
+	<body class="">		
+		
     <div id="container" class="effect mainnav-lg">
 		
 		
@@ -106,7 +108,7 @@
                 <div id="page-content">	
 					
 				{else}
-					<body class="gwBodyClean" data-clean="1">
+					<body class="gwBodyClean {if $smarty.get.clean==2}gwBodyClean2{/if}"   data-clean="1">
 				{/if}	
 				{include "messages.tpl"}
 				

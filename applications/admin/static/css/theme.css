@@ -7644,6 +7644,10 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
 	background-color: transparent ;
 }
 
+.gwBodyClean2{
+	padding: 20px !important;
+}
+
 .gwcmsTableForm  *{
 	color: #444;
 }
@@ -7789,3 +7793,19 @@ input[type="color"] {
 
 .dl_cell_mark input{ margin: 0px }
 .dl_cell_mark{ font-size: 1px; }
+
+.padding-20 {
+  padding: 20px 0;
+}
+.padding-40 {
+  padding: 40px 0;
+}
+.padding-top-20 {
+  padding-top: 20px;
+}
+.padding-top-40 {
+  padding-top: 40px;
+}
+.margin-10 {
+  margin: 10px 0 !important;
+}
