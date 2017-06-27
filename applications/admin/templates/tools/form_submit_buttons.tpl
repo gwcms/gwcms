@@ -21,10 +21,11 @@
 <div class="form_action_buttons">
 	<input type="hidden" name="submit_type" value="0" />
 	
-
-	{foreach $submit_buttons as $submit_button_f}
-		{call name="df_submit_button_`$submit_button_f`"}
-	{/foreach}
+	{if is_array($submit_buttons)}
+		{foreach $submit_buttons as $submit_button_f}
+			{call name="df_submit_button_`$submit_button_f`"}
+		{/foreach}
+	{/if}
 </div>
 
 
