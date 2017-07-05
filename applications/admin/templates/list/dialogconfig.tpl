@@ -44,16 +44,7 @@
 
 .sortable li { cursor: row-resize }
 
-.savedOrderRow input[type="radio"]{
-	padding: 0px;
-	margin:0px 0 0px 0;
-	position: relative;
-	top:3px;
-	line-height: 15px;
-}
-.savedOrderRow label{
-	padding:0;margin:0
-}
+
 
 </style>
 
@@ -111,42 +102,8 @@
 	{/foreach}
 </ul>
 
-{function "isdefaultinput"}
-	<a href="#" class="switchDefault" data-name="{$oname|escape}">
-		<i class="fa {if $default}fa-check-circle-o{else}fa-circle-o{/if}" aria-hidden="true"></i>
-	</a>
-{/function}
 
-<hr>
-<table style="" class="gwTable gwActiveTable">
-	<tr><th colspan="4">{GW::l('/g/SAVE_NAME')}</th></tr>
-	
-	{$i=0}
-	{foreach $saved_orders as $name => $ordvals}
-		{$i=$i+1}
-		<tr class="savedOrderRow">
-			<td><input name="existing_order_name" type="radio" value="{$name|escape}" id="savedOrder{$i}" {if $editorder==$name}checked{/if}></td>
-			<td><label for="savedOrder{$i}" title="{$ordvals.order|escape}">{$ordvals.name}</label></td>
-			<td>{call "isdefaultinput" default=$ordvals.default oname=$name}</td>
-			<td> 
-				<a href="#" class="removeSavedFilter" data-name="{$name|escape}"><i class="fa fa-times" aria-hidden="true"></i></a>
-			</td>
-		</tr>
-		
-	{/foreach}
-	
-	<tr  class="savedOrderRow">
-		<td>
-			<input  name="existing_order_name"  type="radio" value=""  id="newOrder"> 
-		</td>
-		<td>
-			<input type="text" name="new_order_name" placeholder="{GW::l('/g/MY_ORDERING')}"  onfocus="$('#newOrder').prop('checked', true);">
-		</td>
-		<td>
-			{call "isdefaultinput" default=false oname=""}
-		</td>
-	</tr>
-</table>
+
 
 
 </td>
@@ -154,7 +111,7 @@
 </tr>
 
 </table>
-	
+	<input id="savetodefaultpageview" type="hidden" name="savetodefaultpageview" value="" >	
 	<input id="listConfigSubmit" type="submit" style="display:none">
 
 </form>
@@ -162,7 +119,8 @@
 
 
 <div style='border-top: 1px solid rgba(0, 0, 0, 0.07);padding: 10px;'>
-	<button class="btn btn-default" onclick="$('#listConfigSubmit').click();">{GW::l('/g/SAVE')}</button>
+	<button class="btn btn-primary" onclick="$('#listConfigSubmit').click();">{GW::l('/g/APPLY_1')}</button>
+	<button class="btn btn-default" onclick="$('#savetodefaultpageview').val(1);$('#listConfigSubmit').click();">{GW::l('/g/SAVE_AS_DEFAULT_PAGE_VIEW')}</button>
 </div>
 
 
@@ -223,33 +181,6 @@ require(["gwcms"], function(){
 		return false
 	})
 
-	$('.removeSavedFilter').click(function(event){
-		event.stopPropagation();
-
-		var removelist=JSON.parse($('#remove_saved_filters').val())
-		removelist.push($(this).attr('data-name'));
-		$('#remove_saved_filters').val(JSON.stringify(removelist));
-
-		$(this).parents('.savedOrderRow').fadeOut(300, function(){ $(this).remove();});
-
-		return false
-	})
-	
-	$('.switchDefault').click(function(event){
-		event.stopPropagation();
-		
-		$('#default_filter').val($(this).attr('data-name'))
-		
-		$('.switchDefault i').removeClass('fa-check-circle-o').addClass('fa-circle-o');
-		$(this).find('i').removeClass('fa-circle-o').addClass('fa-check-circle-o');
-		
-		return false;
-	})
-
-
-	$('input[type=radio][name=existing_order_name]').on('change', function() {
-		$('input[name="new_order_name"]').attr("required", $(this).val()=='' ? "true" : false);
-	});	
 
 	$('.orderrow input[type=checkbox]').on('change', function() {
 	   $('#newOrder').attr("required", $('.orderrow input[type=checkbox]').length > 0 ? 'true' : false)

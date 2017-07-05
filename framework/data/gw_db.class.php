@@ -82,7 +82,7 @@ class GW_DB
 		$this->error_query = $cmd;
 
 		if (!$soft_error)
-			trigger_error("ERROR: $msg \nCMD: $cmd", E_USER_ERROR);
+			throw new Exception("ERROR: $msg \nCMD: $cmd", E_USER_ERROR);
 	}
 
 	function getError()
@@ -192,7 +192,7 @@ class GW_DB
 			switch(count($key)){
 				case 2:
 					while ($row = $this->result->fetch_assoc())
-						$result[$row[$key[0]]][$row[$key[1]]] = $row;				
+						$result[$row[$key[0]]][$row[$key[1]]] = $row;	
 				break;
 				case 3:
 					while ($row = $this->result->fetch_assoc())
@@ -224,11 +224,11 @@ class GW_DB
 		$this->query($cmd, $nodie);
 
 		$result = [];
-		
+
 		switch(mysqli_num_fields($this->result)){
 			case 2:
-				while ($row = $this->result->fetch_array())
-					$result[$row[0]] = $row[1];
+		while ($row = $this->result->fetch_array())
+			$result[$row[0]] = $row[1];
 			break;
 
 			case 3:
@@ -514,7 +514,7 @@ class GW_DB
 
 		foreach($ids as $i => $id)
 			$ids[$i] = (int)$id;
-		
+
 		if (strpos($fieldname, '`') === false)
 			$fieldname = '`' . $fieldname . '`';
 
@@ -535,7 +535,7 @@ class GW_DB
 
 		return $fieldname . ' IN ("' . implode('","', $ids) . '")';
 	}
-
+	
 	/**
 	 * similar to buidConditions its just allows $condition1 or $condition2 to be empty, and conditions simple strings
 	 */
@@ -543,7 +543,7 @@ class GW_DB
 	{
 		return ($condition1 ? "($condition1)":"").($condition1 && $condition2 ? " $operator ":"").($condition2 ? "($condition2)":"");
 	}
-		
+
 	static function escape($mixed)
 	{
 		if(is_array($mixed)){

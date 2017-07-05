@@ -155,8 +155,18 @@ var gw_adm_sys = {
 			focus: false,
 			timer: 3000
 		});
+	},
+	init_iframe_open: function(){
+		$(".iframeopen:not([data-initdone='1'])").click(function(event){
+			var title = $(this).attr('title');
+			if(!title)
+				title = $(this).text();
+			
+			gwcms.open_dialog2({ url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:800 })	
+			event.stopPropagation();
+			return false;
+		}).attr('data-initdone',1);
 	}
-
 }
 
 var gw_session =

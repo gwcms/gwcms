@@ -40,7 +40,6 @@ class GW_Module
 	public $sys_call = false;
 
 	
-	
 	function viewModInfo()
 	{
 		$info = Array
@@ -90,10 +89,12 @@ class GW_Module
 	{
 		$this->db =& $this->app->db;
 		$this->tpl_dir="{$this->module_dir}tpl/".$this->module_name."/";
-
+		
 		$this->smarty = $this->app->smarty;
 				
-		GW_Lang::$module = $this->module_path[0];
+		$moduleroot = GW_Lang::$module = $this->module_path[0];
+		$this->module_path_clean = $moduleroot != $this->module_name ? "$moduleroot/{$this->module_name}" : $moduleroot;
+		
 		$this->lang = GW::l('/m/');
 		
 		

@@ -485,8 +485,8 @@ class GW_Common_Module extends GW_Module
 		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
 
-		if (isset($this->list_params['views']['conditions']) && $this->list_params['views']['conditions'])
-			$cond .= ($cond ? ' AND ' : '') . $this->list_params['views']['conditions'];
+		if (isset($this->list_params['views']->condition) && $this->list_params['views']->condition)
+			$cond .= ($cond ? ' AND ' : '') . $this->list_params['views']->condition;
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
 
@@ -554,6 +554,12 @@ class GW_Common_Module extends GW_Module
 				$this->list_params['order'] = $this->model->getDefaultOrderBy();
 	}
 
+	
+	
+	function __viewsSearchPaths()
+	{
+		return array_unique([$this->app->path_clean,$this->app->path, $this->module_path_clean]);
+	}
 	//uzkrauna sarasui viewsus
 	//viewsai savyje turi pavadinima, salyga, rikiavima, suskaiciuoti direktyva, 
 	function loadViews($page=false)
@@ -561,143 +567,89 @@ class GW_Common_Module extends GW_Module
 		if(!$page)
 			$page = $this->app->page;
 			
+		$pview0 = GW_Adm_Page_View::singleton();
+		$views = $pview0->getByPath($this->__viewsSearchPaths());
 		
-		$views = $page->VIEWS;
 		$store = & $this->list_params['views'];
-		$default = false;
-
-		$alli18n = $this->app->lang['FILTER_ALL'];
-
-		$views = [$alli18n => ['name' => $alli18n, 'conditions' => '', 'default' => 1]] + (array) $views;
-
-		foreach ($views as $i => $view)
-			if (isset($view['default']))
-				$default = $view;
-
-		if (!$store['name'])
-			$store = $default;
+		
+		if (!$store || !$store->id)
+			$store = $pview0->selectDefault($views);
 
 		foreach ($views as $i => $view) {
 
-			if ($store['name'] == $view['name']) {
-				$store = $view;
-				$views[$i]['active'] = 1;
-			}
+			//set current view
+			if ($store->id == $view->id) 
+				$view->current = true;
+			
+			//calculate results
+			if ($view->calculate) {
+				$key = $this->app->page->path . '::views::' . $view->id;
 
-			if (isset($view['calculate'])) {
-				$key = $this->app->page->path . '::views::' . $view['name'];
-
-				if (!($views[$i]['count'] = GW_Session_Cache::get($key))) {
-					$views[$i]['count'] = $tmp = $this->model->count($view['conditions']);
+				if (!($view->count_result = GW_Session_Cache::get($key))) {
+					
+					try{	
+						$view->count_result = $tmp = $this->model->count($view->condition);
+					} catch (Exception $e) {
+						$this->setError("Can't calculate '$view->title' {$e->getMessage()}");
+						$view->count_result = $tmp = "!Err";
+					}
+					
 					GW_Session_Cache::set($key, $tmp, '10 seconds');
 				}
 			}
 		}
-
+		
 		$this->tpl_vars['views'] = & $views;
 	}
 
-	function loadOrders($page=false)
-	{
-		if(!$page)
-			$page = $this->app->page;		
-		
-		$orders = $page->ORDERS;
-		
-		
-		
-		$store = & $this->list_params['orders'];
-		$default = false;
 
-		$defi18n_name = $this->app->lang['DEFAULT'];
-
-		$deford = method_exists($this->model, 'getDefaultOrderBy') ? $this->model->getDefaultOrderBy() : false;
-		$orders = ['default' => ['name' => $defi18n_name, 'order' => $deford, 'default' => 1]] + (array) $orders;
-
-		foreach ($orders as $i => $order)
-			if (isset($order['default']))
-				$default = $order;
-
-		if (!$store['name'])
-			$store = $default;
-
-		foreach ($orders as $i => $order) {
-
-			if (isset($store['name']) && $store['name'] == $order['name']) {
-				$store = $order;
-				$orders[$i]['active'] = 1;
-			}
-		}
-
-		$this->tpl_vars['list_orders'] = & $orders;
-	}
 
 	function doSetView()
 	{
-		$this->list_params['views']['name'] = $_REQUEST['name'];
+		
+		//$this->initListParams(false, 'list');
+		$this->prepareListConfig();
 		$this->loadViews();
-
+		
+		
+		
+		$pview = GW_Adm_Page_View::singleton()->selectById($this->tpl_vars['views'], $_REQUEST['view_id']);
+		$this->list_params['views'] = $pview;
+		
+		
 		//jump to first page
 		$this->list_params['page']=1;
 
-		if (isset($this->list_params['views']['order']) && $ord = $this->list_params['views']['order']) {
-			$this->list_params['order'] = $ord;
+		if ($pview instanceof GW_Adm_Page_View) {
+			
+			if($pview->order)
+				$this->list_params['order'] = $pview->order;
+			
+			
+			if($pview->fields){	
+				$this->list_params['fields'] = json_decode($pview->fields, true);
+				$this->list_params['updatetime'] = time();
+			}
+			
+			if($pview->page_by)
+			{
+				$this->list_params['page_by']=$pview->page_by;
+			}
+			
+			
 		}
 
 
 
-		unset($_GET['name']);
+		unset($_GET['view_id']);
+		session_write_close();
+		
+		
 		$this->jump();
 	}
 
 	// key=>value rule fieldname=>1
-	public $allowed_order_columns = [];
 
-	function doSetOrder()
-	{
-		$this->prepareListConfig();
-		
-		$this->loadOrders();
-		$orders = $this->tpl_vars['list_orders'];
-		
-		$foundorder = false;
-
-		if (isset($_REQUEST['name'])) {
-			$defi18n_name = $this->app->lang['DEFAULT'];
-
-			if ($_REQUEST['name'] == $defi18n_name)
-				$orders[] = ['name' => $defi18n_name, 'order' => $this->model->getDefaultOrderBy()];
-
-
-			foreach ($orders as $order)
-				if ($order['name'] == $_REQUEST['name'])
-					$foundorder = $order;
-
-			if (!$foundorder) {
-				$this->setError('/g/GENERAL/ORDER_NOT_FOUND');
-				$this->jump();
-			}
-
-			$this->list_params['order'] = $foundorder['order'];
-
-			$this->list_params['orders']['name'] = $_REQUEST['name'];
-		} elseif (isset($_REQUEST['order'])) {
-
-			if (!$this->__validateOrder($_REQUEST['order'], $this->list_config['dl_order_enabled_fields'] + $this->model->getColumns())) {
-				$this->setError('/g/GENERAL/BAD_ORDER_FIELD');
-				$this->jump();
-			} else {
-				$this->list_params['orders']['name'] = 'NIEKAS';
-				$this->list_params['order'] = $_REQUEST['order'];
-			}
-		}
-
-
-
-		unset($_GET['name']);
-
-		$this->jump();
-	}
 
 	function __parseOrders($order)
 	{
@@ -736,7 +688,7 @@ class GW_Common_Module extends GW_Module
 	function common_viewList($params = [])
 	{
 		$this->loadViews();
-		$this->loadOrders();
+
 
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 
@@ -795,8 +747,8 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$this->fireEvent('AFTER_LIST', $list);
-
-
+		
+		
 		return ['list' => $list];
 	}
 
@@ -814,7 +766,16 @@ class GW_Common_Module extends GW_Module
 	//used to allow user edit field list	
 	function getDisplayFields($fields)
 	{
-		$saved = (array) $this->app->page->fields;
+				
+		//d::Dumpas($this->list_params['views']);
+				
+		if(isset($this->list_params['fields']))
+		{
+			$saved = $this->list_params['fields'];
+			
+		}else{
+			$saved = (array) $this->app->page->fields;
+		}
 		
 		//prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
 		if ($saved){
@@ -822,7 +783,7 @@ class GW_Common_Module extends GW_Module
 			foreach($saved as $fieldname => $x)
 				if(!isset($fields[$fieldname]))
 					unset($saved[$fieldname]);
-			
+
 			$fields = $saved + $fields;
 		}
 
@@ -846,39 +807,11 @@ class GW_Common_Module extends GW_Module
 		$neworders = implode(', ', $neworders);
 		
 		
-		$orders = json_decode($this->app->page->orders, true);
-		
-		//pasalinti issaugotus orderius
-		if (is_array($remove = json_decode($_REQUEST['remove_saved_filters'])))
-			foreach ($remove as $itm)
-				unset($orders[$itm]);		
 
-		if($neworders) {
-			$drop = $_REQUEST['existing_order_name'];
-
-			if (isset($orders[$drop]))
-				$orders[$drop]['order'] = $neworders;
-			else {
-				$name = trim($_REQUEST['new_order_name']);
-				$orders[$newordersavename = 'listcfg_' . strtolower($name)] = ['name' => $name, 'order' => $neworders];
-			}		
-		}
 		
-		//pakeisti default orderi
-		if($default = $_REQUEST['default_filter']) {
-			if (!$default && $newordersavename)
-				$default = $newordersavename;
-
-			if ($default) {
-				foreach ($orders as $key => $ordervals)
-					if ($key == $default)
-						$orders[$key]['default'] = 1;
-					else
-						unset($orders[$key]['default']);
-			}		
-		}
 		
-		$this->app->page->orders = json_encode($orders);		
+		//if($this->__validateOrder($neworders, $this->list_config['dl_order_enabled_fields'] + $this->model->getColumns()))
+			$this->list_params['order'] = $neworders;	
 	}
 	
 	function common_doDialogConfigSave()
@@ -891,38 +824,50 @@ class GW_Common_Module extends GW_Module
 		else
 			$fields = $_REQUEST['fields'];
 
-		$this->app->page->fields = $fields;
+		
+		$this->list_params['fields'] = $fields;		
+		$this->list_params['updatetime'] = time();
+		
+		$this->__doDialogConfigPrepareOrders();		
+		
+		if($_REQUEST['savetodefaultpageview']=='1')
+		{
+			
+			$paths = $this->__viewsSearchPaths();
+			if($pview=GW_Adm_Page_View::singleton()->find(['title="Default" AND path=?',$paths[0]]))
+			{
+				
+			}else{
+				$pview = GW_Adm_Page_View::singleton()->createNewObject();	
+				$pview->path = $paths[0];
+				$pview->title = "Default";
+				$pview->title_short = '<i class="fa fa-home"></i>';
+			}
+			
+			$pview->fields = json_encode($fields);
+			$pview->order = $this->list_params['order'];
+			$pview->active = 1;
+			$pview->priority = 100;
+			$pview->default = 1;
+			
+			$pview->save();
+			
+		}
+		
 
+		
 
-
-		$this->__doDialogConfigPrepareOrders();
-
-
-		$this->app->page->updateChanged();
 
 		$this->jump();
 	}
 
+	
+	
+	//paruosti laukelius redagavimui
 	function __viewDialogConfigPrepareOrders()
 	{
-		$orders = json_decode($this->app->page->orders, true);
-
-
-		$editorder = false;
-		$edit_orders = false;
-
-		if($orders)
-			foreach ($orders as $id => $ordervals) {
-				if (isset($ordervals['default'])) {
-					$editorder = $id;
-					$this->tpl_vars['default_filter'] = $id;
-				}
-			}
-		if (!$editorder)
-			$editorder = isset($id) ? $id : false;
-
-		if ($editorder)
-			$edit_orders = $this->__parseOrders($orders[$editorder]['order']);
+		$this->initListParams(false, "list");
+		$edit_orders = $this->__parseOrders($this->list_params['order']);
 
 
 		$formatorders = [];
@@ -935,18 +880,18 @@ class GW_Common_Module extends GW_Module
 			$order_enabled_fields[$fieldname] = ['enabled' => 0, 'dir' => 'ASC'];
 
 
-		$this->tpl_vars['saved_orders'] = $orders;
-		$this->tpl_vars['order_fields'] = $formatorders + $order_enabled_fields;
-		$this->tpl_vars['editorder'] = $editorder;		
+		$this->tpl_vars['order_fields'] = $formatorders + $order_enabled_fields;		
 	}
+	
 	
 	function common_viewDialogConfig()
 	{
+		$this->initListParams(false, "list");
 		$this->prepareListConfig();
 		
 		$fields = $this->list_config['display_fields'];
 		
-		$saved = $this->app->page->fields ? (array) $this->app->page->fields : [];
+		$saved = isset($this->list_params['fields']) && $this->list_params['fields'] ? (array) $this->list_params['fields'] : [];
 		
 		foreach($saved as $fieldname => $x)
 			if(!isset($fields[$fieldname]))
@@ -958,7 +903,8 @@ class GW_Common_Module extends GW_Module
 		$this->__viewDialogConfigPrepareOrders();
 
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/dialogconfig";
-	}
+	}	
+	
 
 	function getMoveCondition($item)
 	{
@@ -1241,6 +1187,95 @@ class GW_Common_Module extends GW_Module
 			return GW_DB::inConditionStr($field, $ids);
 		
 		return "`$field`=0";		
-	}	
+	}
+
+
+	function doManagePageViews()
+	{
+		$this->app->carry_params['clean']=1;
+		$this->app->jump("system/page_views", ['filterpaths'=>implode(',', $this->__viewsSearchPaths())]);
+	}
+	
+	function __currentFields()
+	{
+		$allfields = $this->list_config['display_fields'];
+		$present_fields = $this->list_config['dl_fields'];
+		
+		foreach($allfields as $field => $x)
+			$allfields[$field] = 0;
+		
+		foreach($present_fields as $field)
+			$allfields[$field] = 1;
+		
+		return $allfields;
+	}
+	
+	
+	function doCreatePageView()
+	{
+		$params = [];
+		$cond = '';
+		$this->initListParams(false, 'list');
+		$this->setListParams($params);
+		$this->prepareListConfig();
+		$this->fireEvent("AFTER_LIST_PARAMS", $params);
+		
+		$cond = $params['conditions'];
+		
+		
+		
+		$args = isset($_GET['saveasorder'])? '&saveasorder=1':'';
+		$url = $this->app->buildUri("system/page_views/form?id=0&clean=2".$args);
+		
+		
+		//trys galimi path 
+		
+		$vals = [
+		    'condition'=>$cond, 
+		    'order'=>$params['order'], 
+		    'path_options'=>$this->__viewsSearchPaths(), 
+		    'fields'=>json_encode($this->__currentFields()),		    
+		    'page_by'=>$this->list_params['page_by']
+		];
+		
+		$this->fireEvent("BEFORE_CREATE_PAGE_VIEW", $vals);
+		
+		$this->app->sess['item'] = $vals;
+				
+		header('Location: '.$url);
+		exit;
+	}
+
+	// key=>value rule fieldname=>1
+	public $allowed_order_columns = [];
+
+	function doSetOrder()
+	{
+		$this->prepareListConfig();
+		
+		$this->loadOrders();
+		$orders = $this->tpl_vars['list_orders'];
+		
+		$foundorder = false;
+
+		if (isset($_REQUEST['order'])) {
+
+			if (!$this->__validateOrder($_REQUEST['order'], $this->list_config['dl_order_enabled_fields'] + $this->model->getColumns())) {
+				$this->setError('/g/GENERAL/BAD_ORDER_FIELD');
+				$this->jump();
+			} else {
+				$this->list_params['orders']['name'] = 'NIEKAS';
+				$this->list_params['order'] = $_REQUEST['order'];
+			}
+		}
+
+
+
+		unset($_GET['name']);
+
+		$this->jump();
+	}
+	
+	
 	
 }
