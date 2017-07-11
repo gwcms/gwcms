@@ -39,7 +39,7 @@ function fireInlineEdit(trigger)
 	
 	
 	var id = trigger.data('id');
-	var url = trigger.data('url') ? trigger.data('url') : gw_navigator.url(inline_edit_form_url, {id:id,ajax:1})
+	var url = trigger.data('url') ? trigger.data('url') : gw_navigator.url(inline_edit_form_url, {id:id,form_ajax:1})
 
 	var name = 'list_row_' + id;
 	var trobject = $('#'+name)
