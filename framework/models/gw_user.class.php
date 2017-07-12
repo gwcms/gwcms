@@ -327,6 +327,21 @@ class GW_User extends GW_Composite_Data_Object
 
 		return $this->getAssoc(Array('id', 'username'), $cond);
 	}
+	
+	function getOptionsTitle($active = true, $other_cond = '')
+	{
+		$cond = $active ? 'active!=0 AND removed=0' : '';
+
+		$cond .= ($other_cond && $cond ? ' AND ' : '') . $other_cond;
+
+		$list0 = $this->findAll($cond, ['select'=>'id, name, surname, email, username']);
+		$list = [];
+		
+		foreach($list0 as $item)
+			$list[$item->id] = $item->title;
+		
+		return $list;
+	}		
 
 	function countNewMessages()
 	{
@@ -339,4 +354,20 @@ class GW_User extends GW_Composite_Data_Object
 	{
 		return strpos($this->allowed_ips,$ip)!==false;
 	}
+	
+	function getUserIdsByGroupId($group_id)
+	{
+		return $this->getDB()->fetch_one_column("SELECT id FROM gw_link_user_groups WHERE id1=".(int)$group_id);
+	}	
+	
+	function getByGroupId($group_id)
+	{
+		$ids = $this->getUserIdsByGroupId($group_id);
+		
+		if(!$ids)
+			return [];
+		
+		return $this->findAll(GW_DB::inCondition('id', $ids));
+	}
+	
 }
