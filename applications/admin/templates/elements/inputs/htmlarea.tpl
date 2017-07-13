@@ -2,14 +2,37 @@
 {$dir = GW::$settings.DIR.VENDOR}
 {$ck = GW::getInstance('ckeditor',"`$dir`/ckeditor/ckeditor_php5_gw.php")}
 
+{*jei nenurodytas id $(CKEDITOR.instances['{$input_name}'] jei nurodytas $(CKEDITOR.instances['{$id}']*}
+{$ck->setTextareaAtributes('id',$id)}
 
 {$width=$width|default:"800"}
 
 
 {$ck_editor_opt=['width'=>$width, 'language'=>$app->ln]}
-{$ck_editor_opt['contentsCss']='applications/site/css/style.css'}
+{if $add_site_css}
+	{$ck_editor_opt['contentsCss']='/applications/site/assets/css/full.php'}
+{/if}
 
+	{*change track*}
+	
+	<script type="text/javascript">
+		
+		require(['gwcms'],function(){
+			
+			CKEDITOR.instances['{$id}'].on('instanceReady', function (ev) {
+				
+				//$(CKEDITOR.instances['{$input_name}'].element.$).attr('id',"{$id}")
+				
+				ev.editor.on('change', function() { 
+					this.updateElement();
+					$(CKEDITOR.instances['{$id}'].element.$).change()
+				});
+			});		
+		});	
 
+	</script>
+	
+	
 
 {if $remember_size}
 	{$custom_size_name="`$name`_editor_size"}
@@ -27,13 +50,13 @@
 
 	<script type="text/javascript">
 		require(['gwcms'],function(){
-			CKEDITOR.instances['{$input_name}'].on('instanceReady', function (ev) {
-									ev.editor.on('resize', function (reEvent) {
-											var tmp = reEvent.sender.container.$
-											$('#{$remember_size_id}').val(tmp.clientWidth + 'x' + tmp.clientHeight);
-
-											//console.log(tmp.clientWidth+'x'+tmp.clientHeight)
-									});		
+			CKEDITOR.instances['{$id}'].on('instanceReady', function (ev) {
+			ev.editor.on('resize', function (reEvent) {
+				var tmp = reEvent.sender.container.$
+				$('#{$remember_size_id}').val(tmp.clientWidth + 'x' + tmp.clientHeight);
+				console.log(tmp.clientWidth+'x'+tmp.clientHeight)
+			});
+			});		
 		});	
 
 	</script>	

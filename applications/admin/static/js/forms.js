@@ -48,7 +48,7 @@ var gw_changetrack = {
 
 		}).on('input propertychange change click', function() {
 
-			console.log($(this).attr('id')+' changed');
+			console.log($(this).attr('name')+' changed');
 			changedobj = $(this);
 
 
@@ -84,7 +84,7 @@ var gw_changetrack = {
 		{
 			$('#'+obj.attr('id')+'_inputLabel').addClass("gwinput-label-modified");
 			
-			console.log('changed');
+			console.log('#'+obj.attr('id')+'_inputLabel'+ ' changed');
 		}else{
 			$('#'+obj.attr('id')+'_inputLabel').removeClass("gwinput-label-modified");
 		}

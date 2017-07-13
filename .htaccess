@@ -21,6 +21,7 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.css|\.js)$
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
 <Files README.md>

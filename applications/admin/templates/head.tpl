@@ -23,7 +23,11 @@
 	<title>{include "title_breadcrumbs.tpl"}
 		{*$title|default:$app->page->get(title,$ln)*} - {GW::s(SITE_TITLE)}</title>
 	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
-	<link rel="manifest" href="{$app->buildUri('default/public/manifest/manifest.json')}">	
+	
+	{if GW::s('SW_NOTIFICATIONS')}
+		<link rel="manifest" href="{$app->buildUri('default/public/manifest/manifest.json')}">	
+	{/if}
+	
 		
 
 		
@@ -90,7 +94,10 @@
 	
 	<link rel="stylesheet" href="{$app->sys_base}vendor/font-awesome/css/font-awesome.min.css">	
 	<script src="{$app->sys_base}vendor/jslibs/require.js"></script>
+	
+	{if GW::s('SW_NOTIFICATIONS')}
 	<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
+	{/if}
 	
 
  	<script type="text/javascript">
