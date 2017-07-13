@@ -98,6 +98,11 @@ class CKEditor
 			$this->basePath = $basePath;
 		}
 	}
+	
+	function setTextareaAtributes($atrr, $val)
+	{
+		$this->textareaAttributes[$atrr] = $val;
+	}
 
 	/**
 	 * Creates a %CKEditor instance.
@@ -134,6 +139,10 @@ class CKEditor
 		foreach ($this->textareaAttributes as $key => $val) {
 			$attr.= " " . $key . '="' . str_replace('"', '&quot;', $val) . '"';
 		}
+		
+		//print_r($this->textareaAttributes);
+		//exit;
+		
 		$out = "<textarea name=\"" . $name . "\"" . $attr . ">" . htmlspecialchars($value) . "</textarea>\n";
 		if (!$this->initialized) {
 			$out .= $this->init();
