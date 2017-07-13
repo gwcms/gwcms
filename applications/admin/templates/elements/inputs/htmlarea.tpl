@@ -41,8 +41,8 @@
 
 
 	{if count($custom_size)==2}
-		{$ck_options.width=$custom_size.0}
-		{$ck_options.height=$custom_size.1}
+		{$ck_editor_opt.width=$custom_size.0}
+		{$ck_editor_opt.height=$custom_size.1}
 	{/if}
 
 
@@ -64,7 +64,6 @@
 
 
 
-{*d::ldump([$ck_options,$ck_editor_opt])*}
 
 {if $ck_options=='minimum'}
 	{$ck_editor_opt['toolbarStartupExpanded']=false}
