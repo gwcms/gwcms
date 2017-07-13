@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+<i id="MONTH_KILMININKAS">
+	<i id="1">
+		<lt>Sausio</lt>
+		<en>January</en>
+	</i>
+	<i id="2">
+		<lt>Vasario</lt>
+		<en>February</en>
+	</i>
+	<i id="3">
+		<lt>Kovo</lt>
+		<en>March</en>
+	</i>
+	<i id="4">
+		<lt>Balandio</lt>
+		<en>April</en>
+	</i>
+	<i id="5">
+		<lt>Gegužės</lt>
+		<en>May</en>
+	</i>
+	<i id="6">
+		<lt>Birželio</lt>
+		<en>June</en>
+	</i>
+	<i id="7">
+		<lt>Liepos</lt>
+		<en>July</en>
+	</i>
+	<i id="8">
+		<lt>Rugpjūčio</lt>
+		<en>August</en>
+	</i>
+	<i id="9">
+		<lt>Rugsėjo</lt>
+		<en>September</en>
+	</i>
+	<i id="10">
+		<lt>Spalio</lt>
+		<en>October</en>
+	</i>
+	<i id="11">
+		<lt>Lapkričio</lt>
+		<en>November</en>
+	</i>
+	<i id="12">
+		<lt>Gruodžio</lt>
+		<en>December</en>
+	</i>
+</i>
+
+<i id="MONTHS">
+	<i id="1">
+		<lt>Sausis</lt>
+		<en>January</en>
+	</i>
+	<i id="2">
+		<lt>Vasaris</lt>
+		<en>February</en>
+	</i>
+	<i id="3">
+		<lt>Kovas</lt>
+		<en>March</en>
+	</i>
+	<i id="4">
+		<lt>Balandis</lt>
+		<en>April</en>
+	</i>
+	<i id="5">
+		<lt>Gegužė</lt>
+		<en>May</en>
+	</i>
+	<i id="6">
+		<lt>Birželis</lt>
+		<en>June</en>
+	</i>
+	<i id="7">
+		<lt>Liepa</lt>
+		<en>July</en>
+	</i>
+	<i id="8">
+		<lt>Rugpjūtis</lt>
+		<en>August</en>
+	</i>
+	<i id="9">
+		<lt>Rugsėjis</lt>
+		<en>September</en>
+	</i>
+	<i id="10">
+		<lt>Spalis</lt>
+		<en>October</en>
+	</i>
+	<i id="11">
+		<lt>Lapkritis</lt>
+		<en>November</en>
+	</i>
+	<i id="12">
+		<lt>Gruodis</lt>
+		<en>December</en>
+	</i>
+</i>
+
+</xml>
