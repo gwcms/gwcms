@@ -30,8 +30,6 @@
 		{$do_toolbar_buttons_hidden[] = migrate}	
 	{/if}
 	
-	
-	
 	{function dl_cell_dropdown}
 		<a href="{$m->buildUri(false,[act=>doInvertField,id=>$item->id,field=>dropdown])}">
 			<i class="fa {if $item->dropdown}fa-check-square-o{else}fa-square-o{/if}"></i>
@@ -64,19 +62,11 @@
 	{/function}	
 	
 	{function dl_cell_order}
-		{$item->condition|truncate:40}
+		{$item->order|truncate:40}
 	{/function}	
 	
 	{function dl_cell_insert_time}
                 {$x=explode(' ',$item->insert_time)}
 		<span title=""{$x.1}>{$x.0}</span>
 	{/function}	
-
-	
-	
-
 {/block}
-
-
-
-
