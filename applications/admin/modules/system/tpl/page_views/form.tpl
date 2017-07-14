@@ -28,6 +28,7 @@
 		{/if}
 
 		{if $item->fields}
+			{$item->set(fields,json_encode(json_decode($item->fields), $smarty.const.JSON_PRETTY_PRINT))}
 			{include file="elements/input.tpl" name=fields type=read}
 		{/if}
 
@@ -101,6 +102,9 @@
 </script>
 
 
+<style>
+	.input_td{ max-width: 1000px;  word-wrap: break-word; }
+</style>
 
 
 {include file="default_form_close.tpl" extra_fields=[id,insert_time,update_time]}
