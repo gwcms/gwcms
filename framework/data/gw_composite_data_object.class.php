@@ -92,27 +92,35 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	}
 
 	function get($field)
-	{
+	{		
+		$realfieldname = strpos($field, '/')!==false ? explode('/', $field, 2)[0] : $field;
+		
+		if (!$this->isCompositeField($realfieldname))
+			return parent::get($field);
+		
 		if(strpos($field, '/')!==false)
 		{
 			list($obj,$key) = explode('/', $field, 2);
 			
 			if(is_object($this->$obj))
 				return $this->$obj->$key;
-		}		
-		
-		if (!$this->isCompositeField($field))
-			return parent::get($field);
+		}			
 
 		return $this->{isset($this->composite_map[$field][1]['get_cached']) ? 'getCompositeCached' : 'getComposite'}($field);
 	}
 
 	function set($field, $value)
 	{	
+				
+		$realfieldname = strpos($field, '/')!==false ? explode('/', $field, 2)[0] : $field;
 		
+		
+		if (!$this->isCompositeField($realfieldname))
+			return parent::set($field, $value);
+
 		if(strpos($field, '/')!==false)
 		{
-			
+	
 			
 			list($obj,$key) = explode('/', $field, 2);
 			
@@ -120,10 +128,21 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			//d::dumpas([$obj,$key]);
 			
 			return $obj->set($key, $value);
-		}		
+		}	
+
+		/*
+		if(strpos($field, '/')!==false)
+		{
+			$keys=explode('/', $field);
+			$k1= array_shift($keys);
+	
+			$this->__objAccessWrite($this->content_base[$k1], $keys, $value);
+			$this->changed_fields[$k1] = 1;
+			return true;
+		}*/	
 		
-		if (!$this->isCompositeField($field))
-			return parent::set($field, $value);
+		
+		
 
 		$descript = $this->composite_map[$field];
 		$classname = $descript[0];

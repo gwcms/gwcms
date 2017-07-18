@@ -105,12 +105,19 @@ class GW_Application
 
 	function initLang()
 	{
-		GW_Lang::$ln = $this->ln;
+		$this->setCurrentLang($this->ln);
 		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
 		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
 
 		$this->lang = GW::l('/g/');
 	}
+	
+	function setCurrentLang($ln)
+	{
+		$this->ln = $ln;
+		GW_Lang::setCurrentLang($this->ln);
+	}
+	
 
 	function __construct($context)
 	{

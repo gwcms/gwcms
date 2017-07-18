@@ -8,6 +8,19 @@ class GW_Lang
 	static $langf_dir;
 	static $module_dir;
 	static $module;
+	static $debug=false;
+	
+	static function setCurrentLang($ln)
+	{
+		self::$ln = $ln;
+	}
+	
+	static function setDebug($debug)
+	{
+		self::$debug = $debug;
+	}
+	
+	
 
 	static function getGlobalLangFile($file_id)
 	{
@@ -22,7 +35,7 @@ class GW_Lang
 	static function loadFile($file_id, $modulename = '')
 	{
 		//$file_id=strtolower($file_id);
-		$cid = $file_id . '/' . $modulename;
+		$cid = self::$ln.'/'.$file_id . '/' . $modulename;
 
 		if (isset(self::$cache[$cid]))
 			return true;
@@ -49,7 +62,7 @@ class GW_Lang
 	static function &getFromCache($file_id, $module, $path, $create = false)
 	{
 		$false = false;
-		$var = & self::$cache[$file_id . '/' . $module];
+		$var = & self::$cache[self::$ln.'/'.$file_id . '/' . $module];
 
 		//grazinti visa faila
 		if ($path == [''])

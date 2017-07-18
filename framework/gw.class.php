@@ -229,13 +229,14 @@ class GW
 		}
 
 		//uzloadinti vertima jei nera uzloadintas
+		$cid = GW_Lang::$ln.'/'.$module;
 
-		if (!isset($cache[$module])) {
+		if (!isset($cache[$cid])) {
 			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'id ASC']);
 
 			foreach ($tr as $k => $val) {
 
-				$var = & $cache[$module];
+				$var = & $cache[$cid];
 
 				foreach (explode('/', $k) as $kk)
 					$var = & $var[$kk];
@@ -248,8 +249,8 @@ class GW
 		$explode = explode('/', $key);
 
 		$vr = Null;
-		if (isset($cache[$module]))
-			$vr = & $cache[$module];
+		if (isset($cache[$cid]))
+			$vr = & $cache[$cid];
 
 		foreach ($explode as $part) {
 			if (isset($vr[$part])) {
