@@ -99,12 +99,14 @@ class GW_Data_Object
 
 	function __objAccessRead($o, $keys)
 	{
-		$key=  array_shift($keys);
+		$tmp = $keys;
 		
-		if(is_object($o->$key))
-			return $this->__objAccessRead ($o->$key, $keys);
+		$key = array_shift($keys);
 		
-		return $o->$key;
+		if(is_object($o->{$key}) && count($keys)>0)
+			return $this->__objAccessRead ($o->{$key}, $keys);
+		
+		return $o->{$key};
 	}
 	
 	function __objAccessWrite(&$o, $keys, $val)
