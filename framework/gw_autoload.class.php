@@ -35,8 +35,11 @@ class GW_Autoload
 		if (strpos($file, 'smarty_') !== false)
 			return;
 
-
-
+		//load classes under namespaces
+		if(strpos($file,'\\') !== false){
+			$parts = explode('\\', strtolower($class));
+			$file = implode('/', $parts) . '.class.php';			
+		}
 
 		if (self::tryLoadDirArray($file, GW::s('DIR/AUTOLOAD')))
 			return true;

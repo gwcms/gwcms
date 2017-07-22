@@ -48,7 +48,7 @@ class FH
 	{
 		$title = self::fieldTitle($key);
 
-		if ($tmp = $this->app->module->lang['FIELDS_SHORT'][$key])
+		if (($tmp = GW::l($fkey="/m/FIELDS_SHORT/$key")) && ($fkey!=$tmp))
 			return "<span title='$title'>$tmp</span>";
 
 		return $title;
