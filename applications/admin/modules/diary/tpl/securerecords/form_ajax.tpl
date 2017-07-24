@@ -12,6 +12,8 @@
 			{else}
 				{include file="elements/input.tpl" name=$field type=text}
 			{/if}
+		{elseif $field=="title"}
+			{include file="elements/input.tpl" name=$field type=text}
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}
