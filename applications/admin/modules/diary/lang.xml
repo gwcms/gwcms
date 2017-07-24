@@ -37,12 +37,14 @@
 			<i id="items">
 				<i id="title">Įrašai</i>
 				<i id="info">
+					<i id="icon"><![CDATA[<i class="fa fa-sticky-note-o"></i>]]></i>
 					<i id="model">Diary_Entry</i>
 				</i>
 			</i>	
 			<i id="securerecords">
-				<i id="title"><![CDATA[ <i class="fa fa-key" aria-hidden="true"></i>]]> Įrašai</i>
+				<i id="title">Įrašai</i>
 				<i id="info">
+					<i id="icon"><![CDATA[<i class="fa fa-key"></i>]]></i>
 					<i id="model">GW_Secure_Record</i>
 				</i>
 			</i>						
