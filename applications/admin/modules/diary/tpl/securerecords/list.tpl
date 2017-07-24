@@ -8,7 +8,7 @@
 {$dl_inline_edit=1}
 
 	{$do_toolbar_buttons[]='encrypt'}
-	{$dl_smart_fields=[encrypted]}	
+	{$dl_smart_fields=[encrypted,username]}	
 	
 	{function name=do_toolbar_buttons_encrypt}
 		{*{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}*}
@@ -21,7 +21,15 @@
 		<a href="{gw_path do=invertField params=[id=>$item->id,field=>encryped]}">
 			<i class="fa {if $item->encrypted}fa-lock text-success{else}fa-unlock text-danger{/if}"></i>
 		</a>
-	{/function}	
+	{/function}
+
+	{function dl_cell_username}
+		{if $item->encrypted}
+			{base64_encode($item->username)}
+		{else}
+			{$item->username}
+		{/if}
+	{/function}
 	
 	
 {/block}
