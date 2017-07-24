@@ -17,6 +17,7 @@
 		pass=>encrypteddisp,
 		comments=>encrypteddisp
 	]}
+	{$dl_actions=[show]}
 	
 	
 	{$dl_smart_fields=[encrypted]}	
@@ -43,8 +44,18 @@
 		{/if}
 	{/function}		
 	
-	
+	{function dl_actions_show}
+		{if $item->encrypted}
+			<a class="iframeopen" href="{$m->buildUri(show,[id=>$item->id,clean=>1])}" title="Show">
+				<i class="fa fa-eye" aria-hidden="true"></i>
+			</a>
+		{/if}
+	{/function}
 {/block}
 
 
-<i class="fa fa-" aria-hidden="true"></i>
+{capture append=footer_hidden}	
+	<script>
+		require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
+	</script>		
+{/capture}	
