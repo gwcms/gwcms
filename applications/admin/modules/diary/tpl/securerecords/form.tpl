@@ -10,20 +10,13 @@
 {/foreach}	
 *}
 
-{include file="elements/input.tpl" name="title_lt" type=text}
-{include file="elements/input.tpl" name="title_en" type=text}
+{include file="elements/input.tpl" name="title" type=text}
+{include file="elements/input.tpl" name="username" type=text}
+{include file="elements/input.tpl" name="pass" type=text}
+{include file="elements/input.tpl" name="comments" type=text}
 
-{include file="elements/input.tpl" name=approved type=bool}
+{include file="elements/input.tpl" name="encryped" type=read}
 
-
-
-{if $item->user_id}
-	{include file="elements/input.tpl" name=user_id type=read value="`$item->userobj->name` `$item->userobj->surname`" title=GW::l('/m/CREATED_BY')}
-{/if}
-
-{if $item->admin_id}
-	{include file="elements/input.tpl" name=admin_id type=read value="`$item->adminobj->name` `$item->adminobj->surname`"}
-{/if}
 
 
 {include file="default_form_close.tpl"}
