@@ -103,11 +103,17 @@ class Module_SecureRecords extends GW_Common_Module
 			$extra_cond="AND AES_DECRYPT(test,'$enc_key')=md5('$randstr')";
 		}
 		
+		$enc_fields = ['username','pass','comments'];
+		$set ="";
+		
+		foreach($enc_fields as $field)
+			$set .= "username=$f($field, SHA2('$enc_key',512)), ";
+		
 		$this->model->getDB()->query($q="
 			UPDATE 
 				`gw_secure_records` 
 			SET 
-				username=$f(username, SHA2('$enc_key',512)), 
+				$set
 				$extra_set
 			encrypted=$e 
 			WHERE user_id=$uid AND encrypted=$note $extra_cond
