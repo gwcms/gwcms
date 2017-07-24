@@ -80,7 +80,25 @@ class Module_SecureRecords extends GW_Common_Module
 		
 		$uid = (int)$this->app->user->id;
 		
-		$this->model->getDB()->query($q="UPDATE `gw_secure_records` SET username=$f(username, '$enc_key'), encrypted=$e WHERE user_id=$uid AND encrypted=$note");
+		$extra_set ="";
+		$extra_cond ="";
+		
+		if($encrypt){
+			$extra_set = "test=AES_ENCRYPT('testcheck', '$enc_key'),";
+		}else{
+			$extra_cond="AES_DECRYPT(test)='testcheck'";
+		}
+		
+		$this->model->getDB()->query($q="
+			UPDATE 
+				`gw_secure_records` 
+			SET 
+				username=$f(username, '$enc_key'), 
+				$extra_set
+			encrypted=$e 
+			WHERE user_id=$uid AND encrypted=$note $extra_cond
+				
+		");
 		
 		//d::dumpas($q);
 		
