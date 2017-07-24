@@ -77,6 +77,8 @@ class Module_SecureRecords extends GW_Common_Module
 		$f = $encrypt ? 'AES_ENCRYPT' : 'AES_DECRYPT';
 		$e = $encrypt ? 1 : 0;
 		$note = $encrypt ? 0 : 1;
+		$action = $encrypt ? 'encrypted':'decrypted';
+		
 		
 		$uid = (int)$this->app->user->id;
 		
@@ -100,6 +102,10 @@ class Module_SecureRecords extends GW_Common_Module
 			WHERE user_id=$uid AND encrypted=$note $extra_cond
 				
 		");
+		
+		$affected = $this->model->getDB()->affected();
+		
+		$this->setMessage("Records $action: $affected");
 		
 		
 		//d::dumpas($q);
