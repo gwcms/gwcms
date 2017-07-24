@@ -8,6 +8,7 @@
 {$dl_inline_edit=1}
 
 	{$do_toolbar_buttons[]='encrypt'}
+	{$dl_smart_fields=[encrypted]}	
 	
 	{function name=do_toolbar_buttons_encrypt}
 		{*{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}*}

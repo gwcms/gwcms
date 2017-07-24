@@ -75,8 +75,12 @@ class Module_SecureRecords extends GW_Common_Module
 		$encrypt = $_POST['encrypt_1_decrypt_0'];
 		
 		$f = $encrypt ? 'AES_ENCRYPT' : 'AES_DECRYPT';
+		$e = $encrypt ? 1 : 0;
+		$note = $encrypt ? 0 : 1;
 		
-		$this->model->getDB()->query("UPDATE `gw_secure_records` SET username=$f(username, UNHEX(SHA2('$enc_key',512)));");
+		$uid = (int)$this->app->user->id;
+		
+		$this->model->getDB()->query("UPDATE `gw_secure_records` SET username=$f(username, UNHEX(SHA2('$enc_key',512))); encrypted=$e WHERE user_id=$uid AND encrypted=$note");
 		
 		$this->jumpAfterSave();
 	}
