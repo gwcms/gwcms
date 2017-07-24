@@ -5,7 +5,7 @@
 	
 	{foreach $m->list_config.dl_fields as $field}
 				{}	
-		{if in_array($field,[username,pass,comments, title])}
+		{if in_array($field,[username,pass,comments])}
 			
 			{if $item->encrypted}
 				{include file="elements/input.tpl" name=$field type=read}
