@@ -46,7 +46,7 @@
 	
 	{function dl_actions_show}
 		{if $item->encrypted}
-			<a class="iframeopen" href="{$m->buildUri(show,[id=>$item->id,clean=>1])}" title="Show">
+			<a class="iframeopen" href="{$m->buildUri(show,[id=>$item->id,clean=>2])}" title="Show">
 				<i class="fa fa-eye" aria-hidden="true"></i>
 			</a>
 		{/if}

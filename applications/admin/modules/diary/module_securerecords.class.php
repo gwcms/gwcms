@@ -73,6 +73,7 @@ class Module_SecureRecords extends GW_Common_Module
 	
 	private $enc_fields = ['username','pass','comments'];
 	
+	
 	function doEncrypt()
 	{
 	
@@ -143,7 +144,17 @@ class Module_SecureRecords extends GW_Common_Module
 	
 	function doShowOne()
 	{
-		d::dumpas([$_GET,$_POST]);
+		$id = $_GET['id'];
+		$enc_key =  $_POST['item']['encryptkey'];
+		$f = 'AES_DECRYPT';
+		$select = [];
+			
+		foreach($this->enc_fields as $field)
+			$select[]= "$f($field, SHA2('$enc_key',512)) AS $field ";
+		
+		$res = $this->model->find(['id=?', $id],['select'=>implode(',', $select)]);
+		d::ldump($res->toArray());
+		exit;
 	}
 	
 
