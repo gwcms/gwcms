@@ -74,9 +74,14 @@ class Module_SecureRecords extends GW_Common_Module
 	function doEncrypt()
 	{
 	
-		
-		$enc_key = GW_DB::escape($_POST['item']['encryptkey']);
+		$vals = $_POST['item'];
+		$enc_key = GW_DB::escape($vals['encryptkey']);
 		$encrypt = $_POST['encrypt_1_decrypt_0'];
+		
+		if($encrypt && $vals['encryptkey']!=$vals['encryptkey_repeat'])
+			$this->setError("Encrypt keys don't match");
+			
+		
 		
 		$f = $encrypt ? 'AES_ENCRYPT' : 'AES_DECRYPT';
 		$e = $encrypt ? 1 : 0;
@@ -112,7 +117,7 @@ class Module_SecureRecords extends GW_Common_Module
 		if($affected)
 			$this->setMessage("Records $action: $affected");
 		else
-			$this->setMessage("Bad news");
+			$this->setError("Bad news");
 		
 		
 		//d::dumpas($q);
