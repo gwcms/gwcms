@@ -62,7 +62,11 @@ class Module_SecureRecords extends GW_Common_Module
 		$item->user_id = $this->app->user->id;
 	}
 		
-
+	function viewLockUnlock()
+	{
+		
+	}
+		
 	function doEncrypt()
 	{
 		d::dumpas($_POST);

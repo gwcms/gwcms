@@ -10,7 +10,8 @@
 	{$do_toolbar_buttons[]='encrypt'}
 	
 	{function name=do_toolbar_buttons_encrypt}
-		{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}
+		{*{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}*}
+		{toolbar_button title="Encrypt / Decrypt" iconclass='fa fa-lock' href=$m->buildUri(lockunlock)}
 		
 		{*{list_item_action_m url=[false,[id=>$item->id,act=>doSwitchSim,simid=>'']] query_param="Enter sim id 0-`$tmp`" caption="Sw" title="Switch sim"}*}
 	{/function}	
