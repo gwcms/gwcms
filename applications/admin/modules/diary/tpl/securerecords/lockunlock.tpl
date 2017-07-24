@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" form_width="100px" changes_track=1 action=encrypt}
+{include file="default_form_open.tpl" form_width="600px" changes_track=1 action=encrypt}
 
 {*$nowrap=1*}
 
