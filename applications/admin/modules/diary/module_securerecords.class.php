@@ -63,7 +63,10 @@ class Module_SecureRecords extends GW_Common_Module
 	}
 		
 
-
+	function doEncrypt()
+	{
+		d::dumpas($_POST);
+	}
 
 	
 
