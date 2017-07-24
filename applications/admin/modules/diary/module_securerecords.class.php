@@ -82,11 +82,12 @@ class Module_SecureRecords extends GW_Common_Module
 		
 		$extra_set ="";
 		$extra_cond ="";
+		$randstr = "1fas2d1gt5hs2e41tq652f1d56m5f1";
 		
 		if($encrypt){
-			$extra_set = "test=AES_ENCRYPT('testcheck', '$enc_key'),";
+			$extra_set = "test=AES_ENCRYPT(md5('$randstr'), '$enc_key'),";
 		}else{
-			$extra_cond="AND AES_DECRYPT(test,'$enc_key')='testcheck'";
+			$extra_cond="AND AES_DECRYPT(test,'$enc_key')=md5('$randstr')";
 		}
 		
 		$this->model->getDB()->query($q="
@@ -99,6 +100,7 @@ class Module_SecureRecords extends GW_Common_Module
 			WHERE user_id=$uid AND encrypted=$note $extra_cond
 				
 		");
+		
 		
 		//d::dumpas($q);
 		
