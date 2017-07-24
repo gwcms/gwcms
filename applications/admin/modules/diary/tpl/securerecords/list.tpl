@@ -15,7 +15,7 @@
 		update_time=>short_time,
 		username=>encrypteddisp,
 		pass=>encrypteddisp,
-		comments=>encrypteddisp,
+		comments=>encrypteddisp
 	]}
 	
 	
