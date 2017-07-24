@@ -107,7 +107,7 @@ class Module_SecureRecords extends GW_Common_Module
 		$set ="";
 		
 		foreach($enc_fields as $field)
-			$set .= "username=$f($field, SHA2('$enc_key',512)), ";
+			$set .= "$field=$f($field, SHA2('$enc_key',512)), ";
 		
 		$this->model->getDB()->query($q="
 			UPDATE 
