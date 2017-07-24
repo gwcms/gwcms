@@ -82,7 +82,7 @@ class Module_SecureRecords extends GW_Common_Module
 		
 		$this->model->getDB()->query($q="UPDATE `gw_secure_records` SET username=$f(username, UNHEX(SHA2('$enc_key',512))), encrypted=$e WHERE user_id=$uid AND encrypted=$note");
 		
-		d::dumpas($q);
+		//d::dumpas($q);
 		
 		$this->jumpAfterSave();
 	}
