@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Composition_Parts extends GW_Common_Module
+class Module_SecureRecords extends GW_Common_Module
 {	
 	use Module_Import_Export_Trait;
 	
