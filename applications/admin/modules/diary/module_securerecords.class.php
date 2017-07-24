@@ -93,7 +93,7 @@ class Module_SecureRecords extends GW_Common_Module
 			UPDATE 
 				`gw_secure_records` 
 			SET 
-				username=$f(username, '$enc_key'), 
+				username=$f(username, SHA2('$enc_key',512)), 
 				$extra_set
 			encrypted=$e 
 			WHERE user_id=$uid AND encrypted=$note $extra_cond
