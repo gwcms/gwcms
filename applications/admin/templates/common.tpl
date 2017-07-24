@@ -15,6 +15,7 @@
 	<a class="{if $indropdown}gwtoolbarbtn{else}gwtoolbarbtn btn btn-{$btnnormal|default:'default'} btn-active-{$btnactive|default:'primary'}{/if}" 
 	   {if $toggle}data-toggle="button" aria-pressed="false"{/if} 
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}">
+		{if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if}
 		{if $iconclass}<i class="{$iconclass}"></i>{/if} <span>{$title}</span>
 	</a>
 
