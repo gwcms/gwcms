@@ -86,7 +86,7 @@ class Module_SecureRecords extends GW_Common_Module
 		if($encrypt){
 			$extra_set = "test=AES_ENCRYPT('testcheck', '$enc_key'),";
 		}else{
-			$extra_cond="AND AES_DECRYPT(test)='testcheck'";
+			$extra_cond="AND AES_DECRYPT(test,'$enc_key')='testcheck'";
 		}
 		
 		$this->model->getDB()->query($q="
