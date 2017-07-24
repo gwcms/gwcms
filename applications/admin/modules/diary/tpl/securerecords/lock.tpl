@@ -4,7 +4,7 @@
 
 
 {include file="elements/input.tpl" name=encryptkey type=password}
-
+{include file="elements/input.tpl" name=encryptkey_repeat type=password}
 
 
 
