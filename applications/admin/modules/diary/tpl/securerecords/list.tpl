@@ -8,6 +8,10 @@
 {$dl_inline_edit=1}
 
 	{$do_toolbar_buttons[]='encrypt'}
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}			
+	
+	
 	{$dl_smart_fields=[encrypted,username]}	
 	
 	{function name=do_toolbar_buttons_encrypt}
