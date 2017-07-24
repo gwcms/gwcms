@@ -19,7 +19,7 @@
 	
 	{function dl_cell_encrypted}
 		<a href="{gw_path do=invertField params=[id=>$item->id,field=>encryped]}">
-			<i class="fa {if $item->encryped}fa-lock text-success{else}fa-unlock text-danger{/if}"></i>
+			<i class="fa {if $item->encrypted}fa-lock text-success{else}fa-unlock text-danger{/if}"></i>
 		</a>
 	{/function}	
 	
