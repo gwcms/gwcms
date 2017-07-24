@@ -9,10 +9,17 @@
 
 	{$do_toolbar_buttons[]='encrypt'}
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}			
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}	
+	{$dl_output_filters=[
+		insert_time=>short_time,
+		update_time=>short_time,
+		username=>encrypteddisp,
+		pass=>encrypteddisp,
+		comments=>encrypteddisp,
+	]}
 	
 	
-	{$dl_smart_fields=[encrypted,username]}	
+	{$dl_smart_fields=[encrypted]}	
 	
 	{function name=do_toolbar_buttons_encrypt}
 		{*{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}*}
@@ -28,13 +35,15 @@
 		</a>
 	{/function}
 
-	{function dl_cell_username}
+
+	
+	{function name=dl_output_filters_encrypteddisp}
 		{if $item->encrypted}
-			{base64_encode($item->username)}
+			{base64_encode($item->get($field))}
 		{else}
-			{$item->username}
+			{$item->get($field)}
 		{/if}
-	{/function}
+	{/function}		
 	
 	
 {/block}
