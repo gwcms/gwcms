@@ -8,8 +8,8 @@
 		{if in_array($field,[username,pass,comments])}
 			
 			{if $item->encrypted}
-				
-				{include file="elements/input.tpl" name=$field type=read value=base64encode($item->get($field))}
+				{$tmp=base64_encode($item->get($field))}
+				{include file="elements/input.tpl" name=$field type=read value=$tmp}
 			{else}
 				{include file="elements/input.tpl" name=$field type=text}
 			{/if}
