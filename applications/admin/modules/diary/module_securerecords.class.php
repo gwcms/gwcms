@@ -78,8 +78,10 @@ class Module_SecureRecords extends GW_Common_Module
 		$enc_key = GW_DB::escape($vals['encryptkey']);
 		$encrypt = $_POST['encrypt_1_decrypt_0'];
 		
-		if($encrypt && $vals['encryptkey']!=$vals['encryptkey_repeat'])
+		if($encrypt && $vals['encryptkey']!=$vals['encryptkey_repeat']){
 			$this->setError("Encrypt keys don't match");
+			$this->jumpAfterSave();
+		}
 			
 		
 		
