@@ -4,9 +4,14 @@
 	{*<td></td>*}
 	
 	{foreach $m->list_config.dl_fields as $field}
-					
+				{}	
 		{if in_array($field,[username,pass,comments, title])}
-			{include file="elements/input.tpl" name=$field type=text}
+			
+			{if $item->encrypted}
+				{include file="elements/input.tpl" name=$field type=read}
+			{else}
+				{include file="elements/input.tpl" name=$field type=text}
+			{/if}
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}
