@@ -153,7 +153,8 @@ class Module_SecureRecords extends GW_Common_Module
 			$select[]= "$f($field, SHA2('$enc_key',512)) AS $field ";
 		
 		$res = $this->model->find(['id=?', $id],['select'=>implode(',', $select)]);
-		d::ldump($res->toArray());
+		echo "<pre style='color:#eee'>";
+		print_r($res->toArray());
 		exit;
 	}
 	
