@@ -105,7 +105,10 @@ class Module_SecureRecords extends GW_Common_Module
 		
 		$affected = $this->model->getDB()->affected();
 		
-		$this->setMessage("Records $action: $affected");
+		if($affected)
+			$this->setMessage("Records $action: $affected");
+		else
+			$this->setMessage("Bad news");
 		
 		
 		//d::dumpas($q);
