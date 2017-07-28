@@ -59,8 +59,13 @@
 			
 			
 			<script type="text/javascript">
-				gwcms.initAutoresizeIframe('#comments', { minHeight: 100, heightOffset: 20, debug:true })
-				
+				require(['gwcms'],function(){
+					$(function() {				
+						gwcms.initAutoresizeIframe('#comments', { minHeight: 100, heightOffset: 20, debug:true })
+					});	
+
+
+				})					
 			</script>			
 			
 		</td>
