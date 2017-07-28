@@ -224,19 +224,29 @@ class GW_DB
 		$this->query($cmd, $nodie);
 
 		$result = [];
+		
+		
 
-		switch(mysqli_num_fields($this->result)){
+		switch($tmp=mysqli_num_fields($this->result)){
 			case 2:
-		while ($row = $this->result->fetch_array())
-			$result[$row[0]] = $row[1];
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]] = $row[1];
 			break;
 
 			case 3:
 				while ($row = $this->result->fetch_array())
 					$result[$row[0]][$row[1]] = $row[2];
 			break;
+			case 4:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]][$row[1]][$row[2]] = $row[3];
+			break;			
+			default:
+				$this->trigger_error($cmd, "FETCH ASSOC $tmp - NUM FIELDS NOT SUPPORTED");
+			break;
+			
 		}
-
+		
 		return $result;
 	}
 
