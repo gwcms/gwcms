@@ -17,6 +17,7 @@ class Module_Images extends GW_Common_Module
 		
 		$item = $this->getDataObjectById();
 		$item->rotate(0);
+		$item->deleteCached();
 		$this->app->jump();
 	}	
 /*	
