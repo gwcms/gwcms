@@ -6,7 +6,7 @@
 	{/if}
 {else}
 	
-	{if strpos($value,"http://")!==false || strpos($value,"https://")!==false}
+	{if $is_link}
 		<a href="{$value|escape}" title="{$value|escape}" target="_blank">{$value|escape|truncate:40}</a>
 	{else}
 		{$value}
