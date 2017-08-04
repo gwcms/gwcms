@@ -33,6 +33,8 @@
 	var changes_track={if $changes_track}1{else}0{/if};
 	
 	
+	
+	
 	require(['gwcms'], function(){
 		
 		$(function(){
@@ -44,6 +46,8 @@
 		})
 
 		$('#itemform').submit(function() {
+			$(this).trigger( "beforesubmitevents", [ "Custom", "Event" ] );
+			
 			window.onbeforeunload = null;
 		});	
 
