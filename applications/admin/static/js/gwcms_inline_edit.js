@@ -53,6 +53,11 @@ function fireInlineEdit(trigger)
 			loadRowAfterAjx(trobject, data);
 			$('#' + name).hide().addClass('inlineFormRowHidd');	
 			triggerLoading(trigger, 0);
+			
+			$('#inlineForm').submit(function( event ) {
+				submitInlineForm();
+				event.preventDefault();
+			})
 	});	
 }
 
@@ -88,12 +93,14 @@ function loadRowAfter(trobject, data, classn)
 		
 		classn = classn ? classn : 'inlineFormRow';
 		
+		
 		trobject.after('<tr id="' + name + '_after" class="' + classn + '" data-id="' + id + '">' + data + '</tr>');
 }
 
+
 function submitInlineForm()
 {
-	
+		$( "#inlineForm").trigger( "beforesubmitevents", [ "Custom", "Event" ] );
 		
 		var inlineformrow = $('.inlineFormRow');
 		inlineformrow.find(':input').attr('form', 'inlineForm');
@@ -104,13 +111,15 @@ function submitInlineForm()
 		
 		//triggerLoading(trigg, 1);
 
-		$.post($("#inlineForm").attr('action'), $("#inlineForm").serialize()+'&inlistform=1&ajax=1',
+		$.post($("#inlineForm").attr('action')+'&time='+new Date().getTime(), $("#inlineForm").serialize()+'&inlistform=1&ajax=1',
 				function (data, status, request) {
 						
 						if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
 						{
 							
 								rowobj.after(data);
+								
+								
 								
 								
 								if(inlineformrow.attr('data-id')!='0')

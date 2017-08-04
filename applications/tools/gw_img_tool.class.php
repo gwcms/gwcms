@@ -47,7 +47,7 @@ class GW_Img_Tool
 		}
 
 
-		if(isset($params['width']) || isset($params['height']))
+		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset']))
 			$item->resize($params);
 
 

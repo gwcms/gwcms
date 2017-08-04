@@ -16,6 +16,7 @@ class GW_Image_Resize_Helper
 		    '' . (int) $params['width'] . 'x' . (int) $params['height'] .
 		    '__' . pathinfo($filename, PATHINFO_FILENAME) . '__' .
 		    (isset($params['method']) ? $params['method'] : '') .
+			md5(json_encode($params)).
 		    '.jpg'; // use jpg extension to all types
 	}
 
@@ -63,7 +64,7 @@ class GW_Image_Resize_Helper
 
 		$destination = self::getCacheFileName($item->getFilename(), $params);
 
-		if (file_exists($destination))
+		if (!isset($params['nocache']) && file_exists($destination))
 			return self::formatResult($item, $destination);
 
 		if (!self::resize($item, $params, $destination))

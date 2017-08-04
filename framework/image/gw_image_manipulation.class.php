@@ -70,6 +70,8 @@ class GW_Image_Manipulation
 
 		// create new image
 		$image_resized = imagecreatetruecolor($rw, $rh);
+		
+
 
 
 
@@ -116,6 +118,29 @@ class GW_Image_Manipulation
 		// calculate destination position
 		$dx = floor($rw / 2 - $arw / 2);
 		$dy = floor($rh / 2 - $arh / 2);
+		
+		
+		$zoom = isset($_GET['zoom']) ? $_GET['zoom'] : 1;
+		
+		if(isset($_GET['offset'])){
+			list($ox,$oy) = explode(',',$_GET['offset']);
+			$dx = -$arw*$zoom*$ox;
+			$dy = -$arh*$zoom*$oy;
+		}
+
+		$arw=$arw*$zoom;
+		$arh=$arh*$zoom;
+		
+		
+		if(isset($_GET['debug'])){
+			d::ldump([
+			    'resized_image'=>['width'=>$rw, 'height'=>$rh],
+			    'original_image'=>['width'=>$this->width, 'height'=>$this->height],
+			    'destination_position'=>['x'=>$dx, 'y'=>$dy],
+			    'ar'=>[$arw, $arh]
+			]);
+			exit;
+		}
 
 		// copy image depending on resize method
 		switch ($method) {
