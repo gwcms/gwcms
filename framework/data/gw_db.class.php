@@ -34,15 +34,25 @@ class GW_DB
 		list($user, $uphd) = explode(':', $uphd, 2);
 		list($pass, $uphd) = explode('@', $uphd, 2);
 		list($host, $database) = explode('/', $uphd, 2);
+		
+		$tmp=explode(':',$host,2);
+		if(count($tmp)>1)
+		{
+			$host = $tmp[0];
+			$port = $tmp[1];
+		}else{
+			$port = 3306;
+		}
+		
 
-		return Array($user, $pass, $host, $database);
+		return Array($user, $pass, $host, $database, $port);
 	}
 
 	function connect($updh, $newlink = false)
 	{
-		list($user, $pass, $host, $database) = $updh;
-
-		$this->link = new mysqli($host, $user, $pass, $newlink) or $this->trigger_error();
+		list($user, $pass, $host, $database, $port) = $updh;
+		
+		$this->link = new mysqli($host, $user, $pass, $database, $port) or $this->trigger_error();
 		if ($database)
 			$this->link->select_db($database) or $this->trigger_error();
 
@@ -224,13 +234,13 @@ class GW_DB
 		$this->query($cmd, $nodie);
 
 		$result = [];
-		
+
 		
 
 		switch($tmp=mysqli_num_fields($this->result)){
 			case 2:
-				while ($row = $this->result->fetch_array())
-					$result[$row[0]] = $row[1];
+		while ($row = $this->result->fetch_array())
+			$result[$row[0]] = $row[1];
 			break;
 
 			case 3:
@@ -246,7 +256,7 @@ class GW_DB
 			break;
 			
 		}
-		
+
 		return $result;
 	}
 
