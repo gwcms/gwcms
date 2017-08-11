@@ -97,7 +97,7 @@ class Module_Messages extends GW_Common_Module
 			$item = $messages[0];
 			$data["body"]=$item->message;
 			$data['title']=$item->subject;
-			$data["icon"] = $this->app->app_root.'img/logo/logo_with_ltr_color.png';
+			$data["icon"] = $this->app->app_root.'static/img/logo_push_messages.png';
 			$data['tag'] = 'simple-push-demo-notification-tag';
 			$data["url"] =  Navigator::getBase();
 			
