@@ -872,4 +872,9 @@ class GW_Data_Object
 	{
 		$this->fireEvent('PREPARE_SAVE');
 	}
+	
+	function multiInsert($list, $replace=true)
+	{
+		$this->getDB()->multi_insert($this->table, $list, $replace);
+	}	
 }
