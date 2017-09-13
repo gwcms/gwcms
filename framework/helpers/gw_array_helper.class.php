@@ -123,5 +123,34 @@ class GW_Array_Helper
 		});
 
 		return true;
+	}
+
+
+	/**
+	 * you give var, key array, and you get pointer to 
+	 * 
+	 * set
+	 * GW_Array_Helper::getPointer2XlevelAssocArr($x, [a,b,c], 123);
+	 * or
+	 * $p =& GW_Array_Helper::getPointer2XlevelAssocArr($vals, explode('/', $id));
+	 * $p = 123;
+	 * 
+	 * --after--
+	 * print_r($x): [a=>[b=>[c=>123]]]
+	 * 
+	 * get
+	 * echo GW_Array_Helper::getPointer2XlevelAssocArr($x, [a,b,c]);
+	 * : 123
+	 */
+	static function &getPointer2XlevelAssocArr(&$var, $keys, $value=null)
+	{
+
+		foreach ($keys as $part)
+			$var = & $var[$part];
+
+		if ($value !== Null)
+			$var = $value;
+
+		return $var;
 	}	
 }

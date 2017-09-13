@@ -199,16 +199,15 @@ class GW_DB
 		
 		if(is_array($key))
 		{
-			switch(count($key)){
-				case 2:
-					while ($row = $this->result->fetch_assoc())
-						$result[$row[$key[0]]][$row[$key[1]]] = $row;	
-				break;
-				case 3:
-					while ($row = $this->result->fetch_assoc())
-						$result[$row[$key[0]]][$row[$key[1]]][$row[$key[2]]] = $row;
-				break;
-		
+			$lastidx = array_pop($key);
+			
+			while ($row = $this->result->fetch_assoc()){
+								
+				$idx = [];
+				foreach($key as $fld)
+					$idx[] = $row[$fld];
+
+				GW_Array_Helper::getPointer2XlevelAssocArr($result, $idx, $row[$lastidx]);
 			}
 		}else{
 			while ($row = $this->result->fetch_assoc())
