@@ -18,7 +18,7 @@
 
 					
 <script>require(['vendor/bootstrap-datepicker/js'], function(){
-		//$('.gwcms-dp-component .date').datepicker({ autoclose:true, format: 'yyyy-mm-dd', language:'{$ln}', todayHighlight: true });
+		$('.gwcms-dp-component .date').datepicker({ autoclose:true, format: 'yyyy-mm-dd', language:'{$ln}', todayHighlight: true });
 	});
 	   
 </script>					
