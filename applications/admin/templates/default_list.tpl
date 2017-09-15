@@ -25,6 +25,13 @@
 	{else}
 		{$item->get($field)|escape}
 	{/if}
+	
+	{if isset($dl_calc_totals[$field])}
+		{$dl_calc_totals[$field]=$dl_calc_totals[$field]+$item->$field}
+
+		{assign var=dl_calc_totals value=$dl_calc_totals scope=global}	
+	{/if}		
+	
 {/function}
 
 {function dl_proc_th_cell}
@@ -43,7 +50,7 @@
 
 {function dl_list_proc_rows}
 
-	{foreach from=$list item=item}
+	{foreach from=$list item=item}		
 		{$id=$item->id}
 		{$list_row_id=$list_row_id+1}
 
@@ -62,7 +69,7 @@
 			{if $item->list_color}style="background-color:{$item->list_color}"{/if}>
 
 			{block name="item_row"}
-				{foreach $dl_fields as $field}
+				{foreach $dl_fields as $field}				
 					<td class="dl_cell_{$field}">
 						{call dl_proc_row_cell}
 					</td>
@@ -235,10 +242,26 @@
 			{/if}
 		</div>
 
+		
+		
+		
+		{if $dl_calc_totals}
+			<table class="gwTable mar-top mar-btm gwExtraInfo clear">
+				<tr><th colspan="2" class="th_h3 th_single">Totals</th></tr>
 
+				{foreach $dl_calc_totals as $field => $total}
+					<tr>
+						<td nowrap align="right"><i>{$app->fh()->fieldTitle($field)}</i></td>
+						<td>
+							{$total}
+						</td>
+					</tr>		
+				{/foreach}
+			</table>			
+		{/if}
 		
 
-		{block name="after_list"}
+		{block name="after_list"}		
 		{/block}
 
 
