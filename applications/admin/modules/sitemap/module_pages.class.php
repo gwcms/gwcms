@@ -93,5 +93,12 @@ class Module_Pages extends GW_Common_Module_Tree_Data {
 			$this->afterParentIdChanges($item);
 		}
 	}
+	
+	function doPreview()
+	{
+		$item = $this->getDataObjectById();
+		
+		header('Location: /'.$this->app->ln.'/'.$item->path);
+	}
 
 }

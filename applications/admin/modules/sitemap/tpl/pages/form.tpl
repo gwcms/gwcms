@@ -1,3 +1,15 @@
+{include file="common.tpl"}
+
+{function name=do_toolbar_buttons_preview} 
+	{toolbar_button 
+		title="Peržiūrėti svetainėje" 
+		iconclass='fa fa-external-link' 
+		href=$app->buildUri(false,[act=>doPreview,id=>$item->id]) 
+		tag_params=[target=>'_blank', title=>"Peržiūrėti svetainėje"]}
+{/function}	
+	
+{$do_toolbar_buttons[]=preview}
+
 {include file="default_form_open.tpl" form_width="100%"}
 {$width_title=100px}
 
@@ -25,7 +37,7 @@
 {if $update}
 	{include file="elements/input.tpl" type=bool name=in_menu}
 	
-	
+	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
 	{foreach $item->getInputs() as $input}
 		{include file="elements/input.tpl" 
