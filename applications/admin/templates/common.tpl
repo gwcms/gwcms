@@ -15,10 +15,14 @@
 	<a class="{if $indropdown}gwtoolbarbtn{else}gwtoolbarbtn btn btn-{$btnnormal|default:'default'} btn-active-{$btnactive|default:'primary'}{/if} {$btnclass}" 
 	   {if $toggle}data-toggle="button" aria-pressed="false"{/if} 
 	   {if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if}
+	   {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}">
 		{if $iconclass}<i class="{$iconclass}"></i>{/if} <span>{$title}</span>
 	</a>
 
+	{if strpos($btnclass, 'iframeopen')!==false}
+		<script>require(['gwcms'], function(){ gw_adm_sys.init_iframe_open(); }) </script>
+	{/if}
 
 {/function}
 
