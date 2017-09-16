@@ -108,6 +108,11 @@
 		
 	</i>
 	
+	<i id="VIEWS">
+		<i id="doPreview">Peržiūrėti svetainėje</i>	
+	</i>
+	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
+	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">

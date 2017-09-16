@@ -1,14 +1,16 @@
+{*
 {include file="common.tpl"}
 
 {function name=do_toolbar_buttons_preview} 
 	{toolbar_button 
-		title="Peržiūrėti svetainėje" 
+		title=GW::l('/m/VIEWS/doPreview') 
 		iconclass='fa fa-external-link' 
 		href=$app->buildUri(false,[act=>doPreview,id=>$item->id]) 
-		tag_params=[target=>'_blank', title=>"Peržiūrėti svetainėje"]}
+		tag_params=[target=>'_blank']}
 {/function}	
 	
 {$do_toolbar_buttons[]=preview}
+*}
 
 {include file="default_form_open.tpl" form_width="100%"}
 {$width_title=100px}
@@ -51,5 +53,18 @@
 	{/foreach}
 	
 {/if}
+
+
+
+
+{function name=df_submit_button_preview}
+		<a target="_blank"
+			class="btn btn-default pull-right"  
+			onclick="if(event.shiftKey || event.ctrlKey){ window.open(gw_navigator.url(this.href,{ 'shift_key':1 }), '_blank');return false }"
+			href="{$app->buildUri(false,[act=>doPreview,id=>$item->id]) }" 
+			style="margin-left:2px;" title="{GW::l('/m/PREVIEW_SHIFTKEY')}"><i class="fa fa-external-link"></i> {GW::l('/m/VIEWS/doPreview') }</a>
+{/function}
+
+{$submit_buttons=[save,apply,preview,cancel]}
 
 {include file="default_form_close.tpl" extra_fields=[id,path,insert_time,update_time]}

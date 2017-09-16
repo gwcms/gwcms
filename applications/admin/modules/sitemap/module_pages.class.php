@@ -98,7 +98,15 @@ class Module_Pages extends GW_Common_Module_Tree_Data {
 	{
 		$item = $this->getDataObjectById();
 		
-		header('Location: /'.$this->app->ln.'/'.$item->path);
+		
+		$args=[];
+		
+		if(isset($_GET['shift_key']))
+			$args['clean']=1;
+		
+		
+		
+		header('Location: /'.$this->app->ln.'/'.$item->path.($args ? '?'. http_build_query($args): ""));
 	}
 
 }
