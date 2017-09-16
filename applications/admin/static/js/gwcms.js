@@ -162,7 +162,9 @@ var gw_adm_sys = {
 			if(!title)
 				title = $(this).text();
 			
-			gwcms.open_dialog2({ url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:800 })	
+			var dialogwidth = $(this).data('dialog-width') ? $(this).data('dialog-width') : 800;
+			
+			gwcms.open_dialog2({ url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:dialogwidth })	
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);
@@ -347,7 +349,7 @@ var gwcms = {
 
 		$('#' + id).dialog(dconf);
 	},
-	
+		
 	close_callback: false,
 	
 	open_dialog2: function (conf)
@@ -824,7 +826,7 @@ var gw_sortable =
 						gw_navigator.jump(false, params);
 				}
 		}
-
+		
 
 
 jQuery.cookie = function (name, value, options) {
