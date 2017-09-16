@@ -23,5 +23,13 @@ class Module_Projects extends GW_Common_Module
 		return $cfg;
 	}	
 	
+	function viewOptions()
+	{
+		$opts = $this->model->getOptions();
+		
+		echo json_encode($opts);
+		exit;
+	}
+	
 	
 }

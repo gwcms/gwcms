@@ -70,10 +70,11 @@
 		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			
-			<div class="input-group" style="width:100%">
+			{if $after_input}
+				<div class="input-group" style="width:{$btngroup_width|default:"290px"}">
+			{/if}
+			
 
-
-    
 			{include file="elements/input0.tpl"}
 			
 			{if $layout=='inline'}
@@ -82,9 +83,11 @@
 				{/if}
 			{/if}
 			
-			{$after_input}
+			{if $after_input}
+				{$after_input}
 			
-			</div>
+				</div>
+			{/if}
 		</td>
 	{/if}
 {/capture}
