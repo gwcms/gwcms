@@ -88,6 +88,11 @@ var gw_navigator = {
 		if (typeof params == 'object')
 		{
 			url = gw_navigator.explode_url(url);
+			
+			if(params.baseadd){
+				url.base += params.baseadd
+				delete params.baseadd;
+			}
 
 			$.extend(url.query, params);
 			url = gw_navigator.implode_url(url);
@@ -157,7 +162,7 @@ var gw_adm_sys = {
 		});
 	},
 	init_iframe_open: function(){
-		$(".iframeopen:not([data-initdone='1'])").click(function(event){
+		$(".iframeopen:not([data-initdone='1'])").click(function(event){			
 			var title = $(this).attr('title');
 			if(!title)
 				title = $(this).text();

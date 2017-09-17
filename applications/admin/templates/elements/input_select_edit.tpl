@@ -27,21 +27,57 @@ module should have viewOptions viewForm
 					
 				jQuery.fn.extend({
 				  selEditUpdate: function(id) {
-							url = this.data('url');
+							var url = this.data('url');
 							
-							url = gw_navigator.url(url+'/options', { id: id, clean:2, dialog:1 })
+							var args = { baseadd:'/options', clean:2, dialog:1 };
+							
+							if(id) args[id] = id;
+							
+							url = gw_navigator.url(url, args)
 							
 							var sel = this;
 							
 							$.get({
 								url: url,
 								success: function(data){ 
-									sel.find("[value='"+id+"']").text(data[id]);
+									
+									if(id){
+										sel.find("[value='"+id+"']").text(data[id]);
+									}else{
+										//uzkrauti visa sarasa
+										var seledtedval = sel.val();
+										var isssetval = sel.selEditIsValueSet();
+										
+										if( isssetval )
+											sel.find(':selected').remove()
+										
+										for(var key in data)
+										{
+											sel.append($("<option />").val(key).text(data[key]));
+										}
+										
+										if( isssetval )
+											sel.val(seledtedval);
+																			
+									}
 									$('.selectpicker').selectpicker('refresh');
 								},
 								dataType: 'json'
 							      });
 				  },
+				  selEditIsValueSet: function(){
+					  return $(this).val() && $(this).val()!='0';
+				  },
+				  selEditIsActiveEdit: function(){
+					  var index=$(this).data('input-index');	
+						
+						
+					if( this.selEditIsValueSet() ){
+						$('.edSelForm'+index).removeClass('disabled').prop( "disabled", false );
+					}else{
+						$('.edSelForm'+index).addClass('disabled').prop( "disabled", true );
+					}
+				  }
 				});					
 					
 					
@@ -52,7 +88,7 @@ module should have viewOptions viewForm
 						var url = sel.data('url')
 						var id = sel.val();
 						
-						url = gw_navigator.url(url+'/form', { id: 0, clean:2, dialog:1 })						
+						url = gw_navigator.url(url, { baseadd:'/form', id: 0, clean:2, dialog:1 })						
 						
 						var selecthappend = function(context){ 
 							console.log(context)
@@ -83,7 +119,7 @@ module should have viewOptions viewForm
 						var url = sel.data('url')
 						var id = sel.val();
 						
-						url = gw_navigator.url(url+'/'+id+'/form', { id: id, clean:2, dialog:1 })
+						url = gw_navigator.url(url, { baseadd: '/'+id+'/form', id: id, clean:2, dialog:1 })
 						
 						var selecthappend = function(){ sel.selEditUpdate(id) }
 						
@@ -94,18 +130,16 @@ module should have viewOptions viewForm
 					
 					
 					$(".editSelect select:not([data-initdone='1'])").change(function(){
-
+						$(this).selEditIsActiveEdit();
+					}).each(function(){
 						
-						var index=$(this).data('input-index');	
-						
-						
-						if(!(this.value-0)){
-							$('.edSelForm'+index).addClass('disabled').prop( "disabled", true );
-						}else{
-							$('.edSelForm'+index).removeClass('disabled').prop( "disabled", false );
+						//load options if it is not present
+						if($(this).data('ajaxload'))
+						{
+							$(this).selEditUpdate(false)
 						}
 						
-						
+						$(this).selEditIsActiveEdit();
 						
 					}).attr('data-initdone',1);
 					
@@ -122,10 +156,30 @@ module should have viewOptions viewForm
 {/capture}
 
 
+
 {$tag_params=["data-input-index"=>$GLOBALS.input_edit_select,"data-url"=>$datasource]}
 
+
+
+{if !$options}
+	
+	{if !$value}
+		{$value=$item->$name|default:$default}
+	{/if}	
+	
+	{if $value}
+		{$options=[$value=>'Loading...']}
+	{else}
+		{$options=[]}
+	{/if}
+	
+	
+	{$tag_params["data-ajaxload"]=1}
+	{$tag_params["data-selected"]=$value}
+{/if}
+
 {include file="elements/input.tpl" 
-	type="select_plain"
+	type="select"
 	after_input=$addnew
 	class="`$class` editSelect editSelect`$GLOBALS.input_edit_select`"
 	btngroup_width="150px"
