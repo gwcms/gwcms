@@ -33,7 +33,7 @@ class GW_String_Helper
 		return $str;
 	}
 
-	function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
+	static function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
 	{
 		if ($length == 0)
 			return '';
@@ -51,5 +51,10 @@ class GW_String_Helper
 		} else {
 			return $string;
 		}
+	}
+	
+	static function mb_strcmp($s1, $s2) {
+		return strcmp(
+			iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $s1), iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $s2));
 	}
 }
