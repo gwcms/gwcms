@@ -270,7 +270,7 @@ class GW_Module
 		return $tmp;
 	}
 	
-	function processTemplate($soft=1)
+	function processTemplate($fromstring=false)
 	{
 		
 		$this->fireEvent("BEFORE_TEMPLATE");
@@ -278,15 +278,16 @@ class GW_Module
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
 		
-		
+		if($fromstring){
+			return $this->smarty->fetch('string:' . $fromstring);
+		}else{
+			$tpl_name = $this->getTemplateName();
 
-		$tpl_name = $this->getTemplateName();
-				
-		$this->smarty->display($tpl_name);
+			$this->smarty->display($tpl_name);
+			
+		}
 	}
 	
-
-
 	function __funcVN($str)
 	{
 		if(!$str)
