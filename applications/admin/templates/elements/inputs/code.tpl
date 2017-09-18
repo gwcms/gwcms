@@ -7,13 +7,32 @@
 		var {$id}editor = ace.edit("{$id}_aceeditor");
 		//editor.setTheme("ace/theme/twilight");
 		{$id}editor.session.setMode("ace/mode/{$codelang}");
-
-
+			
 		var {$id}textarea = $('#{$id}');
 		{$id}editor.getSession().setValue({$id}textarea.val());
 		{$id}editor.getSession().on('change', function(){
 			{$id}textarea.val({$id}editor.getSession().getValue());
+			{$id}textarea.change();	//track changes wont work without this
 		});   	
+		
+		//all that shit is needed to initiate editor if it is hidden@startup
+		setTimeout(function(){
+			if(!$("#{$id}_aceeditor").is(':visible')){
+
+				{$id}editorinterval=setInterval(function(){
+						
+					if($("#{$id}_aceeditor").is(':visible')){
+						{$id}editor.resize() ;
+						{$id}editor.renderer.updateFull() ;
+						clearInterval({$id}editorinterval);
+					}
+				}, 1000);
+			}
+		},1000);
+		
+	
+
+
 	})
 </script>
 
