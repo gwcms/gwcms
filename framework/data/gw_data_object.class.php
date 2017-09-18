@@ -876,5 +876,31 @@ class GW_Data_Object
 	function multiInsert($list, $replace=true)
 	{
 		$this->getDB()->multi_insert($this->table, $list, $replace);
+	}
+	
+	function attachAssocRecs($list, $fieldname, $obj_classname, $options=[])
+	{
+		$ids = [];
+		foreach($list as $itm){
+			if($itm->$fieldname)
+			$ids[$itm->$fieldname]=$itm->$fieldname;
+		}
+		
+		$o = new $obj_classname;
+			
+		if(!$ids)
+			return false;
+		
+		$cond = GW_DB::inCondition('id', $ids);
+				
+		if(isset($options['simple_options']))
+		{
+			$key=$options['simple_options'];
+			return $o->getAssoc(['id', $key], $cond);
+		}else{
+			return $o->findAll($cond, ['key_field'=>'id']);
+		}	
 	}	
+	
 }
+
