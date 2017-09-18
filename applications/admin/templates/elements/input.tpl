@@ -32,6 +32,16 @@
 {$title=$title|default:$m->fieldTitle($name)}
 
 
+{if !$input_id}
+	{$input_id=$name}
+	{$input_id=str_replace(["[","]"],'__',$input_id)}
+	{$input_id=str_replace("/",'___',$input_id)}
+{/if}
+
+
+
+
+
 {function input_label}
 	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
@@ -100,13 +110,13 @@
 	<tr class="{$rowclass}">
 		{call input_label}
 	</tr>
-	<tr id="gw_input_{$name}"  class="{$rowclass}">
+	<tr id="gw_input_{$input_id}"  class="{$rowclass}">
 		{$input_content}
 	</tr>
 {elseif $layout=='inline'}
 	{$input_content}
 {else}
-	<tr id="gw_input_{$name}"  class="{$rowclass}">
+	<tr id="gw_input_{$input_id}"  class="{$rowclass}">
 		{call input_label}
 		{$input_content}
 	</tr>
