@@ -767,16 +767,20 @@ class GW_Common_Module extends GW_Module
 
 	//used to allow user edit field list	
 	function getDisplayFields($fields)
-	{
-				
-		//d::Dumpas($this->list_params['views']);
-				
+	{	
+		$saved = [];
+		
 		if(isset($this->list_params['fields']))
 		{
 			$saved = $this->list_params['fields'];
 			
-		}else{
-			$saved = (array) $this->app->page->fields;
+		}elseif(isset($this->tpl_vars['views']) && count($this->tpl_vars['views'])){
+			
+			foreach($this->tpl_vars['views'] as $pview)
+				if($pview->default)
+					break;
+			
+			$saved = (array) json_decode($pview->fields, true);
 		}
 		
 		//prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
