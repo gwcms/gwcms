@@ -12,4 +12,7 @@
 	{$dl_actions=[edit,clone,delete]}
 	
 	
+	{$dl_calc_totals.profit=0}
+	
+	
 {/block}
