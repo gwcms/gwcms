@@ -47,7 +47,14 @@
 					<i id="icon"><![CDATA[<i class="fa fa-key"></i>]]></i>
 					<i id="model">GW_Secure_Record</i>
 				</i>
-			</i>						
+			</i>	
+			<i id="invest">
+				<i id="title">Investavimas</i>
+				<i id="info">
+					<i id="icon"><![CDATA[<i class="fa fa-money"></i>]]></i>
+					<i id="model">GW_Diary_Invest</i>
+				</i>
+			</i>									
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
