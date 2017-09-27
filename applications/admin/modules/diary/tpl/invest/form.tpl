@@ -15,4 +15,4 @@
 
 
 
-{include file="default_close.tpl"}
+{include file="default_form_close.tpl"}
