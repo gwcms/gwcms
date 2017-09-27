@@ -9,7 +9,7 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,clone,delete]}
 	
 	
 {/block}
