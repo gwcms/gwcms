@@ -2,6 +2,8 @@
 
 
 {include file="elements/input.tpl" name=sum}
+{include file="elements/input.tpl" name=object}
+
 {include file="elements/input.tpl" name=platform}
 {include file="elements/input.tpl" name=strategy type=textarea height="50px" autoresize=1}
 
