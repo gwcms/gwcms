@@ -12,6 +12,11 @@
 	{$dl_actions=[edit,clone,delete]}
 	
 	
+	{$dl_output_filters=[
+		insert_time=>short_time,
+		update_time=>short_time
+		]}
+	
 	{$dl_calc_totals.profit=0}
 	
 	
