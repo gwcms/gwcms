@@ -153,4 +153,21 @@ class GW_Array_Helper
 
 		return $var;
 	}	
+	
+	/**
+	 * transform to multilevel array
+	 */
+	static function restruct2MultilevelArray(&$vals)
+	{
+		foreach($vals as $id => $data)
+		{
+			if(strpos($id, '/')!==false){
+				
+				$p =& GW_Array_Helper::getPointer2XlevelAssocArr($vals, explode('/', $id));
+				$p = $data;
+				
+				unset($vals[$id]);
+			}
+		}		
+	}	
 }

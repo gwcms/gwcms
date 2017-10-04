@@ -29,7 +29,10 @@
 	<lt>Taikyti</lt>
 </i>
 
-
+<i id="EXECUTE">
+	<en>Execute</en>
+	<lt>Vykdyti</lt>
+</i>
 <i id="UPDATE">
 	<en>Refresh</en>
 	<lt>Atnaujinti</lt>
