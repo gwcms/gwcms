@@ -46,7 +46,7 @@
 	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
-				{if $m->lang.FIELD_NOTE.$name}
+				{if isset($m->lang.FIELD_NOTE.$name)}
 					{$hidden_note=$m->lang.FIELD_NOTE.$name}
 				{/if}
 			{/if}
