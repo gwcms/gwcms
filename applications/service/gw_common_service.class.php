@@ -168,7 +168,7 @@ class GW_Common_Service
 		if (isset($response['error_code']) && strpos($response['error_code'], '/') === 0)
 			$response['error_human'] = GW::l($response['error_code']);
 
-		echo json_encode($response, JSON_PRETTY_PRINT);
+		echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 		exit;
 	}
 
