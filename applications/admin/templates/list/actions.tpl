@@ -18,8 +18,8 @@
 		
 	{if !$title && ($url.1.act || $url.0)}
 		{$searchkey=$url.1.act|default:basename($url.0)}
-		{if $app->lang.VIEWS[$searchkey]}{$title=$app->lang.VIEWS[$searchkey]}{/if}
-		{if $m->lang.VIEWS[$searchkey]}{$title=$m->lang.VIEWS[$searchkey]}{/if}
+		{if isset($app->lang.VIEWS[$searchkey])}{$title=$app->lang.VIEWS[$searchkey]}{/if}
+		{if isset($m->lang.VIEWS[$searchkey])}{$title=$m->lang.VIEWS[$searchkey]}{/if}
 	{/if}
 	
 
