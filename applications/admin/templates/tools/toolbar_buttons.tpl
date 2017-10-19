@@ -25,7 +25,7 @@
 	<script type="text/javascript">
 		function lds_config(obj)
 		{
-			gwcms.open_dialog2({ url: '{$m->buildURI('dialogconfig')}', iframe:1, title:$(obj).text() })
+			gwcms.open_dialog2({ url: '{$m->buildURI('dialogconfig',[listpar_updatetime=>$m->list_params.updatetime])}', iframe:1, title:$(obj).text() })
 		}
 	</script>
 	{/capture}
@@ -64,16 +64,16 @@
 	{/capture}
 {/function}
 
-{function name=do_toolbar_buttons_hidden}
+{function name=do_toolbar_buttons_dropdown}
 
 	
 						<div class="btn-group">
 						
 					                            <a type="button" data-toggle="dropdown" class="gwtoolbarbtn btn btn-default btn-active-dark dropdown-toggle dropdown-toggle-icon">
-					                                <i class="gwico-Menu-Filled"></i> 
+					                                <i class="{$groupiconclass}"></i> {if $grouptitle}<span>{$grouptitle}</span>{/if}
 					                            </a>
 					                            <ul class="dropdown-menu">
-			{foreach $do_toolbar_buttons_hidden as $button_func}
+			{foreach $do_toolbar_buttons_drop as $button_func}
 				{if $button_func=='divider'}
 					<li class="divider"></li>
 				{else}
@@ -84,16 +84,11 @@
 					                        </div>	
 	
 	
-	{*
-	<div class="unhideroot" style="">
-		<img class="visible unhidetrigger" align="absmiddle" src="{$app->icon_root}action_down24.png">
+{/function}
 
-		<div class="dropdown">
-	
-		</div>
-	</div>
 
-	*}
+{function name=do_toolbar_buttons_hidden}
+	{call name="do_toolbar_buttons_dropdown" do_toolbar_buttons_drop=$do_toolbar_buttons_hidden groupiconclass="gwico-Menu-Filled"}
 {/function}
 
 {function name=do_toolbar_buttons_importdata} 
