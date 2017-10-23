@@ -35,9 +35,23 @@ class Module_Users extends GW_Common_Module
 	
 	function doLoginAs()
 	{
-		$_SESSION[PUBLIC_AUTH_SESSION_KEY] = ['user_id'=>$_GET['user_id'], 'ip_address'=>$_SERVER['REMOTE_ADDR']];
+		//$_SESSION[PUBLIC_AUTH_SESSION_KEY] = ['user_id'=>$_GET['user_id'], 'ip_address'=>$_SERVER['REMOTE_ADDR']];
+		//Header('Location: '.Navigator::getBase().$_GET['redirect_url']);
 		
-		Header('Location: '.Navigator::getBase().$_GET['redirect_url']);
+		if(!$item = $this->getDataObjectById())
+			return;
+		
+		$this->canBeAccessed($item, true);	
+		
+		// jei ne root tai neleisti pasikeisti i root
+		
+		// jei admin grupej iseiti
+		
+		
+		$this->app->auth->switchUser($item->id);
+		
+		$this->jump();			
+		
 	}
 	
 	function eventHandler($event, &$context) 
