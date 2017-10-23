@@ -189,9 +189,10 @@ class GW_Auth
 
 	function switchUser($id)
 	{
-		if (!$this->session['switchUser'])
-			$this->session['switchUser'] = $this->session['user_id'];
-
+		//if (!$this->session['switchUser'])
+		//	$this->session['switchUser'] = $this->session['user_id'];
+		
+		$this->session['switchUser'] = $this->session['user_id'];
 		$this->session['user_id'] = $id;
 	}
 
@@ -200,4 +201,15 @@ class GW_Auth
 		$this->session['user_id'] = $this->session['switchUser'];
 		unset($this->session['switchUser']);
 	}
+	
+	function isUserSwitched()
+	{
+		return isset($this->session['switchUser']);
+	}
+	
+	function getOrigUser()
+	{
+		return $this->session['switchUser'];
+	}
+	
 }

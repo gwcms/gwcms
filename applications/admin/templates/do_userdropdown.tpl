@@ -49,6 +49,16 @@
 					<i class="ti-email icon-fw icon-lg"></i> {GW::l('/M/USERS/MESSAGES')}
 				</a>
 			</li>
+			
+			
+			{if $app->auth->isUserSwitched()}
+			<li>
+				<a href="{$app->buildUri('users/profile',[act=>doSwitchUserReturn])}">
+					<i class="ti-angle-double-left icon-fw icon-lg" style='font-size:20px'></i> {$usrret=$app->user->find(['id=?',$app->auth->getOrigUser()])} {sprintf(GW::l('/g/SWITCH_USER_RETURN'),"<b>`$usrret->title`</b>")}
+				</a>
+			</li>
+			{/if}
+			
 			{*
 			<li>
 				<a href="#">
