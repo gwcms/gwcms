@@ -635,9 +635,13 @@ class GW_Data_Object
 
 			if (is_array($validator))
 				list($validator, $params) = $validator;
-
-			if ($err = GW_Validator::getErrors($validator, $this->get($fieldname), $params))
-				$this->setError($err[0], $fieldname);
+			
+			if(strpos($validator,'func_')===0){
+				$this->{substr($validator, 5)}($fieldname, $params);
+			}else{
+				if ($err = GW_Validator::getErrors($validator, $this->get($fieldname), $params))
+					$this->setError($err[0], $fieldname);
+			}
 		}
 		return $this->errors ? false : true;
 	}
