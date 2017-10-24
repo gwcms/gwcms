@@ -375,7 +375,7 @@ var gwcms = {
 
 		 console.log(conf);
 
-		require(["gwcms","js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function (test) {
+		require(["iframeautoheight"], function (test) {
 
 			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
 
@@ -414,7 +414,7 @@ var gwcms = {
 	
 	initAutoresizeIframe: function(selector, cfg, callback)
 	{
-		require(["js/jq/browser", "js/jq/jquery.iframe-auto-height.plugin"], function () {
+		require(["iframeautoheight"], function () {
 			if(!cfg)
 				cfg = {minHeight: 200, maxHeight: $("body").innerHeight() - 250, minWidth: 200, maxWidth: $("body").innerWidth() - 250, heightOffset: 10, widthOffset: 60/*, debug:true */};
 			
