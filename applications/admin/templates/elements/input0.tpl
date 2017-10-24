@@ -6,7 +6,7 @@
 
 {if !$input_name_pattern}
 	{$input_name_pattern="item[%s]"}
-	{if $type=='multiselect' || $type=='multiselect_checkboxes'}{$input_name_pattern="`$input_name_pattern`[]"}{/if}
+	{if strpos($type, 'multiselect')!==false}{$input_name_pattern="`$input_name_pattern`[]"}{/if}
 {/if}
 {$input_name=$input_name_pattern|sprintf:$name}
 
