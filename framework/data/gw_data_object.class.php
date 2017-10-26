@@ -287,10 +287,17 @@ class GW_Data_Object
 		    isset($options['return_simple']) && $options['return_simple']
 		) {
 			$entries = $db->fetch_assoc($sql, $nodie);
-		} elseif (isset($options['key_field']))
-			$entries = $db->fetch_rows_key($sql, $options['key_field'], $nodie);
-		else
+		} elseif (isset($options['key_field'])){
+			$fields = explode(',',$options['key_field']);
+			
+			if(count($fields) > 1){
+				$entries = $db->fetch_assoc($sql, $nodie);
+			}else{
+				$entries = $db->fetch_rows_key($sql, $options['key_field'], $nodie);
+			}
+		}else{
 			$entries = $db->fetch_rows($sql, 1, $nodie);
+		}
 
 		if ($db->error) {
 			$this->errors[] = $db->getError();
@@ -327,7 +334,9 @@ class GW_Data_Object
 	{
 		$options['return_simple'] = 1;
 		$options['assoc_fields'] = $fields;
-		$options['select'] = "`{$fields[0]}`, `{$fields[1]}`";
+		$options['select'] = '`'.implode('`,`', $fields).'`';
+		if(count($fields) > 2)
+			$options['key_field'] = $options['select'];
 
 
 		return $this->findAll($conditions, $options);
@@ -880,6 +889,11 @@ class GW_Data_Object
 	function multiInsert($list, $replace=true)
 	{
 		$this->getDB()->multi_insert($this->table, $list, $replace);
+	}
+	
+	function deleteMultiple($cond)
+	{
+		$this->getDB()->delete($this->table, $cond);
 	}
 	
 	function attachAssocRecs($list, $fieldname, $obj_classname, $options=[])
