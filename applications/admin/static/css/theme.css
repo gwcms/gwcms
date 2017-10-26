@@ -7809,3 +7809,21 @@ input[type="color"] {
 .margin-10 {
   margin: 10px 0 !important;
 }
+.margin-top-5{
+	margin-top:5px;
+}
+.margin-bottom-5{
+	margin-bottom:5px;
+}
+.margin-y-5{
+	margin-top:5px;
+	margin-bottom:5px;
+}
+.hidden{ display:none }
+
+.link{ cursor:pointer }
+.link:hover{ color:orange }
+
+
+.float-left{ float:left }
+.float-right{ float:right }
