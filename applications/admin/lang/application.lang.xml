@@ -125,6 +125,11 @@
 	<lt>Saugoti kaip pagrindinę peržiūrą</lt>
 </i>
 
+<i id="UPDATE_CURRENT_VIEW">
+	<en>Update current view</en>
+	<lt>Atnaujinti pasirinktąją peržiūrą</lt>
+</i>
+
 <i id="ACTION_CONFIRM_REQUIRED">
 	<en>Action confirm required. Continue?</en>
 	<lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
@@ -277,6 +282,10 @@
 		<en>Invert active state</en>
 		<lt>Pakeisti aktyvumo būklę</lt>
 	</i>
+	<i id="doSetActive">
+		<en>Activate</en>
+		<lt>Aktyvuoti</lt>
+	</i>	
 	<i id="doClone">
 		<en>Clone</en>
 		<lt>Dublikuoti</lt>

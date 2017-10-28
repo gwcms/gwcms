@@ -28,6 +28,9 @@
 	</button>
 	<ul class="dropdown-menu">
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2])}">{GW::l('/g/CREATE_NEW_VIEW')}</a></li>
+	    {if $m->list_params['views']->id}
+		<li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,update=>1,clean=>2])}">{GW::l('/g/UPDATE_CURRENT_VIEW')}</a></li>
+	    {/if}
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE')}</a></li>
 	</ul>
     </div>	

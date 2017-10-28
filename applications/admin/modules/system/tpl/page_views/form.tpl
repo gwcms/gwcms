@@ -11,7 +11,7 @@
 	{include file="elements/input.tpl" name=type type=read value_options=$m->lang.OPTIONS.page_view_types}
 	
 	
-	{if $app->user->isRoot() && $smarty.get.shift_key==1}
+	{if ($app->user->isRoot() && $smarty.get.shift_key==1) || $smarty.get.update}
 		
 		{include file="elements/input.tpl" name=condition type=textarea autoresize=1 height=25}
 		{include file="elements/input.tpl" name=order type=text autoresize=1 height=25}

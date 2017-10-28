@@ -1228,21 +1228,36 @@ class GW_Common_Module extends GW_Module
 		
 		$cond = $params['conditions'];
 		
+		$id = 0;
+		
+		$vals = [];
+		
+		if(isset($_GET['update']))
+		{
+			if($this->list_params['views'] instanceof GW_Adm_Page_View)
+			{
+				$id = $this->list_params['views']->id;
+				$vals = $this->list_params['views']->toArray();
+			}
+		}
+		
 		
 		
 		$args = isset($_GET['saveasorder'])? '&saveasorder=1':'';
-		$url = $this->app->buildUri("system/page_views/form?id=0&clean=2".$args);
+		
+		if($vals)
+			$args .= $args.'&update=1';
+		
+		$url = $this->app->buildUri("system/page_views/form?id={$id}&clean=2".$args);
 		
 		
 		//trys galimi path 
 		
-		$vals = [
-		    'condition'=>$cond, 
-		    'order'=>$params['order'], 
-		    'path_options'=>$this->__viewsSearchPaths(), 
-		    'fields'=>json_encode($this->__currentFields()),		    
-		    'page_by'=>$this->list_params['page_by']
-		];
+		$vals['condition'] = $cond;
+		$vals['order'] = $params['order'];
+		$vals['path_options'] = $this->__viewsSearchPaths();
+		$vals['fields'] = json_encode($this->__currentFields());
+		$vals['page_by'] = $this->list_params['page_by'];
 		
 		$this->fireEvent("BEFORE_CREATE_PAGE_VIEW", $vals);
 		
