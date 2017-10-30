@@ -16,6 +16,7 @@
 	   {if $toggle}data-toggle="button" aria-pressed="false"{/if} 
 	   {if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if}
 	   {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
+	   {if $confirm}{$app->fh()->gw_link_confirm()}{/if}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}">
 		{if $iconclass}<i class="{$iconclass}"></i>{/if} <span>{$title}</span>
 	</a>
