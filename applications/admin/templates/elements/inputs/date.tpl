@@ -9,6 +9,7 @@
 					{if $maxlength}maxlength="{$maxlength}"{/if} 
 					{if $placeholder}placeholder="{$placeholder}"{/if} 
 					{$input_extra_params}						
+					{if $required}required="required"{/if} 
 					   >
 				<span class="input-group-addon"><i class="gwico-Calendar"></i></span>
 			</div>
