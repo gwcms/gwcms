@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl"  changes_track=1}
 
 {include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
