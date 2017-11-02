@@ -198,7 +198,6 @@ class GW
 	 */
 	static function &l($key, $write = null)
 	{
-
 		return GW_Lang::readWrite($key, $write);
 	}
 
@@ -215,7 +214,7 @@ class GW
 			return $fullkey;
 
 		list(, $module, $key) = explode('/', $fullkey, 3);
-
+		
 		if ($module == 'M') {
 			list($module, $key) = explode('/', $key, 2);
 			$module = 'M/' . strtolower($module);
@@ -226,7 +225,7 @@ class GW
 		} elseif ($module == 'G') {
 			list($module, $key) = explode('/', $key, 2);
 			$module = 'G/' . strtolower($module);
-		}
+		} 
 
 		//uzloadinti vertima jei nera uzloadintas
 		$cid = GW_Lang::$ln.'/'.$module;
@@ -276,7 +275,7 @@ class GW
 				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
 			}
 		}
-
+		
 		return $vr;
 	}
 }

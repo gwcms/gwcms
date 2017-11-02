@@ -106,8 +106,8 @@ class GW_Application
 	function initLang()
 	{
 		$this->setCurrentLang($this->ln);
-		GW_Lang::$langf_dir = GW::s("DIR/{$this->app_name}/LANG");
-		GW_Lang::$module_dir = GW::s("DIR/{$this->app_name}/MODULES");
+
+		GW_Lang::setCurrentApp($this->app_name);
 
 		$this->lang = GW::l('/g/');
 	}

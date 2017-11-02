@@ -9,10 +9,16 @@ class GW_Lang
 	static $module_dir;
 	static $module;
 	static $debug=false;
+	static $app='admin';
 	
 	static function setCurrentLang($ln)
 	{
 		self::$ln = $ln;
+	}
+	
+	static function setCurrentApp($app)
+	{
+		self::$app = strtoupper($app);
 	}
 	
 	static function setDebug($debug)
@@ -20,22 +26,20 @@ class GW_Lang
 		self::$debug = $debug;
 	}
 	
-	
-
 	static function getGlobalLangFile($file_id)
-	{
-		return (self::$langf_dir ? self::$langf_dir : GW::s('DIR/ADMIN/LANG')) . "{$file_id}.lang.xml";
+	{		
+		return GW::s("DIR/".self::$app."/LANG") . $file_id . ".lang.xml";
 	}
 
 	static function getModuleLangFile($module)
 	{
-		return self::$module_dir . $module . "/lang.xml";
+		return GW::s("DIR/".self::$app."/MODULES") . $module . "/lang.xml";
 	}
 
 	static function loadFile($file_id, $modulename = '')
 	{
 		//$file_id=strtolower($file_id);
-		$cid = self::$ln.'/'.$file_id . '/' . $modulename;
+		$cid = self::$app.'/'.self::$ln.'/'.$file_id . '/' . $modulename;
 
 		if (isset(self::$cache[$cid]))
 			return true;
@@ -62,7 +66,9 @@ class GW_Lang
 	static function &getFromCache($file_id, $module, $path, $create = false)
 	{
 		$false = false;
-		$var = & self::$cache[self::$ln.'/'.$file_id . '/' . $module];
+		
+		$cid = self::$app.'/'. self::$ln.'/'.$file_id . '/' . $module;
+		$var = & self::$cache[$cid];
 
 		//grazinti visa faila
 		if ($path == [''])
@@ -119,6 +125,16 @@ class GW_Lang
 			return $key;
 
 		list(, $type, $otherargs) = explode('/', $key, 3);
+		
+		
+		if($type=="APP")
+		{
+			$prevapp = GW_Lang::$app;
+			
+			list($app, $type, $otherargs) = explode('/', $otherargs, 3);
+						
+			GW_Lang::setCurrentApp($app);
+		}		
 
 
 		$create = $write !== null;
@@ -147,6 +163,9 @@ class GW_Lang
 				break;
 		}
 
+		
+		if(isset($prevapp))
+			GW_Lang::setCurrentApp($prevapp);
 
 		if ($write !== null) {
 			$r = $write;

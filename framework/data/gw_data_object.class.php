@@ -918,7 +918,17 @@ class GW_Data_Object
 		}else{
 			return $o->findAll($cond, ['key_field'=>'id']);
 		}	
-	}	
+	}
+
+	function getByIds($ids, $opts=[])
+	{
+		if(!$ids)
+			return [];
+		
+		$opts['key_field']='id';
+			
+		return $this->findAll(GW_DB::inCondition('id', $ids), $opts);
+	}
 	
 }
 

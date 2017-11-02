@@ -157,17 +157,40 @@ class GW_Array_Helper
 	/**
 	 * transform to multilevel array
 	 */
-	static function restruct2MultilevelArray(&$vals)
+	static function restruct2MultilevelArray(&$vals, $separator='/')
 	{
 		foreach($vals as $id => $data)
 		{
-			if(strpos($id, '/')!==false){
+			if(strpos($id, $separator)!==false){
 				
-				$p =& GW_Array_Helper::getPointer2XlevelAssocArr($vals, explode('/', $id));
+				$p =& GW_Array_Helper::getPointer2XlevelAssocArr($vals, explode($separator, $id));
 				$p = $data;
 				
 				unset($vals[$id]);
 			}
 		}		
 	}	
+	
+	
+	/**
+	 * @param array $arr1
+	 * @param array $arr2
+	 * @param string $separator - if keys posibly have / character use anoter for this operation
+	 * @return array
+	 */
+	static function arrayTreeMerge($arr1, $arr2, $separator='/')
+	{
+		$arr1flat = self::arrayFlattenSep($separator, $arr1);
+		$arr2flat = self::arrayFlattenSep($separator, $arr2);
+		
+		
+		$merge = array_merge($arr1flat, $arr2flat);
+		
+		
+		
+		self::restruct2MultilevelArray($merge, $separator);
+		
+		return $merge;
+	}
+	
 }
