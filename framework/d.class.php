@@ -2,18 +2,67 @@
 
 class d
 {
-
 	static $html = Array(
-	    "<pre style='background:transparent;margin:5px;border:0;border-left: solid 10px ",
-	    ";padding-left:15px;padding:10px 0px 0px 15px'>",
+	    "<pre class='hidedebug' style='border-color:",
+	    "'>",
 	    "</pre>"
 	);
+	
+	static $initcss = "<style> .hidedebug{ background:transparent;margin:5px;border:0;border-left: solid 10px;padding-left:15px;padding:10px 0px 0px 15px }</style>";
+	
+	static $inithide = "
+		<style>
+			.hiddendebug{ overflow:hidden; height:25px; cursor:all-scroll; border-bottom: 3px dotted orange !important; }
+		</style>
+		<script>
+		document.addEventListener('DOMContentLoaded', function(event) { 
+			jQueryCodeInitDebug = function(){
+			    $('.hidedebug').dblclick(function(){
+				$(this).toggleClass('hiddendebug');
+			    
+			    }).dblclick();
+			}
+
+			if(window.jQuery){
+				jQueryCodeInitDebug();
+			}else{   
+			    var script = document.createElement('script'); 
+			    document.head.appendChild(script);  
+			    script.type = 'text/javascript';
+			    script.src = '//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js';
+
+			    script.onload = jQueryCodeInitDebug;
+			}			
+			
+		});</script>";
+		
+	
+	static function setHide()
+	{
+		if(self::$inithide)
+		{
+			echo self::$inithide;
+			self::$inithide = null;
+		}	
+	}
+	
+	static function initHtml()
+	{
+		if(self::$initcss)
+		{
+			echo self::$initcss;
+			self::$initcss = null;			
+		}
+	}
+	
 
 	static function ldump($x, $add = '', $color = 'orange')
 	{
 		if (!headers_sent())
 			header('content-type: text/html; charset=UTF-8');
 
+		self::initHtml();
+		
 		echo self::$html[0] . $color . self::$html[1];
 		//debug_print_backtrace();
 
@@ -31,6 +80,7 @@ class d
 
 	static function vdump($x, $add = '', $color = 'orange')
 	{
+		self::initHtml();
 		echo self::$html[0] . $color . self::$html[1];
 		var_dump($x);
 		echo self::$html[2];
