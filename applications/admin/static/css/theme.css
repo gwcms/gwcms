@@ -5836,54 +5836,7 @@ blockquote
 {
 	color: #fff;
 }
-.text-light,a.text-light:hover,a.text-light:focus
-{
-	color: #fff;
-}
-.text-muted,a.text-muted:hover,a.text-muted:focus
-{
-	color: #afb9c3;
-}
-.text-primary,a.text-primary:hover,a.text-primary:focus
-{
-	color: #128ef2;
-}
-.text-info,a.text-info:hover,a.text-info:focus
-{
-	color: #008fa1;
-}
-.text-success,a.text-success:hover,a.text-success:focus
-{
-	color: #71a436;
-}
-.text-warning,a.text-warning:hover,a.text-warning:focus
-{
-	color: #f29000;
-}
-.text-danger,a.text-danger:hover,a.text-danger:focus
-{
-	color: #eb2521;
-}
-.text-main,a.text-main:hover,a.text-main:focus
-{
-	color: #2b425b;
-}
-.text-mint,a.text-mint:hover,a.text-mint:focus
-{
-	color: #1c7d74;
-}
-.text-purple,a.text-purple:hover,a.text-purple:focus
-{
-	color: #a844b9;
-}
-.text-pink,a.text-pink:hover,a.text-pink:focus
-{
-	color: #e2175b;
-}
-.text-dark,a.text-dark:hover,a.text-dark:focus
-{
-	color: #11171a;
-}
+
 .btn
 {
 	background-color: transparent;
@@ -7659,7 +7612,7 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
     color: #000;
 }
 
-.text-brown{ color:#795548}
+
 
 #gwFiltersContainer{
 	margin-right: 5px;
@@ -7827,3 +7780,54 @@ input[type="color"] {
 
 .float-left{ float:left }
 .float-right{ float:right }
+
+.text-light,a.text-light:hover,a.text-light:focus
+{
+	color: #fff;
+}
+.text-muted,a.text-muted:hover,a.text-muted:focus
+{
+	color: #afb9c3;
+}
+.text-primary,a.text-primary:hover,a.text-primary:focus
+{
+	color: #128ef2;
+}
+.text-info,a.text-info:hover,a.text-info:focus
+{
+	color: #008fa1;
+}
+.text-success,a.text-success:hover,a.text-success:focus
+{
+	color: #71a436;
+}
+.text-warning,a.text-warning:hover,a.text-warning:focus
+{
+	color: #f29000;
+}
+.text-danger,a.text-danger:hover,a.text-danger:focus
+{
+	color: #eb2521;
+}
+.text-main,a.text-main:hover,a.text-main:focus
+{
+	color: #2b425b;
+}
+.text-mint,a.text-mint:hover,a.text-mint:focus
+{
+	color: #1c7d74;
+}
+.text-purple,a.text-purple:hover,a.text-purple:focus
+{
+	color: #a844b9;
+}
+.text-pink,a.text-pink:hover,a.text-pink:focus
+{
+	color: #e2175b;
+}
+.text-dark,a.text-dark:hover,a.text-dark:focus
+{
+	color: #11171a;
+}
+
+.text-brown{ color:#795548}

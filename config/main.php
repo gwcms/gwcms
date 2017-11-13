@@ -27,10 +27,13 @@ $dir['SYS_REPOSITORY']=$dir['REPOSITORY'].'.sys/';
 
 $dir['AUTOLOAD'][] = $dir['LIB'];
 
-			
+
+$adir =& $dir["ADMIN"];
+$adir["ROOT"] = $dir['APPLICATIONS'].'admin/';
+$adir['LANG'] = $adir['ROOT'].'lang/';
 
 
-		
+				
 //used to send mail through
 //GW::$static_conf['REMOTE_SERVICES']['MAIL1'] = 'http://uostas.net/services/mail.php?key=fh5ad2fg1ht4a6s5dg1hy4a5d4fg';	
 GW::s('DEFAULT_APPLICATION','SITE');		

@@ -2,6 +2,7 @@
 
 class d
 {
+
 	static $html = Array(
 	    "<pre class='hidedebug' style='border-color:",
 	    "'>",
@@ -12,26 +13,29 @@ class d
 	
 	static $inithide = "
 		<style>
+
 			.hiddendebug{ overflow:hidden; height:25px; cursor:all-scroll; border-bottom: 3px dotted orange !important; }
+			.hiddendebug:after { 
+				content: '.......';
+			    }
 		</style>
 		<script>
 		document.addEventListener('DOMContentLoaded', function(event) { 
-			jQueryCodeInitDebug = function(){
+			jQueryCode = function(){
 			    $('.hidedebug').dblclick(function(){
 				$(this).toggleClass('hiddendebug');
 			    
 			    }).dblclick();
 			}
 
-			if(window.jQuery){
-				jQueryCodeInitDebug();
-			}else{   
+			if(window.jQuery)  jQueryCode();
+			else{   
 			    var script = document.createElement('script'); 
 			    document.head.appendChild(script);  
 			    script.type = 'text/javascript';
 			    script.src = '//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js';
 
-			    script.onload = jQueryCodeInitDebug;
+			    script.onload = jQueryCode;
 			}			
 			
 		});</script>";
@@ -170,4 +174,6 @@ class d
 	{
 		d::dumpas(htmlspecialchars($html));
 	}
+	
+	
 }

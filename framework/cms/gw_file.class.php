@@ -67,8 +67,17 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 		return $this;
 	}
 
+	function isMultiple()
+	{
+		return $this->validators['file']['multiple'] ?? false;
+	}
+	
+	
 	function getValue()
 	{
+		if($this->isMultiple())
+			return $this->findAll(Array('owner=?', $this->owner), ['order'=>'id ASC']);
+		
 		return $this->find(Array('owner=?', $this->owner));
 	}
 
@@ -122,10 +131,22 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 			trigger_error('Can\'t write file "' . $file . '". Check permissions', E_USER_ERROR);
 	}
 
-	function removeOld()
+	function removeOld($id=false)
 	{
-		if ($item = $this->find(Array('owner=?', $this->get('owner'))))
-			$item->delete();
+		//d::dumpas([$id,$this->isMultiple()]);
+		
+		if($this->isMultiple()){
+			
+			if($id == '*'){
+				foreach($this->getValue() as $file)
+					$file->delete();
+			}elseif($item = $this->find(Array('owner=? AND id=?', $this->get('owner'), $id))){
+				$item->delete();
+			}
+		}else{
+			if ($item = $this->find(Array('owner=?', $this->get('owner'))))
+				$item->delete();
+		}
 	}
 
 	function setParams($arr)
@@ -144,9 +165,9 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 
 	private $after_save_done = false;
 
-	function deleteComposite()
+	function deleteComposite($id)
 	{
-		$this->removeOld();
+		$this->removeOld($id);
 	}
 
 	function eventHandler($event, &$context_data = [])
@@ -158,7 +179,10 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 				break;
 
 			case 'BEFORE_INSERT':
-				$this->removeOld();
+				
+				if(!$this->isMultiple())
+					$this->removeOld();
+				
 				break;
 
 			case 'AFTER_INSERT':

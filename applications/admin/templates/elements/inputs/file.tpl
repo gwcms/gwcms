@@ -5,24 +5,34 @@
 
 {$inp_file_id="input_file_`$name`_`$suffix`"}
 
-{if $file}
+
+{if is_array($value)}
+	{$files=$value}
+{elseif $value}
+	{$files=[$value]}
+{else}
+	{$files=[]}
+{/if}
+
+
+	
+
+{foreach $files as $file}
 	<div style="margin-top: 6px;margin-bottom:6px">
-		
+
 	{$filename=pathinfo($file->original_filename)}
 	{$title=$filename.filename|truncate:40}
 	{if $filename.extension}
 		{$title="`$title`.`$filename.extension`"}
 	{/if}
-	
-	
-	
+
+
 	{gw_link fullpath="`$app->sys_base`tools/download/`$file->key`" icon="file" title=$title} ({$file->size_human})
-	
-	{include "elements/zz_remove_composite.tpl"}
-	
+
+	{include "elements/zz_remove_composite.tpl" id=$file->id}
+
 	</div>	
-	
-{/if}
+{/foreach}
 
 
 {if !$readonly}

@@ -56,7 +56,7 @@ class GW_Links implements GW_Composite_Slave
 			list($this->id1, $this->id2) = $this->params['fieldnames'];
 	}
 
-	public function deleteComposite()
+	public function deleteComposite($id='*')
 	{
 		$db = $this->getDB();
 		$db->delete($this->table, Array($this->id1 . '=?', $this->owner_obj_id));

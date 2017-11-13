@@ -40,12 +40,13 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			$this->fireEvent('AFTER_COMPOSITE_ITEM_SAVE');
 	}
 
-	function removeCompositeItem($field)
-	{
+	function removeCompositeItem($field, $id='*')
+	{		
 		if ($item = $this->composite_content_base[$field]) {
 
-			$item->deleteComposite();
-			unset($this->composite_content_base[$field]);
+			$item->deleteComposite($id);
+			
+			//unset($this->composite_content_base[$field]);
 		}
 	}
 
@@ -62,6 +63,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		if (/* !$this->get($this->primary_fields[0]) || */ isset($this->composite_content_base[$field])) //do not load twice
 			return false;
 
+		//d::dump($this->composite_content_base);
+		
 		$params = $this->composite_map[$field];
 		$classname = $params[0];
 
@@ -173,17 +176,19 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		switch ($event) {
 			case 'PREPARE_SAVE':
 				
+				
 				if($this->composite_content_base || isset($this->content_base['delete_composite'])){
 					$this->changed=1;
 				}
 
 				if (isset($this->content_base['delete_composite'])) {
-					foreach ($this->content_base['delete_composite'] as $field => $checked) {
-						if (!$checked)
-							continue;
-
+					
+					foreach ($this->content_base['delete_composite'] as $field => $ids) {
 						$this->getComposite($field);
-						$this->removeCompositeItem($field);
+						
+						foreach($ids as $id)
+							$this->removeCompositeItem($field, $id);
+						
 					}
 
 					unset($this->content_base['delete_composite']);

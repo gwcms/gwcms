@@ -48,7 +48,7 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 	}
 
 	//pasalinimas
-	public function deleteComposite() {
+	public function deleteComposite($id='*') {
 		
 	}
 

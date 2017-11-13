@@ -185,7 +185,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 
 	private $after_save_done = false;
 
-	function deleteComposite()
+	function deleteComposite($id='*')
 	{
 		$this->removeOld();
 	}

@@ -14,7 +14,7 @@ interface GW_Composite_Slave
 	public function save();
 
 	//pasalinimas
-	public function deleteComposite();
+	public function deleteComposite($id);
 
 	//duomenu paemimas
 	public function getValue();
