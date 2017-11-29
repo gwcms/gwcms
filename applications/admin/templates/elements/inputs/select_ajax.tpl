@@ -3,9 +3,19 @@
 		{$options[$selected]}{if !$selected@last},{/if}
 	{/foreach}
 {else}
+	
+{if $preload}
+	{if is_array($value)}
+		{foreach $value as $valitm}
+			{$options[$valitm]="`$valitm` Loading..."}
+		{/foreach}
+	{else}
+		{$options[$value]="`$value` Loading..."}
+	{/if}
+{/if}
+	
 
-
-<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}" 
+<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}{if $maximumSelectionLength>1}[]{/if}" 
 	 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
 	 >
 	{html_options options=$options selected=$value}
@@ -42,6 +52,31 @@ require(['vendor/select2/js'], function () {
 	function formatRepoSelection(item) {
 		return item.title || item.text;
 	}
+	
+	
+	{if $preload}
+		
+		//download captions
+		$.get("{$datasource}", { ids: JSON.stringify($("#{$id}").val()) }, function(data){
+			
+			if(data.hasOwnProperty('items'))
+			{
+				$("#{$id}").empty();
+				
+				jQuery.each(data.items, function(index, item){
+					console.log(item)
+					$("#{$id}").append(new Option(item.title, item.id, true, true));
+				} )
+				
+				$("#{$id}").trigger('change');
+			}
+			
+		}, 'json')
+		 
+		
+		//
+	{/if}
+	
 
 	$("#{$id}").select2({
 		ajax: {
@@ -83,6 +118,7 @@ require(['vendor/select2/js'], function () {
 		minimumInputLength: 1,
 		templateResult: formatRepo, // omitted for brevity, see the source of this page
 		templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+		{if $dontCloseOnSelect},closeOnSelect: false{/if}
 
 	});
 	
