@@ -15,7 +15,12 @@
 
 {function name=do_toolbar_buttons_info}
 	{if $page->notes}
-		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' onclick="open_notes(`$page->id`)" }
+		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}
+		{capture append=footer_hidden}	
+			<script>
+				require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
+			</script>		
+		{/capture}		
 	{/if}
 {/function}
 
