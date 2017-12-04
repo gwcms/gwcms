@@ -536,8 +536,8 @@ class GW_Common_Module extends GW_Module
 
 		if (isset($this->list_params['order']) && $ord = $this->list_params['order'])
 			$params['order'] = $ord;
-
-
+		
+		
 		//perrasoma is modulio konfig. views
 		//if(isset($this->list_params['views']['order']) && $ord=$this->list_params['views']['order'])
 		//	$params['order']=$ord;
@@ -551,9 +551,15 @@ class GW_Common_Module extends GW_Module
 
 	function setDefaultOrder()
 	{
-		if (!isset($this->list_params['order']) || !$this->list_params['order'])
-			if (method_exists($this->model, 'getDefaultOrderBy'))
+		if (!isset($this->list_params['order']) || !$this->list_params['order']){
+			
+			if($this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
+				$this->list_params['order'] = $this->list_params['views']->order;
+			
+			}elseif (method_exists($this->model, 'getDefaultOrderBy')){
 				$this->list_params['order'] = $this->model->getDefaultOrderBy();
+			}
+		}
 	}
 
 	
