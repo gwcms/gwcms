@@ -31,7 +31,9 @@
 	{/function}	
 	
 	{function dl_cell_encrypted}
-			<i class="fa {if $item->encrypted}fa-lock text-success{else}fa-unlock text-danger{/if}"></i>
+			<a href="{if $item->encrypted}{$m->buildUri(unlock,[id=>$item->id])}{else}{$m->buildUri(lock, id=>$item->id)}{/if}">
+				<i class="fa {if $item->encrypted}fa-lock text-success{else}fa-unlock text-danger{/if}">
+			</i>
 	{/function}
 
 

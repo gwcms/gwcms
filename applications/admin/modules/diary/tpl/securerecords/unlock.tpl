@@ -7,7 +7,7 @@
 
 
 
-
+<input type='hidden' name='id' value='{$smarty.get.id}'>
 <input type="hidden" name="encrypt_1_decrypt_0" value="0" />
 
 {function name=df_submit_button_dencrypt}

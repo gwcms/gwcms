@@ -81,11 +81,12 @@ class Module_SecureRecords extends GW_Common_Module
 		$enc_key = GW_DB::escape($vals['encryptkey']);
 		$encrypt = $_POST['encrypt_1_decrypt_0'];
 		
+		$id_cond=isset($_POST['id']) ? " AND id=".(int)$_POST['id'] : "";
+		
 		if($encrypt && $vals['encryptkey']!=$vals['encryptkey_repeat']){
 			$this->setError("Encrypt keys don't match");
 			$this->jumpAfterSave();
 		}
-			
 		
 		
 		$f = $encrypt ? 'AES_ENCRYPT' : 'AES_DECRYPT';
@@ -119,7 +120,7 @@ class Module_SecureRecords extends GW_Common_Module
 				$set
 				$extra_set
 			encrypted=$e 
-			WHERE user_id=$uid AND encrypted=$note $extra_cond
+			WHERE user_id=$uid AND encrypted=$note $extra_cond $id_cond
 				
 		");
 		
