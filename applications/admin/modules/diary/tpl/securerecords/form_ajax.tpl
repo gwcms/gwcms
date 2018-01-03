@@ -1,7 +1,7 @@
 {function name="df_inputs"}
 
 	{*dl_checklist*}
-	<td></td>
+	{*<td></td>*}
 	
 	{foreach $m->list_config.dl_fields as $field}
 					
