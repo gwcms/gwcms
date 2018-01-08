@@ -36,7 +36,6 @@
 			</i>
 	{/function}
 	
-	{function dl_cell_}
 
 
 	
