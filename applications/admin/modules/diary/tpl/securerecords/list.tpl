@@ -35,12 +35,14 @@
 				<i class="fa {if $item->encrypted}fa-lock text-success{else}fa-unlock text-danger{/if}">
 			</i>
 	{/function}
+	
+	{function dl_cell_}
 
 
 	
 	{function name=dl_output_filters_encrypteddisp}
 		{if $item->encrypted}
-			{base64_encode($item->get($field))}
+			{base64_encode($item->get($field))|truncate:40}
 		{else}
 			{$item->get($field)}
 		{/if}
