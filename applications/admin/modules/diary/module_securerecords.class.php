@@ -155,11 +155,11 @@ class Module_SecureRecords extends GW_Common_Module
 		
 		$res = $this->model->find(['id=?', $id],['select'=>implode(',', $select)]);
 		echo "<div style='color:#eee'>";
-		print_r($res->toArray());
+		//print_r($res->toArray());
 		
 		foreach($res->toArray() as $key => $val)
 		{
-			echo "<b>{$key}</b>: {$val}<br/>";
+			echo "<i>{$key}</i>: {$val}<br/>";
 		}
 		
 		exit;
