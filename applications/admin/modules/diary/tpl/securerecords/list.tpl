@@ -43,7 +43,7 @@
 		{if $item->encrypted}
 			{base64_encode($item->get($field))|truncate:40}
 		{else}
-			{$item->get($field)}
+			{$item->get($field)|truncate:80}
 		{/if}
 	{/function}		
 	
