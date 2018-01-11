@@ -2,7 +2,7 @@
 	<a  class="{$action_class|default:gwcmsAction}"
 		{if $onclick}onclick="{$onclick};return false"{/if} 
 		{if $shift_button}onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false }"{/if}
-		{if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if}
+		{if $query_param}onclick="var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });return false;"{/if}
 		href="{$href|default:'#'}"
 		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		{if $title}title="{$title|escape}"{/if}
