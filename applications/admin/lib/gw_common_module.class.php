@@ -343,7 +343,7 @@ class GW_Common_Module extends GW_Module
 		if(isset($_GET['form_ajax'])){
 			$this->loadViews();
 			$this->initListParams(false, 'list');
-						
+			
 			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
 		}
 		
@@ -698,6 +698,7 @@ class GW_Common_Module extends GW_Module
 	function common_viewList($params = [])
 	{
 		$this->loadViews();
+		$this->setDefaultOrder(); //for template
 
 
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
@@ -743,21 +744,11 @@ class GW_Common_Module extends GW_Module
 			return false;
 		}
 
-		$this->setDefaultOrder(); //for template
-
-
-
 		if ($this->list_params['page_by'])
 			$this->tpl_vars['query_info'] = $this->model->lastRequestInfo();
 
-
-
 		
-	
-		
-		
-		$this->fireEvent('AFTER_LIST', $list);
-		
+		$this->fireEvent('AFTER_LIST', $list);	
 		
 		return ['list' => $list];
 	}
@@ -881,7 +872,7 @@ class GW_Common_Module extends GW_Module
 	function __viewDialogConfigPrepareOrders()
 	{
 		$this->initListParams(false, "list");
-		$edit_orders = $this->__parseOrders($this->list_params['order'] ?? '');
+		$edit_orders = $this->__parseOrders($this->list_params['order']);
 
 
 		$formatorders = [];
