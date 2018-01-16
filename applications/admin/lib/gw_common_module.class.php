@@ -879,7 +879,7 @@ class GW_Common_Module extends GW_Module
 	function __viewDialogConfigPrepareOrders()
 	{
 		$this->initListParams(false, "list");
-		$edit_orders = $this->__parseOrders($this->list_params['order']);
+		$edit_orders = $this->__parseOrders($this->list_params['order'] ?? '');
 
 
 		$formatorders = [];
