@@ -341,7 +341,9 @@ class GW_Common_Module extends GW_Module
 		
 
 		if(isset($_GET['form_ajax'])){
+			$this->loadViews();
 			$this->initListParams(false, 'list');
+						
 			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
 		}
 		
