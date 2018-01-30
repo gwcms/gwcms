@@ -73,10 +73,12 @@
 </script>
 
 
-
+			{if $input_tabs}
+				{include "tools/input_tabs.tpl"}
+			{/if}
 
 	<div class="row panel gwlistpanel">
 		<div class="panel-body">
-			
+				
 			<table class="gwTable gwcmsTableForm">
 				<tbody>

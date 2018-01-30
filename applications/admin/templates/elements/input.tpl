@@ -103,7 +103,9 @@
 {/capture}
 
 
-	
+{if $tabs}
+	{foreach $tabs as $tab}{$rowclass="`$rowclass` tabitm_`$tab`"}{/foreach}
+{/if}	
 
 
 {if $layout=='wide'}
