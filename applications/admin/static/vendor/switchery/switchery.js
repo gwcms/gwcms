@@ -1286,6 +1286,7 @@ Switchery.prototype.colorize = function() {
  */
 
 Switchery.prototype.handleOnchange = function(state) {
+	
   if (typeof Event === 'function' || !document.fireEvent) {
     var event = document.createEvent('HTMLEvents');
     event.initEvent('change', false, true);
@@ -1302,8 +1303,14 @@ Switchery.prototype.handleOnchange = function(state) {
  */
 
 Switchery.prototype.handleClick = function() {
+	
+
+      
   var self = this
     , switcher = this.switcher;
+    
+    
+   
 
   if (this.isDisabled() === false) {
     fastclick(switcher);
@@ -1323,6 +1330,11 @@ Switchery.prototype.handleClick = function() {
     this.element.disabled = true;
     this.switcher.style.opacity = this.options.disabledOpacity;
   }
+  
+       this.element.addEventListener('click', function() {
+	     self.setPosition(false);
+      });  
+  
 };
 
 /*
@@ -1389,6 +1401,7 @@ Switchery.prototype.init = function() {
   this.markAsSwitched();
   this.disableLabel();
   this.handleClick();
+  
 };
 
 });

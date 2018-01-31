@@ -34,16 +34,19 @@ add tab titles to lang.xml:
 				<table class="inptabs_sel" style="margin-right:10px;">
 					<tr>
 						<td>
-							<input class="tab-switch" data-color="{$tabcolor}" type="checkbox" value="{$tabid}" {if $tabdefaultshow}checked="checked"{/if} style="width:auto;height:auto">
+							<input id="tab-{$tabid}" class="tab-switch" data-color="{$tabcolor}" type="checkbox" value="{$tabid}" {if $tabdefaultshow}checked="checked"{/if} style="width:auto;height:auto">
 						</td><td style="padding-left:5px;">
-							{GW::l("/m/INPUT_TABS/`$tabid`")}
+							<a href="#" onclick="$('#tab-{$tabid}').click();return false">{GW::l("/m/INPUT_TABS/`$tabid`")}</a>
 						</td>
 					</tr>
 				</table>
 
 
 
-				<style>.tabitm_{$tabid}{ border-left:5px solid {$tabcolor}; {if !$tabdefaultshow}display:none{/if} }</style>
+				<style>
+					.tabitm_{$tabid}{ border-left:5px solid {$tabcolor}; {if !$tabdefaultshow}display:none{/if} }
+					.inptabs_sel a:hover{ color:black }
+				</style>
 		{/foreach}
 		</ul>
 		<style>
