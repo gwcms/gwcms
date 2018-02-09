@@ -456,7 +456,7 @@ class GW_Application
 	{
 		
 		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
-			return false;
+			return [];
 
 		if($prepare){
 			foreach($data as $i => $msg){
