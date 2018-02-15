@@ -18,6 +18,7 @@ class GW_Adm_Page_View extends GW_Data_Object
 	
 	public $current = false; //used in controller
 	public $count_result = false; //used in controller
+	public $match_level = 999;
 	
 	public $validators = [
 	    'title'=>['gw_string', ['required'=>1]],
@@ -27,11 +28,46 @@ class GW_Adm_Page_View extends GW_Data_Object
 	 * 
 	 * @param array $paths
 	 */
-	function getByPath($paths)
+	function getByPath($paths, $only_best_match=true)
 	{
 		//d::dumpas("active=1 AND ".GW_DB::inConditionStr("path", $paths));
 		
-		return $this->findAll("active=1 AND ".GW_DB::inConditionStr("path", $paths), ['order'=>'priority DESC, title ASC']);
+		$list = $this->findAll("active=1 AND ".GW_DB::inConditionStr("path", $paths), ['order'=>'priority DESC, title ASC', 'key_field'=>'id']);
+			
+		
+		foreach($list as $item)
+		{
+			foreach($paths as $idx => $path){
+				if($item->path == $path)
+					$item->match_level = $idx;
+			}
+		}
+		
+		//pasalins kitus viewsus kuriu pavadinimai sutampa, bet pagal best mach yra zemesnio prioriteto
+		if($only_best_match)
+		{
+			$duplct_title = [];
+			
+			foreach($list as $item)
+				$duplct_title[$item->title][$item->match_level][] = $item->id;
+			
+			foreach($duplct_title as $arr)
+			{
+				if(count($arr) > 1)
+				{
+					ksort($arr);
+					
+					$dontremoveitm = array_shift($arr);
+					
+					foreach($arr as $ids){
+						foreach($ids as $id)
+							unset($list[$id]);
+					}
+				}
+			}
+		}
+				
+		return $list;
 	}
 	
 	

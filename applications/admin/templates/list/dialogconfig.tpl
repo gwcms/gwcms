@@ -2,7 +2,12 @@
 {include "default_open.tpl"}
 
 
-
+<form id="listConfig"  action="{$app->buildURI($app->path_arr_parent.path)}" method="post" >
+<input type="hidden" name="act" value="doDialogConfigSave" />
+<input type="hidden" id="defaults" name="defaults" value="0" />
+<input type="hidden" name="dialog_iframe" value="1">
+<input type="hidden" id="remove_saved_filters" name="remove_saved_filters" value="[]" />
+<input type="hidden" id="default_filter" name="default_filter" value="{$default_filter}" />
 
 <div class="dialogcontainer">
 <style>
@@ -44,24 +49,12 @@
 
 .sortable li { cursor: row-resize }
 
-
+.bootstrap-select .btn { padding: 6px 12px 6px 12px }
 
 </style>
 
 
 
-
-
-
-
-
-
-<form id="listConfig"  action="{$app->buildURI($app->path_arr_parent.path)}" method="post" >
-<input type="hidden" name="act" value="doDialogConfigSave" />
-<input type="hidden" id="defaults" name="defaults" value="0" />
-<input type="hidden" name="dialog_iframe" value="1">
-<input type="hidden" id="remove_saved_filters" name="remove_saved_filters" value="[]" />
-<input type="hidden" id="default_filter" name="default_filter" value="{$default_filter}" />
 
 <table style="" class="gwTable gwActiveTable">
 
@@ -111,18 +104,41 @@
 </tr>
 
 </table>
-	<input id="savetodefaultpageview" type="hidden" name="savetodefaultpageview" value="" >	
-	<input id="listConfigSubmit" type="submit" style="display:none">
+	
 
-</form>
+
 </div>
 
+{*
+Leisti pasirinkti kur saugoti ar taikyti:
+į page view, current(dabar parinktas), default(parenkamas jei neparinktas joks kitas) ir regural(sukuriamas po defaultu jei nera)
+
+*}
 
 <div style='border-top: 1px solid rgba(0, 0, 0, 0.07);padding: 10px;'>
-	<button class="btn btn-primary" onclick="$('#listConfigSubmit').click();">{GW::l('/g/APPLY_1')}</button>
-	<button class="btn btn-default" onclick="$('#savetodefaultpageview').val(1);$('#listConfigSubmit').click();">{GW::l('/g/SAVE_AS_DEFAULT_PAGE_VIEW')}</button>
+	
+	<select id="saveto" name="pageviewid" class="selectpicker">
+		<option value="">Taikyti neišsaugant</option>
+		
+		{foreach $page_views as $pview}
+			<option value="{$pview->id}" {if $current_page_view_id == $pview->id}selected="selected"{/if}>{GW::l('/g/PAGE_VIEWS')}: {$pview->title}</option>
+		{/foreach}
+		
+	</select>
+	<button id="submitbtn" class="btn btn-primary" data-save="{GW::l('/g/SAVE')}" data-apply="{GW::l('/g/APPLY_1')}"></button>
 </div>
 
+
+</form>
+
+
+
+{if !$gwcms_input_select_loaded}
+	{$m->addIncludes("bs/selectcss", 'css', "`$app_root`static/vendor/bootstrap-select/css.css")}
+	{assign var=gwcms_input_select_loaded value=1 scope=global}	
+{/if}
+
+<script type="text/javascript">require(['vendor/bootstrap-select/js'], function(){ $('.selectpicker').selectpicker(); });</script>
 
 <script>
 require(["gwcms"], function(){	
@@ -179,7 +195,8 @@ require(["gwcms"], function(){
 
 
 		return false
-	})
+	});
+	
 
 
 	$('.orderrow input[type=checkbox]').on('change', function() {
@@ -190,6 +207,11 @@ require(["gwcms"], function(){
 
 
 	$('.switchDefault').attr('title', "{GW::l('/g/SET_AS_DEFAULT')}")
+	
+	$('#saveto').change(function(){
+		$('#submitbtn').html(this.value ? $('#submitbtn').data('save') : $('#submitbtn').data('apply'))
+		$('#submitbtn').removeClass('btn-primary').removeClass('btn-warning').addClass(this.value ? 'btn-primary' : 'btn-warning')
+	}).change();
 
 });
 </script>

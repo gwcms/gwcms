@@ -73,6 +73,7 @@
 
 {include file="elements/input.tpl" type=number name=priority}
 {include file="elements/input.tpl" type=bool name=default}
+{include file="elements/input.tpl" type=bool name=regular}
 {include file="elements/input.tpl" type=bool name=dropdown}
 {include file="elements/input.tpl" type=bool name=active default=1}
 

@@ -115,6 +115,25 @@
 	<lt>Išsaugoti peržiūros parametrus</lt>
 </i>
 
+<i id="PAGE_VIEWS">
+	<en>Page views</en>
+	<lt>Paruoštos peržiūros</lt>
+</i>
+<i id="PAGE_VIEW">
+	<en>Page view</en>
+	<lt>Paruošta peržiūra</lt>
+</i>
+
+<i id="PAGE_VIEW_REGULAR">
+	<lt>Įprastasis</lt>
+	<en>Regular</en>
+</i>
+<i id="PAGE_VIEW_DEFAULT">
+	<lt>Numatytasis</lt>
+	<en>Default</en>
+</i>
+	
+
 <i id="CREATE_NEW_ORDER">
 	<en>Save current ordering</en>
 	<lt>Išsaugoti dabartinį rikiavimą</lt>
