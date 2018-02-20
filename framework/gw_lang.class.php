@@ -126,16 +126,37 @@ class GW_Lang
 
 		list(, $type, $otherargs) = explode('/', $key, 3);
 		
-		
 		if($type=="APP")
 		{
 			$prevapp = GW_Lang::$app;
 			
-			list($app, $type, $otherargs) = explode('/', $otherargs, 3);
-						
+			list($app, $key) = explode('/', $otherargs, 2);
+			$key = '/'.$key;
+			
 			GW_Lang::setCurrentApp($app);
-		}		
-
+			
+			$res = self::readWrite($key, $write);	
+			
+			GW_Lang::setCurrentApp($prevapp);
+			
+			return $res;
+		}
+		
+		if($type=="LN")
+		{
+			$prevln = GW_Lang::$ln;
+			
+			list($ln, $key) = explode('/', $otherargs, 2);
+			$key = '/'.$key;
+			
+			GW_Lang::setCurrentLang($ln);
+			
+			$res = self::readWrite($key, $write);
+						
+			GW_Lang::setCurrentLang($prevln);
+			
+			return $res;
+		}
 
 		$create = $write !== null;
 
