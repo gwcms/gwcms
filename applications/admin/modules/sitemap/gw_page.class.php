@@ -105,6 +105,16 @@ class GW_Page extends GW_i18n_Data_Object
 		$this->set('path', $path=($parent?$parent->get('path').'/':'').$this->get('pathname'));
 	}
 
+	function prepare()
+	{
+		if (!$this->pathname)
+			$this->pathname = $this->title;
+
+		$this->pathname = GW_Validation_Helper::pagePathName($this->pathname);
+		$this->fixPath();		
+	}
+	
+	
 	function eventHandler($event, &$context_data=[])
 	{
 		switch($event)
@@ -120,7 +130,11 @@ class GW_Page extends GW_i18n_Data_Object
 					unset($this->content_base['input_data']);
 					unset($this->changed_fields['input_data']);
 				}
-				break;
+			break;
+			case 'BEFORE_INSERT':
+				$this->prepare();
+			break;
+			
 		}
 
 		parent::eventHandler($event, $context_data);

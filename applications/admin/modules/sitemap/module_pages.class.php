@@ -2,6 +2,17 @@
 
 class Module_Pages extends GW_Common_Module_Tree_Data {
 
+	
+	function init()
+	{	
+		parent::init();
+
+		
+		$this->app->carry_params['clean']=1;
+	}
+	
+	
+	
 	function viewDefault() {
 		$this->viewList();
 	}
@@ -46,12 +57,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data {
 		return GW_Template::getAssocStatic(Array('id', 'title'), 'active');
 	}
 
-	function preparePage($item) {
-		if (!$item->pathname)
-			$item->pathname = $item->title;
-
-		$item->pathname = GW_Validation_Helper::pagePathName($item->pathname);
-		$item->fixPath();
+	function preparePage(GW_Page $item) 
+	{
+		$item->prepare();
 	}
 
 	function getMoveCondition($item) {

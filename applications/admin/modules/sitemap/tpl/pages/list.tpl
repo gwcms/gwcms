@@ -47,9 +47,18 @@
 	{$do_toolbar_buttons[] = dialogconf}	
 	
 	
+	{function dl_actions_preview}
+		{list_item_action_m 
+			url=[false,[act=>doPreview,id=>$item->id]] 
+			iconclass="fa fa-external-link" 
+			tag_params=[target=>'_blank', title=>GW::l('/m/VIEWS/doPreview')]}
+	{/function}
+	
+	
+	
 	{if $m->filters.parent_id}
 		{*tree display*}
-		{$dl_actions=[invert_active,move,edit,delete,clone]}
+		{$dl_actions=[invert_active,move,edit,delete,clone,preview]}
 	{else}
 		{*one level list display*}
 		{$dl_actions=[invert_active,edit,delete,clone]}
