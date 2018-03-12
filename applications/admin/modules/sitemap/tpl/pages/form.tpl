@@ -58,11 +58,13 @@
 
 
 {function name=df_submit_button_preview}
+	{if $item->id}
 		<a target="_blank"
 			class="btn btn-default pull-right"  
 			onclick="if(event.shiftKey || event.ctrlKey){ window.open(gw_navigator.url(this.href,{ 'shift_key':1 }), '_blank');return false }"
 			href="{$app->buildUri(false,[act=>doPreview,id=>$item->id]) }" 
 			style="margin-left:2px;" title="{GW::l('/m/PREVIEW_SHIFTKEY')}"><i class="fa fa-external-link"></i> {GW::l('/m/VIEWS/doPreview') }</a>
+	{/if}
 {/function}
 
 {$submit_buttons=[save,apply,preview,cancel]}
