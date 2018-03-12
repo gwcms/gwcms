@@ -150,10 +150,10 @@ class GW_Application
 
 		if (isset($params['carry_params']))
 			$getparams = (is_array($getparams) ? $getparams : []) + $this->carryParams();
-
+		
 		if ($path === false)
 			$path = $this->path;
-
+		
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
 			(isset($params['app']) ? $params['app'] . '/' : $this->app_base) .
@@ -167,12 +167,7 @@ class GW_Application
 	 */
 	function carryParams()
 	{
-		static $cache;
-
-		if ($cache)
-			return $cache;
-
-		return $cache = array_intersect_key($_GET, $this->carry_params);
+		return array_intersect_key($_GET, $this->carry_params);
 	}
 
 	function jump($path = false, $params = Array())
