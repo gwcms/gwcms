@@ -172,12 +172,11 @@ class GW_Site_Application extends GW_Application
 		$this->smarty->assign($restore_vars); 
 	}
 
-	function processPage()
+	function processPage(GW_Page $page)
 	{
-		if(!$template=$this->page->getTemplate())
+		if(!$template=$page->getTemplate())
 			die('Template not set');
 			
-
 		//$this->preRun();
 		
 		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
@@ -217,7 +216,7 @@ class GW_Site_Application extends GW_Application
 
 		switch($this->page->type)
 		{
-			case 0: $this->processPage();break;
+			case 0: $this->processPage($this->page);break;
 			case 1: $this->jumpToFirstChild();break;
 			case 2: $this->jumpLink();break;
 			case 3: 
