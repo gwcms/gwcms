@@ -69,4 +69,4 @@
 
 {$submit_buttons=[save,apply,preview,cancel]}
 
-{include file="default_form_close.tpl" extra_fields=[id,path,insert_time,update_time]}
+{include file="default_form_close.tpl" extra_fields=[id,path,unique_pathid,insert_time,update_time]}

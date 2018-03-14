@@ -116,5 +116,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data {
 		
 		header('Location: /'.$this->app->ln.'/'.$item->path.($args ? '?'. http_build_query($args): ""));
 	}
-
+	
+	
+	function doFixUniqPathId()
+	{
+		foreach($this->model->findAll() as $page)
+		{
+			$page->fixUniqPathId(true);
+			$page->updateChanged();
+		}
+	}
 }
