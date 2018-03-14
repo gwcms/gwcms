@@ -1,0 +1,1 @@
+ALTER TABLE `gw_sitemap` ADD `unique_pathid` VARCHAR(255) NOT NULL AFTER `pathname`;

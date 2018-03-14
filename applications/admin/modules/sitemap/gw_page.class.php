@@ -10,11 +10,11 @@
 
 class GW_Page extends GW_i18n_Data_Object
 {
-	var $table = 'gw_sitemap';
-	var $i18n_fields = Array('title'=>1, 'in_menu'=>1);
-	var $default_order = 'priority ASC';
-	var $calculate_fields = Array('child_count'=>1);
-	var $level=0;
+	public $table = 'gw_sitemap';
+	public $i18n_fields = Array('title'=>1, 'in_menu'=>1);
+	public $default_order = 'priority ASC';
+	public $calculate_fields = Array('child_count'=>1);
+	public $level=0;
 
 	function getChilds($params=Array())
 	{		
@@ -34,6 +34,7 @@ class GW_Page extends GW_i18n_Data_Object
 	function getByPath($path, $check_parent=false)
 	{
 		$item0 = new GW_Page();
+		
 
 		while($path && strlen($path) > 0)
 		{
@@ -98,11 +99,27 @@ class GW_Page extends GW_i18n_Data_Object
 		return $arr;
 	}
 
+	
+	function fixUniqPathId($force=false, $recursiveInc=0)
+	{
+		if($force || !$this->unique_pathid)
+		{
+			$tmp = $this->pathname.($recursiveInc ? '-'.$recursiveInc : '');
+			
+			if($this->count(['id != ? AND unique_pathid = ?', $this->id, $tmp])){
+				$this->fixUniqPathId(true, $recursiveInc+1);
+			}else{
+				$this->unique_pathid = $tmp;
+			}
+		}
+	}
+	
 	function fixPath()
 	{
 		$parent=$this->getParent();
 
 		$this->set('path', $path=($parent?$parent->get('path').'/':'').$this->get('pathname'));
+		
 	}
 
 	function prepare()
@@ -111,7 +128,8 @@ class GW_Page extends GW_i18n_Data_Object
 			$this->pathname = $this->title;
 
 		$this->pathname = GW_Validation_Helper::pagePathName($this->pathname);
-		$this->fixPath();		
+		$this->fixPath();
+		$this->fixUniqPathId();
 	}
 	
 	
