@@ -212,8 +212,21 @@ class GW
 		
 		if($fullkey[0]!=='/')
 			return $fullkey;
-
+		
 		list(, $module, $key) = explode('/', $fullkey, 3);
+		
+		if($module == "LN")
+		{
+			list($ln, $fullkey) = explode('/', $key, 2);
+			
+			$prevln = GW_Lang::$ln;
+			GW_Lang::$ln = $ln;
+			$result = GW::ln('/'.$fullkey, $valueifnotfound);
+			
+			GW_Lang::$ln = $prevln;
+			
+			return $result;
+		}		
 		
 		if ($module == 'M') {
 			list($module, $key) = explode('/', $key, 2);
