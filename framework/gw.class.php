@@ -226,7 +226,7 @@ class GW
 			GW_Lang::$ln = $prevln;
 			
 			return $result;
-		}		
+		}
 		
 		if ($module == 'M') {
 			list($module, $key) = explode('/', $key, 2);
@@ -249,9 +249,13 @@ class GW
 			foreach ($tr as $k => $val) {
 
 				$var = & $cache[$cid];
-
-				foreach (explode('/', $k) as $kk)
-					$var = & $var[$kk];
+				
+				foreach (explode('/', $k) as $kk){
+					if(is_string($var))
+						break;
+						
+					$var = &$var[$kk];
+				}
 
 				$var = $val;
 			}
