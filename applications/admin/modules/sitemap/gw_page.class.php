@@ -20,7 +20,7 @@ class GW_Page extends GW_i18n_Data_Object
 	{		
 		$id = $this->id ? (int)$this->id : -1;
 
-		$cond = Array('parent_id=?'.($params['in_menu']?' AND active AND in_menu_'.$this->lang():''), $id);
+		$cond = Array('parent_id=?'.($params['in_menu']?' AND active=1 AND in_menu_'.$this->lang():''), $id);
 
 		$list = $this->findAll($cond);
 		

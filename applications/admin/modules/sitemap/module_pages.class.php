@@ -1,6 +1,7 @@
 <?php
 
-class Module_Pages extends GW_Common_Module_Tree_Data {
+class Module_Pages extends GW_Common_Module_Tree_Data 
+{
 
 	
 	function init()

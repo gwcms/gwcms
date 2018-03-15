@@ -20,8 +20,7 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		
 		
 		//uzloadinti tevini irasa
-		$this->parent=$this->model->createNewObject(isset($this->filters['parent_id']) ?  $this->filters['parent_id'] : false);
-		$this->parent->load();
+		$this->parent = $this->model->createNewObject(isset($this->filters['parent_id']) ?  $this->filters['parent_id'] : false, true);
 				
 		
 		//jeigu veiksmo pakvietimas - nevykdyti
@@ -49,10 +48,13 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		
 		$breadcrumbs_attach=[];
 		
-		foreach($this->parent->getParents() as $item)
+		$parents = $this->parent->getParents();
+		$parents = array_reverse($parents);
+			
+		foreach($parents as $item)
 			$breadcrumbs_attach[]=Array
 			(
-				'path'=>$this->app->fh()->gw_path(['params' => ['pid'=>$item->id] ]),
+				'path'=> $this->builduri(false, ['pid'=>$item->id],['level'=>2]),
 				'title'=>$item->title
 			);
 		
