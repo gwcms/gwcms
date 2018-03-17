@@ -260,23 +260,10 @@ class GW
 				$var = $val;
 			}
 		}
-
+		
 		//paimti vertima is cache
-		$explode = explode('/', $key);
-
-		$vr = Null;
-		if (isset($cache[$cid]))
-			$vr = & $cache[$cid];
-
-		foreach ($explode as $part) {
-			if (isset($vr[$part])) {
-				$vr = & $vr[$part];
-			} else {
-				$vr = null;
-				break;
-			}
-		}
-
+		$explode = explode('/', $key);	
+		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($cache[$cid],$explode);
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (self::$devel_debug && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
