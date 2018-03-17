@@ -166,13 +166,16 @@ class Module_Translations extends GW_Common_Module
 		$cfg = array('fields' => [
 			'id'=>'lof',
 			'module'=>'Lof',
-			'key'=>'Lof'
+			'key'=>'Lof',
 			]
 		);
+		
 		
 		foreach(GW::s("LANGS") as $lang)
 			$cfg["fields"]["value_".$lang]="Lof";
 			
+		
+		$cfg["fields"]['update_time'] = 'lof';
 		
 		return $cfg;
 	}		

@@ -20,7 +20,7 @@
 	
 	
 	
-	{$dl_order_enabled_fields=array_keys($display_fields)}
+	
 {/block}
 
 
