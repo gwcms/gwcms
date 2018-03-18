@@ -187,7 +187,8 @@ class GW_Application
 		$this->page = new GW_ADM_Page();
 
 		for ($i = count($this->path_arr) - 1; $i >= 0; $i--) {
-			if ($tmp = $this->page->getByPath($this->path_arr[$i]['path'])) {
+			
+			if ($tmp = $this->page->getByPath($this->path_arr[$i]['path_clean'])) {
 				$this->page = & $tmp;
 				return true;
 			}
