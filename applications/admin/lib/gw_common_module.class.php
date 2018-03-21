@@ -631,16 +631,16 @@ class GW_Common_Module extends GW_Module
 		$this->list_params['page']=1;
 
 		if ($pview instanceof GW_Adm_Page_View) {
-			
+
 			if($pview->order)
 				$this->list_params['order'] = $pview->order;
-			
-			
+
+
 			if($pview->fields){	
 				$this->list_params['fields'] = json_decode($pview->fields, true);
 				$this->list_params['updatetime'] = time();
 			}
-			
+
 			if($pview->page_by)
 			{
 				$this->list_params['page_by']=$pview->page_by;
@@ -765,7 +765,7 @@ class GW_Common_Module extends GW_Module
 	}
 
 	//used to allow user edit field list	
-	function getDisplayFields($fields)
+	function getDisplayFields($fields, $onlyenabled=1)
 	{	
 		$saved = [];
 		
@@ -795,9 +795,13 @@ class GW_Common_Module extends GW_Module
 		$rez = [];
 
 		foreach ($fields as $id => $enabled)
-			if ($enabled)
+			if($onlyenabled){
+				if ($enabled)
+					$rez[] = $id;
+			}else{
 				$rez[] = $id;
-
+			}
+			
 		return $rez;
 	}
 
@@ -821,7 +825,6 @@ class GW_Common_Module extends GW_Module
 	
 	function common_doDialogConfigSave()
 	{
-
 		//atstatyti numatytuosius nustatymus
 		/////////////////////////////////////////////////////////FIELDS
 		if ($_REQUEST['defaults'])
@@ -835,46 +838,121 @@ class GW_Common_Module extends GW_Module
 		
 		$this->__doDialogConfigPrepareOrders();		
 		
-		if($_REQUEST['savetodefaultpageview']=='1')
+		
+		if($pageviewid=$_POST['pageviewid'])
 		{
-			
-			$paths = $this->__viewsSearchPaths();
-			if($pview=GW_Adm_Page_View::singleton()->find(['title="Default" AND path=?',$paths[0]]))
+			$avail = $this->getImportantPageViews();
+			if(isset($avail['list'][$pageviewid]))
 			{
+				$pageview = $avail['list'][$pageviewid];
+				$pageview->fields = json_encode($fields);
+				$pageview->order = $this->list_params['order'];
+				$pageview->save();
+				$this->setMessage(GW::l('/g/UPDATE_SUCCESS').' ('.GW::l('/g/PAGE_VIEW').' - "'.$pageview->title.'")');
 				
 			}else{
-				$pview = GW_Adm_Page_View::singleton()->createNewObject();	
-				$pview->path = $paths[0];
-				$pview->title = "Default";
-				$pview->title_short = '<i class="fa fa-home"></i>';
+				$this->setError('/g/CANT_SAVE_TO_PAGE_VIEW_BADID');
 			}
-			
-			$pview->fields = json_encode($fields);
-			$pview->order = $this->list_params['order'];
-			$pview->active = 1;
-			$pview->priority = 100;
-			$pview->default = 1;
-			
-			$pview->save();
-			
 		}
 		
 
-		
-
-
 		$this->jump();
 	}
-
 	
+	//---------------------page views functions-----------------------------
+	
+	//gauti vienam is pathsu (ieskoma eiles tvarka)
+	function getPageView($paths, $default=false, $regular=false)
+	{
+		$extracond = "";
+		
+		if($default==1)
+			$extracond .= "`default`=1 AND ";
+		
+		if($regular==1)
+			$extracond .= "`regular`=1 AND ";
+		
+		foreach($paths as $path)
+		{
+			$pview=GW_Adm_Page_View::singleton()->find(["$extracond path=?", $path]);
+			if($pview)
+				return $pview;
+		}
+	}
+	
+	function createRegularPageView($path)
+	{
+		$pview = GW_Adm_Page_View::singleton()->createNewObject();	
+		$pview->path = $path;
+		$pview->title = GW::l('/g/PAGE_VIEW_REGULAR');
+		$pview->title_short = ''; // rodomas title nei sitas neuzsetintas
+
+		$pview->active = 1;
+		$pview->priority = 100;
+		$pview->default = 1;
+		$pview->save();
+		
+		return $pview;
+	}
+		
+	function getRegularPageView($createIfNotExists=false){
+		
+		$paths = $this->__viewsSearchPaths();
+		
+		if(!($pview=$this->getPageView($paths, false, true)))
+		{
+			if($createIfNotExists){
+				$pview = $this->createRegularPageView($paths[0]);
+			}else{
+				return null;
+			}
+		}
+
+		return $pview;	
+	}
+	
+	function getDefaultPageView($createIfNotExists=false)
+	{
+		$paths = $this->__viewsSearchPaths();
+		
+		if(!($pview=$this->getPageView($paths, true, false)))
+		{
+			if($createIfNotExists){
+				$pview = $this->createRegularPageView($paths[0]);
+			}else{
+				return null;
+			}
+		}
+
+		return $pview;
+	}
+	
+	function getCurrentPageView()
+	{
+		if(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View)
+			return $this->list_params['views'];
+	}
+
+	function getImportantPageViews()
+	{
+		$arr = [];
+		
+		if($current = $this->getCurrentPageView()) $arr[$current->id] = $current;
+		if($tmp1 = $this->getDefaultPageView()) $arr[$tmp1->id] = $tmp1;
+		if($tmp2 = $this->getRegularPageView()) $arr[$tmp2->id] = $tmp2;
+		
+
+		return ['list'=>$arr, 'current'=>$current];
+		
+	}	
 	
 	//paruosti laukelius redagavimui
 	function __viewDialogConfigPrepareOrders()
 	{
 		$this->initListParams(false, "list");
 		$edit_orders = $this->__parseOrders($this->list_params['order']);
-
-
+		
+		
 		$formatorders = [];
 		if($edit_orders)
 			foreach ($edit_orders as $fieldname => $dir)
@@ -887,8 +965,7 @@ class GW_Common_Module extends GW_Module
 
 		$this->tpl_vars['order_fields'] = $formatorders + $order_enabled_fields;		
 	}
-	
-	
+		
 	function common_viewDialogConfig()
 	{
 		$this->initListParams(false, "list");
@@ -896,7 +973,27 @@ class GW_Common_Module extends GW_Module
 		
 		$fields = $this->list_config['display_fields'];
 		
+		
 		$saved = isset($this->list_params['fields']) && $this->list_params['fields'] ? (array) $this->list_params['fields'] : [];
+		
+		//test
+		//&act=doresetListVars
+		
+
+		$page_views = $this->getImportantPageViews();		
+		
+		$this->tpl_vars['page_views'] = $page_views['list'];
+		
+				
+		if($page_views['current']){
+			$tmp = json_decode($page_views['current']->fields, true);
+						
+			if($tmp && is_array($tmp)){
+				$this->tpl_vars['current_page_view_id'] = $page_views['current']->id;
+				$tmp = $saved;
+			}
+		}
+		
 		
 		foreach($saved as $fieldname => $x)
 			if(!isset($fields[$fieldname]))
@@ -904,6 +1001,13 @@ class GW_Common_Module extends GW_Module
 
 		
 		$this->tpl_vars['fields'] = $saved + $fields;
+		
+		if($this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
+			$this->list_params['order'] = $this->list_params['views']->order;
+
+		}elseif (method_exists($this->model, 'getDefaultOrderBy')){
+			$this->list_params['order'] = $this->model->getDefaultOrderBy();
+		}		
 		
 		$this->__viewDialogConfigPrepareOrders();
 
@@ -1026,7 +1130,7 @@ class GW_Common_Module extends GW_Module
 		
 		$vars['display_fields'] = $display_fields;
 		$vars['dl_fields'] = $this->getDisplayFields($display_fields);
-	
+		
 		$vars['dl_order_enabled_fields'] = $order_enabled;
 		
 				

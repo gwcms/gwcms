@@ -41,6 +41,44 @@ class GW_Admin_Application extends GW_Application
 		$this->jump($item->get('path'));
 	}	
 	
+	//gali buti ieskoma pvz
+	//sitemap/templates/15/tplvars/form jei bus toks - sitemap/templates/tplvars tai supras
+	//users/users/form 
+
+	function getPage()
+	{
+		$this->page = new GW_ADM_Page();
+
+		for ($i = count($this->path_arr) - 1; $i >= 0; $i--) {
+			
+			if ($tmp = $this->page->getByPath($this->path_arr[$i]['path_clean'])) {
+				$this->page = & $tmp;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function getAdmPage($module_dirname, $modulename)
+	{
+		$path = [$module_dirname, $modulename];
+		
+		
+		$this->page = new GW_ADM_Page();
+
+
+		if ($tmp = $this->page->getByPath($module_dirname.'/'.$modulename) ) {
+			$this->page = & $tmp;
+			return true;
+		}
+	
+
+		return false;		
+	}
+	
+	
+	
 	function getPages($params=[])
 	{
 		$params['can_access']=[$this, 'canAccess'];
@@ -138,5 +176,27 @@ class GW_Admin_Application extends GW_Application
 		GW_Lang::$module  = $resore_module;
 
 	}
+	
+	function process()
+	{
+
+		$path_info = $this->getModulePathInfo($this->path);
+		
+		
+
+		$this->getAdmPage($path_info['dirname'], $path_info['module']);
+				
+		
+		if (!$this->canAccess($this->page))
+			if ($this->user)
+				$this->jumpToFirstChild();
+			else
+				$this->jump(GW::s("$this->app_name/PATH_LOGIN"));		
+		
+		
+
+		$this->processModule($path_info, $_REQUEST);
+	}	
+	
 	
 }

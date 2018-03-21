@@ -178,25 +178,6 @@ class GW_Application
 		Navigator::jump(self::buildUri($path, $params, ['carry_params' => 1]));
 	}
 
-	//gali buti ieskoma pvz
-	//sitemap/templates/15/tplvars/form jei bus toks - sitemap/templates/tplvars tai supras
-	//users/users/form 
-
-	function getPage()
-	{
-		$this->page = new GW_ADM_Page();
-
-		for ($i = count($this->path_arr) - 1; $i >= 0; $i--) {
-			
-			if ($tmp = $this->page->getByPath($this->path_arr[$i]['path_clean'])) {
-				$this->page = & $tmp;
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	function moduleExists($dirname, $name = '')
 	{
 		return file_exists(GW::s("DIR/{$this->app_name}/MODULES") . "$dirname/module_" . ($name ? $name : $dirname) . ".class.php");
@@ -339,7 +320,7 @@ class GW_Application
 				$level = $i + 1;
 
 
-
+			
 
 		if ($level) {
 			$info['path'] = array_splice($path_arr_clean, 0, $level);
@@ -358,7 +339,7 @@ class GW_Application
 
 		$obj = new $name();
 		$obj->app = $this;
-
+		
 		return $obj;
 	}
 
@@ -379,7 +360,7 @@ class GW_Application
 	{
 		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
 			$this->jumpToFirstChild();
-
+		
 		$module = $this->constructModule1($path_info);
 
 		$this->module = & $module;
@@ -447,7 +428,6 @@ class GW_Application
 		$this->setMessage(['type'=>GW_MSG_ERR, 'text'=>$message]);
 	}
 
-
 	function acceptMessages($prepare = false)
 	{
 		
@@ -476,9 +456,6 @@ class GW_Application
 		return $data;
 	}
 
-
-	
-
 	function fatalError($message)
 	{
 		$this->setError($message);
@@ -492,24 +469,6 @@ class GW_Application
 		$this->processModule($path_info, []);
 
 		exit;
-	}
-
-	function process()
-	{
-
-		if (!$this->canAccess($this->page))
-			if ($this->user)
-				$this->jumpToFirstChild();
-			else
-				$this->jump(GW::s("$this->app_name/PATH_LOGIN"));
-
-
-
-		$path_info = $this->getModulePathInfo($this->path);
-		
-		
-
-		$this->processModule($path_info, $_REQUEST);
 	}
 
 	/**
