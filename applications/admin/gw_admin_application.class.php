@@ -62,18 +62,15 @@ class GW_Admin_Application extends GW_Application
 
 	function getAdmPage($module_dirname, $modulename)
 	{
-		$path = [$module_dirname, $modulename];
-		
-		
 		$this->page = new GW_ADM_Page();
+				
+		$path = $module_dirname.($modulename ? '/'.$modulename : '');
 
-
-		if ($tmp = $this->page->getByPath($module_dirname.'/'.$modulename) ) {
+		if ($tmp = $this->page->getByPath($path) ) {
 			$this->page = & $tmp;
 			return true;
 		}
 	
-
 		return false;		
 	}
 	
@@ -174,25 +171,19 @@ class GW_Admin_Application extends GW_Application
 		}
 		
 		GW_Lang::$module  = $resore_module;
-
 	}
 	
 	function process()
 	{
-
 		$path_info = $this->getModulePathInfo($this->path);
+		$this->getAdmPage($path_info['dirname'], $path_info['module'] ?? false);
 		
-		
-
-		$this->getAdmPage($path_info['dirname'], $path_info['module']);
-				
-		
+			
 		if (!$this->canAccess($this->page))
 			if ($this->user)
 				$this->jumpToFirstChild();
 			else
 				$this->jump(GW::s("$this->app_name/PATH_LOGIN"));		
-		
 		
 
 		$this->processModule($path_info, $_REQUEST);
