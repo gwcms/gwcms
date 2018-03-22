@@ -6,6 +6,8 @@ class Module_Comments extends Module_Items
 {	
   	function init()
   	{
+		$this->model = GW_Todo_Item::singleton();
+		
   		parent::init();
   		
 		
