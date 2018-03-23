@@ -65,6 +65,12 @@ class GW_Admin_Application extends GW_Application
 		$this->page = new GW_ADM_Page();
 				
 		$path = $module_dirname.($modulename ? '/'.$modulename : '');
+		
+		//one level module path
+		if($modulename == $module_dirname){
+			if($this->getAdmPage($module_dirname, false))
+				return true;
+		}
 
 		if ($tmp = $this->page->getByPath($path) ) {
 			$this->page = & $tmp;
@@ -176,7 +182,7 @@ class GW_Admin_Application extends GW_Application
 	function process()
 	{
 		$path_info = $this->getModulePathInfo($this->path);
-		$this->getAdmPage($path_info['dirname'], $path_info['module'] ?? false);
+		$this->getAdmPage($path_info['dirname'], $path_info['module']);
 		
 			
 		if (!$this->canAccess($this->page))
