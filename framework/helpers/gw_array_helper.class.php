@@ -111,19 +111,28 @@ class GW_Array_Helper
 	
 	static function sortByField($field, &$array)
 	{
-		uasort($array, function($a, $b) use ($field)
-		{
-		    if ($a[$field] == $b[$field]){
-			return 0;
-		    }else if ($a[$field] > $b[$field]){
-			return -1;
-		    }else {             
-			return 1;
-		    }
-		});
+		uasort($array, function($a, $b) use ($field) { return $a[$field] <=> $b[$field]; });
 
 		return true;
 	}
+	
+	static function objSortByField($field, &$array)
+	{
+		uasort($array, function($a, $b) use ($field) { return $a->$field <=> $b->$field; });
+
+		return true;
+	}
+	
+	static function objSortByFieldAlpabet($field, &$array, $lncode='lt_LT')
+	{
+		$c = new Collator($lncode);
+
+		uasort($array,  function($a,$b) use ($field, $c)  {
+			  return $c->compare($a->$field, $b->$field);
+		     });		
+		
+		return true;
+	}	
 
 
 	/**
