@@ -216,8 +216,15 @@ class FH
 			return "$h:$i";
 
 		$lang = $this->app->lang;
+		
+		
+		if($m > 0){
+			$month = $this->app->app_name=="ADMIN" ? GW::l('/G/date/MONTHS_SHORT/'. ($m-1)) : GW::ln('/G/date/MONTHS_SHORT/'. ($m-1));
+		}else{
+			$month ="";
+		}
 
-		return (date('Y') != $y ? $y . ' ' : '') . GW::ln('/G/date/MONTHS_SHORT/'. ($m-1)) . ' ' . $d;
+		return (date('Y') != $y ? $y . ' ' : '') . $month . ' ' . $d;
 	}
 
 	function dateFormate($date, $format)
