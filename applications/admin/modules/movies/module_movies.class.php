@@ -11,7 +11,8 @@ class Module_Movies extends GW_Common_Module
 	{	
 		parent::init();
 		
-		$this->list_params['paging_enabled']=1;			
+		$this->list_params['paging_enabled']=1;		
+		d::dumpas($this->app->page);
 		
 	}	
 	
