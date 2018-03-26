@@ -697,7 +697,7 @@ class GW_Common_Module extends GW_Module
 		$this->loadViews();
 		$this->setDefaultOrder(); //for template
 		
-		if(isset($_GET['form_ajax']))
+		if(isset($_GET['form_ajax']) && !isset($params['ajax_one_item_list']))
 		{
 			$this->processView('form');
 			exit;
