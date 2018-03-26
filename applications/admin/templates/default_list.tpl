@@ -230,7 +230,7 @@
 					{if $dl_inline_edit}
 						<script src="{$app_root}static/js/gwcms_inline_edit.js"></script>
 						<script type="text/javascript">
-							var inline_edit_form_url = '{$m->buildUri("form")}';
+							var inline_edit_form_url = '{$m->buildUri(false,[form_ajax=>1])}';
 							
 							require(['gwcms'], function(){
 								initActiveList();
@@ -271,5 +271,3 @@
 		{include file="default_close.tpl"}
 	{/block}	
 {/if}
-
-

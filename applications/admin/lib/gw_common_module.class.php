@@ -341,9 +341,6 @@ class GW_Common_Module extends GW_Module
 		
 
 		if(isset($_GET['form_ajax'])){
-			$this->loadViews();
-			$this->initListParams(false, 'list');
-			
 			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
 		}
 		
@@ -699,7 +696,12 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->loadViews();
 		$this->setDefaultOrder(); //for template
-
+		
+		if(isset($_GET['form_ajax']))
+		{
+			$this->processView('form');
+			exit;
+		}
 
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 
@@ -1061,6 +1063,7 @@ class GW_Common_Module extends GW_Module
 	function doGetFilters()
 	{
 		$this->prepareListConfig();
+		
 		
 		$filters_config = $this->list_config['dl_filters'];
 		
