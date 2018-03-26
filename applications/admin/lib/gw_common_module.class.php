@@ -552,7 +552,7 @@ class GW_Common_Module extends GW_Module
 	{
 		if (!isset($this->list_params['order']) || !$this->list_params['order']){
 			
-			if($this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
+			if(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
 				$this->list_params['order'] = $this->list_params['views']->order;
 			
 			}elseif (method_exists($this->model, 'getDefaultOrderBy')){
@@ -581,12 +581,18 @@ class GW_Common_Module extends GW_Module
 		
 		if (!$store || !$store->id)
 			$store = $pview0->selectDefault($views);
-
+		
+			
+		if($store && $store->id && !isset($views[$store->id])){
+			$store = GW_Adm_Page_View::singleton(); /*in case of view is deleted*/
+		}
+		
 		foreach ($views as $i => $view) {
 
 			//set current view
-			if ($store->id == $view->id) 
+			if ($store->id == $view->id){
 				$view->current = true;
+			}
 			
 			//calculate results
 			if ($view->calculate) {
@@ -605,6 +611,9 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
+				
+		if(!$views)
+			$this->createRegularPageView();
 		
 		$this->tpl_vars['views'] = & $views;
 	}
@@ -882,16 +891,17 @@ class GW_Common_Module extends GW_Module
 		}
 	}
 	
-	function createRegularPageView($path)
+	function createRegularPageView($path=null)
 	{
 		$pview = GW_Adm_Page_View::singleton()->createNewObject();	
-		$pview->path = $path;
+		$pview->path = $path===null ? $this->__viewsSearchPaths()[0] : $path;
 		$pview->title = GW::l('/g/PAGE_VIEW_REGULAR');
 		$pview->title_short = ''; // rodomas title nei sitas neuzsetintas
 
 		$pview->active = 1;
 		$pview->priority = 100;
 		$pview->default = 1;
+		$pview->regular = 1;
 		$pview->save();
 		
 		return $pview;
@@ -1347,8 +1357,6 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 		
-		
-		
 		$args = isset($_GET['saveasorder'])? '&saveasorder=1':'';
 		
 		if($vals)
@@ -1402,7 +1410,4 @@ class GW_Common_Module extends GW_Module
 
 		$this->jump();
 	}
-	
-	
-	
 }
