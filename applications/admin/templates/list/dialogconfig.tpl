@@ -13,9 +13,9 @@
 <style>
 
 .dialogcontainer{ padding: 10px}
-.sortable { list-style-type: none; margin: 0; padding: 0; }
-.sortable input{ margin:0; margin-right: 5px}
-.sortable li { 
+.cols_deactivated, .sortable { list-style-type: none; margin: 0; padding: 0; }
+.cols_deactivated input, .sortable input{ margin:0; margin-right: 5px}
+.cols_deactivated li, .sortable li { 
 	font-size: 100%; 
 	line-height: 100%; 
 	margin-bottom: 2px;
@@ -23,8 +23,8 @@
 	text-align: left;
 	background-color: #eee;
 }
-.sortable li span {
-		vertical-align: middle;
+.cols_deactivated li span, .sortable li span {
+	vertical-align: middle;
 }
 
 
@@ -32,7 +32,7 @@
 
 .sortable-state-disabled{ 
 	border:1px solid silver;
-	background-color: #fff !important;
+	background-color: #fff;
 	cursor: default !important;	
 	color: silver;
 }
@@ -51,20 +51,22 @@
 
 .bootstrap-select .btn { padding: 6px 12px 6px 12px }
 
+.cols_deactivated{ max-height:150px; overflow-y: auto; }
+
 </style>
 
 
 
 
-<table style="" class="gwTable gwActiveTable">
+<table style="" class="gwTable">
 
 
 <tr><th>{$lang.LDS_FIELD_PRIORITY_VISIBILITY}</th><th>{GW::l('/g/ORDERS_LABEL')}</th></tr>
 
 <tr>
-<td valign="top">
+<td valign="top" class="columns">
 
-<ul  class="sortable form-field" style="width:200px;margin-top:5px">
+<ul class="cols_activated sortable form-field" style="width:200px;margin-top:5px">
 	{foreach $fields as $id => $enabled}
 		<li>
 			<input type="checkbox" {if $enabled}checked{/if} />
@@ -73,11 +75,17 @@
 		</li>
 	{/foreach}
 </ul>
+
+
+<i id="cols_deactivated_label" style="color:brown">Deaktyvuoti:</i>
+<ul class="cols_deactivated">
+</ul>
+
 </td>
 
-<td valign="top">
+<td valign="top" class="columns">
 
-<ul  class="sortable form-field" style="width:200px;margin-top:5px">
+<ul  class="cols_activated sortable form-field" style="width:200px;margin-top:5px">
 	{foreach $order_fields as $id => $info}
 		<li class="orderrow">
 			<input class="orderCheckbox" type="checkbox" {if $info.enabled}checked{/if} />
@@ -93,6 +101,10 @@
 			
 		</li>
 	{/foreach}
+</ul>
+
+<i id="cols_deactivated_label" style="color:brown">{GW::l('/g/DEACTIVATED_FIELDS')}:</i>
+<ul class="cols_deactivated">
 </ul>
 
 
@@ -155,12 +167,52 @@ require(["gwcms"], function(){
 		$('.sortable li').addClass('sortable-state-disabled');
 		$('.sortable li input:checked').parent().toggleClass('sortable-state-disabled');
 
-		$('.sortable li input').change(function() {
+		$('.sortable li input[type=checkbox]').change(function() {
 			var $this = $(this)
-			$this.parent().toggleClass('sortable-state-disabled')
+			
+			var $li = $(this).parent();
+			
+			var attachto=$li.parents('.columns').find($this.is(':checked') ? '.cols_activated' : '.cols_deactivated').get(0);
+			
+			if($this.is(':checked')){
+				$li.detach().appendTo( attachto );
+			}else{
+				$li.detach().prependTo( attachto );
+			}
+			
+			if ( $this.is(':checked') ) {
+				$( $li ).animate({
+					backgroundColor: "#eee",
+					color: "#000"
+				}, 1000 );
+			} else {
+				$( $li ).animate({
+					backgroundColor: "#fff",
+					color: "#999"
+				}, 1000 );
+			}
+			
+			
+			
+			
+			$this.parent().toggleClass('sortable-state-disabled', $this.is(':checked'))
 
 			$this.next().val( $this.is(':checked') ? 1 : 0 );
+			
+			$('.columns').each(function(){
+				var max_height = Math.max(500-$(this).find('.cols_activated').height(), 150)
+				
+				$(this).find('.cols_deactivated').css('max-height', max_height+'px')
+				
+				
+			})
 		});
+		
+		$('.columns .sortable li input:not(:checked)').each(function(){ 
+			$(this).change();
+		})
+		
+		
 
 		$('.sortable li').hover(
 			function () {
