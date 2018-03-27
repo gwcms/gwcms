@@ -565,7 +565,10 @@ class GW_Common_Module extends GW_Module
 	
 	function __viewsSearchPaths()
 	{
-		return array_unique([$this->app->path_clean,$this->app->path, $this->module_path_clean]);
+		$path = implode('/', $this->module_path);
+		$path_clean = implode('/', $this->module_path_filtered);
+				
+		return array_unique([$path, $path_clean, $this->module_path_clean]);
 	}
 	//uzkrauna sarasui viewsus
 	//viewsai savyje turi pavadinima, salyga, rikiavima, suskaiciuoti direktyva, 
@@ -775,21 +778,27 @@ class GW_Common_Module extends GW_Module
 		$this->jump(false, ['id' => $item->get('id')]);
 	}
 
-	//used to allow user edit field list	
-	function getDisplayFields($fields, $onlyenabled=1)
+	/**
+	 * Atvaizdavimui list view'se paruošiamas stulpelių sąrašas pagal išsaugotus nustatymus 
+	 * i funkcija paduodamas turimas laukeliu sarasas,
+	 * pagal sesijoje arba pageview'se saugomu laukeliu masyva atrenkami laukeliai rodymui
+	 * 
+	 */
+	function getDisplayFields(&$fields, $onlyenabled=1)
 	{	
 		$saved = [];
+		
+		//d::dumpas($this->tpl_vars['views']);
+		//d::dumpas("test");
+
 		
 		if(isset($this->list_params['fields']))
 		{
 			$saved = $this->list_params['fields'];
-			
-		}elseif(isset($this->tpl_vars['views']) && count($this->tpl_vars['views'])){
-			
-			foreach($this->tpl_vars['views'] as $pview)
-				if($pview->default)
-					break;
-			
+		}
+		elseif(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View)
+		{	
+			$pview = $this->list_params['views'];
 			$saved = (array) json_decode($pview->fields, true);
 		}
 		
@@ -804,7 +813,7 @@ class GW_Common_Module extends GW_Module
 		}
 
 		$rez = [];
-
+		
 		foreach ($fields as $id => $enabled)
 			if($onlyenabled){
 				if ($enabled)
@@ -812,7 +821,7 @@ class GW_Common_Module extends GW_Module
 			}else{
 				$rez[] = $id;
 			}
-			
+						
 		return $rez;
 	}
 
@@ -940,7 +949,7 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	function getCurrentPageView()
-	{
+	{		
 		if(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View)
 			return $this->list_params['views'];
 	}
@@ -954,8 +963,7 @@ class GW_Common_Module extends GW_Module
 		if($tmp2 = $this->getRegularPageView()) $arr[$tmp2->id] = $tmp2;
 		
 
-		return ['list'=>$arr, 'current'=>$current];
-		
+		return ['list'=>$arr, 'current'=>$current];		
 	}	
 	
 	//paruosti laukelius redagavimui
@@ -963,7 +971,7 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->initListParams(false, "list");
 		$edit_orders = $this->__parseOrders($this->list_params['order']);
-		
+				
 		
 		$formatorders = [];
 		if($edit_orders)
@@ -981,10 +989,11 @@ class GW_Common_Module extends GW_Module
 	function common_viewDialogConfig()
 	{
 		$this->initListParams(false, "list");
+		$this->loadViews();
 		$this->prepareListConfig();
-		
+				
 		$fields = $this->list_config['display_fields'];
-		
+				
 		
 		$saved = isset($this->list_params['fields']) && $this->list_params['fields'] ? (array) $this->list_params['fields'] : [];
 		
@@ -992,11 +1001,11 @@ class GW_Common_Module extends GW_Module
 		//&act=doresetListVars
 		
 
-		$page_views = $this->getImportantPageViews();		
-		
+		$page_views = $this->getImportantPageViews();	
+				
 		$this->tpl_vars['page_views'] = $page_views['list'];
 		
-				
+		
 		if($page_views['current']){
 			$tmp = json_decode($page_views['current']->fields, true);
 						
@@ -1117,6 +1126,15 @@ class GW_Common_Module extends GW_Module
 	}	
 	
 	
+	/**
+	 * 
+	 * užkrauna $this->list_config kuriame yra rodomi stulpeliai ir jų eiliškumas
+	 * filtrai, ir rikiuotinų stulpelių sąrašas
+	 * 
+	 * paimamas laukelių konfigas
+	 * 
+	 * @return boolean
+	 */
 	function prepareListConfig()
 	{
 		//neuzkraut jei jau uzkrautas
@@ -1141,28 +1159,15 @@ class GW_Common_Module extends GW_Module
 				$filters[$fieldname] = isset($conf['filters'][$fieldname]) ? $conf['filters'][$fieldname]: 1;					
 		}
 		
-		$vars['display_fields'] = $display_fields;
+		
 		$vars['dl_fields'] = $this->getDisplayFields($display_fields);
+		$vars['display_fields'] = $display_fields;
 		
-		$vars['dl_order_enabled_fields'] = $order_enabled;
 		
-				
-		//padaryti kad filtrai susirikiuotu pagal per "Rodymo parinktys" sustatyta eiliškumą
-		if(is_array($this->app->page->fields)){
-			
-			$tmp = $this->app->page->fields + $filters;
-			
-			foreach($tmp as $key => $val)
-			{
-				if(isset($filters[$key]) && $filters[$key]!=1 && $filters[$key]!=0)
-					$tmp[$key] = $filters[$key];
-			}
-			$filters = $tmp;
-		}
-		
+		$vars['dl_order_enabled_fields'] = $order_enabled;		
 		$vars['dl_filters'] = $filters;
 		
-		
+		//d::ldump($vars);
 		
 		
 		$this->list_config = $vars;
