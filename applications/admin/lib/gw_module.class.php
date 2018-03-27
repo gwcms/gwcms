@@ -111,6 +111,9 @@ class GW_Module
 		$this->tpl_vars['messages'] =& $this->messages;
 	}
 	
+	/***
+	 * Užkrauna peržiūros parametrus išsaugotus sesijoje
+	 */
 	function initListParams($modulepath=false,$viewname=false)
 	{	
 		if(!$modulepath)
