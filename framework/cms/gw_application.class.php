@@ -306,29 +306,29 @@ class GW_Application
 		$path_arr = explode('/', $path);
 		$path_arr_clean = $path_arr;
 		//array_map(Array('GW_Validation_Helper', 'classFileName'), $path_arr);
-
+		
 		if (is_dir($dirname = GW::s("DIR/{$this->app_name}/MODULES") . $path_arr[0]))
 			$info['dirname'] = $path_arr[0];
 		else
 			return Array('path' => Array('default'), 'dirname' => 'default', 'module' => 'default');
 
-
-
-
 		foreach ($path_arr_clean as $i => $name)
 			if (self::moduleExists($path_arr_clean[0], $name))
 				$level = $i + 1;
 
+		
 
 			
-
 		if ($level) {
 			$info['path'] = array_splice($path_arr_clean, 0, $level);
 			$info['module'] = $info['path'][count($info['path']) - 1];
 
 			$info['params'] = array_splice($path_arr, $level, count($path_arr));
 		}
-
+		
+		
+		$info['path_clean'] = array_filter($path_arr, function($var){ return !is_numeric($var); } );
+		
 		return $info;
 	}
 
@@ -349,6 +349,9 @@ class GW_Application
 		
 		$module->module_name = $path_info['module'];
 		$module->module_path = $path_info['path'];
+		$module->module_path_filtered = $path_info['path_clean'];		
+		
+		
 		$module->module_dir = GW::s("DIR/{$this->app_name}/MODULES") . $path_info['dirname'] . '/';
 
 
@@ -394,7 +397,7 @@ class GW_Application
 		}
 
 		$path_info = $this->getModulePathInfo($path);
-
+		
 		return $this->processModule($path_info, $request_args);
 	}
 
