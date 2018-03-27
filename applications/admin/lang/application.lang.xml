@@ -675,4 +675,9 @@
 	<en>Manage</en>
 </i>
 
+<i id="DEACTIVATED_FIELDS">
+	<lt>Deaktyvuoti</lt>
+	<en>Deaktyvuoti</en>
+</i>
+
 </xml>
