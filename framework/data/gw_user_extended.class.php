@@ -96,7 +96,7 @@ class GW_User_Extended
 			$db->insert($this->table, $vals + ['insert_time' => date('Y-m-d H:i:s')]);
 	}
 
-	function get($key, $all = true)
+	function get($key, $all = true, $full=false)
 	{
 		$db = $this->getDB();
 
@@ -108,11 +108,10 @@ class GW_User_Extended
 		$list = [];
 
 		if (!$all)
-			return $rez['value'];
+			return $full ? $rez : $rez['value'];
 
 		foreach ($rez as $row)
-			$list[] = $row['value'];
-
+			$list[] = $full ? $row : $row['value'];
 
 		return $list;
 	}
