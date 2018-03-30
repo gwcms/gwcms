@@ -4,7 +4,7 @@
 
 
 {function "page_view_a"}
-	<a class="btn {if $view->current}btn-primary{else}btn-default{/if}" 
+	<a class="btn {if $m->list_config.pview->id==$view->id}btn-primary{else}btn-default{/if}" 
 		href="{$m->buildUri(false,[act=>doSetView,view_id=>$view->id],[carry_params=>1])}"
 		title="{if $view->title_short}{$view->title}{else}{$view->condition}{/if} {if $view->fields}[Stulpeliai]{/if} {if $view->condition}[Filtrai]{/if} {if $view->order}[Rikiavimas]{/if}"
 		>
@@ -30,7 +30,7 @@
 	</button>
 	<ul class="dropdown-menu">
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2])}">{GW::l('/g/CREATE_NEW_VIEW')}</a></li>
-	    {if $m->list_params['views']->id}
+	    {if $m->list_config.pview->id}
 		<li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,update=>1,clean=>2])}">{GW::l('/g/UPDATE_CURRENT_VIEW')}</a></li>
 	    {/if}
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE')}</a></li>
@@ -98,11 +98,3 @@
 </div>
 
 {/if}
-
-
-{capture append=footer_hidden}	
-	<script>
-		require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
-	</script>		
-{/capture}
-

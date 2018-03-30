@@ -130,7 +130,10 @@ class GW_Module
 		$this->list_params = array_merge($this->list_params, $sess_store);
 		
 		$sess_store = $this->list_params;
-		$this->list_params =& $sess_store;		
+		$this->list_params =& $sess_store;	
+		
+		if(isset($this->list_params['pview']) && $this->list_params['pview'])
+			$this->list_config['pview'] = GW_Adm_Page_View::singleton()->createNewObject($this->list_params['pview'], true);
 	}
 	
 	function doSetListParams()

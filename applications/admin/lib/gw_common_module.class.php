@@ -486,8 +486,12 @@ class GW_Common_Module extends GW_Module
 		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
 
-		if (isset($this->list_params['views']->condition) && $this->list_params['views']->condition)
-			$cond .= ($cond ? ' AND ' : '') . $this->list_params['views']->condition;
+		
+		
+		if (isset($this->list_config['pview']->condition) && $this->list_config['pview']->condition){
+			
+			$cond .= ($cond ? ' AND ' : '') . $this->list_config['pview']->condition;
+		}
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
 
@@ -552,8 +556,8 @@ class GW_Common_Module extends GW_Module
 	{
 		if (!isset($this->list_params['order']) || !$this->list_params['order']){
 			
-			if(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
-				$this->list_params['order'] = $this->list_params['views']->order;
+			if(isset($this->list_config['pview']) && $this->list_config['pview'] instanceof GW_Adm_Page_View && $this->list_config['pview']->order){
+				$this->list_params['order'] = $this->list_config['pview']->order;
 			
 			}elseif (method_exists($this->model, 'getDefaultOrderBy')){
 				$this->list_params['order'] = $this->model->getDefaultOrderBy();
@@ -580,22 +584,9 @@ class GW_Common_Module extends GW_Module
 		$pview0 = GW_Adm_Page_View::singleton();
 		$views = $pview0->getByPath($this->__viewsSearchPaths());
 		
-		$store = & $this->list_params['views'];
 		
-		if (!$store || !$store->id)
-			$store = $pview0->selectDefault($views);
-		
-			
-		if($store && $store->id && !isset($views[$store->id])){
-			$store = GW_Adm_Page_View::singleton(); /*in case of view is deleted*/
-		}
 		
 		foreach ($views as $i => $view) {
-
-			//set current view
-			if ($store->id == $view->id){
-				$view->current = true;
-			}
 			
 			//calculate results
 			if ($view->calculate) {
@@ -633,7 +624,7 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$pview = GW_Adm_Page_View::singleton()->selectById($this->tpl_vars['views'], $_REQUEST['view_id']);
-		$this->list_params['views'] = $pview;
+		$this->list_params['pview'] = $pview->id;
 		
 		
 		//jump to first page
@@ -657,11 +648,12 @@ class GW_Common_Module extends GW_Module
 			
 			
 		}
-
+		
 
 
 		unset($_GET['view_id']);
-		session_write_close();
+		//session_write_close();
+		
 		
 		
 		$this->jump();
@@ -796,9 +788,9 @@ class GW_Common_Module extends GW_Module
 		{
 			$saved = $this->list_params['fields'];
 		}
-		elseif(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View)
+		elseif(isset($this->list_config['pview']) && $this->list_config['pview'] instanceof GW_Adm_Page_View)
 		{	
-			$pview = $this->list_params['views'];
+			$pview = $this->list_config['pview'];
 			$saved = (array) json_decode($pview->fields, true);
 		}
 		
@@ -950,8 +942,8 @@ class GW_Common_Module extends GW_Module
 	
 	function getCurrentPageView()
 	{		
-		if(isset($this->list_params['views']) && $this->list_params['views'] instanceof GW_Adm_Page_View)
-			return $this->list_params['views'];
+		if(isset($this->list_config['pview']) && $this->list_config['pview'])
+			return $this->list_config['pview'];
 	}
 
 	function getImportantPageViews()
@@ -1023,8 +1015,8 @@ class GW_Common_Module extends GW_Module
 		
 		$this->tpl_vars['fields'] = $saved + $fields;
 		
-		if($this->list_params['views'] instanceof GW_Adm_Page_View && $this->list_params['views']->order){
-			$this->list_params['order'] = $this->list_params['views']->order;
+		if($this->list_config['pview'] instanceof GW_Adm_Page_View && $this->list_config['pview']->order){
+			$this->list_params['order'] = $this->list_config['pview']->order;
 
 		}elseif (method_exists($this->model, 'getDefaultOrderBy')){
 			$this->list_params['order'] = $this->model->getDefaultOrderBy();
@@ -1160,17 +1152,14 @@ class GW_Common_Module extends GW_Module
 		}
 		
 		
-		$vars['dl_fields'] = $this->getDisplayFields($display_fields);
-		$vars['display_fields'] = $display_fields;
+		$this->list_config['dl_fields'] = $this->getDisplayFields($display_fields);
+		$this->list_config['display_fields'] = $display_fields;
 		
 		
-		$vars['dl_order_enabled_fields'] = $order_enabled;		
-		$vars['dl_filters'] = $filters;
+		$this->list_config['dl_order_enabled_fields'] = $order_enabled;		
+		$this->list_config['dl_filters'] = $filters;
 		
-		//d::ldump($vars);
-		
-		
-		$this->list_config = $vars;
+
 		
 		return true;
 	}
@@ -1355,10 +1344,10 @@ class GW_Common_Module extends GW_Module
 		
 		if(isset($_GET['update']))
 		{
-			if($this->list_params['views'] instanceof GW_Adm_Page_View)
+			if($this->list_config['pview'] instanceof GW_Adm_Page_View)
 			{
-				$id = $this->list_params['views']->id;
-				$vals = $this->list_params['views']->toArray();
+				$id = $this->list_config['pview']->id;
+				$vals = $this->list_config['pview']->toArray();
 			}
 		}
 		

@@ -1,4 +1,10 @@
 /*USED*/
+
+
+
+
+
+
 var GW = {
 	zero: function (num, count)
 	{
@@ -173,6 +179,56 @@ var gw_adm_sys = {
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);
+	},
+	
+	initWS: function(config){
+				
+		var gwws = new GW_WS()
+		
+				
+		gwws.registerEvent('connect', 'main', function () {
+						
+				console.log('WSC Connected!')
+				gwws.authorise({ username: config.user, pass: config.apikey })
+		});
+		
+		gwws.registerEvent('authorise', 'main', function (data) {
+							
+			console.log('WSC Authorised!')
+			
+			
+			//gwws.joinchan({ channel: _this.channel, pass: "" }, function(success, data){
+			//	gwws.infochan( { channel: data.channel });
+			//});						
+		});	
+		
+		gwws.registerEvent('disconnect', 'main', function () {
+
+			console.log('WSC Disconnected!')
+		});	
+		
+		gwws.registerMessageCallback('messageprivate','main', function(data){ 
+			console.log({"Private_message_received":data}); 
+			
+			//perduodama json uzkoduota zinute su parametrais title,text
+			var decoded = JSON.parse(data.data)
+						
+			var data = {
+				type: 'info',
+				message: decoded.text,
+				container: 'floating',
+				timer: 5000
+			};
+			
+			if(decoded.hasOwnProperty('title'))
+				data.title = decoded.title;
+			
+			$.niftyNoty(data);
+		});
+		
+		gwws.connect("wss://"+config.host+":"+config.port+"/irc");
+		
+		
 	}
 }
 
