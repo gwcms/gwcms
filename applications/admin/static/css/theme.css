@@ -5836,7 +5836,6 @@ blockquote
 {
 	color: #fff;
 }
-
 .btn
 {
 	background-color: transparent;
@@ -7612,6 +7611,7 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
     color: #000;
 }
 
+.text-brown{ color:#795548}
 
 
 #gwFiltersContainer{
