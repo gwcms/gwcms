@@ -39,7 +39,7 @@
 	{$dl_output_filters=[time=>short_time]}
 	
 	
-	{$dl_fields=$m->getDisplayFields([text=>1,time=>1,insert_time=>0,update_time=>0])}
+	
 	{$do_toolbar_buttons[] = dialogconf}	
 	
 	{$dl_actions=[edit,delete]}
