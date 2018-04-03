@@ -609,6 +609,13 @@ class GW_Common_Module extends GW_Module
 		if(!$views)
 			$this->createRegularPageView();
 		
+		
+		if(!isset($this->list_config['pview']))
+		{
+			if($pview = $this->getDefaultPageView())
+				$this->list_config['pview'] = $pview;
+		}
+		
 		$this->tpl_vars['views'] = & $views;
 	}
 
