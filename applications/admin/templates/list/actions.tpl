@@ -1,5 +1,5 @@
 {function list_item_action}
-	<a  class="{$action_class|default:gwcmsAction}"
+	<a  class="{$action_class|default:gwcmsAction} {$action_addclass}"
 		{if $onclick}onclick="{$onclick};return false"{/if} 
 		{if $shift_button}onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false }"{/if}
 		{if $query_param}onclick="var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });return false;"{/if}
@@ -74,7 +74,9 @@
 	{list_item_action_m url=[false, [act=>doInvertActive,id=>$item->id]] iconclass="fa fa-flag gw_active_`$item->active`"}
 {/function}
 
-
+{function name=dl_actions_invert_active_ajax}
+	{list_item_action_m url=[false, [act=>doInvertActive,id=>$item->id]] iconclass="fa fa-flag gw_active_`$item->active`" action_addclass="ajax-link"}
+{/function}
 
 
 {function name=dl_display_actions}
