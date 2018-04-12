@@ -162,12 +162,14 @@ class Navigator
 	 */
 	static function tempAccessUrl($user_id, $path, $get_args = [])
 	{
-		$token = GW_Temp_Access::singleton()->getToken($user_id, '10 minute', $path);
+		if(!isset($get_args['GWSESSID'])){
+			$token = GW_Temp_Access::singleton()->getToken($user_id, '10 minute', $path);
 
-		$get_args['temp_access'] = $user_id . ',' . $token;
-		$get_args['sys_call'] = 1;
+			$get_args['temp_access'] = $user_id . ',' . $token;
+			$get_args['sys_call'] = 1;
+		}
 
-		$path .= (strpos($path, '?') === false ? '?' : '&') . http_build_query($get_args);
+		$path = self::buildURI($path, $get_args);
 
 		if (GW::s('APP_BACKGROUND_REQ_TYPE') == 'localhost_base') {
 			$base = GW::s("SITE_LOCAL_URL");
@@ -178,13 +180,13 @@ class Navigator
 			$base = Navigator::getBase(true);
 		}
 
-		$url = $base . $path;
+		$url = $base . $path;		
 		return $url;
 	}
 	
-	static function backgroundRequest($path, $get_args = [])
+	static function backgroundRequest($path, $get_args = [], $uid=false)
 	{
-		GW_Http_Agent::impuls($url=self::tempAccessUrl(GW_USER_SYSTEM_ID, $path, $get_args));
+		GW_Http_Agent::impuls($url=self::tempAccessUrl($uid ? $uid: GW_USER_SYSTEM_ID, $path, $get_args));
 
 		return $url;
 	}
@@ -204,5 +206,10 @@ class Navigator
 		$path .= (strpos($path, '?')===false ? '?' : '&'). http_build_query($get_args);
 
 		return json_decode(file_get_contents($path));	
+	}
+	
+	static function isAjaxRequest()
+	{
+		return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';		
 	}
 }
