@@ -123,7 +123,18 @@ class GW_User_Extended
 		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE `user_id`=?", $this->user_id]);
 
 		return $rez;
-	}	
+	}
+
+	function __set($name, $value)
+	{
+		$this->replace($name, $value);
+	}
+	
+	function __get($name)
+	{
+		return $this->get($name, false);
+	}
+	
 	/*
 
 	  function preload($key, &$time = 0) {
