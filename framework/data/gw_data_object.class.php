@@ -78,8 +78,15 @@ class GW_Data_Object
 			$keys=explode('/', $key);
 			$k1= array_shift($keys);
 	
-			$this->__objAccessWrite($this->content_base[$k1], $keys, $val);
-			$this->changed_fields[$k1] = 1;
+			if(isset($this->calculate_fields[$k1]) && is_object($this->$k1)){
+				$store = $this->$k1;
+			} else {
+				$store =& $this->content_base[$k1];
+				$this->changed_fields[$k1] = 1;
+			}
+			
+			$this->__objAccessWrite($store, $keys, $val);			
+			
 			return true;
 		}		
 		
@@ -88,7 +95,9 @@ class GW_Data_Object
 			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
 
 			$this->content_base[$key] = $val;
-			$this->changed_fields[$key] = 1;
+			
+			if(!isset($this->ignore_fields[$key]))
+				$this->changed_fields[$key] = 1;
 		}
 	}
 
@@ -98,7 +107,7 @@ class GW_Data_Object
 	}
 
 	function __objAccessRead($o, $keys)
-	{
+	{		
 		$tmp = $keys;
 		
 		$key = array_shift($keys);
@@ -111,19 +120,21 @@ class GW_Data_Object
 	
 	function __objAccessWrite(&$o, $keys, $val)
 	{
-		
-		$key=  array_shift($keys);
+		$key= array_shift($keys);
 		
 		if(!is_object($o))
 			$o = new stdClass();
 		
-		if(!isset($o->$key))
-			$o->$key = new stdClass();
+		if(count($keys) > 0){
+			if(!isset($o->$key))
+				$o->$key = new stdClass();	
 			
-		if(count($keys) > 0)
 			return $this->__objAccessWrite($o->$key, $keys, $val);
+		}
 		
-		return $o->$key = $val;
+		$o->$key = $val;
+		
+		return $val;
 	}
 	
 	function get($key)
