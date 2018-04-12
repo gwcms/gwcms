@@ -46,6 +46,14 @@ var GW = {
 		// Remove it from the body
 		document.body.removeChild(aux);
 
+	},
+	
+	uptime: function(timeinsecs)
+	{
+		var m = Math.floor(timeinsecs / 60);
+		var s = timeinsecs - m * 60;
+		var str = (m ? m + ' m ' : '') + (m < 3 ? s + ' s' : '');
+		return str;
 	}
 }
 
@@ -145,6 +153,8 @@ var gw_adm_sys = {
 	{
 		GW.init_time = new Date().getTime();
 		$(document).ready(gw_adm_sys.init_after_load);
+		gw_adm_sys.initObjects();
+		
 	},
 	init_after_load: function ()
 	{
@@ -181,55 +191,175 @@ var gw_adm_sys = {
 		}).attr('data-initdone',1);
 	},
 	
+	gwws: false,
+	
 	initWS: function(config){
 				
-		var gwws = new GW_WS()
+		gw_adm_sys.gwws = new GW_WS()
 		
-				
+		var gwws = gw_adm_sys.gwws;
+			
 		gwws.registerEvent('connect', 'main', function () {
-						
-				console.log('WSC Connected!')
-				gwws.authorise({ username: config.user, pass: config.apikey })
+			gwws.authorise({ username: config.user, pass: config.apikey })
 		});
 		
-		gwws.registerEvent('authorise', 'main', function (data) {
-							
-			console.log('WSC Authorised!')
-			
-			
-			//gwws.joinchan({ channel: _this.channel, pass: "" }, function(success, data){
-			//	gwws.infochan( { channel: data.channel });
-			//});						
-		});	
-		
-		gwws.registerEvent('disconnect', 'main', function () {
-
-			console.log('WSC Disconnected!')
-		});	
+		gwws.registerEvent('authorise', 'main', function (data) {			
+			console.log('WSC Authorised!')				
+		});
 		
 		gwws.registerMessageCallback('messageprivate','main', function(data){ 
 			console.log({"Private_message_received":data}); 
 			
 			//perduodama json uzkoduota zinute su parametrais title,text
-			var decoded = JSON.parse(data.data)
-						
-			var data = {
-				type: 'info',
-				message: decoded.text,
-				container: 'floating',
-				timer: 5000
-			};
+			var decoded = JSON.parse(data.data);
 			
-			if(decoded.hasOwnProperty('title'))
-				data.title = decoded.title;
+			if(!decoded.hasOwnProperty('action'))
+				decoded.action = 'notification';
 			
-			$.niftyNoty(data);
+			gw_adm_sys.runPackets([decoded]);
+			
 		});
 		
 		gwws.connect("wss://"+config.host+":"+config.port+"/irc");
+	},
+	
+	bgTaskComplete: function(id)
+	{
+		$('#backgroundtask_'+id).fadeOut("slow", function() {
+			
+			if($('.backgroundTask:visible').length==0)
+			{
+				clearInterval(gw_adm_sys.bgTaskRunCountersInterval);
+				$('#backgroundTasks').fadeOut()
+			}
+			
+			
+		 })
+	},
+	
+	bgTaskRunCountersInterval:false,
+	
+	bgTaskRunCounters: function(servertime)
+	{
+		serverBrowserTimeDiff = servertime - Math.floor(Date.now() / 1000)
 		
+		gw_adm_sys.bgTaskRunCountersInterval = setInterval(function(){
+			
+			var nowsecs = Math.floor(Date.now() / 1000)-serverBrowserTimeDiff;
+			$('.backgroundTask:visible').each(function(){
+				var starttime = $(this).find('.startTime').text()
+				var duration = nowsecs - starttime;
+				$(this).find('.timeGoing').text(GW.uptime(duration))
+				var expecteddur=$(this).find('.expectedDuration').text();
+				
+				if(expecteddur){
+					var progress = Math.round(duration/expecteddur*100);
+					progress = progress <= 100 ? progress : 100;
+					$(this).find('.progress-bar').css({'width':progress+'%'}).find('.sr-only').text(progress+'%');
+					
+				}
+					
+				
+			})			
+			
+		}, 1000);
+	},
+	
+	
+	updintervals: {},
+
+
+	runPackets: function(data){
+		for(var packetidx in data)
+		{
+			var packet = data[packetidx]
+
+			if(gw_adm_sys.packetactions.hasOwnProperty(packet.action)){
+				gw_adm_sys.packetactions[packet.action](packet);
+			}else{
+				console.log(["Action "+packet.action+" not supported", packet])
+			}
+		}		
+	},
+	
+	runUpdaters: function(id, url, args, intervalSecs){
+		gw_adm_sys.updintervals[id]=setInterval(function(){
+			$.ajax({ url: url, type: "GET", dataType: "json", success: function (data) { gw_adm_sys.runPackets(data) }});
+		}, intervalSecs)
+	},
+
+	packetactions: {
+		updateProgress: function(data){			
+			$('#progess_'+data.id).find('.valuedrop').text(data.progress+'%');
+			$('#progess_'+data.id).find('.progress-bar').css({'width':data.progress+'%'})
+		},
+		clearInterval: function(data){
+			console.log(['Clear interval debug', data]);
+			clearInterval(gw_adm_sys.updintervals[data.id]);
+		},
+		notification: function(data)
+		{
+			gw_adm_sys.notification(data);
+		},
 		
+		bgtask_close: function(data){
+			gw_adm_sys.bgTaskComplete(data.bgtaskid)
+		},
+		
+		update_row: function(data){
+			gw_adm_sys.updateRow(data.id)
+		}	
+	},
+	
+	updateRow: function(id){
+		$.get(location.href, { act:'',background:'',ajax_row:id }, function(data){
+			var row=$('#list_row_' + id);
+			var prevrow=row.prev();
+			row.remove();
+			prevrow.after(data);
+			
+			animateChangedRow(id, 2000);
+			
+			gw_adm_sys.initObjects();
+		})
+		
+	},
+	
+	initObjects: function()
+	{
+		$(".ajax-link:not([data-initdone='1'])").click(function(event){			
+			$(this).data('ownsrc', $(this).html());
+			$(this).html('<i class="fa fa-spinner fa-pulse"></i>');
+			var obj = $(this);
+			
+			$.ajax({ url: this.href, type: "GET", dataType: "json", success: function (data) { 
+					gw_adm_sys.runPackets(data);
+					obj.html(obj.data('ownsrc'));
+				}});
+			
+			event.stopPropagation();
+			return false;
+			
+		}).attr('data-initdone',1);
+	},
+	
+	notification: function(data){
+		var typetrans = {0:'success', 1: "warning", 2: "danger", 3: "info", 4: "dark"}
+		//primary info success warning danger mint purple pink dark
+
+		var nndata = {
+			type: data.hasOwnProperty('type') ? (typetrans.hasOwnProperty(data.type) ? typetrans[data.type] : 'info')  : 'info',
+			message: data.text,
+			container: 'floating',
+			timer: data.hasOwnProperty('time') ? data.time : 10000,
+		};
+
+		if(data.hasOwnProperty('title'))
+			nndata.title = data.title;
+
+		$.niftyNoty(nndata);		
 	}
+	
 }
 
 var gw_session =
@@ -293,11 +423,9 @@ var gw_session =
 						}
 
 
-						var m = Math.floor(left_secs / 60);
-						var s = left_secs - m * 60;
-						var str = (m ? m + ' m ' : '') + (m < 3 ? s + ' s' : '');
+						
 
-						$('#session_exp_t').html(str);
+						$('#session_exp_t').html(GW.uptime(left_secs));
 				},
 				login_dialog_open: function ()
 				{
@@ -683,6 +811,7 @@ var gwcms = {
 						//console.log('data loaded 1st time');
 						trigg.data('isloaded', 'loaded');
 						drop.html(data);
+						gw_adm_sys.initObjects();
 						trigg.dropdown();//fix
 					}
 				});
@@ -797,11 +926,11 @@ function animateChangedRow(id,speed)
 		var curr_bgcolor = $('#list_row_'+id).css("background-color");
 		var curr_color = $('#list_row_'+id).css("color");
 		
-        $('#list_row_'+id).animate({backgroundColor: "#003311",color: "#fff"}, 300 );
+		$('#list_row_'+id).animate({backgroundColor: "#003311",color: "#fff"}, 300 );
 				
 		setTimeout(function(){
-				$('#list_row_'+id).animate({backgroundColor: curr_bgcolor, color: curr_color}, 300 );
-		}, (speed ? speed : 300))
+				$('#list_row_'+id).animate({backgroundColor: curr_bgcolor, color: curr_color}, speed ? speed/2 : 300 );
+		}, (speed ? speed/2 : 300))
 	
 }
 
