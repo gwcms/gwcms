@@ -65,7 +65,7 @@
 					</ul>
 
 					{$app->processHook('AFTER_MENU')}
-
+					{include "tools/running_tasks.tpl"}
 
 				</div>
 			</div>
