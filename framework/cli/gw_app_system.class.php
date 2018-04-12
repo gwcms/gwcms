@@ -5,6 +5,7 @@ class GW_App_System Extends GW_App_Base
 
 	var $forked_methods = Array();
 	var $one_instance = true;
+	public $plugins=[];
 
 	function init()
 	{
@@ -22,6 +23,29 @@ class GW_App_System Extends GW_App_Base
 		pcntl_signal(SIGUSR1, array(&$this, "forceDoTasks"));
 
 		$this->msg('Hello');
+		
+		$this->runPlugins();
+	}
+	
+	
+	//example config GW::s('SYSTEM_DAEMON_PLUGINS', ['pluginname']);
+	function runPlugins()
+	{
+		$plugins = GW::s('SYSTEM_DAEMON_PLUGINS');
+		
+		if(!$plugins)
+			return false;
+		
+		foreach($plugins as $name)
+		{
+			$fname = "GW_App_System_".$name;
+			$plugin = new $fname($this);
+			$this->plugins[$name] = $plugin;
+			
+			$plugin->init();
+			
+			$this->msg("Adding plugin $name");
+		}
 	}
 
 	static function getRunningPid()

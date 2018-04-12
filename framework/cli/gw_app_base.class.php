@@ -93,7 +93,24 @@ class GW_App_Base
 	//uzregistruoti vidini programos klases metoda vykdymui kas x sekundziu
 	function registerInnerMethod($name, $interval, $exec1st = false)
 	{
-		$this->registerTimer($name, Array(&$this, $name), $interval, $exec1st);
+		if(strpos($name,'/')!==false)
+		{
+			list($type, $subname, $method) = explode('/', $name, 3);
+			
+			switch($type){
+				case 'plugin':
+					$callback = Array($this->plugins[$subname], $method);
+				break;
+				default:
+					$this->msg("$name not supported");
+					return false;
+				break;
+			}
+		}else{
+			$callback = Array(&$this, $name);
+		}
+		
+		$this->registerTimer($name, $callback , $interval, $exec1st);
 	}
 
 	//parametru pavyzdziai --bananu_skaicius=5 -rodyti_bananus
