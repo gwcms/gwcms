@@ -11,18 +11,19 @@ class GW_Auth
 	public $session;
 	public $error;
 
-	function __construct($user0)
+	function __construct($user0, &$session)
 	{
 		$this->user0 =  $user0;
 
-		if (get_class($this->user0) == "GW_User")
-			$this->session = & $_SESSION[AUTH_SESSION_KEY];
-		else
-			$this->session = & $_SESSION[PUBLIC_AUTH_SESSION_KEY];
+		$this->session =& $session;
+		
+		//d::dumpas($this->session);
 	}
 
 	function getUserByUserID($id)
 	{
+		
+		//d::dumpas($this->user0->find(Array('id=?', $id)));
 		return $this->user0->find(Array('id=?', $id));
 	}
 
@@ -46,8 +47,11 @@ class GW_Auth
 		$autologin = isset($_COOKIE['login_7']) && $_COOKIE['login_7'] && self::isAutologinEnabled();
 
 
+		//pasalinu featura kad galetu background requestus daryt
 		//request must be from same ip
-		$logedin = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']) && ($user_id = (int) $this->session["user_id"]);
+		//$sameip = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']);
+		
+		$logedin =  ($user_id = (int) $this->session["user_id"]);
 
 		if (isset($_GET['temp_access'])) {
 			list($uid, $token) = explode(',', $_GET['temp_access']);
@@ -152,7 +156,7 @@ class GW_Auth
 	{
 		$this->session["user_id"] = $user->get('id');
 		$this->session['ip_address'] = $_SERVER['REMOTE_ADDR'];
-
+		
 		$user->onLogin($_SERVER['REMOTE_ADDR'], @$_SERVER['HTTP_USER_AGENT']);
 		
 		$this->session['last_request'] = time();
@@ -160,7 +164,7 @@ class GW_Auth
 		//store some login info
 		$inf = GW_Request_Helper::visitorInfo();
 		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
-		GW_DB_Logger::msg($msg, 'user', 'login', $user->id, $inf['browser']);		
+		GW_DB_Logger::msg($msg, 'user', 'login', $user->id, $inf['browser']);
 
 		return $user;
 	}

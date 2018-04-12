@@ -23,5 +23,6 @@ GW::s('SITE/USERZONE_PATH','usr/');
 GW::s('SITE/USER_PASS_CHANGE_PAGE', "sys/user/passchange?id1=%s&id2=%s");
 GW::s('SITE/PATH_LOGOUT','usr/user/logout');
 
+GW::s('SITE/USER_CLASS', 'GW_Customer');
 
 GW::s('SITE/TITLE','Žinutės');

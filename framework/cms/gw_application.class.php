@@ -28,7 +28,7 @@ class GW_Application
 	//pvz jei bus Array('pid'=>1), visad bus pernesama pid reiksme
 	public $carry_params = Array();
 	public $inner_request = false;
-	public $user_class = "GW_User";
+	public $user_class = false;
 	public $sess; //application session - to avoid conflicts with site - admin apps
 
 	/*
@@ -44,19 +44,46 @@ class GW_Application
 	function initSession()
 	{
 		ob_start();
+		
+		if(isset($_GET['GWSESSID'])){
+			session_id($_GET['GWSESSID']);
+		}
+		
 		session_start();
 
 		$this->sess = & $_SESSION[$this->app_name]; //to avoid conflicts with site - admin apps
+		
+		unset($GLOBALS['SESSION_CLOSED']);
 	}
+	
+	function sessionWriteClose()
+	{
+		session_write_close();
+		$GLOBALS['SESSION_CLOSED'] = true;
+	}
+	
+	function reopenSessionIfClosed()
+	{
+		if(isset($GLOBALS['SESSION_CLOSED']))
+			$this->initSession();
+	}
+	
 
 	function initDB()
 	{
 		$this->db = GW::db();
 	}
+	
 
 	function initAuth()
 	{
-		$this->auth = new GW_Auth(new $this->user_class());
+		
+		$clasname = GW::s($this->app_name.'/USER_CLASS') ?: "GW_User";
+		$session_key = GW::s($this->app_name.'/AUTH_SESSION_KEY') ?: 'cms_auth';
+		
+				
+		$this->auth = new GW_Auth(new $clasname, $_SESSION[$session_key]);
+		
 		$this->user = $this->auth->isLogged();
 		
 		if($this->auth->error)
@@ -487,4 +514,31 @@ class GW_Application
 
 		return $fh;
 	}
+	
+	
+	public $packets = [];
+	
+	function addPacket($packet)
+	{
+		$this->packets[] = $packet;
+	}
+	
+	function outputPackets($include_messages=true)
+	{
+		if($include_messages)
+			$this->getMessagesAsPackets($this->packets);
+		
+		echo json_encode($this->packets);
+		exit;	
+	}
+	
+	function getMessagesAsPackets(&$packets)
+	{
+		$messages=$this->acceptMessages(true);
+		foreach($messages as $msg)
+		{
+			$msg['action'] = 'notification';
+			$packets[]=$msg;
+		}
+	}	
 }

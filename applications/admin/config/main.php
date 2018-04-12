@@ -23,6 +23,7 @@ $rdir['AUTOLOAD_RECURSIVE'] = $dir['MODULES'];
 
 GW::s('ADMIN/LANGS', ['lt','en']);
 GW::s('ADMIN/PATH_LOGIN', 'users/login');
+GW::s('ADMIN/USER_CLASS', 'GW_User');
 
 
 
