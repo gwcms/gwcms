@@ -46,7 +46,7 @@ define('GW_GENERIC_ERROR', 100);
 GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
-GW::s('GW_CMS_VERSION', '3.0');
+GW::s('GW_CMS_VERSION', '3.1');
 
 include $dir['ROOT'].'config/project.php';
 include $dir['ROOT'].'config/environment.php';
