@@ -27,13 +27,13 @@ $dir['SYS_REPOSITORY']=$dir['REPOSITORY'].'.sys/';
 
 $dir['AUTOLOAD'][] = $dir['LIB'];
 
-
+			
 $adir =& $dir["ADMIN"];
 $adir["ROOT"] = $dir['APPLICATIONS'].'admin/';
 $adir['LANG'] = $adir['ROOT'].'lang/';
 
 
-				
+		
 //used to send mail through
 //GW::$static_conf['REMOTE_SERVICES']['MAIL1'] = 'http://uostas.net/services/mail.php?key=fh5ad2fg1ht4a6s5dg1hy4a5d4fg';	
 GW::s('DEFAULT_APPLICATION','SITE');		
@@ -43,8 +43,8 @@ define('GW_USER_SYSTEM_ID', 1);
 define('GW_GENERIC_ERROR', 100);
 
 //padaryt vienodus jei reikia kad administravimo vartotojai butu priloginti svetaineje
-define("AUTH_SESSION_KEY", "cms_auth");
-define("PUBLIC_AUTH_SESSION_KEY", "cms_auth");
+GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
+GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
 GW::s('GW_CMS_VERSION', '3.0');
 
@@ -56,7 +56,8 @@ $env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];
 GW::s('SITE/TITLE_MARK', $env_title[GW::s('PROJECT_ENVIRONMENT')]);
 
 //whereis php
-GW::s('PHP_CLI_LOCATION', '/usr/local/bin/php');
+//GW::s('PHP_CLI_LOCATION', '/usr/local/bin/php');
+GW::s('PHP_CLI_LOCATION', '/usr/bin/php');
 
 /*
 echo "<pre>";
