@@ -175,20 +175,75 @@ class GW_Module
 		
 	}	
 	
-  
+
+	
+	function processActionBG($act)
+	{
+		
+		if($_GET['background']==1){
+			$taskparams = [
+			    'act'=>$act, 
+			    'title'=> $_GET['background_title']??GW::l('/m/VIEWS/'.$act),
+			    'expire'=>'+5 minutes'
+			];
+			
+			if(isset($_GET['background_duration']))
+				$taskparams['expected_duration']=$_GET['background_duration'];			
+			
+			if(method_exists($this, $act.'_BackgroundParams'))
+				$this->{$act.'_BackgroundParams'}($taskparams);
+			
+
+			
+			$bgtask = new GW_Background_Task($taskparams);
+			$this->app->sess['bgtasks'][$bgtask->id] = $bgtask;
+
+			$args = ['background'=>2, 'bgtaskid'=>$bgtask->id, 'GWSESSID'=>session_id()];
+			
+			//isimt app user id is sessijos jau eina
+			Navigator::backgroundRequest($this->app->buildUri(false, $_GET), $args);
+
+			$this->jump();
+		}elseif($_GET['background']==2){
+			//vykdymas fone uzdarom sesija kad nelockinti procesu
+			$this->app->sessionWriteClose();
+			
+			$this->processActionNC($act);
+			
+			$this->app->reopenSessionIfClosed();
+			unset($this->app->sess['bgtasks'][$_GET['bgtaskid']]);
+
+			GW_WebSocket_Helper::notifyUser($this->app->user->username, ['action'=>'bgtask_close','bgtaskid'=>$_GET['bgtaskid']]);	
+			
+			if(isset($_GET['id']))
+				GW_WebSocket_Helper::notifyUser($this->app->user->username, ['action'=>'update_row','id'=>$_GET['id']]);	
+			exit;
+		}
+				
+	}
+	
+	// process action (no check)
+	function processActionNC($act)
+	{
+		$this->ob_start();
+		$this->$act();
+		$this->ob_end();
+
+		$this->action_name=$act;		
+	}
 	  
-	function process_act($act)
+	function processAction($act)
 	{
 		$name=$this->__funcVN($act);
 
 		// && method_exists($this,$funcName)
 		if($this->isPublic($name))
 		{
-			$this->ob_start();
-			$this->$name();
-			$this->ob_end();
-
-			$this->action_name=$name;
+			if(isset($_GET['background'])){
+				$this->processActionBG($name);
+			}else{
+				$this->processActionNC($name);
+			}
 		}
 		else
 		{
@@ -246,7 +301,7 @@ class GW_Module
 		
 		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
-			$this->process_act($act);
+			$this->processAction($act);
 			
 			if(isset($request_params['just_action'])) //prevent from displaying view
 				return true;
@@ -330,6 +385,14 @@ class GW_Module
 	
 	function jump($path=false, $params=[])
 	{
+		if(Navigator::isAjaxRequest()){
+			if(isset($_GET['id']))
+				$this->app->addPacket(["action"=>"update_row", "id"=>$_GET['id']]);
+			
+			$this->app->outputPackets();
+		}
+		
+		
 		//this thing allows to see last eddited element in list
 		
 		if(method_exists($this, 'getCurrentItemId') && $this->getCurrentItemId())
@@ -570,6 +633,16 @@ class GW_Module
 	
 	function setMessage($message)
 	{
+		if(isset($_GET['bgtaskid']))
+		{
+			$this->app->reopenSessionIfClosed();
+			
+			$task = $this->app->sess['bgtasks'][$_GET['bgtaskid']];
+			GW_WebSocket_Helper::notifyUser($this->app->user->username, ['title'=>$task->title, 'text'=>$message, 'bgtaskid'=>$_GET['bgtaskid']]);
+			
+			return true;
+		}
+		
 		if ($this->sys_call) {
 			$this->lgr->msg(json_encode($message));
 		} else {
@@ -589,7 +662,7 @@ class GW_Module
 		foreach($item->errors as $field => $error)
 			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
 	}
-	
+		
 	
 	function fieldTitle($field)
 	{
