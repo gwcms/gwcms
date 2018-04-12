@@ -679,5 +679,9 @@
 	<lt>Deaktyvuoti</lt>
 	<en>Deaktyvuoti</en>
 </i>
+<i id="BACKGROUND_TASKS">
+	<lt>Foniniai veiksmai</lt>
+	<en>Background tasks</en>
+</i>
 
 </xml>
