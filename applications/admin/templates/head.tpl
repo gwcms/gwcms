@@ -108,7 +108,7 @@
 				bootstrap : { "deps" :['jquery'] },
 				jqueryui: { "deps" : ['jquery'] },
 				nifty: { "deps" : ['jquery','bootstrap'] },
-				gwcms: { "deps" : ['jquery','bootstrap','nifty','jqueryui'] },
+				gwcms: { "deps" : ['jquery','bootstrap','nifty','jqueryui', 'project'] },
 				sortable: { deps: ['gwcms'] },
 				browser: { "deps" : ['gwcms'] },
 				iframeautoheight: { "deps" : ['browser'] }
@@ -119,6 +119,7 @@
 				jqueryui: "vendor/jqueryui/jquery-ui.min",
 				nifty: "js/nifty.min",
 				gwcms: "js/gwcms",
+				project: "js/gwcms_project",
 				sortable: "js/jq/jquery-sortable",
 				browser: "js/jq/browser",
 				iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin"
@@ -127,7 +128,7 @@
 		
 		require(['gwcms'], function(){
 			$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
-			gw_adm_sys.init();	
+			gw_adm_sys.init();				
 		});
 		
 		
