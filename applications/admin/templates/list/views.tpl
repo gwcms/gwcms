@@ -98,3 +98,11 @@
 </div>
 
 {/if}
+
+
+{capture append=footer_hidden}	
+	<script>
+		require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
+	</script>		
+{/capture}
+
