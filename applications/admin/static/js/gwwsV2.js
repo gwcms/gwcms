@@ -13,8 +13,9 @@ function GW_WS() {
 	this.verbose=true;
 	this.auto_reconnect=true;
 	this.last_connection_info={};
-	this.reconnect_speed=3;
-	this.init_reconn_speed=3;
+	this.reconnect_loop=0;
+	this.authorised = false;
+	this.username = false;
 	
 	var ws = this;
 	
@@ -45,7 +46,7 @@ function GW_WS() {
 		
 		if (this.socket)
 		{
-			return this.log('Already connected');
+			return this.log('WSC Already connected');
 		}
 
 
@@ -60,9 +61,9 @@ function GW_WS() {
 			ws.pingStart();
 
 			if(ws.verbose)
-				ws.log('connected');
+				ws.log('WSC connected');
 			
-			ws.reconnect_speed = ws.init_reconn_speed;
+			ws.reconnect_loop=0;
 		}
 
 
@@ -74,21 +75,22 @@ function GW_WS() {
 	};
 	this.generalAction= function(action, data, callback)
 	{
+		var obj=this;
 		ws.send0({action: action, data: data},
 				function (data) {
 					if (!data) {
 						var success = false;
-						this.log(action + ' timeout');
+						obj.log(action + ' timeout');
 					} else {
 						var success = data.data == 'SUCCESS'
 
 						if (success) {
 							
 							if(this.verbose)
-								this.log(action + ' was successfull');
+								obj.log(action + ' was successfull');
 							
 						} else {
-							this.log(action + ' failed. Errors: ' + JSON.stringify(data.errors));
+							obj.log(action + ' failed. Errors: ' + JSON.stringify(data.errors));
 						}
 					}
 					
@@ -104,9 +106,13 @@ function GW_WS() {
 	};
 	this.authorise= function(userdata, callback)
 	{
+		var gwws = this;
 		ws.generalAction('authorise', userdata, function(success, data){
-			if(success)
+			if(success){
+				ws.authorised = true;
+				gwws.username = data.user;
 				ws.fireEvent('authorise', data);
+			}
 			
 			if(callback)
 				callback(success, data);
@@ -127,7 +133,12 @@ function GW_WS() {
 			if(callback)
 				callback(success, data)
 		});
-	};	
+	};
+
+	this.leavechan= function(channel, callback){
+		ws.generalAction('leavechan', {channel: channel}, callback);		
+	};
+	
 	this.infochan= function(chandata, callback){
 		this.generalAction('infochan', chandata, function(success, data){
 			if(success)
@@ -152,7 +163,7 @@ function GW_WS() {
 	this.onmessage= function(e) {
 
 		if(this.verbose)
-			this.log("Text message received: " + e.data);
+			this.log("WSC Text message received: " + e.data);
 		
 		var msg = JSON.parse(e.data);
 
@@ -188,24 +199,28 @@ function GW_WS() {
 	
 	this.close= function() {
 
-		ws.log("Connection closed.");
+		ws.log("WSC Connection closed.");
 		ws.socket = null;
 
 		ws.pingStop()
 
 		ws.fireEvent('disconnect');
 		
-		if(this.auto_reconnect)
+		if(ws.auto_reconnect)
 		{
-			setTimeout(ws.reconnect, ws.reconnect_speed*1000);
+			var reconnect_timeout = Math.min(20, ws.reconnect_loop);
+			
+			console.log('WSC Disconnected! Reconnect after '+reconnect_timeout+' secs');
+			
+			setTimeout(function(){ ws.reconnect() }, reconnect_timeout *1000);
 			//incremental - prevent overloading
-			ws.reconnect_speed++;
+			ws.reconnect_loop++;
 		}
 	};
 	
 	this.reconnect= function()
 	{
-		this.log('Trying reconnect');
+		this.log('WSC Trying reconnect');
 		
 		ws.connect(ws.last_connection_info.url, ws.last_connection_info.user, ws.last_connection_info.pass)
 		
@@ -223,7 +238,7 @@ function GW_WS() {
 	this.send0= function(data, callback, timeout) {
 
 		if (!this.socket) {
-			this.log('Not connected');
+			this.log('WSC Not connected');
 			return false;
 		}
 		data.msgid = ++this.msgid;
@@ -244,7 +259,7 @@ function GW_WS() {
 			}, timeout);
 	};
 	this.callbackTimeout= function(msgid) {
-		ws.log('timeout msgid' + msgid);
+		ws.log('WSC timeout msgid' + msgid);
 
 		ws.procCallback(msgid, false)
 	};
@@ -253,7 +268,7 @@ function GW_WS() {
 	{
 		ws.socket.close();
 
-		ws.log('Disconnect');
+		ws.log('WSC Disconnect');
 	};
 	this.ping= function(){
 		ws.send0({action: 'ping'}, function (data) {
