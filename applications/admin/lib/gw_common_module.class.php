@@ -236,9 +236,10 @@ class GW_Common_Module extends GW_Module
 				
 				$message['text']="/g/NO_CHANGES";
 				$message['type']=GW_MSG_INFO;
-			}
+			}	
 		}
 		
+		$message["float"] = 1;
 		$message["id"]=$item->id;
 		$this->setMessage($message);
 
@@ -433,7 +434,7 @@ class GW_Common_Module extends GW_Module
 			return $this->setError('/g/GENERAL/ACTION_FAIL');
 
 		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);
-
+		
 		if(!$this->sys_call)
 			$this->jump();
 	}
@@ -728,6 +729,12 @@ class GW_Common_Module extends GW_Module
 		$params['key_field'] = $this->model->primary_fields[0];
 
 		$params['soft_error'] = true;
+		
+		if(isset($_GET['ajax_row']))
+		{
+			$this->tpl_vars['ajax_rows_only'] = 1;
+			$params['ajax_one_item_list'] = $_GET['ajax_row'];
+		}
 
 		if (isset($params['ajax_one_item_list'])) {
 			$list = [$this->model->createNewObject($params['ajax_one_item_list'], true)];
