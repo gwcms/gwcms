@@ -35,21 +35,24 @@ require(['vendor/select2/js'], function () {
 
 {if $datasource}
 
-	function formatRepo(item) {
+	function formatSelect2Result(item) {
 		if (item.loading)
 			return item.text;
 
+		if(item.html)
+			return item.html;
+			
 		var markup = "<div class='select2-result-repository clearfix'>" +
 			"<div class='select2-result-repository__meta'>" +
 			"<div class='select2-result-repository__title'>" + item.title + "</div>";
 
 		"</div>" +
 			"</div></div>";
-
+		
 		return markup;
-	}
+	}	
 
-	function formatRepoSelection(item) {
+	function formatSelect2Selection(item) {
 		return item.title || item.text;
 	}
 	
@@ -116,8 +119,8 @@ require(['vendor/select2/js'], function () {
 			return markup;
 		}, // let our custom formatter work
 		minimumInputLength: 1,
-		templateResult: formatRepo, // omitted for brevity, see the source of this page
-		templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+		templateResult: formatSelect2Result, // omitted for brevity, see the source of this page
+		templateSelection: formatSelect2Selection // omitted for brevity, see the source of this page
 		{if $dontCloseOnSelect},closeOnSelect: false{/if}
 
 	});

@@ -160,12 +160,17 @@ class Module_Movies extends GW_Common_Module
 	
 	function __eventBeforeSave($item)
 	{
-		
-		
 		$item->title = str_replace('.', ' ', $item->title);
 		
-		if($item->mdbid)
-			$this->extendFromMovieDB($item->mdbid);
+		if($item->mdbid){
+			$data = $this->extendFromMovieDB($item->mdbid);
+			if(!$item->title)
+				$item->title = $data['title'];
+			
+			$item->imdb = json_encode($data, JSON_UNESCAPED_SLASHES);;
+			
+			
+		}
 		
 	}
 	
@@ -247,8 +252,29 @@ class Module_Movies extends GW_Common_Module
 	{
 		$args = http_build_query(['language'=>'en-US', 'api_key'=>'c26927cb6d010fa46c750bd8babd5dd0']);
 		$json = file_get_contents("https://api.themoviedb.org/3/movie/".$id."?".$args);
+		$item = json_decode($json);
 		
-		d::dumpas($json);
+		
+		
+		list($item->year) = explode('-', $item->release_date);
+		
+		$f = function($genres){ $l=[]; foreach($genres as $g)$l[]=$g->name; return implode(' ', $l); };
+		
+		$return = [
+		    "mdbid"=>$id,
+		    "title"=>$item->title,
+		    "poster"=>"http://image.tmdb.org/t/p/w92/".$item->poster_path, 
+		    "overview"=>$item->overview,		    
+		    "year"=>$item->year,
+		    "genres"=>$f($item->genres),
+		    "vote"=>$item->vote_average.' ('. $item->vote_count .')',
+		    "runtime"=>$item->runtime,
+		    "imdb_id"=>$item->imdb_id,
+		    "original_language"=>$item->original_language,
+		    "budget"=>$item->budget
+		];
+		
+		return $return;
 	}
 	
 	
