@@ -184,6 +184,8 @@ class Module_Movies extends GW_Common_Module
 			//$this->setMessage("Imdb update background process started");
 			$this->doBackgroundAterInsert($item);
 		}
+		
+		$this->__extendMovieDatabase($item);
 	}
 	
 	function doUpdateAllWithoutImdb()
