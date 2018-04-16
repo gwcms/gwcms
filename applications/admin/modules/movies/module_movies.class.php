@@ -172,9 +172,7 @@ class Module_Movies extends GW_Common_Module
 				$item->title = $data['title'];
 			
 			$item->imdb = json_encode($data, JSON_UNESCAPED_SLASHES);;
-			
-			d::dumpas($data);
-			
+			$item->updateChanged();
 		}		
 	}
 	
@@ -307,7 +305,6 @@ class Module_Movies extends GW_Common_Module
 			{
 				$item->mdbid = $res["items"][0]['id'];
 				$this->__extendMovieDatabase($item);
-				$item->save();
 			}
 			
 		}
