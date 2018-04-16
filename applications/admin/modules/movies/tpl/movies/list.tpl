@@ -11,7 +11,7 @@
 		{$imdb = json_decode($item->imdb)}
 
 		{if $imdb->poster_external}
-			{capture assign=tmp}<img src="{$imdb->poster_external_big}" style="height:300px;" align="absmiddle" vspace="2"  />{/capture}
+			{capture assign=tmp}<div style="width:300px"><img src="{$imdb->poster_external_big}" style="height:300px;" align="absmiddle" vspace="2"  /></div>{/capture}
 			
 			<a href="{$imdb->poster_external_big}" class="add-tooltip" data-html="true" data-toggle="" href="#" data-original-title="{htmlspecialchars("`$tmp`")}" >
 				<img src="{$imdb->poster_external}" style="max-height: 50px;max-height: 50px;" align="absmiddle" vspace="2"  />
