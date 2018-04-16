@@ -6,22 +6,25 @@
 	{$dl_inline_edit=1}
 	
 
-	{function name=dl_cell_image}		
-			{$img=$item->image1}
-			
-			{if $img->id}
-				{$imdb = json_decode($item->imdb)}
-				
-				{if $imdb->poster_external}
-					<a href="{$imdb->poster_external_big}">
-						<img src="{$imdb->poster_external}" style="max-height: 50px;max-height: 50px;" align="absmiddle" vspace="2"  />
-					</a>
-				{/if}
-				
-				<a target="_blank" href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
-					<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
-				</a>
-			{/if}
+	{function name=dl_cell_image}	
+		
+		{$imdb = json_decode($item->imdb)}
+
+		{if $imdb->poster_external}
+			<a href="{$imdb->poster_external_big}">
+				<img src="{$imdb->poster_external}" style="max-height: 50px;max-height: 50px;" align="absmiddle" vspace="2"  />
+			</a>
+		{/if}		
+		
+		{$img=$item->image1}
+
+		{if $img->id}
+
+
+			<a target="_blank" href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
+				<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />
+			</a>
+		{/if}
 	{/function}
 	
 	{function name=dl_cell_description}
