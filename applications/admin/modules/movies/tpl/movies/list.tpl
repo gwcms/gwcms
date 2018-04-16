@@ -12,7 +12,7 @@
 
 		{if $imdb->poster_external}
 			{$popoversize=str_replace("/w92/",'/w154/', $imdb->poster_external)}
-			{capture assign=tmp}<img style="width: 231px;" src="{$popoversize}" />{/capture}
+			{capture assign=tmp}<img style="height: 231px;" src="{$popoversize}" />{/capture}
 			
 			<a href="{$imdb->poster_external_big}" class="add-tooltip" data-html="true" data-toggle="" href="#" data-original-title="{htmlspecialchars("`$tmp`")}" >
 				<img src="{$imdb->poster_external}" style="max-height: 50px;max-height: 50px;" align="absmiddle" vspace="2"  />
