@@ -298,6 +298,8 @@ class Module_Movies extends GW_Common_Module
 		{
 			$query_str= $item->title;
 			$query_str = preg_replace('/\(\d\d\d\d\)/','', $query_str);
+			$query_str = preg_replace('/20\d\d/','', $query_str);
+			$query_str = preg_replace('/19\d\d/','', $query_str);
 			
 			$res = $this->searchMovies($query_str, 1);
 						
