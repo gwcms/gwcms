@@ -297,6 +297,12 @@ class Module_Movies extends GW_Common_Module
 		foreach($list as $item)
 		{
 			$query_str= $item->title;
+			
+			if($item->imdb && ($dec=$item->imdb) && $item->mdbid)
+				continue;
+				
+			
+	
 			$query_str = preg_replace('/\(\d\d\d\d\)/','', $query_str);
 			$query_str = preg_replace('/20\d\d/','', $query_str);
 			$query_str = preg_replace('/19\d\d/','', $query_str);
