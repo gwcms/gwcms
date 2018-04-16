@@ -161,7 +161,11 @@ class Module_Movies extends GW_Common_Module
 	function __eventBeforeSave($item)
 	{
 		$item->title = str_replace('.', ' ', $item->title);
-		
+				
+	}
+	
+	function __extendMovieDatabase($item)
+	{
 		if($item->mdbid){
 			$data = $this->extendFromMovieDB($item->mdbid);
 			if(!$item->title)
@@ -170,8 +174,7 @@ class Module_Movies extends GW_Common_Module
 			$item->imdb = json_encode($data, JSON_UNESCAPED_SLASHES);;
 			
 			
-		}
-		
+		}		
 	}
 	
 	function __eventAfterSave($item)
@@ -217,18 +220,15 @@ class Module_Movies extends GW_Common_Module
 		return $html;
 	}
 	
-	function doSearchMovies()
-	{
-		
-		$query_str = $_GET['q'];
-		$page = $_GET['page'] ?? 1;
-		
+	function searchMovies($query_str, $page)
+	{	
 		$args = http_build_query(['query'=>$query_str, 'api_key'=>'c26927cb6d010fa46c750bd8babd5dd0', 'page'=>$page]);
 		$json = file_get_contents("https://api.themoviedb.org/3/search/movie?".$args);
 		
 		$resp = json_decode($json);
 		
 		
+		$list=[];
 		
 		foreach($resp->results as $id => $item){
 			list($item->year) = explode('-', $item->release_date);
@@ -240,6 +240,17 @@ class Module_Movies extends GW_Common_Module
 		
 		if(isset($resp->total_results))
 			$res['total_count'] = $resp->total_results;
+
+		return $res;
+	}
+	
+	function doSearchMovies()
+	{
+		
+		$query_str = $_GET['q'];
+		$page = $_GET['page'] ?? 1;
+		
+		$res = $this->searchMovies($query_str, $page);
 		
 		echo json_encode($res);
 		exit;	
@@ -276,6 +287,26 @@ class Module_Movies extends GW_Common_Module
 		];
 		
 		return $return;
+	}
+	
+	function doFixMoviews()
+	{
+		$list = $this->model->findAll("id = 570");
+		
+		foreach($list as $item)
+		{
+			$query_str= $item->title;
+			$query_str = preg_replace('/\(\d\d\d\d\)/','', $query_str);
+			
+			$res = $this->searchMovies($query_str, 1);
+			if(isset($res[0]))
+			{
+				$item->mdbid = $res[0]->id;
+				$this->__extendMovieDatabase($item);
+				$item->save();
+			}
+			
+		}
 	}
 	
 	
