@@ -298,7 +298,7 @@ class Module_Movies extends GW_Common_Module
 		{
 			$query_str= $item->title;
 			
-			if($item->imdb && ($dec=$item->imdb) && $item->mdbid)
+			if($item->imdb && ($dec=json_decode($item->imdb)) && $dec->mdbid)
 				continue;
 				
 			
