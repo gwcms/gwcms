@@ -173,6 +173,7 @@ class Module_Movies extends GW_Common_Module
 			
 			$item->imdb = json_encode($data, JSON_UNESCAPED_SLASHES);;
 			
+			d::dumpas($data);
 			
 		}		
 	}
