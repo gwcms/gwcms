@@ -12,7 +12,11 @@
 			{if $img->id}
 				{$imdb = json_decode($item->imdb)}
 				
-				
+				{if $imdb->poster_external}
+					<a href="{$imdb->poster_external_big}">
+						<img src="{$imdb->poster_external}" style="max-height: 50px;max-height: 50px;" align="absmiddle" vspace="2"  />
+					</a>
+				{/if}
 				
 				<a target="_blank" href="{$imdb->poster}" {*href="{$app->sys_base}tools/imga/{$img->id}"*}>
 					<img src="{$app->sys_base}tools/imga/{$img->id}?size=50x50" align="absmiddle" vspace="2"  />

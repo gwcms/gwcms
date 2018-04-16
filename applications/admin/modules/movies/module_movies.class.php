@@ -263,7 +263,8 @@ class Module_Movies extends GW_Common_Module
 		$return = [
 		    "mdbid"=>$id,
 		    "title"=>$item->title,
-		    "poster"=>"http://image.tmdb.org/t/p/w92/".$item->poster_path, 
+		    "poster_external"=>"http://image.tmdb.org/t/p/w92/".$item->poster_path, 
+		    "poster_external_big"=>"http://image.tmdb.org/t/p/w780/".$item->poster_path,
 		    "overview"=>$item->overview,		    
 		    "year"=>$item->year,
 		    "genres"=>$f($item->genres),
