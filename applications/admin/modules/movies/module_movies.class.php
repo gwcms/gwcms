@@ -160,7 +160,13 @@ class Module_Movies extends GW_Common_Module
 	
 	function __eventBeforeSave($item)
 	{
+		
+		
 		$item->title = str_replace('.', ' ', $item->title);
+		
+		if($item->mdbid)
+			$this->extendFromMovieDB($item->mdbid);
+		
 	}
 	
 	function __eventAfterSave($item)
@@ -182,6 +188,67 @@ class Module_Movies extends GW_Common_Module
 		}
 		
 		$this->setMessage("Passed for execution ".count($list).' background processes');
+	}
+	
+	
+	
+	function __movie2Html($item)
+	{
+		$imgrep = "http://image.tmdb.org/t/p/w92/";
+		
+		$votes = '<i class="fa fa-star"></i> '.$item->vote_average.' ('. $item->vote_count .')';
+		$year ="($item->year)";
+		
+		
+		$html = '<div class="clearfix">' .
+		    '<div class="col-sm-1">' .
+		    '<img src="' . $imgrep.$item->poster_path. '" style="max-width: 100%" />' .
+		    '</div>' .
+		    '<div clas="col-sm-10">' .
+		    '<div class="clearfix">'.
+		    "<div class='col-sm-10'> $item->title $year $votes <br> $item->overview </div>" .
+		    '</div>';	
+		
+		return $html;
+	}
+	
+	function doSearchMovies()
+	{
+		
+		$query_str = $_GET['q'];
+		$page = $_GET['page'] ?? 1;
+		
+		$args = http_build_query(['query'=>$query_str, 'api_key'=>'c26927cb6d010fa46c750bd8babd5dd0', 'page'=>$page]);
+		$json = file_get_contents("https://api.themoviedb.org/3/search/movie?".$args);
+		
+		$resp = json_decode($json);
+		
+		
+		
+		foreach($resp->results as $id => $item){
+			list($item->year) = explode('-', $item->release_date);
+			$list[]=['id'=>$item->id, "title"=>$item->title.' '.$item->year, 'html'=>$this->__movie2Html($item)];		
+		}
+		
+		
+		$res = ['items'=>$list];
+		
+		if(isset($resp->total_results))
+			$res['total_count'] = $resp->total_results;
+		
+		echo json_encode($res);
+		exit;	
+				
+		//poster base url http://image.tmdb.org/t/p/w92//6K5JOW6HmrwJnP0VILq667cspnS.jpg
+		// "w92", "w154", "w185", "w342", "w500", "w780"	
+	}
+	
+	function extendFromMovieDB($id)
+	{
+		$args = http_build_query(['language'=>'en-US', 'api_key'=>'c26927cb6d010fa46c750bd8babd5dd0']);
+		$json = file_get_contents("https://api.themoviedb.org/3/movie/".$id."?".$args);
+		
+		d::dumpas($json);
 	}
 	
 	
