@@ -299,6 +299,9 @@ class Module_Movies extends GW_Common_Module
 			$query_str = preg_replace('/\(\d\d\d\d\)/','', $query_str);
 			
 			$res = $this->searchMovies($query_str, 1);
+			
+			d::dumpas($res);
+			
 			if(isset($res[0]))
 			{
 				$item->mdbid = $res[0]->id;
