@@ -291,7 +291,7 @@ class Module_Movies extends GW_Common_Module
 	
 	function doFixMoviews()
 	{
-		$list = $this->model->findAll("id = 570");
+		$list = $this->model->findAll("id > 533");
 		
 		foreach($list as $item)
 		{
@@ -302,7 +302,7 @@ class Module_Movies extends GW_Common_Module
 						
 			if(isset($res["items"][0]))
 			{
-				$item->mdbid = $res["items"][0]->id;
+				$item->mdbid = $res["items"][0]['id'];
 				$this->__extendMovieDatabase($item);
 				$item->save();
 			}
