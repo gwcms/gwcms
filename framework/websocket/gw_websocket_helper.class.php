@@ -2,9 +2,13 @@
 
 class GW_WebSocket_Helper 
 {
+	static $client=false;
 	
 	static function initControlUserWsc($connect=true)
 	{
+		if(self::$client)
+			return self::$client;
+		
 		$wss = GW::s('WSS');
 		$user = $wss['CONTROL_USER'];
 		$pass = $wss['CONTROL_USER_PASS'];
@@ -12,7 +16,7 @@ class GW_WebSocket_Helper
 		$port = $wss['PORT'];
 
 		$client = new WebSocket\Client($uri="wss://$user:$pass@$host:$port/irc");
-		
+		$client->messages_enabled = false;
 			
 		
 		if($client->__fastConnect([]))
@@ -20,7 +24,7 @@ class GW_WebSocket_Helper
 		
 		
 		//$client->ping();
-		
+		self::$client = $client;
 		return $client;
 	}	
 	
