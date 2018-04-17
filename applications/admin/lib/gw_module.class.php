@@ -216,11 +216,30 @@ class GW_Module
 			GW_WebSocket_Helper::notifyUser($this->app->user->username, ['action'=>'bgtask_close','bgtaskid'=>$_GET['bgtaskid']]);	
 			
 			if(isset($_GET['id']))
-				GW_WebSocket_Helper::notifyUser($this->app->user->username, ['action'=>'update_row','id'=>$_GET['id']]);	
+				$this->notifyRowUpdated($_GET['id']);
 			exit;
-		}
-				
+		}		
 	}
+	
+	function notifyRowUpdated($id, $nottype_ws=true, $user=false)
+	{
+		$packet = ['action'=>'update_row','id'=>$id, 'context'=>get_class($this->model)];
+		
+		if($nottype_ws){
+			$user = $user ? $user : $this->app->user->username;
+			$this->packetWS(false, $packet, $user);
+		}else{
+			$this->app->addPacket($packet);
+		}
+	}
+	function packetWS($action, $packet, $user=false)
+	{		
+		$user = $user ? $user : $this->app->user->username;
+		if($action)
+			$packet['action'] = $action;
+		
+		GW_WebSocket_Helper::notifyUser($user, $packet);
+	}	
 	
 	// process action (no check)
 	function processActionNC($act)
@@ -387,10 +406,14 @@ class GW_Module
 	{
 		if(Navigator::isAjaxRequest()){
 			if(isset($_GET['id']))
-				$this->app->addPacket(["action"=>"update_row", "id"=>$_GET['id']]);
+				$this->notifyRowUpdated($_GET['id'], false, false);
+				
 			
 			$this->app->outputPackets();
 		}
+		
+		if(isset($_GET['background']))
+			return false;
 		
 		
 		//this thing allows to see last eddited element in list
