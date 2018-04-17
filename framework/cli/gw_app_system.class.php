@@ -27,8 +27,6 @@ class GW_App_System Extends GW_App_Base
 		$this->runPlugins();
 	}
 	
-	
-	//example config GW::s('SYSTEM_DAEMON_PLUGINS', ['pluginname']);
 	function runPlugins()
 	{
 		$plugins = GW::s('SYSTEM_DAEMON_PLUGINS');
