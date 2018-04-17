@@ -210,7 +210,7 @@
 			{if !count($list)}
 				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
 			{else}
-					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable">
+					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable" data-context="{get_class(current($list))}">
 						<tr>	
 							{foreach $dl_fields as $field}
 								<th>{dl_proc_th_cell}</th>
