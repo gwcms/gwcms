@@ -95,10 +95,13 @@ function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
 		];
 }
 
-function filterProjectSpecific(&$filesarr)
+function filterProjectSpecific(&$filesarr, $repos_local=true)
 {
 	$t= new GW_Timer;	
-	include GW::s('DIR/ROOT').'config/project_specific_files.php';
+	
+	$dir = $repos_local ? GW::s('DIR/ROOT') : dirname(__DIR__).'/gwcms/';
+	
+	include $dir.'config/project_specific_files.php';
 	
 	
 	foreach($filesarr as $idx => $file)
@@ -149,7 +152,9 @@ function getChangedFiles($repos_local=true, $commit_id)
 		}
 	}
 	
-	filterProjectSpecific($files);
+	filterProjectSpecific($files, true);
+	filterProjectSpecific($files, false);
+	
 	filterMatchingFiles($files, $dir.'/', $destdir.'/');
 
 	return ['remove'=>$removes, 'copy'=>$files];
@@ -264,26 +269,10 @@ function processCommand($line, $repos_local=true){
 			print_r($last_sync);
 		break;	
 	
+
+		
 		case '1':
-		case 'showupdates':
-			if(isset($args[0]))
-				$datefrom = $args[0];
-			else{
-				$last_sync = getLastCommitWhenVersionsWereSynced(true);
-				$datefrom = $last_sync['lastcommit_date'];
-			}	
-			echo "labadiena\n";
-			//to check updates before get updates
-			
-			$new_commits = getNewCommitsFromDate(false, $datefrom);
-			$changed_files = getChangedFiles(false, $new_commits['updates_from_commit']);
-			
-			print_r(['last_sync'=>isset($last_sync) ? $last_sync : false,
-				'new_commits'=>$new_commits,
-				'changed_files'=>$changed_files, 
-				]);
-		break;
-	
+		case 'showupdates':		
 		case '2':
 		case 'importupdatesfromcore':
 			if(isset($args[0]))
@@ -294,21 +283,18 @@ function processCommand($line, $repos_local=true){
 			}
 			//intended to get updates from core gwcms
 			
-			$new_commits = getNewCommitsFromDate(false, $datefrom);
-			$dir = exportExtract2Tmp(false, $new_commits['updates_from_commit'], ['new_commits'=>$new_commits]);
+			$newcommits = getNewCommitsFromDate(false, $datefrom);
+			$changed_files = getChangedFiles(false, $newcommits['updates_from_commit']);
+			
+			if($cmd == '1' || $cmd=='showupdates')
+			{
+				print_r($changed_files);
+				break;
+			}			
+			
+			$dir = exportExtract2Tmp(false, $changed_files);
 			
 			shell_exec("krusader --left=$dir --right='".__DIR__."'");
-		break;
-		
-
-			$last_sync = getLastCommitWhenVersionsWereSynced();
-			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info
-			$changed_files = getChangedFiles(true, $last_sync['lastcommit']);
-			
-			
-			
-			if(!$changed_files)
-				echo "NO CHANGED FILES\n";
 		break;
 		
 		case '3':
@@ -327,7 +313,6 @@ function processCommand($line, $repos_local=true){
 							
 			if($cmd == '3' || $cmd=='showupdates2core')
 			{
-				
 				print_r($changed_files);
 				break;
 			}
