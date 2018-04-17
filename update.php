@@ -1,5 +1,9 @@
 <?php
 
+include "init_basic.php";
+
+
+
 function execute($cmd)
 {
 	echo "$cmd ...\n";
@@ -11,8 +15,10 @@ function my_shell_exec($cmd)
 	return shell_exec($cmd);
 }
 
-$dir = __DIR__;
-my_shell_exec("cd '$dir'");
+
+my_shell_exec("cd '".__DIR__."'");
+
+
 
 function getLastCommitWhenVersionsWereSynced($repos_local=true, $bydate=false){
 
@@ -89,10 +95,44 @@ function getNewCommitsFromDate($repos_local=true, $lastcommit_date)
 		];
 }
 
+function filterProjectSpecific(&$filesarr)
+{
+	$t= new GW_Timer;	
+	include GW::s('DIR/ROOT').'config/project_specific_files.php';
+	
+	
+	foreach($filesarr as $idx => $file)
+	{
+		foreach($paths as $pattern)
+			if(fnmatch($pattern, $file)){
+				unset($filesarr[$idx]);
+				echo "--(projspec) $file ($pattern)\n";
+			}
+	}
+	echo "filterProjectSpecific: ".$t->stop()." secs\n";
+}
+
+function filterMatchingFiles(&$filesarr, $sourceDir, $destDir)
+{
+	$t= new GW_Timer;
+	
+	foreach($filesarr as $idx => $file)
+	{
+		if(GW_File_Helper::isFilesEqual($sourceDir.$file, $destDir.$file))
+		{
+			unset($filesarr[$idx]);
+			echo "--(nochange) $file\n";
+		}
+	}
+	echo "filterMatchingFiles: ".$t->stop()." secs\n";
+}
+
+
 function getChangedFiles($repos_local=true, $commit_id)
 {
 	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
 	$dir = $repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
+	$destdir = !$repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
 	
 	$files = explode("\n", trim(my_shell_exec($enter_repos."git diff --stat $commit_id..HEAD --name-only")));	
 	
@@ -109,26 +149,40 @@ function getChangedFiles($repos_local=true, $commit_id)
 		}
 	}
 	
+	filterProjectSpecific($files);
+	filterMatchingFiles($files, $dir.'/', $destdir.'/');
 
-	
 	return ['copy'=>$files, 'remove'=>$removes];
 }
 
-function exportExtract2Tmp($repos_local=true, $commit_id, $info=[])
+
+function exportExtract2Tmp($repos_local=true, $changed_files)
 {
-	$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
-	execute($enter_repos."git diff --stat $commit_id..HEAD --name-only | tar czf /tmp/exportchanges.tar.gz -T -");
+	$t= new GW_Timer;
 	
-	$outdir = "/tmp/extractupdates_".date('Ymd_His');
-	mkdir($outdir);
+	$sourcedir = $repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
+	//$destdir = !$repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
 	
-	execute('cd '.$outdir.' && for a in `ls -1 /tmp/exportchanges.tar.gz`; do tar -zxvf $a; done');	
 	
-	$removefile = $outdir.'/removefile.sh';
-	$info_file = $outdir.'/update_info_file.txt';
+	$destdir = "/tmp/extractupdates_".date('Ymd_His');
+	mkdir($destdir);
 	
-	$str = '';	
-	$changed_files = getChangedFiles(false, $commit_id);
+	$removefile = $destdir.'/removefile.sh';
+	$info_file = $destdir.'/update_info_file.txt';
+	
+	$str = '';
+	
+	echo "Copying files ";
+	foreach($changed_files['copy'] as $file){
+		@mkdir(dirname($destdir.'/'.$file), 0777, true);
+		
+		copy($sourcedir.'/'.$file, $destdir.'/'.$file);
+		echo $file."\n";
+		
+	}
+	echo "\n";
+		
+	
 	foreach($changed_files['remove'] as $rmfile)
 		$str.="rm $rmfile\n";
 	
@@ -142,8 +196,11 @@ function exportExtract2Tmp($repos_local=true, $commit_id, $info=[])
 	
 	//tar -xvzf archyvo_pavadinimas.tar.gz extractins i ta pati kataloga
 	
-	echo "Files were extracted to $outdir\n";
-	return $outdir;
+	echo count($changed_files['copy'] )." Files were extracted to $destdir\n";
+	
+	echo __FUNCTION__.": ".$t->stop(5)." secs\n";
+	
+	return $destdir;
 }
 
 function gitlog($repos_local=true, $datesince=''){
@@ -177,7 +234,9 @@ function processCommand($line, $repos_local=true){
 	
 	print_r($args);
 	
-	switch ($line[0]) {
+	$cmd = $line[0];
+	
+	switch ($cmd) {
 		case 'c':
 			processCommand(implode(';', $args), false);
 		break;
@@ -241,32 +300,39 @@ function processCommand($line, $repos_local=true){
 			shell_exec("krusader --left=$dir --right='".__DIR__."'");
 		break;
 		
-		case '3':
-		case 'showupdates2core':
+
 			$last_sync = getLastCommitWhenVersionsWereSynced();
 			$newcommits = getNewCommitsFromDate(true, $last_sync['lastcommit_date']);//just for info
 			$changed_files = getChangedFiles(true, $last_sync['lastcommit']);
 			
-			print_r(['$last_sync'=>$last_sync, '$newcommits'=>$newcommits, 'changed_files'=>$changed_files]);	
+			
 			
 			if(!$changed_files)
 				echo "NO CHANGED FILES\n";
 		break;
-	
+		
+		case '3':
+		case 'showupdates2core':	
 		case '4':
 		case 'exportupdates2core':
-			if(isset($args[0]))
+			if(isset($args[0])){
 				$datefrom = $args[0];
-			else{
+			}else{
 				$last_sync = getLastCommitWhenVersionsWereSynced();
 				$datefrom = $last_sync['lastcommit_date'];
 			}		
 			
+			$newcommits = getNewCommitsFromDate(true, $datefrom);//just for info	
+			$changed_files = getChangedFiles(true, $newcommits['updates_from_commit']);
+							
+			if($cmd == '3' || $cmd=='showupdates2core')
+			{
+				
+				print_r($changed_files);
+				break;
+			}
 			
-			
-			$newcommits = getNewCommitsFromDate(true, $datefrom);//just for info			
-			
-			$dir = exportExtract2Tmp(true, $newcommits['updates_from_commit']);
+			$dir = exportExtract2Tmp(true, $changed_files);
 			
 			shell_exec("krusader --left=$dir --right=../gwcms");
 		break;
@@ -286,7 +352,7 @@ function processCommand($line, $repos_local=true){
 }
 
 
-
+	
 
 
 
