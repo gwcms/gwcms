@@ -108,7 +108,7 @@ function filterProjectSpecific(&$filesarr)
 				unset($filesarr[$idx]);
 				echo "--(projspec) $file ($pattern)\n";
 			}
-	}
+	}	
 	echo "filterProjectSpecific: ".$t->stop()." secs\n";
 }
 
@@ -152,7 +152,7 @@ function getChangedFiles($repos_local=true, $commit_id)
 	filterProjectSpecific($files);
 	filterMatchingFiles($files, $dir.'/', $destdir.'/');
 
-	return ['copy'=>$files, 'remove'=>$removes];
+	return ['remove'=>$removes, 'copy'=>$files];
 }
 
 
