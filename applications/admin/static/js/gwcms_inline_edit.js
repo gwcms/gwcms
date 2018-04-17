@@ -17,7 +17,12 @@ function initActiveList()
 	$(document).keyup(function(e) {
 		 if (e.keyCode == 27) { // escape key maps to keycode `27`
 			$('.inlineFormRow').remove();
+			
+			gw_adm_sys.resetInitState($('.inlineFormRowHidd'));
 			$('.inlineFormRowHidd').show().removeClass('inlineFormRowHidd');
+			
+			gw_adm_sys.initObjects();
+			
 		}
 		
 		
@@ -75,6 +80,8 @@ function initActiveListRows()
 	}
 	);	
 	
+	
+	gw_adm_sys.initObjects();
 }
 
 
@@ -105,32 +112,37 @@ function submitInlineForm()
 						
 						if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
 						{
-							rowobj.after(data);
-
-							if(inlineformrow.attr('data-id')!='0')
-								rowobj.remove();
-
-							inlineformrow.remove();
-							$('.activeList').trigger( "updated");//call init list
-
-							var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
-							var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
-							var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
-
-
-							gwcms.showMessages(JSON.parse(messages), title);
-
-
-							//console.log(messages);
-
-							animateChangedRow(id);
-							initActiveListRows();
+							console.log(data);
+							
+								rowobj.after(data);
+								
+								
+								
+								
+								if(inlineformrow.attr('data-id')!='0')
+									rowobj.remove();
+								
+								inlineformrow.remove();
+								$('.activeList').trigger( "updated");//call init list
+								
+								var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
+								var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
+								var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
+								
+																
+								gwcms.showMessages(JSON.parse(messages), title);
+								
+								
+								//console.log(messages);
+								
+								animateChangedRow(id);
+								initActiveListRows();
 								
 								
 								//gw_navigator.jump(location.href, {id:id})
 						} else {
-							inlineformrow.remove();
-							loadRowAfterAjx(rowobj, data)
+								inlineformrow.remove();
+								loadRowAfterAjx(rowobj, data)
 								
 						}
 

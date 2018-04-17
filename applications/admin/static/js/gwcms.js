@@ -342,6 +342,10 @@ var gw_adm_sys = {
 			
 		}).attr('data-initdone',1);
 	},
+	resetInitState: function(parent){
+		console.log('reset '+parent.find("[data-initdone='1']").length);
+		parent.find("[data-initdone='1']").attr('data-initdone',0);
+	},
 	
 	notification: function(data){
 		var typetrans = {0:'success', 1: "warning", 2: "danger", 3: "info", 4: "dark"}
