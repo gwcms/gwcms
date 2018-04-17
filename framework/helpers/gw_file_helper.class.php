@@ -98,4 +98,42 @@ class GW_File_Helper
 
 		exit;
 	}
+	
+	static function rglob($pattern, $flags = 0) 
+	{
+		$files = glob($pattern, $flags);
+		foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+			$files = array_merge($files, self::rglob($dir . '/' . basename($pattern), $flags));
+		}
+		
+		return $files;
+	}
+	
+	static function isFilesEqual($filepath1, $filepath2) {
+
+		$filesize1 = @filesize($filepath1);
+		$filesize2 = @filesize($filepath2);
+
+		if ($filesize1 != $filesize2)
+			return false;
+
+		if ($filesize1 === $filesize2) {
+
+			$file1 = fopen($filepath1, 'r');
+			$file2 = fopen($filepath2, 'r');
+
+			for ($i = 0; $i < $filesize1 && $i < $filesize2; $i += 1) {
+				fseek($file1, $i);
+				fseek($file2, $i);
+				if (fgetc($file1) !== fgetc($file2))
+					return false;
+			}
+
+			fclose($file1);
+			fclose($file2);
+
+			return true;
+		}
+	}
+
 }
