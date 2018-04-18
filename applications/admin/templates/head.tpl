@@ -127,8 +127,16 @@
 		});	
 		
 		require(['gwcms'], function(){
-			$.extend(GW, { app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', base:'{$sys_base}', ln:'{$app->ln}', path:'{$app->path}', session_exp:{$session_exp|intval}, server_time:'{"F d, Y H:i:s"|date}'});
-			gw_adm_sys.init();				
+			$.extend(GW, { 
+				app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', 
+				base:'{$sys_base}', ln:'{$app->ln}', 
+				path:'{$app->path}', session_exp:{$session_exp|intval}, 
+				server_time:'{"F d, Y H:i:s"|date}',
+				user_id: {if $app->user}{$app->user->id}{else}0{/if}
+			});
+			gw_adm_sys.init();	
+			
+			
 		});
 		
 		
@@ -145,3 +153,4 @@
     
 </head>
 	
+

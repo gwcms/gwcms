@@ -151,6 +151,7 @@ var gw_adm_sys = {
 	},
 	init: function ()
 	{
+		gwcms_project.init();
 		GW.init_time = new Date().getTime();
 		$(document).ready(gw_adm_sys.init_after_load);
 		gw_adm_sys.initObjects();

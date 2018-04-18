@@ -161,21 +161,24 @@ function getChangedFiles($repos_local=true, $commit_id)
 }
 
 
-function exportExtract2Tmp($repos_local=true, $changed_files)
+function exportExtract2Tmp($repos_local=true, $changed_files, $copy2temp=true)
 {
 	$t= new GW_Timer;
 	
 	$sourcedir = $repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
-	//$destdir = !$repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';
 	
-	
-	$destdir = "/tmp/extractupdates_".date('Ymd_His');
-	mkdir($destdir);
+	if($copy2temp){
+		$destdir = "/tmp/extractupdates_".date('Ymd_His');
+		mkdir($destdir);
+		
+	}else{
+		$destdir = !$repos_local ? __DIR__ : dirname(__DIR__).'/gwcms';		
+	}
 	
 	$removefile = $destdir.'/removefile.sh';
 	$info_file = $destdir.'/update_info_file.txt';
 	
-	$str = '';
+	
 	
 	echo "Copying files ";
 	foreach($changed_files['copy'] as $file){
@@ -188,16 +191,22 @@ function exportExtract2Tmp($repos_local=true, $changed_files)
 	echo "\n";
 		
 	
+	$rm_cmds = '';
 	foreach($changed_files['remove'] as $rmfile)
-		$str.="rm $rmfile\n";
+		$rm_cmds.="rm $rmfile\n";
 	
-	if($changed_files['remove'])
-		file_put_contents($removefile, $str);
 	
-	$info['changed']=$changed_files;
-	
-	file_put_contents($info_file, print_r($info, true));
-	
+	if($copy2temp){
+		if($changed_files['remove'])
+			file_put_contents($removefile, $rm_cmds);
+
+		$info['changed']=$changed_files;
+
+		file_put_contents($info_file, print_r($info, true));
+	}else{
+		echo "To remove files you should execute these commands:\n";
+		echo $rm_cmds;
+	}
 	
 	//tar -xvzf archyvo_pavadinimas.tar.gz extractins i ta pati kataloga
 	
@@ -306,7 +315,9 @@ function processCommand($line, $repos_local=true){
 			}else{
 				$last_sync = getLastCommitWhenVersionsWereSynced();
 				$datefrom = $last_sync['lastcommit_date'];
-			}		
+			}	
+			
+			$straight_to_core = $args[1] ?? false;
 			
 			$newcommits = getNewCommitsFromDate(true, $datefrom);//just for info	
 			$changed_files = getChangedFiles(true, $newcommits['updates_from_commit']);
@@ -317,9 +328,10 @@ function processCommand($line, $repos_local=true){
 				break;
 			}
 			
-			$dir = exportExtract2Tmp(true, $changed_files);
+			$dir = exportExtract2Tmp(true, $changed_files, !$straight_to_core);
 			
-			shell_exec("krusader --left=$dir --right=../gwcms");
+			if(!$straight_to_core)
+				shell_exec("krusader --left=$dir --right=../gwcms");
 		break;
 	
 		case 'h':
@@ -330,7 +342,7 @@ function processCommand($line, $repos_local=true){
 			echo "1 - showupdates[;2016-01-01] - get info when was last 'gwcms uptodate' named commit\n";
 			echo "2 - importupdatesfromcore[;2016-01-01] - get info when was last 'gwcms uptodate' named commit - or enter date from\n";
 			echo "3 - showupdates2core - get info when was last 'gwcms uptodate' named commit\n";
-			echo "4 - exportupdates2core[;2016-01-01] - export files when was last 'gwcms uptodate' named commit\n";
+			echo "4 - exportupdates2core[;2016-01-01][;1] - export files when was last 'gwcms uptodate' named commit 3rd arg to send files straight to core\n";
 		break;
 	}	
 	

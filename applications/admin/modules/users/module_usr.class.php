@@ -206,5 +206,12 @@ class Module_Usr extends GW_Common_Module
 		$list = GW_User_Ip_Log::singleton()->findAll(['user_id=?', $item->id]);
 		
 		$this->tpl_vars['list'] = $list;
-	}	
+	}
+
+	function doGetWsTempConfig()
+	{
+		$data = GW_WebSocket_Helper::getFrontConfig($this->app->user, true);
+		echo json_encode($data);
+		exit;
+	}
 }
