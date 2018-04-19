@@ -118,7 +118,7 @@
 		{if $i18n>2}
 			{foreach $langs as $ln_code}
 				
-				<span class="ln_contain ln_contain_{$i18n} {if $app->ln==$ln_code}ln_cont_main{else}ln_cont_oth {if $i18n_expand}i18n_expand{/if}{/if}">
+				<span class="ln_contain ln_contain_{$i18n} {if $app->ln==$ln_code}ln_cont_main{else}ln_cont_oth {if $i18n_expand}i18n_expand{/if}{/if}" title="{$ln_code}">
 				{call name="langswitch"}
 				
 					{$width="calc(100% - 25px)"}

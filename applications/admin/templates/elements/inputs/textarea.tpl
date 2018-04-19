@@ -1,5 +1,5 @@
-{if $tabs}
-	<script type="text/javascript" src="{$app_root}js/textarea_tabfunc.js"></script>	
+{if $input_tabs}
+	<script type="text/javascript" src="{$app_root}static/js/textarea_tabfunc.js"></script>	
 {/if}
 
 

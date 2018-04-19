@@ -3072,7 +3072,6 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 }
 .lang-id,.lang-name
 {
-	display: none;
 	vertical-align: middle;
 }
 .lang-selector .lang-id
