@@ -214,8 +214,10 @@ class GW_CMS_Sync
 
 			file_put_contents($info_file, print_r($info, true));
 		}else{
-			echo "To remove files you should execute these commands:\n";
-			echo $rm_cmds;
+			if($changed_files['remove']){
+				echo "To remove files you should execute these commands:\n";
+				echo $rm_cmds;
+			}
 		}
 
 		//tar -xvzf archyvo_pavadinimas.tar.gz extractins i ta pati kataloga
