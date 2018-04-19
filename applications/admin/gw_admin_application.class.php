@@ -106,7 +106,7 @@ class GW_Admin_Application extends GW_Application
 		$this->icon_root = $this->app_root . $this->icon_root;
 	}
 	
-	
+		
 	function getBreadcrumbs()
 	{		
 		$list = $this->path_arr;
@@ -115,7 +115,7 @@ class GW_Admin_Application extends GW_Application
 		{
 			if(!isset($item['title']))
 			{
-				$page=GW::getInstance('GW_ADM_Page')->getByPath($item['path']);
+				$page= GW_ADM_Page::singleton()->getByPath($item['path']);
 				
 				if($page)
 				{

@@ -15,7 +15,7 @@
 {/if}
 	
 
-<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}{if $maximumSelectionLength>1}[]{/if}" 
+<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
 	 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
 	 >
 	{html_options options=$options selected=$value}

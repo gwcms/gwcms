@@ -82,14 +82,32 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		return $list;
 	}
 
+	
+	/* uzloadinamas puslapis taip pat prideedamas data_object_id*/
+	
 	function getByPath($path)
-	{
+	{		
+		
+		//tam atvejui kai path eina gylin pvz straipsniumodulis/grupes/1/tagai/1
+		//tuo atveju ieskoma puslapiu su pathais straipsniumodulis/grupes/tagai ir straipsniumodulis/tagai 
+		
+		preg_match_all('/([^\/]+)(\/\d{1,20})?/', $path, $matches, PREG_SET_ORDER);
+		
+		if(count($matches) > 2)
+			$path_clean = implode('/',[$matches[0][1], $matches[count($matches)-1][1]]);
+		
+		
 		if($data_object_id=(int)pathinfo($path,PATHINFO_FILENAME))
 			$path=dirname($path);
 		
+			
+		//isvalyt nuo identifikatoriu
 		$path = preg_replace('/\/\d+\//','/',$path);
 		
-		if(($tmp = $this->find(['path=?',$path])) && $data_object_id)
+		$path_cond = isset($path_clean) ? GW_DB::inConditionStr("path", [$path, $path_clean]) : ['path=?', $path];
+		
+		
+		if(($tmp = $this->find($path_cond)) && $data_object_id)
 			$tmp->set('data_object_id', $data_object_id);
 			
 		return $tmp;
