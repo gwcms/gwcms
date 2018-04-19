@@ -28,7 +28,7 @@
 
 
 {if !$readonly}
-	<input id="{$inp_file_id}" class="imageinputwithpreview" type="file" name="{$name}" data-container="{$preview_container_id}" onchange="readURL(this)" />
+	<input id="{$inp_file_id}" class="inp-image imageinputwithpreview" type="file" name="{$name}" data-container="{$preview_container_id}" onchange="readURL(this)" />
 {/if}
 
 <script>

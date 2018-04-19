@@ -13,7 +13,7 @@
 {/if}
 
 
-<textarea  id="{$id}" class="form-control{if $autoresize} ta_autoresize{/if}" name="{$input_name}" {if $tabs}onkeydown="return catchTab(this,event)"{/if} 
+<textarea  id="{$id}" class="form-control{if $autoresize} ta_autoresize{/if} inp-textarea" name="{$input_name}" {if $tabs}onkeydown="return catchTab(this,event)"{/if} 
 style="width: {$width|default:"100%"}; {if !$rows}height: {$height|default:"250px"};{/if}" {if $rows}rows="{$rows}"{/if}  {if $readonly}readonly="readonly"{/if}
 onchange="this.value=$.trim(this.value);" {if $hidden_note}title="{$hidden_note}"{/if}>{$value|escape}</textarea>
     			

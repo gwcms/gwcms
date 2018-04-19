@@ -1,7 +1,7 @@
 
 {*text line or password*}
 <input id="{$id}"
-	class="form-control{if $class} {$class}{/if} "
+	class="form-control{if $class} {$class}{/if} inp-{$type|default:text}"
 	{if $required}required="required"{/if} 
 	name="{$input_name}" 
 	type="{$type|default:text}" 

@@ -36,5 +36,5 @@
 
 
 {if !$readonly}
-	<input id="{$inp_file_id}" type="file" name="{$name}" />
+	<input id="{$inp_file_id}" type="file" name="{$name}" class="inp-file" />
 {/if}

@@ -1,7 +1,7 @@
 {if $value=="0000-00-00"}
 	{$value=""}
 {/if}
-	<div class="gwcms-dp-component" style="width:150px">
+	<div class="gwcms-dp-component inp-date" style="width:150px">
 			<div class="input-group date">
 				<input type="text" class="form-control" value="{$value|escape}" name="{$input_name}" 
 					{if $hidden_note}title="{$hidden_note}"{/if}

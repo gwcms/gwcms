@@ -7838,4 +7838,4 @@ input[type="color"] {
 .ln_contain_3{ display: inline-block; padding: 2px; background-color: #eee;border-radius:5px; }
 .ln_contain_4{ display: block; }
 .i18n_tag{ cursor:pointer; }
-.ln_contain_4 input { display:inline-block; }
+.ln_contain_4 .inp-text { display:inline-block; }
