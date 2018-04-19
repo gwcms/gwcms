@@ -51,7 +51,7 @@ class GW_Auth
 		//request must be from same ip
 		//$sameip = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']);
 		
-		$logedin =  ($user_id = (int) $this->session["user_id"]);
+		$logedin =  ($user_id = intval($this->session["user_id"] ?? 0));
 
 		if (isset($_GET['temp_access'])) {
 			list($uid, $token) = explode(',', $_GET['temp_access']);
