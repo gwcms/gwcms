@@ -158,6 +158,9 @@ class GW_CMS_Sync
 
 		$this->filterProjectSpecific($files, true);
 		$this->filterProjectSpecific($files, false);
+		
+		$this->filterProjectSpecific($removes, true);
+		$this->filterProjectSpecific($removes, false);		
 
 		$this->filterMatchingFiles($files);
 
@@ -175,8 +178,11 @@ class GW_CMS_Sync
 		
 		//copy to temp dir
 		if(!isset($this->params['s'])){
+			$copy2temp=true;
 			$destdir = "/tmp/extractupdates_".date('Ymd_His').'/';
 			mkdir($destdir);
+		}else{
+			$copy2temp=false;
 		}
 		
 
