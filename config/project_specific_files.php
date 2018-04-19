@@ -10,6 +10,7 @@ applications/admin/modules/customers/*
 applications/admin/modules/diary/*
 applications/admin/modules/movies/*
 pullupdates.php
+update.php
 ";
 
 $paths=explode("\n", trim($paths));
