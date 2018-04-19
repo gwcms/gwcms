@@ -7831,3 +7831,11 @@ input[type="color"] {
 }
 
 .text-brown{ color:#795548}
+
+.i18nhidden{ width:1px }
+.gwform_sw_ln{ cursor: pointer; margin-left:5px;margin-right:5px; }
+.gwform_sw_ln img{ vertical-align:text-top }
+.ln_contain_3{ display: inline-block; padding: 2px; background-color: #eee;border-radius:5px; }
+.ln_contain_4{ display: block; }
+.i18n_tag{ cursor:pointer; }
+.ln_contain_4 input { display:inline-block; }

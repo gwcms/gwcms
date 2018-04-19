@@ -363,6 +363,22 @@ var gw_adm_sys = {
 			nndata.title = data.title;
 
 		$.niftyNoty(nndata);		
+	},
+	
+	initI18nForm: function()
+	{
+		$('.i18n_tag').click(function(){ 
+
+			
+			$(this).parents('td:first').next('.input_td').find('.ln_contain').fadeIn();
+		})
+	
+		$('.gwform_sw_ln').click(function(){
+			$(this).parents('.ln_contain').fadeOut();
+		})
+		
+		$('.ln_cont_oth').hide();
+		$('.i18n_expand').fadeIn();
 	}
 	
 }

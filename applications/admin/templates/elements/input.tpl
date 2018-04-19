@@ -39,6 +39,35 @@
 {/if}
 
 
+{if $i18n}
+	{$langs=array_flip(GW::$settings.LANGS)}
+	{$langs=[$app->ln=>1]+$langs}
+	{$langs=array_keys($langs)}
+	
+	{if !isset($GLOBALS.form_18n_init_done)}
+		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
+		
+		{$GLOBALS.form_18n_init_done=1}
+		<script type="text/javascript">
+			require(['gwcms'], function(){
+			gw_adm_sys.initI18nForm();
+		});
+		</script>
+	{/if}		
+	
+	
+	
+
+
+	{function name="langswitch"}
+		{if $ln_code=='en'}{$flag_code='gb'}{else}{$flag_code=$ln_code}{/if}
+
+		<span class="gwform_sw_ln" href="#" onclick="tooglei18nCol('{$ln_code}');return false">
+				<img src="{$app_root}static/img/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> {if $show_ln_code_title}<span class="toggle_i18n_{$ln_code}" title="{GW::l("/g/LANG/`$ln_code`")}">{$ln_code}</span>{/if}
+		</span>
+	{/function}
+{/if}
+
 
 
 
@@ -85,7 +114,21 @@
 			{/if}
 			
 
+			
+		{if $i18n>2}
+			{foreach $langs as $ln_code}
+				
+				<span class="ln_contain ln_contain_{$i18n} {if $app->ln==$ln_code}ln_cont_main{else}ln_cont_oth {if $i18n_expand}i18n_expand{/if}{/if}">
+				{call name="langswitch"}
+				
+					{$width="calc(100% - 25px)"}
+				
+				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
+				</span>
+			{/foreach}
+		{else}
 			{include file="elements/input0.tpl"}
+		{/if}
 			
 			{if $layout=='inline'}
 				{if $m->error_fields.$name}
