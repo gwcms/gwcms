@@ -358,6 +358,11 @@ var gw_adm_sys = {
 			container: 'floating',
 			timer: data.hasOwnProperty('time') ? data.time : 10000,
 		};
+		
+		
+		if(data.hasOwnProperty('footer'))
+			nndata.message+="<span class='alert-footer'>"+data.footer+'</span>';
+		
 
 		if(data.hasOwnProperty('title'))
 			nndata.title = data.title;
