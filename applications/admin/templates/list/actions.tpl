@@ -24,7 +24,7 @@
 	
 
 	
-	{$href=$m->buildUri($url.0,$url.1,$url.2)}
+	{$href=$href|default:$m->buildUri($url.0,$url.1,$url.2)}
 	{list_item_action}
 {/function}
 

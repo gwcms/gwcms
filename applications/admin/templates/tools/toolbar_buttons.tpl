@@ -14,14 +14,12 @@
 
 
 {function name=do_toolbar_buttons_info}
-	{if $page->notes}
-		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}
-		{capture append=footer_hidden}	
-			<script>
-				require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
-			</script>		
-		{/capture}		
-	{/if}
+	{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}
+	{capture append=footer_hidden}	
+		<script>
+			require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
+		</script>		
+	{/capture}
 {/function}
 
 {function name=do_toolbar_buttons_dialogconf}
@@ -78,13 +76,18 @@
 					                                <i class="{$groupiconclass}"></i> {if $grouptitle}<span>{$grouptitle}</span>{/if}
 					                            </a>
 					                            <ul class="dropdown-menu">
+									    {if is_array($do_toolbar_buttons_drop)}
 			{foreach $do_toolbar_buttons_drop as $button_func}
 				{if $button_func=='divider'}
 					<li class="divider"></li>
 				{else}
 					<li >{call name="do_toolbar_buttons_`$button_func`" indropdown=1}</li>
 				{/if}
-			{/foreach}
+			{/foreach}										    
+									{else}
+										<li >{$do_toolbar_buttons_drop}</li>
+									{/if}
+
 					                            </ul>
 					                        </div>	
 	

@@ -7,6 +7,8 @@
 
 (function ($) {
 	$.fn.iframeAutoHeight = function (spec) {
+		
+		
 
 		var undef;
 		if ($.browser === undef) {
@@ -143,8 +145,11 @@
 					debug('need delay');
 					setTimeout(function(){ resizeHeight(iframe, true) }, 1000);
 					
+					
 					//return false;
 				}
+				
+				
 
 				// set the iframe size to minHeight so it'll get smaller on resizes in FF and IE
 				if (options.resetToMinHeight && options.resetToMinHeight === true) {
@@ -222,6 +227,8 @@
 			if (options.diagnostics) {
 				showDiagnostics(this, "each iframe");
 			}
+			
+
 
 			// if trigger functions are registered, invoke them
 			if (options.triggerFunctions.length > 0) {
@@ -239,10 +246,16 @@
 				$(this).load(function () {
 					var delay = 0;
 					var iframe = this;
-
+					
 					var delayedResize = function () {
 						resizeHeight(iframe);
 					};
+					
+					
+					if(options.interval)
+					{
+						setInterval(delayedResize, options.interval)
+					}						
 
 					if (loadCounter === 0) {
 						// delay the first one
@@ -254,6 +267,7 @@
 					}
 
 					debug("load delay: " + delay);
+					console.log("load delay: " + delay);
 					setTimeout(delayedResize, delay);
 					loadCounter++;
 				});
@@ -271,6 +285,17 @@
 		
 				}
 					$(this).load(function () {
+						
+							var delayedResize = function () {
+								resizeHeight(iframe);
+							};
+
+							if(options.interval)
+							{
+								setInterval(delayedResize, options.interval)
+							}					
+					
+						
 							debug('autoheight onload');
 							resizeHeight(this);
 					});					

@@ -130,7 +130,14 @@ var gw_navigator = {
 			return url;
 
 		return parts[0].split('//')[0] + '//' + parts[1];
-	}
+	},
+	switchHash: function(hash){
+		var url = location.href;
+		
+		var parts = url.split('#')
+		
+		window.location.replace(parts[0]+'#'+hash)
+	}	
 }
 
 var gw_adm_sys = {
@@ -626,8 +633,18 @@ var gwcms = {
 	initAutoresizeIframe: function(selector, cfg, callback)
 	{
 		require(["iframeautoheight"], function () {
-			if(!cfg)
-				cfg = {minHeight: 200, maxHeight: $("body").innerHeight() - 250, minWidth: 200, maxWidth: $("body").innerWidth() - 250, heightOffset: 10, widthOffset: 60/*, debug:true */};
+			var defaults = {
+				minHeight: 200, 
+				maxHeight: $("body").innerHeight() - 250, 
+				minWidth: 200, 
+				maxWidth: $("body").innerWidth() - 250, 
+				heightOffset: 10, 
+				widthOffset: 60/*, debug:true */};
+			
+			cfg = $.extend(defaults, cfg)
+			
+			
+				
 			
 			$(selector).iframeAutoHeight(cfg);
 			
