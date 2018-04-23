@@ -18,7 +18,7 @@
 	   {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 	   {if $confirm}{$app->fh()->gw_link_confirm()}{/if}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}">
-		{if $iconclass}<i class="{$iconclass}"></i>{/if} <span>{$title}</span>
+		{if $iconhtml}{$iconhtml}{/if}{if $iconclass}<i class="{$iconclass}"></i>{/if} <span>{$title}</span>
 	</a>
 
 	{if strpos($btnclass, 'iframeopen')!==false}
