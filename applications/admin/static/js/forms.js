@@ -135,10 +135,77 @@ var gw_changetrack = {
 				}
 		);		
 		
-	}
+	},
 	
 	
+	animateChanged: function (obj, speed)
+	{
+		//obj.fadeOut('slow', function(){ $(this).fadeIn('slow') }).animate({backgroundColor: "#003311",color: "#fff"}, 300 );
+		
+		var curr_bgcolor = obj.css("background-color");
+		var curr_color = obj.css("color");
+
+		obj.animate({backgroundColor: "#FFA500",color: "#fff"}, 1000 );
+
+		setTimeout(function(){
+				obj.animate({backgroundColor: curr_bgcolor, color: curr_color}, speed ? speed/2 : 300 );
+		}, (speed ? speed/2 : 300))
+
+	},
 	
+	isFormValuesChanged: function(){
+		$('#itemform').data('newvals', $('#itemform').serializeArray());	
+			
+		var orig_vals = gw_changetrack.recodeArray($('#itemform').data('originalvals'));					
+		var new_vals = gw_changetrack.recodeArray($('#itemform').data('newvals'))
+
+		delete new_vals['original_values'];
+
+		var changesfound = false;
+
+		for(var field in orig_vals)
+		{
+			
+			if(!new_vals.hasOwnProperty(field))
+				new_vals[field] ='';
+			
+			if(JSON.stringify(orig_vals[field]) != JSON.stringify(new_vals[field])){
+								
+				var fieldname = field + ( Array.isArray(orig_vals[field]) ? '[]' :'');
+				var obje=$('#itemform [name="'+fieldname+'"]');
+				
+				gw_changetrack.animateChanged(obje.parents('tr:first').fadeIn(), 3000)
+				//$('#'+fieldid+'_inputLabel').addClass("gwinput-label-modified")
+				
+				console.log("Change found in field: "+field+' before: '+orig_vals[field]+' now: '+new_vals[field])
+				changesfound = true;
+			}
+		}	
+		
+		return changesfound;
+	},
+	
+	recodeArray: function(arr)
+	{
+		var newvals = { }
+		for(var field in arr)
+		{
+			var it = arr[field]
+			if(it.name.slice(-2)=='[]'){
+				var newkey=it.name.substring(0,it.name.length-2);
+
+				if(!newvals.hasOwnProperty(newkey)){
+					newvals[newkey] = [];
+				}
+
+				newvals[newkey].push(it.value);
+			}else{
+				newvals[it.name]=it.value
+			}
+
+		}
+		return newvals;
+	}	
 	
 }
 

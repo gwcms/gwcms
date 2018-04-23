@@ -37,9 +37,11 @@
 	
 	require(['gwcms'], function(){
 		
+		
+		
 		$(function(){
-			$('#itemform').attr('rel', $('#itemform').serialize());	
-
+			$('#itemform').data('originalvals', $('#itemform').serializeArray());	
+									
 			if(changes_track){
 					gw_changetrack.init('.itemform');
 			}
@@ -53,18 +55,9 @@
 
 
 		window.onbeforeunload = function() {
-			var orig_vals = unserialize($('#itemform').attr('rel'));
-			var new_vals = unserialize($('#itemform').serialize())
-			delete new_vals['original_values'];
+	
 			
-			for(var field in orig_vals)
-			{
-				if(orig_vals[field] != new_vals[field])
-					console.log("Change found in field: "+field)
-			}
-			
-
-			if(JSON.stringify(orig_vals) != JSON.stringify(new_vals))
+			if(gw_changetrack.isFormValuesChanged())
 				return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
 		}	
 	
