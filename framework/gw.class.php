@@ -201,6 +201,8 @@ class GW
 		return GW_Lang::readWrite($key, $write);
 	}
 
+	
+	static $transcache;
 	/**
 	 * pakrauna vertimus is duombazes, 
 	 * jei nera duombazeje tada pakrauna is 
@@ -208,8 +210,6 @@ class GW
 	 */
 	static function ln($fullkey, $valueifnotfound = false)
 	{
-		static $cache;
-		
 		if($fullkey[0]!=='/')
 			return $fullkey;
 		
@@ -243,12 +243,12 @@ class GW
 		//uzloadinti vertima jei nera uzloadintas
 		$cid = GW_Lang::$ln.'/'.$module;
 
-		if (!isset($cache[$cid])) {
+		if (!isset(self::$transcache[$cid])) {
 			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'id ASC']);
 
 			foreach ($tr as $k => $val) {
 
-				$var = & $cache[$cid];
+				$var = & self::$transcache[$cid];
 				
 				foreach (explode('/', $k) as $kk){
 					if(is_string($var))
@@ -263,7 +263,7 @@ class GW
 		
 		//paimti vertima is cache
 		$explode = explode('/', $key);	
-		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($cache[$cid],$explode);
+		$vr = GW_Array_Helper::getPointer2XlevelAssocArr(self::$transcache[$cid],$explode);
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (self::$devel_debug && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {

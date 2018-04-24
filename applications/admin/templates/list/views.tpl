@@ -5,7 +5,7 @@
 
 {function "page_view_a"}
 	<a class="btn {if $m->list_config.pview->id==$view->id}btn-primary{else}btn-default{/if}" 
-		href="{$m->buildUri(false,[act=>doSetView,view_id=>$view->id],[carry_params=>1])}"
+		href="{$m->buildUri(false,[act=>doSetView,view_id=>$view->id])}"
 		title="{if $view->title_short}{$view->title}{else}{$view->condition}{/if} {if $view->fields}[Stulpeliai]{/if} {if $view->condition}[Filtrai]{/if} {if $view->order}[Rikiavimas]{/if}"
 		>
 		{if $view->default}<i class="fa fa-home" title="{GW::l('/g/PAGE_VIEW_DEFAULT')}"></i>{/if} 

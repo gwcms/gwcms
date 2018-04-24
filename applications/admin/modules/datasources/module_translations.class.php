@@ -12,6 +12,8 @@ class Module_Translations extends GW_Common_Module
 		$this->list_params['paging_enabled']=1;	
 		
 
+		//if(!isset($this->list_params['order']))
+		//	$this->list_params['order'] = "";
 		
 	}
 	
@@ -86,19 +88,19 @@ class Module_Translations extends GW_Common_Module
 	
 	function viewSynchronizeFromXml()
 	{
-		$data = $this->__importReadLangFiles();
+		$trans_xml = $this->__importReadLangFiles();
 		
-		$dbitems = $this->__importReadDb();
+		$trans_db = $this->__importReadDb();
 		
 		
 		$counts=[
-		    'xml'=>count($data), 
-		    'db'=>count($dbitems), 
+		    'translations in xml files'=>count($trans_xml), 
+		    'translations stored in db'=>count($trans_db), 
 		    'updated'=>0,
 		    'inserted'=>0
 		];
 		
-		//d::dumpas($dbitems);
+		//d::dumpas($trans_db);
 		
 		
 		$sitelangs = GW::s('LANGS');
@@ -107,43 +109,51 @@ class Module_Translations extends GW_Common_Module
 		$xml_not_found=[];
 		$update_count = 0;
 		
-		foreach($dbitems as $item)
+				
+		
+		//pereina duombazes irasus ikelia pokycius
+		//ismeta nerastus 
+		
+		foreach($trans_db as $item)
 		{
 			$index = $item->module.'/'.$item->key;
 			
-			if(!isset($data[$index]))
+			//jeigu xmluose nerasta skipina
+			if(!isset($trans_xml[$index]))
 			{
 				$xml_not_found[]=$index;
 				continue;
 			}
 				
 			
-			$xmlentry = $data[$index];
+			$xmlentry = $trans_xml[$index];
 			
 			foreach($sitelangs as $lncode)
 			{
 				$field='value_'.$lncode;
 				if(!$item->$field && isset($xmlentry[$field]))
-					$item->$field=$xmlentry[$field];
+					$item->$field = $xmlentry[$field];
 			}
 			
 			$Oldpriority = $item->priority;
 			
 			//updeitina jei nesutampa tipai
 			$item->priority = (string)$xmlentry['priority'];
-			unset($data[$index]);
+			unset($trans_xml[$index]);
 			
 			if($item->changed_fields){
 				$item->updateChanged();				
 				$counts['updated']++;
-				$updated[]=[$item->module,$item->key];
+				$counts['updated_keys']=[$item->module.'/'.$item->key];
 			}
 		}
 		
-		$counts['xmlnotfound']=count($xml_not_found);
+		$counts['Only in database']=count($xml_not_found);
+		$counts['Only in database list']=$xml_not_found;
 		
+		// nerasti sukeliami
 		
-		foreach($data as $entry)
+		foreach($trans_xml as $entry)
 		{
 			$item = GW_Translation::singleton()->createNewObject($entry);
 			$item->save();
@@ -152,8 +162,8 @@ class Module_Translations extends GW_Common_Module
 		
 		
 		
-		$this->setPlainMessage(json_encode($counts));
-		$this->setPlainMessage("xmlnotfound: <br/>".implode("<br />", $xml_not_found));
+		$this->setPlainMessage('<pre>'.json_encode($counts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).'</pre>');
+		
 		
 		//d::ldump(['xmlnotfound'=>$xml_not_found]);
 		
@@ -176,6 +186,7 @@ class Module_Translations extends GW_Common_Module
 			
 		
 		$cfg["fields"]['update_time'] = 'lof';
+		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
 	}		

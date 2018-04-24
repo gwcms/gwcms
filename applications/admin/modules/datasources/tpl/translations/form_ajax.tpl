@@ -1,6 +1,8 @@
 
 
 {function name="df_inputs"}
+	{*$dl_checklist_enabled=1*}
+	<td></td>
 	
 	{foreach $m->list_config.dl_fields as $field}
 		{$field}

@@ -1,4 +1,4 @@
-{if $input_tabs}
+{if $textarea_tabfunc}
 	<script type="text/javascript" src="{$app_root}static/js/textarea_tabfunc.js"></script>	
 {/if}
 
@@ -10,6 +10,19 @@
 		})
 		
 	</script>
+{/if}
+
+{if $expandonfocus}
+	<script>
+		require(['gwcms'], function(){
+
+			$("#{$id}").focus(function(){	
+				$(this).css({ height: "{$expandonfocus}" })
+			}).blur(function(){
+				$(this).css({ height: "{$height}" })
+			})
+		})
+	</script>	
 {/if}
 
 
