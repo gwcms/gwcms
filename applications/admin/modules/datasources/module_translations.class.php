@@ -109,14 +109,16 @@ class Module_Translations extends GW_Common_Module
 		$xml_not_found=[];
 		$update_count = 0;
 		
-				
+		$preview_changes = [];		
 		
 		//pereina duombazes irasus ikelia pokycius
 		//ismeta nerastus 
+		//importuoja naujas kalbas jei db tuscia verte
 		
 		foreach($trans_db as $item)
 		{
 			$index = $item->module.'/'.$item->key;
+			$oldvals = $item->toArray();
 			
 			//jeigu xmluose nerasta skipina
 			if(!isset($trans_xml[$index]))
@@ -131,8 +133,9 @@ class Module_Translations extends GW_Common_Module
 			foreach($sitelangs as $lncode)
 			{
 				$field='value_'.$lncode;
-				if(!$item->$field && isset($xmlentry[$field]))
+				if(!$item->$field && isset($xmlentry[$field])){
 					$item->$field = $xmlentry[$field];
+				}
 			}
 			
 			$Oldpriority = $item->priority;
@@ -142,9 +145,22 @@ class Module_Translations extends GW_Common_Module
 			unset($trans_xml[$index]);
 			
 			if($item->changed_fields){
-				$item->updateChanged();				
-				$counts['updated']++;
-				$counts['updated_keys']=[$item->module.'/'.$item->key];
+				
+				if(isset($_GET['commit'])){
+					$item->updateChanged();				
+					$counts['updated']++;
+					$counts['updated_keys']=[$item->module.'/'.$item->key];
+				}else{
+					foreach($item->changed_fields as $key => $x)
+					{
+						$preview_changes[$index.':'.$key]=['old'=>$oldvals[$key], 'new'=>$item->$key];
+					}
+				}
+				
+				
+				
+				
+				
 			}
 		}
 		
@@ -162,7 +178,12 @@ class Module_Translations extends GW_Common_Module
 		
 		
 		
-		$this->setPlainMessage('<pre>'.json_encode($counts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).'</pre>');
+		
+		foreach($counts as $key => $val)
+			$counts[$key] = json_encode($val, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+			
+		$this->tpl_vars['changes'] = $preview_changes;
+		$this->tpl_vars['results'] = $counts;
 		
 		
 		//d::ldump(['xmlnotfound'=>$xml_not_found]);
