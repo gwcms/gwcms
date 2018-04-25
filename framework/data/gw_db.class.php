@@ -336,7 +336,7 @@ class GW_DB
 			$keys[] = $key;
 			$keys1[] = '`' . $key . '`';
 		}
-
+		
 		$query = "INSERT INTO $table (" . implode($keys1, ',') . ") VALUES ";
 
 		foreach ($entries as $entry) {
@@ -352,11 +352,15 @@ class GW_DB
 
 		if ($replace) {
 			$query .= ' ON DUPLICATE KEY UPDATE ';
+			unset($keys1['insert_time']);
+			
 			foreach ($keys1 as $key)
 				$query .= $key . '=VALUES(' . $key . '), ';
 
 			$query = substr($query, 0, -2);
-		}
+		} 
+		
+		
 
 		$this->query($query, $nodie);
 
