@@ -15,7 +15,20 @@ class Module_Translations extends GW_Common_Module
 		//if(!isset($this->list_params['order']))
 		//	$this->list_params['order'] = "";
 		
+		if(isset($_GET['transsearch']))
+		{
+			list($group,$module, $key) = explode('/',$_GET['transsearch'],3);
+			$module = $group."/".$module;
+			
+			$this->setFilter("module", $module, "EQ");		
+			$this->setFilter("key", $key, "EQ");	
+			unset($_GET['transsearch']);
+			$this->app->jump();
+		}
+		
+		
 	}
+	
 	
 	function appendData(&$data, $file, $module)
 	{

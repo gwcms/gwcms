@@ -202,6 +202,15 @@ class GW
 	}
 
 	
+	static function lnResult($key, &$result)
+	{
+
+		if(!self::$context->vars['app']->user || !self::$context->vars['app']->user->isRoot())
+			return $result;
+		
+		return is_array($result) ? $result : "<span class='lnresult' data-key='".$key."'>".$result."</span>";
+	}
+	
 	static $transcache;
 	/**
 	 * pakrauna vertimus is duombazes, 
@@ -212,6 +221,8 @@ class GW
 	{
 		if($fullkey[0]!=='/')
 			return $fullkey;
+		
+		
 		
 		list(, $module, $key) = explode('/', $fullkey, 3);
 		
@@ -228,6 +239,8 @@ class GW
 			return $result;
 		}
 		
+		
+		
 		if ($module == 'M') {
 			list($module, $key) = explode('/', $key, 2);
 			$module = 'M/' . strtolower($module);
@@ -239,6 +252,8 @@ class GW
 			list($module, $key) = explode('/', $key, 2);
 			$module = 'G/' . strtolower($module);
 		} 
+		
+		$orig_key = $module.'/'.$key;
 
 		//uzloadinti vertima jei nera uzloadintas
 		$cid = GW_Lang::$ln.'/'.$module;
@@ -280,6 +295,6 @@ class GW
 			}
 		}
 		
-		return $vr;
+		return self::lnResult($orig_key, $vr);
 	}
 }
