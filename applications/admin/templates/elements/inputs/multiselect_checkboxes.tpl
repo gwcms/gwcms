@@ -7,8 +7,7 @@
 <div style="overflow-y:scroll;max-height:{$height|default:"80px"};width:auto;float:left;padding-right:5px;border:1px solid silver">
 <table class="inputmultiselectcheckboxes gw_clean_tbl" cellspacing="0" cellpadding="0" style="width:auto">
 	
-{capture assign=footer_hidden}
-{/capture}	
+	
 	<style>
 		.inputmultiselectcheckboxes > tbody > tr > td:nth-child(1) {
 			 padding: 0 5px;

@@ -30,6 +30,10 @@ class GW_String_Validator extends GW_Validator
 				return $this->setErrorMessage($this->getParam('error_max_length')) && false;
 
 
+		if ($pattern = $this->getParam('pattern'))
+			if(!preg_match($pattern, $value))
+				return $this->setErrorMessage($this->getParam('error_message')) && false;
+			
 		if ($min_words = $this->getParam('min_words'))
 			if ($this->__countWords($value) < $min_words)
 				return $this->setErrorMessage($this->getParam('error_min_length')) && false;

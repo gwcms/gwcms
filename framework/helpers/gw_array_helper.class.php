@@ -161,7 +161,44 @@ class GW_Array_Helper
 			$var = $value;
 
 		return $var;
-	}	
+	}
+
+	
+	/**
+	 * groupArray groups array by given keys example:
+	 * 
+	 * $demoarr = [
+	 *	['id'=>10, 'title'=>'pear', 'group'=>'eatable','group2'=>'fruits'], 
+	 *	['id'=>15, 'title'=>'apple', 'group'=>'eatable','group2'=>'fruits'],
+	 *	['id'=>20, 'title'=>'carrot', 'group'=>'eatable','group2'=>'vegets'] 
+	 * ];
+	 * groupArray([$demoarr , ['group', 'group2'])
+	 * output:
+	 * ['eatable'=> [
+	 * 
+	 *		'fruits'=> [
+	 *			['id'=>10, 'title'=>'pear', 'group'=>'eatable','group2'=>'fruits'], 
+	 *			['id'=>15, 'title'=>'apple', 'group'=>'eatable','group2'=>'fruits']]
+	 *		],
+	 *		'vegets'=> [
+	 *			['id'=>20, 'title'=>'carrot', 'group'=>'eatable','group2'=>'vegets'] 
+	 *		]
+	 *  ]]
+	 */
+	static function groupArray(array $arr, array $keys)
+	{
+		$newlist = [];
+		
+		foreach($arr as $row){
+			$keys1=[];
+			foreach($keys as $key)
+				$keys1[] = $row[$key];
+			
+			GW_Array_Helper::getPointer2XlevelAssocArr($newlist, $keys1, $row);
+		}
+		
+		return $newlist;
+	}
 	
 	/**
 	 * transform to multilevel array
@@ -200,6 +237,30 @@ class GW_Array_Helper
 		self::restruct2MultilevelArray($merge, $separator);
 		
 		return $merge;
+	}
+	
+	/**
+	 * objExtractOneKey([ ['id'=>'10', 'title'=>'apple'], ['id'=>'15', 'title'=>'pear'] ], 'title') => ['apple','pear']
+	 */
+	static function objExtractOneKey($arr, $key)
+	{
+		$new = [];
+		foreach($arr as $itm)
+			$new[] = $itm->$key;
+		
+		return $new;
+	}
+	
+	/**
+	 * arrExtractOneKey([ ['id'=>'10', 'title'=>'apple'], ['id'=>'15', 'title'=>'pear'] ], 'title') => ['apple','pear']
+	 */
+	static function arrExtractOneKey($arr, $key)
+	{
+		$new = [];
+		foreach($arr as $itm)
+			$new[] = $itm[$key];
+		
+		return $new;
 	}
 	
 }
