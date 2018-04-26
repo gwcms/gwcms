@@ -477,6 +477,15 @@ class GW_Module
 				];
 	}
 	
+	function replaceFilter($field, $value, $comparetype='EQ')
+	{
+		foreach($this->list_params['filters'] as $idx => $filterdata)
+			if($filterdata['field'] == $field)
+				unset($this->list_params['filters'][$idx]);
+			
+		$this->setFilter($field, $value, $comparetype);
+	}
+	
 	
 	function fireEvent($event, &$context=false)
 	{
