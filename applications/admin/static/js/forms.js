@@ -174,6 +174,9 @@ var gw_changetrack = {
 				var fieldname = field + ( Array.isArray(orig_vals[field]) ? '[]' :'');
 				var obje=$('#itemform [name="'+fieldname+'"]');
 				
+				if(obje.data('ingorechanges'))
+					continue;
+				
 				gw_changetrack.animateChanged(obje.parents('tr:first').fadeIn(), 3000)
 				//$('#'+fieldid+'_inputLabel').addClass("gwinput-label-modified")
 				
