@@ -411,6 +411,12 @@
 	<lt>Paieška</lt>
 </i>
 
+<i id="QUICK_SEARCH">
+	<en>Quick search</en>
+	<lt>Greita paieška</lt>
+</i>
+
+
 <i id="ORDER_BY">
 	<en>Order by</en>
 	<lt>Rikiuoti pagal</lt>

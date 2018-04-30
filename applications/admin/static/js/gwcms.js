@@ -137,7 +137,30 @@ var gw_navigator = {
 		var parts = url.split('#')
 		
 		window.location.replace(parts[0]+'#'+hash)
-	}	
+	},
+	
+
+
+	post: function(path, params, method) {
+		method = method || "post"; // Set method to post by default if not specified.
+		var form = document.createElement("form");
+		form.setAttribute("method", method);
+		form.setAttribute("action", path);
+
+		for (var key in params) {
+			if (params.hasOwnProperty(key)) {
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "hidden");
+				hiddenField.setAttribute("name", key);
+				hiddenField.setAttribute("value", params[key]);
+
+				form.appendChild(hiddenField);
+			}
+		}
+
+		document.body.appendChild(form);
+		form.submit();
+	}
 }
 
 var gw_adm_sys = {
@@ -201,6 +224,27 @@ var gw_adm_sys = {
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);
+	},
+	
+	init_list: function()
+	{
+		$('.setListParams').keypress(function(e){
+			var keyCode = e.keyCode || e.which;
+			if (keyCode === 13) { 
+				
+				
+				var args = {act:'doSetListParams' }
+				args[$(this).attr('name')] = $(this).val()
+				
+				gw_navigator.jump(false, args)
+				
+				
+				//post(location.href,  args);
+				
+				e.preventDefault();
+				return false;
+			}			
+		});
 	},
 	
 	gwws: false,

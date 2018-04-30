@@ -94,6 +94,17 @@
 	
 {/function}
 
+{function name=do_toolbar_buttons_search}	
+	<div class="searchbox">
+		<div class="input-group custom-search-form setListParamsContainer">
+			<input type="text" class="setListParams form-control" placeholder="{GW::l('/g/QUICK_SEARCH')}" name="list_params[search]" value="{$m->list_params.search|escape}">
+			<span class="input-group-btn">
+                                <button class="text-muted" type="button"><i class="fa fa-search"></i></button>
+			</span>
+		</div>
+	</div>	
+{/function}
+
 
 {function name=do_toolbar_buttons_hidden}
 	{call name="do_toolbar_buttons_dropdown" do_toolbar_buttons_drop=$do_toolbar_buttons_hidden groupiconclass="gwico-Menu-Filled"}

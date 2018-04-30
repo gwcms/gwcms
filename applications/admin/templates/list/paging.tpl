@@ -26,18 +26,11 @@
 					</div>
 				{else}
 					
-					<div class="btn-group">
+					<div class="btn-group pagebybtns">
 						{if $paging.first && $paging.prev!=1}<a class="btn btn-default" href="#{$paging.first}" onclick="return gw_adm_sys.change_page(1)">1</a>{/if}
 						{if $paging.prev}<a class="btn btn-default" href="#{$paging.prev}" onclick="return gw_adm_sys.change_page({$paging.prev})">{$paging.prev}</a>{/if}
 					
-
-					
-	
-							
-						<input class="form-control gwDinamicPageNr bg-primary" name="list_params[page]" value="{$paging.current}" onchange="gw_adm_sys.change_page(this.value)" style="padding-left:2px;padding-right:2px;text-align:center" />
-	
-
-
+						<input class="form-control gwDinamicPageNr bg-primary" name="list_params[page]" value="{$paging.current}" onchange="gw_adm_sys.change_page(this.value)" />
 
 					{if $paging.next}<a class="btn btn-default" href="#{$paging.next}" onclick="return gw_adm_sys.change_page({$paging.next})">{$paging.next}</a>{/if}
 					{if $paging.last && $paging.next != $paging.last}<a class="btn btn-default" href="#{$paging.last}" onclick="return gw_adm_sys.change_page({$paging.last})">{$paging.last}</a>{/if}

@@ -18,7 +18,10 @@
 					<ul id="mainnav-menu" class="list-group">
 
 
-
+						{function menudisplayicon}
+							{if $item->info.icon}{$item->info.icon}{/if}
+							{if $item->info.iconclass}<i class="{$item->info.iconclass}"></i>{/if}
+						{/function}
 
 
 						{foreach from=$app->getPages() item=item key=key}
@@ -37,7 +40,7 @@
 								<li class="{if $active} active-sub active{/if}">
 
 									<a href="{$app->buildUri($item->path)}">
-										{$item->info.icon}
+										{call "menudisplayicon"}
 										<span class="menu-title">{$item->get(title,$ln)}</span>
 										{if count($childs)}<i class="arrow"></i>{/if}
 									</a>
@@ -48,7 +51,7 @@
 											{foreach from=$childs item=sitem}
 
 												<li {if $app->path_arr.1.path_clean == $sitem->path}class="active-link"{/if}>
-													<a href="{$app->buildUri($sitem->path)}">{$sitem->info.icon}  {$sitem->get(title,$ln)}</a>
+													<a href="{$app->buildUri($sitem->path)}">{call "menudisplayicon" item=$sitem} {$sitem->get(title,$ln)}</a>
 												</li>
 											{/foreach}
 										</ul>

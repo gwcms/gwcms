@@ -121,7 +121,8 @@
 
 	{/block}
 
-	{if $m->list_params.paging_enabled && count($list)}
+	
+	{if $m->list_params.paging_enabled && (count($list) || $m->list_params.page>1)}
 		{$do_display_toolbar_pull_right[]=['file',"list/page_by.tpl"]}
 	{/if}	
 
@@ -267,7 +268,14 @@
 
 	</div>
 
+		
+	{capture append=footer_hidden}	
+		<script> require(['gwcms'], function(){	gw_adm_sys.init_list(); }) </script>				
+	{/capture}		
+		
+		
 	{block name="close_tpl"}
 		{include file="default_close.tpl"}
 	{/block}	
+	
 {/if}

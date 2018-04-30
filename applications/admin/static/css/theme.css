@@ -7409,10 +7409,55 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
 
 
 .gwPageBy {padding: 3px 8px 3px 8px !important;}
-.gwDinamicPageNr{ width: 40px;display:inline;position:relative;float:left}
+.pagebybtns .btn, .gwDinamicPageNr{ height: 24px; font-size: 13px; padding: 3px 5px 3px 5px; }
+.gwDinamicPageNr{ 
+	width: 40px;
+	display:inline;
+	position: relative;
+	float:left;
+	line-height: 1.42857;
+	text-align:center;
+	border: 1px solid #d1d9de;
+	margin-left: -1px;
+	padding-top:2px; padding-bottom:2px; 
+}
+.gwDinamicPageNr:hover{
+	/*background-color: hsl(255,30%,75%);*/
+	
+	filter: brightness(110%);
+
+}
+.gwDinamicPageNr:focus{
+	background-color: white;
+	color: black;
+}
+
+.searchbox { 
+	width: 200px; 
+	margin-left: 5px; 
+	float: left;
+	margin-top:3px; 
+
+} 
+.searchbox .input-group-btn{ z-index: 5000 !important;;  }
+.searchbox input{
+
+	width:200px !important;
+	transition: all 0.3s linear;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	z-index: 0 !important;
+	
+}
+
+.searchbox input:focus{
+	background-color: white;
+	
+}
 
 .gwPagination a{
 	padding: 4px 6px 4px 6px;
+	
 }
 
 .gw_notactive{

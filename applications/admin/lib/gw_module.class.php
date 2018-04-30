@@ -138,8 +138,14 @@ class GW_Module
 	
 	function doSetListParams()
 	{
-		if(isset($_REQUEST['list_params']) && ($tmp = $_REQUEST['list_params']))
+		if(isset($_REQUEST['list_params']) && ($tmp = $_REQUEST['list_params'])){
+			
+			if(isset($tmp['search']) && $this->list_params['page']!=1)
+				$this->list_params['page']=1;
+			
+			
 			$this->list_params = array_merge($this->list_params, $tmp);
+		}
 				
 		$this->jump();	
 	}

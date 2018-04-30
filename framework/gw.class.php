@@ -258,7 +258,7 @@ class GW
 		$cid = GW_Lang::$ln.'/'.$module;
 
 		if (!isset(self::$transcache[$cid])) {
-			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'id ASC']);
+			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'priority ASC']);
 
 			foreach ($tr as $k => $val) {
 

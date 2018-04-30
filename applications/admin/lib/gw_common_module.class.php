@@ -478,6 +478,35 @@ class GW_Common_Module extends GW_Module
 
 		return $cond ? "($cond)" : "";
 	}
+	
+	
+	function buildConds($filter, &$cond, $joiner="AND")
+	{
+			$compare_type = $filter['ct'];
+			$value = $filter['value'];
+			$field = $filter['field'];
+			
+			if($value==="" || $value===null)
+				return;			
+
+			if ($compare_type == "IN" || $compare_type == "NOTIN") {
+				
+				if($value==='null')
+					return;
+				//d::dumpas($filter);
+				$value = json_decode($value);
+			} else {
+				$value = GW_DB::escape($value);
+			}
+			
+			$cond.= ($cond ? ' '.$joiner.' ' : '');
+
+			if (method_exists($this, $ofmethod = "overrideFilter$field")) {
+				$cond.=$this->$ofmethod($value, $compare_type);
+			} else {
+				$cond.=$this->buildCond($field, $compare_type, $value);
+			}		
+	}
 
 	function setListParams(&$params = [])
 	{
@@ -498,36 +527,23 @@ class GW_Common_Module extends GW_Module
 
 		foreach ($this->filters as $key => $val)
 			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
-
-
 		
+		
+		if(isset($this->list_params['search']) && $this->list_params['search'])
+		{
+			$cols = $this->model->getColumns();
+			
+			$subcond = '';
+			
+			foreach ($cols as $key => $x){
+				$this->buildConds(['field' => $key, 'value' => $this->list_params['search'], 'ct' => 'LIKE'], $subcond, 'OR');
+			}
+			
+			$cond.="($subcond)";
+		}
 
 		foreach ($search as $filter) {
-			
-			$compare_type = $filter['ct'];
-			$value = $filter['value'];
-			$field = $filter['field'];
-			
-			if($value==="" || $value===null)
-				continue;			
-
-			if ($compare_type == "IN" || $compare_type == "NOTIN") {
-				
-				if($value==='null')
-					continue;
-				//d::dumpas($filter);
-				$value = json_decode($value);
-			} else {
-				$value = GW_DB::escape($value);
-			}
-			
-			$cond.= ($cond ? ' AND ' : '');
-
-			if (method_exists($this, $ofmethod = "overrideFilter$field")) {
-				$cond.=$this->$ofmethod($value, $compare_type);
-			} else {
-				$cond.=$this->buildCond($field, $compare_type, $value);
-			}
+			$this->buildConds($filter, $cond);
 		}
 
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
