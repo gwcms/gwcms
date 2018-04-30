@@ -43,6 +43,8 @@
 		
 	{$do_toolbar_buttons = [addinlist]}
 	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons[] = search}
+	
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,updateimdball]}			
 	{$dl_actions=[edit,delete,ext_actions]}
 
