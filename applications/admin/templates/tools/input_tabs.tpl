@@ -23,7 +23,7 @@ add tab titles to lang.xml:
 *}
 
 
-<div class="row panel gwlistpanel">
+<div class="row panel gwlistpanel inputtabspan">
 	<div class="panel-body">
 		<ul class="inptabs_sel">
 		{foreach $input_tabs as $tabitem}

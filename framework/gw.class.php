@@ -204,8 +204,7 @@ class GW
 	
 	static function lnResult($key, &$result)
 	{
-
-		if(!self::$context->vars['app']->user || !self::$context->vars['app']->user->is_admin || !self::$context->vars['app']->sess['lang-results-active'])
+		if(!self::$context->app->user || !self::$context->app->user->is_admin || !isset(self::$context->app->sess['lang-results-active']) || !self::$context->app->sess['lang-results-active']) 
 			return $result;
 		
 		return is_array($result) ? $result : "<span class='lnresult' data-key='".$key."'>".$result."</span>";

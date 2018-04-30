@@ -686,7 +686,11 @@ class GW_Module
 	
 	function setPlainMessage($text, $type=GW_MSG_SUCC)
 	{
-		$this->setMessage(["text"=>$text, "type"=>$type]);
+		$opt = ["text"=>$text, "type"=>$type];
+		if($type==GW_MSG_SUCC)
+			$opt['float'] = 1;
+		
+		$this->setMessage($opt);
 	}
 
 	function setItemErrors($item)

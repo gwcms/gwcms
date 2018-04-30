@@ -192,8 +192,12 @@ var gw_adm_sys = {
 				title = $(this).text();
 			
 			var dialogwidth = $(this).data('dialog-width') ? $(this).data('dialog-width') : 800;
+			var opts = { url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:dialogwidth };
 			
-			gwcms.open_dialog2({ url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:dialogwidth })	
+			if($(this).data('dialog-minheight'))
+				opts.minHeight=$(this).data('dialog-minheight');
+			
+			gwcms.open_dialog2(opts)	
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);
