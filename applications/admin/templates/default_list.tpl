@@ -229,9 +229,10 @@
 						{include "list/checklist.tpl"}
 					{/if}
 					{if $dl_inline_edit}
+						<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 						<script src="{$app_root}static/js/gwcms_inline_edit.js"></script>
 						<script type="text/javascript">
-							var inline_edit_form_url = '{$m->buildUri(false,[form_ajax=>1])}';
+							var inline_edit_form_url = '{$m->buildUri(false,[form_ajax=>1,checklist=>$dl_checklist_enabled])}';
 							
 							require(['gwcms'], function(){
 								initActiveList();

@@ -11,7 +11,13 @@
 {$ck_editor_opt=['width'=>$width, 'language'=>$app->ln]}
 {if $add_site_css}
 	{$ck_editor_opt['contentsCss']='/applications/site/assets/css/full.php'}
+	
 {/if}
+
+{*fuck &scaron; and similar shit*}
+{$ck_editor_opt.entities = false}
+{$ck_editor_opt.entities_latin = false}
+{$ck_editor_opt.ForceSimpleAmpersand = true}
 
 	{*change track*}
 	

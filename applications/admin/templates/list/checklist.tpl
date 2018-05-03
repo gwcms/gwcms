@@ -1,11 +1,14 @@
 
-
 <br />
 <div id="checklist_actions" style="display:none">
 
 	<select name="action" onchange="eval(this.value);
 						this.selectedIndex = 0">
 		<option value="">{$lang.CHECKLIST_SELECT_ACTION}</option>
+		{foreach $dl_cl_actions as $action}
+			{call name="dl_cl_actions_`$action`"}
+		{/foreach}
+		
 		{foreach $dl_checklist_actions as $action}
 			{$action}
 		{/foreach}

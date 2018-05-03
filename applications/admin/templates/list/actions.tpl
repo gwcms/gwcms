@@ -117,3 +117,14 @@
 {function dl_actions_inlineedit}
 	{list_item_action_m action_class="inline_edit_trigger" iconclass="fa fa-pencil-square-o text-brown" onclick="return false" tag_params=["data-id"=>$item->id]}
 {/function}
+
+
+
+{function dl_cl_actions_invertactive}
+	<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doInvertActive])}', 1)">{GW::l('/A/VIEWS/doInvertActive')}</option>
+{/function}
+
+{function dl_cl_actions_dialogremove}
+	<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>
+{/function}
+

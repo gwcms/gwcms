@@ -228,7 +228,7 @@
             <en>Todo</en>
         </i>	
         <i id="info">
-            <i id="icon"><![CDATA[<i class="fa fa-briefcase"></i>]]></i>
+            <i id="iconclass">fa fa-briefcase</i>
         </i>	
 				
         <i id="childs">

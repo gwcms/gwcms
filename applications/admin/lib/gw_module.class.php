@@ -323,6 +323,7 @@ class GW_Module
 	function process()
 	{
 		extract($this->_args);
+
 		
 		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
@@ -346,10 +347,15 @@ class GW_Module
 			include $tmp;
 		}else{
 			//iesko modulio tpl kataloge
-			if(!file_exists($tmp = $file.'.tpl'))
+			if(!file_exists($tmp = $file.'.tpl')){
+
+				if(file_exists(($dflt=$this->default_tpl_file_name.".tpl")))
+					return $dflt;
+				
 				//ieskoti default kataloge
 				if(!file_exists($tmp = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/".$this->view_name.'.tpl'))
 					$tmp='default_empty.tpl';
+			}
 					
 		}
 		

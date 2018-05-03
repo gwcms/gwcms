@@ -135,4 +135,47 @@ class GW_Lang_XML
 		}
 	}
 	//-------------
+	function __addChildsRecursive($parent, $struct)
+	{
+		foreach($struct as $key => $substruct)
+		{			
+			if(is_array($substruct)){
+				$child=$parent->addChild("i");
+				$child->addAttribute('id', $key);
+				self::__addChildsRecursive($child, $substruct);
+			}else{
+				$parent->addChild("i", $substruct)->addAttribute('id', $key);
+			}
+		}
+	}
+	
+	function modify($xml, $path, $lang_data)
+	{
+		$sxml = new SimpleXMLElement($xml, 0, false);
+		
+		$path_to_xpath = 'i[@id = "'.implode('"]/i[@id = "',explode('/', $path)).'"]';
+		
+		$test = $sxml->xpath($path_to_xpath);
+		
+		if(isset($test[0]))
+			self::__addChildsRecursive($test[0], $lang_data);
+		
+		$out = $sxml->asXML();
+		
+		//take off cdatas
+		preg_match_all("/<!\[\CDATA\[(.*?)\]\]>/is", $out, $cdatas);
+		$cnt=-1;
+		$out = preg_replace_callback("/<!\[\CDATA\[(.*?)\]\]>/is", function($mathc) use (&$cnt){ $cnt++; return "///cdata///$cnt///";  }, $out);		
+
+		
+		//human readable output
+		$out = tidy_repair_string($out, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0], 'utf8');
+		//spaces to tabs
+		$out = preg_replace('/(?:^|\G)  /um', "\t", $out);
+		
+		//return cdatas back
+		$out = preg_replace_callback("/\/{3}cdata\/{3}(\d+)\/{3}/", function($m) use (&$cdatas){ return $cdatas[0][$m[1]];  }, $out);	
+		
+		return $out;
+	}
 }

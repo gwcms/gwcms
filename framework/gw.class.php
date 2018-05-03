@@ -136,6 +136,28 @@ class GW
 		self::$lgr = new GW_Logger(GW::s('DIR/LOGS') . 'system.log');
 	}
 
+	
+	function fakerequest($path, $user_id)
+	{
+		$_POST = array();
+		$args = parse_url($path, PHP_URL_QUERY);
+		parse_str($args, $args);
+		$_GET = $args;
+		$_REQUEST = array_merge($_GET, $_POST);
+		
+		
+		$path = parse_url($path, PHP_URL_PATH);
+		
+		ob_start();
+
+		GW::request(['path'=>$path, 'fake_user_id'=>$user_id]);
+
+
+		$out2 = ob_get_contents();		
+		ob_end_clean();		
+		return $out2;
+	}
+	
 	function request($args = Array())
 	{
 		if (!isset($args['path']))
@@ -160,7 +182,7 @@ class GW
 		    'args' => $args['args'],
 		    'sys_base' => Navigator::getBase()
 		);
-
+		
 		$app_class = "GW_{$app}_application";
 		include GW::s('DIR/APPLICATIONS') . strtolower($app) . DIRECTORY_SEPARATOR . strtolower($app_class) . '.class.php';
 
@@ -169,9 +191,15 @@ class GW
 		self::$context->app = $app_o;
 
 		$app_o->app_name = $app;
-
+		
 		$app_o->init();
+		
+		if(isset($args['fake_user_id']))
+		{
+			self::$context->app->user = GW_User::singleton()->createNewObject($args['fake_user_id'], true);
+		}
 
+		
 		if (self::$context->app->user)
 			self::$devel_debug = self::$context->app->user->isRoot();
 

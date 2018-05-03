@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="GROUP_NAME">Grupė</i>
+	
+	<i id="FIELDS">
+		<i id="date">Data</i>
+		<i id="start_time">Pradžios laikas</i>
+		<i id="end_time">Pabaigos laikas</i>
+		<i id="type_id">Tipas</i>
+		<i id="participant_num">Dalyvio eil. nr.</i>
+		<i id="location_id">Vieta</i>
+		<i id="owner_key">Pririšta prie objekto</i>
+		<i id="type1">Tipas 1</i>
+		<i id="type2">Tipas 2</i>
+		<i id="participant_list_id">Dalyvių sąrašas</i>
+	</i>
+	
+	<i id="FIELDS_SHORT">
+		<i id="end_time">Nuo <![CDATA[<i class="fa fa-clock-o"></i>]]></i>
+		<i id="start_time">Iki <![CDATA[<i class="fa fa-clock-o"></i>]]></i>
+		<i id="second_tour">IIe.</i>
+		<i id="final_tour">Fin.</i>
+		<i id="priority">Nr.</i>
+	</i>
+	
+	<i id="VIEWS">
+		<i id="sortition">Eilės nr. įvedimas</i>
+		<i id="seriesnumpages">Spauzdinti serijos numerius burtu traukimams</i>
+		<i id="addmulti">Pridėti seriją</i>
+		<i id="sched">Tvarkaraštis</i>
+	</i>
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">Tvarkaraščiai</i>
+		
+		<i id="info">
+			<i id="iconclass">fa fa-calendar-check-o</i>
+		</i>			
+		
+		<i id="childs">
+
+			<i id="groups">
+				<i id="title">Grupės</i>
+				<i id="info">
+					<i id="model">GW_Sched_Group</i>
+				</i>		
+			</i>	
+			<i id="days">
+				<i id="title">Dienos</i>
+				<i id="in_menu">0</i>
+				<i id="info">
+					<i id="model">GW_Sched_Day</i>
+				</i>		
+			</i>							
+			<i id="sched">
+				<i id="title">Tvarkaraščiai</i>
+				<i id="in_menu">0</i>
+			</i>	
+			
+			<i id="types">
+			    <i id="title">Tipai</i>
+			    <i id="info">
+				<i id="model">GW_Sched_Type</i>
+			    </i>
+			    <i id="in_menu">0</i>
+			</i>
+			<i id="locations">
+			    <i id="title">Adresai</i>
+			    <i id="info">
+				<i id="model">GW_Sched_Location</i>
+			    </i>
+			    <i id="in_menu">0</i>
+			</i>														
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

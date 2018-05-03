@@ -38,7 +38,7 @@
 		
 		<i id="info">
 			<i id="model">GW_Country</i>
-			<i id="icon"><![CDATA[<i class="fa fa-cubes"></i>]]></i>
+			<i id="iconclass">fa fa-cubes</i>
 		</i>			
 
 		
@@ -51,7 +51,7 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Translation</i>
-					<i id="icon"><![CDATA[<i class="fa fa-language"></i>]]></i>
+					<i id="iconclass">fa fa-language</i>
 				</i>			
 			</i>	
 			<i id="countries">
@@ -61,7 +61,7 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Country</i>
-					<i id="icon"><![CDATA[<i class="fa fa-flag"></i>]]></i>
+					<i id="iconclass">fa fa-flag</i>
 				</i>			
 			</i>			
 			<i id="languages">
@@ -71,21 +71,21 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Data_Language</i>
-					<i id="icon"><![CDATA[<i class="fa fa-flag-o"></i>]]></i>
+					<i id="iconclass">fa fa-flag-o</i>
 				</i>			
 			</i>
 			<i id="payments_paysera">
 				<i id="title"><en>Payments PS</en><lt>Mokėjimai PS</lt></i>
 				<i id="info">
 					<i id="model">gw_paysera_log</i>
-					<i id="icon"><![CDATA[<i class="fa fa-money"></i>]]></i>
+					<i id="iconclass">fa fa-money</i>
 				</i>			
 			</i>	
 			<i id="payments_paypal">
 				<i id="title"><en>Payments PP</en><lt>Mokėjimai PP</lt></i>
 				<i id="info">
 					<i id="model">gw_paypal_log</i>
-					<i id="icon"><![CDATA[<i class="fa fa-paypal"></i>]]></i>
+					<i id="iconclass">fa fa-paypal</i>
 
 				</i>			
 			</i>
@@ -93,7 +93,7 @@
 				<i id="title"><en>Pictures</en><lt>Paveiksliukai</lt></i>
 				<i id="info">
 					<i id="model">gw_image</i>
-					<i id="icon"><![CDATA[<i class="fa fa-picture-o"></i>]]></i>
+					<i id="iconclass">fa fa-picture-o</i>
 
 				</i>			
 			</i>														

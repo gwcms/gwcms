@@ -63,7 +63,7 @@ class GW_File_Helper
 
 		foreach ($files as $file) {
 			if (filemtime($file) < $expire_time)
-				unlink($file);
+				GW_Install_Helper::recursiveUnlink($file);
 		}
 	}
 

@@ -3,7 +3,7 @@
 class GW_Install_Helper
 {
 
-	function recursiveChmod($file, $files_mod = 0666, $dirs_mod = 0777, &$info)
+	function recursiveChmod($file, $files_mod = 0666, $dirs_mod = 0777, &$info=[])
 	{
 
 		if (is_dir($file)) {

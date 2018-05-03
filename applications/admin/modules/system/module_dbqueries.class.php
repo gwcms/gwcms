@@ -9,26 +9,37 @@ class Module_DBQueries extends GW_Common_Module
 
 		if(!$item->get('active'))
 			return $this->setError("Can't run. Switch query state to active");
-		
-		$sqls = explode(';', $item->get('sql'));
+
+		$this->execSqls($item->get('sql'), true);
+	}
+	
+	function execSqls($sqls, $show_exec_res=true)
+	{
+		$sqls = explode(';', $sqls);
 		
 		$db =& $this->app->db;
 		
+		$results;
+		
 		foreach($sqls as $sql)
 		{
-			if(!trim($sql))continue;
+			$sql = trim($sql);
+			if(!$sql)continue;
 			
-			print("<b>SQL</b>: ".htmlspecialchars($sql)."\n");
-			$res = $db->fetch_rows($sql);
-
+			$result = ['sql'=>htmlspecialchars($sql)];
 			
-			if($res)
-				echo GW_Data_to_Html_Table_Helper::doTable($res);
-			else
-				print("<b>No result</b>\n");
-				
-			print("<b>Affected: ".$db->affected()."</b>\n");
-			print("<hr />");
-		}
+			
+			$res = $db->fetch_rows($sql, true, true);
+			$result['res']= json_encode($res, JSON_PRETTY_PRINT);
+			$result['affected'] = $db->affected();
+			$result['error'] = $db->error; 
+			$results[] = $result;
+		}	
+		
+		if($show_exec_res)
+			echo  GW_Data_to_Html_Table_Helper::doTable($results);
+		
+		return $results;
 	}
+	
 }

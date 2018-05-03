@@ -228,19 +228,15 @@ var gw_adm_sys = {
 	
 	init_list: function()
 	{
-		$('.setListParams').keypress(function(e){
+		$('.setListParams').on('submit', function(){
+			var args = {act:'doSetListParams' }
+			args[$(this).attr('name')] = $(this).val()
+			gw_navigator.jump(false, args)
+		}).keypress(function(e){
 			var keyCode = e.keyCode || e.which;
 			if (keyCode === 13) { 
 				
-				
-				var args = {act:'doSetListParams' }
-				args[$(this).attr('name')] = $(this).val()
-				
-				gw_navigator.jump(false, args)
-				
-				
-				//post(location.href,  args);
-				
+				$(this).trigger( "submit" );
 				e.preventDefault();
 				return false;
 			}			

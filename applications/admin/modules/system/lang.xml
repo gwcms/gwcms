@@ -122,7 +122,7 @@
 		</i>	
 		
 		<i id="info">
-			<i id="icon"><![CDATA[<i class="fa fa-tasks"></i>]]></i>
+			<i id="iconclass">fa fa-tasks</i>
 		</i>
 				
 		<i id="childs">
@@ -157,9 +157,10 @@
 			</i>	
 			<i id="i18n">
 				<i id="title">i18n</i>
-
 			</i>							
-					
+			<i id="scaffold">
+				<i id="title">Scaffold</i>
+			</i>						
 		</i>
 					
 	</i>

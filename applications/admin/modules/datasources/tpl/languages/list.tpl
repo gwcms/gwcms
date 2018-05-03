@@ -8,6 +8,7 @@
 	
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = search}
 	
 	{$dl_actions=[edit,delete]}
 	

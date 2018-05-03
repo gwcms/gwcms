@@ -343,6 +343,9 @@ class GW_Common_Module extends GW_Module
 
 		if(isset($_GET['form_ajax'])){
 			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
+			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tplform_ajax";
+		}else{
+			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/form";
 		}
 		
 		$this->prepareListConfig();

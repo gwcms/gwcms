@@ -54,7 +54,7 @@ class GW_Lang
 
 
 		if (!is_file($filename)) {
-			d::dump('lang file "' . $filename . '" do not exist', E_USER_NOTICE);
+			//d::dump('lang file "' . $filename . '" do not exist', E_USER_NOTICE);
 			return false;
 		}
 
