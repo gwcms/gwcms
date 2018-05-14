@@ -7896,3 +7896,6 @@ input[type="color"] {
 .ln_contain_4{ display: block; }
 .i18n_tag{ cursor:pointer; }
 .ln_contain_4 .inp-text { display:inline-block; }
+
+.inputtabspan .panel-body{ margin:0px;;padding-top:10px;padding-bottom:6px; }
+.inptabs_sel{ margin:0px; padding:0px; }

@@ -197,4 +197,203 @@ class GW_Lang
 		else
 			return $key;
 	}
+	
+	
+	
+	static function transKeyAnalise($fullkey)
+	{
+		list(, $module, $key) = explode('/', $fullkey, 3);
+		
+		if ($module == 'M') {
+			list($module, $key) = explode('/', $key, 2);
+			$module = 'M/' . strtolower($module);
+		} elseif ($module == 'm') {
+			$module = 'M/' . GW_Lang::$module;
+		} elseif ($module == 'g') {
+			$module = 'G/application';
+		} elseif ($module == 'G') {
+			list($module, $key) = explode('/', $key, 2);
+			$module = 'G/' . strtolower($module);
+		}
+
+		return [$module, $key];
+	}
+	
+	
+	static $transcache;
+	
+	
+	
+	
+	static function __dbTrans2arr($tr, &$arr){
+		foreach ($tr as $k => $val) {
+
+			$var =& $arr;
+
+			foreach (explode('/', $k) as $kk){
+				if(is_string($var))
+					break;
+
+				$var = &$var[$kk];
+			}
+
+			$var = $val;
+		}
+	}
+	
+	/**
+	 * užkrauna vertimus iš db i cache, konvertuoja į masyvą
+	 */
+	static function &transCache($module)
+	{
+		$cid = GW_Lang::$ln.'/'.$module;
+		
+		if (!isset(self::$transcache[$cid])) {
+			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'priority ASC']);
+
+			self::__dbTrans2arr($tr, self::$transcache[$cid]);
+		}
+		
+		return self::$transcache[$cid];
+	}
+	
+	static function __highlightActive()
+	{
+		return GW::$context->app->user && 
+			GW::$context->app->user->is_admin && 
+			isset(GW::$context->app->sess['lang-results-active']) && 
+			GW::$context->app->sess['lang-results-active'];		
+	}
+	
+	static function lnResult($key, &$result)
+	{
+		if(!self::__highlightActive()) 
+			return $result;
+		
+		return is_array($result) ? $result : "<span class='lnresult' data-key='".$key."'>".$result."</span>";
+	}
+	
+	
+	/**
+	 * pakrauna vertimus is duombazes, 
+	 * jei nera duombazeje tada pakrauna is 
+	 * lang failu arba pacio templeito jei vartotojas developeris
+	 */
+	static function ln($fullkey, $valueifnotfound = false)
+	{		
+		if($fullkey[0]!=='/')
+			return $fullkey;
+		
+
+		
+		list($module, $key) = GW_Lang::transKeyAnalise($fullkey);
+		
+		if($module == "LN")
+		{
+			list($ln, $fullkey) = explode('/', $key, 2);
+			
+			$prevln = GW_Lang::$ln;
+			GW_Lang::$ln = $ln;
+			$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
+			
+			GW_Lang::$ln = $prevln;
+			
+			return $result;
+		}
+		
+		$orig_key = $module.'/'.$key;
+		
+		
+		if($tmp=GW_Lang::transOver($orig_key))
+			return $tmp;		
+
+		//uzloadinti vertima jei nera uzloadintas
+		
+		$transcache = GW_Lang::transCache($module);
+				
+		//paimti vertima is cache
+		
+		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($transcache, explode('/', $key));
+		
+		//d::dumpas([$transcache, $vr, explode('/', $key)]);
+
+		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
+		if (GW::$devel_debug && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
+			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
+			if ($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln . ':') !== false) {
+				list($ln, $vr) = explode(':', $valueifnotfound, 2);
+				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
+			} else {
+				//is lang failu
+				$fromxml = GW::l($fullkey);
+				$vr = $fromxml != $fullkey ? $fromxml : '*' . $key . '*';
+
+				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
+			}
+		}
+		
+		if(!$vr)
+			return $vr=$orig_key;
+		
+		return self::lnResult($orig_key, $vr);
+	}
+	
+	
+	
+	
+	
+	static $transOverContextGroup;
+	static $transOverContextId;
+	static $transOverCache;
+	
+	static function transOverSetContext($group, $id)
+	{
+		self::$transOverContextGroup = $group;
+		self::$transOverContextId = $id;
+	}
+	
+	static function &transOverLoadCache($cid)
+	{		
+		if (!isset(self::$transOverCache[$cid])) {
+			$tr = GW_Translation_Over::singleton()->getAssoc(
+				['concat(`module`,"/",`key`)', 'value_' . GW_Lang::$ln], 
+				['context_group=? AND context_id=?', self::$transOverContextGroup, self::$transOverContextId], 
+				['order' => 'priority ASC']
+			);
+
+			
+			self::__dbTrans2arr($tr, self::$transOverCache[$cid]);
+		}
+		
+		return self::$transOverCache[$cid];
+	}
+	
+	static function transOverlnResult($key, $owner, &$result)
+	{
+		if(!self::__highlightActive()) 
+			return $result;
+		
+		return is_array($result) ? $result : "<span class='lnresult transover' data-key='".$key."' data-owner='".$owner."'>".$result."</span>";
+	}	
+	
+	
+	static function transOver($key)
+	{
+		if(!(self::$transOverContextGroup && self::$transOverContextId))
+			return false;
+				
+		$cache = self::transOverLoadCache($ownr=self::$transOverContextGroup.'/'.self::$transOverContextId);	
+		//d::dumpas($cache);
+		$xpld = explode('/', $key);
+		
+		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($cache, $xpld);
+		
+		if(!$vr)	
+			return false;
+		
+		return self::transOverlnResult($key, $ownr, $vr);
+		
+	}
+	
+	
 }

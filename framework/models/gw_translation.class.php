@@ -25,4 +25,9 @@ class GW_Translation extends GW_i18n_Data_Object
 			$this->storeOne($db, $module, $key, $lang, $value);
 		}
 	}
+	
+	function fullkey()
+	{
+		return $this->get('module').'/'.$this->get('key');
+	}
 }

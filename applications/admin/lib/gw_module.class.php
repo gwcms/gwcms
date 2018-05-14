@@ -349,7 +349,7 @@ class GW_Module
 			//iesko modulio tpl kataloge
 			if(!file_exists($tmp = $file.'.tpl')){
 
-				if(file_exists(($dflt=$this->default_tpl_file_name.".tpl")))
+				if(isset($this->default_tpl_file_name) && file_exists(($dflt=$this->default_tpl_file_name.".tpl")))
 					return $dflt;
 				
 				//ieskoti default kataloge
@@ -561,16 +561,11 @@ class GW_Module
 			unset($params['modulepath']);
 		}
 		
-		
-		
 		return $this->app->fh()->gw_path($params);
 	}
 	
 	function buildUri($path=false,$getparams=[], $params=[])
 	{
-		
-			
-		
 		if(!isset($params['level']))
 			$params['level']=2;
 		

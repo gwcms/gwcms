@@ -53,7 +53,17 @@
 					<i id="model">GW_Translation</i>
 					<i id="iconclass">fa fa-language</i>
 				</i>			
-			</i>	
+			</i>
+			<i id="translations_over">
+				<i id="title">
+					<en>Translations (context)</en>
+					<lt>Vertimai kontekstiniai</lt>
+				</i>
+				<i id="info">
+					<i id="model">GW_Translation_Over</i>
+					<i id="iconclass">fa fa-language</i>
+				</i>			
+			</i>				
 			<i id="countries">
 				<i id="title">
 					<en>Countries</en>

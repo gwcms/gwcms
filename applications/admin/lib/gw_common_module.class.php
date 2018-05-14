@@ -283,6 +283,10 @@ class GW_Common_Module extends GW_Module
 			$_REQUEST['id'] = $item->get('id');
 
 		if ($_REQUEST['submit_type'] == 1) {//apply
+			
+			if(isset($_POST['activetabs']))
+				$_GET['activetabs']=$_POST['activetabs'];
+		
 			$options = $item ? ['id' => $item->get('id')] : [];
 			$this->jump(false, $options + $_GET);
 		} else { //save
@@ -343,7 +347,7 @@ class GW_Common_Module extends GW_Module
 
 		if(isset($_GET['form_ajax'])){
 			$this->tpl_file_name = $this->tpl_dir.'form_ajax';
-			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tplform_ajax";
+			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/form_ajax";
 		}else{
 			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/form";
 		}
@@ -351,7 +355,7 @@ class GW_Common_Module extends GW_Module
 		$this->prepareListConfig();
 		
 		
-		
+				
 		return ['update' => (int) $item->get('id'), 'item' => $item];
 	}
 

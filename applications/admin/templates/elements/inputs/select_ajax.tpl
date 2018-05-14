@@ -45,6 +45,11 @@ require(['vendor/select2/js'], function () {
 		var markup = "<div class='select2-result-repository clearfix'>" +
 			"<div class='select2-result-repository__meta'>" +
 			"<div class='select2-result-repository__title'>" + item.title + "</div>";
+		
+			if(item.hasOwnProperty('footer')){
+				markup += "<small class='text-muted'>"+item.footer+"<small>";
+			}
+				
 
 		"</div>" +
 			"</div></div>";

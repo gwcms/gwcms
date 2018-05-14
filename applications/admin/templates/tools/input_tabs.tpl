@@ -26,10 +26,16 @@ add tab titles to lang.xml:
 <div class="row panel gwlistpanel inputtabspan">
 	<div class="panel-body">
 		<ul class="inptabs_sel">
+			{$showtabs=array_flip(explode(',',$smarty.get.activetabs))}
 		{foreach $input_tabs as $tabitem}
 			{$tabid=$tabitem.0}
 			{$tabcolor=$tabitem.1}
-			{$tabdefaultshow=$tabitem.2}
+			{if $smarty.get.activetabs}
+				{$tabdefaultshow=isset($showtabs[$tabid])}
+			{else}
+				{$tabdefaultshow=$tabitem.2}
+			{/if}
+			
 
 				<table class="inptabs_sel" style="margin-right:10px;">
 					<tr>
@@ -56,24 +62,23 @@ add tab titles to lang.xml:
 			<script>
 				function updateTabs()
 				{
+					var activetabs = [];
 					$('.tab-switch:not(:checked)').each(function(){
 						$('.tabitm_'+this.value).hide();
 						$(this).next('.switchery').find('small').css('border-color', $(this).data('color'))
-						
 					})
+					
 					$('.tab-switch:checked').each(function(){
+						activetabs.push(this.value);
 						$('.tabitm_'+this.value).fadeIn()
 						$(this).next('.switchery').find('small').css('border-color', '#fff')
 					})
+					$('#activetabs').val(activetabs.join(','));
 				}
 				
 				require(['gwcms'], function(){
 
 					require(['vendor/switchery/switchery'], function(Switchery) {
-
-
-
-
 						$( ".tab-switch" ).each(function() {
 							 var testSwitchery = new Switchery(this, { color: $(this).data('color'), jackSecondaryColor:$(this).data('color')   });
 						}).change(function(){
@@ -87,6 +92,6 @@ add tab titles to lang.xml:
 
 
 			</script>			
-
+			<input id="activetabs" name="activetabs" type="hidden" value="" data-ignorechanges="1">
 	</div>
 </div>

@@ -578,6 +578,14 @@ class GW_DB
 		
 		return addslashes($mixed);
 	}
+	
+	static function escapeField($str)
+	{
+		if(strpos($str,'`')!==false)
+			return $str;
+		
+		return "`".$str."`";
+	}
 
 	static function timeString($time = false)
 	{

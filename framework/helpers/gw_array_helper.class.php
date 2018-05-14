@@ -263,4 +263,16 @@ class GW_Array_Helper
 		return $new;
 	}
 	
+	/**
+	 * buildOpts([0=>'a', 1=>'b', 2=>'c']) => ['a'=>'a','b'=>'b','c'=>'c']
+	 */
+	function buildOpts($array_values)
+	{
+		$new = [];
+		foreach($array_values as $key)
+			$new[$key] = $key;
+		
+		return $new;
+	}
+	
 }

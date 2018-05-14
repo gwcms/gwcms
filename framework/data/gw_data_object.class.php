@@ -345,7 +345,8 @@ class GW_Data_Object
 	{
 		$options['return_simple'] = 1;
 		$options['assoc_fields'] = $fields;
-		$options['select'] = '`'.implode('`,`', $fields).'`';
+		$options['select'] = implode(', ', array_map(['GW_DB','escapeField'], $fields));
+		
 		if(count($fields) > 2)
 			$options['key_field'] = $options['select'];
 

@@ -4,7 +4,9 @@
 
 
 {function name=df_submit_button_save}
-	<button class="btn btn-primary"><i class="{$save_button_icon|default:'fa fa-save'}"></i> {$save_button_caption|default:$lang.SAVE}</button>
+	{if !$smarty.get.nosavebtn}
+		<button class="btn btn-primary"><i class="{$save_button_icon|default:'fa fa-save'}"></i> {$save_button_caption|default:$lang.SAVE}</button>
+	{/if}
 {/function}
 
 

@@ -315,6 +315,9 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 			
 			//controller
 			
+			//TODO: prideti visa struktura be titlu tik
+			//getDisplayConfig uzsiloadintu fieldus
+			
 			$submodclass = "Module_".ucfirst($submod);
 			$controller_tpl = str_replace('Module_Submodule', $submodclass, $controllertpl);
 			
@@ -379,6 +382,8 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 		}else{
 			echo "no such dir";
 		}
+		
+		copy($scaffdir.'update.sql', GW::s('DIR/ROOT').'sql/'.date('Y-m-d-H-i-s').' scaff '.$scaffid.'.sql');
 
 		exit;
 	}	

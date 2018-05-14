@@ -174,7 +174,7 @@ var gw_changetrack = {
 				var fieldname = field + ( Array.isArray(orig_vals[field]) ? '[]' :'');
 				var obje=$('#itemform [name="'+fieldname+'"]');
 				
-				if(obje.data('ingorechanges'))
+				if(obje.data('ignorechanges'))
 					continue;
 				
 				gw_changetrack.animateChanged(obje.parents('tr:first').fadeIn(), 3000)

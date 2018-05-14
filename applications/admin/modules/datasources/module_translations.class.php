@@ -223,7 +223,70 @@ class Module_Translations extends GW_Common_Module
 		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
-	}		
+	}	
+
+
+
+	function viewKeySearch()
+	{
+		$i0 = GW_Translation::singleton();
+		
+		if(isset($_GET['q'])){
+			$search = "'%".GW_DB::escape($_GET['q'])."%'";
+			
+			$cond = "`key` LIKE $search";
+			$cond .= " OR `module` LIKE $search";
+			foreach(GW::s("LANGS") as $lang)
+				$cond .= " OR value_{$lang} LIKE $search";
+			
+
+
+			//$cond = "$cond";
+		}
+
+		if(isset($_GET['ids']))
+		{
+			$tmp = trim($_GET['ids'],'"');
+			echo json_encode(['items'=>[['id'=>$tmp, 'title'=>$tmp]]]);
+			exit;
+		}
+		
+		//d::dumpas($cond);
+		
+		$page_by = 30;
+		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
+		$params['offset'] = $page_by * $page;
+		$params['limit'] = $page_by;
+		//$params['select'] = '`key`, `module`';
+	
+		
+		$list0 = $i0->findAll($cond, $params);
+		
+		$list=[];
+		
+		foreach($list0 as $item){
+			
+			$tmp=['id'=>$item->fullkey(), "title"=>$item->fullkey() ];
+			
+			$footer = [];
+			foreach(GW::s("LANGS") as $lang)
+				$footer[] = "$lang: ".GW_String_Helper::truncate($item->get("value_".$this->app->ln));
+				
+			$tmp['footer'] = implode('<br />',$footer);
+				
+			$list[] =$tmp;
+		}
+		
+		$res['items'] = $list;
+		
+		$info = $this->model->lastRequestInfo();
+		$res['total_count'] = $info['item_count'];
+		
+
+		
+		echo json_encode($res);
+		exit;
+	}	
 	
 	
 /*	

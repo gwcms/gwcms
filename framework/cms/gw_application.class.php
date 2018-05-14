@@ -458,6 +458,11 @@ class GW_Application
 		$this->setMessage(['type'=>GW_MSG_ERR, 'text'=>$message]);
 	}
 
+	function prepareMessage($text)
+	{
+		return GW::l($text);
+	}
+	
 	function acceptMessages($prepare = false)
 	{
 		
@@ -468,7 +473,7 @@ class GW_Application
 			foreach($data as $i => $msg){
 				//translate error message if it is translation path
 				if(substr($data[$i]['text'],0,1) == '/')
-					$data[$i]['text'] = GW::l($data[$i]['text']);
+					$data[$i]['text'] = $this->prepareMessage($data[$i]['text']);
 				
 				//get field captions
 				if(isset($data[$i]['field']))
