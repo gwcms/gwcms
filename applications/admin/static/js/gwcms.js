@@ -241,6 +241,25 @@ var gw_adm_sys = {
 				return false;
 			}			
 		});
+		
+		$('.gwActiveTable td').mousedown(function (event) {
+			if (event.ctrlKey) {
+				//alert($(this).data('key') + event.button);
+				var field = this.className.replace(/dl_cell_/,'');
+				
+				
+				gwcms.addFilters(field, $(this).text().trim());
+				
+				
+				//var searchmod = $(this).hasClass('transover') ? 'translations_over': 'translations';
+
+				//window.open("/admin/"+gw_ln+"/datasources/"+searchmod+"/?transsearch=" + encodeURIComponent($(this).data('key')))
+
+				event.preventDefault();
+			}
+
+
+		})
 	},
 	
 	gwws: false,
@@ -814,9 +833,13 @@ var gwcms = {
 	},
 	
 	loadedfilters: [],
-	addFilters: function (name) {
+	addFilters: function (name, value) {
 		$('#gwDropFiltersLoading').show();
 		data = {act: 'doGetFilters', fieldname: name}
+		
+		if(value)
+			data.value = value;
+		
 		$.get(location.href, data, function (rdata) {
 			$('#gwDropFilters').append(rdata);
 			gwcms.filtersChanged();

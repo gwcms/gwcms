@@ -12,16 +12,6 @@ class Module_CronTasks extends GW_Common_Module
 	}
 
 	
-	function viewDefault()
-	{
-
-		
-		$this->viewList();
-
-		
-		//dump($this->smarty->tpl_vars['list']);
-		
-	}
 
 	function zero($txt,$fillto=2,$fillchar='0'){
 		return sprintf("%'{$fillchar}{$fillto}s",$txt);

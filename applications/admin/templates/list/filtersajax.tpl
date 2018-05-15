@@ -11,6 +11,7 @@
 	{/foreach}
 {else}
 	{foreach $dl_filters as $filter}
+		{if $smarty.get.value}{$value=$smarty.get.value}{/if}
 		{include file="elements/input_filter.tpl" name=$filter@key params=$filter muted=!$filter}
 	{/foreach}
 
