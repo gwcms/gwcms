@@ -31,6 +31,9 @@ class GW_DB
 
 	function parse_uphd($uphd)
 	{
+		if(is_array($uphd))
+			return $uphd;
+		
 		list($user, $uphd) = explode(':', $uphd, 2);
 		list($pass, $uphd) = explode('@', $uphd, 2);
 		list($host, $database) = explode('/', $uphd, 2);
@@ -51,7 +54,7 @@ class GW_DB
 	function connect($updh, $newlink = false)
 	{
 		list($user, $pass, $host, $database, $port) = $updh;
-		
+				
 		$this->link = new mysqli($host, $user, $pass, $database, $port) or $this->trigger_error();
 		if ($database)
 			$this->link->select_db($database) or $this->trigger_error();
@@ -72,10 +75,10 @@ class GW_DB
 	function __construct($conf = Array())
 	{
 		$this->conf['logfile'] = GW::s('DIR/LOGS') . 'MySQL.log';
-		$this->uphd = is_array(GW::$settings['DB']['UPHD']) ? GW::$settings['DB']['UPHD'] : self::parse_uphd(GW::$settings['DB']['UPHD']);
-
 		$conf = array_merge(GW::$settings['DB'], $conf);
 		$this->conf = array_merge($this->conf, (array) $conf);
+		
+		$this->uphd = self::parse_uphd($this->conf['UPHD']);
 
 		$this->connect($this->uphd);
 	}
@@ -237,9 +240,12 @@ class GW_DB
 		
 
 		switch($tmp=mysqli_num_fields($this->result)){
+			case 1:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]] = 1;
 			case 2:
-		while ($row = $this->result->fetch_array())
-			$result[$row[0]] = $row[1];
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]] = $row[1];
 			break;
 
 			case 3:
@@ -325,6 +331,7 @@ class GW_DB
 		return $this->link->affected_rows;
 	}
 
+	public $mi_odk_unset_insert=true;
 	//required that all entries have set full keys
 	function _multi_insert($table, $entries, $replace = false, $nodie = false)
 	{
@@ -352,7 +359,9 @@ class GW_DB
 
 		if ($replace) {
 			$query .= ' ON DUPLICATE KEY UPDATE ';
-			unset($keys1['insert_time']);
+			
+			if($this->mi_odk_unset_insert)
+				unset($keys1['insert_time']);
 			
 			foreach ($keys1 as $key)
 				$query .= $key . '=VALUES(' . $key . '), ';

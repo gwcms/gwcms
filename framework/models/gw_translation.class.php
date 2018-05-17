@@ -29,7 +29,8 @@ class GW_Translation extends GW_i18n_Data_Object
 	
 	function fullkey()
 	{
-		return $this->get('module').'/'.$this->get('key');
+		if($this->get('module') && $this->get('key'))
+			return $this->get('module').'/'.$this->get('key');
 	}
 	
 	
