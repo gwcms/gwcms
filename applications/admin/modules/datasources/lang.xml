@@ -29,6 +29,8 @@
 		</i>
 	</i>
 	
+	<i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
+	<i id="EDIT_TRANSKEY">Redaguoti vertimą</i>	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">

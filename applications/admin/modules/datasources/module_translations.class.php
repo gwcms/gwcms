@@ -17,8 +17,7 @@ class Module_Translations extends GW_Common_Module
 		
 		if(isset($_GET['transsearch']))
 		{
-			list($group,$module, $key) = explode('/',$_GET['transsearch'],3);
-			$module = $group."/".$module;
+			list($module, $key) = GW_Translation::fullkeyToModAndKey($_GET['transsearch']);
 			
 			$this->replaceFilter("module", $module, "EQ");		
 			$this->replaceFilter("key", $key, "EQ");	
@@ -26,8 +25,10 @@ class Module_Translations extends GW_Common_Module
 			$this->app->jump();
 		}
 		
-		
+		$this->options['module'] = GW_Array_Helper::buildOpts(GW_Translation::singleton()->getDistinctVals('module'));		
 	}
+	
+
 	
 	
 	function appendData(&$data, $file, $module)
@@ -286,7 +287,24 @@ class Module_Translations extends GW_Common_Module
 		
 		echo json_encode($res);
 		exit;
-	}	
+	}
+
+
+	function viewForm()
+	{
+		//called from input_transkey
+		if(isset($_GET['key']))
+		{			
+			if($itm = $this->model->findByFullKey($_GET['key']))
+			{
+				unset($_GET['key']);
+				$_GET['id'] = $itm->id;
+				$this->app->jump(false, $_GET);
+			}
+		}
+		
+		return parent::viewForm();
+	}
 	
 	
 /*	

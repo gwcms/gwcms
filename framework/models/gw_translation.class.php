@@ -5,6 +5,7 @@ class GW_Translation extends GW_i18n_Data_Object
 
 	public $table = 'gw_translations';
 	public $i18n_fields = ['value' => 1];
+	public $calculate_fields = ['title'=>'fullkey'];
 
 	function storeOne($db, $module, $key, $lang, $value)
 	{
@@ -30,4 +31,21 @@ class GW_Translation extends GW_i18n_Data_Object
 	{
 		return $this->get('module').'/'.$this->get('key');
 	}
+	
+	
+	static function fullkeyToModAndKey($fullkey)
+	{
+		list($group,$module, $key) = explode('/', $fullkey, 3);
+		$module = $group."/".$module;		
+		
+		return [$module, $key];
+	}
+
+	function findByFullKey($fullkey)
+	{
+		list($module, $key) = $this->fullkeyToModAndKey($fullkey);
+			
+		return $this->find(['module=? AND `key`=?', $module, $key]);		
+	}
+	
 }

@@ -10,7 +10,7 @@
 *}
 
 {function name=dl_output_filters_truncate}
-	{$item->$field|truncate:$dl_output_filters_truncate_size}
+	{$item->$field|escape|truncate:$dl_output_filters_truncate_size}
 {/function}	
 
 

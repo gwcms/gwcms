@@ -39,6 +39,11 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	{
 		return $this->dir . parent::get('filename');
 	}
+	
+	function fileExists()
+	{
+		return file_exists($this->getFilename());
+	}
 
 	function setFilename($value)
 	{

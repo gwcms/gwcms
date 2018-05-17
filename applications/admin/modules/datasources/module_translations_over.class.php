@@ -36,7 +36,7 @@ class Module_Translations_Over extends GW_Common_Module
 		}
 		
 		
-		$this->options['module'] = GW_Array_Helper::buildOpts(GW_Translation::singleton()->getDistinctVals('module'));
+		
 		
 	}
 	

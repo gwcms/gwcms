@@ -46,6 +46,9 @@ class GW_Img_Tool
 			unset($params['size']);
 		}
 
+		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV && !$item->fileExists()){			
+			header('Location: '.GW::s("ENV_".GW_ENV_PROD."/SITE_URL").$_SERVER['REQUEST_URI']);
+		}
 
 		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset']))
 			$item->resize($params);
@@ -53,7 +56,7 @@ class GW_Img_Tool
 
 		GW_Cache_Control::setExpires('+24 hour');
 		//GW_Cache_Control::checkFile($item->getFilename());
-
+		
 		if(isset($params['debug']))
 		{
 			dump(Array
