@@ -424,7 +424,7 @@ class GW_Module
 			$this->app->outputPackets();
 		}
 		
-		if(isset($_GET['background']))
+		if(isset($_GET['background']) && $_GET['background']==2)
 			return false;
 		
 		
