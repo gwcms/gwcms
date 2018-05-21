@@ -4,10 +4,16 @@
 class GW_TestClass
 {
 	public $test_result=[];
+	public $test_class_present = true;
+	public $info=[];
 	
 	function __construct($testclass)
-	{
-		$this->testobj = new $testclass;
+	{	
+		if($this->test_class_present)
+			$this->testobj = new $testclass;
+		
+		if(method_exists($this, 'init'))
+			$this->init();
 	}
 	
 	
@@ -27,6 +33,10 @@ class GW_TestClass
 		}
 		
 		$this->test_result['speed'] = $timer->stop(5);
+		
+		if($this->info)
+			$this->test_result['info'] = $this->info;
+		
 		
 		return $this->test_result;
 	}
@@ -76,5 +86,10 @@ class GW_TestClass
 	function assertTrue($state)
 	{
 		$this->__assertTrue($state);
+	}
+	
+	function addInfo($key, $val)
+	{
+		$this->info[$key] = $val;
 	}
 }

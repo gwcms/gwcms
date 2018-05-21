@@ -683,7 +683,8 @@ class GW_Module
 		}
 		
 		if ($this->sys_call) {
-			$this->lgr->msg(json_encode($message));
+			if($this->lgr)
+				$this->lgr->msg(json_encode($message));
 		} else {
 			$this->app->setMessage($message);
 		}

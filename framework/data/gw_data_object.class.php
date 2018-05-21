@@ -900,7 +900,7 @@ class GW_Data_Object
 	
 	function multiInsert($list, $replace=true)
 	{
-		$this->getDB()->multi_insert($this->table, $list, $replace);
+		return $this->getDB()->multi_insert($this->table, $list, $replace);
 	}
 	
 	function updateMultiple($conditions, $update_vals)

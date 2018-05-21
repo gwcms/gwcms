@@ -104,6 +104,7 @@
 		require.config({ 
 			urlArgs: 'version={$GLOBALS.version_short}',			
 			baseUrl: '{$app_root}static',
+			waitSeconds: 200,
 			shim : {
 				bootstrap : { "deps" :['jquery'] },
 				jqueryui: { "deps" : ['jquery'] },

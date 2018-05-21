@@ -341,7 +341,7 @@ class GW_DB
 		reset($entries); //to get first element from array
 		foreach (current($entries) as $key => $entry) {
 			$keys[] = $key;
-			$keys1[] = '`' . $key . '`';
+			$keys1[$key] = '`' . $key . '`';
 		}
 		
 		$query = "INSERT INTO $table (" . implode($keys1, ',') . ") VALUES ";

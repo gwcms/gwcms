@@ -17,8 +17,11 @@ $time = file_get_contents($sync_file);
 $updates_sql = '';
 $tables=[];
 
+$uphd = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+$dbname = $uphd[3];
 
-foreach($db->fetch_rows("SELECT schema_sql, table_name FROM phpmyadmin.pma__tracking WHERE date_updated > '$time' AND db_name='artistdb'") as $row)
+
+foreach($db->fetch_rows("SELECT schema_sql, table_name FROM phpmyadmin.pma__tracking WHERE date_updated > '$time' AND db_name='$dbname'") as $row)
 {
 	preg_match_all('/\# log (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}).*/i', $row['schema_sql'], $matches);
 	

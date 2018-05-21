@@ -3,6 +3,11 @@
 class GW_Proc_Ctrl
 {
 
+	static function pidInfo($pid)
+	{
+		return shell_exec("ps -p $pid -o cmd= 2>&1");
+	}
+	
 	static function isRunning($pid, $procname)
 	{
 		$list = shell_exec("ps -p $pid -o cmd= 2>&1");
