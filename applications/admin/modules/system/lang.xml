@@ -89,6 +89,7 @@
 		<i id="addseparator">Add separator</i>
 		<i id="iframe">Log view realtime</i>
 		<i id="doExecuteQuery">Execute query</i>
+		<i id="doSyncFromXmls">Sync from xmls</i>
 	</i>
 	
 	<i id="FIELD_NOTE">

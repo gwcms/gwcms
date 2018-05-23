@@ -113,6 +113,16 @@ class Module_Modules extends GW_Common_Module
 	}
 	
 	
+	function doSyncFromXmls()
+	{
+		$t = new GW_Timer;
+		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
+		
+		if($msgs)
+			foreach($msgs as $msg)
+				$this->setMessage(['type' => GW_MSG_INFO, 'text'=>$msg, 'float'=>1, 'footer'=>$t->stop().'s']);		
+	}
+	
 }
 
 ?>

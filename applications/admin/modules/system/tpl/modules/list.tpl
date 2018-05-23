@@ -20,7 +20,9 @@
 		{toolbar_button title="Rearange structure" iconclass='gwico-Sorting-Arrows-Filled' href=$m->buildUri(rearange)}
 	{/function}		
 	
-	
+	{function name=do_toolbar_buttons_synchronizefromxml} 
+		{toolbar_button title=GW::l('/A/VIEWS/doSyncFromXmls') iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doSyncFromXmls])}	
+	{/function}		
 	
 	{function name=dl_prepare_item}
 	
@@ -52,7 +54,7 @@
 		
 	{$dl_fields=[title,path]}
 	{$dl_smart_fields=[title,path]}
-	{$do_toolbar_buttons=[info,rearange]}	
+	{$do_toolbar_buttons=[info,rearange,synchronizefromxml]}	
 	{$dl_actions=[edit,invert_active,delete]}
 	
 	

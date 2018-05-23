@@ -97,12 +97,7 @@ class GW_Admin_Application extends GW_Application
 		
 		$this->autoPrepare();
 		
-		$t = new GW_Timer;
-		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
-		
-		if($msgs)
-			foreach($msgs as $msg)
-				$this->setMessage(['type' => GW_MSG_INFO, 'text'=>$msg, 'float'=>1, 'footer'=>$t->stop().'s']);
+	
 		
 		$this->icon_root = $this->app_root . $this->icon_root;
 	}
