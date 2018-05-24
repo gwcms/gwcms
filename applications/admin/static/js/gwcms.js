@@ -403,6 +403,8 @@ var gw_adm_sys = {
 			$(this).html('<i class="fa fa-spinner fa-pulse"></i>');
 			var obj = $(this);
 			var url = gw_navigator.url(this.href, { packets:1 })
+			alert(url);
+			
 			$.ajax({ url: url , type: "GET", dataType: "json", success: function (data) { 
 					gw_adm_sys.runPackets(data);
 					obj.html(obj.data('ownsrc'));
