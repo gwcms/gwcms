@@ -403,7 +403,7 @@ var gw_adm_sys = {
 			$(this).html('<i class="fa fa-spinner fa-pulse"></i>');
 			var obj = $(this);
 			
-			$.ajax({ url: this.href, type: "GET", dataType: "json", success: function (data) { 
+			$.ajax({ url: this.href, data: { packets: 1 } , type: "GET", dataType: "json", success: function (data) { 
 					gw_adm_sys.runPackets(data);
 					obj.html(obj.data('ownsrc'));
 				}});
