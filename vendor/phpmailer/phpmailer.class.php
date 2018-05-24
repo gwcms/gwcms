@@ -710,6 +710,7 @@ class PHPMailer {
 	 */
 	public function isSMTP() {
 		$this->Mailer = 'smtp';
+		include_once __DIR__.'/smtp.class.php';
 	}
 
 	/**

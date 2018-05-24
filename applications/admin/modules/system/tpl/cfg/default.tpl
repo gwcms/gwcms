@@ -12,7 +12,20 @@
 {include file="elements/input.tpl" name=google_api_access_key type=text}
 
 
+{include file="elements/input.tpl" name=mail_from type=text default="Title <email@address.lt>"}
+{include file="elements/input.tpl" name=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
 
+
+{capture assign=tmp}
+	<table>
+{include file="elements/input.tpl" name=mail_smtp_host type=text}
+{include file="elements/input.tpl" name=mail_smtp_user type=text}
+{include file="elements/input.tpl" name=mail_smtp_pass type=text}
+{include file="elements/input.tpl" name=mail_smtp_port type=number}
+	</table>
+{/capture}
+
+{include file="elements/input.tpl" name=smtp_config type=read value=$tmp rowclass="smtpdetails"}
 
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

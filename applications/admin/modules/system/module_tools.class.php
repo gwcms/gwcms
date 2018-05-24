@@ -263,57 +263,26 @@ class Module_Tools extends Module_Config
 	public $doTestPhpMailer = ['info'=>'Check mail sending with phpmailer class'];
 	
 	function doTestPhpMailer()
-	{
-		$from = GW::s('DEFAULT_MAIL_SENDER_ADDR');
-		$to = $this->app->user->email;
-		
-		$mailer = $this->initPhpmailer($from, "testing php mailer");
-		$mailer->msgHTML("This is test message body");
-		$mailer->addAddress($to);
-		
-		$status = $mailer->send();
-		
+	{			
+		$opts = [
+		    'to'=> $this->app->user->email,
+		    'subject'=>"testing php mailer",
+		    'body'=>'This is test message body'
+		];
+		$status = GW_Mail_Helper::sendMail($opts);
 		
 
-		$this->setPlainMessage("mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
-		
-		$mailer->clearAllRecipients();
-		
-		////--------------2nd test----------------------------------
-		$mailer->addAddress($to="gwcmsmailtest@mailinator.com");
-		$status = $mailer->send();
-		
-		$this->setPlainMessage("2nd mail send from ".htmlspecialchars($from)." to $to ".($status ? 'succeed':'failed'));
+		$this->setPlainMessage("mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'));
 		
 			
+		////--------------2nd test----------------------------------
+		$opts['to'] = "gwcmsmailtest@mailinator.com";
+		$status = GW_Mail_Helper::sendMail($opts);
+		
+		$this->setPlainMessage("2nd mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'));	
 	}
 	
-	function initPhpmailer($from, $subject, $replyto='')
-	{
-		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
-		//$mail->isSendmail();
-		$mail->CharSet = 'UTF-8';
-		
-		
-		list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($from);
-		$mail->setFrom($email, $name);
-		
-		if($replyto){
-			list($name, $email) = GW_Email_Validator::separateDisplayNameEmail($replyto);
-			$mail->addReplyTo($email, $name);
-			$mail->__replyTo = $email;
-		}
-		
-		$mail->Subject = $subject;
-		
-		//$mail->DKIM_domain = $this->config->dkim_domain;
-		//$mail->DKIM_private = GW::s('DIR/SYS_FILES').'.mail.key';
 
-		//$mail->DKIM_selector = $this->config->dkim_domain_selector;
-		//$mail->DKIM_passphrase = ''; //key is not encrypted
-		
-		return $mail;
-	}	
 	
 	public $doTestGeoip = ["info"=>"Check if geoip function working (geoip_country_code_by_name)"];
 	
@@ -334,7 +303,7 @@ class Module_Tools extends Module_Config
 		
 	}
 
-	
+		
 	
 
 	

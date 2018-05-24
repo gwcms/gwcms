@@ -179,7 +179,7 @@ class GW_Admin_Application extends GW_Application
 	{
 		$path_info = $this->getModulePathInfo($this->path);
 		$this->getAdmPage($path_info['dirname'], $path_info['module'] ?? $path_info['dirname']);
-
+		
 		if (!$this->canAccess($this->page)){			
 			if ($this->user)
 				$this->jumpToFirstChild();
@@ -187,7 +187,8 @@ class GW_Admin_Application extends GW_Application
 				$this->jump(GW::s("$this->app_name/PATH_LOGIN"));
 		}
 		
-
+		$this->preRun();
+		
 		$this->processModule($path_info, $_REQUEST);
 	}	
 	

@@ -254,7 +254,12 @@ class GW_Module
 		$this->$act();
 		$this->ob_end();
 
-		$this->action_name=$act;		
+		$this->action_name=$act;
+
+		if($this->isPacketRequest()){
+			$this->app->outputPackets(true);
+			exit;
+		}
 	}
 	  
 	function processAction($act)
@@ -664,13 +669,18 @@ class GW_Module
 	}
 	
 	
-	function setError($text)
+	function setError($message)
 	{
-		$this->setMessage(["text"=>$text,"type"=>GW_MSG_ERR]);
+		$this->setMessageEx($message, GW_MSG_ERR);
 	}
 	
 	
-	function setMessage($message)
+	function isPacketRequest()
+	{
+		return isset($_REQUEST['packets']) && $_REQUEST['packets']==1;
+	}
+	
+	function setMessageEx($message, $type)
 	{
 		if(isset($_GET['bgtaskid']))
 		{
@@ -686,10 +696,24 @@ class GW_Module
 			if($this->lgr)
 				$this->lgr->msg(json_encode($message));
 		} else {
-			$this->app->setMessage($message);
+			
+			if($this->isPacketRequest()){
+				$packet=['action'=>'notification', 'type'=>$type, 'title'=>$message];
+				if(isset($_GET['id']))
+					$packet['id'] = $_GET['id'];
+				
+				$this->app->addPacket($packet);
+			}else{
+				$this->app->setMessage([$message, "type"=>$type]);
+			}
 		}
 		
-		$this->loadErrorFields();
+		$this->loadErrorFields();		
+	}
+	
+	function setMessage($message)
+	{
+		$this->setMessageEx($message, GW_MSG_SUCC);
 	}
 	
 	function setPlainMessage($text, $type=GW_MSG_SUCC)

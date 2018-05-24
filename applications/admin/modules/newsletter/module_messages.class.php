@@ -229,6 +229,15 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
+	
+	function __addAtachments($item, $mail)
+	{
+		for($i=1;$i<=1;$i++)
+			if($f=$item->get("file_".$i))		
+				$mail->AddAttachment( $f->full_filename , $f->original_filename);
+			
+	}	
+	
 	function __doSend($item, $recipients)
 	{
 		$sent_info = [];
@@ -243,7 +252,8 @@ class Module_Messages extends GW_Common_Module
 		
 		//2015-07-13 removed
 		//$message = GW_Link_Helper::trackingLink($message);
-		$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
+		//$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
+		$mail = GW_Mail_Helper::initPhpmailer($item->sender, $item->subject);
 		
 		
 		foreach($recipients as $recipient){
@@ -259,6 +269,8 @@ class Module_Messages extends GW_Common_Module
 			
 			$mail->addAddress($recipient->email);
 			$mail->msgHTML($msg);
+			
+			$this->__addAtachments($item, $mail);
 			
 		
 			//$mail->addCustomHeader("List-Unsubscribe",'<'.$mail->__replyTo.'>, <'.$message_info['unsubscribe_link'].'>');

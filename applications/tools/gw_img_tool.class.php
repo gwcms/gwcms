@@ -46,8 +46,10 @@ class GW_Img_Tool
 			unset($params['size']);
 		}
 
-		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV && !$item->fileExists()){			
-			header('Location: '.GW::s("ENV_".GW_ENV_PROD."/SITE_URL").$_SERVER['REQUEST_URI']);
+		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV && !$item->fileExists()){	
+			
+			initEnviroment(GW_ENV_PROD);
+			header('Location: '.GW::s("SITE_URL").$_SERVER['REQUEST_URI']);
 		}
 
 		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset']))
