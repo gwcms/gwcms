@@ -402,8 +402,8 @@ var gw_adm_sys = {
 			$(this).data('ownsrc', $(this).html());
 			$(this).html('<i class="fa fa-spinner fa-pulse"></i>');
 			var obj = $(this);
-			
-			$.ajax({ url: this.href, data: { packets: 1 } , type: "GET", dataType: "json", success: function (data) { 
+			var url = gw_navigator.url(this.href, { packets:1 })
+			$.ajax({ url: url , type: "GET", dataType: "json", success: function (data) { 
 					gw_adm_sys.runPackets(data);
 					obj.html(obj.data('ownsrc'));
 				}});
