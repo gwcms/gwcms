@@ -375,8 +375,8 @@ class GW_Application
 		$module = $this->constructModule($path_info['dirname'], $path_info['module']);
 		
 		$module->module_name = $path_info['module'];
-		$module->module_path = $path_info['path'];
-		$module->module_path_filtered = $path_info['path_clean'];		
+		$module->module_path = $path_info['path'] ?? '';
+		$module->module_path_filtered = $path_info['path_clean'] ?? '';		
 		
 		
 		$module->module_dir = GW::s("DIR/{$this->app_name}/MODULES") . $path_info['dirname'] . '/';

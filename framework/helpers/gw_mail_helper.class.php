@@ -10,8 +10,20 @@ class GW_Mail_Helper
 	static $debug_smtp = false;
 	static $last_from = "";
 	static $insert_to_queue_if_fail = true;
+	static $cfg_cache = false;
 	
-	static function initPhpmailer($from, $subject='')
+	static function loadCfg()
+	{
+		if(!self::$cfg_cache){
+			$cfg = new GW_Config('sys/');
+			$cfg->preload('mail_');	
+			self::$cfg_cache = $cfg;	
+		}
+		
+		return self::$cfg_cache;
+	}
+	
+	static function initPhpmailer($from='', $subject='')
 	{
 		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		
@@ -21,8 +33,7 @@ class GW_Mail_Helper
 
 		$mail->CharSet = 'UTF-8';
 				
-		$cfg = new GW_Config('sys/');
-		$cfg->preload('mail_');
+		$cfg = self::loadCfg();
 				
 		if(!$from)
 			$from = $cfg->mail_from;
@@ -51,6 +62,17 @@ class GW_Mail_Helper
 		
 		return $mail;
 	}
+	
+	static function explodeMultipleEmails($str)
+	{
+		$arr = explode(';', $str);
+		$arr = array_map('trim', $arr);
+		return $arr;
+	}
+	static function implodeMultipleEmails($arr)
+	{
+		return implode(';', $arr);
+	}	
 	
 	static function sendMail($opts)
 	{
@@ -102,5 +124,14 @@ class GW_Mail_Helper
 		return $status;
 	}
 	
+		
+	function sendMailAdmin($opts)
+	{
+		$cfg = self::loadCfg();
+		
+		$opts['to'] = self::explodeMultipleEmails($cfg->mail_admin_emails);
+		
+		return self::sendMail($opts);
+	}
 
 }

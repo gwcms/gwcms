@@ -113,6 +113,7 @@
 		</ul>
 		]]>
 		</i>
+		<i id="mail_admin_emails"><en>Email address or addresses separated by ; (semicolon)</en><lt>El. pašto adresas arba adresai atskirti ; (kabliataškiu)</lt></i>
 	</i>
 	
 	<!-- =============== MODULE MAP START =================== -->

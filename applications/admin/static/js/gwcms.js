@@ -434,7 +434,7 @@ var gw_adm_sys = {
 			nndata.message+="<span class='alert-footer'>"+data.footer+'</span>';
 		
 
-		if(data.hasOwnProperty('title'))
+		if(data.hasOwnProperty('title') && data.title!=false)
 			nndata.title = data.title;
 
 		$.niftyNoty(nndata);		

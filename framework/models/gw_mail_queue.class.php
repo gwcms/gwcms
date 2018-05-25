@@ -23,7 +23,9 @@ class GW_Mail_Queue extends GW_Data_Object
 		
 		switch($event)
 		{
-			case 'BEFORE_INSERT':
+			case 'BEFORE_SAVE':
+				if(is_array($this->content_base['to']))
+					$this->content_base['to'] = GW_Mail_Helper::implodeMultipleEmails($this->content_base['to']);
 				
 			break;
 		}

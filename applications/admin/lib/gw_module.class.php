@@ -671,7 +671,7 @@ class GW_Module
 	
 	function setError($message)
 	{
-		$this->setMessageEx($message, GW_MSG_ERR);
+		$this->setMessageEx(["text"=>$message, "type"=>GW_MSG_ERR]);
 	}
 	
 	
@@ -680,14 +680,20 @@ class GW_Module
 		return isset($_REQUEST['packets']) && $_REQUEST['packets']==1;
 	}
 	
-	function setMessageEx($message, $type)
+	function setMessageEx($opts=[])
 	{
+		
+		
+		
 		if(isset($_GET['bgtaskid']))
 		{
 			$this->app->reopenSessionIfClosed();
 			
 			$task = $this->app->sess['bgtasks'][$_GET['bgtaskid']];
-			GW_WebSocket_Helper::notifyUser($this->app->user->username, ['title'=>$task->title, 'text'=>$message, 'bgtaskid'=>$_GET['bgtaskid']]);
+			$opts['title']=$task->title;
+			$opts['bgtaskid']=$_GET['bgtaskid'];
+	
+			$this->packetWS('notify', $opts);
 			
 			return true;
 		}
@@ -698,22 +704,22 @@ class GW_Module
 		} else {
 			
 			if($this->isPacketRequest()){
-				$packet=['action'=>'notification', 'type'=>$type, 'title'=>$message];
 				if(isset($_GET['id']))
 					$packet['id'] = $_GET['id'];
 				
-				$this->app->addPacket($packet);
+				$this->app->addPacket(['action'=>'notification'] + $opts);
 			}else{
-				$this->app->setMessage([$message, "type"=>$type]);
+				$this->app->setMessage($opts);
 			}
 		}
-		
+				
 		$this->loadErrorFields();		
 	}
 	
 	function setMessage($message)
 	{
-		$this->setMessageEx($message, GW_MSG_SUCC);
+		$opts = is_array($message) ? $message : ["text"=>$message, "type"=>GW_MSG_SUCC];
+		$this->setMessageEx($opts);
 	}
 	
 	function setPlainMessage($text, $type=GW_MSG_SUCC)
@@ -722,7 +728,7 @@ class GW_Module
 		if($type==GW_MSG_SUCC)
 			$opt['float'] = 1;
 		
-		$this->setMessage($opt);
+		$this->setMessageEx($opt);
 	}
 
 	function setItemErrors($item)

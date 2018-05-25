@@ -106,14 +106,11 @@
                 <!--Page content-->
                 <!--===================================================-->
                 <div id="page-content">	
-					
 				{else}
-					<body class="gwBodyClean {if $smarty.get.clean==2}gwBodyClean2{/if}"   data-clean="1">
+					<body class="gwBodyClean {if $smarty.get.clean==2}gwBodyClean2{/if}"   data-clean="1" id="container">
 				{/if}	
 				{include "messages.tpl"}
 				
-
-
 {include "do_toolbar.tpl"}
 
 <div id='gwcms-dynamic-alerts-container'></div>

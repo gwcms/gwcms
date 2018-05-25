@@ -241,7 +241,8 @@ class GW_Common_Module extends GW_Module
 		
 		$message["float"] = 1;
 		$message["id"]=$item->id;
-		$this->setMessage($message);
+		
+		$this->setMessageEx($message);
 
 		$this->fireEvent('AFTER_SAVE', $item);
 
