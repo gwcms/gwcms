@@ -31,4 +31,15 @@ class Module_Email_Queue extends GW_Common_Module
 		
 		$this->notifyRowUpdated($item->id, false);			
 	}
+	
+	function doViewBody($item=false)
+	{
+		if(!$item)
+			$item = $this->getDataObjectById();
+		
+		if($item->plain)
+			header('Content-type: text/plain');
+
+		die($item->body);
+	}
 }

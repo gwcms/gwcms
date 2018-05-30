@@ -81,6 +81,8 @@ class GW_Mail_Helper
 			$opts = $m_queue_item->toArray();
 		}
 		
+		$cfg = self::loadCfg();
+		
 		$mailer = self::initPhpmailer(isset($opts['from'])? $opts['from']:'', $opts['subject']);
 		
 		
@@ -97,8 +99,8 @@ class GW_Mail_Helper
 		}else{
 			$mailer->addAddress($opts['to']);
 		}
-				
 		
+		$mailer->addBCC($cfg->mail_admin_emails);
 		
 		try {
 			$status = $mailer->send();

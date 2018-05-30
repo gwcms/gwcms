@@ -9,6 +9,18 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		parent::init();
 
 		
+	
+
+		$this->app->carry_params['site_id']=1;
+		
+		if(isset($_GET['site_id']))
+		{
+			$this->filters['site_id']=$_GET['site_id'];
+		}elseif(GW::s('MULTISITE')){
+			$this->filters['site_id'] = $this->app->site->id;
+		}
+		
+		
 		$this->app->carry_params['clean']=1;
 	}
 	

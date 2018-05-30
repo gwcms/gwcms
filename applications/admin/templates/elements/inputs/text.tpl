@@ -12,5 +12,6 @@
 	style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}" 
 	{if $hidden_note}title="{$hidden_note}"{/if} 
 	{if $placeholder}placeholder="{$placeholder}"{/if} 
+	 {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 	{$input_extra_params}
 />

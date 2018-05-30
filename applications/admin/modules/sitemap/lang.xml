@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-	
 	<i id="ROOT">
 		<en>Root</en>
 		<lt>Šakninis</lt>
 	</i>
-	
 	<i id="PATH">
 		<en>Path</en>
 		<lt>Kelias</lt>
@@ -18,7 +16,7 @@
 		<i id="params">
 			<en>Parameters (json)</en>
 			<lt>Parametrai (json)</lt>
-		</i>		
+		</i>
 		<i id="priority">
 			<en>Priority</en>
 			<lt>Svarbumas</lt>
@@ -38,7 +36,7 @@
 		<i id="path">
 			<en>Path</en>
 			<lt>Kelias</lt>
-		</i>		
+		</i>
 		<i id="note">
 			<en>Note</en>
 			<lt>Pastaba</lt>
@@ -51,11 +49,21 @@
 			<en>Name</en>
 			<lt>Unikalus vardas</lt>
 		</i>
+		<i id="admin_name">Ident. vardas</i>
+		<i id="relations"><en>Relations</en><lt>Sąsajos</lt></i>
+		<i id="hosts">Hosts</i>
+		<i id="site_id"><en>Site</en><lt>Svetainė</lt></i>
+		<i id="name"><en>Identif. name</en><lt>Identif. vardas</lt></i>
+		<i id="path_filter"><en>Path filter</en><lt>URL kelio filtras</lt></i>
+		<i id="contents_type"><en>Content type</en><lt>Turinio tipas</lt></i>
+		<i id="contents"><en>Content</en><lt>Turinys</lt></i>
+		<i id="ln"><en>Apply languages</en><lt>Kalbos</lt></i>
+		<i id="preload">Svarba</i>
 	</i>
 	<i id="FIELDS_SHORT">
 		<i id="templatevars">TV</i>
+		<i id="relations"><![CDATA[<i class="fa fa-link"></i>]]></i>
 	</i>
-	
 	<i id="TYPE_OPT">
 		<i id="0">
 			<en>Page</en>
@@ -71,14 +79,13 @@
 		</i>
 	</i>
 	<i id="FIELD_NOTE">
-		<i  id="template_title">
+		<i id="template_title">
 			<en>Human readable, for admin</en>
 		</i>
 		<i id="template_name">
 			<en>Unique name, lowercase without spaces [a-z0-9_]</en>
 		</i>
 	</i>
-	
 	<i id="VAR_TYPE_OPT">
 		<i id="text">
 			<lt>Teksto eilutė</lt>
@@ -91,7 +98,7 @@
 		<i id="htmlarea">
 			<lt>HTML teksto laukas</lt>
 			<en>HTML text area</en>
-		</i>		
+		</i>
 		<i id="image">
 			<lt>Paveiksliukas</lt>
 			<en>Image</en>
@@ -102,28 +109,48 @@
 		</i>
 		<i id="code_smarty">
 			<en>Html code</en>
-			<lt>Html  kodas</lt>
+			<lt>Html kodas</lt>
 		</i>
 		
-		
 	</i>
+	<i id="OPTIONS">
+		<i id="block_types">
+			<i id="1">Text line</i>
+			<i id="2">Text area</i>
+			<i id="3">Formated text</i>
+			<i id="4">Html code</i>
+			<i id="5">Template file</i>
+			<i id="6">Color</i>
+			<i id="7">Image</i>
+		</i>
+		<i id="preload">
+			<i id="0">
+				<lt>Naudotinas pagal paklausima</lt>
+				<en>Used on by demand</en>
+			</i>
+			<i id="1">
+				<lt>Dažno naudojimo, visada pakraunamas</lt>
+				<en>Used on every template, preload every time</en>
+			</i>
+		</i>
+		
+	</i>	
+	<i id="ADD_HOST"><lt>Pridėti host</lt><en>Add host</en></i>
+	<i id="ALL_LANGS"><lt>Visos kalbos</lt><en>All languages</en></i>
 	
 	<i id="VIEWS">
-		<i id="doPreview">Peržiūrėti svetainėje</i>	
+		<i id="doPreview">Peržiūrėti svetainėje</i>
 	</i>
 	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
-	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">
 			<en>Structure &amp; Content</en>
 			<lt>Struktūra ir tekstai</lt>
 		</i>
-		
 		<i id="info">
 			<i id="iconclass">fa fa-sitemap</i>
-		</i>		
-		
+		</i>
 		<i id="childs">
 			<i id="pages">
 				<i id="title">
@@ -132,22 +159,21 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Page</i>
-				</i>				
+				</i>
 			</i>
-			
 			<i id="templates">
 				<i id="title">
 					<en>Templates</en>
 					<lt>Šablonai</lt>
 				</i>
-
 				<i id="info">
 					<i id="model">GW_Template</i>
 				</i>
-
 				<i id="childs">
 					<i id="tplvars">
-						<i id="info"><i id="model">GW_TplVar</i></i>
+						<i id="info">
+							<i id="model">GW_TplVar</i>
+						</i>
 						<i id="title">
 							<en>Template vars</en>
 							<lt>Šablono įvestys</lt>
@@ -155,8 +181,27 @@
 					</i>
 				</i>
 			</i>
+			<i id="sites">
+				<i id="title"><lt>Svetainės</lt><en>Sites</en></i>
+				<i id="info">
+					<i id="model">gw_site</i>
+				</i>
+				<i id="in_menu">1</i>
+			</i>
+			<i id="blocks">
+				<i id="title"><lt>Blokeliai</lt><en>Blocks</en></i>
+				<i id="info">
+					<i id="model">gw_site_block</i>
+				</i>
+				<i id="in_menu">1</i>
+			</i>
+			<i id="config">
+				<i id="title">Nustatymai</i>
+				<i id="info">
+					<!--<i id="iconclass">fa fa-gears</i>-->
+				</i>
+			</i>			
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
-	
 </xml>

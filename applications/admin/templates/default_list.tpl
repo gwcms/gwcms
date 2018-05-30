@@ -7,6 +7,9 @@
 {/block}
 
 {$dl_smart_fields=array_flip($dl_smart_fields|default:[])}
+{if $smarty.get.print_view}
+	{$dl_checklist_enabled=0}
+{/if}
 {if $dl_checklist_enabled}
 	{$dl_custom_head.mark=1}
 	{$x=array_unshift($dl_fields, mark)}

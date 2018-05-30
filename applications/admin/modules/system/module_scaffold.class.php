@@ -13,12 +13,10 @@ class Module_Scaffold extends GW_Common_Module
 		
 		
 	}
-	
-	
-	function doScaffold()
-	{
-		GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
-		
+
+
+
+/*
 		$config = [
 		    'module'=>'competitions',
 		    
@@ -43,6 +41,38 @@ class Module_Scaffold extends GW_Common_Module
 		    ],
 		    'overwrite_tables'=>0,
 		    'installid'=>'test'
+		];
+ */	
+	
+	function doScaffold()
+	{
+		GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
+		
+		$config = [
+		    'module'=>'sitemap',
+		    
+		    'submodules'=>[
+			[
+			    'name'=>'sites',
+			    'title'=>'Svetainės',
+			    'model'=>'gw_site',
+			    'structure'=>
+				[
+				    'admin_name'=>['type'=>'varchar255', 'title'=>"Ident. vardas"],
+				    'title'=>['type'=>'varchar255','i18n'=>1],
+				    'admin_email'=>['type'=>'varchar255'],
+				    'hosts'=>['type'=>'varchar255'],
+				    'price'=>['type'=>'float']
+				],
+			    'actions'=>['inline_edit','remove'],
+			    'list_actions'=>['inline_form'],
+			    'in_menu'=>1,
+			    
+			    'list'=>['checklist'=>1]
+			]
+		    ],
+		    'overwrite_tables'=>0,
+		    'installid'=>'sitemap_sites'
 		];	
 		
 		

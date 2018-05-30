@@ -171,13 +171,13 @@ class GW_Auth
 
 	function logout()
 	{
-
+		
 		setcookie('login_7', '---', time(), GW::$context->app->sys_base);
 		$_COOKIE['login_7'] = false;
 
 
 		//dump("logging out");
-		$this->session = array();
+		$this->session = array();		
 		//$_SESSION=Array();
 	}
 
@@ -214,6 +214,16 @@ class GW_Auth
 	function getOrigUser()
 	{
 		return $this->session['switchUser'];
+	}
+	
+	static function adminLoginToSite($userid, $adminid)
+	{
+		$_SESSION[GW::s('SITE/AUTH_SESSION_KEY')] = [
+		    'user_id' => $userid, 
+		    'ip_address' => $_SERVER['REMOTE_ADDR'], 
+		    'admin_user_id' => $adminid,
+		    'last_request' => time()
+		];		
 	}
 	
 }

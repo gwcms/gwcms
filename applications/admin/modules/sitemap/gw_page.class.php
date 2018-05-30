@@ -20,8 +20,11 @@ class GW_Page extends GW_i18n_Data_Object
 	{		
 		$id = $this->id ? (int)$this->id : -1;
 
-		$cond = Array('parent_id=?'.($params['in_menu']?' AND active=1 AND in_menu_'.$this->lang():''), $id);
+		if(!isset($params['site_id']))
+			$params['site_id'] = GW::s('MULTISITE') ? GW::$context->app->site->id : 0;
 
+		$cond = ['parent_id=? AND site_id = ?'.($params['in_menu']?' AND active=1 AND in_menu_'.$this->lang():''), $id, $params['site_id'] ];		
+		
 		$list = $this->findAll($cond);
 		
 		if($params['return_first_only'])
@@ -31,14 +34,16 @@ class GW_Page extends GW_i18n_Data_Object
 	}
 
 
-	function getByPath($path, $check_parent=false)
+	function getByPath($path, $check_parent=false, $siteid=null)
 	{
 		$item0 = new GW_Page();
 		
-
+		if($siteid===null)
+			$siteid = GW::s('MULTISITE') ? GW::$context->app->site->id : 0;
+		
 		while($path && strlen($path) > 0)
 		{
-			if($tmp = $item0->find(Array('path=?',$path)))
+			if($tmp = $item0->find(['path=? AND site_id=?',$path, $siteid]))
 			return $tmp;
 
 			if(!$check_parent)

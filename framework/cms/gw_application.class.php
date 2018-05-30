@@ -16,6 +16,7 @@ class GW_Application
 	 * language code
 	 */
 	public $ln;
+	
 	public $page;
 	public $module;
 	public $data_object_id;
@@ -30,6 +31,12 @@ class GW_Application
 	public $inner_request = false;
 	public $user_class = false;
 	public $sess; //application session - to avoid conflicts with site - admin apps
+	
+	/**
+	 *
+	 * @var GW_Site
+	 */
+	public $site;
 
 	/*
 	 * loaded from session!
@@ -66,6 +73,22 @@ class GW_Application
 	{
 		if(isset($GLOBALS['SESSION_CLOSED']))
 			$this->initSession();
+	}
+	
+	function initSite()
+	{
+		if(GW::s('MULTISITE'))
+		{			
+			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $_SERVER["HTTP_HOST"]]);
+			
+			if($tmp)
+			{
+				$this->site = $tmp;
+				return true;
+			}
+			
+			$this->site = GW_Site::singleton()->find('hosts="*"');				
+		}
 	}
 	
 
@@ -154,12 +177,14 @@ class GW_Application
 
 	function init()
 	{
+		
 		$this->loadConfig();
 		$this->initDB();
 		$this->initSession();
 
 		$this->initAuth();
 
+		$this->initSite();
 		$this->requestInfo();
 
 
@@ -198,7 +223,7 @@ class GW_Application
 	}
 
 	function jump($path = false, $params = Array())
-	{
+	{		
 		if (!is_array($params))
 			backtrace();
 

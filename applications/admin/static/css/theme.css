@@ -7777,7 +7777,7 @@ input[type="color"] {
 }
 
 
-.i18n_tag{font-size:70%;color: orange;font-weight: bold}
+
 
 .change_lang a.selected{ font-weight:bold;color:#000 }
 .change_lang a{ color:#555; }
@@ -7899,3 +7899,19 @@ input[type="color"] {
 
 .inputtabspan .panel-body{ margin:0px;;padding-top:10px;padding-bottom:6px; }
 .inptabs_sel{ margin:0px; padding:0px; }
+
+
+.i18n_tag_active .i18n_link{ background-color: #74a838; color:white; border: 1px solid #74a838;  }
+.i18n_tag_active .i18n_link:hover{ background-color: #86c042; color: white;  }
+.i18n_link{ color: #86c042;  border-radius: 50%; padding:3px;margin-left:2px; border: 1px solid #86c042; }
+.i18n_link:hover { 	
+	color: #74a838;border: 1px solid #74a838;
+}
+
+.tabitm_row td:first-child{
+	padding-left: 8px !important;
+}
+
+a.badge:hover{
+	color: green !important;
+}

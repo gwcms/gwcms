@@ -89,7 +89,7 @@
 				{/if}
 
 				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
-			{if $i18n || $item->i18n_fields.$name}<sup title="International" class="i18n_tag">(Int)</sup>{/if}
+			{if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		</span>
 
 		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
@@ -147,7 +147,7 @@
 
 
 {if $tabs}
-	{foreach $tabs as $tab}{$rowclass="`$rowclass` tabitm_`$tab`"}{/foreach}
+	{foreach $tabs as $tab}{$rowclass="`$rowclass` tabitm_`$tab` tabitm_row"}{/foreach}
 {/if}	
 
 

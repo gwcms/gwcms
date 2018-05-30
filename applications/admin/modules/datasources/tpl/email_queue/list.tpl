@@ -30,7 +30,7 @@
 	{$dl_output_filters.update_time=short_time}
 	
 	
-	{$dl_actions=[edit,delete,send]}	
+	{$dl_actions=[edit,delete,send,preview]}	
 	
 	{function name=dl_actions_send}
 		{if $item->error=="SENT"}
@@ -41,6 +41,10 @@
 			{$tmp2=""}
 		{/if}
 		{list_item_action_m url=[false,[act=>dosend,id=>$item->id]] iconclass="fa fa-send-o `$color`" confirm=$tmp tag_params=$tmp2 action_addclass="ajax-link"}
+	{/function}
+
+	{function dl_actions_preview}
+		{list_item_action_m url=[false,[act=>doViewBody,id=>$item->id]] iconclass="fa fa-eye" action_addclass="iframe-under-tr"}
 	{/function}	
 	
 	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}
