@@ -15,13 +15,17 @@ class GW_Data_Object
 	public $auto_fields = true;
 	public $auto_validation = false; // calls $this->validate before save
 	public $default_order = false;
-	public $ignore_fields = Array();
-	public $encode_fields = Array();
-	public $calculate_fields = Array();
+	public $ignore_fields = [];
+	private $_ignore_fields = ['temp_id'=>1];
+	
+	public $encode_fields = [];
+	public $calculate_fields = [];
 	static $_instance;
 	public $cache;
 	public $changed_fields = [];
 	public $changed=false; //indicates if changed related composite objects
+	public $extensions=[];
+	protected $observers = [];
 
 	/**
 	 * pvz 
@@ -43,7 +47,20 @@ class GW_Data_Object
 		if ($load)
 			$this->load();
 
+		$this->ignore_fields += $this->_ignore_fields;
+		
+		$this->initExtensions();
+						
 		$this->fireEvent('AFTER_CONSTRUCT');
+	}
+	
+	function initExtensions()
+	{
+		foreach($this->extensions as $extension => $x)
+		{
+			$class="GW_Extension_$extension";
+			$this->extensions[$extension] = new $class($this, $extension);
+		}
 	}
 
 	function decodeFields()
@@ -605,10 +622,27 @@ class GW_Data_Object
 	function fireEvent($event, &$context_data = [])
 	{
 		if (!is_array($event))
-			$this->EventHandler($event, $context_data);
+			$this->fireSingeEvent($event, $context_data);
 		else
 			foreach ($event as $e)
-				$this->EventHandler($e, $context_data);
+				$this->fireSingeEvent($e, $context_data);
+		
+	}
+		
+	function registerObserver($observer)
+	{
+		$this->observers[] = $observer;
+	}
+	
+	function fireSingeEvent($event, &$context_data = [])
+	{
+		$this->EventHandler($event, $context_data);
+				
+		foreach($this->observers as $observer)
+			if($observer[0] == 'extension')
+				$this->extensions[$observer[1]]->eventHandler($event, $context_data);
+			
+			
 	}
 
 	function __get($name)
@@ -661,7 +695,7 @@ class GW_Data_Object
 				$this->{substr($validator, 5)}($fieldname, $params);
 			}else{
 				if ($err = GW_Validator::getErrors($validator, $this->get($fieldname), $params))
-					$this->setError($err[0], $fieldname);
+					$this->setError($err, $fieldname);
 			}
 		}
 		return $this->errors ? false : true;
@@ -774,6 +808,13 @@ class GW_Data_Object
 
 		$db->_multi_insert($this->table, $list, true);
 	}
+	
+	function savePositionsExact($rows, $conditions)
+	{
+		$db = $this->getDB();
+		return $db->updateMultiple($this->table, $rows, $conditions);
+	}
+	
 
 	function encodeSerialize($fieldname, $value, $revert)
 	{
@@ -817,7 +858,7 @@ class GW_Data_Object
 	}
 
 	function eventHandler($event, &$context_data = [])
-	{
+	{		
 		switch ($event) {
 			case 'BEFORE_UPDATE':
 				if ($this->auto_fields)
@@ -946,6 +987,6 @@ class GW_Data_Object
 			
 		return $this->findAll(GW_DB::inCondition('id', $ids), $opts);
 	}
-	
+
 }
 
