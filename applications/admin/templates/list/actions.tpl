@@ -50,6 +50,11 @@
 	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}
 {/function}
 
+{function name=dl_actions_delete_ajax}
+	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 action_addclass="ajax-link"}
+{/function}
+
+
 
 
 {function name=dl_actions_editold}
