@@ -16,6 +16,10 @@
 <input class="gwSysFields" type="hidden" name="item[id]" value="{$item->id}" />
 {/if}
 
+{if !$item->id}
+	<input class="gwSysFields" type="hidden" name="item[temp_id]" value="{$item->temp_id}" />
+{/if}
+
 
 {*if $item->id}
 	<input class="gwSysFields" type="hidden" name="item[update_time_check]" value="{if $item->update_time_check}{$item->update_time_check}{else}{$item->update_time}{/if}" />
