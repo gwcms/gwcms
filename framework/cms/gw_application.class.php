@@ -571,4 +571,18 @@ class GW_Application
 			$packets[]=$msg;
 		}
 	}	
+	
+	function &sess($var_name, $value = Null)
+	{
+		$var = & $this->sess;
+		$explode = explode('/', $var_name);
+
+		foreach ($explode as $part)
+			$var = & $var[$part];
+
+		if ($value !== Null)
+			$var = $value;
+
+		return $var;
+	}	
 }
