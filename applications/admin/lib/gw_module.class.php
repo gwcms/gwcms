@@ -321,7 +321,8 @@ class GW_Module
 		
 		$this->ob_end();
 
-		$this->processTemplate();
+		
+		return $this->processTemplate(false, $params['return_as_string'] ?? false);
 	}
 	
 	
@@ -367,7 +368,7 @@ class GW_Module
 		return $tmp;
 	}
 	
-	function processTemplate($fromstring=false)
+	function processTemplate($fromstring=false, $tostring=false)
 	{
 		
 		$this->fireEvent("BEFORE_TEMPLATE");
@@ -380,7 +381,10 @@ class GW_Module
 		}else{
 			$tpl_name = $this->getTemplateName();
 
-			$this->smarty->display($tpl_name);
+			if($tostring)
+				return $this->smarty->fetch($tpl_name);
+			else
+				$this->smarty->display($tpl_name);
 			
 		}
 	}
@@ -683,7 +687,15 @@ class GW_Module
 	function setMessageEx($opts=[])
 	{
 		
-		
+		if(isset($opts['params']))
+		{
+			$str = "";
+			foreach($opts['params'] as $key => $val)
+			{
+				$str.=GW::l($key).': <i>'.htmlspecialchars($val).'</i><br/>';
+			}
+			$opts['footer']=$str;
+		}		
 		
 		if(isset($_GET['bgtaskid']))
 		{
@@ -706,6 +718,8 @@ class GW_Module
 			if($this->isPacketRequest()){
 				if(isset($_GET['id']))
 					$packet['id'] = $_GET['id'];
+				if(is_string($opts['text']) && $opts['text'][0]=='/')
+					$opts['text'] = GW::l($opts['text']);
 				
 				$this->app->addPacket(['action'=>'notification'] + $opts);
 			}else{
@@ -733,8 +747,16 @@ class GW_Module
 
 	function setItemErrors($item)
 	{
-		foreach($item->errors as $field => $error)
-			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
+		foreach($item->errors as $field => $error){
+			$error = is_array($error) ? $error : ["text"=>$error];
+			$error['type']=GW_MSG_ERR;
+			$error['field']=$field;
+			
+			if($item->title)
+				$error['title']=$item->title;
+						
+			$this->setMessage($error);
+		}	
 	}
 		
 	
