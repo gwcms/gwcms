@@ -24,8 +24,14 @@
 	
 
 	<i id="IMAGE">
-		<i id="ERR_DIMENSIONS_MAX">Image dimensions exceeds the maximum dimensions</i>
-		<i id="ERR_DIMENSIONS_MIN">Image dimensions does not meet the minimum dimensions condition</i>
+		<i id="ERR_DIMENSIONS_MAX">
+			<lt>Pateiktas paveikslėlis per didelis</lt>
+			<en>Image dimensions exceeds the maximum dimensions</en>
+		</i>
+		<i id="ERR_DIMENSIONS_MIN">
+			<lt>Pateiktas paveikslėlis per mažas</lt>
+			<en>Image dimensions does not meet the minimum dimensions condition</en>
+		</i>
 	</i>
 	
 	<i id="FILE">
@@ -69,4 +75,20 @@
 		<lt>Nuotolinė autorizacija nepavyko</lt>
 	</i>
 	
+	<i id="REQUIRED">
+		<en>Required</en>
+		<lt>Privaloma</lt>
+	</i>
+	<i id="PROVIDED">
+		<en>Provided</en>
+		<lt>Pateikta</lt>
+	</i>
+	<i id="ITEM">
+		<en>Item</en>
+		<lt>Įrašas</lt>
+	</i>
+	<i id="LIMITATION">
+		<en>Limitation</en>
+		<lt>Ribojimas</lt>
+	</i>
 </xml>
