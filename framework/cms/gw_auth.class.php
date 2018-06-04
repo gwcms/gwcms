@@ -66,7 +66,7 @@ class GW_Auth
 			$user = $this->getUserByUserID($user_id);
 		} elseif ($autologin) {
 			$user = $this->loginAuto($cookieUsername, $cookiePass);
-		} elseif ($tmp = @$_GET['GW_CMS_API_AUTH']) {
+		} elseif (isset($_GET['GW_CMS_API_AUTH']) && $_GET['GW_CMS_API_AUTH']) {
 
 			$autologin = 1; //session expired kad neziuretu
 			$user = $this->loginApi($tmp);
