@@ -244,6 +244,12 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 
 		return explode('x', $this->composite_map[$name][1]['dimensions_resize']);
 	}
+	
+	function setValidationParams($composite_name, $params)
+	{
+		$this->composite_map[$composite_name][1] = $params;
+	}	
+	
 	/*
 	  function __isset($name)
 	  {
