@@ -328,7 +328,7 @@ class GW_Http_Agent
 	/**
 	 * https request does not works
 	 */
-	function impuls($url, $post_params = [])
+	static function impuls($url, $post_params = [])
 	{
 		$parts = parse_url($url);
 
