@@ -43,3 +43,7 @@ DIEGIMAS
 	2. Sukonfigūruoti kad operacinė sistema periodiškai vykdytų "task.php cron"
 		/etc/crontab += 
 		"*/5 *    * * *    www-data /kelias-iki-cms/admin/cli/task.php cron >> /kelias-iki-cms/admin/repository/.sys/logs/system.log" 
+
+
+
+http://blog.lenss.nl/2012/05/adding-colors-to-php-cli-script-output/
