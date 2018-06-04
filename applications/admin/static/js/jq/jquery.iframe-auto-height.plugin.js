@@ -31,7 +31,8 @@
 			diagnostics: false, // used for development only
 			resetToMinHeight: false,
 			triggerFunctions: [],
-			heightCalculationOverrides: []
+			heightCalculationOverrides: [],
+			fixedWidth:false
 		}, spec);
 
 		// logging
@@ -158,9 +159,21 @@
 
 				// get the iframe body height and set inline style to that plus a little
 				var $body = $(iframe, window.parent).contents().find('body');
+				var lastelement = $body.find('#lastelement')
 				var strategy = findStrategy($.browser);
 				var newHeight = strategy(iframe, $body, options, $.browser)[0];
-				debug('newHeight: '+newHeight);
+				
+				//var newHeight = lastelement.length ? lastelement.offset().top : strategy(iframe, $body, options, $.browser)[0];
+				
+				
+				if(lastelement.length){
+					var tmp = lastelement.offset().top
+					debug('New height orig: '+newHeight+' from last element: '+tmp);
+					newHeight=tmp;
+				}else{
+					debug('newHeight: '+newHeight);
+				}
+				
 
 				if (newHeight < options.minHeight) {
 					debug("new height is less than minHeight");
@@ -174,7 +187,7 @@
 
 				newHeight += options.heightOffset;
 
-				debug("New Height: " + newHeight);
+				
 				if (options.animate) {
 					$(iframe).animate({height: newHeight + 'px'}, {duration: 500});
 				} else {
@@ -183,7 +196,8 @@
 
 				options.callback.apply($(iframe), [{newFrameHeight: newHeight}]);
 
-				resizeWidth(iframe);
+				if(!options.fixedWidth)
+					resizeWidth(iframe);
 			} // END resizeHeight
 
 
@@ -234,9 +248,19 @@
 			if (options.triggerFunctions.length > 0) {
 				debug(options.triggerFunctions.length + " trigger Functions");
 				for (var i = 0; i < options.triggerFunctions.length; i++) {
+					alert('bitch');
 					options.triggerFunctions[i](resizeHeight, this);
 				}
 			}
+
+
+
+
+					
+			if(options.interval)
+			{
+				setInterval(function () { resizeHeight(iframe); }, options.interval)
+			}			
 
 			// Check if browser is Webkit (Safari/Chrome) or Opera
 			if (false && ($.browser.webkit || $.browser.opera || $.browser.chrome)) {
@@ -247,15 +271,11 @@
 					var delay = 0;
 					var iframe = this;
 					
-					var delayedResize = function () {
-						resizeHeight(iframe);
-					};
 					
 					
-					if(options.interval)
-					{
-						setInterval(delayedResize, options.interval)
-					}						
+					
+					
+					
 
 					if (loadCounter === 0) {
 						// delay the first one
@@ -281,28 +301,17 @@
 				if (iframeDoc.readyState === 'complete') {
 					debug('autoheight ready state complete');
 					resizeHeight(this);
+					
 				} else {
 		
 				}
 					$(this).load(function () {
-						
-							var delayedResize = function () {
-								resizeHeight(iframe);
-							};
-
-							if(options.interval)
-							{
-								setInterval(delayedResize, options.interval)
-							}					
-					
-						
 							debug('autoheight onload');
 							resizeHeight(this);
 					});					
 		
 					var iframe=this;
 					 $(this).contents().find('body').load(function(){
-						 alert('nuuu');
 							debug('autoheight body onload');
 							resizeHeight(iframe);						 
 					 })

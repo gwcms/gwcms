@@ -3,6 +3,7 @@
 {block name="init"}
 	
 	{$dl_checklist_enabled=1}
+	{$dl_inline_edit=1}
 	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
 	
 	{capture append=footer_hidden}
@@ -52,6 +53,14 @@
 				{$users[$item->user_create]}
 	{/function}	
 	
+	
+	{function name="actSwitchState"}
+		{list_item_action_m 
+			url=[false,[act=>doSwitchState,id=>$item->id,state=>$state]] 
+			iconclass="fa `$addclass`" 
+			action_addclass="ajax-link" 
+			title=$m->lang.CHANGE_STATE_TO[$state]}
+	{/function}
 
 	{function name=dl_cell_state}
 		
@@ -69,30 +78,26 @@
 		{if $item->state===200}{$is_canceled=''}{else}{$is_canceled='text-muted1'}{/if}
 		
 
+		
 		{if $item->state >= 100}
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>50]] iconclass="fa fa-bug text-purple" title=$m->lang.CHANGE_STATE_TO.50}
+			
+			{actSwitchState state=50 addclass="fa-bug text-purple"}
 			
 			{if $item->state==100}
-				{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>100]] iconclass="fa fa-check-circle `$is_finished` text-success"}
+				{actSwitchState state=100 addclass="fa-check-circle `$is_finished` text-success"}
 			{else}
-				{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>200]] iconclass="fa fa-times-circle `$is_canceled` text-danger"}			
+				{actSwitchState state=200 addclass="fa-times-circle `$is_canceled` text-danger"}	
 			{/if}
 		{else}
-			
-			
 			{*
 			{gw_link do=switch_state params=[id=>$item->id,state=>15] icon="dot_violet`$is_violet`" title=$states.15 show_title=0}
 			*}
-			
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>10]] iconclass="fa fa-stop-circle text-primary `$is_new`" title=$m->lang.CHANGE_STATE_TO.10}
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>15]] iconclass="fa fa-play-circle text-success `$is_running`" title=$m->lang.CHANGE_STATE_TO.15}
-			
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>12]] iconclass="fa fa-pause-circle `$is_paused` text-warning" title=$m->lang.CHANGE_STATE_TO.12}
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>50]] iconclass="fa fa-bug `$is_bug` text-purple" title=$m->lang.CHANGE_STATE_TO.50}
-			
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>100]] iconclass="fa fa-check-circle `$is_finished` text-success"  title=$m->lang.CHANGE_STATE_TO.100}
-			{list_item_action_m url=[false,[act=>doSwitchState,id=>$item->id,state=>200]] iconclass="fa fa-times-circle `$is_canceled` text-danger"  title=$m->lang.CHANGE_STATE_TO.200}
-						
+			{actSwitchState state=10 addclass="fa-stop-circle text-primary `$is_new`"}
+			{actSwitchState state=15 addclass="fa-play-circle text-success `$is_running`"}
+			{actSwitchState state=12 addclass="fa-pause-circle `$is_paused` text-warning"}
+			{actSwitchState state=50 addclass="fa-bug text-purple `$is_bug`"}
+			{actSwitchState state=100 addclass="fa-check-circle `$is_finished` text-success"}
+			{actSwitchState state=200 addclass="fa-times-circle `$is_canceled` text-danger"}						
 		{/if}
 		
 
@@ -132,6 +137,14 @@
 		{$tmp=$item->comments_count}
 		{if $tmp>1}<span class="text-muted" title="{GW::l('/m/FIELDS/comments')}">+{$tmp-1}</span>{/if}		
 	{/function}
+	
+	
+	{function name=dl_cell_attachments}
+		{$tmp=$item->extensions.attachments->count()}	
+		{if $tmp}{$tmp}{else}{/if}
+	{/function}	
+	
+	
 	{function name=dl_cell_description}
 		{$item->description|strip_tags|truncate:40}
 	{/function}	
@@ -139,8 +152,9 @@
 	{function name=dl_cell_info}
 		{if $item->hasAttachments()}<span class="badge badge-primary"><i class="fa fa-paperclip"></i></span>{/if}
 	{/function}			
+	
 
-	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment,info,description]}
+	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment,info,description,attachments]}
 	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}
 	
 
@@ -148,7 +162,7 @@
 	{$do_toolbar_buttons[] = dialogconf}	
 	{$do_toolbar_buttons[] = print}
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete_ajax]}
 	
 	
 {/block}

@@ -381,7 +381,13 @@ var gw_adm_sys = {
 		
 		update_row: function(data){
 			gw_adm_sys.updateRow(data.id)
-		}	
+		},	
+		delete_row: function(data){
+			gw_adm_sys.deleteRow(data.id)
+		},
+		update_container: function(data){
+			gw_adm_sys.updateContent(data.id, data.value, data)
+		}
 	},
 	
 	updateRow: function(id){
@@ -396,6 +402,14 @@ var gw_adm_sys = {
 			gw_adm_sys.initObjects();
 		})
 		
+	},
+	updateContent: function(id, value, opts)
+	{
+		$('#'+id).html(value);
+	},
+	
+	deleteRow: function(id){
+		$('#list_row_' + id).remove();
 	},
 	
 	initObjects: function()
@@ -425,6 +439,9 @@ var gw_adm_sys = {
 		}).attr('data-initdone',1);
 		
 		
+		$(".add-popover:not([data-initdone='1'])").popover().attr('data-initdone',1);
+		
+				
 		gw_checklist.init();
 	},
 	resetInitState: function(parent){
@@ -719,7 +736,7 @@ var gwcms = {
 		require(["iframeautoheight"], function () {
 			var defaults = {
 				minHeight: 200, 
-				maxHeight: $("body").innerHeight() - 250, 
+				//maxHeight: $("body").innerHeight() - 250, 
 				minWidth: 200, 
 				maxWidth: $("body").innerWidth() - 250, 
 				heightOffset: 10, 

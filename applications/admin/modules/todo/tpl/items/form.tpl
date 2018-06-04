@@ -30,6 +30,12 @@
 
 {include file="elements/input.tpl" name=file1 type=file}
 
+{include file="elements/input.tpl" 
+	name=attachments 
+	type=attachments 
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
+	preview=[thumb=>'50x50']
+}
 
 
 {include file="elements/input.tpl" type=select name=state options=$m->lang.STATE_OPT|strip_tags}
@@ -57,7 +63,7 @@
 {/if}
 
 
-{if $item->id}
+{if  $item->id}
 <br /><br />
 
 <table class="gwTable mar-top" style="width:100%">
@@ -67,16 +73,13 @@
 		<td style="border: 1px solid white;background-color:#f9f9f9">
 
 			
-			<iframe id="comments" style="width:100%;height:250px;" src="{$app->buildURI("todo/items/`$item->id`/form/`$m->parent->id`/comments")}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+			<iframe id="comments" style="width:100%;height:250px;" src="{$app->buildURI("todo/items/`$item->id`/form/`$m->parent->id`/comments?clean=2")}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
 			
 			
 			<script type="text/javascript">
 				require(['gwcms'],function(){
-					$(function() {				
-						gwcms.initAutoresizeIframe('#comments', { minHeight: 100, heightOffset: 20, debug:true })
-					});	
-
-
+					/*add debug to look for bugs, debug:true*/
+					gwcms.initAutoresizeIframe('#comments', { minHeight: 100, heightOffset: 0, fixedWidth:true, interval:1000})
 				})					
 			</script>			
 			
@@ -88,6 +91,7 @@
 {/if}
 
 </table>
+
 
 
 {include file="default_close.tpl"}

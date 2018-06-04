@@ -12,7 +12,10 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 	);
 	
 	var $calculate_fields = Array('child_count'=>1, 'comments_count'=>1, 'path'=>'getPath');
-	var $default_order = 'state ASC, priority DESC';		
+	var $default_order = 'state ASC, priority DESC';	
+
+	public $attachments_owner = 'todo/items';
+	public $extensions = ['attachments'=>1];
 	
 
 	
@@ -50,17 +53,18 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 	function getChilds($params=Array())
 	{
 		$id = $this->id ? (int)$this->id : -1;
-
-		$cond = Array('parent_id=?'.($params['type']?' AND type='.(int)$params['type']:'').($params['active']?' AND active':''), $id);
+		$type = $params['type']?? 0;
+		$actv = $params['active'] ?? false;
+		$cond = Array('parent_id=?'.($type?' AND type='.(int)$type:'').($actv ?' AND active':''), $id);
 
 		$p=Array();
 		
-		if($params['limit'])
+		if($params['limit'] ?? false)
 			$p['limit']=$params['limit'];
 		
 		$list = $this->findAll($cond, $p);
 
-		if($params['return_first_only']) 
+		if($params['return_first_only'] ?? false) 
 			return $list[0];
 					
 		return $list;

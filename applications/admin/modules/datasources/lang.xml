@@ -32,6 +32,29 @@
 		<i id="subject"><en>Subject</en><lt>Tema</lt></i>
 		<i id="body"><en>Mail body</en><lt>Laiško turinys</lt></i>
 	</i>
+	<i id="FIELD_NOTE">
+		<i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>
+	</i>	
+	<i id="VALIDATION_PARAMS">
+		<i id="dimensions_min"><en>Minimum width x height</en><lt>Minimalus dydis</lt></i>
+		<i id="dimensions_max"><en>Minimum width x height</en><lt>Maks. dydis</lt></i>
+		<i id="dimensions_resize"><en>Store width x height</en><lt>Saugojimo dydis</lt></i>
+		<i id="size_max"><en>Max file size</en><lt>Maks. rinkmenos dydis</lt></i>
+		<i id="limit"><en>Limit attachments quantity</en><lt>Ribojamas rinkmenų kiekis</lt></i>
+	</i>
+	<i id="ATTACHMENTS_LIMIT_REACHED">
+		<en>Quantity limit exceed</en>
+		<lt>Kiekio ribojimas pasiektas</lt>
+	</i>
+	<i id="ADD_ATTACHMENT">
+		<en>Add</en><lt>Prisegti</lt>
+	</i>
+	<i id="UPDATED_POSITIONS">
+		<en>Positions updated</en>
+		<lt>Pozicionavimas atnaujintas</lt>
+	</i>	
+	
+	
 	
 	<i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
 	<i id="EDIT_TRANSKEY">Redaguoti vertimą</i>	
@@ -123,6 +146,14 @@
 
 				</i>			
 			</i>	
+			<i id="attachments">
+				<i id="title"><en>Attachments</en><lt>Prisegtukai</lt></i>
+				<i id="info">
+					<i id="model">GW_Attachment</i>
+					<i id="iconclass">fa fa-paperclip</i>
+
+				</i>			
+			</i>				
 			
 																													
 		</i>

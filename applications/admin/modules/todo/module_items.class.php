@@ -15,7 +15,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->options['project'] = GW::getInstance('gw_todo_project')->findAll(null, ['key_field' => 'id']);	
 		
 		$this->options['users'] = GW_User::singleton()->getOptions(true, 'is_admin=1');
-		
+				
 	}
 
 	function __eventBeforeListParams(&$params)
@@ -40,6 +40,11 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			
 		$this->options['project_id'] = $tmp;
 	}
+	
+	function __eventAfterList($list)
+	{
+		GW_Extension_Attachments::prepareList($list);
+	}
 
 	function doSwitchState()
 	{
@@ -50,7 +55,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 
 		$item->update(Array('state', 'user_exec'));
 
-		$this->setMessage(sprintf(GW::l('/m/ITEM_STATUS_CHANGED'), $item->id));
+		$this->setPlainMessage(sprintf(GW::l('/m/ITEM_STATUS_CHANGED'), $item->id));
 
 		$this->jump();
 	}
@@ -93,6 +98,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			'update_time' => 'Lof',
 			'last_comment' =>'Lo',
 			'comments'=>'f',
+			'attachments'=>'L',
 			'info'=>'L',
 			'week'=>'lf'
 			]

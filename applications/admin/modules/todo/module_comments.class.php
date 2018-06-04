@@ -15,12 +15,13 @@ class Module_Comments extends Module_Items
  		$this->filters['type']=2;
 		
 		//d::dumpas($this->filters);
+		$this->app->carry_params['clean']=1;		
 		
 		$this->model->default_order = 'id ASC';
   	}
   	
   	
-  	function __eventAfterList()
+  	function __eventAfterList($list)
   	{
 		if(isset($_REQUEST['id']))
   		{
@@ -112,7 +113,13 @@ class Module_Comments extends Module_Items
 	
 	function getListConfig()
 	{
-		return ['fields'=>[]];
+//		/,,
+		return ['fields'=>[
+		    'description'=>'L',
+		    'user_create'=>'L',
+		    'insert_time'=>'L',
+		]];
+		
 	}
 	
 }

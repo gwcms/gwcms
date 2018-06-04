@@ -1,0 +1,51 @@
+.progress-bar {
+	height: 3px;
+	background-color: #f39ac7;
+	width: 0;
+}
+
+.status { display: inline-block; }
+
+
+
+.attach_actions{ position:absolute;z-index: 9999; }
+.attach_block{ 
+      float: left;
+      overflow: hidden;
+      margin: 2px;
+      padding: 2px;
+      word-break: break-all;
+
+}
+
+.sortContainer { 
+      list-style-type: none; margin: 0; padding: 0; 
+      display: flex; 
+      flex-wrap:               wrap;
+      -webkit-flex-wrap:       wrap;/* Safari 8 */
+      
+ 
+  flex-direction: row;
+  text-align: center;    
+}
+.sortContainer li { 
+      margin: 1px; border: 1px solid #ddd;background-color: white; }	
+
+.attach_action { 
+      background-color: white; 
+      padding: 2px; 
+      border-radius: 5px; 
+      display:inline-block;
+      float:left;
+      border: 1px solid silver;
+      position:relative;
+      top: -5px
+}
+.sortContainer li:hover .attach_actions{
+      display:inline-block !important;
+}	
+
+.ui-sortable-placeholder{
+	background-color: lightblue !important;
+	visibility: visible !important;
+}
