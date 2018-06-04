@@ -100,7 +100,10 @@ class GW_Mail_Helper
 			$mailer->addAddress($opts['to']);
 		}
 		
-		$mailer->addBCC($cfg->mail_admin_emails);
+		if(!isset($opts['noAdminCopy'])){
+			$mailer->addBCC($cfg->mail_admin_emails);
+			unset($opts['noAdminCopy']);
+		}
 		
 		try {
 			$status = $mailer->send();
@@ -111,17 +114,18 @@ class GW_Mail_Helper
 			$opts['error'] = $e->getMessage();
 		}
 
-
-		if(!$status && self::$insert_to_queue_if_fail){
-			
+		//saugoti tuo atveju jei yra sukonfiguruota kad saugoti errorus ir yra erroras
+		//arba jei neeroras bet sukonfiguruota adminkej kad saugoti visus
+		//nesaugoti jei paduodamas parametras nostoredb
+		if(((!$status && self::$insert_to_queue_if_fail) || $cfg->mail_insert_succ==1) && !isset($opts['noStoreDB'])){
+			if(isset($m_queue_item)){
+				$m_queue_item->setValues($opts);
+				$m_queue_item->update();
+			}else{
+				GW_Mail_Queue::singleton()->createNewObject($opts)->insert();
+			}
 		}
 		
-		if(isset($m_queue_item)){
-			$m_queue_item->setValues($opts);
-			$m_queue_item->update();
-		}else{
-			GW_Mail_Queue::singleton()->createNewObject($opts)->insert();
-		}
 		
 		return $status;
 	}

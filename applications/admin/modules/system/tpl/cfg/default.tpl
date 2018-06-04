@@ -14,6 +14,7 @@
 
 {include file="elements/input.tpl" name=mail_from type=text default="Title <email@address.lt>"}
 {include file="elements/input.tpl" name=mail_admin_emails type=text}
+{include file="elements/input.tpl" name=mail_insert_succ type=bool}
 
 {include file="elements/input.tpl" name=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
 
