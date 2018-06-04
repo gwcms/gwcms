@@ -8,10 +8,11 @@ class GW_Image_Validator Extends GW_Validator
 		return explode('x', $string);
 	}
 
-	function isValidDimensions($min_dim = false, $max_dim = false)
+	function isValidDimensions($min_dim = false, $max_dim = false, &$obj_dim=false)
 	{
 		$w = $this->validation_object->get('width');
 		$h = $this->validation_object->get('height');
+		$obj_dim="{$w}x{$h}";
 
 		if ($min_dim) {
 			list($w_min, $h_min) = self::__splitDimensionStr($min_dim);
@@ -24,7 +25,7 @@ class GW_Image_Validator Extends GW_Validator
 			if ($w > $w_max || $h > $h_max)
 				return false;
 		}
-
+		
 		return true;
 	}
 
@@ -34,6 +35,7 @@ class GW_Image_Validator Extends GW_Validator
 		$im_vali = & $item->validators['image_file'];
 
 		$new_file = $item->get('new_file');
+		$obj_dim = '';
 
 		//var_dump(file_exists($new_file));
 
@@ -43,10 +45,22 @@ class GW_Image_Validator Extends GW_Validator
 		if (isset($im_vali['size_max']) && @filesize($new_file) > $im_vali['size_max'])
 			return ($item->errors[] = '/G/GENERAL/FILE/TOO_LARGE') && false;
 
-		if (isset($im_vali['dimensions_min']) && !self::isValidDimensions($im_vali['dimensions_min']))
-			return ($item->errors[] = '/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN') && false;
+		if (isset($im_vali['dimensions_min']) && !self::isValidDimensions($im_vali['dimensions_min'], false, $obj_dim))
+			return ($item->errors[] = [
+			    'text'=>'/G/GENERAL/IMAGE/ERR_DIMENSIONS_MIN', 
+			    'params'=>[
+				'/G/general/REQUIRED'=>$im_vali['dimensions_min'],
+				'/G/general/PROVIDED'=>$obj_dim,
+				]])
+			&& false;
 
-		if (isset($im_vali['dimensions_max']) && !self::isValidDimensions(false, $im_vali['dimensions_max']))
-			return ($item->errors[] = '/G/GENERAL/IMAGE/ERR_DIMENSIONS_MAX') && false;
+		if (isset($im_vali['dimensions_max']) && !self::isValidDimensions(false, $im_vali['dimensions_max'], $obj_dim)){
+			return ($item->errors[] = [
+			    'text'=>'/G/GENERAL/IMAGE/ERR_DIMENSIONS_MAX', 
+			    'params'=>[
+				'/G/general/REQUIRED'=>$im_vali['dimensions_min'],
+				'/G/general/PROVIDED'=>$obj_dim,
+				]]) && false;
+		}
 	}
 }
