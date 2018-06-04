@@ -653,6 +653,38 @@ class GW_DB
 				
 		return $opts;
 	}
+	
+	/**
+	 * rows must be indexed array - and index is id
+	 */
+	function updateMultiple($table, $rows, $conditions='1=1', $id_field='id')
+	{		
+		$fields = [];
+		foreach($rows as $idx => $record)
+			foreach($record as $field => $value)
+				$fields[$field]=1;
+			
+		$sql = "UPDATE `{$table}` SET ";
+		
+		foreach($fields as $field => $x)
+		{
+			$sql.=" ".self::escapeField($field)." = CASE ".self::escapeField($id_field)."\n";
+			
+			foreach($rows as $id => $record){
+				if(isset($record[$field]))
+					$sql.=" WHEN ".self::escape($id).' THEN '. self::escape($record[$field])."\n";
+			}
+			$sql.="END,";
+		}
+		
+		$sql = substr($sql, 0, -1); //last comma
+		
+		$sql.= " WHERE ". self::prepare_query($conditions). ($conditions ? ' AND ':'').self::inCondition($id_field, array_keys($rows));
+			
+		$this->query($sql, true);
+
+		return $this->link->affected_rows;
+	}
 }
 
 class db_query_prep_helper
