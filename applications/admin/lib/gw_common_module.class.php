@@ -129,11 +129,15 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('BEFORE_DELETE', $item);
 
 		$item->delete();
-		$this->setMessage(["text"=>"/g/ITEM_REMOVE_SUCCESS", "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id]);
+		$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_SUCCESS"), "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
 
 		$this->fireEvent('AFTER_DELETE', $item);
 
-		$this->jump();
+		if($this->isPacketRequest())	
+			$this->app->addPacket(['action'=>'delete_row','id'=>$item->id, 'context'=>get_class($this->model)]);
+		
+		if(!$this->sys_call)
+			$this->jump();
 	}
 
 	function common_doClone()
@@ -222,7 +226,7 @@ class GW_Common_Module extends GW_Module
 		//{/if}
 		//isvengsime sio nesklandumo
 		$item->prepareSave();
-
+		
 		$message = ["title"=>$item->title];
 				
 		if (isset($_REQUEST['SAVE-TYPE']) && $_REQUEST['SAVE-TYPE'] == "INSERT" || !$item->id) {
@@ -238,7 +242,7 @@ class GW_Common_Module extends GW_Module
 				$message['type']=GW_MSG_INFO;
 			}	
 		}
-		
+				
 		$message["float"] = 1;
 		$message["id"]=$item->id;
 		
@@ -341,6 +345,7 @@ class GW_Common_Module extends GW_Module
 
 			$this->canBeAccessed($item, true);
 		} else { // create new
+			$item->temp_id = uniqid();
 		}
 
 		$this->fireEvent("AFTER_FORM", $item);
@@ -898,7 +903,7 @@ class GW_Common_Module extends GW_Module
 				$pageview->fields = json_encode($fields);
 				$pageview->order = $this->list_params['order'];
 				$pageview->save();
-				$this->setMessage(GW::l('/g/UPDATE_SUCCESS').' ('.GW::l('/g/PAGE_VIEW').' - "'.$pageview->title.'")');
+				$this->setPlainMessage(GW::l('/g/UPDATE_SUCCESS').' ('.GW::l('/g/PAGE_VIEW').' - "'.$pageview->title.'")');
 				
 			}else{
 				$this->setError('/g/CANT_SAVE_TO_PAGE_VIEW_BADID');
@@ -1068,7 +1073,7 @@ class GW_Common_Module extends GW_Module
 
 	function getMoveCondition($item)
 	{
-		return GW_SQL_Helper::condition_str($this->filters);
+		return GW_DB::buidConditions($this->filters, ' AND ');
 	}
 
 	function methodExists($name)
@@ -1083,7 +1088,7 @@ class GW_Common_Module extends GW_Module
 		if (!$die || $result)
 			return $result;
 
-		$this->setError('/g/GENERAL/ACTION_RESTRICTED');
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		$this->jump();
 	}
 
