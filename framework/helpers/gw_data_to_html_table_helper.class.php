@@ -25,7 +25,7 @@ class GW_Data_to_Html_Table_Helper
 		return $str;
 	}
 	
-	static function doTableSingleRecord($data, $font_size = 10)
+	static function doTableSingleRecord($data, $opts=[])
 	{
 		if (!is_array($data))
 			return;
@@ -33,10 +33,25 @@ class GW_Data_to_Html_Table_Helper
 		$str = "";
 		$str.= "<table class='gwTable'>";
 		
+		
 		foreach($data as $fieldname => $value)
 		{
-			$str.="<tr><th>".htmlspecialchars($fieldname)."</th><td>".htmlspecialchars($value)."</td></tr>";
+			if(is_array($value) || is_object($value))
+				$value = json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+				
+			switch($opts['valformat'][$fieldname] ?? 1){
+				case 1:
+					$value = str_replace("\n",'<br>',htmlspecialchars($value));
+				break;
+				case 2:
+					$value = htmlspecialchars($value);
+				break;
+				case 0:
+					$value=$value;
+				break;
+			}
 			
+			$str.="<tr><th>".htmlspecialchars($fieldname)."</th><td>$value</td></tr>";
 		}
 		
 
