@@ -27,8 +27,8 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		$list = $this->findAll($cond);
 		
-		if($params['return_first_only'])
-		return $list[0];
+		if($params['return_first_only'] ?? false)
+			return $list[0];
 			
 		return $list;
 	}
