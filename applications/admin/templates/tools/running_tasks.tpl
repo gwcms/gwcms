@@ -1,4 +1,4 @@
-{if $app->sess.bgtasks}
+{if isset($app->sess.bgtasks) && $app->sess.bgtasks}
 	{GW_Background_Task::singleton()->checkExpired()}
 	
 <div class="mainnav-widget" id="backgroundTasks">
