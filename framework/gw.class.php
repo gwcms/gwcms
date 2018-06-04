@@ -92,7 +92,7 @@ class GW
 	 * 
 	 * @return GW_DB
 	 */
-	function db()
+	static function db()
 	{
 		if (!self::$context->db)
 			self::$context->db = new GW_DB();
@@ -123,12 +123,12 @@ class GW
 		return $cache[$class];
 	}
 
-	function &_($varname)
+	static function &_($varname)
 	{
 		return self::$$varname;
 	}
 
-	function init()
+	static function init()
 	{
 		self::$context = new GW_Context;
 		self::$s = new GW_Tree_Data_Elm(self::$settings);
@@ -137,7 +137,7 @@ class GW
 	}
 
 	
-	function fakerequest($path, $user_id)
+	static function fakerequest($path, $user_id)
 	{
 		$_POST = array();
 		$args = parse_url($path, PHP_URL_QUERY);
@@ -158,7 +158,7 @@ class GW
 		return $out2;
 	}
 	
-	function request($args = Array())
+	static function request($args = Array())
 	{
 		if (!isset($args['path']))
 			$args['path'] = isset($_GET['url']) ? $_GET['url'] : '';
