@@ -96,63 +96,6 @@ class Module_Attachments extends GW_Common_Module
 		return ['image'=>$i, 'file'=>$f, 'general'=>$cfg];
 	}
 	
-	public function icon($filename, $contenttype=false) {
-		$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-		
-		
-
-		switch ($extension) {
-			case 'jpeg':
-			case 'jpg':
-			case 'png':
-			case 'gif':
-			case 'svg':
-			case 'xcf':
-				return 'fa-file-image-o';
-			case 'ods':
-			case 'xls':
-			case 'xlsx':
-				return 'fa-file-excel-o';
-			case 'odt':
-			case 'doc':
-			case 'doc':
-			case 'docx':
-				return 'fa-file-word-o';
-			case 'ppt':
-			case 'pptx':
-				return 'fa-file-powerpoint-o';
-			case 'zip':
-			case 'rar':
-			case 'tar':
-			case 'bz2':
-			case 'xz':
-			case 'gz':
-				return 'fa-file-archive-o';
-			case 'mp3':
-			case '3gp':
-			case 'aac':
-			case 'wav':
-				return 'fa-file-audio-o';
-			case 'avi':
-			case 'mov':
-			case 'mkv':
-				return 'fa-file-video-o';
-			case 'php':
-			case 'json':
-			case 'js':
-			case 'html':
-			case 'css':
-			case 'sh':
-				return 'fa-file-code-o';
-			case 'pdf':
-				return 'fa-file-pdf-o';
-			case 'txt':
-				return 'fa fa-file-text-o';
-		}
-
-		return 'fa-file-o';
-	}
-
 	function getOwnerVals()
 	{
 		return [

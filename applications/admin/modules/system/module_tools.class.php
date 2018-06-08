@@ -270,16 +270,27 @@ class Module_Tools extends Module_Config
 		    'body'=>'This is test message body'
 		];
 		$status = GW_Mail_Helper::sendMail($opts);
-		
-
-		$this->setPlainMessage("mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'));
+		$opts['to']=implode(',', $opts['to']);
+				
+		$this->setMessage([
+			"text"=>"mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'),
+			'type'=>$status ? GW_MSG_SUCC : GW_MSG_ERR,
+			'footer'=>$opts['error'],
+			'float'=>1
+		]);		
 		
 			
 		////--------------2nd test----------------------------------
 		$opts['to'] = "gwcmsmailtest@mailinator.com";
 		$status = GW_Mail_Helper::sendMail($opts);
+		$opts['to']=implode(',', $opts['to']);
 		
-		$this->setPlainMessage("2nd mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'));	
+		$this->setMessage([
+			"text"=>"2nd mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'),
+			'type'=>$status ? GW_MSG_SUCC : GW_MSG_ERR,
+			'footer'=>$opts['error'],
+			'float'=>1
+		]);	
 	}
 	
 

@@ -20,6 +20,8 @@
 {include file="elements/input.tpl" type=select name=status options=$m->lang.OPT.status}
 
 
+{include file="elements/input.tpl" type=file name=file_1}
+
 
 
 {include file="default_form_close.tpl"}

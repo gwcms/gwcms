@@ -33,7 +33,7 @@ class Module_Messages extends GW_Common_Module
 	
 	function __eventAfterList(&$list)
 	{
-		$this->tpl_vars['lasttestmail']=GW::getInstance('GW_Config')->get('newsletter/lastmail');
+		$this->tpl_vars['lasttestmail']=GW::getInstance('GW_Config')->get('emails/lastmail');
 		
 		$this->__addHitCounts($list);
 	}

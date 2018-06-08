@@ -386,6 +386,9 @@ class GW_Data_Object
 	function find($conditions = Null, $options = Array())
 	{
 		$options['limit'] = 1;
+		
+		if(is_numeric($conditions))
+			$conditions="id = $conditions";
 
 		return count($r = $this->findAll($conditions, $options)) ? $r[0] : false;
 	}
@@ -930,6 +933,9 @@ class GW_Data_Object
 
 	function setError($msg, $field = false, $error_code = GW_GENERIC_ERROR)
 	{
+		if(is_array($msg) && GW_Array_Helper::isIndexesNumeric($msg))
+			$msg = $msg[0];
+				
 		$this->errors[$field] = $msg;
 		$this->error_codes[$error_code] = ($field ? $field . '::' : '') . $msg;
 	}

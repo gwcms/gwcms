@@ -79,5 +79,5 @@ class Module_Translations_Over extends GW_Common_Module
 		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
-	}	
+	}
 }

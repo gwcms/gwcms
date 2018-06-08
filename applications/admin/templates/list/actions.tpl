@@ -51,7 +51,7 @@
 {/function}
 
 {function name=dl_actions_delete_ajax}
-	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 action_addclass="ajax-link"}
+	{dl_actions_delete action_addclass="ajax-link"}
 {/function}
 
 
@@ -80,7 +80,7 @@
 {/function}
 
 {function name=dl_actions_invert_active_ajax}
-	{list_item_action_m url=[false, [act=>doInvertActive,id=>$item->id]] iconclass="fa fa-flag gw_active_`$item->active`" action_addclass="ajax-link"}
+	{dl_actions_invert_active action_addclass="ajax-link"}
 {/function}
 
 

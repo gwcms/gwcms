@@ -1,4 +1,81 @@
+gw_forms = {
+	enabled_langs: {},
+	
+	initI18nForm: function(langs)
+	{
+		gw_forms.enabled_langs = langs;
+		
+		$('.i18n_tag').click(function(){ 
+			if($(this).hasClass('i18n_tag_active')){
+				$(this).removeClass('i18n_tag_active')
+				
+				var i=0
+				for(var ln in gw_forms.enabled_langs)
+				{
+					var ln_containers =$(this).parents('td:first').next('.input_td').find('.ln_contain_'+ln);
+					
+					i == 0 ? ln_containers.fadeIn() : ln_containers.fadeOut()
+					
+					i++;
+					
+				}
+				
+				
+			}else{
+				for(var ln in gw_forms.enabled_langs)
+					$(this).parents('td:first').next('.input_td').find('.ln_contain_'+ln).fadeIn();
+					
+				
+				$(this).addClass('i18n_tag_active')
+			}
+			
+			
+		})
+	
+		$('.gwform_sw_ln').click(function(){
+			$(this).parents('.ln_contain').fadeOut();
+		})
+		
+		$('.ln_cont_oth').hide();
+		$('.i18n_expand').fadeIn();
+	},	
+	
+	lnEnable:function(ln, state, trigg){
+		
+		$('.ln_contain_'+ln).toggle(state==1)
+		
+		if(state==1){
+			gw_forms.enabled_langs[ln]=1;
+		}else{
+			delete gw_forms.enabled_langs[ln];
+		}
+		
+		$(trigg).parents('.input_td').find('.ln_contain').show();
+	},
+	
+	initForms: function(){
+		
+		$(function(){
+			$('#itemform').data('originalvals', $('#itemform').serializeArray());	
+									
+			if(changes_track){
+					gw_changetrack.init('.itemform');
+			}
+		})
 
+		$('#itemform').submit(function() {
+			$(this).trigger( "beforesubmitevents", [ "Custom", "Event" ] );
+			
+			window.onbeforeunload = null;
+		});	
+
+
+		window.onbeforeunload = function() {
+			if(gw_changetrack.isFormValuesChanged())
+				return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
+		}
+	}	
+}
 
 var gw_changetrack = {
 	
@@ -208,7 +285,10 @@ var gw_changetrack = {
 
 		}
 		return newvals;
-	}	
+	}
+	
 	
 }
+
+
 

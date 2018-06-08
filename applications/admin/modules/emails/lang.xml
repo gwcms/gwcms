@@ -22,6 +22,7 @@
 			<lt>Aprašymas</lt>
 		</i>
 		
+		
 		<i id="sender">Siuntėjas</i>
 		<i id="sent_count">Išsiųstų sk.</i>
 		<i id="recipients_count">Gavėjų sk.</i>
@@ -52,9 +53,27 @@
 		<i id="subscribe_confirm_msg">Prenumeratos patvirtinimo žinutė</i>
 		<i id="confirmed">Patvirtintas</i>
 		<i id="unsubscribe_note">Atsisakymo pastaba</i>
+		<i id="from"><en>From</en><lt>Nuo</lt></i>
+		<i id="to"><en>To</en><lt>Kam</lt></i>
+		<i id="subject"><en>Subject</en><lt>Tema</lt></i>
+		<i id="body"><en>Mail body</en><lt>Laiško turinys</lt></i>
+		<i id="idname">Unikalus vardas</i>
+		<i id="ln_enabled">Kalbos</i>
+		
+		<i id="admin_title">Administracinis pavadinimas</i>
+		<i id="custom_sender">Keisti siuntėjo adresa</i>
+		<i id="format_texts">Formatuojami tekstai</i>
+		<i id="body_editor">Teksto redaktorius</i>
+		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
 	</i>
 	
 	<i id="FIELD_NOTE">
+		<i id="idname"><![CDATA[
+			Unikalus vardas, geriau be tarpų arba dviprasmiškų simbolių. <br />
+			Naudojamas susieti su kitais objektais. <br />
+			<b>Pakeitus pavadinimą sąsajos bus prarastos</b>
+			]]>
+		</i>
 		<i id="dkim_private_key">
 <![CDATA[
 
@@ -79,6 +98,20 @@
 	# host -t txt burger._domainkey.example.com<br />
 ]]>	
 		</i>
+		<i id="sender"><![CDATA[Formatas:<br /> Siuntejo&nbsp;pavadinimas&nbsp;&lt;siuntejo@adresas.lt&gt;]]></i>
+		<i id="custom_sender">Pagal nutylėjima imama iš nustatymų</i>
+		<i id="mail_admin_emails"><en>Email address or addresses separated by ; (semicolon)</en><lt>El. pašto adresas arba adresai atskirti ; (kabliataškiu)</lt></i>
+		<i id="mail_insert_succ"><en>Insert all mails, uncheck to store only not sent emails</en><lt>Saugoti visus laiškus, atžymėti jei norima saugoti tik neišsiųstus</lt></i>
+		<i id="mail_bcc_all">
+			<lt>Visiem sistemos siunčiamiem laiškam pridėti bcc(vienas gavėjas!) - jei nenurodoma nebus siunčiama</lt>
+			<en>Add bcc to all mails sending to users from system(single address!) - leave empty to disable</en>
+		</i>
+		
+		<i id="PUSH_APPLY_TO_TAKE_EFFECT">
+			<en>Push Apply after changes</en>
+			<lt>Spauskite Išsaugoti liekant po pakeitimo</lt>
+		</i>
+		
 	</i>
 	
 	<i id="OPT">
@@ -96,6 +129,29 @@
 		</i>
 		
 	</i>
+	<i id="OPTIONS">
+		<i id="format_texts">
+			<i id="0"><lt>Paprastas tekstas</lt><en>No interpret</en></i>
+			<i id="2"><lt>Interpret. (Smarty kodas)</lt><en>Interpreter (Smarty code)</en></i>
+		</i>
+		
+		<i id="body_editor">
+			<i id="0"><lt>Formatuotas tekstas</lt><en>Formatted text</en></i>
+			<i id="1"><lt>Neformatuotas tekstas</lt><en>Raw - plain text</en></i>			
+			<i id="2"><lt>HTML / Smarty kodo redakt.</lt><en>HTML / Smarty code editor</en></i>			
+		</i>
+		<i id="body_editor_height">
+			<i id="100px">100px</i>
+			<i id="200px">200px</i>
+			<i id="300px">300px</i>
+			<i id="400px">400px</i>
+			<i id="500px">500px</i>
+			<i id="600px">600px</i>
+			<i id="700px">700px</i>
+			<i id="800px">800px</i>
+			<i id="900px">900px</i>
+		</i>
+	</i>
 	
 	<i id="VIEWS">
 		<i id="send">Siuntimas</i>
@@ -104,6 +160,7 @@
 		<i id="import">Importavimas iš spreadsheet</i>
 		<i id="export">Eksportavimas į spreadsheet</i>
 		<i id="emailsfromtext">El. paštų išėmimas iš teksto</i>
+		<i id="dotest">Laiško siuntimo testas</i>
 	</i>
 	
 	<i id="LINK">
@@ -122,14 +179,15 @@
 	
 	<i id="subscribe_confirm_msg_note">Iš žinutės negali būti išimtas {$CONFIRM_LINK}</i>
 	<i id="email_note"><![CDATA[Siuntėjo vardas &lt;email@address.com&gt;]]></i>
-		
+	<i id="REPEAT_SEND_CONFIRM"><lt>Siųsti pakartotinai?</lt><en>Repeat sending?</en></i>		
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">Naujienlaiškis</i>
+		<i id="title"><lt>E.Laiškai</lt><en>E.Mails</en></i>
 		
 		<i id="info">
-			<i id="iconclass">fa fa-rss</i>
+			
+			<i id="iconclass">fa fa-envelope-o</i>
 		</i>		
 		
 		<i id="childs">
@@ -137,24 +195,53 @@
 			<i id="messages">
 				<i id="title">Laiškai</i>
 				<i id="info">
+					<i id="iconclass">fa fa-rss</i>
 					<i id="model">GW_NL_Message</i>
 				</i>			
 			</i>	
 			<i id="subscribers">
 				<i id="title">Prenumeratoriai</i>
 				<i id="info">
+					<i id="iconclass">fa fa-address-book-o</i>
 					<i id="model">GW_NL_Subscriber</i>
 				</i>			
 			</i>
 			<i id="groups">
 				<i id="title">Prenumeratorių grupės</i>
 				<i id="info">
+					<i id="iconclass">fa fa-users</i>
 					<i id="model">GW_NL_Group</i>
 				</i>			
 			</i>	
+			<i id="nlconfig">
+				<i id="title">Naujienlaiškio nustatymai</i>
+				<i id="info">
+					<i id="iconclass">fa fa-gears</i>
+				</i>					
+			</i>
 			<i id="config">
 				<i id="title">Nustatymai</i>
-			</i>												
+				<i id="info">
+					<i id="iconclass">fa fa-gears</i>
+				</i>				
+			</i>	
+			
+			<i id="email_queue">
+				<i id="title"><en>Email queue</en><lt>El. laiškų eilė</lt></i>
+				<i id="info">
+					<i id="model">GW_Mail_Queue</i>
+					<i id="iconclass">fa fa-envelope-square</i>
+
+				</i>			
+			</i>	
+			<i id="email_templates">
+				<i id="title">Laiškų šablonai</i>
+				<i id="info">
+					<i id="model">GW_Mail_Template</i>
+					<i id="iconclass">fa fa-codepen</i>
+				</i>			
+			</i>			
+																																																																			
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->

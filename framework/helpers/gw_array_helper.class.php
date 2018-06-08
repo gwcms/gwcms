@@ -275,4 +275,15 @@ class GW_Array_Helper
 		return $new;
 	}
 	
+	
+	static function isIndexesNumeric($arr)
+	{
+		foreach($arr as $key => $x)
+			if(!is_numeric($key))
+				return false;
+			
+		return true;
+	}
+	
+	
 }

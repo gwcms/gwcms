@@ -46,5 +46,8 @@
 		<lt>Nevalidus JSON</lt>
 		<en>Invalid JSON</en>		
 	</i>
-
+	<i id="EMAIL_TPL_NOT_SET">
+		<lt>El. laiško šablonas nenustatytas / nerastas</lt>
+		<en>Email template not found / not set</en>
+	</i>
 </xml>

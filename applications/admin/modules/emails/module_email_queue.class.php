@@ -15,9 +15,10 @@ class Module_Email_Queue extends GW_Common_Module
 		if(!$item)
 			$item = $this->getDataObjectById();
 		
-		GW_Mail_Helper::sendMail($item);
+		$status = GW_Mail_Helper::sendMail($item);
 		
-		if($item->error=="SENT"){
+		
+		if($status){
 			
 			$this->setMessage("Mail id:{$item->id} SENT");
 		}else{
@@ -42,4 +43,11 @@ class Module_Email_Queue extends GW_Common_Module
 
 		die($item->body);
 	}
+	
+	function dummy()
+	{
+		GW_Mail_Queue::singleton();
+	}
+
+	
 }

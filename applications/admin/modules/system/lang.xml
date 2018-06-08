@@ -113,8 +113,6 @@
 		</ul>
 		]]>
 		</i>
-		<i id="mail_admin_emails"><en>Email address or addresses separated by ; (semicolon)</en><lt>El. pašto adresas arba adresai atskirti ; (kabliataškiu)</lt></i>
-		<i id="mail_insert_succ"><en>Insert all mails, uncheck to store only not sent emails</en><lt>Saugoti visus laiškus, atžymėti jei norima saugoti tik neišsiųstus</lt></i>
 	</i>
 	
 	<!-- =============== MODULE MAP START =================== -->

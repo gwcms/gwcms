@@ -1,14 +1,14 @@
 <?php
 
 
-class Module_Config extends GW_Common_Module
+class Module_NLConfig extends GW_Common_Module
 {	
 
 	public $default_view = 'default';
 	
 	function init()
 	{
-		$this->model = new GW_Config($this->module_path[0].'/');
+		$this->model = new GW_Config('newsletter/');
 		
 		parent::init();
 	}

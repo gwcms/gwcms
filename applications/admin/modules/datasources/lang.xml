@@ -27,10 +27,6 @@
 			<en>Description</en>
 			<lt>Aprašymas</lt>
 		</i>
-		<i id="from"><en>From</en><lt>Nuo</lt></i>
-		<i id="to"><en>To</en><lt>Kam</lt></i>
-		<i id="subject"><en>Subject</en><lt>Tema</lt></i>
-		<i id="body"><en>Mail body</en><lt>Laiško turinys</lt></i>
 	</i>
 	<i id="FIELD_NOTE">
 		<i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>
@@ -58,7 +54,6 @@
 	
 	<i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
 	<i id="EDIT_TRANSKEY">Redaguoti vertimą</i>	
-	<i id="REPEAT_SEND_CONFIRM"><lt>Siųsti pakartotinai?</lt><en>Repeat sending?</en></i>
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
@@ -138,14 +133,7 @@
 
 				</i>			
 			</i>
-			<i id="email_queue">
-				<i id="title"><en>Email queue</en><lt>El. laiškų eilė</lt></i>
-				<i id="info">
-					<i id="model">GW_Mail_Queue</i>
-					<i id="iconclass">fa fa-envelope-square</i>
-
-				</i>			
-			</i>	
+	
 			<i id="attachments">
 				<i id="title"><en>Attachments</en><lt>Prisegtukai</lt></i>
 				<i id="info">

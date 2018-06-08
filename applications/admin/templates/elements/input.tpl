@@ -42,18 +42,19 @@
 {if $i18n}
 	{$langs=array_flip(GW::$settings.LANGS)}
 	{$langs=[$app->ln=>1]+$langs}
-	{$langs=array_keys($langs)}
+	
 	
 	{if !isset($GLOBALS.form_18n_init_done)}
 		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 		
 		{$GLOBALS.form_18n_init_done=1}
 		<script type="text/javascript">
-			require(['gwcms'], function(){
-			gw_adm_sys.initI18nForm();
-		});
+			require(['forms'], function(){ gw_forms.initI18nForm({json_encode($langs)}) })
 		</script>
 	{/if}		
+	
+	{$langs=array_keys($langs)}
+	
 	
 	
 	
@@ -118,10 +119,9 @@
 		{if $i18n>2}
 			{foreach $langs as $ln_code}
 				
-				<span class="ln_contain ln_contain_{$i18n} {if $app->ln==$ln_code}ln_cont_main{else}ln_cont_oth {if $i18n_expand}i18n_expand{/if}{/if}" title="{$ln_code}">
+				<span class="ln_contain ln_contain_{$ln_code} ln_contain_{$i18n} {if $app->ln==$ln_code}ln_cont_main{else}ln_cont_oth {if $i18n_expand}i18n_expand{/if}{/if}" title="{$ln_code}">
 				{call name="langswitch"}
-				
-					{$width="calc(100% - 25px)"}
+					{if $i18n==4 && !$width}{$width="calc(100% - 25px)"}{/if}
 				
 				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
 				</span>

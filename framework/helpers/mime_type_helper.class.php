@@ -68,4 +68,62 @@ class Mime_Type_Helper
 			return 'application/octet-stream';
 		}
 	}
+	
+	static function icon($filename, $contenttype=false) {
+		$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+		
+		
+
+		switch ($extension) {
+			case 'jpeg':
+			case 'jpg':
+			case 'png':
+			case 'gif':
+			case 'svg':
+			case 'xcf':
+				return 'fa fa-file-image-o';
+			case 'ods':
+			case 'xls':
+			case 'xlsx':
+				return 'fa fa-file-excel-o';
+			case 'odt':
+			case 'doc':
+			case 'doc':
+			case 'docx':
+				return 'fa fa-file-word-o';
+			case 'ppt':
+			case 'pptx':
+				return 'fa fa-file-powerpoint-o';
+			case 'zip':
+			case 'rar':
+			case 'tar':
+			case 'bz2':
+			case 'xz':
+			case 'gz':
+				return 'fa fa-file-archive-o';
+			case 'mp3':
+			case '3gp':
+			case 'aac':
+			case 'wav':
+				return 'fa fa-file-audio-o';
+			case 'avi':
+			case 'mov':
+			case 'mkv':
+				return 'fa fa-file-video-o';
+			case 'php':
+			case 'json':
+			case 'js':
+			case 'html':
+			case 'css':
+			case 'sh':
+				return 'fa fa-file-code-o';
+			case 'pdf':
+				return 'fa fa-file-pdf-o';
+			case 'txt':
+				return 'fa fa fa-file-text-o';
+		}
+
+		return 'fa fa-file-o';
+	}	
+	
 }

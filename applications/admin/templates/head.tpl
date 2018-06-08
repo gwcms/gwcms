@@ -94,6 +94,7 @@
 	
 	<link rel="stylesheet" href="{$app->sys_base}vendor/font-awesome/css/font-awesome.min.css">	
 	<script src="{$app->sys_base}vendor/jslibs/require.js"></script>
+	<script src="{$app_root}static/js/require_config.js"></script>
 	
 	{if GW::s('SW_NOTIFICATIONS')}
 	<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
@@ -101,31 +102,9 @@
 	
 
  	<script type="text/javascript">
-		require.config({ 
-			urlArgs: 'version={$GLOBALS.version_short}',			
-			baseUrl: '{$app_root}static',
-			waitSeconds: 200,
-			shim : {
-				bootstrap : { "deps" :['jquery'] },
-				jqueryui: { "deps" : ['jquery'] },
-				nifty: { "deps" : ['jquery','bootstrap'] },
-				gwcms: { "deps" : ['jquery','bootstrap','nifty','jqueryui', 'project'] },
-				sortable: { deps: ['gwcms'] },
-				browser: { "deps" : ['gwcms'] },
-				iframeautoheight: { "deps" : ['browser'] }
-			},			
-			paths: {
-                jquery: 'js/jquery-2.2.4.min',
-				bootstrap :  "js/bootstrap.min",
-				jqueryui: "vendor/jqueryui/jquery-ui.min",
-				nifty: "js/nifty.min",
-				gwcms: "js/gwcms",
-				project: "js/gwcms_project",
-				sortable: "js/jq/jquery-sortable",
-				browser: "js/jq/browser",
-				iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin"
-			}
-		});	
+		require_config.urlArgs = 'version={$GLOBALS.version_short}';
+		require_config.baseUrl = '{$app_root}static';		
+		require.config(require_config);	
 		
 		require(['gwcms'], function(){
 			$.extend(GW, { 

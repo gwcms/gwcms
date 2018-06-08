@@ -13,11 +13,7 @@
 	{$do_toolbar_buttons[] = search}
 	
 	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
-	
-	
 		
-	{$dl_actions=[edit,delete]}
-	
 	{$dl_inline_edit=1}		
 	
 	{$dl_checklist_enabled=1}
@@ -30,7 +26,7 @@
 	{$dl_output_filters.update_time=short_time}
 	
 	
-	{$dl_actions=[edit,delete,send,preview]}	
+	{$dl_actions=[edit,delete_ajax,send,preview]}	
 	
 	{function name=dl_actions_send}
 		{if $item->error=="SENT"}

@@ -18,6 +18,8 @@
 	
 	{elseif $field=="plain"}
 		{include file="elements/input.tpl" name=$field type=bool}
+	{else}
+		{include file="elements/input.tpl" name=$field type=read}
 	{/if}
 
 {/function}

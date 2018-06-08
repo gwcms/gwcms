@@ -1,7 +1,7 @@
 <?php
 
 
-class GW_NL_Message extends GW_Data_Object
+class GW_NL_Message extends GW_Composite_Data_Object
 {
 	public $table = 'gw_nl_messages';
 
@@ -14,6 +14,12 @@ class GW_NL_Message extends GW_Data_Object
 	    'subject'=>['gw_string', ['required'=>1]],
 	    'lang'=>['gw_string', ['required'=>1]],
 	];	
+	
+	var $composite_map = Array
+	(
+		'file_1' => Array('gw_file'),
+	    
+	);	
 	
 	
 	public function getRecipients()

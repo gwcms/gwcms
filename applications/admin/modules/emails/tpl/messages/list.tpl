@@ -20,20 +20,24 @@
 	{$dl_actions=[test,clone,edit,invert_active,delete,send]}
 	
 	{function dl_actions_test}
-		{gw_link 
-			do="test" 
-			icon="test" 
-			title="testuoti"
-			params=[id=>$item->id,'mail'=>0] show_title=0 
-			tag_params=[onclick=>"x=prompt('Test laiško gavėjas', '`$lasttestmail`'); if(!x)return false; this.href=this.href.replace('mail=0','mail='+x)"]
-		}
+
+		
+	{list_item_action_m 
+			url=[false,[act=>doTest,id=>$item->id,'mail'=>0]] 
+			onclick="x=prompt('Test laiško gavėjas', '`$lasttestmail`'); ;if(!x)return false; location.href=this.href.replace('mail=0','mail='+x)"
+			iconclass="fa fa-fw fa-eye" 
+			tag_params=[target=>'_blank', title=>"Bus siunčiamas laiškas nurodytu el. pašto adresu"]}
 	{/function}
 	
 	{function dl_actions_send}
 		{if $item->status < 11}
-			{if $item->active}{gw_link relative_path="`$item->id`/send" icon="email_go" params=[id=>$item->id] show_title=0 confirm=1 title="Send email"}{/if}
+				
+			
+			{if $item->active}
+				{list_item_action_m url=[send,[id=>$item->id]] confirm=1 iconclass="fa fa-send" title="Send email"} 
+			{/if}
 		{else}
-			{gw_link icon=action_info relative_path="`$item->id`/sentinfo" title=$m->lang.VIEWS.sentinfo show_title=0}
+			{list_item_action_m url=[sentinfo,[id=>$item->id]] iconclass="fa fa-info-circle" title=$m->lang.VIEWS.sentinfo} 
 		{/if}
 	{/function}
 	

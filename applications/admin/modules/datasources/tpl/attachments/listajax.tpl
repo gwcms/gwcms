@@ -43,7 +43,7 @@
 
 	<div class="attach_block_in">
 		<a href="{$app->sys_base}tools/download/{$file->key}" title="{$title|escape} ({$file->size_human}) {$item->content_type}">
-			<i class="fa {$m->icon($title)}"></i>
+			<i class="{Mime_Type_Helper::icon($title)}"></i>
 			{$title|truncate:80} ({$file->size_human}) </a> 
 	</div>	
 	{$total_size=$total_size+$file->size}
@@ -61,6 +61,7 @@
 
 {/if}
 		<div class="attach_actions" style="display:none">
+			<i data-id="{$item->id}" class="attach_action fas fa-search link btn-preview" title='{GW::l('/g/PREVIEW')} "{$title}"'></i>
 			<i data-id="{$item->id}" class="attach_action fa fa-trash-o link btn-remove" title='{GW::l('/g/REMOVE')} "{$title}" {$image->size}'></i>
 		</div>
 

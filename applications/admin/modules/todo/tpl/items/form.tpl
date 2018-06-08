@@ -28,8 +28,9 @@
 
 {include file="elements/input.tpl" name=description type=textarea height="100px" autoresize=1}
 
+{*
 {include file="elements/input.tpl" name=file1 type=file}
-
+*}
 {include file="elements/input.tpl" 
 	name=attachments 
 	type=attachments 

@@ -7,11 +7,16 @@
 <input  id="{$id}" type="hidden" name="{$input_name}" value="{$value|escape}" class="gwcheckboxinput"/>
 
 
-{if $stateToggleRows}
+{if $stateToggleRows || $onchange}
 	<script>
 		require(['gwcms'], function(){
-			$('#{$id}').change(function(){		
-				$('.{$stateToggleRows}').toggle(this.value=='1')
+			$('#{$id}').change(function(){	
+				{if $stateToggleRows}$('.{$stateToggleRows}').toggle(this.value=='1'){/if}
+				{if $onchange}
+					var ln = $(this).parents('.ln_contain:first').attr('title')
+					var state = $(this).val()==1;
+					{$onchange}
+				{/if}
 			}).change();
 		});
 	</script>

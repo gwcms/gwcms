@@ -12,9 +12,9 @@
 				<tr>	
 					<td style="text-align:center;padding: 0px 5px 0px 5px">		
 
-					<img style="display:none" id="icon_working" src="{$app_root}/img/working.gif" />
-					<img style="display:none" id="icon_done" src="{$app_root}/img/complete_64.png" />
-					<img style="display:none" id="icon_fail" src="{$app_root}/img/error_64.png" />
+					<img style="display:none" id="icon_working" src="{$app_root}static/img/working.gif" />
+					<img style="display:none" id="icon_done" src="{$app_root}static/img/complete_64.png" />
+					<img style="display:none" id="icon_fail" src="{$app_root}static/img/error_64.png" />
 
 					</td>
 					
@@ -47,7 +47,7 @@
 			{
 				if((Math.round(obj.total_sent / obj.total_size) > 0.98) || obj.finished)
 				{
-					$('#progress_status_drop').text('Išsiūsta.');
+					$('#progress_status_drop').text('Išsiųsta.');
 					$('#icon_working').hide();
 					$('#icon_done').show();
 				}else{
@@ -68,9 +68,12 @@
 	
 	}
 	
-	$(function(){
-		sendPortion();
+	require(['gwcms'], function(){
+		$(function(){
+			sendPortion();
+		})	
 	})
+
 	
 {*	/alert('test');*}
 </script>

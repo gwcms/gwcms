@@ -469,29 +469,6 @@ var gw_adm_sys = {
 			nndata.title = data.title;
 
 		$.niftyNoty(nndata);		
-	},
-	
-	initI18nForm: function()
-	{
-		$('.i18n_tag').click(function(){ 
-			if($(this).hasClass('i18n_tag_active')){
-				$(this).removeClass('i18n_tag_active')
-				
-				$(this).parents('td:first').next('.input_td').find('.ln_cont_oth').fadeOut();
-			}else{
-				$(this).parents('td:first').next('.input_td').find('.ln_contain').fadeIn();
-				$(this).addClass('i18n_tag_active')
-			}
-			
-			
-		})
-	
-		$('.gwform_sw_ln').click(function(){
-			$(this).parents('.ln_contain').fadeOut();
-		})
-		
-		$('.ln_cont_oth').hide();
-		$('.i18n_expand').fadeIn();
 	}
 	
 }
