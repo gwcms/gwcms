@@ -7915,3 +7915,8 @@ input[type="color"] {
 a.badge:hover{
 	color: green !important;
 }
+
+.inp_lab_wide{
+	padding-bottom:0px !important;
+	padding-top:3px !important;
+}
