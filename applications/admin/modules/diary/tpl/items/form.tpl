@@ -6,14 +6,16 @@
 {include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
 {*contentsCss=>'applications/admin/css/ckstyle1.css',*}
+{*
+	extraPlugins=>autogrow,
+	height=>500,
+	autoGrow_maxHeight=>800
+*}
 
 {$ck_options=[
 	toolbarStartupExpanded=>false, 
 	autoParagraph=>false, 
-	enterMode=>'CKEDITOR.ENTER_BR', 
-	extraPlugins=>autogrow,
-	height=>500,
-	autoGrow_maxHeight=>800
+	enterMode=>'CKEDITOR.ENTER_BR'
 ]}
 
 {include file="elements/input.tpl" name=text type=htmlarea layout=wide}
