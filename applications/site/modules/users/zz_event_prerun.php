@@ -81,5 +81,5 @@ if ($this->user_cfg->login_with_fb) {
 	$this->smarty->assign('login_with_fb_url', $_SESSION['FBRLH_state_link']);
 }
 
-//https://www.facebook.com/v2.4/dialog/oauth?client_id=172271779814711&state=9a8a5e796ff3b598acd7321d445e3f6a&response_type=code&sdk=php-sdk-5.1.2&redirect_uri=http%3A%2F%2Fdestinationgirls.com%2Fen%2Fdirect%2Fusers%2Ffblogin%2Flogin&scope=email
+//https://www.facebook.com/v2.4/dialog/oauth?client_id=172271779814711&state=9a8a5e796ff3b598acd7321d445e3f6a&response_type=code&sdk=php-sdk-5.1.2&redirect_uri=http%3A%2F%2Fdatinggirls.com%2Fen%2Fdirect%2Fusers%2Ffblogin%2Flogin&scope=email
 //https://www.facebook.com/v2.4/dialog/oauth?client_id=885513141537294&state=a54356a82effc0a3e9acc4915f83856b&response_type=code&sdk=php-sdk-5.0.0&redirect_uri=http%3A%2F%2Fipmc.lt%2Fartistdb%2Flt%2Fdirect%2Fusers%2Ffblogin%2Flogin&scope=email"
