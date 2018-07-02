@@ -27,6 +27,8 @@ function initEnviroment($environmentid)
 		break;
 	
 		case GW_ENV_PROD:
+			include $GLOBALS['dir']['ROOT'].'config/db.php';
+			
 			GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);
 			
 
