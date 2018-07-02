@@ -23,7 +23,6 @@ function initEnviroment($environmentid)
 			
 
 			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/FETCH_HEAD'));
-			GW::s('DB/UPHD', 'root:ino@localhost/gw_cms');
 		break;
 	
 		case GW_ENV_PROD:
@@ -35,9 +34,12 @@ function initEnviroment($environmentid)
 			GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
 			GW::s("SITE_LOCAL_URL",'http://localhost/sms/');
 
-			GW::s("SITE_URL",'https://gw.lt/');
+			GW::s("SITE_URL",'https://cms.gw.lt/');
+			
+			//db_sync tool ant others
 			GW::s("SSH_USERHOST",'root@gw.lt');
 			
+			//reset css,js caches
 			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'version'));
 			
 			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=000099');
