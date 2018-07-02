@@ -41,6 +41,7 @@
 	
 	
 	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = search}	
 	
 	{$dl_actions=[edit,delete]}
 	
