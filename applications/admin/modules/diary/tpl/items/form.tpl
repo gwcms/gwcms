@@ -5,16 +5,15 @@
 
 {include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
+{*contentsCss=>'applications/admin/css/ckstyle1.css',*}
 
 {$ck_options=[
 	toolbarStartupExpanded=>false, 
 	autoParagraph=>false, 
-	contentsCss=>'applications/admin/css/ckstyle1.css',
 	enterMode=>'CKEDITOR.ENTER_BR', 
 	extraPlugins=>autogrow,
 	height=>500,
 	autoGrow_maxHeight=>800
-	
 ]}
 
 {include file="elements/input.tpl" name=text type=htmlarea layout=wide}
