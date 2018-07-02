@@ -12,7 +12,7 @@
 	contentsCss=>'applications/admin/css/ckstyle1.css',
 	enterMode=>'CKEDITOR.ENTER_BR', 
 	extraPlugins=>autogrow,
-	height=>150,
+	height=>300,
 	autoGrow_maxHeight=>800
 	
 ]}
