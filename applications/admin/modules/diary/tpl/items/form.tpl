@@ -1,4 +1,5 @@
 {include file="default_form_open.tpl"  changes_track=1 form_width="100%"}
+{$width_title="100px"}
 
 {include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
