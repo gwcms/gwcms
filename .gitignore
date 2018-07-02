@@ -1,3 +1,4 @@
 /nbproject/
 /repository
 /config/db.php
+/config/db_prod.php
