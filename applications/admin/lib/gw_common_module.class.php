@@ -275,7 +275,7 @@ class GW_Common_Module extends GW_Module
 		} else {
 			header("GW_AJAX_FORM: OK");
 			header("GW_AJAX_FORM_ITEM_ID: " . $item->id);
-			header("GW_AJAX_FORM_ITEM_TITLE: " . $item->title);
+			header("GW_AJAX_FORM_ITEM_TITLE: " . str_replace(["\n", "\r"],' ',$item->title));
 			header("GW_AJAX_MESSAGES: ".json_encode($this->app->acceptMessages(true)));
 
 			if(isset($_POST['inlistform'])){
@@ -283,7 +283,7 @@ class GW_Common_Module extends GW_Module
 				$this->processView('list', ['ajax_one_item_list' => $item->id]);
 				exit;
 			}else{
-				echo json_encode($vals);
+				echo json_encode($vals+['last_update_time'=>$item->update_time]);
 				exit;
 			}
 			

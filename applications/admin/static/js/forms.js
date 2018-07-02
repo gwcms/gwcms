@@ -98,6 +98,7 @@ var gw_changetrack = {
 			
 		});
 		
+		//form changes loss protection
 		var ovals=$('<input class="original_values" name="original_values" type="hidden">').appendTo(formclass)
 				
 		
@@ -214,7 +215,16 @@ var gw_changetrack = {
 					//gwcms.showMessages(JSON.parse(messages), title);
 
 
-					console.log(data);
+					
+					data = JSON.parse(data);
+					var last_update_time = form.find('[name="last_update_time"]');
+					if(last_update_time.length && data.hasOwnProperty('last_update_time'))
+					{
+						console.log('Lastupdate time: '+last_update_time.val()+' => '+data.last_update_time);
+						last_update_time.val(data.last_update_time);
+					}
+					
+					
 					labsave.animate({color: "green"}, 1000 );
 
 
@@ -270,7 +280,15 @@ var gw_changetrack = {
 				if(obje.data('ignorechanges'))
 					continue;
 				
-				gw_changetrack.animateChanged(obje.parents('tr:first').fadeIn(), 3000)
+				var container = obje.parents('tr:first');
+				
+				if(gw_auto_save && !gw_changetrack.isChanged(obje))
+				{
+					console.log(field+': autosave field subsystem, ignored');
+					continue;
+				}
+				
+				gw_changetrack.animateChanged(container.fadeIn(), 3000)
 				//$('#'+fieldid+'_inputLabel').addClass("gwinput-label-modified")
 				
 				console.log("Change found in field: "+field+' before: '+orig_vals[field]+' now: '+new_vals[field])
