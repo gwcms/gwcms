@@ -119,18 +119,12 @@ var gw_changetrack = {
 			ovals.val(JSON.stringify(vals));
 			
 			//console.log(JSON.stringify(vals))
-			
-			
-			
-
 		}).on('input propertychange change click', function() {
 
-			console.log($(this).attr('name')+' changed');
-			changedobj = $(this);
-
-
-			gw_changetrack.isChanged(changedobj);
-
+			
+			var changedobj = $(this);
+			var changed = gw_changetrack.isChanged(changedobj);
+			
 			//mark field as changed
 			//$(this).data('checkIsChanged')();
 			//
@@ -138,15 +132,21 @@ var gw_changetrack = {
 			//
 			//
 			//isvalomas nepasibaiges automatinio saugojimo timeout
-			clearTimeout($(this).data('timeoutid'));
-			var timeoutid = setTimeout(function() {
-				// Runs 1 second (2000 ms) after the last change    
-				//vykdytisaugojima()
+			var elm=this;
+			
+			if(gw_auto_save && changed){
+				
+				clearTimeout($(this).data('timeoutid'));
+				var timeoutid = setTimeout(function() {
 
-				//gw_changetrack.doSaveField(changedobj)
-			}, 2000);
+					// Runs 1 second (2000 ms) after the last change    
+					//vykdytisaugojima()
+					gw_changetrack.doSaveField(changedobj)
+					
+				}, 5000);
 
-			$(this).data('timeoutid', timeoutid);
+				$(this).data('timeoutid', timeoutid);
+			}
 
 		});
 		
@@ -156,60 +156,76 @@ var gw_changetrack = {
 	
 	isChanged: function(obj)
 	{
+		var lab = $('#'+obj.attr('id')+'_inputLabel');
 		
 		if(obj.attr('data-origval')!=gw_changetrack.readValue(obj))
 		{
-			$('#'+obj.attr('id')+'_inputLabel').addClass("gwinput-label-modified");
+			//console.log(obj.attr('name')+' changed');
 			
-			console.log('#'+obj.attr('id')+'_inputLabel'+ ' changed');
+			lab.addClass("gwinput-label-modified");
+			
+			if(gw_auto_save)
+				if(lab.find('.fa-floppy-o').length==0)
+					lab.append('<i class="fa fa-floppy-o text-muted"></i>')
+			
+			return true;
 		}else{
-			$('#'+obj.attr('id')+'_inputLabel').removeClass("gwinput-label-modified");
+			lab.removeClass("gwinput-label-modified");
+			
+			return false;
 		}
-		
 	},
 	
 	doSaveField: function(obj)
 	{
-		
 		//i forma reikia itraukti pakeistus laukelius ir sisteminius
 		
-		console.log(obj.attr('id')+' dosave');
+		//console.log(obj.attr('id')+' dosave');
 		//console.log()
 		var fielddata=obj.serialize();
+		var neworigval = gw_changetrack.readValue(obj);
+		
+		//console.log(fielddata);
+		
 		var form=obj.parents('form')
 		var sysfields=form.find('.gwSysFields');
 		
 		var data=fielddata+'&'+sysfields.serialize()+'&ajax=1';
 		
-		console.log(data);
+		//console.log(data);
+		var lab = $('#'+obj.attr('id')+'_inputLabel');
+		var labsave = lab.find('.fa-floppy-o');
 		
+		labsave.css({color: "orange" });
 		
 		
 		$.post(form.attr('action'), data,
-				function (data, status, request) {
-						
-						if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
-						{
-							
-																
-								var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
-								var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
-								var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
-								
-								gwcms.showMessages(JSON.parse(messages), title);
-								
-								
-								console.log(data);
-								
-								
-								//gw_navigator.jump(location.href, {id:id})
-						} else {
-								console.log('failed submit to:'+form.attr('action')+', status: '+status);
-								console.log(data);
-								
-						}
+			function (data, status, request) {
 
+				if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
+				{
+					obj.attr('data-origval', neworigval)
+					gw_changetrack.isChanged(obj);
+
+					var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
+					var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
+					var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
+
+					//gwcms.showMessages(JSON.parse(messages), title);
+
+
+					console.log(data);
+					labsave.animate({color: "green"}, 1000 );
+
+
+						//gw_navigator.jump(location.href, {id:id})
+				} else {
+					labsave.animate({color: "red"}, 1000 );
+					console.log('failed submit to:'+form.attr('action')+', status: '+status);
+					console.log(data);	
 				}
+
+			}
 		);		
 		
 	},

@@ -690,4 +690,9 @@
 	<en>Background tasks</en>
 </i>
 
+<i id="ITEM_SAVE_PREVENT_DATA_LOSS">
+	<lt>Prieš jus įvykdytas nenumatytas išsaugojimas, tai galėjo padaryti kitas administratorius/vartotojas arba pasekoje fone vykstančių procesų</lt>
+	<en>Save interupted, unexpected save detected, that might be cause of other admin/user or background process</en>
+</i>
+
 </xml>

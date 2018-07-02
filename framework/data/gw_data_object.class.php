@@ -993,6 +993,23 @@ class GW_Data_Object
 			
 		return $this->findAll(GW_DB::inCondition('id', $ids), $opts);
 	}
-
+	
+	function isChangedField($field)
+	{
+		return isset($this->changed_fields[$field]);
+	}
+	
+	public $_original=[];
+	
+	function copyOriginal()
+	{
+		$this->_original = clone $this;
+	}
+	function getOriginal($name){
+		
+		if($this->_original);
+			return $this->_original->get($name);
+		
+	}
 }
 

@@ -193,8 +193,14 @@ class GW_Common_Module extends GW_Module
 
 		$item = $this->model->createNewObject(isset($vals['id']) ? ['id'=>$vals['id']]: [], false, $this->lang());
 
-		if ($this->load_before_save)
+		if ($this->load_before_save){
 			$item->load();
+			
+			if(isset($_POST['last_update_time']) && $_POST['last_update_time']!=$item->update_time)
+			{
+				$item->errors['update_time']='/g/ITEM_SAVE_PREVENT_DATA_LOSS';
+			}
+		}
 
 		$this->fireEvent('BEFORE_SAVE_00', $item);
 
@@ -209,6 +215,8 @@ class GW_Common_Module extends GW_Module
 		if (!$item->validate()) {
 			if (!isset($_POST['ajax'])) {
 				$this->setItemErrors($item);
+				
+				
 				
 				$this->processView('form');
 				exit;
@@ -334,6 +342,7 @@ class GW_Common_Module extends GW_Module
 			if (isset($vals['id'])) { //redaguojamas su klaidom
 				$item->set('id', $vals['id']);
 				$item->load();
+				$item->copyOriginal();
 
 				$this->canBeAccessed($item, true);
 			} else {

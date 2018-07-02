@@ -73,7 +73,11 @@
 
 
 {function input_label}
-	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
+	{if method_exists($item, 'isChangedField')}
+		{$impischanged=$item->isChangedField($name)}
+	{/if}
+	
+	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if}" width="{$width_title}" {if $nowrap} nowrap{/if}>
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if isset($m->lang.FIELD_NOTE.$name)}
@@ -94,6 +98,11 @@
 		</span>
 
 		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
+		
+		{if $impischanged}
+			{$tmp=$item->getOriginal($name)}
+			<i class="fa fa-floppy-o text-warning" title="{if $tmp}Orig.: {$tmp|escape}{/if}"></i>{else}
+		{/if}
 		
 	</td>	
 {/function}
