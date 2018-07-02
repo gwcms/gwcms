@@ -31,11 +31,7 @@
 <script>
 	var changes_track={if $changes_track}1{else}0{/if};
 	var gw_auto_save={if $item->id && $auto_save }1{else}0{/if};
-	
-	var original_vals = {if $original}{json_encode($original->toArray())}{else} { } {/if};
-	
-
-		
+			
 	require(['forms'], function(){ gw_forms.initForms() })	
 </script>
 
