@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"  changes_track=1}
+{include file="default_form_open.tpl"  changes_track=1 form_width="1000px"}
 
 {include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
@@ -16,7 +16,7 @@
 	
 ]}
 
-{include file="elements/input.tpl" name=text type=htmlarea}
+{include file="elements/input.tpl" name=text type=htmlarea layout=wide}
 
 {$curr=date('Y-m-d H:i:s')}
 {include file="elements/input.tpl" name=time default=$curr}
