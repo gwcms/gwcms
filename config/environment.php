@@ -11,28 +11,44 @@ GW::s('PROJECT_FAVICO_ARGS', 'text=GW&text2=CMS&fs=50&font=EncodeSansNarrow-Extr
 
 GW::s('DB/INIT_SQLS',"SET SESSION sql_mode = '';"); // automatycaly turned to strict in mysql 5.7 which causes default errors and others
 
-$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/ORIG_HEAD'));
-$GLOBALS['version_short'] = substr($GLOBALS['version'],0,8);
+$hostname = trim(file_get_contents("/etc/hostname"));
 
-if(__DIR__=='/var/www/gwcms/config'){
-	GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);
-	GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=000099');
+
+function initEnviroment($environmentid)
+{
+	switch($environmentid){
+		case GW_ENV_DEV:
+			include $GLOBALS['dir']['ROOT'].'config/db.php';
+			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
+			
+
+			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/FETCH_HEAD'));
+			GW::s('DB/UPHD', 'root:ino@localhost/gw_cms');
+		break;
 	
-	$GLOBALS['version'] = is_file(__DIR__.'/version') ? file_get_contents(__DIR__.'/version') : -1;
+		case GW_ENV_PROD:
+			GW::s('PROJECT_ENVIRONMENT', GW_ENV_PROD);
+			
+
+			GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
+			GW::s("SITE_LOCAL_URL",'http://localhost/sms/');
+
+			GW::s("SITE_URL",'https://gw.lt/');
+			GW::s("SSH_USERHOST",'root@gw.lt');
+			
+			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'version'));
+			
+			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=000099');
+		break;
+		
+	}
 	
-	include $dir['ROOT'].'config/db.php';
-	//GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
-	//GW::s("SITE_LOCAL_URL",'http://localhost/projectpathunder_localhost/');
-	//GW::s("SITE_URL",'https://project.com/');
-	
-}elseif(__DIR__=='/var/www/testpath'){
-	GW::s('PROJECT_ENVIRONMENT', GW_ENV_TEST);
-	//GW::s('DB/UPHD', 'user:pass@host/dbname');
-}else{
-	GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
-	
-	GW::s('PROJECT_ENVIRONMENT', GW_ENV_DEV);
-	//GW::s('DB/UPHD', 'user:pass@host/dbname');
+	GW::s('DB/INIT_SQLS',"SET SESSION sql_mode = '';");// automatycaly turned to strict in mysql 5.7 which causes default errors and others
 	
 }
 
+$env_host_map = ['wdmpc'=>GW_ENV_DEV, 'whatever'=>GW_ENV_TEST, 'odroidXU4'=>GW_ENV_PROD];
+GW::s('PROJECT_ENVIRONMENT', $env_host_map[$hostname]?? GW_ENV_DEV);
+initEnviroment(GW::s('PROJECT_ENVIRONMENT'));
+
+$GLOBALS['version_short'] = substr($GLOBALS['version'],0,8);

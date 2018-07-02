@@ -67,6 +67,16 @@ require(["ckeditor"], function() {
 	CKEDITOR.replace( '{$id}', config); 
  
  
+	CKEDITOR.instances['{$id}'].on('instanceReady', function (ev) {
+
+		//$(CKEDITOR.instances['{$input_name}'].element.$).attr('id',"{$id}")
+
+		ev.editor.on('change', function() { 
+			this.updateElement();
+			$(CKEDITOR.instances['{$id}'].element.$).change()
+		});
+	});	
+ 
 })
 
 </script>
