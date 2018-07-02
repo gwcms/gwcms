@@ -276,6 +276,7 @@ class GW_Common_Module extends GW_Module
 				exit;
 			}else{
 				echo json_encode($vals);
+				exit;
 			}
 			
 		}
