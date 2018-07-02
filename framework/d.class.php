@@ -2,7 +2,6 @@
 
 class d
 {
-
 	static $html = Array(
 	    "<pre class='hidedebug' style='border-color:",
 	    "'>",
@@ -144,6 +143,16 @@ class d
 
 	static function dumpas($x)
 	{
+		//echo "<pre>";
+		//var_dump([GW::$context->app->user]);
+		
+		if(GW::$context->app && GW::$context->app->app_name=='SITE' && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD && 
+			(!GW::$context->app->user || !GW::$context->app->user->isRoot())){
+			echo "<span style='color:red' title='Test dot'>.</span>";
+			return false;
+		}
+		
+		
 		self::dump($x);
 		exit;
 	}

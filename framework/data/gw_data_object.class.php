@@ -430,7 +430,7 @@ class GW_Data_Object
 	function getColumns()
 	{
 		$db = & $this->getDB();
-		$cols = $db->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE table_name =  '" . $this->table . "'");
+		$cols = $db->getColumns($this->table);
 
 		return array_flip($cols);
 	}

@@ -119,7 +119,13 @@ module should have viewOptions viewForm
 						var url = sel.data('url')
 						var id = sel.val();
 						
-						url = gw_navigator.url(url, { baseadd: '/'+id+'/form', id: id, clean:2, dialog:1 })
+						if(isNaN(id))
+						{
+							url = gw_navigator.url(url, { baseadd: '/form', idkey: id, clean:2, dialog:1 })	
+						}else{
+							url = gw_navigator.url(url, { baseadd: '/form', id: id, clean:2, dialog:1 })	
+						}
+						
 						
 						var selecthappend = function(){ sel.selEditUpdate(id) }
 						

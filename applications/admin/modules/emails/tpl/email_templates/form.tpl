@@ -25,8 +25,7 @@
 	{include file="elements/input.tpl" name=idname}
 {/if}
 
-{include file="elements/input.tpl" name=owner_type}
-{include file="elements/input.tpl" name=owner_field}
+
 
 
 {include file="elements/input.tpl" name=custom_sender type=bool stateToggleRows="custsender"}
@@ -45,12 +44,14 @@
 
 
 {if $item->body_editor == 0}
-	{$ck_options=[toolbarStartupExpanded=>false]}
+	{$ck_set='minimum'}
+	{$ck_options.height=$item->body_editor_height|default:"200px"}
 	{$bodyInpType=htmlarea}
 {elseif $item->body_editor == 1}
 	{$bodyInpType=textarea}
 {elseif $item->body_editor == 2}
 	{$bodyInpType=code_smarty}
+	
 {/if}
 
 {include file="elements/input.tpl" type=$bodyInpType name=body i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote height=$item->body_editor_height|default:"200px"}	
@@ -65,5 +66,14 @@
 {include file="elements/input0.tpl" name=config value=json_encode($custom_cfg) type=hidden}
 
 
+
+{if $app->user->isRoot()}
+	{include file="elements/input.tpl" name=protected type=bool}
+{/if}
+
+{if $app->user->isRoot()}
+	{include file="elements/input.tpl" name=owner_type}
+	{include file="elements/input.tpl" name=owner_field}
+{/if}
 
 {include file="default_form_close.tpl"}

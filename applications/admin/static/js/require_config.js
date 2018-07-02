@@ -8,7 +8,12 @@ var require_config = {
 		forms: { "deps" : ['gwcms'] },
 		sortable: { "deps": ['gwcms'] },
 		browser: { "deps" : ['gwcms'] },
-		iframeautoheight: { "deps" : ['browser'] }
+		iframeautoheight: { "deps" : ['browser'] },
+		ckeditor: {
+			exports: 'CKEDITOR',
+			deps: ['gwcms']
+		},
+
 	},			
 	paths: {
                 jquery: 'js/jquery-2.2.4.min',
@@ -20,6 +25,9 @@ var require_config = {
 		project: "js/gwcms_project",
 		sortable: "js/jq/jquery-sortable",
 		browser: "js/jq/browser",
-		iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin"
+		iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin",
+		ckeditor:'/vendor/ckeditor1/ckeditor'
+
 	}
 }
+

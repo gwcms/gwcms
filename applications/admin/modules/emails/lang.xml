@@ -161,6 +161,7 @@
 		<i id="export">Eksportavimas į spreadsheet</i>
 		<i id="emailsfromtext">El. paštų išėmimas iš teksto</i>
 		<i id="dotest">Laiško siuntimo testas</i>
+		<i id="testpdfgen">Pdf generavimą pasibandyt</i>
 	</i>
 	
 	<i id="LINK">

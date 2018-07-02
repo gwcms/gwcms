@@ -315,7 +315,37 @@ class Module_Tools extends Module_Config
 	}
 
 		
+	public $viewTestHtmlarea = ["info"=>"Test CKEDITOR"];
 	
+	function viewTestHtmlarea()
+	{
+		
+	}
+
+	public $viewTestPdfGen = ["info"=>"Test dompdf"];
+	
+	function viewTestPdfGen()
+	{
+		$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
+		
+		if($_POST)
+		{
+			//d::dumpas($_POST);
+			file_put_contents($filename, $_POST['item']['htmlcontents']);
+		}
+		
+		$this->tpl_vars['filecontents'] = @file_get_contents($filename);
+	}		
+	
+	function doGenPdf()
+	{
+		$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
+		
+		$pdf=GW_html2pdf_Helper::convert(file_get_contents($filename), false);
+		header("Content-type:application/pdf");
+		header("Content-Disposition:inline;filename=test.pdf");
+		die($pdf);		
+	}
 
 	
 }

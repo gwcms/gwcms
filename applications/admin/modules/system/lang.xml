@@ -161,7 +161,10 @@
 			</i>							
 			<i id="scaffold">
 				<i id="title">Scaffold</i>
-			</i>						
+			</i>	
+			<i id="demoinputs">
+				<i id="title">Demo inputs</i>
+			</i>								
 		</i>
 					
 	</i>

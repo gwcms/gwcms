@@ -52,4 +52,22 @@ class GW_String_Helper
 			return $string;
 		}
 	}
+	
+	/**
+	 * A function to fill the template with variables, returns filled template.
+	 * 
+	 * @param string $template A template with variables placeholders {$varaible}.
+	 * @param array $variables A key => value store of variable names and values.
+	 * 
+	 * @return string  
+	 */
+
+	static function replaceVarsInTpl(&$template, array $variables) {
+
+		$template = preg_replace_callback('#{(.*?)}#', function($match) use ($variables) {
+			$match[1] = trim($match[1], '$');
+			return $variables[$match[1]];
+		}, ' ' . $template . ' ');
+	}
+
 }

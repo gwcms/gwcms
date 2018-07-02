@@ -139,4 +139,6 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$page->updateChanged();
 		}
 	}
+	
+
 }

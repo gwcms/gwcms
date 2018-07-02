@@ -530,7 +530,7 @@ class GW_DB
 	{
 		$conditions = [];
 		foreach ($conds as $field => $val) {
-			$conditions[0][] = "`$field`=?";
+			$conditions[0][] = self::escapeField($field)."=?";
 			$conditions[] = $val;
 		}
 		if (isset($conditions[0]))
@@ -684,6 +684,14 @@ class GW_DB
 		$this->query($sql, true);
 
 		return $this->link->affected_rows;
+	}
+	
+	
+	function getColumns($tablename)
+	{		
+		$conds = self::prepare_query(self::buidConditions(['table_name'=>$tablename,'table_schema'=>$this->uphd[3]]));
+		
+		return $this->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE ".$conds);
 	}
 }
 

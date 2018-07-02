@@ -140,6 +140,7 @@
 	
 	<i id="VIEWS">
 		<i id="doPreview">Peržiūrėti svetainėje</i>
+		<i id="fileselect">Failo parinktis</i>
 	</i>
 	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
 	<!-- =============== MODULE MAP START =================== -->
@@ -195,6 +196,10 @@
 				</i>
 				<i id="in_menu">1</i>
 			</i>
+			<i id="repository">
+				<i id="title"><lt>Failų saugykla</lt><en>File repository</en></i>
+				<i id="in_menu">0</i>
+			</i>			
 			<i id="config">
 				<i id="title">Nustatymai</i>
 				<i id="info">

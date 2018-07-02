@@ -11,6 +11,8 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 	    'admin_title'=>['gw_string', ['required'=>1]],
 	];		
 	
+	public $default_order="owner_type ASC, owner_field ASC, admin_title ASC";	
+	
 	
 	function validate()
 	{

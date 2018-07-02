@@ -116,6 +116,9 @@ class Module_Email_Templates extends GW_Common_Module
 		$cfg["fields"]["title"]="Lof";
 		$cfg["fields"]["subject"]="Lof";
 		$cfg["fields"]["body"]="lof";
+		$cfg["fields"]["owner_type"]="Lof";
+		$cfg["fields"]["owner_field"]="Lof";
+		
 		$cfg["fields"]["ln_enabled"]="lof";
 		$cfg["fields"]["body"]="lof";
 		$cfg["fields"]["body"]="lof";
@@ -171,6 +174,40 @@ class Module_Email_Templates extends GW_Common_Module
 		
 		$item->setValues($this->filters);		
 					
+	}
+	
+	
+	function viewTestPdfGen()
+	{
+		$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
+		
+		if($_POST)
+		{
+			file_put_contents($filename, $_POST['item']['htmlcontents']);
+		}
+		
+		$this->tpl_vars['filecontents'] = @file_get_contents($filename);
+	}		
+	
+	function doGenPdf()
+	{
+		$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
+		
+		$pdf=GW_html2pdf_Helper::convert(file_get_contents($filename), false);
+		header("Content-type:application/pdf");
+		header("Content-Disposition:inline;filename=test.pdf");
+		die($pdf);		
+	}
+	
+	
+	
+	function __eventBeforeDelete($item)
+	{
+		if($item->protected)
+		{
+			$this->setError("Cant delete protected item");
+		}
+		
 	}
 	
 }

@@ -545,7 +545,7 @@ class GW_Common_Module extends GW_Module
 		if(isset($this->list_params['search']) && $this->list_params['search'])
 		{
 			$cols = $this->model->getColumns();
-			
+						
 			$subcond = '';
 			
 			foreach ($cols as $key => $x){

@@ -60,12 +60,21 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 
 
 		$file = $_GET['file'];
-		$file = preg_replace('/[^.a-z0-9_ ]/i', '', $file);
-
-		if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
-			die('dirid not specified or invalid');
 		
-		$file = $repositories[$_GET['dirid']].'/'.$file;
+		//public repositories - security weak
+		if($_GET['dirid']=='repository'){
+			$file = GW::s('DIR/REPOSITORY').$file;
+		}else{
+			//strict repositories
+			$file = preg_replace('/[^.a-z0-9_ ]/i', '', $file);
+
+			if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
+				die('dirid not specified or invalid');
+
+			$file = $repositories[$_GET['dirid']].'/'.$file;			
+		}
+			
+		
 		
 		
 		if(!isset($_REQUEST['size'])){

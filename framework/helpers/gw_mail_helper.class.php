@@ -101,6 +101,10 @@ class GW_Mail_Helper
 	static function processTpl(&$opts)
 	{
 		$tpl = $opts['tpl'];
+		
+		if(is_numeric($tpl))
+			$tpl = GW_Mail_Template::singleton()->find($tpl);
+		
 		$vars =& $opts['vars'] ?? [];
 		$ln = $opts['ln'] ?? GW::$context->app->ln;
 		

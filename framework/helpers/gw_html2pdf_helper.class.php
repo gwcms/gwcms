@@ -18,7 +18,8 @@ class GW_html2pdf_Helper
 		// instantiate and use the dompdf class
 		$dompdf = new Dompdf();
 		
-	
+			
+		$dompdf->set_option('enable_font_subsetting', true);
 		$dompdf->set_option('defaultFont', 'Arial');
 		$dompdf->set_option('isRemoteEnabled', true);
 		
