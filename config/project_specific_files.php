@@ -4,6 +4,7 @@
 $paths = "
 config/project.php
 config/project_specific_files.php
+config/environment.php
 applications/site/config/main.php
 test/*
 applications/admin/modules/customers/*
