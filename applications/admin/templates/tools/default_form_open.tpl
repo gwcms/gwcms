@@ -19,7 +19,7 @@
 {if !$item->id}
 	<input class="gwSysFields" type="hidden" name="item[temp_id]" value="{$item->temp_id}" />
 {else}
-	<input class="gwSysFields" type="hidden" name="last_update_time" value="{$item->update_time}" />
+	<input class="gwSysFields" type="hidden" name="last_update_time" value="{$item->update_time}" data-ignorechanges="1" />
 {/if}
 
 

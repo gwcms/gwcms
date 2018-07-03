@@ -39,7 +39,7 @@ require(["ckeditor"], function() {
 	config.toolbarCanCollapse = true;
 	
 	
-	config.extraPlugins = 'codemirror,filebrowser,resize';
+	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',':'') + 'codemirror,filebrowser,resize';
 	
 	{if $height}
 		config.height = "{$height}";
