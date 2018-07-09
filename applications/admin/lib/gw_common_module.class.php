@@ -21,6 +21,8 @@ class GW_Common_Module extends GW_Module
 		'doclone' => 1,
 	];
 	public $filters = [];
+	public $filtersEx = [];
+	
 	//to easy adjust list for printing
 	public $paging_enabled = true;
 	// 1 - integer
@@ -512,7 +514,7 @@ class GW_Common_Module extends GW_Module
 			if($value==="" || $value===null)
 				return;			
 
-			if ($compare_type == "IN" || $compare_type == "NOTIN") {
+			if (($compare_type == "IN" || $compare_type == "NOTIN") && !is_array($value)) {
 				
 				if($value==='null')
 					return;
@@ -550,6 +552,9 @@ class GW_Common_Module extends GW_Module
 
 		foreach ($this->filters as $key => $val)
 			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
+
+		foreach ($this->filtersEx as $filt)
+			$search[] = $filt;
 		
 		
 		if(isset($this->list_params['search']) && $this->list_params['search'])
