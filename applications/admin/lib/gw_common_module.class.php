@@ -553,6 +553,12 @@ class GW_Common_Module extends GW_Module
 		foreach ($this->filters as $key => $val)
 			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
 
+		
+		//example use:
+		//if(isset($_GET['filterids'])){
+		//	$this->filtersEx[]=['field' => 'id', 'value' => explode(',', $_GET['filterids']), 'ct' => 'IN'];		
+		//}		
+		
 		foreach ($this->filtersEx as $filt)
 			$search[] = $filt;
 		
