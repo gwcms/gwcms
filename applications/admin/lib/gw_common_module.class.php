@@ -269,6 +269,10 @@ class GW_Common_Module extends GW_Module
 		if(isset($_GET['dialog']) && $_REQUEST['submit_type'] != 1) {
 			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
 			
+			$messages=$this->app->acceptMessages(1);
+			foreach($messages as $msg)
+				echo "<script type='text/javascript'>window.parent.gw_adm_sys.notification(".json_encode($msg).")</script>";
+						
 			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
 			exit;
 		}elseif(!isset($_POST['ajax'])) {

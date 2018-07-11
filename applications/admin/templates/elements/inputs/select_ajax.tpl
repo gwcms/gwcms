@@ -4,7 +4,7 @@
 	{/foreach}
 {else}
 	
-{if $preload}
+{if $preload && $value}
 	{if is_array($value)}
 		{foreach $value as $valitm}
 			{$options[$valitm]="`$valitm` Loading..."}
@@ -26,6 +26,7 @@
 	{$m->addIncludes("bs/select2css", 'css', "`$app_root`static/vendor/select2/css.css")}
 	{assign var=gwcms_input_select2_loaded value=1 scope=global}		
 {/if}	
+
 
 {capture append=footer_hidden}
 	<script type="text/javascript">
@@ -61,8 +62,8 @@ require(['vendor/select2/js'], function () {
 		return item.title || item.text;
 	}
 	
-	
-	{if $preload}
+		
+	{if $preload && $value}
 		
 		//download captions
 		$.get("{$datasource}", { ids: JSON.stringify($("#{$id}").val()) }, function(data){

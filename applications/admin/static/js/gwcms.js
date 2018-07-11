@@ -1292,6 +1292,8 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 
 				iframe_content.resize(function(){ 
 					$(ifrm).height(ifrmcont.height()+20);
+					
+					//iframe_content.get(0).scrollHeight
 				});
 
 				iframe_content.resize();

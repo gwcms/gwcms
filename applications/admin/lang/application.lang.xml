@@ -695,4 +695,9 @@
 	<en>Save interupted, unexpected save detected, that might be cause of other admin/user or background process</en>
 </i>
 
+<i id="ADD">
+	<lt>Pridėti</lt>
+	<en>Add</en>
+</i>
+
 </xml>

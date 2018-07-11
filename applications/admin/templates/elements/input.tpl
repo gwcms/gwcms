@@ -119,10 +119,15 @@
 		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			
-			{if $after_input}
-				<div class="input-group" style="width:{$btngroup_width|default:"290px"}">
+			{if $after_input_f}
+				{capture assign="after_input"}
+					{include "`$smarty.current_dir`/afterinput/`$after_input_f`.tpl"}
+				{/capture}
 			{/if}
 			
+			{if $after_input}
+				<div class="input-group" style="width:{$btngroup_width|default:"290px"}">
+			{/if}		
 
 			
 		{if $i18n>2}

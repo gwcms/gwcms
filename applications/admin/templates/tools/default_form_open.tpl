@@ -1,5 +1,9 @@
 {$default_form_before_form}
 
+{function "e"}
+	{include file="elements/input.tpl" name=$field}
+{/function}
+
 
 <form id="itemform" class="itemform" action="{$formendpoint|default:$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" onsubmit="gwcms.beforeFormSubmit(this)"  >
 
