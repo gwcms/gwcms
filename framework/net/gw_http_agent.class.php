@@ -221,8 +221,15 @@ class GW_Http_Agent
 
 		if (count($post_params)) {
 			$context['method'] = 'POST';
-			$post_data = http_build_query($post_params);
-			$headers['Content-type'] = "application/x-www-form-urlencoded";
+			
+			if(isset($headers['Content-Type']) && $headers['Content-Type']=='application/json;charset=utf-8')
+			{
+				$post_data = json_encode($post_params);
+			}else{
+				$post_data = http_build_query($post_params);
+				$headers['Content-Type'] = "application/x-www-form-urlencoded";
+			}
+			
 			$headers['Content-Length'] = strlen($post_data);
 			$context['content'] = $post_data;
 		} else {
