@@ -35,6 +35,7 @@ class GW_Common_Module extends GW_Module
 	//include [type:js/css/jsstring,data/path]
 	public $includes = [];
 	public $sys_call = false;
+	public $extra_cols = [];
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -472,7 +473,8 @@ class GW_Common_Module extends GW_Module
 	{
 		$encapChr = $encap_val ? "'" : '';
 		
-		$cond = ($encap_fld ? "a.`$field`" : $field). ' ';
+		
+		$cond = ($encap_fld ? GW_DB::escapeField($field, 'a') : $field). ' ';
 				
 		switch ($compare_type) {
 			case 'LT':
@@ -536,7 +538,7 @@ class GW_Common_Module extends GW_Module
 				$cond.=$this->buildCond($field, $compare_type, $value);
 			}		
 	}
-
+	
 	function setListParams(&$params = [])
 	{
 		
@@ -569,8 +571,7 @@ class GW_Common_Module extends GW_Module
 		
 		if(isset($this->list_params['search']) && $this->list_params['search'])
 		{
-			$cols = $this->model->getColumns();
-						
+			$cols = $this->getModelCols();		
 			$subcond = '';
 			
 			foreach ($cols as $key => $x){
@@ -1471,5 +1472,10 @@ class GW_Common_Module extends GW_Module
 		unset($_GET['name']);
 
 		$this->jump();
+	}
+	
+	function getModelCols()
+	{
+		return $this->extra_cols+$this->model->getColumns();
 	}
 }

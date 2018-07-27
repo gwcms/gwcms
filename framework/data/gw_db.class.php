@@ -588,12 +588,21 @@ class GW_DB
 		return addslashes($mixed);
 	}
 	
-	static function escapeField($str)
+	static function escapeField($str, $default_tbl=false)
 	{
+		if(strpos($str,'.')!==false)
+			return $str;
+		
+		
 		if(strpos($str,'`')!==false)
 			return $str;
 		
-		return "`".$str."`";
+		$str = "`".$str."`";
+		
+		if($default_tbl)
+			$str = "$default_tbl.".$str;
+		
+		return $str;
 	}
 
 	static function timeString($time = false)
