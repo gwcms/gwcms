@@ -9,6 +9,7 @@ class GW_TestClass
 	
 	function __construct($testclass)
 	{	
+	
 		if($this->test_class_present)
 			$this->testobj = new $testclass;
 		
@@ -91,5 +92,19 @@ class GW_TestClass
 	function addInfo($key, $val)
 	{
 		$this->info[$key] = $val;
+	}
+	
+	
+	function initDB()
+	{
+		GW::db();
+	}
+	
+	function initAdminAutoLoad()
+	{
+		
+		GW_Autoload::addAutoloadDir(GW::s('DIR/ADMIN/ROOT').'/lib');
+		
+		
 	}
 }

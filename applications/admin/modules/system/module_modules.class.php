@@ -116,7 +116,7 @@ class Module_Modules extends GW_Common_Module
 	function doSyncFromXmls()
 	{
 		$t = new GW_Timer;
-		$msgs = GW_ADM_Sitemap_Helper::updateSitemap();
+		$msgs = GW_ADM_Sitemap_Helper::updateSitemap(isset($_GET['force']));
 		
 		if($msgs)
 			foreach($msgs as $msg)

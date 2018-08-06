@@ -39,7 +39,7 @@
 	
 	{function dl_cell_title}
 		{if $item->path!='separator'}
-			<span class="gw_listicon">{if $item->info.icon}{$item->info.icon}{else}<i class="fa fa-caret-right" style="opacity: 0.3"></i>{/if}</span> {$item->title}
+			<span class="gw_listicon">{if $item->getIcon()}{$item->getIcon()}{else}<i class="fa fa-caret-right" style="opacity: 0.3"></i>{/if}</span> {$item->title}
 		{else}
 			<center><i>{$item->title}</i></center>
 		{/if}

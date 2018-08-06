@@ -12,7 +12,7 @@ if(GW::s('SYNC_TRANSLATIONS_AFTER_DEPLOY'))
 	Navigator::backgroundRequest('admin/lt/datasources/translations/synchronizefromxml?commit=1');
 
 Navigator::backgroundRequest('admin/lt/system/tools?act=doimportSqlUpdates');
-Navigator::backgroundRequest('admin/lt/system/modules?act=doSyncFromXmls');
+Navigator::backgroundRequest('admin/lt/system/modules?act=doSyncFromXmls&force=1');
 
 
 echo shell_exec("cd '".GW::s('DIR/ROOT')."' && rm repository/.sys/templates_c/*");

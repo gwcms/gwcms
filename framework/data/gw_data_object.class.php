@@ -8,8 +8,9 @@ class GW_Data_Object
 	public $table;
 	public $db_die_on_error = true;
 	public $primary_fields = array('id');
-	public $content_base = Array();
-	public $errors = Array();
+	public $content_base = [];
+	public $decoded_content_base = [];
+	public $errors = [];
 	public $error_codes = [];
 	public $loaded = false;
 	public $auto_fields = true;
@@ -19,6 +20,8 @@ class GW_Data_Object
 	private $_ignore_fields = ['temp_id'=>1];
 	
 	public $encode_fields = [];
+	public $ondemand_encode_fields = [];
+	
 	public $calculate_fields = [];
 	static $_instance;
 	public $cache;
@@ -74,11 +77,26 @@ class GW_Data_Object
 		}
 	}
 
+	function &getDecoded($key)
+	{	
+		
+		if(!isset($this->decoded_content_base[$key])){
+			
+		
+			$func = "encode" . $this->encode_fields[$key];
+			
+			$this->decoded_content_base[$key] = $this->$func($key, $this->content_base[$key], true);
+		}
+		
+		return $this->decoded_content_base[$key];
+	}
+	
 	function getStoreVal($key)
 	{
 		if (isset($this->encode_fields[$key])) {
 			$func = "encode" . $this->encode_fields[$key];
-			return $this->$func($key, $this->content_base[$key], false);
+			$store =& $this->getDecoded($key);
+			return $this->$func($key, $store, false);			
 		}
 
 		return $this->content_base[$key];
@@ -94,8 +112,13 @@ class GW_Data_Object
 		{
 			$keys=explode('/', $key);
 			$k1= array_shift($keys);
-	
-			if(isset($this->calculate_fields[$k1]) && is_object($this->$k1)){
+			
+			if($this->loaded && isset($this->encode_fields[$k1]))
+			{			
+				$store =&  $this->getDecoded($k1);
+				$this->changed_fields[$k1] = 1;
+								
+			}elseif(isset($this->calculate_fields[$k1]) && is_object($this->$k1)){
 				$store = $this->$k1;
 			} else {
 				$store =& $this->content_base[$k1];
@@ -105,8 +128,14 @@ class GW_Data_Object
 			$this->__objAccessWrite($store, $keys, $val);			
 			
 			return true;
-		}		
+		}
 		
+		if($this->loaded && isset($this->encode_fields[$key]))
+		{
+			$data =&  $this->getDecoded($key);
+			$data = $val;
+			$this->changed_fields[$key] = 1;
+		}
 		
 		if (!isset($this->content_base[$key]) || $this->content_base[$key] !== $val) {
 			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
@@ -126,9 +155,9 @@ class GW_Data_Object
 	function __objAccessRead($o, $keys)
 	{		
 		$tmp = $keys;
-		
+			
 		$key = array_shift($keys);
-		
+				
 		if(is_object($o->{$key}) && count($keys)>0)
 			return $this->__objAccessRead ($o->{$key}, $keys);
 		
@@ -157,13 +186,31 @@ class GW_Data_Object
 	function get($key)
 	{
 		
-		if(strpos($key, '/')!==false)			
-			return $this->__objAccessRead($this, explode('/', $key));
+		if(strpos($key, '/')!==false)
+		{
+			$keys=explode('/', $key);
+			$k1= array_shift($keys);
+			
+			if($this->loaded && isset($this->encode_fields[$k1]))
+			{			
+				$store =&  $this->getDecoded($k1);
+			} else {
+				$store =& $this->content_base[$k1];
+			}
+					
+			return $this->__objAccessRead($store, $keys);
+		}		
+		
 		
 		if (isset($this->calculate_fields[$key])) {
 			$func = $this->calculate_fields[$key];
 			$func = $func == 1 ? 'calculateFieldCache' : $func;
 			return $this->$func($key);
+		}
+		
+		if(isset($this->encode_fields[$key]))
+		{
+			return $this->getDecoded($key);
 		}
 
 		return isset($this->content_base[$key]) ? $this->content_base[$key] : false;
@@ -873,7 +920,7 @@ class GW_Data_Object
 				break;
 
 			case 'AFTER_LOAD':
-				$this->decodeFields();
+				//$this->decodeFields();
 				$this->resetChangedFields();
 				break;
 			case 'AFTER_CONSTRUCT':

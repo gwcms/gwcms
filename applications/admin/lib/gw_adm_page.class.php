@@ -16,7 +16,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 	public $level=0;
 	public $data_object;
 	
-	public $encode_fields=['info'=>'serialize', 'fields'=>'serialize'];
+	public $encode_fields=['info'=>'jsono'];
 	public $ignore_fields = ['data_object_id'=>1];
 	public $calculate_fields = ['VIEWS'=>'getViews', 'ORDERS'=>'getOrders'];
 
@@ -155,8 +155,8 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		$info=$this->get('info');
 		
-		
-		if(!isset($info['model']) || !$Class=$info['model'])
+				
+		if(!isset($info->model) || !$Class=$info->model)
 			return false;
 			
 			
@@ -181,6 +181,16 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		return $cache;
 	}
 	
+	
+	function getIcon()
+	{
+		if($this->info->icon){
+			return $this->info->icon;
+		}
+		if($this->info->iconclass){
+			return "<i class='{$this->info->iconclass}'></i>";
+		}	
+	}
 	
 	
 	

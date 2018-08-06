@@ -19,8 +19,7 @@
 
 
 						{function menudisplayicon}
-							{if $item->info.icon}{$item->info.icon}{/if}
-							{if $item->info.iconclass}<i class="{$item->info.iconclass}"></i>{/if}
+							{$item->getIcon()}
 						{/function}
 
 

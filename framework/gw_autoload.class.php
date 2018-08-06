@@ -48,13 +48,24 @@ class GW_Autoload
 		//for example try search gw_article.class.php in admin/modules/
 		//will search admin/modules/*/gw_article.class.php
 		//will find admin/modules/articles/gw_article.class.php
-
-
+		
+	
 		self::searchSubDirs(GW::s('DIR/AUTOLOAD_RECURSIVE'), $file);
 	}
-
-	static function searchSubdirs($root_dir, $file)
+	
+	static function addAutoloadDir($dir)
 	{
+		$al =& GW::s('DIR/AUTOLOAD');
+		$al[] = $dir;
+	}
+	
+	static function setRecursiveAutoloadDir($dir)
+	{
+		GW::s('DIR/AUTOLOAD_RECURSIVE', $dir);
+	}
+	
+	static function searchSubdirs($root_dir, $file)
+	{		
 		self::$search_timer->start();
 		$files = glob($root_dir . "*/" . $file);
 		self::$search_timer->pause();

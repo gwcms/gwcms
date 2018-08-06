@@ -195,7 +195,7 @@ class GW_Email_Validator extends GW_String_Validator
 	{
 		// extract parts between the two parentheses
 		$mailAddress = preg_match('/(?:<)(.+)(?:>)$/', $rfc_email_string, $matches);
-		return $matches[1];
+		return $matches[1] ?? false;
 	}
 
 	static function separateDisplayNameEmail($rfc_email_string)

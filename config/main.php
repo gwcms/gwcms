@@ -15,6 +15,9 @@ $dir['VENDOR']=$dir['ROOT'].'vendor/';
 $dir['PEAR']=$dir['LIB'].'pear/';
 $dir['REPOSITORY']=$dir['ROOT'].'repository/';
 
+
+
+
 $dir['SYS_REPOSITORY']=$dir['REPOSITORY'].'.sys/';
 	$dir['TEMPLATES_C']=$dir['SYS_REPOSITORY'].'templates_c/';
 	$dir['LOGS']=$dir['SYS_REPOSITORY'].'logs/';
@@ -30,7 +33,8 @@ $dir['AUTOLOAD'][] = $dir['LIB'];
 			
 $adir =& $dir["ADMIN"];
 $adir["ROOT"] = $dir['APPLICATIONS'].'admin/';
-$adir['LANG'] = $adir['ROOT'].'lang/';
+$adir['MODULES']=$adir['ROOT'].'modules/';
+$adir['LANG']=$adir['ROOT'].'lang/';
 
 
 		

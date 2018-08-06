@@ -202,8 +202,10 @@ class GW_CMS_Sync
 
 
 		$rm_cmds = '';
-		foreach($changed_files['remove'] as $rmfile)
+		foreach($changed_files['remove'] as $rmfile){
+			unlink($destdir.$rmfile);
 			$rm_cmds.="rm $rmfile\n";
+		}
 
 
 		if($copy2temp){
