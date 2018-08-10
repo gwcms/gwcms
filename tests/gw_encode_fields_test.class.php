@@ -33,19 +33,23 @@ class gw_encode_fields_test extends gw_testclass
 		$rand = random_int(100000, 999999);
 		
 		$array = $o->get('info');
-		$array->test="{$rand}abc";
 		
+		$test1_string="{$rand}abc";
+		$test0_string="test{$rand}";
+		$test2_string = "{$rand}hellou";
+			
 		
+		$array->test=$test1_string;
 		
-		$o->set('info/test1', "test{$rand}");
-		//$o->set('info/test1', 'test123');
+				
+		$o->set('info/test1', $test0_string);
 		$info = $o->info;
 		
-		$this->assertEquals($o->get('info/test'), "{$rand}abc");
-		$this->assertEquals($o->info->test, "{$rand}abc");
-		$this->assertEquals($info->test, "{$rand}abc");
+		$this->assertEquals($o->get('info/test'), $test1_string);
+		$this->assertEquals($o->info->test, $test1_string);
+		$this->assertEquals($info->test, $test1_string);
 		
-		$this->assertEquals($info->test1, "test{$rand}");
+		$this->assertEquals($info->test1, $test0_string);
 		
 		$this->assertEquals($o->isChangedField('info'), true);
 		
@@ -54,7 +58,19 @@ class gw_encode_fields_test extends gw_testclass
 		
 		$o1 = GW_ADM_Page::singleton()->find('path="system"');
 		
-		$this->assertEquals($o1->info->test, "{$rand}abc");
+		$this->assertEquals($o1->info->test, $test1_string);
+		
+		
+		
+		$info = $o1->info;
+		$info->test3 = $test2_string;
+		
+		$o1->info = $info;
+		$o1->save();
+		
+		$o2 = GW_ADM_Page::singleton()->find('path="system"');
+		$this->assertEquals($o1->info->test3, $test2_string);
+		
 		
 		
 		//d::dumpas($o->changed_fields);

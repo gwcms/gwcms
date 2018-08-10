@@ -157,6 +157,10 @@ class GW_Data_Object
 		$tmp = $keys;
 			
 		$key = array_shift($keys);
+		
+		
+		if(!isset($o->{$key}))
+			return null;
 				
 		if(is_object($o->{$key}) && count($keys)>0)
 			return $this->__objAccessRead ($o->{$key}, $keys);

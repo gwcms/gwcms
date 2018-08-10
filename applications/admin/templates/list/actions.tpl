@@ -22,6 +22,10 @@
 		{if isset($m->lang.VIEWS[$searchkey])}{$title=$m->lang.VIEWS[$searchkey]}{/if}
 	{/if}
 	
+	{if $smarty.get.RETURN_TO}
+		{$url.1.RETURN_TO=$smarty.get.RETURN_TO}
+	{/if}
+	
 
 	
 	{$href=$href|default:$m->buildUri($url.0,$url.1,$url.2)}
@@ -97,13 +101,13 @@
 
 {function name=dl_actions_ext_actions}
 	
-<div class="btn-group dropright gwcmsAction" style="display: inline">
-					                           
-												<i class="fa fa-bars dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" data-url="{$m->buildURI('itemactions',[id=>$item->id])}"></i>	
-					                            <ul class="dropdown-menu dropdown-menu-right">
-					                                <li><i class="fa fa-spinner fa-pulse"></i></li>
-					                            </ul>
-					                        </div>	
+	<div class="btn-group dropright gwcmsAction" style="display: inline">
+
+		<i class="fa fa-bars dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" data-url="{$m->buildURI('itemactions',[id=>$item->id])}"></i>	
+		    <ul class="dropdown-menu dropdown-menu-right">
+			<li><i class="fa fa-spinner fa-pulse"></i></li>
+		    </ul>
+	</div>	
 	
 												
 	{if !isset($GLOBALS.dropdown_init_done)}

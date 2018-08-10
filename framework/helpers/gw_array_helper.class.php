@@ -76,11 +76,19 @@ class GW_Array_Helper
 			if (isset($source[$key]))
 				$destination[$key] = $source[$key];
 	}
-
+	
+	static function copyOut($source, $keys)
+	{
+		$dest = [];
+		self::copy($source, $dest, $keys);
+		return $dest;
+	}
+	
 	static function objectCopy($source, &$destination, $keys)
 	{
 		foreach ($keys as $key)
-			$destination->$key = $source->$key;
+			if(isset($source->$key))
+				$destination->$key = $source->$key;
 	}
 
 	/**
