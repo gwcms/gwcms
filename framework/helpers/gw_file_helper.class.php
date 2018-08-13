@@ -76,11 +76,20 @@ class GW_File_Helper
 		return $name;
 	}
 
-	function output($file)
+	function output($file, $view=false)
 	{
 		header('HTTP/1.0 200 OK', true, 200);
-		header("Content-Type: application/x-download");
-		header('Content-Disposition: attachment; filename="' . basename($file) . '";');
+		
+		
+		if($view){
+			header('Content-Type: '.Mime_Type_Helper::getByFilename($file));
+			
+		}else{
+			header("Content-Type: application/x-download");
+			header('Content-Disposition: attachment; filename="' . basename($file) . '";');
+		}
+		
+		
 		header("Accept-Ranges: bytes");
 		header("Content-Length: " . filesize($file));
 

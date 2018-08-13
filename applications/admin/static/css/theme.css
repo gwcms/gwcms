@@ -7772,11 +7772,9 @@ input[type="color"] {
 }
 
 
-#mainnav-menu .fa{
+#mainnav-menu .fa, .gwcmsLinksInDD  .fa{
 	margin-right: .3em; width: 1.28571429em;text-align: center;
 }
-
-
 
 
 .change_lang a.selected{ font-weight:bold;color:#000 }

@@ -15,5 +15,9 @@ class GW_Attachment extends GW_i18n_Data_Object
 		'image' => ['gw_image', ['dimensions_max'=>'10000x10000']],
 		'file' => ['gw_file', []]
 	];	
+	
+	public $encode_fields = [
+	    'extra'=>'jsono',
+	];	
 
 }

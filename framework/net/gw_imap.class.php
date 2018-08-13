@@ -61,8 +61,11 @@ class GW_Imap
 	}	
 	
 	function getPart($messageNumber, $partNumber, $encoding) {
+		
+		
 
 		$data = imap_fetchbody($this->conn, $messageNumber, $partNumber);
+		
 
 		//d::dumpas([$data,$partNumber, $encoding]);
 		
@@ -118,14 +121,23 @@ class GW_Imap
 	}	
 	
 	
-	function fetchContents($message, $partfetch='all')
+	function initStructure($message)
 	{
 		if(!isset($message->structure))
 		{
 			$message->structure = imap_fetchstructure($this->conn, $message->mailid);;
-			//$message->overview = imap_fetch_overview($this->conn, $message->mailid);			
-		}
-		
+			//$message->overview = imap_fetch_overview($this->conn, $message->mailid);
+
+			if(isset($message->structure) && is_array($message->structure->parts))
+				$message->structure->parts = self::flattenParts($message->structure->parts);
+			
+		}		
+	}
+	
+	function fetchContents($message, $partfetch='all')
+	{
+
+		$this->initStructure($message);
 		
 		$struct = $message->structure;
 		
@@ -137,62 +149,47 @@ class GW_Imap
 			return true;
 		}
 		
-		//with parts
 		
-		$flattenedParts = self::flattenParts($struct->parts);
+		
+		//with parts		
 		
 		if(!isset($message->attachments))
 			$message->attachments = [];
 		
-		foreach($flattenedParts as $partNumber => $part) {
+		//flat structure walk (self::flattenParts)
+		foreach($message->structure->parts as $partNumber => $part) {
+						
 			
-			if($partfetch==='body' && $part->type!=0)
-				continue;
-			
-			if($partfetch==='attachments' && $part->type < 3)
-				continue;
+			if($part->type==0 && $part->subtype=="HTML"){
+				if($partfetch!='body')
+						continue;
+				
+				$message->body = $this->getPart($message->mailid, $partNumber, $part->encoding);				
+			}else{
+				$filename = $this->getFilenameFromPart($part);
 
-			switch($part->type) {
+				$message->attachments_structure[$partNumber]=(object)['filename'=>$filename, 'encoding'=>$part->encoding];
 
-				case 0:
-					// the HTML or plain text part of the email
-					$message->body = $this->getPart($message->mailid, $partNumber, $part->encoding);
-					// now do something with the message, e.g. render it
-				break;
+				if($partfetch!='attachments')
+						continue;					
 
-				case 1:
-					// multi-part headers, can ignore
+				if($filename) {
+					// it's an attachment
 
-				break;
-				case 2:
-					// attached message headers, can ignore
-				break;
-
-				case 3: // application
-				case 4: // audio
-				case 5: // image
-				case 6: // video
-				case 7: // other
-					$filename = $this->getFilenameFromPart($part);
-					if($filename) {
-						// it's an attachment
-			
-						// now do something with the attachment, e.g. save it somewhere
-						$message->attachments[]=[
-						    'filename'=>$filename, 
-						    'data'=>$this->getPart($message->mailid, $partNumber, $part->encoding)
-						];
-					}
-					else {
-						// don't know what it is
-					}
-				break;
-
+					// now do something with the attachment, e.g. save it somewhere
+					$message->attachments[]=[
+					    'filename'=>$filename, 
+					    'data'=>$this->getPart($message->mailid, $partNumber, $part->encoding),
+					    'size'=>$part->bytes
+					];
+				}
+				else {
+					// don't know what it is
+				}				
 			}
-
 		}
 	}
-
+	
 
 	function getSubject($subject)
 	{

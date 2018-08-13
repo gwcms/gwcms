@@ -114,6 +114,18 @@ Upload.prototype.reinitControls = function () {
 	}).attr('data-initdone',1);
 	
 	
+	this.container.find(".btn-preview:not([data-initdone='1'])").click(function () {
+		
+	
+		var url = gw_navigator.url(that.input.data('url'), {clean: 1, act: 'doPreview', id: $(this).data('id')});
+
+		var opts = { url: url, iframe:1, title: $(this).attr('title'), widthOffset:0, minWidth:600,minHeight:600  };
+		
+		gwcms.open_dialog2(opts)
+		
+	}).attr('data-initdone',1);	
+	
+	
 	gw_adm_sys.initObjects(); 
 
 	$('.sortContainer').sortable({ items: '.sortItm', update: function(){ 

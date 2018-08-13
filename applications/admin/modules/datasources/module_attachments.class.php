@@ -217,4 +217,19 @@ class Module_Attachments extends GW_Common_Module
 		$this->setMessage(["text"=>GW::l('/m/UPDATED_POSITIONS').": $updated", "type"=>GW_MSG_INFO]);
 	}	
 	
+	
+	
+	function viewPreview()
+	{
+		$item = $this->getDataObjectById();
+		$this->tpl_vars['item'] = $item;
+	}
+	
+	function doPreview()
+	{
+		
+		$this->processView('preview');
+		exit;
+		
+	}
 }

@@ -699,5 +699,9 @@
 	<lt>Pridėti</lt>
 	<en>Add</en>
 </i>
+<i id="PREVIEW">
+	<lt>Peržiūra</lt>
+	<en>Preview</en>
+</i>
 
 </xml>

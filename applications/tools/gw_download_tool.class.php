@@ -49,15 +49,7 @@ class GW_Download_Tool
 			exit;
 		}	
 
+		GW_File_Helper::output($item->getFilename(), $_GET['view'] ?? false);
 
-		
-		header("Content-Type: application/x-download");	
-		header('Content-Disposition: attachment; filename="'.$item->get('original_filename').'";');
-		header("Accept-Ranges: bytes");
-		header("Content-Length: ".$item->get('size'));
-		
-
-		readfile($item->getFilename());
-		exit; //kad neiskristu process time
 	}
 }
