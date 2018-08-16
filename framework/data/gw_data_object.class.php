@@ -320,8 +320,12 @@ class GW_Data_Object
 		$data = array();
 
 		$options['conditions'] = $conditions;
-		$sql = "SELECT SQL_CALC_FOUND_ROWS {$select} FROM " . $this->findAllTable($options);
-
+		
+		if(isset($options['count'])){
+			$sql = "SELECT count(*) FROM " . $this->findAllTable($options);
+		}else{	
+			$sql = "SELECT SQL_CALC_FOUND_ROWS {$select} FROM " . $this->findAllTable($options);
+		}
 
 		//ussage example $options=['joins'=>[['RIGHT','table_name','condition AND condition']]]
 		if (isset($options['joins']))
@@ -469,6 +473,13 @@ class GW_Data_Object
 	{
 		$db = & $this->getDB();
 		return $db->count($this->table, $condition, $this->db_die_on_error);
+	}
+	
+	
+	function countExt($condition)
+	{
+		$sql = $this->buildSql(['conditions'=>$condition, 'count'=>1]);
+		return $this->getDB()->fetch_result($sql);
 	}
 
 	function countGrouped($groupby, $condition)
@@ -1058,7 +1069,7 @@ class GW_Data_Object
 	}
 	function getOriginal($name){
 		
-		if($this->_original);
+		if($this->_original && is_object($this->_original))
 			return $this->_original->get($name);
 		
 	}

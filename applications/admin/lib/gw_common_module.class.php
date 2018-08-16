@@ -357,6 +357,10 @@ class GW_Common_Module extends GW_Module
 			}
 
 			$item->setValues($vals);
+			
+			
+			
+			
 		} elseif ($id) { // edit existing
 			$item = $this->model->createNewObject($id, true, $this->lang());
 
@@ -376,9 +380,7 @@ class GW_Common_Module extends GW_Module
 		}
 		
 		$this->prepareListConfig();
-		
-		
-				
+						
 		return ['update' => (int) $item->get('id'), 'item' => $item];
 	}
 
@@ -578,7 +580,7 @@ class GW_Common_Module extends GW_Module
 				$this->buildConds(['field' => $key, 'value' => $this->list_params['search'], 'ct' => 'LIKE'], $subcond, 'OR');
 			}
 			
-			$cond.="($subcond)";
+			$cond.=($cond ? ' AND ':'')."($subcond)";
 		}
 
 		foreach ($search as $filter) {
@@ -651,7 +653,7 @@ class GW_Common_Module extends GW_Module
 				if (!($view->count_result = GW_Session_Cache::get($key))) {
 					
 					try{	
-						$view->count_result = $tmp = $this->model->count($view->condition);
+						$view->count_result = $tmp = $this->model->countExt($view->condition);
 					} catch (Exception $e) {
 						$this->setError("Can't calculate '$view->title' {$e->getMessage()}");
 						$view->count_result = $tmp = "!Err";
@@ -1437,7 +1439,7 @@ class GW_Common_Module extends GW_Module
 		$vals['page_by'] = $this->list_params['page_by'];
 		
 		$this->fireEvent("BEFORE_CREATE_PAGE_VIEW", $vals);
-		
+				
 		$this->app->sess['item'] = $vals;
 				
 		header('Location: '.$url);

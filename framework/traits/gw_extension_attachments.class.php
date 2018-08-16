@@ -40,13 +40,30 @@ class GW_Extension_Attachments
 		}
 	}
 	
-	static function prepareList($list)
+	
+	//example use
+	/*
+	function __eventAfterList($list)
+	{
+		//to get first item
+		foreach($list as $item)
+			break;
+
+		if($item)
+			if($item->extensions['attachments'])
+				$item->extensions['attachments']->prepareList($list);
+	}
+	 */
+	
+	function prepareList($list)
 	{
 		$ids = [];
 		foreach($list as $item)
 			$ids[] = $item->id;
 		
-		$result = GW_Attachment::singleton()->countGrouped('owner_id', GW_DB::inCondition('owner_id', $ids));
+		$cond = GW_DB::inCondition('owner_id', $ids).' AND '.GW_DB::prepare_query(['owner_type=?', $this->parent->attachments_owner]);
+				
+		$result = GW_Attachment::singleton()->countGrouped('owner_id', $cond);
 		
 		foreach($list as $item)		
 			$item->extensions['attachments']->prepare_count = $result[$item->id] ?? 0;
@@ -62,5 +79,12 @@ class GW_Extension_Attachments
 		
 		return GW_Attachment::singleton()->count(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->attachments_owner]);
 	}
+	
+	function getByTitle($title, $ln='lt')
+	{
+		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}",$this->parent->id, $this->parent->attachments_owner, $title]);
+	}
+	
+
 
 }

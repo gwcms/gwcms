@@ -20,4 +20,9 @@ class GW_Attachment extends GW_i18n_Data_Object
 	    'extra'=>'jsono',
 	];	
 
+	
+	function setTitle($value, $ln='lt')
+	{
+		$this->set("title_{$ln}", $value);
+	}
 }

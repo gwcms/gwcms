@@ -232,4 +232,13 @@ class Module_Attachments extends GW_Common_Module
 		exit;
 		
 	}
+	
+	function getListConfig() 
+	{
+		$cfg = parent::getListConfig();
+				
+		$cfg['fields']['filename'] = 'L';	
+						
+		return $cfg;
+	}	
 }

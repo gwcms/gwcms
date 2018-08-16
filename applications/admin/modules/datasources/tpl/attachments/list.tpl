@@ -9,6 +9,21 @@
 
 	{/function}	
 	
+	
+	
+	{function dl_cell_filename}
+		{if $item->content_cat == 'file'}
+			{$file=$item->file}
+			{$file->original_filename}
+		{else}
+			{$file=$item->image}
+			{$file->original_filename}
+		{/if}
+
+	{/function}
+	
+	
+	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
@@ -17,7 +32,7 @@
 	
 		
 	{$dl_actions=[edit,delete]}
-	
+	{$dl_smart_fields=[filename]}
 	{$dl_inline_edit=1}		
 	
 	{$dl_checklist_enabled=1}

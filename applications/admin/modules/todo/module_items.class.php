@@ -43,7 +43,13 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function __eventAfterList($list)
 	{
-		GW_Extension_Attachments::prepareList($list);
+		//to get first item
+		foreach($list as $item)
+			break;
+
+		if($item)
+			if($item->extensions['attachments'])
+				$item->extensions['attachments']->prepareList($list);
 	}
 
 	function doSwitchState()

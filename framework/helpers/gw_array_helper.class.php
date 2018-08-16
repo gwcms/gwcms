@@ -294,4 +294,11 @@ class GW_Array_Helper
 	}
 	
 	
+	
+	static function get1stIndex($list)
+	{
+		foreach($list as $idx => $x)
+			return $idx;
+	}
+	
 }
