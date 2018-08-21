@@ -158,8 +158,8 @@ class GW_Data_Object
 			
 		$key = array_shift($keys);
 		
-		
-		if(!isset($o->{$key}))
+		//d::ldump( ['isset key'=>$key, 'class'=>get_class($o), 'result'=>isset($o->{$key})] );
+		if(!isset($o->{$key}) )
 			return null;
 				
 		if(is_object($o->{$key}) && count($keys)>0)
@@ -198,7 +198,11 @@ class GW_Data_Object
 			if($this->loaded && isset($this->encode_fields[$k1]))
 			{			
 				$store =&  $this->getDecoded($k1);
-			} else {
+			} elseif(isset($this->calculate_fields[$k1])){
+				$store = $this->get($k1);
+				//$store->{$keys[0]};
+				
+			}else {
 				$store =& $this->content_base[$k1];
 			}
 					

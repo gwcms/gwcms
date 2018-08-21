@@ -3,9 +3,11 @@
 	{$i="elements/input.tpl"}	
 
 	{if strpos($field, 'title_')===0}
-		{include file="elements/input.tpl" name=$field}
+		{include file=$i name=$field}
+	{elseif $field=='owner_id'}
+		{include file=$i name=$field type=number}
 	{else}
-		{include file="elements/input.tpl" name=$field type=read}
+		{include file=$i name=$field type=read}
 	{/if}
 
 {/function}

@@ -127,12 +127,19 @@ class GW_User_Extended
 
 	function __set($name, $value)
 	{
+		//d::ldump(['set'=>[$name, $value] ]);
 		$this->replace($name, $value);
 	}
 	
 	function __get($name)
 	{
+		//d::ldump(['get'=>[$name] ]);
 		return $this->get($name, false);
+	}
+	
+	function __isset ($name){
+		return true;
+		//required by gw_data_object infrastructure
 	}
 	
 	/*

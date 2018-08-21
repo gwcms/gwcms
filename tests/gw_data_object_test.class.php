@@ -1,7 +1,7 @@
 <?php
 
 
-class gw_encode_fields_test extends gw_testclass
+class gw_data_object_test extends gw_testclass
 {
 	
 	public $test_class_present = false;
@@ -23,7 +23,7 @@ class gw_encode_fields_test extends gw_testclass
 	}	
 	
 	
-	function testGetCountryByPhone()
+	function testEncode()
 	{
 		
 		$o = GW_ADM_Page::singleton()->find('path="system"');
@@ -81,5 +81,19 @@ class gw_encode_fields_test extends gw_testclass
 		//test
 		
 		
+	}
+	
+	function testExtendedObject()
+	{
+		$user = GW_User::singleton()->createNewObject(GW_USER_SYSTEM_ID, true);
+		
+		$rand = random_int(100000, 999999);
+		$test0_string="test{$rand}";		
+		
+		
+		$user->set('ext/labas', $test0_string);
+		
+		$this->assertEquals($user->get('ext')->labas, $test0_string);
+		$this->assertEquals($user->get('ext/labas'), $test0_string);
 	}
 }

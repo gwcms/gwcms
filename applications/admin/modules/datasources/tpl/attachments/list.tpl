@@ -22,6 +22,12 @@
 
 	{/function}
 	
+
+
+	{function name=dl_actions_preview}
+		<a href="{$m->buildUri(false,[act=>doPreview,id=>$item->id, clean=>1])}" class="iframe-under-tr"><i class="fa fa-search"></i></span>		
+	{/function}
+	
 	
 	
 	{$do_toolbar_buttons[] = hidden}
@@ -31,7 +37,7 @@
 	
 	
 		
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[preview,edit,delete]}
 	{$dl_smart_fields=[filename]}
 	{$dl_inline_edit=1}		
 	
