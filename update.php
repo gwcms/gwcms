@@ -96,6 +96,12 @@ class GW_CMS_Sync
 		$newcommits = explode("\n", trim($this->exec('git log  --since="' . $lastcommit_date . '" '.$format)));
 
 		$updates_from_commit_com = $this->getOneCommitBefore($lastcommit_date);
+		
+		if(!$updates_from_commit_com){
+			$first_commit = explode("\n", trim($this->exec('git rev-list --max-parents=0 HEAD')));
+			$updates_from_commit_com = $first_commit;
+		}
+			
 
 		return [
 			'newcommits'=>$newcommits,
@@ -290,7 +296,7 @@ class GW_CMS_Sync
 		}
 		//intended to get updates from core gwcms
 
-		$newcommits = $this->getNewCommitsFromDate($datefrom);
+		$newcommits = $this->getNewCommitsFromDate($datefrom);		
 		$changed_files = $this->getChangedFiles($newcommits['updates_from_commit']);
 
 		if(isset($this->params['p']))
