@@ -10,16 +10,30 @@
 		{if $confirm}{$app->fh()->gw_link_confirm()}{/if}>{if $iconclass}<i class="{$iconclass}"></i>{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
 {/function}
 
+{function list_item_title}{strip}
+	{if isset($app->lang.VIEWS[$searchkey])}
+		{$app->lang.VIEWS[$searchkey]}
+	{elseif isset($m->lang.VIEWS[$searchkey])}
+		{$m->lang.VIEWS[$searchkey]}
+	{else}
+		{$searchkey}
+	{/if}
+{/strip}{/function}
+
 {function list_item_action_m}
-	
+	{if $addlitag}<li>{/if}
 	{if $url_return_to}
 		{$url.1.return_to=$url_return_to}
 	{/if}	
-		
+			
 	{if !$title && ($url.1.act || $url.0)}
 		{$searchkey=$url.1.act|default:basename($url.0)}
-		{if isset($app->lang.VIEWS[$searchkey])}{$title=$app->lang.VIEWS[$searchkey]}{/if}
-		{if isset($m->lang.VIEWS[$searchkey])}{$title=$m->lang.VIEWS[$searchkey]}{/if}
+		{call list_item_title assign=title}
+	{/if}
+	
+	{if $autocaption && !$caption}
+		{$searchkey=$url.1.act|default:basename($url.0)}
+		{call list_item_title assign=caption}
 	{/if}
 	
 	{if $smarty.get.RETURN_TO}
@@ -30,6 +44,7 @@
 	
 	{$href=$href|default:$m->buildUri($url.0,$url.1,$url.2)}
 	{list_item_action}
+	{if $addlitag}</li>{/if}
 {/function}
 
 

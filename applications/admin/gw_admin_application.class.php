@@ -126,7 +126,8 @@ class GW_Admin_Application extends GW_Application
 						
 						if($page->info->itemactions)
 						{
-							$item['actions'] = $this->buildUri($item['path'].'/itemactions',['id'=>$do->id, 'RETURN_TO'=>$_SERVER['REQUEST_URI']]);
+							$id = $do->id ? $do->id : $_GET['id'];
+							$item['actions'] = $this->buildUri($item['path'].'/itemactions',['id'=>$id, 'RETURN_TO'=>$_SERVER['REQUEST_URI']]);
 						}						
 					}
 				}else{

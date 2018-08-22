@@ -150,6 +150,7 @@ class GW_Imap
 		}
 		
 		
+		//$message->attachments_structure = [];
 		
 		//with parts		
 		
@@ -164,8 +165,12 @@ class GW_Imap
 				if($partfetch!='body')
 						continue;
 				
-				$message->body = $this->getPart($message->mailid, $partNumber, $part->encoding);				
+				$message->body = $this->getPart($message->mailid, $partNumber, $part->encoding);	
+			}elseif($part->type==0 && $part->subtype=="PLAIN"){
+				//not implemented
 			}else{
+				//d::dumpas(['tipo attachmentas'=>$part]);
+				
 				$filename = $this->getFilenameFromPart($part);
 
 				$message->attachments_structure[$partNumber]=(object)['filename'=>$filename, 'encoding'=>$part->encoding];

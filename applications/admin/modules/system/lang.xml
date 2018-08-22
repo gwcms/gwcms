@@ -90,6 +90,10 @@
 		<i id="iframe">Log view realtime</i>
 		<i id="doExecuteQuery">Execute query</i>
 		<i id="doSyncFromXmls">Sync from xmls</i>
+		<i id="realtime">Realtime log watch</i>
+		<i id="entire">Show entire log</i>
+		<i id="newlines">Show new lines</i>
+		<i id="doClean">Clean log file</i>
 	</i>
 	
 	<i id="FIELD_NOTE">
@@ -143,7 +147,10 @@
 			</i>	
 			<i id="logwatch">
 				<i id="title">Log Watch</i>
-				<i id="info"><i id="model">GW_Log_Watch</i></i>				
+				<i id="info">
+					<i id="model">GW_Log_Watch</i>
+					<i id="itemactions">1</i>
+				</i>				
 			</i>
 			<i id="tasks">
 				<i id="title">Tasks</i>
