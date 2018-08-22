@@ -18,10 +18,10 @@ class GW_Extension_Attachments
 
 			case 'AFTER_INSERT':
 				
-				//d::dumpas([$this->parent->temp_id, $this->parent->id , $this->parent->attachments_owner]);
+				//d::dumpas([$this->parent->temp_id, $this->parent->id , $this->parent->ownerkey]);
 				
 				GW_Attachment::singleton()->updateMultiple(
-					['owner_temp_id=? AND owner_type=?', $this->parent->temp_id, $this->parent->attachments_owner], 
+					['owner_temp_id=? AND owner_type=?', $this->parent->temp_id, $this->parent->ownerkey], 
 					['owner_id'=>$this->parent->id,'owner_temp_id'=>0]);
 				
 				//d::dumpas($this->parent->getDB()->last_query);
@@ -29,7 +29,7 @@ class GW_Extension_Attachments
 			break;
 		
 			case 'BEFORE_DELETE':
-				$attachs = GW_Attachment::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->attachments_owner]);
+				$attachs = GW_Attachment::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);
 				foreach($attachs as $attach)
 				{
 					$attach->delete();
@@ -61,7 +61,7 @@ class GW_Extension_Attachments
 		foreach($list as $item)
 			$ids[] = $item->id;
 		
-		$cond = GW_DB::inCondition('owner_id', $ids).' AND '.GW_DB::prepare_query(['owner_type=?', $this->parent->attachments_owner]);
+		$cond = GW_DB::inCondition('owner_id', $ids).' AND '.GW_DB::prepare_query(['owner_type=?', $this->parent->ownerkey]);
 				
 		$result = GW_Attachment::singleton()->countGrouped('owner_id', $cond);
 		
@@ -77,12 +77,12 @@ class GW_Extension_Attachments
 			return $this->prepare_count;
 		}
 		
-		return GW_Attachment::singleton()->count(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->attachments_owner]);
+		return GW_Attachment::singleton()->count(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);
 	}
 	
 	function getByTitle($title, $ln='lt')
 	{
-		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}",$this->parent->id, $this->parent->attachments_owner, $title]);
+		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}",$this->parent->id, $this->parent->ownerkey, $title]);
 	}
 	
 

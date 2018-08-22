@@ -29,6 +29,7 @@ class GW_Data_Object
 	public $changed=false; //indicates if changed related composite objects
 	public $extensions=[];
 	protected $observers = [];
+	public $constructcomplete=false;
 
 	/**
 	 * pvz 
@@ -55,6 +56,7 @@ class GW_Data_Object
 		$this->initExtensions();
 						
 		$this->fireEvent('AFTER_CONSTRUCT');
+		$this->constructcomplete = true;
 	}
 	
 	function initExtensions()
@@ -85,7 +87,7 @@ class GW_Data_Object
 		
 			$func = "encode" . $this->encode_fields[$key];
 			
-			$this->decoded_content_base[$key] = $this->$func($key, $this->content_base[$key], true);
+			$this->decoded_content_base[$key] = isset($this->content_base[$key]) ? $this->$func($key, $this->content_base[$key], true) : [];
 		}
 		
 		return $this->decoded_content_base[$key];
@@ -130,7 +132,7 @@ class GW_Data_Object
 			return true;
 		}
 		
-		if($this->loaded && isset($this->encode_fields[$key]))
+		if($this->constructcomplete && isset($this->encode_fields[$key]))
 		{
 			$data =&  $this->getDecoded($key);
 			$data = $val;

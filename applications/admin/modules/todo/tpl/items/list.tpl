@@ -159,8 +159,10 @@
 	
 
 	
-	{$do_toolbar_buttons[] = dialogconf}	
-	{$do_toolbar_buttons[] = print}
+	{$do_toolbar_buttons_hidden[] = dialogconf}	
+	{$do_toolbar_buttons_hidden[] = print}
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons[] = search}
 	
 	{$dl_actions=[edit,delete_ajax]}
 	

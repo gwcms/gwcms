@@ -14,7 +14,7 @@ class GW_Todo_Item extends GW_Composite_Data_Object
 	var $calculate_fields = Array('child_count'=>1, 'comments_count'=>1, 'path'=>'getPath');
 	var $default_order = 'state ASC, priority DESC';	
 
-	public $attachments_owner = 'todo/items';
+	public $ownerkey = 'todo/items';
 	public $extensions = ['attachments'=>1];
 	
 

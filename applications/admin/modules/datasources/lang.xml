@@ -139,9 +139,15 @@
 				<i id="info">
 					<i id="model">GW_Attachment</i>
 					<i id="iconclass">fa fa-paperclip</i>
-
 				</i>			
-			</i>				
+			</i>	
+			<i id="changetrack">
+				<i id="title"><en>Change Track</en><lt>Redagavimo istorija</lt></i>
+				<i id="info">
+					<i id="model">GW_Change_Track</i>
+					<i id="iconclass">fa fa-pencil</i>
+				</i>			
+			</i>							
 			
 																													
 		</i>

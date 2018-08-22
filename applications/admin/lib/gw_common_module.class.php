@@ -204,6 +204,10 @@ class GW_Common_Module extends GW_Module
 				$item->errors['update_time']='/g/ITEM_SAVE_PREVENT_DATA_LOSS';
 			}
 		}
+		
+		if($item->id){
+			$item->fireEvent('BEFORE_CHANGES');
+		}
 
 		$this->fireEvent('BEFORE_SAVE_00', $item);
 
@@ -592,7 +596,7 @@ class GW_Common_Module extends GW_Module
 			$params['offset'] = $this->list_params['page_by'] * $page;
 			$params['limit'] = $this->list_params['page_by'];
 		}
-
+		
 
 
 		if (isset($this->list_params['order']) && $ord = $this->list_params['order'])

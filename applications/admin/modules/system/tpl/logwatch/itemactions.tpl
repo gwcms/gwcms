@@ -14,4 +14,4 @@
 {list_item_action_m url=[entire,[id=>$item->id]]}	
 
 <li class="divider"></li>
-{list_item_action_m url=[false,[act=>doClean,id=>$item->id]] x=Cl iconclass="fa fa-trash-o text-danger" confirm=1}	
+{list_item_action_m url=[false,[act=>doClean,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}	
