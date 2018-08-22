@@ -1079,5 +1079,20 @@ class GW_Data_Object
 			return $this->_original->get($name);
 		
 	}
+	
+	function secondsPassedAfterCreate($testseconds=false)
+	{
+		if($this->insert_time=='0000-00-00 00:00:00' || !$this->insert_time)
+			return false;
+		
+		$secs = time()-strtotime($this->insert_time);
+		
+		if($testseconds){
+			return $secs > $testseconds;
+		}else{
+			return $secs;
+		}
+		
+	}
 }
 
