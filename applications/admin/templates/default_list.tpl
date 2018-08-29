@@ -78,7 +78,7 @@
 					</td>
 				{/foreach}
 
-				{if count($dl_actions) && !$smarty.get.print_view}
+				{if $dl_actions && !$smarty.get.print_view}
 					<td nowrap class="gw_dl_actions">
 						{call dl_display_actions}
 					</td>
@@ -125,7 +125,7 @@
 	{/block}
 
 	
-	{if $m->paging_enabled && $m->list_params.paging_enabled && (count($list) || $m->list_params.page>1)}
+	{if $m->paging_enabled && $m->list_params.paging_enabled && ($list || $m->list_params.page>1)}
 		{$do_display_toolbar_pull_right[]=['file',"list/page_by.tpl"]}
 	{/if}	
 
@@ -140,12 +140,12 @@
 	{if !$smarty.get.print_view}
 		<div class="row gwViewsOrdersCont">
 			<div>
-				{if count($views) > 1}
+				{if $views && count($views) > 1}
 					{include "list/views.tpl"}
 				{/if}
 			</div>
 			<div>
-				{if count($list_orders) > 1}
+				{if $list_orders}
 					{include "list/orders.tpl"}
 				{/if}
 			</div>

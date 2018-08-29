@@ -296,8 +296,8 @@ class GW_DB
 
 	function insert($table, $entry, $nodie = false, $replaceinto = false)
 	{
-		$names = '';
-		$values = '';
+		$names = [];
+		$values = [];
 		foreach ($entry as $elemRak => $vert) {
 			$names[] = '`' . $elemRak . '`';
 			$values[] = "'" . addslashes($vert) . "'";
@@ -310,8 +310,8 @@ class GW_DB
 
 	function save($table, $entry, $nodie = false)
 	{		
-		$names = '';
-		$values = '';
+		$names = [];
+		$values = [];
 		foreach ($entry as $elemRak => $vert) {
 			$names[] = '`' . $elemRak . '`';
 			

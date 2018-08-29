@@ -9,12 +9,12 @@
 	{gw_unassign var=$breadcrumbs.0} 
 {/if}
 
-{if count($breadcrumbs)}
+{if $breadcrumbs}
 	{foreach $breadcrumbs as $item}
 		{$item.title|escape}{if !$item@last} / {/if}
 	{/foreach}
 	
-	{if count($breadcrumbs_attach)}
+	{if $breadcrumbs_attach}
 		::
 		{foreach $breadcrumbs_attach as $item}
 			{$item.title|escape} {if !$item@last}&raquo;{/if}	

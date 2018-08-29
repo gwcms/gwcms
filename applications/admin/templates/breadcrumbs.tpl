@@ -35,7 +35,7 @@
 		{/if}	
 	{/foreach}
 	
-	{if count($breadcrumbs_attach)}
+	{if $breadcrumbs_attach}
 		::
 		{foreach $breadcrumbs_attach as $item}
 			{if !$smarty.get.print_view}

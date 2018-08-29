@@ -128,7 +128,7 @@ class GW_Admin_Application extends GW_Application
 						{
 							$id = $do->id ? $do->id : $_GET['id'];
 							$item['actions'] = $this->buildUri($item['path'].'/itemactions',['id'=>$id, 'RETURN_TO'=>$_SERVER['REQUEST_URI']]);
-						}						
+						}
 					}
 				}else{
 					$item['title'] = GW::l('/A/VIEWS/'.$item['name']);

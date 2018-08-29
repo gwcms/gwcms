@@ -4,6 +4,11 @@
 class Module_Scaffold extends GW_Common_Module
 {	
 
+	function init()
+	{
+		parent::init();
+		$this->config = new GW_Config('sys/scaffold');
+	}
 	
 	
 	public $default_view = 'default';	
@@ -11,7 +16,61 @@ class Module_Scaffold extends GW_Common_Module
 	function viewDefault()
 	{
 		
+		$sample = '{
+	"module":"sitemap",
+	"submodules":[
+		{
+			"name":"sites",
+			"title":"Svetainės",
+			"model":"gw_site",
+			"structure":{
+				"admin_name":{
+					"type":"varchar255",
+					"title":"Ident. vardas"
+				},
+				"title":{
+					"type":"varchar255",
+					"i18n":1
+				},
+				"admin_email":{
+					"type":"varchar255"
+				},
+				"hosts":{
+					"type":"varchar255"
+				},
+				"price":{
+					"type":"float"
+				}
+			},
+			"actions":[
+				"inline_edit",
+				"remove"
+			],
+			"list_actions":[
+				"inline_form"
+			],
+			"in_menu":1,
+			"list":{
+				"checklist":1
+			}
+		}
+	],
+	"overwrite_tables":0,
+	"installid":"sitemap_sites"
+}';
 		
+		
+		
+		$item = new stdClass();
+		$item->config = json_encode(json_decode($this->config->lastconf), JSON_PRETTY_PRINT);;
+		
+		if(!$item->config || $item->config=='null')
+			$item->config = $sample;
+		
+		
+		
+		
+		$this->tpl_vars['item'] = $item;
 	}
 
 
@@ -48,32 +107,11 @@ class Module_Scaffold extends GW_Common_Module
 	{
 		GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
 		
-		$config = [
-		    'module'=>'sitemap',
-		    
-		    'submodules'=>[
-			[
-			    'name'=>'sites',
-			    'title'=>'Svetainės',
-			    'model'=>'gw_site',
-			    'structure'=>
-				[
-				    'admin_name'=>['type'=>'varchar255', 'title'=>"Ident. vardas"],
-				    'title'=>['type'=>'varchar255','i18n'=>1],
-				    'admin_email'=>['type'=>'varchar255'],
-				    'hosts'=>['type'=>'varchar255'],
-				    'price'=>['type'=>'float']
-				],
-			    'actions'=>['inline_edit','remove'],
-			    'list_actions'=>['inline_form'],
-			    'in_menu'=>1,
-			    
-			    'list'=>['checklist'=>1]
-			]
-		    ],
-		    'overwrite_tables'=>0,
-		    'installid'=>'sitemap_sites'
-		];	
+		$config = $_POST['item']['config'];
+		
+		$this->config->lastconf = json_encode($config);
+		
+		
 		
 		
 		$module = $config['module'];
