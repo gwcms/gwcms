@@ -169,8 +169,13 @@ class GW_CMS_Sync
 		$this->filterProjectSpecific($removes, false);		
 
 		$this->filterMatchingFiles($files);
+		
+		$ret = ['copy'=>$files, 'remove'=>[] ];
+		
+		
+		$ret[ isset($this->params['nr'])?'skip_remove':'remove' ] = $removes;
 
-		return ['remove'=>$removes, 'copy'=>$files];
+		return $ret;
 	}
 
 
@@ -276,6 +281,7 @@ class GW_CMS_Sync
 -exp // to export
 -p // preview changes (dont do actual sync)
 -s // straight sync (otherwise changed files will be copied to temp dir)
+-nr // no remove - dont remove files only copy
 --proj='proj_repos' //select project (projects mus be in same dir 'ls /var/www/projects' : 'gwcms shopproject crmproject whateverproject')
 --date='2018-01-01' //scan for changes from date
 -l //get last sync time

@@ -48,8 +48,17 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		  foreach($parent->getChilds() as $item)
 		  $arr+=$this->__getParentOpt($item);
 		 */
+		//multisite
+		$conds = null;
 
-		$list = $parent->findAll(Null, Array('order' => 'path'));
+		if(isset($this->filters['site_id']))
+			$conds = ['site_id=?', $this->filters['site_id']];
+
+		
+		//d::dumpas($conds);
+		
+		
+		$list = $parent->findAll($conds, Array('order' => 'path'));
 
 		foreach ($list as $item)
 		//$arr[$item->id] = $item->path.' ('. $item->title.')';		
