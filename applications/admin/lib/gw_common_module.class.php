@@ -111,9 +111,9 @@ class GW_Common_Module extends GW_Module
 		if ($class)
 			$item = new $class($id);
 		else
-			$item = $this->model->createNewObject($id);
+			$item = $this->model->createNewObject($id, $load);
 
-		if ($load && !$item->load())
+		if ($load && !$item->loaded)
 			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
 
 		$this->canBeAccessed($item, true);

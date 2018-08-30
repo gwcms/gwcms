@@ -58,6 +58,7 @@ class gw_data_object_test extends gw_testclass
 		
 		$o1 = GW_ADM_Page::singleton()->find('path="system"');
 		
+		
 		$this->assertEquals($o1->info->test, $test1_string);
 		
 		
@@ -70,6 +71,17 @@ class gw_data_object_test extends gw_testclass
 		
 		$o2 = GW_ADM_Page::singleton()->find('path="system"');
 		$this->assertEquals($o1->info->test3, $test2_string);
+		
+		
+		//load method #2
+		$o3 = GW_ADM_Page::singleton()->createNewObject($o1->id, true);
+		$this->assertEquals($o3->info->test3, $test2_string);
+		
+		//load method #3
+		$o4 = GW_ADM_Page::singleton()->find($o1->id);
+		$this->assertEquals($o4->info->test3, $test2_string);		
+		
+		//d::dumpas($o3->info->test3 == );
 		
 		
 		

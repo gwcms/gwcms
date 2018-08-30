@@ -912,8 +912,13 @@ class GW_Data_Object
 	function encodeJSON($fieldname, $value, $revert, $object = false)
 	{
 		if ($revert) {
-			if ($value)
+			if ($value){
+				if(is_array($value) || is_object($value)){
+					return $value;
+				}
+					
 				return json_decode($value, !$object);
+			}
 		}else {
 			if (is_array($value) || is_object($value))
 				return json_encode($value);

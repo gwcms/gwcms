@@ -128,7 +128,7 @@ class GW_Imap
 			$message->structure = imap_fetchstructure($this->conn, $message->mailid);;
 			//$message->overview = imap_fetch_overview($this->conn, $message->mailid);
 
-			if(isset($message->structure) && is_array($message->structure->parts))
+			if(isset($message->structure->parts) && is_array($message->structure->parts))
 				$message->structure->parts = self::flattenParts($message->structure->parts);
 			
 		}		
@@ -214,7 +214,7 @@ class GW_Imap
 			$head = imap_headerinfo($this->conn, $message->mailid);				
 			
 			//$head=json_encode($head, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-			$message->subject = $this->getSubject($head->subject);
+			$message->subject = $this->getSubject($head->subject ?? '--gwimapnosubj--'); //gali ir nebut tokio
 			$message->from = isset($head->from[0]->personal) ? $head->from[0]->personal : $head->fromaddress;
 			$message->to = $head->toaddress ?? false;
 			
