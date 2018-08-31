@@ -9,6 +9,8 @@ class GW_CMS_Sync
 	public $params;
 	private $sourceDir;
 	private $destDir;
+	private $projDir;
+	private $sync_direction;
 	
 	function parseParams($argv)
 	{
@@ -42,6 +44,7 @@ class GW_CMS_Sync
 
 	function getLastCommitWhenVersionsWereSynced($bydate=false){
 
+		/*
 		$enter_repos = $repos_local ? '' : 'cd ../gwcms && ';
 
 		$format='--pretty=format:"%H %s %ai"';
@@ -68,7 +71,24 @@ class GW_CMS_Sync
 			'lastcommitmsg' => $commitmsg,
 			'lastcommit_date' => $lastcommit_date,
 			'allcommits' => $out
-		];	
+		];
+		 */	
+	}
+	
+	function getLastSyncTime()
+	{
+		$f=$this->projDir."config/project_core_sync.json";
+		$dat = json_decode(file_get_contents($f));
+		return $dat->{$this->sync_direction};	
+	}
+	
+	function storeSyncTime()
+	{
+		$f=$this->projDir."config/project_core_sync.json";
+		$dat = json_decode(file_get_contents($f));
+		$dat->{$this->sync_direction} = date('Y-m-d H:i:s');
+		
+		file_put_contents($f, json_encode($dat));
 	}
 
 	/**
@@ -170,10 +190,10 @@ class GW_CMS_Sync
 
 		$this->filterMatchingFiles($files);
 		
-		$ret = ['copy'=>$files, 'remove'=>[] ];
+		$ret = ['copy'=>array_values($files), 'remove'=>[] ];
 		
 		
-		$ret[ isset($this->params['nr'])?'skip_remove':'remove' ] = $removes;
+		$ret[ isset($this->params['nr'])?'skip_remove':'remove' ] = array_values($removes);
 
 		return $ret;
 	}
@@ -238,6 +258,8 @@ class GW_CMS_Sync
 		echo count($changed_files['copy'] )." Files were extracted to $destdir\n";
 
 		echo __FUNCTION__.": ".$t->stop(5)." secs\n";
+		
+		$this->storeSyncTime();
 
 		return $destdir;
 	}
@@ -294,11 +316,10 @@ class GW_CMS_Sync
 	
 	function actSync()
 	{
-		if(isset($this->params['date']))
+		if(isset($this->params['date'])){
 			$datefrom = $this->params['date'];
-		else{
-			$last_sync = $this->getLastCommitWhenVersionsWereSynced();
-			$datefrom = $last_sync['lastcommit_date'];
+		}else{
+			$datefrom = strtotime($this->getLastSyncTime().' -1 DAY');
 		}
 		//intended to get updates from core gwcms
 
@@ -325,9 +346,12 @@ class GW_CMS_Sync
 	
 	function setDirection($import=true)
 	{
+		$this->sync_direction = $import ? 'import':'export';
+		
 		$external = dirname(__DIR__).'/'.$this->params['proj'].'/';;
 		$core = __DIR__.'/';	
 		
+		$this->projDir = $external;
 		$this->sourceDir = $import ? $external : $core;
 		$this->destDir = $import ? $core : $external;
 		
@@ -338,6 +362,7 @@ class GW_CMS_Sync
 	function cmdImp()
 	{
 		$this->setDirection(true);
+		
 		
 		$this->actSync();
 	}
