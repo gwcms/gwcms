@@ -7,7 +7,7 @@ class Module_Support  extends GW_Public_Module {
 	}
 
 	function viewDefault() {
-		$this->tpl_name = 'support';
+		//$this->tpl_name = 'support';
 	}
 
 	
@@ -21,7 +21,8 @@ class Module_Support  extends GW_Public_Module {
 		return $str;
 	}
 
-	function doMessage() {
+	function doMessage() 
+	{
 		$vals = $_POST['item'];
 		$msg = GW_Support_Message::singleton()->createNewObject();
 		
@@ -32,15 +33,52 @@ class Module_Support  extends GW_Public_Module {
 		if ($msg->validate()) {
 			$msg->insert();
 			
-			mail($this->config->notify_mail, 'New support request', $this->encodeTextMessage($vals));
+			//mail(, 'New support request', $this->encodeTextMessage($vals));
 			
-			$this->app->jump(false,['success'=>1]);
-		} else {
-			$this->app->setError($msg->errors);
+			$opts['subject']="Gauta nauja zinute i menuturas.lt (".$vals['subject'].")";
+
+			$str = "Nuo: <b>".$vals['name'].'</b><br />';
+
+			if(isset($vals['phone']))
+				$str .= "Telnr: <b>".$vals['phone'].'</b><br />';
+			
+			if(isset($vals['email']))
+				$str .= "El pašto adresas: <b>".$vals['email'].'</b><br />';
+
+			if(isset($vals['message']))
+				$str .= "Žinutė: <b><br /><br />".$vals['message'].'</b><br />';
+			
+			$str .= "<br><small style='color:silver'>Visas gautas žinutes galima matyti admin/support modulyje</small>";
+
+			$opts['body']=$str;
+
+			$opts['to'] = $this->config->notify_mail;
+			//$opts['debug'] = 1;
+
+			$status = GW_Mail_Helper::sendMail($opts);		
+			
+			echo json_encode(['status'=>'1']);
+		}else{
+			echo json_encode(['status'=>'0']);
 		}
 
+		exit;
+	}
+	
+	function doDiscount()
+	{
+		$_POST['item']['subject']="DISCOUNT 10%";
+		$this->doMessage();
+	}
+	
+	function viewIndex()
+	{
 		
 	}
-
+	
+	function viewIndexDiscount()
+	{
+		
+	}
 
 }

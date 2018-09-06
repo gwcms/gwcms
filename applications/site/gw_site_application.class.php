@@ -5,9 +5,15 @@ class GW_Site_Application extends GW_Application
 	public $path_arg=Array();
 	public $user_class="GW_Customer";
 	public $updates_by_path=[]; //store updates to show in menu
+	/**
+	 *
+	 * @var type GW_Page;
+	 */
+	public $page;
+	
 	
 	function getPage()
-	{
+	{	
 		$this->page = new GW_Page();
 		
 		if(isset($this->path_arr[0]['name']) && $this->path_arr[0]['name']=='direct')
@@ -181,6 +187,7 @@ class GW_Site_Application extends GW_Application
 		
 		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
 		{
+			$this->preloadBlocks();
 			$this->processTemplate(GW::s("DIR/SITE/ROOT").$template->path);
 		}else{
 			$this->processPath($template->path);
@@ -206,13 +213,23 @@ class GW_Site_Application extends GW_Application
 	function process()
 	{
 		//d::dumpas($this->page);
+		$this->preRun();
 		
 		if(!$this->page->id)
 			$this->jumpToFirstPage();
 		
-		$this->preRun();
+		
 			
 		$this->userzoneAccess();
+		
+		
+		if(isset($_GET['toggle-lang-results-active']))
+		{
+			$this->sess['lang-results-active'] = isset($this->sess['lang-results-active']) && $this->sess['lang-results-active'] ? 0 : 1;
+			unset($_GET['toggle-lang-results-active']);
+			$this->jump(false, $_GET);
+		}
+		
 
 		switch($this->page->type)
 		{
@@ -229,6 +246,34 @@ class GW_Site_Application extends GW_Application
 				$this->processPath($path);
 			break;
 			default: die("Unknown page type");break;
+		}
+	}
+	
+	function prepareMessage($text)
+	{
+		return GW::ln($text);
+	}
+
+	
+	public $block_preload;
+	
+	function preloadBlocks()
+	{
+		if($this->site){
+			$blocks = GW_Site_Block::singleton()->findAll(['site_id=? AND (ln=? OR ln="*") AND preload=1', $this->site->id, $this->ln]);
+
+			foreach($blocks as $block)
+				$this->block_preload[ $block->name ] = $block;
+		}
+		
+	}
+	
+	function getBlock($name)
+	{
+		if(isset($this->block_preload[$name])){
+			return $this->block_preload[$name];
+		}else{
+			return GW_Site_Block::singleton();
 		}
 	}
 

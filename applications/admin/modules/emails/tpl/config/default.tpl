@@ -17,7 +17,7 @@
 	<table>
 {include file="elements/input.tpl" name=mail_smtp_host type=text}
 {include file="elements/input.tpl" name=mail_smtp_user type=text}
-{include file="elements/input.tpl" name=mail_smtp_pass type=text}
+{include file="elements/input.tpl" name=mail_smtp_pass type=password}
 {include file="elements/input.tpl" name=mail_smtp_port type=number}
 	</table>
 {/capture}

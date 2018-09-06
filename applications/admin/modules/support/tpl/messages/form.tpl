@@ -4,12 +4,10 @@
 
 {include file="elements/input.tpl" name=user_id}
 {include file="elements/input.tpl" name=name}
+{include file="elements/input.tpl" name=phone}
 {include file="elements/input.tpl" name=email}
+{include file="elements/input.tpl" name=subject}
 {include file="elements/input.tpl" name=message type=textarea}
-
-
-
-
 
 
 

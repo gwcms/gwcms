@@ -19,10 +19,10 @@ class GW_Extension_Attachments
 			case 'AFTER_INSERT':
 				
 				//d::dumpas([$this->parent->temp_id, $this->parent->id , $this->parent->ownerkey]);
-				
-				GW_Attachment::singleton()->updateMultiple(
-					['owner_temp_id=? AND owner_type=?', $this->parent->temp_id, $this->parent->ownerkey], 
-					['owner_id'=>$this->parent->id,'owner_temp_id'=>0]);
+				if((int)$this->parent->temp_id)
+					GW_Attachment::singleton()->updateMultiple(
+						['owner_temp_id=? AND owner_type=?', $this->parent->temp_id, $this->parent->ownerkey], 
+						['owner_id'=>$this->parent->id,'owner_temp_id'=>0]);
 				
 				//d::dumpas($this->parent->getDB()->last_query);
 				

@@ -49,7 +49,11 @@
 		{gw_link relative_path="`$item->id`/balancelog"  params=[id=>$item->id] title="BL"}
 		*}
 		{gw_link do="rotate" params=[id=>$item->id] tag_params=[title=>GW::l('/m/ROTATE_CLOCKWISE')] title="<i class='fa fa-rotate-right'></i>"}		
-	{/function}			
-
+	{/function}	
+        
+        
+        
+	{$dl_checklist_enabled=1}
+	{$dl_cl_actions=[invertactive,dialogremove]}
 
 {/block}
