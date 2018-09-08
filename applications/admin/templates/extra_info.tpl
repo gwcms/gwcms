@@ -5,7 +5,7 @@
 
 
 
-	<table class="gwTable mar-top mar-btm gwExtraInfo {if $corner!='left'}pull-right{/if} clear">
+	<table class="gwTable mar-top mar-btm gwExtraInfo {if $corner!='left'}pull-right{/if}">
 		<tr><th colspan="2" class="th_h3 th_single">{$lang.EXTRA_INFO}</th></tr>
 
 		{foreach from=$extra_fields item=field_id}
