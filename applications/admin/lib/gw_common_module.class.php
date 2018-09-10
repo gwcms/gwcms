@@ -577,7 +577,10 @@ class GW_Common_Module extends GW_Module
 		
 		if(isset($this->list_params['search']) && $this->list_params['search'])
 		{
-			$cols = $this->getModelCols();		
+			
+			$is_utf8 = mb_detect_encoding($this->list_params['search']) != 'ASCII';
+			
+			$cols = $this->getModelCols($is_utf8 ? 'text':'all');		
 			$subcond = '';
 			
 			foreach ($cols as $key => $x){
@@ -1480,8 +1483,8 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 	}
 	
-	function getModelCols()
+	function getModelCols($type='all')
 	{
-		return $this->extra_cols+$this->model->getColumns();
+		return $this->extra_cols+$this->model->getColumns($type);
 	}
 }

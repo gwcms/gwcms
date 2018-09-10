@@ -495,13 +495,26 @@ class GW_Data_Object
 		return $this->getDb()->fetch_assoc($counts_sql);
 	}
 
-	function getColumns()
+	/*
+	 * type - 
+	 *	all(default) 
+	 *	text - text columns, char,varchar, text, TINYTEXT,MEDIUMTEXT longtext,
+	 */
+	function getColumns($type='all')
 	{
 		$db = & $this->getDB();
-		$cols = $db->getColumns($this->table);
+		
+		if($type=='all'){
+			$cols = $db->getColumns($this->table);
+		}elseif($type=='text'){
+			$cols = $db->getColumns($this->table, GW_DB::inConditionStr('DATA_TYPE', ['char','varchar','text','tinytext','mediumtext','longtext']));
+		}
+			
 
 		return array_flip($cols);
 	}
+	
+	
 	
 	function getColumnOptions($column)
 	{

@@ -696,9 +696,12 @@ class GW_DB
 	}
 	
 	
-	function getColumns($tablename)
+	function getColumns($tablename, $extraconds="")
 	{		
 		$conds = self::prepare_query(self::buidConditions(['table_name'=>$tablename,'table_schema'=>$this->uphd[3]]));
+		
+		if($extraconds)
+			$conds = GW_DB::mergeConditions ($conds, $extraconds);
 		
 		return $this->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE ".$conds);
 	}

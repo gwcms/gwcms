@@ -1,5 +1,8 @@
+{if !$options}
+	{$options=[]}
+{/if}
 {if $empty_option}
-	{$options=$lang.EMPTY_OPTION+$options}
+	{$options=GW::l('/g/EMPTY_OPTION')+$options}
 {/if}
 
 	
@@ -7,6 +10,7 @@
 		 {if $enable_search}data-live-search="true"{/if} {if $readonly}disabled{/if} 
 		 {if $auto_width} data-width="auto" {/if}
 		 {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
+		 style="{if $width}width: {$width};{/if}" 
 		 >
 	{if isset($disabled)}
 		{html_options  selected=$value options=$options disabled=$disabled strict=1}
