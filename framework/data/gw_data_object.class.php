@@ -50,7 +50,7 @@ class GW_Data_Object
 
 		if ($load)
 			$this->load();
-
+		
 		$this->ignore_fields += $this->_ignore_fields;
 		
 		$this->initExtensions();
@@ -111,7 +111,7 @@ class GW_Data_Object
 	function set($key, $val)
 	{
 		if(strpos($key, '/')!==false)
-		{
+		{			
 			$keys=explode('/', $key);
 			$k1= array_shift($keys);
 			
@@ -144,7 +144,7 @@ class GW_Data_Object
 
 			$this->content_base[$key] = $val;
 			
-			if(!isset($this->ignore_fields[$key]))
+			if($this->constructcomplete && !isset($this->ignore_fields[$key]))
 				$this->changed_fields[$key] = 1;
 		}
 	}
