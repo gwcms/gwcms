@@ -2,6 +2,7 @@
 
 
 {if $item->content_cat=='image'}
+	{$thumbn_sz=800x600}
 	{$image=$item->image}
 	<img src="{$app->sys_base}tools/imga/{$image->id}?size={$thumbn_sz}" align="absmiddle" vspace="2" />
 {elseif $item->content_type=='pdf'}

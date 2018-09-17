@@ -39,7 +39,7 @@
     			
 	
 				
-				<div class="js-slide">
+				<div class="js-slide" onclick="location.href = $(this).find('.mtlink').attr('href')" style="cursor:pointer">
 					<article class="u-shadow-v26 g-parent g-theme-bg-black-v1 g-bg-primary--hover g-transition-0_2 g-transition--ease-in">
 						<div class="u-bg-overlay g-bg-black-opacity-0_3--after">
 							<img class="img-fluid w-100" src="/tools/img/{$img->key}&v={$img->v}&size=570x436&method=crop" alt="Image description">
@@ -48,7 +48,7 @@
 						<div class="text-center g-pa-45">
 							<h3 class="text-uppercase g-font-weight-700 g-font-size-default g-font-secondary g-color-white g-mb-15">{$article->title}</h3>
 							<p class="g-color-white-opacity-0_8 g-mb-35">{$article->short|truncate:120}</p>
-							<a class="btn btn-md text-uppercase u-btn-primary g-font-weight-700 g-font-size-12 g-theme-bg-black-v1--parent-hover rounded-0 g-py-10 g-px-25" href="#!">{GW::ln('/g/ARTICLES/LEARN_MORE')}</a>
+							<a class="mtlink btn btn-md text-uppercase u-btn-primary g-font-weight-700 g-font-size-12 g-theme-bg-black-v1--parent-hover rounded-0 g-py-10 g-px-25" href="{$item_url}?id={$article->id}">{GW::ln('/g/ARTICLES/LEARN_MORE')}</a>
 						</div>
 					</article>
 				</div>

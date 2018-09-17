@@ -85,7 +85,8 @@ class Module_Comments extends Module_Items
 		
 		foreach($emails as $email)
 		{
-			$sent = GW_Mail_Helper::sendMail(['to'=>$email] + $msg);
+			$opts = ['to'=>$email] + $msg;
+			$sent = GW_Mail_Helper::sendMail($opts );
 			
 			if(!$sent){
 				$this->setError("Notification failed");

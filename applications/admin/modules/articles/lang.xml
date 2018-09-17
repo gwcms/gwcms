@@ -19,7 +19,19 @@
 			<en>Description</en>
 			<lt>Aprašymas</lt>
 		</i>
+		
+		<i id="group_id">
+			<en>Group</en>
+			<lt>Grupė</lt>
+		</i>		
 	</i>
+	
+	
+	<i id="FIELDS_SHORT">
+
+		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>
+	</i>	
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
