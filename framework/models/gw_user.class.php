@@ -100,8 +100,11 @@ class GW_User extends GW_Composite_Data_Object
 
 		$this->set('last_request_time', date('Y-m-d H:i:s'));
 
-		if ($db_update)
-			$this->update(Array('last_request_time'));
+		if ($db_update){
+			$this->auto_fields = false;
+			$this->update(['last_request_time']);
+			$this->auto_fields = true;
+		}
 	}
 
 	function canAccess($key)
