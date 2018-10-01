@@ -1,5 +1,7 @@
 {include "head.tpl"}
     
+<div class="page" id="page">
+<a class="btn btn-default" id="reposNewFolder" data-url="{$m->buildUri()}">{GW::l('/m/ADD_FOLDER')}</a>
 
 <div id="gwFileBrowser" class="folder" data-dir="/" data-url="{$m->buildUri(fileslist)}"></div>
 
@@ -32,13 +34,13 @@
 		
 		
 
-	
-
 	require(['gwcms'], function(){  require(['pack/browse_repository/js'], function(){ initBrowseRepos() }) });
 
 	function initBrowseRepos()
 	{
 		var funcNum = getUrlParam( 'CKEditorFuncNum' )
+		
+		try{
 		window.opener.CKEDITOR.tools.callFunction( funcNum, '', function() {
 		       var type=this.getDialog().getName() == 'image' ? 'image' : 'file';
 		       var br = new BrowseRepository($('#gwFileBrowser'), type);
@@ -48,6 +50,9 @@
 		       if(type=="image")
 			       $('#imageOpts').addClass('imageOptsEnabled');
 		});
+		}catch(err){
+			console.log('DEVELOP MODE');
+		}
 	}
 
 	</script>
@@ -85,5 +90,6 @@
 <span class="progress-bar"></span>  
     
 
+</div>
 {include "default_close_clean.tpl"}
     

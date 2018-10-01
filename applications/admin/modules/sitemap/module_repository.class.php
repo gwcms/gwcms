@@ -90,5 +90,18 @@ class Module_Repository extends GW_Common_Module
 		die('OK');
 	}
 	
+	function doMkDir()
+	{
+		$name = preg_replace('/[^a-z0-9]/i', '_', $_GET['foldername']);
+		
+		
+		
+		mkdir(GW::s('DIR/REPOSITORY').$name, 0777);
+		
+		$this->setMessage(GW::s('DIR/REPOSITORY').$name);
+		
+		$this->setMessage("New folder ok -". $_GET['foldername'].'- -'.$name);
+	}
+	
 	
 }

@@ -143,6 +143,10 @@
 		<i id="fileselect">Failo parinktis</i>
 	</i>
 	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
+	<i id="ADD_FOLDER">
+		<en>New folder</en>
+		<lt>Sukurti tuščią katalogą</lt>
+	</i>
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
 		<i id="title">

@@ -182,6 +182,31 @@ BrowseRepository.prototype.init = function () {
             window.close();	
 	})
 	
+	$("#reposNewFolder").click(function () {
+		
+		
+	
+		var newfolder=window.prompt($(this).text());
+		if(!newfolder)
+			return false;
+			
+		var url = gw_navigator.url($(this).data('url'), {packets: 1, act: 'doMkDir', foldername: newfolder});
+
+		$.post({
+			url: url,
+			dataType: "json",
+			success: function (data) {
+				gw_adm_sys.runPackets(data);
+				that.loadDir(that.container);
+			},
+			async: true,
+			cache: false,
+			processData: false,
+			timeout: 60000
+		});
+		
+	})	
+	
 };	
 
 BrowseRepository.prototype.initFolders = function () {

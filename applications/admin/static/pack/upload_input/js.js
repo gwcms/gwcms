@@ -198,7 +198,7 @@ Upload.prototype.init = function () {
 			that.reenableSelect($(this))
 		})	
 	});
-
+	
 	this.refresh();
 };
 
