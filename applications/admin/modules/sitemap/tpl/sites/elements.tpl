@@ -15,6 +15,8 @@
 		{include file=$i name=admin_email type=text}
 	{elseif $field=="hosts"}
 		{include file=$i name=hosts type=tags placeholder=GW::l('/m/ADD_HOST')}
+	{elseif $field=="admin_host"}
+		{include file=$i name=$field type=tags placeholder=GW::l('/m/ADD_HOST')}		
 	
 	{else}
 		

@@ -7,7 +7,14 @@
 
 
 	{function dl_cell_ico}
+		{if $item->type==4}
+			<i class="fa fa-external-link" aria-hidden="true" style="margin:2px"></i>
+		{elseif $item->type==2}
+			<i class="fa fa-external-link-square" style="margin:2px"></i>
+		{else}
+			
 		<img src="{$app->icon_root}{$icons[$item->type]}.png" align="absmiddle" vspace="2" />	
+		{/if}
 	{/function}
 	{function dl_cell_title}
 		{if $item->type!=2}

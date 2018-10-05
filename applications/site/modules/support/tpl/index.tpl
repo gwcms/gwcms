@@ -1,6 +1,6 @@
 
-<div class="col-md-6 col-lg-4 d-flex g-theme-bg-black-v1 g-pa-40">
-	<div class="align-self-center w-100" style="position:absolute">
+<div class="col-md-6 col-lg-4 d-flex g-theme-bg-black-v1 g-pa-40" style="min-height:511.891px">
+	<div class="align-self-center w-100" style="position:absolute;">
 		<div class="u-heading-v8-2 g-mb-60">
 			<h2 class="h1 text-uppercase u-heading-v8__title g-font-weight-700 g-font-size-26 g-color-white g-mb-30">
 

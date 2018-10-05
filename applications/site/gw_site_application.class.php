@@ -235,7 +235,11 @@ class GW_Site_Application extends GW_Application
 		{
 			case 0: $this->processPage($this->page);break;
 			case 1: $this->jumpToFirstChild();break;
-			case 2: $this->jumpLink();break;
+			
+			case 4: //external link
+			case 2: //internal link
+				$this->jumpLink();break;
+			
 			case 3: 
 				//shift off direct
 				$path = preg_replace('/^.*\//U','',$this->path);
@@ -245,6 +249,7 @@ class GW_Site_Application extends GW_Application
 				
 				$this->processPath($path);
 			break;
+		
 			default: die("Unknown page type");break;
 		}
 	}

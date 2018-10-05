@@ -77,6 +77,10 @@
 			<en>Link</en>
 			<lt>Nuoroda</lt>
 		</i>
+		<i id="4">
+			<en>External link</en>
+			<lt>Išorinė nuoroda</lt>
+		</i>		
 	</i>
 	<i id="FIELD_NOTE">
 		<i id="template_title">
