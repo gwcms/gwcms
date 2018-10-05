@@ -113,8 +113,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	}
 
 	//fix subitems paths
-	function afterParentIdChanges($item) {
-
+	function afterParentIdChanges($item) 
+	{
+		/*
 		$list = $item->findAll(['parent_id=?', $item->id]);
 
 		foreach ($list as $item) {
@@ -122,6 +123,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$item->updateChanged();
 			$this->afterParentIdChanges($item);
 		}
+		*/
+		
+		$this->doFixPaths();
 	}
 	
 	function doPreview()
@@ -149,5 +153,22 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		}
 	}
 	
+	function doFixPaths()
+	{
+		$t = new GW_Timer;
+		$pages= $this->model->findAll('1=1');
+		
+		foreach($pages as $page)
+		{
+			$page->fixPath();
+			$page->updateChanged();
+		}
+		
+		
+		//GW_Page::singleton();
+		
+		$this->setMessage('Fix path complete in: '.$t->stop().' secs');
+			
+	}	
 
 }

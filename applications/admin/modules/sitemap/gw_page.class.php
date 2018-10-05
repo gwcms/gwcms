@@ -197,7 +197,7 @@ class GW_Page extends GW_i18n_Data_Object
 		$cache =& $this->cache['input_data'];
 
 		if($cache)
-			return $cache[$key];
+			return $cache[$key] ?? false;
 			
 
 		$db = $this->getDB();

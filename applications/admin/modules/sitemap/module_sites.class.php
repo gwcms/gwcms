@@ -48,7 +48,7 @@ class Module_Sites extends GW_Common_Module
 		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
-	}	
+	}
 	
 	
 }

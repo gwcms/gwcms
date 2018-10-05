@@ -80,7 +80,7 @@
 		<i id="4">
 			<en>External link</en>
 			<lt>Išorinė nuoroda</lt>
-		</i>		
+	</i>
 	</i>
 	<i id="FIELD_NOTE">
 		<i id="template_title">
@@ -115,6 +115,10 @@
 			<en>Html code</en>
 			<lt>Html kodas</lt>
 		</i>
+		<i id="bool">
+			<en>Yes / no toggle</en>
+			<lt>Taip / ne - žymimoji varnelė</lt>
+		</i>		
 		
 	</i>
 	<i id="OPTIONS">
