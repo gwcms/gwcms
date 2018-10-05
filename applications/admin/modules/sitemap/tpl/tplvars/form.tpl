@@ -6,7 +6,12 @@
 {include file="elements/input.tpl" name=note}
 {include file="elements/input.tpl" name=type type=select options=$m->lang.VAR_TYPE_OPT}
 
-{include file="elements/input.tpl"  name=params type=code_json height=100px nopading=1}  
+
+{capture assign=defaultparams}
+	{literal}{}{/literal}
+{/capture}
+
+{include file="elements/input.tpl"  name=params type=code_json height=100px nopading=1 default=$defaultparams}  
 {*{include file="elements/input.tpl" name=params type=textarea height="100px"}*}
 
 {*include file="elements/input.tpl" name=params type=textarea height="100px" default="{ldelim}{rdelim}"*}
