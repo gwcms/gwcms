@@ -8,12 +8,14 @@ class Module_Repository extends GW_Common_Module
 	{	
 		parent::init();
 
-		$this->model = new stdClass();
+		$this->model = new GW_FSFile();
 	
 
 	
 		
 		$this->app->carry_params['clean']=1;
+		
+		//d::dumpas($this->app);
 	}
 	
 	
@@ -69,6 +71,8 @@ class Module_Repository extends GW_Common_Module
 		$this->tpl_vars['files'] = $files;
 	}
 	
+
+	
 	
 	function doUpload()
 	{
@@ -101,6 +105,37 @@ class Module_Repository extends GW_Common_Module
 		$this->setMessage(GW::s('DIR/REPOSITORY').$name);
 		
 		$this->setMessage("New folder ok -". $_GET['foldername'].'- -'.$name);
+	}
+	
+	
+	
+	
+	
+	
+	function getListConfig()
+	{
+		
+		//d::dumpas();
+		
+		$cfg = parent::getListConfig();
+		
+		
+		
+						
+		$cfg["fields"]['ico'] = 'L';
+		
+		return $cfg;
+	}
+
+
+	function viewPreview()
+	{
+		
+		//d::dumpas($this->getCurrentItemId());
+		
+		$item = $this->getDataObjectById();
+		
+		$this->tpl_vars['item']=$item;
 	}
 	
 	

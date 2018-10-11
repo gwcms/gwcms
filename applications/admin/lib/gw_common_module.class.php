@@ -86,9 +86,12 @@ class GW_Common_Module extends GW_Module
 
 		if (isset($this->app->path_arr_parent['data_object_id']) && $tmp = $this->app->path_arr_parent['data_object_id'])
 			$id = $tmp;
+		
+		
+		
 
 		if ($this->data_object_id_type == 1)
-			$id = (int) $id;
+			$id = $id;
 
 		return $id;
 	}
@@ -385,7 +388,7 @@ class GW_Common_Module extends GW_Module
 		
 		$this->prepareListConfig();
 						
-		return ['update' => (int) $item->get('id'), 'item' => $item];
+		return ['update' => $item->get('id'), 'item' => $item];
 	}
 
 	function common_viewItem()
@@ -806,7 +809,9 @@ class GW_Common_Module extends GW_Module
 			$list = $this->model->findAll($cond, $params);
 		}
 		
-		$last_querty=$this->model->getDB()->last_query;
+		if($this->model->is_db_based){
+			$last_querty=$this->model->getDB()->last_query;
+		}
 		
 		if(isset($_GET['verbose']) && $this->app->user->isRoot())
 		{

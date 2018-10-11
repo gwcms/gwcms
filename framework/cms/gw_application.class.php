@@ -263,12 +263,17 @@ class GW_Application
 
 	function requestInfoInnerDataObject(&$name, &$item)
 	{
-		if (is_numeric($name) && $item) {
-			$item['data_object_id'] = (int) $name;
+		if ($this->isItemIdentificator($name) && $item) {
+			$item['data_object_id'] = strpos($name, 'id:')===0 ? substr($name, 3) : (int) $name;
 			$data_object_id = $item['data_object_id'];
 			$item['path'].='/' . $name;
 			return true;
 		}
+	}
+	
+	function isItemIdentificator($name)
+	{
+		return (is_numeric($name) || strpos($name, 'id:')===0);
 	}
 
 	/**
@@ -312,10 +317,12 @@ class GW_Application
 		//nuimti id - articles/items
 		//kad galetu sudarinet teisingus linkus
 
-		if (count($path_arr) && is_numeric($path_arr[count($path_arr) - 1]))
-			$path = dirname($path);
+		
+		//anksciau buvo is_numeric bet paduodamas masyvas, kazkurioj vietoj patobulejus neprisitempiau
+		//if (count($path_arr) && $this->isItemIdentificator($path_arr[count($path_arr) - 1]))
+		//	$path = dirname($path);
 
-
+		
 
 		return compact('ln', 'path', 'path_arr', 'path_clean', 'data_object_id', 'path_arr_parent');
 	}
@@ -379,7 +386,7 @@ class GW_Application
 		}
 		
 		
-		$info['path_clean'] = array_filter($path_arr, function($var){ return !is_numeric($var); } );
+		$info['path_clean'] = array_filter($path_arr, function($var){ return !$this->isItemIdentificator($var); } );
 		
 		return $info;
 	}
@@ -420,7 +427,7 @@ class GW_Application
 
 		$this->module = & $module;
 
-
+		
 		$path_info['params'] = isset($path_info['params']) ? $path_info['params'] : [];
 
 		//d::dumpas($path_info);

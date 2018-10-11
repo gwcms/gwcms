@@ -30,6 +30,7 @@ class GW_Data_Object
 	public $extensions=[];
 	protected $observers = [];
 	public $constructcomplete=false;
+	public $is_db_based = true;
 
 	/**
 	 * pvz 

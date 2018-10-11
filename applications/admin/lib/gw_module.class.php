@@ -291,7 +291,7 @@ class GW_Module
 		
 		
 		//jei paduodama 100/form/abc - 100 kontekstinio objekto id, form - viewsas, abc viewso paramsas
-		while(isset($params[0]) && is_numeric($params[0]))
+		while(isset($params[0]) && $this->app->isItemIdentificator($params[0]))
 			$erase=array_shift($params);
 		
 		//nuimti pirmus paramsus kurie yra number
@@ -329,7 +329,7 @@ class GW_Module
 	function process()
 	{
 		extract($this->_args);
-
+				
 		
 		if(isset($request_params['act']) && ($act=$request_params['act']))
 		{
