@@ -104,17 +104,21 @@ class GW_Common_Module extends GW_Module
 	 */
 	function getDataObjectById($load = true, $class = false)
 	{
-
 		$id = $this->getCurrentItemId();
-
 
 		if (!$id)
 			return $this->setError('/g/GENERAL/BAD_ARGUMENTS');
 
-		if ($class)
+		if ($class){
 			$item = new $class($id);
-		else
-			$item = $this->model->createNewObject($id, $load);
+		}else{
+			
+			$item = $this->model->createNewObject($id);
+			
+			//must be outside of create new object, in case of inheritProps is needed before load
+			if($load)
+				$item->load();
+		}
 
 		if ($load && !$item->loaded)
 			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
@@ -335,7 +339,7 @@ class GW_Common_Module extends GW_Module
 	function common_viewForm()
 	{
 		$item = $this->model->createNewObject();
-
+		
 		$id = $this->getCurrentItemId();
 
 		//only form i18n objects
@@ -355,7 +359,7 @@ class GW_Common_Module extends GW_Module
 
 			if (isset($vals['id'])) { //redaguojamas su klaidom
 				$item->set('id', $vals['id']);
-				$item->load();
+				$item->load();//4 inheritProps
 				$item->copyOriginal();
 
 				$this->canBeAccessed($item, true);
@@ -369,8 +373,8 @@ class GW_Common_Module extends GW_Module
 			
 			
 		} elseif ($id) { // edit existing
-			$item = $this->model->createNewObject($id, true, $this->lang());
-
+			$item = $this->model->createNewObject($id, false, $this->lang());
+			$item->load();
 			$this->canBeAccessed($item, true);
 		} else { // create new
 			$item->temp_id = uniqid();

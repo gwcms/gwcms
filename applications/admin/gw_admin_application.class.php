@@ -196,5 +196,9 @@ class GW_Admin_Application extends GW_Application
 		$this->processModule($path_info, $_REQUEST);
 	}	
 	
+	function idInPath($id)
+	{
+		return is_numeric($id) ? $id : "id_".$id;
+	}
 	
 }

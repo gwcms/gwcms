@@ -52,6 +52,10 @@ Upload.prototype.doUpload = function () {
 			that.reinitControls();
 			//that.refresh();
 			that.reenableSelect();
+			
+			if($.isFunction(that.onUpload))
+				that.onUpload();
+			
 		},
 		error: function (error) {
 			// handle error

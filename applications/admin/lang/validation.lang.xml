@@ -50,4 +50,13 @@
 		<lt>El. laiško šablonas nenustatytas / nerastas</lt>
 		<en>Email template not found / not set</en>
 	</i>
+	<i id="INVALID_FILENAME">
+		<lt>Failo pavadinime yra neleistinų simbolių</lt>
+		<en>Filename contains illeagal symbols</en>
+	</i>
+	<i id="FILE_EXISTS">
+		<lt>Failo pavadinimas jau egzistuoja</lt>
+		<en>Filename already exists</en>		
+	</i>	
+	
 </xml>

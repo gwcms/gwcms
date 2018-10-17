@@ -9,8 +9,7 @@ class Module_Repository extends GW_Common_Module
 		parent::init();
 
 		$this->model = new GW_FSFile();
-	
-
+		$this->model->root_dir = GW::s('DIR/REPOSITORY');
 	
 		
 		$this->app->carry_params['clean']=1;
@@ -44,7 +43,6 @@ class Module_Repository extends GW_Common_Module
 		$files = [];
 		$dirs = [];
 		
-		
 		usort( $files0, function( $a, $b ) { return filemtime($a) - filemtime($b); } );
 		
 		foreach($files0 as $idx =>  $file){
@@ -56,17 +54,11 @@ class Module_Repository extends GW_Common_Module
 				$files[$file] = $relative;
 		}
 		
-		
-		
-		
 		if(isset($_GET['ftype']) && $_GET['ftype']=='image')
 			foreach($files as $idx => $file)
 				if(!$this->isImage($file))
 					unset($files[$idx]);	
 				
-				
-				
-		
 		$this->tpl_vars['dirs'] = $dirs;
 		$this->tpl_vars['files'] = $files;
 	}
@@ -105,6 +97,8 @@ class Module_Repository extends GW_Common_Module
 		$this->setMessage(GW::s('DIR/REPOSITORY').$name);
 		
 		$this->setMessage("New folder ok -". $_GET['foldername'].'- -'.$name);
+		
+		$this->jump();
 	}
 	
 	
@@ -131,12 +125,33 @@ class Module_Repository extends GW_Common_Module
 	function viewPreview()
 	{
 		
-		//d::dumpas($this->getCurrentItemId());
-		
 		$item = $this->getDataObjectById();
 		
 		$this->tpl_vars['item']=$item;
 	}
+	
+	function __eventBeforeListParams(&$params)
+	{
+		$this->model->root_dir = GW::s('DIR/REPOSITORY');
+	}
+	
+	function __eventAfterForm($item)
+	{
+	
+	}
+	
+	
+	function doStore()
+	{
+		$files = GW_File_Helper::reorderFilesArray('files');
+		
+		foreach($files as $file)
+		{
+			move_uploaded_file($file['tmp_name'], $this->model->root_dir.$file['name']);
+		}
+		
+	}
+	
 	
 	
 }

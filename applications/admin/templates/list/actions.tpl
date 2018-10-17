@@ -81,11 +81,11 @@
 {/function}
 
 {function name=dl_actions_edit}
-	{list_item_action_m url=["`$item->id`/form"] iconclass="fa fa-pencil-square-o text-brown"}
+	{list_item_action_m url=["`$app->idInPath($item->id)`/form"] iconclass="fa fa-pencil-square-o text-brown"}
 {/function}
 
 {function name=dl_actions_editshift}
-	{list_item_action_m url=["`$item->id`/form"] iconclass="fa fa-pencil-square-o text-warning"  shift_button=1}
+	{list_item_action_m url=["`$app->idInPath($item->id)`/form"] iconclass="fa fa-pencil-square-o text-warning"  shift_button=1}
 {/function}
 
 {function name=dl_actions_invert_activeold}

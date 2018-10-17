@@ -264,7 +264,7 @@ class GW_Application
 	function requestInfoInnerDataObject(&$name, &$item)
 	{
 		if ($this->isItemIdentificator($name) && $item) {
-			$item['data_object_id'] = strpos($name, 'id:')===0 ? substr($name, 3) : (int) $name;
+			$item['data_object_id'] = strpos($name, 'id_')===0 ? substr($name, 3) : (int) $name;
 			$data_object_id = $item['data_object_id'];
 			$item['path'].='/' . $name;
 			return true;
@@ -273,7 +273,7 @@ class GW_Application
 	
 	function isItemIdentificator($name)
 	{
-		return (is_numeric($name) || strpos($name, 'id:')===0);
+		return (is_numeric($name) || strpos($name, 'id_')===0);
 	}
 
 	/**

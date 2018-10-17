@@ -31,6 +31,7 @@ class GW_Data_Object
 	protected $observers = [];
 	public $constructcomplete=false;
 	public $is_db_based = true;
+	public $inherit_props = [];
 
 	/**
 	 * pvz 
@@ -262,8 +263,18 @@ class GW_Data_Object
 	{
 		$class = get_class($this);
 		$o = new $class($values, $load);
+				
+		$this->inheritProps($o);
+		
 		return $o;
 	}
+	
+	function inheritProps($o)
+	{
+		foreach($this->inherit_props as $prop)
+			$o->$prop = $this->$prop;
+	}
+	
 
 	function &objResult(&$list)
 	{
@@ -365,6 +376,9 @@ class GW_Data_Object
 		if ($conditions)
 			$options['conditions'] = $conditions;
 
+		
+		$this->fireEvent('BEFORE_LIST', $options);
+		
 		$sql = $this->buildSql($options);
 
 
@@ -454,10 +468,15 @@ class GW_Data_Object
 
 		return count($r = $this->findAll($conditions, $options)) ? $r[0] : false;
 	}
+	
+	function loadVals($fields = "*")
+	{
+		return $this->find($this->getIdCondition(), Array('select' => $fields, 'return_simple' => 1));
+	}
 
 	function load($fields = '*')
 	{
-		$vals = $this->find($this->getIdCondition(), Array('select' => $fields, 'return_simple' => 1));
+		$vals = $this->loadVals($fields);
 
 		if (!$vals)
 			return false;

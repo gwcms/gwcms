@@ -350,7 +350,7 @@ class GW_DB
 			$values = Array();
 
 			foreach ($keys as $key)
-				$values[] = "'" . addslashes($entry[$key]) . "'";
+				$values[] = "'" . addslashes($entry[$key]??'') . "'";
 
 			$query.= "(" . implode($values, ',') . "),\n";
 		}

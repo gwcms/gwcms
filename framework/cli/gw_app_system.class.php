@@ -151,7 +151,7 @@ class GW_App_System Extends GW_App_Base
 			$time_match = '....-..-.. ' . $time_match;
 
 		$match = preg_match("/$time_match/", date('Y-m-d H:i:s'), $m) ? 1 : 0;
-
+		
 		$last_exec = $config->get($cron_id = "ctask $time_match $interval");
 
 
@@ -159,9 +159,11 @@ class GW_App_System Extends GW_App_Base
 		$dif = time() - strtotime($last_exec);
 
 		//debug
-		//echo "lastexec $time_match#$interval - $last_exec\n";
-		//echo "diff: $dif\n";
-		//echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
+		echo "lastexec $time_match#$interval - $last_exec\n";
+		echo "diff: $dif\n";
+		echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
+		
+
 
 		if ($match && ($dif >= $interval * 60 ) || (isset($GLOBALS['argv'][1]) && $GLOBALS['argv'][1] == $interval)) {
 			$this->msg('[' . date('H:i:s') . "] run $interval");
@@ -176,6 +178,8 @@ class GW_App_System Extends GW_App_Base
 	{
 		$crontask0 = new GW_CronTask;
 		$time_matches = $crontask0->getAllTimeMatches();
+		
+		print_r($time_matches);
 
 		foreach ($time_matches as $tm) {
 			list($time_match, $interval) = explode('#', $tm);
@@ -192,7 +196,7 @@ class GW_App_System Extends GW_App_Base
 						include $f;
 						$this->msg($msg = "Inner task: " . $task->name . ", speed: " . $t->stop());
 					} else {
-						$this->msg($msg = "Inner not found: " . $task->name);
+						$this->msg($msg = "Inner not found: " . $task->name." ($f)");
 					}
 
 					echo "$msg\n";

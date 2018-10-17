@@ -1,67 +1,66 @@
 <?php
 
-class GW_FSFile
+class GW_FSFile extends GW_Data_Object
 {
-	public $dir="/";
+
+	
+	public $table = "reposfilelist";
 	public $root_dir;
-	public $content_base=[];
-	public $is_db_based = false;
-	public $loaded = false;
+	public $inherit_props=['root_dir'];
+	public $default_order = 'isdir ASC, filename ASC';		
 	
-	function __construct($vals=[], $load=false)
+
+
+	function filterFilename($filename) 
 	{
-		$this->root_dir = GW::s('DIR/REPOSITORY');;
-		
-		if(!is_array($vals)){
-			$path = $vals;
-			
-			if(strpos($path, 'id:')===0)
-				$path= substr ($path, 3);
-			
-			$this->content_base = $this->getByPath(base64_decode($path));
-			$this->loaded = true;
-		
-		}else{
-		
-			foreach($vals as $key => $val)
-			{
-				$this->set($key, $val);
-			}
-		}
+		// sanitize filename
+		$filename = preg_replace('~[<>:"/\\|?*]|[\x00-\x1F]|[\x7F\xA0\xAD]|[#\[\]@!$&\'()+,;=]|[{}^\~`]~x', '-', $filename);
+		// avoids ".", ".." or ".hiddenFiles"
+		$filename = ltrim($filename, '.-');
+		// optional beautification
+
+		// maximise filename length to 255 bytes http://serverfault.com/a/9548/44086
+		$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		$filename = mb_strcut(pathinfo($filename, PATHINFO_FILENAME), 0, 255 - ($ext ? strlen($ext) + 1 : 0), mb_detect_encoding($filename)) . ($ext ? '.' . $ext : '');
+		return $filename;
 	}
-	
-	function set($key, $val)
+
+	function validate()
 	{
-		$this->content_base[$key] = $val;
-	}
-	
-	function get($key)
-	{
-		
-		if($key=='id')
+		if(isset($this->changed_fields['filename']))
 		{
-			return 'id:'.base64_encode($this->path);
+			if($this->filterFilename($this->filename) != $this->filename)
+				$this->errors['filename'] = "/G/VALIDATION/INVALID_FILENAME";
+			
+			
+			$new = dirname($this->path).'/'.$this->filename;
+			if(file_exists($new) || is_dir($new))
+				$this->errors['filename'] = "/G/VALIDATION/FILE_EXISTS";
 		}
 		
-		return $this->content_base[$key];
+		return count($this->errors)==0;
 	}
 	
-	function findAll()
+	
+	function loadList()
 	{
-		
-		
 		$list0 = glob($this->root_dir.$this->dir.'*');
 		$list = [];
-		
+				
 		foreach($list0 as $path){
-			$list[] = new GW_FSFile($this->getByPath($path));
+			$list[] = $this->getByPath($path);
 		}
+				
+	
 		
+		//foreach($list as $idx => $vals){
+		//	$list[$idx] = new GW_FSFile($vals) ;
+		//}	
 
-		
 		return $list;
-		
 	}
+	
+	
 	
 	function getByPath($path)
 	{
@@ -72,7 +71,7 @@ class GW_FSFile
 				'insert_time'=> date('Y-m-d H:i:s', filectime($path)),
 				'update_time'=> date('Y-m-d H:i:s', filemtime($path)),
 				'size'=> filesize($path),
-				'humansize' => GW_File_Helper::cFileSize(filesize($path)),
+				//'humansize' => GW_File_Helper::cFileSize(filesize($path)),
 				'mime'=> Mime_Type_Helper::getByFilename($path)
 		];
 		
@@ -84,45 +83,124 @@ class GW_FSFile
 			$arr['type'] = $arr['mime'];
 		}
 		
+		//d::dumpas($this->root_dir);
+		
 		$arr['relpath'] = str_replace($this->root_dir, '', $arr['path']);
+		$arr['id'] = $this->getIDByPath($arr['path']);
+		
+		unset($arr['mime']);
+		unset($arr['path']);
+		//unset
 		
 		return $arr;
-	}
+	}	
 	
-	
-
-	
-	
-	public $primary_fields = ['path']; 
-	
-	function getColumns()
+	function getIDByPath($path)
 	{
-		$list = ['path', 'filename','isdir','insert_time','update_time','size','humansize','type'];
-		return array_flip($list);
+		return str_replace('=','_',base64_encode($path));		
+	}
+	
+	function getPathById($id)
+	{
+		return  base64_decode(str_replace('_','=',$id));;
 	}
 	
 	
-	function lastRequestInfo()
+	function loadVals($fields="*") 
+	{
+		return $this->getByPath($this->getPathById($this->id));
+	}
+	
+	
+	function createTempTable()
+	{
+		$sql="
+		CREATE TEMPORARY TABLE `reposfilelist` (
+		`id` varchar(500) NOT NULL,
+		`relpath` varchar(500) NOT NULL,
+		`filename` varchar(200) NOT NULL,
+		`size` bigint(20) NOT NULL,
+		`isdir` tinyint(4) NOT NULL,
+		`type` varchar(50) NOT NULL,
+		`subtype` varchar(25) NOT NULL,
+		`insert_time` datetime NOT NULL,
+		`update_time` datetime NOT NULL
+	      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		
+		//egzistuos tik sesijos metu
+		//$this->getDB()->query("DROP TABLE IF EXISTS `reposfilelist`;");
+		$this->getDB()->query($sql);
+	}
+	
+	function getColumns($type="all")
+	{
+		$list = ['relpath', 'filename','isdir','insert_time','update_time','size','type'];
+		return array_flip($list);
+	}	
+		
+	
+	
+	function eventHandler($event, &$context_data = array()) {
+		
+		switch($event){
+			case "BEFORE_LIST":
+				$this->createTempTable();
+				$rows = $this->loadList();
+				
+				
+				$this->getDB()->multi_insert($this->table, $rows);
+			break;
+		
+			case "BEFORE_SAVE":
+				if(isset($this->changed_fields['filename']))
+				{
+					rename($this->path, dirname($this->path).'/'.$this->filename);
+					//d::dumpas($this->changed_fields);
+				}				
+			break;
+		}
+	
+		parent::eventHandler($event, $context_data);
+	}
+	
+	
+	public $calculate_fields = [
+	    'path'=>1,
+	    'humansize'=>1,
+	];
+
+
+
+	function calculateField($key)
+	{
+		switch ($key) {
+			case 'humansize':
+				return GW_File_Helper::cFileSize($this->size);
+			break;
+			case 'path':
+				$this->root_dir.$this->relpath;
+			break;
+			//case 'ext':
+			//	return new IPMC_Competition_Extended($this->id);
+		}	
+	}
+	
+	
+	function updateChanged()
 	{
 		
-	}
-	
-	function __set($key, $val)
-	{
-		return $this->set($key, $val);
-	}
-	
-	function __get($key)
-	{
-		return $this->get($key);
-	}
-	
-	function createNewObject($values = array(), $load = false)
-	{
-		$class = get_class($this);
-		$o = new $class($values, $load);
-		return $o;
+		
+		
+		if(isset($this->changed_fields['filename']))
+		{
+			$path = $this->getPathById($this->id);
+			rename($path, dirname($path).'/'.$this->filename);
+			//d::dumpas($this->changed_fields);
+		}		
 	}	
+	
+	
+	
 	
 }
 
