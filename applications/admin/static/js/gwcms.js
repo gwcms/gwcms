@@ -1038,6 +1038,33 @@ function checked_action(actionOrUrl, redirect) {
 	}
 }
 
+function checked_action_postids(actionOrUrl, redirect) 
+{
+
+	var selected = [];
+	$.each($('.checklist_item:checked'), function () {
+		selected.push($(this).val());
+	});
+
+	var url = actionOrUrl.indexOf('/')==-1 ? GW.app_base + GW.ln + '/' + GW.path + '/' + actionOrUrl : actionOrUrl
+
+	$.ajax({
+	  type: "POST",
+	  url: url,
+	  data: { ids : selected.join(',') },
+	  success: function(){
+
+			if(redirect) {
+				location.href = url
+			} else {
+				gw_dialog.open(url)
+			}
+
+	  }
+	});
+
+}
+
 function checked_action2(action, title) {
 
 	var selected = [];

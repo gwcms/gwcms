@@ -14,7 +14,8 @@
 
 	<a class="{if $indropdown}gwtoolbarbtn{else}gwtoolbarbtn btn btn-{$btnnormal|default:'default'} btn-active-{$btnactive|default:'primary'}{/if} {$btnclass}" 
 	   {if $toggle}data-toggle="button" aria-pressed="false"{/if} 
-	   {if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if}
+	   {*2018-10 outdate if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if*}
+	   {if $query_param}onclick="var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });return false;"{/if}
 	   {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 	   {if $confirm}{$app->fh()->gw_link_confirm()}{/if}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}"

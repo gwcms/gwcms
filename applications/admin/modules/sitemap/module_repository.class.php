@@ -9,12 +9,34 @@ class Module_Repository extends GW_Common_Module
 		parent::init();
 
 		$this->model = new GW_FSFile();
-		$this->model->root_dir = GW::s('DIR/REPOSITORY');
+		
+		
+		$dir = GW::s('DIR/REPOSITORY');
+		
+		if(isset($_GET['parent']) && $_GET['parent'] !='..')
+		{
+			$relpath = str_replace('../', '', $_GET['parent']);
+			$path = $dir.$relpath.'/';
+			
+			
+			if(is_dir($path)){
+				$dir = $path;
+				$this->breadcrumbsAttach();
+			}
+			
+						
+		}
+		$this->model->root_dir = $dir;
+		$this->model->base_dir = GW::s('DIR/REPOSITORY');
 	
 		
 		$this->app->carry_params['clean']=1;
+		$this->app->carry_params['parent']=1;
 		
 		//d::dumpas($this->app);
+		
+			
+		
 	}
 	
 	
@@ -90,13 +112,20 @@ class Module_Repository extends GW_Common_Module
 	{
 		$name = preg_replace('/[^a-z0-9]/i', '_', $_GET['foldername']);
 		
+		$new = $this->model->root_dir.$name;
+			
+		if(file_exists($new) || is_dir($new)){
+			$this->setError("/G/VALIDATION/FILE_EXISTS");
+		}else{
+			mkdir($new, 0777);
+			
+			if(is_dir($new)){
+				$this->setMessage(GW::l('/m/NEW_FOLDER_ADDED'));
+			}else{
+				$this->setMessage(GW::l('/m/CREATE_FAILED_MAYBE_CHECK_PERMISSIONS'));
+			}
+		}
 		
-		
-		mkdir(GW::s('DIR/REPOSITORY').$name, 0777);
-		
-		$this->setMessage(GW::s('DIR/REPOSITORY').$name);
-		
-		$this->setMessage("New folder ok -". $_GET['foldername'].'- -'.$name);
 		
 		$this->jump();
 	}
@@ -130,15 +159,9 @@ class Module_Repository extends GW_Common_Module
 		$this->tpl_vars['item']=$item;
 	}
 	
-	function __eventBeforeListParams(&$params)
-	{
-		$this->model->root_dir = GW::s('DIR/REPOSITORY');
-	}
+
 	
-	function __eventAfterForm($item)
-	{
-	
-	}
+
 	
 	
 	function doStore()
@@ -150,6 +173,146 @@ class Module_Repository extends GW_Common_Module
 			move_uploaded_file($file['tmp_name'], $this->model->root_dir.$file['name']);
 		}
 		
+	}
+	
+	
+	function breadcrumbsAttach()
+	{
+		
+		$breadcrumbs_attach=[];
+		
+		$parents = explode('/', $_GET['parent']);
+		$parents = array_filter($parents);
+		//$parents = array_reverse($parents);
+		$path = [];	
+		
+
+		$breadcrumbs_attach[]=Array
+		(
+			'path'=> $this->builduri(false, ['parent'=>""],['level'=>2]),
+			'title'=>GW::l('/m/ROOT_DIR')
+		);
+
+		
+		foreach($parents as $name){
+			$path[]=$name;
+			
+			
+			$breadcrumbs_attach[]=Array
+			(
+				'path'=> $this->builduri(false, ['parent'=>implode('/', $path)],['level'=>2]),
+				'title'=>$name
+			);
+		
+		}
+		
+		$this->tpl_vars['breadcrumbs_attach'] =& $breadcrumbs_attach;
+	}	
+	
+	
+	
+	function moveFile($file, $dest, $succmsg_skip=false)
+	{
+		$new = $dest.'/'.basename($file);
+		
+		if(!file_exists($file))
+		{
+			$this->setError(GW::l('/g/GENERAL/ITEM_NOT_EXISTS'). ' ('.$file.')');
+			return false;
+		}
+			
+		if(file_exists($new) || is_dir($new)){
+			$this->setError(GW::l("/G/VALIDATION/FILE_EXISTS").' ('.$new.')');
+			return false;
+		}else{
+			rename($file, $new);
+			
+			if(file_exists($new)){
+				if(!$succmsg_skip)
+					$this->setMessage(GW::l('/m/ITEM_MOVED'));
+				
+				return true;
+			}else{
+				$this->setMessage(GW::l('/m/FAILED_MAYBE_CHECK_PERMISSIONS').' ('.$new.')');
+				return false;
+			}
+		}
+	}
+	
+	function doDragDrop()
+	{		
+		$base = $this->model->base_dir;
+		$dropto = $base.$_GET['dropto'];
+		$file = $base.$_GET['itemid'];
+		
+		
+		$this->moveFile($file, $dropto);
+		
+
+		$this->jump();
+		
+	}
+	
+	
+	
+	function getFoldersList($basedir)
+	{
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($basedir));
+
+		foreach ($iterator as $file) {
+			if ($file->isDir()) {
+				$path = $file->getRealpath();
+				//pirma salyga nerodyt hidden failu (prasidedanciu tasku) .sys .sys/images
+				if (strpos($path, $this->model->base_dir . '.') !== 0 && strpos($path, $this->model->base_dir)===0){
+					$path= str_replace($this->model->base_dir,'',$path);
+					$folders[$path] = $path;
+				}
+			}
+		}
+		return $folders;
+	}
+	
+	function viewDialogMoveItems()
+	{
+		
+		if(isset($_POST['ids']))
+		{
+			$this->app->sess('moveitems', explode(',', $_POST['ids']));
+			exit;
+		}else{
+			$this->tpl_vars['ids'] = $this->app->sess("moveitems");
+			$list = $this->getFoldersList($this->model->base_dir);
+			$this->smarty->assign('destination_list', $list);			
+		}
+	}	
+	
+	
+	function doDialogMoveItemsSubmit()
+	{
+		$base = $this->model->base_dir;
+		$files2move = explode(',',$_POST['ids']);
+		$list = [];
+		foreach($files2move as $id)
+		{
+			$list[] = $this->model->getPathById($id);
+		}
+		
+		$newdest = $base.$_POST['destination'];
+		
+		$cnt =0;
+		$failed = 0;
+		foreach($list as $file){
+			if($this->moveFile($file, $newdest, true))
+			{
+				$cnt++;
+			}else{
+				$failed++;
+			}
+		}
+		
+		$this->setMessage("Moved: $cnt, Failed: $failed");
+		
+		$this->jumpAfterSave();
 	}
 	
 	

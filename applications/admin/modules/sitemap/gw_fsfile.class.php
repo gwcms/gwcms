@@ -6,7 +6,8 @@ class GW_FSFile extends GW_Data_Object
 	
 	public $table = "reposfilelist";
 	public $root_dir;
-	public $inherit_props=['root_dir'];
+	public $base_dir;
+	public $inherit_props=['root_dir','base_dir'];
 	public $default_order = 'isdir ASC, filename ASC';		
 	
 
@@ -43,20 +44,14 @@ class GW_FSFile extends GW_Data_Object
 	
 	
 	function loadList()
-	{
+	{		
 		$list0 = glob($this->root_dir.$this->dir.'*');
 		$list = [];
 				
 		foreach($list0 as $path){
 			$list[] = $this->getByPath($path);
 		}
-				
-	
 		
-		//foreach($list as $idx => $vals){
-		//	$list[$idx] = new GW_FSFile($vals) ;
-		//}	
-
 		return $list;
 	}
 	
@@ -85,7 +80,7 @@ class GW_FSFile extends GW_Data_Object
 		
 		//d::dumpas($this->root_dir);
 		
-		$arr['relpath'] = str_replace($this->root_dir, '', $arr['path']);
+		$arr['relpath'] = str_replace($this->base_dir, '', $arr['path']);
 		$arr['id'] = $this->getIDByPath($arr['path']);
 		
 		unset($arr['mime']);
@@ -167,6 +162,8 @@ class GW_FSFile extends GW_Data_Object
 	public $calculate_fields = [
 	    'path'=>1,
 	    'humansize'=>1,
+	    'extension'=>1,
+	    'subfilescount'=>1
 	];
 
 
@@ -178,7 +175,16 @@ class GW_FSFile extends GW_Data_Object
 				return GW_File_Helper::cFileSize($this->size);
 			break;
 			case 'path':
-				$this->root_dir.$this->relpath;
+				return $this->getPathById($this->id);
+			break;
+		
+			case 'extension':
+				return pathinfo($this->filename, PATHINFO_EXTENSION);
+			break;
+		
+			case 'subfilescount':
+				if($this->isdir)
+					return count(scandir($this->root_dir.$this->filename))-2;
 			break;
 			//case 'ext':
 			//	return new IPMC_Competition_Extended($this->id);
@@ -188,16 +194,30 @@ class GW_FSFile extends GW_Data_Object
 	
 	function updateChanged()
 	{
-		
-		
-		
 		if(isset($this->changed_fields['filename']))
 		{
 			$path = $this->getPathById($this->id);
 			rename($path, dirname($path).'/'.$this->filename);
 			//d::dumpas($this->changed_fields);
 		}		
-	}	
+	}
+
+
+	function delete()
+	{
+		if($this->isdir==0){
+			
+			unlink($this->path);
+			
+			return !file_exists($this->path);
+		}else{
+			if($this->subfilescount==0){
+				rmdir($this->path);
+			}else{
+				return false;
+			}
+		}
+	}
 	
 	
 	

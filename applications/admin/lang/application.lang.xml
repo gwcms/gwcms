@@ -185,6 +185,11 @@
 	<en>Item removed</en>
 	<lt>Įrašas panaikintas</lt>
 </i>
+<i id="ITEM_REMOVE_FAILED">
+	<en>Item remove failed</en>
+	<lt>Įrašas panaikinimas nepavyko</lt>
+</i>
+
 <i id="ITEM_ADD_SUCCESS">
 	<en>Item added</en>
 	<lt>Įrašas idetas</lt>

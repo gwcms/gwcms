@@ -3,6 +3,8 @@
 <div class="page" id="page">
 <a class="btn btn-default" id="reposNewFolder" data-url="{$m->buildUri()}">{GW::l('/m/ADD_FOLDER')}</a>
 
+<a class="btn btn-default" href="{$m->buildUri()}" target="_blank">{GW::l('/m/MANAGE_REPOSITORY')}</a>
+
 <div id="gwFileBrowser" class="folder" data-dir="/" data-url="{$m->buildUri(fileslist)}"></div>
 
 

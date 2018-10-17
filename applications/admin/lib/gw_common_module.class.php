@@ -138,8 +138,11 @@ class GW_Common_Module extends GW_Module
 
 		$this->fireEvent('BEFORE_DELETE', $item);
 
-		$item->delete();
-		$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_SUCCESS"), "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+		if($item->delete()){
+			$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_SUCCESS"), "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+		}else{
+			$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_FAILED"), "type"=>GW_MSG_ERR, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+		}
 
 		$this->fireEvent('AFTER_DELETE', $item);
 
