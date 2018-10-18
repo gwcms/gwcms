@@ -1,4 +1,4 @@
-{extends file="default_list.tpl"}
+ {extends file="default_list.tpl"}
 
 {block name="init"}
 
@@ -132,6 +132,7 @@
 
 	{$dl_checklist_enabled=1}
 	{capture append="dl_checklist_actions"}<option value="checked_action_postids('dialogMoveItems')">Perkėlti į kitą katalogą</option>{/capture}
+	{capture append="dl_checklist_actions"}<option value="checked_action_postids('downloadmultiple', true)">Parsisiųsti</option>{/capture}
 		
 
 	

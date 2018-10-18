@@ -272,30 +272,43 @@ class Module_Repository extends GW_Common_Module
 		return $folders;
 	}
 	
-	function viewDialogMoveItems()
+	
+	
+	function acceptIds($store)
 	{
-		
 		if(isset($_POST['ids']))
 		{
-			$this->app->sess('moveitems', explode(',', $_POST['ids']));
+			$this->app->sess($store, explode(',', $_POST['ids']));
 			exit;
-		}else{
-			$this->tpl_vars['ids'] = $this->app->sess("moveitems");
-			$list = $this->getFoldersList($this->model->base_dir);
-			$this->smarty->assign('destination_list', $list);			
-		}
+		}		
+	}
+	
+	function viewDialogMoveItems()
+	{
+		$this->acceptIds('moveitems');
+		
+		$this->tpl_vars['ids'] = $this->app->sess("moveitems");
+		$list = $this->getFoldersList($this->model->base_dir);
+		$this->smarty->assign('destination_list', $list);			
+		
 	}	
 	
 	
-	function doDialogMoveItemsSubmit()
+	function getSelectedFileList($store)
 	{
-		$base = $this->model->base_dir;
-		$files2move = explode(',',$_POST['ids']);
+		$files2move = $this->app->sess($store);
 		$list = [];
 		foreach($files2move as $id)
 		{
 			$list[] = $this->model->getPathById($id);
 		}
+		return $list;
+	}
+	
+	function doDialogMoveItemsSubmit()
+	{
+		$base = $this->model->base_dir;
+		$list = $this->getSelectedFileList('moveitems');
 		
 		$newdest = $base.$_POST['destination'];
 		
@@ -314,6 +327,80 @@ class Module_Repository extends GW_Common_Module
 		
 		$this->jumpAfterSave();
 	}
+	
+	
+	function doUploadzip()
+	{
+		if(!$_FILES['zipfile']['tmp_name'] || !preg_match('/\.zip$/', $_FILES['zipfile']['name'])) 
+		{
+			$this->setError('/G/GENERAL/FAIL');
+			$this->jump();
+		}
+		
+		$zip_dir = GW::s('TEMP').'gw_zipdir_'.rand(0, 9999).'/';
+		GW_Install_Helper::createDir($zip_dir);
+		
+		chdir($zip_dir);
+		exec($cmd='unzip -j ' . $_FILES['zipfile']['tmp_name'] . ' -d' . $zip_dir);	
+		
+		//foreach(glob($zip_dir.'*') as $idx => $file)
+		 //   @$this->importEntry($file, pathinfo($file, PATHINFO_BASENAME), isset($_POST['activate']), $idx);
+
+		GW_Install_Helper::recursiveUnlink($zip_dir, $tmp);
+		
+		$this->jumpAfterSave();	
+	}
+	
+	
+	
+	function viewDownloadMultiple()
+	{
+		
+		$this->acceptIds('downloaditems');
+		
+		$base = $this->model->base_dir;
+		$list = $this->getSelectedFileList('downloaditems');		
+
+		
+		ob_start();
+			
+		
+
+		$zip = GW::s('DIR/TEMP').'download_repository_'.date('ymd_His').'.zip';
+		
+		$ziplist = [];
+		foreach($list as $filename)
+			$ziplist[$filename] = str_replace('//','/',str_replace($base, '', $filename));
+		
+		$errc=GW_File_Helper::createZip($ziplist, $zip, false);
+		
+		//shell_exec($cmd = "cd $workdir && zip $zip ".basename($copy_dir).'/*');
+		
+		d::dumpas($errc);
+		
+		if(!file_exists($zip))
+		{
+			
+			d::dumpas([$ziplist, $zip]);
+			echo('nesukurtas zip failas');
+		}else{
+			GW_File_Helper::unlinkOldTempFiles($workdir,'24 hour');
+		}
+		
+		
+		$errors = ob_get_contents();
+		ob_clean();
+		
+		if($errors)
+		{
+			die($errors);
+		}
+		
+		$zip = str_replace(GW::s('DIR/ROOT'), Navigator::getBase(), $zip);
+		
+		
+		header('Location: '.$zip);
+	}			
 	
 	
 	
