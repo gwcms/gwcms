@@ -33,28 +33,17 @@ class GW_File_Helper
 				}
 			}
 		}
-		
-		
-		
 		//if we have good files...
 		if (count($valid_files)) {
 			//create the archive
-			
 			$zip = new ZipArchive();
-			touch("/tmp/bbisi.zip");
-			$errc = $zip->open("/tmp/bbisi.zip", ZipArchive::CREATE|ZipArchive::OVERWRITE);
-			
-			d::dumpas([$destination, $errc]);
-						
-			if ($errc !== true) {
-				return $errc;
+			if ($zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
+				return false;
 			}
-			
 			//add the files
 			foreach ($valid_files as $file => $zippath) {
 				$zip->addFile($file, $zippath);
 			}
-			
 			//debug
 			//echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
 			//close the zip -- done!
