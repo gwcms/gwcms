@@ -8,7 +8,7 @@ class GW_FSFile extends GW_Data_Object
 	public $root_dir;
 	public $base_dir;
 	public $inherit_props=['root_dir','base_dir'];
-	public $default_order = 'isdir ASC, filename ASC';		
+	public $default_order = 'isdir DESC, filename ASC';		
 	
 
 

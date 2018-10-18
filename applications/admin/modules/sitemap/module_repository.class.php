@@ -365,8 +365,10 @@ class Module_Repository extends GW_Common_Module
 		ob_start();
 			
 		
-
-		$zip = GW::s('DIR/TEMP').'download_repository_'.date('ymd_His').'.zip';
+		$workdir=GW::s('DIR/REPOSITORY')."tempdownload/";
+		@mkdir($workdir);
+			
+		$zip = $workdir.'download_repository_'.date('ymd_His').'.zip';
 		
 		$ziplist = [];
 		foreach($list as $filename)
@@ -376,13 +378,12 @@ class Module_Repository extends GW_Common_Module
 		
 		//shell_exec($cmd = "cd $workdir && zip $zip ".basename($copy_dir).'/*');
 		
-		d::dumpas($errc);
 		
 		if(!file_exists($zip))
 		{
 			
-			d::dumpas([$ziplist, $zip]);
-			echo('nesukurtas zip failas');
+			d::dumpas(['nesukurtas zip failas','errc'=>$errc,$ziplist, $zip]);
+			
 		}else{
 			GW_File_Helper::unlinkOldTempFiles($workdir,'24 hour');
 		}
