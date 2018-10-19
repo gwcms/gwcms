@@ -33,41 +33,45 @@ Upload.prototype.doUpload = function () {
 
 	var url = gw_navigator.url(this.input.data('url'), {packets: 1});
 
-	$.ajax({
-		type: "POST",
-		url: url,
-		xhr: function () {
-			var myXhr = $.ajaxSettings.xhr();
-			if (myXhr.upload) {
-				myXhr.upload.addEventListener('progress', function (event) {
-					that.progressHandling(event, that)
-				}, false);
-			}
-			return myXhr;
-		},
-		dataType: "json",
-		success: function (data) {
-			console.log(data);
-			gw_adm_sys.runPackets(data);
-			that.reinitControls();
-			//that.refresh();
-			that.reenableSelect();
-			
-			if($.isFunction(that.onUpload))
-				that.onUpload();
-			
-		},
-		error: function (error) {
-			// handle error
-			that.reenableSelect();
-		},
-		async: true,
-		data: formData,
-		cache: false,
-		contentType: false,
-		processData: false,
-		timeout: 60000
+	Pace.track(function(){
 
+		$.ajax({
+			type: "POST",
+			url: url,
+			xhr: function () {
+				var myXhr = $.ajaxSettings.xhr();
+				if (myXhr.upload) {
+					myXhr.upload.addEventListener('progress', function (event) {
+						that.progressHandling(event, that)
+					}, false);
+				}
+				return myXhr;
+			},
+			dataType: "json",
+			success: function (data) {
+				console.log(data);
+				gw_adm_sys.runPackets(data);
+				that.reinitControls();
+				//that.refresh();
+				that.reenableSelect();
+
+				if($.isFunction(that.onUpload))
+					that.onUpload();
+
+			},
+			error: function (error) {
+				// handle error
+				that.reenableSelect();
+			},
+			async: true,
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			timeout: 60000
+
+		});
+	
 	});
 };
 
@@ -83,6 +87,14 @@ Upload.prototype.progressHandling = function (event, that) {
 	// update progressbars classes so it fits your code
 	container.find(".progress-bar").css("width", +percent + "%");
 	container.find(".status").text(percent + "%");
+	
+	if(this.status_display){
+		if(percent==100){
+			this.status_display.html( this.status_displ_init_val);
+		}else{
+			this.status_display.html( this.status_displ_init_val +' | Uploading: '+percent + "%");
+		}
+	}
 
 	if (percent == 100)
 	{
@@ -180,6 +192,10 @@ Upload.prototype.refresh = function () {
 
 Upload.prototype.init = function () {
 	var that = this;
+	
+	
+	if(this.status_display)
+		this.status_displ_init_val = this.status_display.html()
 	
 	this.input.on("change", function (e) { that.doUpload();	});	
 

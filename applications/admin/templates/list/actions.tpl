@@ -66,7 +66,7 @@
 {/function}
 
 {function name=dl_actions_delete}
-	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}
+	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 shift_button=1}
 {/function}
 
 {function name=dl_actions_delete_ajax}

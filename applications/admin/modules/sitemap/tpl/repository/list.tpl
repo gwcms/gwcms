@@ -2,8 +2,7 @@
 
 {block name="init"}
 
-	
-	
+			
 	{$dl_inline_edit=1}
 
 
@@ -11,7 +10,7 @@
 	{$do_toolbar_buttons = [upload]}	
 	{$do_toolbar_buttons[] = addfolder}	
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,print,uploadzip]}	
 	{$do_toolbar_buttons[] = search}
 	{$dl_filters = []}
 	
@@ -31,7 +30,7 @@
 			<i class="fa fa-folder-o dragable dropable"  data-id="{$item->relpath}"></i>
 		{else}
 			{if $item->type=='image'}
-				<img class="dragable file" data-file="{$file}" src="{$app->sys_base}tools/img_resize?file={urlencode($item->relpath)}&dirid=repository&size=24x24" title="{$dir} {$filename}" alt="{$filename}"  data-id="{$item->relpath}" />
+				<img class="dragable file" data-file="{$file}" src="{$app->sys_base}tools/img_resize?file={urlencode($item->relpath)}&dirid=repository&size=30x24&method=crop" title="{$dir} {$filename}" alt="{$filename}"  data-id="{$item->relpath}" />
 			{else}
 				<i class="dragable {Mime_Type_Helper::icon($item->path)}" data-id="{$item->rel_path}"></i>
 			{/if}
@@ -70,8 +69,8 @@
 	
 	{$dl_smart_fields=[ico,size,filename]}
 	
-	
-	{$dl_actions=[preview,edit,delete,ext_actions]}
+	{*ext_actions*}
+	{$dl_actions=[preview,edit,delete]}
 	
 	
 	
@@ -120,10 +119,10 @@
 			})
 
 		</script>
-		
+
 		<style>
-			.dragable{ font-size: 24px; }
-			.dropable{ font-size: 24px; }
+			.dl_cell_ico i{ font-size: 24px; margin-top: 1px;margin-bottom: 1px; }
+			.dl_cell_ico{ padding: 0px 5px 0 5px !important;vertical-align:middle; }
 		</style>
 		
 		
@@ -133,8 +132,16 @@
 	{$dl_checklist_enabled=1}
 	{capture append="dl_checklist_actions"}<option value="checked_action_postids('dialogMoveItems')">Perkėlti į kitą katalogą</option>{/capture}
 	{capture append="dl_checklist_actions"}<option value="checked_action_postids('downloadmultiple', true)">Parsisiųsti</option>{/capture}
+	{capture append="dl_checklist_actions"}<option value="checked_action_postids('{$m->buildUri(false,[act=>doRemoveMultiple])}', true)">Šalinti</option>{/capture}
 		
 
 	
 {/block}
 
+	{block name="after_list"}
+		
+		<br />
+		<small style="color:silver">Max upload size: {$max_upload_size}</small>
+		
+		
+	{/block}	

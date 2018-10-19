@@ -152,6 +152,7 @@
 		<i id="doMkDir">Sukurti katalogą</i>
 		<i id="doStore">Įkelti rinkmenas</i>
 		<i id="dialogMoveItems">Perkelį į kitą katalogą</i>
+		<i id="doUploadZip">Įkelti Zip ir išskleisti</i>
 	</i>
 	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
 	<i id="ADD_FOLDER">

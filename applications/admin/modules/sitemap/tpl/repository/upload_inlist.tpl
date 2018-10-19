@@ -29,7 +29,8 @@
 		$('.gwfileinput').each(function(){		
 			var upload = new Upload($(this));
 			$(this).data('upload', upload)
-
+			
+			upload.status_display=$('.select_attachments_btn11')
 			upload.init();
 			
 			upload.onUpload = function(){
@@ -47,3 +48,15 @@
 
 {/if}		
 	{/function}
+	
+	
+{function name=do_toolbar_buttons_uploadzip}
+	
+	{toolbar_button title=GW::l('/m/VIEWS/doUploadZip') iconclass='fa fa-upload' onclick="$('#zipuploadinput').click()" }	
+	
+<form id="zipuploadform" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" style="display:none" >
+	<input type="hidden" name="act" value="doUploadZip" />
+	<input id="zipuploadinput" type="file" name="zipfile" multiple="multiple" onchange="$('#zipuploadform').submit()" />
+</form>
+
+{/function}

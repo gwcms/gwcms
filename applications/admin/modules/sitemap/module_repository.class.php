@@ -120,9 +120,9 @@ class Module_Repository extends GW_Common_Module
 			mkdir($new, 0777);
 			
 			if(is_dir($new)){
-				$this->setMessage(GW::l('/m/NEW_FOLDER_ADDED'));
+				$this->setPlainMessage(GW::l('/m/NEW_FOLDER_ADDED'));
 			}else{
-				$this->setMessage(GW::l('/m/CREATE_FAILED_MAYBE_CHECK_PERMISSIONS'));
+				$this->setPlainMessage(GW::l('/m/CREATE_FAILED_MAYBE_CHECK_PERMISSIONS'), GW_MSG_ERR);
 			}
 		}
 		
@@ -160,7 +160,10 @@ class Module_Repository extends GW_Common_Module
 	}
 	
 
-	
+	function __eventAfterList()
+	{
+		$this->tpl_vars['max_upload_size'] = ini_get("upload_max_filesize");
+	}
 
 	
 	
@@ -337,18 +340,23 @@ class Module_Repository extends GW_Common_Module
 			$this->jump();
 		}
 		
-		$zip_dir = GW::s('TEMP').'gw_zipdir_'.rand(0, 9999).'/';
+		$zip_dir = GW::s('DIR/TEMP').'gw_zipdir_'.rand(0, 9999).'/';
 		GW_Install_Helper::createDir($zip_dir);
 		
 		chdir($zip_dir);
-		exec($cmd='unzip -j ' . $_FILES['zipfile']['tmp_name'] . ' -d' . $zip_dir);	
+		//exec($cmd='unzip -j ' . $_FILES['zipfile']['tmp_name'] . ' -d' . $zip_dir);	
 		
-		//foreach(glob($zip_dir.'*') as $idx => $file)
-		 //   @$this->importEntry($file, pathinfo($file, PATHINFO_BASENAME), isset($_POST['activate']), $idx);
-
-		GW_Install_Helper::recursiveUnlink($zip_dir, $tmp);
 		
-		$this->jumpAfterSave();	
+		
+		$zip = new ZipArchive;
+		if ($zip->open( $_FILES['zipfile']['tmp_name']) === TRUE) {
+		    $zip->extractTo($this->model->root_dir);
+		}
+		$zip->close();
+		unlink($_FILES['zipfile']['tmp_name']);
+		
+				
+		$this->jump();	
 	}
 	
 	
@@ -371,8 +379,23 @@ class Module_Repository extends GW_Common_Module
 		$zip = $workdir.'download_repository_'.date('ymd_His').'.zip';
 		
 		$ziplist = [];
-		foreach($list as $filename)
-			$ziplist[$filename] = str_replace('//','/',str_replace($base, '', $filename));
+		foreach($list as $filename){
+			
+			if(is_dir($filename)){
+				$files = GW_File_Helper::rglob($filename.'/*');
+				
+				//d::dumpas($files);
+				
+				foreach($files as $filename)
+					$ziplist[$filename] = str_replace('//','/',str_replace($base, '', $filename));
+				
+				
+			}else{
+				$ziplist[$filename] = str_replace('//','/',str_replace($base, '', $filename));
+			}
+		}
+		
+		//d::Dumpas($ziplist);
 		
 		$errc=GW_File_Helper::createZip($ziplist, $zip, false);
 		
@@ -401,7 +424,39 @@ class Module_Repository extends GW_Common_Module
 		
 		
 		header('Location: '.$zip);
-	}			
+	}	
+	
+	function doRemoveMultiple()
+	{
+		$this->acceptIds('removeitems');
+		
+		$base = $this->model->base_dir;
+		$list = $this->getSelectedFileList('removeitems');	
+
+		$remcnt=0;
+		
+		foreach($list as $filename){
+			$item = $this->model->createNewObject($this->model->getIdByPath($filename));
+			if($item->delete())
+				$remcnt++;
+		}
+		
+		$this->setMessage("Removed items: $remcnt");
+		
+		$this->jump();
+	}
+	
+	
+	function __eventBeforeDelete($item)
+	{		
+		if(isset($_GET['shift_key'])){
+			if($item->isdir){
+				GW_Install_Helper::recursiveUnlink($item->path);
+				mkdir($item->path);
+				$this->setMessage("Removed Multiple files");
+			}
+		}
+	}
 	
 	
 	

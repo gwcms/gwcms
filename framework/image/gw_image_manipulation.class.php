@@ -114,7 +114,7 @@ class GW_Image_Manipulation
 			// fill background
 			imagefill($image_resized, 0, 0, $bgColor);
 		}
-
+		
 		// calculate destination position
 		$dx = floor($rw / 2 - $arw / 2);
 		$dy = floor($rh / 2 - $arh / 2);

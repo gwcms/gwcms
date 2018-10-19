@@ -50,6 +50,9 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 	
 	function process()
 	{
+		
+		
+		
 		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
 		
 		GW::s('DIR/SYS_IMAGES_CACHE_1', $cachedir=GW::s('DIR/SYS_REPOSITORY').'cache/images_1/');
@@ -75,20 +78,23 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		}
 			
 		
-		
+
 		
 		if(!isset($_REQUEST['size'])){
 			self::output_image($file, $file);
 		}
 
 		list($params['width'],$params['height'])=explode('x',$_REQUEST['size']);
+		
+		if(isset($_GET['method']))
+			$params['method'] = $_GET['method'];
 
 
 		if(!file_exists($file))
 			die('Failed to locate file: '.$file);
 
 
-		$resized = $cachedir.str_replace('/','__',$file).'.'.$params['width'].'x'.$params['height'];
+		$resized = $cachedir.str_replace('/','__',$file).'.'.md5(serialize($_GET));
 
 		//check if is cached
 
@@ -97,7 +103,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			self::output_image($resized, $file);
 			exit;
 		}
-
+		
 
 		//doresize & output file
 		$im = new GW_Image_Manipulation($file);

@@ -197,7 +197,9 @@ class GW_FSFile extends GW_Data_Object
 		if(isset($this->changed_fields['filename']))
 		{
 			$path = $this->getPathById($this->id);
-			rename($path, dirname($path).'/'.$this->filename);
+			rename($path, $newpath = dirname($path).'/'.$this->filename);
+			
+			$this->id = $this->getIDByPath($newpath);
 			//d::dumpas($this->changed_fields);
 		}		
 	}
@@ -213,6 +215,8 @@ class GW_FSFile extends GW_Data_Object
 		}else{
 			if($this->subfilescount==0){
 				rmdir($this->path);
+				
+				return !is_dir($this->path);
 			}else{
 				return false;
 			}
