@@ -627,11 +627,18 @@ var gwcms = {
 		var id = 'ajaxdialog' + gwcms.dialog_cnt;
 
 		$('body').append('<div id="' + id + '"></div>');
+		
+		if(conf.title)
+		{
+			$('#' + id).attr('title', conf.title)
+		}
 
 		if (conf.iframe) {
 			$('#' + id).get(0).innerHTML = '<iframe frameborder=0 style="width:100%;height:95%" src="' + conf.url + '">';
-		} else {
+		} else if(conf.url) {
 			$('#' + id).load(conf.url)
+		}else if(conf.html){
+			$('#' + id).html(conf.html)
 		}
 
 		var dconf = {
@@ -644,12 +651,14 @@ var gwcms = {
 			$(this).dialog("close");
 			$('#' + id).dialog('destroy');
 		}
+		
+		
 
 		$.extend(dconf, conf);
 
 		$('#' + id).dialog(dconf);
 	},
-		
+	
 	close_callback: false,
 	
 	open_dialog2: function (conf)
@@ -1331,4 +1340,14 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 			//$('.iframe_auto_sz').attr('data-ifrm_auto_sz_init'))
 	})		
 
+}
+
+
+//jei ifreime leidziamas kodas vykdyt auksciausiam lange
+function rootgwcms() {
+	try {
+		return window.self !== window.top ?  window.parent.gwcms : gwcms; 
+	} catch (e) {
+		return gwcms
+	}
 }

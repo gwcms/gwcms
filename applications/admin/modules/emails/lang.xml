@@ -31,7 +31,7 @@
 		<i id="name">Vardas</i>
 		<i id="surname">Pavardė</i>
 		<i id="email">El. paštas</i>
-		<i id="lang">Kalba</i>
+		<i id="lang">Kalbos</i>
 		<i id="groups">Grupės</i>
 		<i id="groups_string">Grupės</i>
 		<i id="status">Būklė</i>
@@ -65,6 +65,7 @@
 		<i id="format_texts">Formatuojami tekstai</i>
 		<i id="body_editor">Teksto redaktorius</i>
 		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
+		<i id="recipients_ids">Paskiri gavėjai</i>
 	</i>
 	
 	<i id="FIELD_NOTE">
@@ -111,6 +112,7 @@
 			<en>Push Apply after changes</en>
 			<lt>Spauskite Išsaugoti liekant po pakeitimo</lt>
 		</i>
+		<i id="recipients"><![CDATA[Formatas 1 gavėjas per eilutę: Vardas Pavardė;El pašto adresas<br>Pvz: <br/>Jonas Jonaitis;jonas.jonaitis@gmail.com<br/>Antanas Antanaitis;antanas@yahoo.com]]></i>
 		
 	</i>
 	
@@ -162,6 +164,7 @@
 		<i id="emailsfromtext">El. paštų išėmimas iš teksto</i>
 		<i id="dotest">Laiško siuntimo testas</i>
 		<i id="testpdfgen">Pdf generavimą pasibandyt</i>
+		<i id="multilangform">Daugiakalbis laiškas</i>
 	</i>
 	
 	<i id="LINK">

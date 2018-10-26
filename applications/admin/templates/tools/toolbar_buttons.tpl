@@ -15,13 +15,12 @@
 
 {function name=do_toolbar_buttons_info}
 	{if $page->notes}
-		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}
-		{capture append=footer_hidden}	
-			<script>
-				require(['gwcms'], function(){	gw_adm_sys.init_iframe_open(); })
-			</script>		
-		{/capture}		
+		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}	
 	{/if}
+{/function}
+
+{function name=do_toolbar_buttons_modinfo}
+		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$m->buildUri('modinfo',[clean=>2]) btnclass="iframeopen"}
 {/function}
 
 {function name=do_toolbar_buttons_dialogconf}

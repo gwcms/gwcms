@@ -148,13 +148,10 @@
 	{function name=dl_cell_description}
 		{$item->description|strip_tags|truncate:40}
 	{/function}	
-	
-	{function name=dl_cell_info}
-		{if $item->hasAttachments()}<span class="badge badge-primary"><i class="fa fa-paperclip"></i></span>{/if}
-	{/function}			
+		
 	
 
-	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment,info,description,attachments]}
+	{$dl_smart_fields=[week,project_id,state,user_create,user_exec,title,deadline,time_have,last_comment,description,attachments]}
 	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}
 	
 

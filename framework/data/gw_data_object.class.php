@@ -20,7 +20,6 @@ class GW_Data_Object
 	private $_ignore_fields = ['temp_id'=>1];
 	
 	public $encode_fields = [];
-	public $ondemand_encode_fields = [];
 	
 	public $calculate_fields = [];
 	static $_instance;
@@ -82,13 +81,9 @@ class GW_Data_Object
 	}
 
 	function &getDecoded($key)
-	{	
-		
+	{			
 		if(!isset($this->decoded_content_base[$key])){
-			
-		
 			$func = "encode" . $this->encode_fields[$key];
-			
 			$this->decoded_content_base[$key] = isset($this->content_base[$key]) ? $this->$func($key, $this->content_base[$key], true) : [];
 		}
 		
@@ -134,7 +129,10 @@ class GW_Data_Object
 			return true;
 		}
 		
-		if($this->constructcomplete && isset($this->encode_fields[$key]))
+		//construct complete keciu i loaded 2018-10-24 / blogai veikia serializuojant paprasta masyva, po formos issaugojimo
+		//common modulis pirma construct patadaro tada set values, load padaro sekanciu zingsniu
+		
+		if($this->loaded && isset($this->encode_fields[$key]))
 		{
 			$data =&  $this->getDecoded($key);
 			$data = $val;
@@ -221,7 +219,7 @@ class GW_Data_Object
 		}
 		
 		if(isset($this->encode_fields[$key]))
-		{
+		{			
 			return $this->getDecoded($key);
 		}
 

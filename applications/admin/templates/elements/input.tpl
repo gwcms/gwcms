@@ -40,10 +40,12 @@
 
 
 {if $i18n}
-	{$langs=array_flip(GW::$settings.LANGS)}
-	{$langs=[$app->ln=>1]+$langs}
+	{if !$langs}
+		{$langs=array_flip(GW::$settings.LANGS)}
+		{$langs=[$app->ln=>1]+$langs}
+	{/if}
 	
-	
+
 	{if !isset($GLOBALS.form_18n_init_done)}
 		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 		

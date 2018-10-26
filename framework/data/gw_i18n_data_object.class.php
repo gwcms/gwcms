@@ -97,7 +97,11 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 		}
 
 		foreach ($sqls as $sql) {
-			$this->getDB()->query($sql);
+			$this->getDB()->query($sql, true);
+			if($err=$this->getDB()->getError())
+			{
+				d::ldump($err);
+			}
 		}
 
 		return $sqls;

@@ -72,6 +72,15 @@ class GW_Array_Helper
 
 	static function copy($source, &$destination, $keys)
 	{
+		if(is_object($source))
+		{
+			foreach ($keys as $key)
+				if (isset($source->$key))
+					$destination->$key = $source->$key;	
+				
+			return true;
+		}
+		
 		foreach ($keys as $key)
 			if (isset($source[$key]))
 				$destination[$key] = $source[$key];

@@ -7,13 +7,14 @@
 {if $preload && $value}
 	{if is_array($value)}
 		{foreach $value as $valitm}
-			{$options[$valitm]="`$valitm` Loading..."}
+			{$options[$valitm]="`$valitm` {GW::l('/g/LOADING')}..."}
 		{/foreach}
 	{else}
-		{$options[$value]="`$value` Loading..."}
+		{$options[$value]="`$value` {GW::l('/g/LOADING')}..."}
 	{/if}
 {/if}
 	
+
 
 <select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control " name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
 	 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
@@ -35,7 +36,7 @@ require(['vendor/select2/js'], function () {
 
 
 {if $datasource}
-
+		
 	function formatSelect2Result(item) {
 		if (item.loading)
 			return item.text;
@@ -62,35 +63,12 @@ require(['vendor/select2/js'], function () {
 		return item.title || item.text;
 	}
 	
-		
-	{if $preload && $value}
-		
-		//download captions
-		$.get("{$datasource}", { ids: JSON.stringify($("#{$id}").val()) }, function(data){
 			
-			if(data.hasOwnProperty('items'))
-			{
-				$("#{$id}").empty();
-				
-				jQuery.each(data.items, function(index, item){
-					console.log(item)
-					$("#{$id}").append(new Option(item.title, item.id, true, true));
-				} )
-				
-				$("#{$id}").trigger('change');
-			}
-			
-		}, 'json')
-		 
-		
-		//
-	{/if}
-	
-
+	$('#{$id}').data('source', "{$datasource}");
 	$("#{$id}").select2({
 		ajax: {
 	{if $maximumSelectionLength>0}maximumSelectionLength: {$maximumSelectionLength}, {/if}
-			url: "{$datasource}",
+			url: $('#{$id}').data('source'),
 			dataType: 'json',
 			delay: 250,
 			data: function (params) {
@@ -128,8 +106,56 @@ require(['vendor/select2/js'], function () {
 		templateResult: formatSelect2Result, // omitted for brevity, see the source of this page
 		templateSelection: formatSelect2Selection // omitted for brevity, see the source of this page
 		{if $dontCloseOnSelect},closeOnSelect: false{/if}
+	}).on('fillitems', function(event, items, append){
 
+		if(append){
+			var current = $(this).val();
+			
+			for(var index in items){
+				if(current.indexOf(items[index].id)!=-1){
+					console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
+					
+					delete index[id];
+				}
+			}			
+			
+		}else{
+			$(this).empty();
+		}
+		
+		var that = this;
+		
+		//console.log(items);
+
+		$.each(items, function(index, item){
+			//console.log(item.title+':'+item.id)
+			$(that).append(new Option(item.title, item.id, true, true));
+		} );
+
+		$(this).trigger('change');		
+	}).on('inittitles', function(event, ids, append){
+		
+		if(!ids)
+			ids = $(this).val()
+		
+		var that = this;
+		
+		$.get($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){
+			
+			if(data.hasOwnProperty('items'))
+			{
+				$(that).trigger('fillitems', [data.items, append]);
+			}else{
+				console.log("select_ajax: Items not received. Received content: "+data);
+			}
+			
+		}, 'json')
 	});
+	
+	{if $preload && $value}
+		$('#{$id}').trigger('inittitles');
+	{/if}	
+	
 	
 	{if $onchangeFunc}
 			$('#{$id}').change(function(){

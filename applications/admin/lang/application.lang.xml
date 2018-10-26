@@ -49,6 +49,10 @@
 	<en>Continue</en>
 	<lt>Tęsti</lt>
 </i>
+<i id="SUBMIT">
+	<en>Submit</en>
+	<lt>Pateikti</lt>
+</i>
 
 <i id="BACK">
 	<en>&amp;laquo; Back</en>
@@ -707,6 +711,26 @@
 <i id="PREVIEW">
 	<lt>Peržiūra</lt>
 	<en>Preview</en>
+</i>
+
+
+<i id="AS_CSV_ROWS">
+	<lt>Kaip csv eilutes</lt>
+	<en>As csv rows</en>
+</i>
+<i id="AS_DB_ID">
+	<lt>Kaip DB identifikatorius</lt>
+	<en>As database id's</en>
+</i>
+
+<i id="LOADING">
+	<lt>Kraunama</lt>
+	<en>Loading</en>
+</i>
+
+<i id="VALUE">
+	<lt>Vertė</lt>
+	<en>Value</en>
 </i>
 
 </xml>

@@ -19,7 +19,7 @@ class GW_Mail_Helper
 			$cfg->preload('mail_');	
 			self::$cfg_cache = $cfg;	
 		}
-		
+				
 		return self::$cfg_cache;
 	}
 	

@@ -95,6 +95,103 @@ class Module_Subscribers extends GW_Common_Module
 		return compact('data');
 	}
 	
+	function viewExportSimple()
+	{
+		$ids = explode(',',$_POST['ids']);
+		
+		$ids = array_map('intval', $ids);
+		$cond = GW_DB::inCondition('id', $ids);		
+		
+		$list =  $this->model->findAll($cond);
+		
+		
+		foreach($list as $item)
+		{
+			$row = [$item->name.' '.$item->surname, $item->email, $item->lang];
+			$row = array_map(function ($str) { return str_replace(';',',', $str); }, $row);
+			$rows[] = implode(';',$row);
+		}
+		
+		echo implode("\n", $rows);
+		exit;
+	}
+	
+	function viewImportSimple()
+	{
+		ob_start();
+		ini_set('html_errors', false);
+		
+		$t = new GW_Timer;
+		
+		$rows = trim($_POST['rows']);
+		$rows = str_replace("\r","\n",$rows);
+		$rows = explode("\n", $rows);
+		
+		$list = [];
+		$rowbyeml = [];
+		$emails = [];
+		$failedrows = [];
+		$insertcnt = 0;
+		$existingcnt = 0;
+		$failcnt = 0;
+		
+		foreach($rows as $row0)
+		{
+			$row = explode(';', $row0);
+			$name = trim($row[0] ?? '');
+			$name = explode(' ', $name, 2);
+			$name = $name[0] ?? '';
+			$surname = $name[1] ?? '';
+			$email = trim($row[1] ?? '');
+			$lang = trim($row[2] ?? '');
+			
+			$item = ["name"=>$name, "surname"=>$surname, "email"=>$email, "lang"=>trim($lang)];
+			$list[$email] = $item;
+			$rowbyeml[$email] = $row;
+			
+		}
+		
+		$cond = GW_DB::inConditionStr('email', array_keys($list));		
+		$existing =  $this->model->findAll($cond);		
+		
+		$ids = [];
+		
+		foreach($existing as $item)
+		{
+			unset($list[$item->email]);
+			$ids[] = $item->id;
+			$existingcnt++;
+		}
+		
+		foreach($list as $idx => $vals){
+			$item = $this->model->createNewObject();
+			$item->setValues($vals);
+			
+			if($item->validate())
+			{
+				$item->insert();
+				$insertcnt++;
+				$ids[] = $item->id;
+			}else{
+				$failedrows[] = implode(';',$rowbyeml[$idx]);
+				$failcnt++;
+			}
+		}
+		
+
+		$failedrows = implode("\n", $failedrows);
+		
+		$info = ["message"=>"Items created: $insertcnt, Existing items found: $existingcnt; failed: $failcnt, took: ".$t->stop()." secs", "failedrows"=>$failedrows, 'ids'=>$ids, 'failcnt'=>$failcnt];
+		
+		$errors = ob_get_contents();
+		ob_clean();
+		
+		echo json_encode($info+['errors'=>$errors]);
+		exit;
+	}	
+	
+	
+	
 	function doImport()
 	{
 		$field_translations=$this->import_field_translations;
@@ -279,5 +376,64 @@ class Module_Subscribers extends GW_Common_Module
 	{
 		$this->tpl_vars['item'] = isset($_POST['item']) ? (object)$_POST['item'] : new stdClass(); 
 	}
+	
+	
+	
+	function viewSearch()
+	{
+		$i0 = $this->model;
+		
+		if(isset($_GET['q']))
+		{
+			$search = "'%".GW_DB::escape($_GET['q'])."%'";		
+			$cond = "(name LIKE $search OR surname LIKE $search OR email LIKE $search)";		
+		}elseif(isset($_GET['ids'])){
+			
+			$ids = json_decode($_GET['ids'], true);
+			
+			if(!is_array($ids))
+				$ids = [$ids];
+			
+			$ids = array_map('intval', $ids);
+			$cond = GW_DB::inCondition('id', $ids);
+			
+
+		}	
+		
+
+		
+		
+		$page_by = 30;
+		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
+		$params['offset'] = $page_by * $page;
+		$params['limit'] = $page_by;
+	
+		
+		//$params['joins']=[
+		//    ['left','mt_passengers AS psng','a.passenger_id=psng.id'],
+		//];
+		
+		$params['select']='a.*';
+		
+		$list0 = $i0->findAll($cond, $params);
+		
+		$list=[];
+		
+		foreach($list0 as $item)
+			$list[]=['id'=>$item->id, "title"=>$item->title.'('.$item->lang.')'];
+		
+		$res['items'] = $list;
+		
+		
+		
+		$info = $this->model->lastRequestInfo();
+		$res['total_count'] = $info['item_count'];
+		
+
+		
+		echo json_encode($res);
+		exit;
+	}	
+	
 	
 }

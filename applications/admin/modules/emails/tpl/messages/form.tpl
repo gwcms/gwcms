@@ -1,27 +1,114 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="100%"}
+{$width_title="150px"}
 
-{include file="elements/input.tpl" name=title note="(Nesiunčiama)"}
-{include file="elements/input.tpl" name=comments type=textarea note="(Nesiunčiama)" autoresize=1 height=40px}
+{$f="elements/input.tpl"}
 
-
-{include file="elements/input.tpl" name=sender hidden_note=$m->lang.email_note default=$m->config->default_sender}
-{include file="elements/input.tpl" name=replyto hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
-{include file="elements/input.tpl" name=subject}
+{include file=$f name=lang type=bool i18n=3 i18n_expand=1 hidden_note=$m->lang.FIELDS_HELP.lang}
 
 
+{$langs=[]}
+{*show only active langs*}
+{foreach GW::$settings.LANGS as $ln}
+	
+	{if $item->get(lang, $ln)}
+		{$langs[$ln]=1}
+	{/if}
+{/foreach}
 
+
+
+
+
+
+{include file=$f name=title note="(Nesiunčiama)"}
+{include file=$f name=comments type=textarea note="(Nesiunčiama)" autoresize=1 height=40px}
+
+
+
+{include file=$f name=sender hidden_note=$m->lang.email_note default=$m->config->default_sender i18n=4}
+{include file=$f name=replyto hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
+{include file=$f name=subject i18n=4}
+
+
+{*
 {$ck_options=[toolbarStartupExpanded=>false, autoParagraph=>false, contentsCss=>'applications/admin/css/newsletter.css']}
+*}
+
+{include file=$f type=htmlarea name=body remember_size=1 i18n=4}
+{include file=$f name=groups type=multiselect options=$options.groups}
 
 
-{include file="elements/input.tpl" type=htmlarea name=body remember_size=1}
-
-{include file="elements/input.tpl" name=groups type=multiselect options=$options.groups}
-{include file="elements/input.tpl" type=select name=lang options=$m->lang.OPT.lang empty_option=1 required=1}
-{include file="elements/input.tpl" type=select name=status options=$m->lang.OPT.status}
 
 
-{include file="elements/input.tpl" type=file name=file_1}
+{call "e" 
+	after_input_f="editadd"
+	field="recipients_ids"
+	type="multiselect_ajax"
+	object_title=GW::l('/m/MAP/childs/subscribers/title')
+	form_url=$app->buildUri('emails/subscribers/form',[clean=>2,dialog=>1])
 
+	import_url=$app->buildUri('emails/subscribers/importsimple')
+	export_url=$app->buildUri('emails/subscribers/exportsimple')
+
+	datasource=$app->buildUri('emails/subscribers/search') 
+	preload=1
+	btngroup_width="100%"
+	rowclass="recipients"
+}
+
+
+
+{if $app->user->isRoot()}
+	{include file=$f type=select name=status options=$m->lang.OPT.status}
+{/if}
+
+
+
+{include file=$f name=attachments type=attachments 
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
+	preview=[thumb=>'50x50']
+	i18n=4
+}
+
+
+{capture append=footer_hidden}
+	<style>
+		.recipients.select2, .recipients select
+		{
+			width: calc(100%-100px);
+			margin: 0 auto;
+			border-radius: 0 !important;
+			display: block;
+		}
+		.recipients .select2-container .select2-selection {
+			max-height: 100px;
+
+			overflow-y: scroll;
+		} 
+
+	
+	</style>
+	
+	{*
+	<script>
+	require(['gwcms'], function(){
+		
+	
+			
+			$('#item__details_enabled__').change(function(){
+				if($(this).val()==1) {
+					$('.detailsCapt').fadeIn();
+				}else{
+					$('.detailsCapt').hide();
+				}				
+			}).change();
+			
+		       
+			
+	})
+</script>
+*}
+{/capture}
 
 
 {include file="default_form_close.tpl"}

@@ -29,12 +29,12 @@ class Module_i18n extends GW_Common_Module
 		
 		foreach($list1 as $i => $item)
 		{
-			if(!isset($item->info['model']) || !$item->info['model']){
+			if(!isset($item->info->model) || !$item->info->model){
 				unset($list1[$i]);
 				continue;
 			}
 			
-			$classname = $item->info['model'];
+			$classname = $item->info->model;
 			
 			
 			$obj = new $classname;

@@ -16,9 +16,13 @@ class Module_Messages extends GW_Common_Module
 		
 	}
 
-	function __eventAfterForm()
+	function __eventAfterForm($item)
 	{
-		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts(false);		
+		$this->options['groups']=GW::getInstance('GW_NL_Group')->getOptionsWithCounts(false);
+		//d::ldump($item->recipients_ids);
+		//d::dumpas($item);
+		
+		//d::dumpas($item);
 	}
 	
 	
@@ -36,22 +40,77 @@ class Module_Messages extends GW_Common_Module
 		$this->tpl_vars['lasttestmail']=GW::getInstance('GW_Config')->get('emails/lastmail');
 		
 		$this->__addHitCounts($list);
+
+		//to get first item
+		foreach($list as $item)
+			break;
+
+		if($item)
+			if($item->extensions['attachments'])
+				$item->extensions['attachments']->prepareList($list);
+			
 	}
 	
 	function __eventBeforeSave($item)
 	{
 		 
-		$item->recipients_count = $this->__getRecipients($item, 1, true);
+		foreach($item->getActiveLangs() as $ln){
+	
+			
+			
+			$item->set('recipients_count', $this->__getRecipients($item, 1, $ln, true), $ln);
+		}
+		
+		
+
 		
 		//paskutini p taga nuimti
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);	
 	}
+	
+	
+	function __parseRecipients($text, $lang, &$list)
+	{
+		$text = str_replace("\t",'', $text);
+		
+		$recipients = explode("\n", $text);
+		
+		foreach($recipients as $recipient)
+		{
+			$tmp = explode(';', $recipient);;
+			if(count($tmp)==2)
+				$list[] = ['name'=>$tmp[0], 'email'=>$tmp[1], 'lang'=>$lang];
+		}
+	}
+	
+	function beforeSaveParseRecipients()
+	{
+		$recipients=[];
+		$this->parseRecipients($this->recipients_lt, 'lt', $recipients);
+		$this->parseRecipients($this->recipients_en, 'en', $recipients);
+		$this->parseRecipients($this->recipients_ru, 'ru', $recipients);
+
+		//d::dumpas($recipients);
+
+		$this->recipients_count = count($recipients);
+		$this->recipients_data = json_encode($recipients);
+	}	
+	
+	
+	function __processRecipients($item)
+	{
+		
+	}
+	
+	
 	
 	function __eventAfterSave($item)
 	{
 		//surasti linkus irasyt i duombaze
 		$body = $item->body;
 		
+		
+		/*
 		$orig_links = GW_Link_Helper::getLinks($body);
 		$links = GW_Link_Helper::cleanAmps($orig_links, $body);
 		
@@ -64,45 +123,57 @@ class Module_Messages extends GW_Common_Module
 			$body = str_replace("'".$link."'", '\'{$TRACKINK_LINK}'.$id."'", $body);
 			$body = str_replace('"'.$link.'"', '"{$TRACKINK_LINK}'.$id.'"', $body);
 		}
+		*/
+		//$item->body_prepared = $body;
 		
-		$item->body_prepared = $body;
+		//$item->__processRecipients($item);
 		
 		
-		$item->update(['body_prepared']);
+		//$item->update(['body_prepared']);
 	}
 	
 	
 	
-	function __getRecipients($letter, $portion, $count_total=false)
+	function __getRecipients($letter, $portion,  $lang, $count_total=false)
 	{
 		$db =& $letter->getDB();
 		
-		$incond = GW_DB::inCondition('b.`group_id`', $letter->groups);
+		$grp_cond = " FALSE ";
+		
+		if($letter->groups){
+			$grp_incond = GW_DB::inCondition('b.`group_id`', $letter->groups);
+			$grp_cond = "a.active=1 AND (a.confirm_code IS NULL OR a.confirm_code < 100) AND $grp_incond";
+		}
+		
+		
+		$separete_ids = $letter->recipients_ids;
+		$part_incond = " FALSE ";
+		
+		if($separete_ids){
+			
+			$part_incond = GW_DB::inCondition('a.`id`', $separete_ids);
+		}
 		
 		$sql = "SELECT SQL_CALC_FOUND_ROWS DISTINCT a.id, a.* 
 			FROM 
 				`gw_nl_subscribers` AS a
-			INNER JOIN `gw_nl_subs_bind_groups` AS b
+			LEFT JOIN `gw_nl_subs_bind_groups` AS b
 				ON a.id=b.subscriber_id
 			LEFT JOIN gw_nl_sent_messages AS aa 
 				ON a.id = aa.subscriber_id AND aa.message_id=?
 			WHERE 
 				a.unsubscribed=0 AND
-				a.active=1 AND 
 				a.lang=? AND
-				(a.confirm_code IS NULL OR a.confirm_code < 100) AND
-				$incond 
+				( ($grp_cond) OR ($part_incond) )
 				". (!$count_total ? 'AND aa.status IS NULL' : '')."
 			LIMIT $portion
 			";
 		
-		
-		
-		$sql = GW_DB::prepare_query([$sql, $letter->id, $letter->lang]);
-		
-		
+		$sql = GW_DB::prepare_query([$sql, $letter->id, $lang]);
 		
 		$rows = $db->fetch_rows($sql);
+		
+		//d::dumpas([$rows, $sql, $lang]);
 		
 		
 		if($count_total){
@@ -136,31 +207,50 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
+	function doSendBackground()
+	{
+		//
+	}
+	
+	
 	function __sendPortion($item)
 	{		
-		$recipients = $this->__getRecipients($item, $this->config->portion_size);
 		
-		$finished = false;
+		$portionSz = $this->config->portion_size ?? 50;
+		$recip_count = 0;
 		
-		$response = ['total_size'=>$item->recipients_count];
+		foreach($item->getActiveLangs() as $ln)
+		{
+			$recipients = $this->__getRecipients($item, $portionSz, $ln);
+
+			$finished = false;
+
+			$response = ['total_size'=>$item->recipients_count];
+			
+			
+
+			if($recipients){
+
+				$info = $this->__doSend($item, $recipients, $ln);
+
+				$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
+
+				$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients)]);
+
+
+				$response[$ln]['portion_sent']=$info['sent_count'];
+				$response[$ln]['portion_size']=count($recipients);
+				
+				$recip_count += count($recipients);
+			}
+		}
 		
-		if(!$recipients)
+		
+		if($recip_count==0)
 		{
 			$item->saveVAlues(['status'=>70, 'sent_time'=>date('Y-m-d H:i:s')]);
-			
-			$response['finished']=true;
 
-		}else{
-				
-			$info = $this->__doSend($item, $recipients);
-
-			$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
-
-			$item->saveVAlues(['sent_count'=>$item->sent_count + count($recipients)]);
-			
-			
-			$response['portion_sent']=$info['sent_count'];
-			$response['portion_size']=count($recipients);
+			$response['finished']=true;			
 		}
 		
 		$response['total_sent']=$item->sent_count;
@@ -238,14 +328,14 @@ class Module_Messages extends GW_Common_Module
 			
 	}	
 	
-	function __doSend($item, $recipients)
+	function __doSend($item, $recipients, $ln)
 	{
 		$sent_info = [];
 		$sent_count=0;
 		
 		$linkbase = Navigator::getBase(true).'site/';	
 		
-		$message = $item->getBodyFull('body_prepared');
+		$message = $item->getBodyFull("body_$ln");
 		
 		//$message="<a href='http://www.menuturas.lt/newsletter_images/nl1-head.jpg'>Abc</a>";
 		//d::dumpas(htmlspecialchars(GW_Link_Helper::trackingLink($message)));
@@ -253,8 +343,11 @@ class Module_Messages extends GW_Common_Module
 		//2015-07-13 removed
 		//$message = GW_Link_Helper::trackingLink($message);
 		//$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
-		$mail = GW_Mail_Helper::initPhpmailer($item->sender, $item->subject);
+	
 		
+		$mail = GW_Mail_Helper::initPhpmailer($item->get('sender', $ln));
+		$mail->Subject = $item->get('subject', $ln);
+					
 		
 		foreach($recipients as $recipient){
 			
@@ -277,18 +370,20 @@ class Module_Messages extends GW_Common_Module
 			
 			
 			if(!$mail->send()) {
+				
 				$info['status']=0;
 			}else{
+				d::ldump([$mail]);
 				$info['status']=1;
 				$sent_count++;
 			}
 			
 			$mail->clearAddresses();
 			$mail->clearAttachments();
-			
-	
-			
-			
+					
+			if($mail->ErrorInfo){
+				$this->setError("Sending error sender:  '{$mail->ErrorInfo}' Msg:$item->id recipient: $recipient->email");
+			}
 			
 			$sent_info[]=$info;
 		}
@@ -311,12 +406,14 @@ class Module_Messages extends GW_Common_Module
 		if(!($recipient=GW::getInstance('GW_NL_Subscriber')->find(['email=?', $mail])))
 			$recipient = (object)['id'=>-1,'name'=>'Testname', 'surname'=>'Testsurname', 'email'=>$mail,'lang'=>'lt'];
 		
-		$info = $this->__doSend($item, [$recipient]);
-		
-		if($info['sent_count']) {
-			$this->setPlainMessage('Testinis laiškas išsiųstas į: '.$mail);
-		} else {
-			$this->setPlainMessage('Testinis laiško siuntimas nepavyko. Gavėjas: '.$mail);
+		foreach($item->getActiveLangs() as $ln){
+			$info = $this->__doSend($item, [$recipient], $ln);
+
+			if($info['sent_count']) {
+				$this->setPlainMessage("$ln: Testinis laiškas išsiųstas į: $mail");
+			} else {
+				$this->setPlainMessage("$ln: Testinis laiško siuntimas nepavyko. Gavėjas: $mail");
+			}
 		}
 		$this->jump();
 	}
@@ -420,5 +517,23 @@ class Module_Messages extends GW_Common_Module
 		//d::dumpas('tikrinu');
 		return ['id'=>$item->id ];
 	}
+	
+	
+
+	
+	
+	function viewModInfo()
+	{
+		
+	}
+	
+	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();
+		$cfg['fields']['recipients_count']='l';
+
+		return $cfg;
+	}		
 	
 }

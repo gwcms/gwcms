@@ -3,19 +3,27 @@
 
 {block name="init"}
 
+	{$dl_smart_fields=[status,hits,recipients_ids,recipients_count]}
+	
+	{$dl_filters=[]}	
+	
+	
 
-	{$display_fields=[title=>1,sender=>1,subject=>1,lang=>1,status=>1,recipients_count=>1,sent_count=>1,hits=>1,insert_time=>1,update_time=>1,sent_time=>0]}
-	{$dl_smart_fields=[status,hits]}
 	
-	{$dl_filters=[
-		title=>1,subject=>1,sender=>1,insert_time=>1,sent_time=>1,
-		lang=>[type=>select, options=>$m->lang.OPT.lang],
-		status=>[type=>select, options=>$m->lang.OPT.status]
-	]}	
+	{$do_toolbar_buttons[] = addmultilang}	
+	{$do_toolbar_buttons[] = hidden}	
+	{$do_toolbar_buttons_hidden = [dialogconf,modinfo]}	
+	
+	{$do_toolbar_buttons[] = search}	
 	
 	
-	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$do_toolbar_buttons[] = dialogconf}	
+	
+	{function name=do_toolbar_buttons_addmultilang} 
+		{toolbar_button title=GW::l('/A/VIEWS/multilangform') iconclass='fa fa-plus-circle' 
+			href=$m->buildUri('multilangform',[id=>0])}	
+	{/function}		
+	
+	
 	
 	{$dl_actions=[test,clone,edit,invert_active,delete,send]}
 	
@@ -32,9 +40,8 @@
 	{function dl_actions_send}
 		{if $item->status < 11}
 				
-			
 			{if $item->active}
-				{list_item_action_m url=[send,[id=>$item->id]] confirm=1 iconclass="fa fa-send" title="Send email"} 
+				{list_item_action_m url=[false,[act=>doSend,id=>$item->id]] confirm=1 iconclass="fa fa-send" title="Send email"} 
 			{/if}
 		{else}
 			{list_item_action_m url=[sentinfo,[id=>$item->id]] iconclass="fa fa-info-circle" title=$m->lang.VIEWS.sentinfo} 
@@ -56,6 +63,19 @@
 			-
 		{/if}
 	{/function}	
+	
+	
+	{function dl_cell_recipients_ids}
+		{$tmp = $item->recipients_ids}
+		{if is_array($tmp)}({count($tmp)}){/if}
+	{/function}		
+	
+	{function dl_cell_recipients_count}
+		{foreach $item->getActiveLangs() as $ln}
+			{$ln}: {$item->get(recipients_count, $ln)}
+		{/foreach}
+	{/function}
+	
 	
 
 		

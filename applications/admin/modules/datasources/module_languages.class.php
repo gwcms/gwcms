@@ -47,7 +47,7 @@ class Module_Languages extends GW_Common_Module
 			if(!is_array($ids))
 				$ids = [$ids];
 			
-			array_walk($ids, 'intval');
+			$ids = array_map('intval', $ids);
 			$cond = GW_DB::inCondition('id', $ids);
 		}
 		
