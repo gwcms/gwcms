@@ -7,10 +7,7 @@
 	
 	{$dl_filters=[]}	
 	
-	
-
-	
-	{$do_toolbar_buttons[] = addmultilang}	
+		
 	{$do_toolbar_buttons[] = hidden}	
 	{$do_toolbar_buttons_hidden = [dialogconf,modinfo]}	
 	
@@ -18,24 +15,11 @@
 	
 	
 	
-	{function name=do_toolbar_buttons_addmultilang} 
-		{toolbar_button title=GW::l('/A/VIEWS/multilangform') iconclass='fa fa-plus-circle' 
-			href=$m->buildUri('multilangform',[id=>0])}	
-	{/function}		
 	
 	
 	
-	{$dl_actions=[test,clone,edit,invert_active,delete,send]}
+	{$dl_actions=[edit,invert_active,send,ext_actions]}
 	
-	{function dl_actions_test}
-
-		
-	{list_item_action_m 
-			url=[false,[act=>doTest,id=>$item->id,'mail'=>0]] 
-			onclick="x=prompt('Test laiško gavėjas', '`$lasttestmail`'); ;if(!x)return false; location.href=this.href.replace('mail=0','mail='+x)"
-			iconclass="fa fa-fw fa-eye" 
-			tag_params=[target=>'_blank', title=>"Bus siunčiamas laiškas nurodytu el. pašto adresu"]}
-	{/function}
 	
 	{function dl_actions_send}
 		{if $item->status < 11}
@@ -79,5 +63,7 @@
 	
 
 		
-	{$dl_order_enabled_fields=array_keys($display_fields)}
+	{$dl_checklist_enabled=1}
+	{$dl_cl_actions=[dialogremove]}
+	
 {/block}

@@ -45,7 +45,7 @@ class Module_Messages extends GW_Common_Module
 		foreach($list as $item)
 			break;
 
-		if($item)
+		if(isset($item))
 			if($item->extensions['attachments'])
 				$item->extensions['attachments']->prepareList($list);
 			
@@ -54,52 +54,10 @@ class Module_Messages extends GW_Common_Module
 	function __eventBeforeSave($item)
 	{
 		 
-		foreach($item->getActiveLangs() as $ln){
-	
-			
-			
-			$item->set('recipients_count', $this->__getRecipients($item, 1, $ln, true), $ln);
-		}
-		
-		
-
-		
+		$item->updateRecipientsCount();
+				
 		//paskutini p taga nuimti
 		$item->body = preg_replace('/<p>[^\da-z]{0,20}&nbsp;[^\da-z]{0,20}<\/p>/iUs', '', $item->body);	
-	}
-	
-	
-	function __parseRecipients($text, $lang, &$list)
-	{
-		$text = str_replace("\t",'', $text);
-		
-		$recipients = explode("\n", $text);
-		
-		foreach($recipients as $recipient)
-		{
-			$tmp = explode(';', $recipient);;
-			if(count($tmp)==2)
-				$list[] = ['name'=>$tmp[0], 'email'=>$tmp[1], 'lang'=>$lang];
-		}
-	}
-	
-	function beforeSaveParseRecipients()
-	{
-		$recipients=[];
-		$this->parseRecipients($this->recipients_lt, 'lt', $recipients);
-		$this->parseRecipients($this->recipients_en, 'en', $recipients);
-		$this->parseRecipients($this->recipients_ru, 'ru', $recipients);
-
-		//d::dumpas($recipients);
-
-		$this->recipients_count = count($recipients);
-		$this->recipients_data = json_encode($recipients);
-	}	
-	
-	
-	function __processRecipients($item)
-	{
-		
 	}
 	
 	
@@ -133,61 +91,14 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
-	
-	function __getRecipients($letter, $portion,  $lang, $count_total=false)
+	function __eventBeforeClone($item)
 	{
-		$db =& $letter->getDB();
-		
-		$grp_cond = " FALSE ";
-		
-		if($letter->groups){
-			$grp_incond = GW_DB::inCondition('b.`group_id`', $letter->groups);
-			$grp_cond = "a.active=1 AND (a.confirm_code IS NULL OR a.confirm_code < 100) AND $grp_incond";
-		}
-		
-		
-		$separete_ids = $letter->recipients_ids;
-		$part_incond = " FALSE ";
-		
-		if($separete_ids){
-			
-			$part_incond = GW_DB::inCondition('a.`id`', $separete_ids);
-		}
-		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS DISTINCT a.id, a.* 
-			FROM 
-				`gw_nl_subscribers` AS a
-			LEFT JOIN `gw_nl_subs_bind_groups` AS b
-				ON a.id=b.subscriber_id
-			LEFT JOIN gw_nl_sent_messages AS aa 
-				ON a.id = aa.subscriber_id AND aa.message_id=?
-			WHERE 
-				a.unsubscribed=0 AND
-				a.lang=? AND
-				( ($grp_cond) OR ($part_incond) )
-				". (!$count_total ? 'AND aa.status IS NULL' : '')."
-			LIMIT $portion
-			";
-		
-		$sql = GW_DB::prepare_query([$sql, $letter->id, $lang]);
-		
-		$rows = $db->fetch_rows($sql);
-		
-		//d::dumpas([$rows, $sql, $lang]);
-		
-		
-		if($count_total){
-			
-			$count_total= $db->fetch_result("SELECT FOUND_ROWS()");
-			
-			return $count_total;
-		}
-		
-		
-		
-		
-		return $rows;
+		$item->status = 0; 
+		$item->active = 0; //leave not active, for security, to leave user as double confirmation or treat that as secure send button
 	}
+	
+	
+
 	
 	function doSend()
 	{
@@ -221,7 +132,7 @@ class Module_Messages extends GW_Common_Module
 		
 		foreach($item->getActiveLangs() as $ln)
 		{
-			$recipients = $this->__getRecipients($item, $portionSz, $ln);
+			$recipients = $item->getRecipients($portionSz, $ln);
 
 			$finished = false;
 
@@ -394,7 +305,7 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
-	function doTest()
+	function doSendTestEmail()
 	{
 		if(! $item = $this->getDataObjectById())
 			return false;		
@@ -536,4 +447,66 @@ class Module_Messages extends GW_Common_Module
 		return $cfg;
 	}		
 	
+	
+	
+	function doImportFromIPMC()
+	{
+		$list = IPMC_Mail_Message::singleton()->findAll();
+		$cnt = 0;
+		
+		foreach($list as $item0)
+		{
+			$item = new GW_NL_Message();
+			
+			GW_Array_Helper::copy($item0, $item, [
+			    'subject_lt',
+			    'subject_ru',
+			    'subject_en',
+			    'sender_lt',
+			    'sender_ru',
+			    'sender_en',
+			    'body_lt',
+			    'body_en',
+			    'body_ru',
+			    'insert_time',
+			    'update_time',
+			    'title'
+			    ]);
+			
+			$recipients = json_decode($item0->recipients_data, true);
+			
+			$response = $this->app->innerRequest("emails/subscribers/importsimple",[],['jsonrows'=>json_encode($recipients)]);
+			
+			$item->recipients_ids = $response->ids;			
+			
+			if($item->body_lt)
+				$item->lang_lt = 1;
+			
+			if($item->body_en)
+				$item->lang_en = 1;
+			
+			if($item->body_ru)
+				$item->lang_ru = 1;
+			
+			
+			$item->status = 70;
+					
+			$item->updateRecipientsCount();
+			$item->insert();
+			$cnt++;
+		}
+		
+		$this->setMessage("Transfered items: $cnt");
+		$this->jump();
+	}
+
+
+	function doUpdateRecCountsAll()
+	{
+		foreach($this->model->findAll() as $msg){
+			$msg->updateRecipientsCount();
+			$msg->updateChanged();
+		}
+			
+	}
 }

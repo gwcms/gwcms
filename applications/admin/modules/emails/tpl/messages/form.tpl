@@ -3,17 +3,26 @@
 
 {$f="elements/input.tpl"}
 
-{include file=$f name=lang type=bool i18n=3 i18n_expand=1 hidden_note=$m->lang.FIELDS_HELP.lang}
+
+{if !$item->id}
+	{*naujam irasui pazymet dabar admino naudojama kalba*}
+	{$item->set(lang,1)}
+{/if}
+
+{include file=$f name=lang type=bool i18n=3 i18n_expand=1 hidden_note=$m->lang.FIELD_NOTE.lang}
+
+{*disablinti atzymetas kalbas*}
+{if $item->id}
+	{$langs=[]}
+	{*show only active langs*}
+	{foreach GW::$settings.LANGS as $ln}
+		{if $item->get(lang, $ln)}
+			{$langs[$ln]=1}
+		{/if}
+	{/foreach}
+{/if}
 
 
-{$langs=[]}
-{*show only active langs*}
-{foreach GW::$settings.LANGS as $ln}
-	
-	{if $item->get(lang, $ln)}
-		{$langs[$ln]=1}
-	{/if}
-{/foreach}
 
 
 
@@ -35,7 +44,11 @@
 *}
 
 {include file=$f type=htmlarea name=body remember_size=1 i18n=4}
-{include file=$f name=groups type=multiselect options=$options.groups}
+{include file=$f 
+	name=groups type=multiselect options=$options.groups
+	hidden_note=GW::l('/m/FIELD_NOTE/groups_or_recipients')
+	note=GW::l('/m/FIELD_NOTE/optional_select')
+}
 
 
 
@@ -54,6 +67,8 @@
 	preload=1
 	btngroup_width="100%"
 	rowclass="recipients"
+	hidden_note=GW::l('/m/FIELD_NOTE/groups_or_recipients')
+	note=GW::l('/m/FIELD_NOTE/optional_select')
 }
 
 

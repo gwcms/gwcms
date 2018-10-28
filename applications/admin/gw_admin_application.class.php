@@ -201,4 +201,35 @@ class GW_Admin_Application extends GW_Application
 		return is_numeric($id) ? $id : "id_".$id;
 	}
 	
+	function innerRequest($path, $get_args, $post_args)
+	{
+				
+		$get_args['GWSESSID']=session_id();
+		$get_args['sys_call'] = 1;
+		
+		$path = $this->buildUri($path, $get_args, ['absolute'=>1]);
+		
+		
+		$opts=[];
+		
+		if($post_args)
+		{
+			$opts = array('http' =>
+			    array(
+				'method'  => 'POST',
+				'header'  => 'Content-type: application/x-www-form-urlencoded',
+				'content' => http_build_query($post_args)
+			    )
+			);	
+			
+			
+		}
+		
+		$this->sessionWriteClose();
+		$res = json_decode(file_get_contents($path, false, stream_context_create($opts)));
+		$this->reopenSessionIfClosed();
+		
+		return $res;
+	}
+	
 }

@@ -123,9 +123,13 @@ class Module_Subscribers extends GW_Common_Module
 		
 		$t = new GW_Timer;
 		
-		$rows = trim($_POST['rows']);
-		$rows = str_replace("\r","\n",$rows);
-		$rows = explode("\n", $rows);
+		if(isset($_POST['rows'])){
+			$rows = trim($_POST['rows']);
+			$rows = str_replace("\r","\n",$rows);
+			$rows = explode("\n", $rows);
+		}elseif(isset($_POST['jsonrows'])){
+			$rows = json_decode($_POST['jsonrows'], true);
+		}
 		
 		$list = [];
 		$rowbyeml = [];
@@ -137,15 +141,26 @@ class Module_Subscribers extends GW_Common_Module
 		
 		foreach($rows as $row0)
 		{
-			$row = explode(';', $row0);
-			$name = trim($row[0] ?? '');
+			if(isset($row0['email'])){
+				//jsonrows
+				$name = $row0['name'];
+				$email = $row0['email'];
+				$lang = $row0['lang'];
+				$row = $row0;
+			}else{
+				//csv
+				$row = explode(';', $row0);
+				$name = trim($row[0] ?? '');
+				$email = trim($row[1] ?? '');
+				$lang = trim($row[2] ?? '');
+			}
+			
 			$name = explode(' ', $name, 2);
 			$name = $name[0] ?? '';
-			$surname = $name[1] ?? '';
-			$email = trim($row[1] ?? '');
-			$lang = trim($row[2] ?? '');
+			$surname = $name[1] ?? '';			
 			
 			$item = ["name"=>$name, "surname"=>$surname, "email"=>$email, "lang"=>trim($lang)];
+			
 			$list[$email] = $item;
 			$rowbyeml[$email] = $row;
 			
