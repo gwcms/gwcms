@@ -733,4 +733,19 @@
 	<en>Value</en>
 </i>
 
+<i id="SELECT_ALL">
+	<lt>Pasirinkti visus</lt>
+	<en>Select all</en>
+</i>
+
+<i id="TOTAL">
+	<lt>viso</lt>
+	<en>Total</en>
+</i>
+
+<i id="FOUND">
+	<lt>rasta</lt>
+	<en>Found</en>
+</i>
+
 </xml>

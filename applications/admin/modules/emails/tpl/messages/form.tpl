@@ -59,16 +59,16 @@
 	type="multiselect_ajax"
 	object_title=GW::l('/m/MAP/childs/subscribers/title')
 	form_url=$app->buildUri('emails/subscribers/form',[clean=>2,dialog=>1])
-
 	import_url=$app->buildUri('emails/subscribers/importsimple')
 	export_url=$app->buildUri('emails/subscribers/exportsimple')
-
 	datasource=$app->buildUri('emails/subscribers/search') 
 	preload=1
 	btngroup_width="100%"
 	rowclass="recipients"
 	hidden_note=GW::l('/m/FIELD_NOTE/groups_or_recipients')
 	note=GW::l('/m/FIELD_NOTE/optional_select')
+	options=[]
+	btnselectall=1
 }
 
 

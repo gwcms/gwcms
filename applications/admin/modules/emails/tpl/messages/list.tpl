@@ -3,7 +3,7 @@
 
 {block name="init"}
 
-	{$dl_smart_fields=[status,hits,recipients_ids,recipients_count]}
+	{$dl_smart_fields=[status,hits,recipients_ids,recipients_count,attachments]}
 	
 	{$dl_filters=[]}	
 	
@@ -11,7 +11,8 @@
 	{$do_toolbar_buttons[] = hidden}	
 	{$do_toolbar_buttons_hidden = [dialogconf,modinfo]}	
 	
-	{$do_toolbar_buttons[] = search}	
+	{$do_toolbar_buttons[] = search}
+	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}
 	
 	
 	
@@ -59,6 +60,12 @@
 			{$ln}: {$item->get(recipients_count, $ln)}
 		{/foreach}
 	{/function}
+	
+	{function name=dl_cell_attachments}
+		{$tmp=$item->extensions.attachments->count()}	
+		{if $tmp}{$tmp}{else}{/if}
+	{/function}	
+		
 	
 	
 

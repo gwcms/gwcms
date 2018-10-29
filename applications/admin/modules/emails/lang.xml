@@ -66,7 +66,15 @@
 		<i id="body_editor">Teksto redaktorius</i>
 		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
 		<i id="recipients_ids">Paskiri gavėjai</i>
+		<i id="attachments"><lt>Prisegtukai</lt><en>Attachments</en></i>
 	</i>
+	
+    <i id="FIELDS_SHORT">
+		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>		
+        <i id="id">Id</i>
+		<i id="attachments"><![CDATA[<i class="fa fa-paperclip"></i>]]></i>
+    </i>	
 	
 	<i id="FIELD_NOTE">
 		<i id="idname"><![CDATA[

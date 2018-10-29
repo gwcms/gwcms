@@ -34,7 +34,19 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	    )
 	);
 	public $original;
+	public $calculate_fields = ['size_human' => 1, 'full_filename' => 1, 'extension' => 'getType'];	
 
+	function calculateField($name)
+	{
+		if ($name == 'size_human')
+			return GW_Math_Helper::cFileSize($this->size, $prec = 3);
+
+		if ($name == 'full_filename')
+			return $this->dir . $this->get('filename');
+
+		parent::calculateField($name);
+	}	
+	
 	function getFilename()
 	{
 		return $this->dir . parent::get('filename');

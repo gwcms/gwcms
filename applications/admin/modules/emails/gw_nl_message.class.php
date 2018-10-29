@@ -26,11 +26,6 @@ class GW_NL_Message extends GW_i18n_Data_Object
 	];
 	
 	
-
-	
-
-	
-	
 	function getBodyFull($field = 'body')
 	{
 		return '<html><head><meta charset="UTF-8"></head><body style="margin:0">'.$this->$field.'</body></html>';

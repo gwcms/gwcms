@@ -5,7 +5,7 @@ class GW_Attachment extends GW_i18n_Data_Object
 
 	public $table = 'gw_attachments';
 	public $i18n_fields = ['title'=>1];
-	public $calculate_fields = [];
+	public $calculate_fields = ['attachment'=>1];
 	//public $ignore_fields = ['fullkey'=>1];
 
 	
@@ -25,4 +25,17 @@ class GW_Attachment extends GW_i18n_Data_Object
 	{
 		$this->set("title_{$ln}", $value);
 	}
+	
+	
+	function calculateField($name) {
+		
+		switch($name){
+			case 'attachment':
+				return $this->get($this->get('content_cat'));
+			break;
+		}
+		
+		parent::calculateField($name);
+	}
+	
 }

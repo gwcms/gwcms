@@ -85,6 +85,60 @@ class GW_Extension_Attachments
 		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}",$this->parent->id, $this->parent->ownerkey, $title]);
 	}
 	
+	function findAll($extra_conds = false, $opts=[])
+	{
+		$conds = GW_DB::prepare_query(["owner_id=? AND owner_type=?",$this->parent->id, $this->parent->ownerkey]);
+		
+		if($extra_conds){
+			$conds = GW_DB::mergeConditions($conds, GW_DB::prepare_query($extra_conds));
+		}
+				
+		return GW_Attachment::singleton()->findAll($conds, $opts);
+	}	
+	
+	
+	/**
+	 * note, store only after id is present // after insert done
+	 */
+	function storeAttachment($field, $filename, $vals=[])
+	{
+		$fileinfo = [
+		    'new_file' => $filename,
+		    'size' => filesize($filename),
+		    'original_filename' => basename($filename),
+		];
+				
+		$values['owner_type'] = $this->parent->ownerkey;
+		$values['owner_id']= $this->parent->id;
+		$values['field'] = $field;
+		$values['checksum'] = md5_file($filename);
+				
+		
+		list($type,$subtype) = explode('/', Mime_Type_Helper::getByFilename($filename));
+		
+		$values['content_cat'] = $type == 'image' && in_array($subtype, ['png','jpeg','gif']) ? 'image':'file';
+		$values['content_type'] = $subtype;		
+
+		$item = GW_Attachment::singleton()->createNewObject($values);
+		
+
+		
+		$item->set($values['content_cat'], $fileinfo);
+		$item->setValues($vals);
+		
+		//d::dumpas(file_get_contents($tempfn));
+		//$item->set('extra/parse', $parse);
+		
+		
+		if(!$item->validate())
+			return false;
+		
+		
+		$item->insert();		
+		
+		return true;
+	}
+	
 
 
 }

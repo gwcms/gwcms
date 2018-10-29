@@ -231,11 +231,25 @@ class Module_Messages extends GW_Common_Module
 	
 	
 	
-	function __addAtachments($item, $mail)
+	function __addAttachments($item, $mail, $ln)
 	{
-		for($i=1;$i<=1;$i++)
-			if($f=$item->get("file_".$i))		
-				$mail->AddAttachment( $f->full_filename , $f->original_filename);
+		$attachments = $item->extensions['attachments']->findAll(["field=?", "attachments_$ln"]);
+		$att_succ = 0;
+		$att_fail = 0;
+		
+		foreach($attachments as $attachment){
+			if($f=$attachment->attachment){
+				//d::ldump([$f->full_filename , $f->original_filename]);
+				if($mail->AddAttachment( $f->full_filename , $f->original_filename))
+				{
+					$att_succ++;
+				}else{
+					$att_fail++;
+				}
+			}
+		}
+		
+		return [$att_succ,$att_fail];
 			
 	}	
 	
@@ -258,6 +272,19 @@ class Module_Messages extends GW_Common_Module
 		
 		$mail = GW_Mail_Helper::initPhpmailer($item->get('sender', $ln));
 		$mail->Subject = $item->get('subject', $ln);
+		
+		
+		
+		$mail->clearAttachments();
+		
+		//su ta mintim kad visiem attachmentai vienodi
+		list($asucc, $afail) = $this->__addAttachments($item, $mail, $ln);
+		
+		if($afail){
+			$this->setError("Failed attach: $afail");
+		}
+		
+		//d::dumpas($mail);
 					
 		
 		foreach($recipients as $recipient){
@@ -267,6 +294,7 @@ class Module_Messages extends GW_Common_Module
 			$recipient = (object)$recipient;
 			
 			$message_info = $this->__prepareMessage($msg, $item, $linkbase, $recipient);
+			$mail->clearAddresses();
 			
 
 			$info = ['subscriber_id'=>$recipient->id, 'message_id'=>$item->id, 'time'=>date('Y-m-d H:i:s')];
@@ -274,11 +302,10 @@ class Module_Messages extends GW_Common_Module
 			$mail->addAddress($recipient->email);
 			$mail->msgHTML($msg);
 			
-			$this->__addAtachments($item, $mail);
+			//$this->__addAtachments($item, $mail);
 			
 		
 			//$mail->addCustomHeader("List-Unsubscribe",'<'.$mail->__replyTo.'>, <'.$message_info['unsubscribe_link'].'>');
-			
 			
 			if(!$mail->send()) {
 				
@@ -289,8 +316,6 @@ class Module_Messages extends GW_Common_Module
 				$sent_count++;
 			}
 			
-			$mail->clearAddresses();
-			$mail->clearAttachments();
 					
 			if($mail->ErrorInfo){
 				$this->setError("Sending error sender:  '{$mail->ErrorInfo}' Msg:$item->id recipient: $recipient->email");
@@ -443,9 +468,12 @@ class Module_Messages extends GW_Common_Module
 	{
 		$cfg = parent::getListConfig();
 		$cfg['fields']['recipients_count']='l';
-
+		$cfg['fields']['attachments']='l';
+		
 		return $cfg;
 	}		
+	
+	
 	
 	
 	
@@ -453,6 +481,21 @@ class Module_Messages extends GW_Common_Module
 	{
 		$list = IPMC_Mail_Message::singleton()->findAll();
 		$cnt = 0;
+		
+		$filefields=[
+		    "file_1_lt"=>'lt',
+		    "file_2_lt"=>'lt',
+		    "file_3_lt"=>'lt',
+		    "file_1_en"=>'en',
+		    "file_2_en"=>'en',
+		    "file_3_en"=>'en',
+		    "file_1_ru"=>'ru',
+		    "file_2_ru"=>'ru',
+		    "file_3_ru"=>'ru'
+		    ];
+		
+		$att_fail = 0;
+		$att_succ = 0;
 		
 		foreach($list as $item0)
 		{
@@ -462,9 +505,6 @@ class Module_Messages extends GW_Common_Module
 			    'subject_lt',
 			    'subject_ru',
 			    'subject_en',
-			    'sender_lt',
-			    'sender_ru',
-			    'sender_en',
 			    'body_lt',
 			    'body_en',
 			    'body_ru',
@@ -477,7 +517,17 @@ class Module_Messages extends GW_Common_Module
 			
 			$response = $this->app->innerRequest("emails/subscribers/importsimple",[],['jsonrows'=>json_encode($recipients)]);
 			
-			$item->recipients_ids = $response->ids;			
+			if(!isset($response->ids))
+			{
+				d::ldump($response);
+			}
+			
+			$item->recipients_ids = $response->ids;	
+			
+			$item->sender_lt = $item0->sender;
+			$item->sender_en = $item0->sender;
+			$item->sender_ru = $item0->sender;
+			$item->comments = "Importuota iš 'IPMC laiškai' id: ".$item0->id;
 			
 			if($item->body_lt)
 				$item->lang_lt = 1;
@@ -493,10 +543,25 @@ class Module_Messages extends GW_Common_Module
 					
 			$item->updateRecipientsCount();
 			$item->insert();
+			
+			foreach($filefields as $field => $lang)
+			{
+				if($item0->get($field)){
+					$file = $item0->$field;
+									
+					if($item->extensions['attachments']->storeAttachment("attachments_$lang", $file->getFilename()))
+					{
+						$att_succ++;
+					}else{
+						$att_fail++;
+					}
+				}
+			}			
+			
 			$cnt++;
 		}
 		
-		$this->setMessage("Transfered items: $cnt");
+		$this->setMessage("Transfered items: $cnt. Attachments success: $att_succ, fail: $att_fail");
 		$this->jump();
 	}
 
