@@ -12,7 +12,6 @@ if(isset($argv)){
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
 }
 
-
 if(isset($_SERVER['REMOTE_ADDR'])){
 	header('Content-type: text/plain');
 		
