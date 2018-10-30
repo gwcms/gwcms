@@ -19,8 +19,11 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 	echo "exec res:\n";
 	$res=shell_exec($cmd="sudo /usr/bin/php ".__FILE__.' 2>&1');
 	//echo $cmd;
+	
 	echo $res;
 	echo ".";
+	include __DIR__.'/applications/cli/after_deploy.php';	
+	
 	exit;
 }
 
