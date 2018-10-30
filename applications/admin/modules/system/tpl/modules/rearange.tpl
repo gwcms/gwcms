@@ -111,7 +111,7 @@
 	{$dl_smart_fields=[icon,path,title,actions]}
 	
 	{function dl_cell_icon}
-		<center>{$item->info.icon} {if $item->info.iconclass}<i class="{$item->info.iconclass}"></i>{/if}</center>
+		<center>{$item->info->icon} {if $item->info->iconclass}<i class="{$item->info->iconclass}"></i>{/if}</center>
 	{/function}
 	{function dl_cell_title}
 		{if $item->path!='separator'}
