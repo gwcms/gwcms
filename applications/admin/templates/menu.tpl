@@ -35,7 +35,8 @@
 								<li class="list-header">{$item->get(title,$ln)}</li>
 
 							{else}
-
+								{*{$GLOBALS.adm_sys_menu[$item->path]=1}*}
+								
 								<li class="{if $active} active-sub active{/if}">
 
 									<a href="{$app->buildUri($item->path)}">
@@ -48,7 +49,8 @@
 										{if $active}<!--active-->{/if}
 										<ul class="collapse {if $active}in{/if}">
 											{foreach from=$childs item=sitem}
-
+												{*$GLOBALS.adm_sys_menu[$sitem->path]=1*}
+												
 												<li {if $app->path_arr.1.path_clean == $sitem->path}class="active-link"{/if}>
 													<a href="{$app->buildUri($sitem->path)}">{call "menudisplayicon" item=$sitem} {$sitem->get(title,$ln)}</a>
 												</li>
@@ -62,7 +64,7 @@
 						{/foreach}
 
 						<!--Category name-->
-
+						
 
 					</ul>
 

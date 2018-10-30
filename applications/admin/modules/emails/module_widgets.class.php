@@ -17,12 +17,8 @@ class Module_Widgets extends GW_Module
 		parent::init();
 	}
 	
-	
-	
-	
-	
 	function viewProgress()
-	{
+	{		
 		$list = GW_NL_Message::singleton()->findAll('status=10',['select'=>'recipients_total,sent_count,id,title']);
 				
 		$this->tpl_vars['messages_in_progres'] = $list;

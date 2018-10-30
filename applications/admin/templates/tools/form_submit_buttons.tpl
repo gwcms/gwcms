@@ -9,6 +9,10 @@
 	{/if}
 {/function}
 
+{function name=df_submit_button_submit}
+	{call df_submit_button_save save_button_caption=GW::l('/g/SUBMIT')}
+{/function}
+
 
 
 {function name=df_submit_button_apply}

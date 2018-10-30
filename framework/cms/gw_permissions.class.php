@@ -79,10 +79,15 @@ class GW_Permissions
 		return $cache_var;
 	}
 
-	static function canAccess($path, $gids, $load_once = true)
+	static function canAccess($path, $gids, $load_once = true, $rootcheck=true)
 	{
-		if (self::isRoot($gids))
-			return true;
+		if (self::isRoot($gids)){
+			if($rootcheck){
+				return true;
+			}else{				
+				return GW_ADM_Page::singleton()->count(['path=? AND active=1', $path]) > 0;
+			}
+		}		
 
 		if ($load_once)
 			$paths = self::getPrmByMltGrpIds($gids);

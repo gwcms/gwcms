@@ -1,9 +1,7 @@
-{include "default_open.tpl"} 
+{include file="default_form_open.tpl" action="parseEmailsFromText"}
 
+</table>
 
-
-<form method="post"><input type="hidden" name="act"
-	value="do:parseEmailsFromText" />
 
 <table class="gwTable" style="width: 100%">
 
@@ -28,10 +26,12 @@
 {/if}
 
 
-</table>
+{function name=df_submit_button_send}
+	<button class="btn btn-primary"><i class="fa fa-save"></i> {$m->lang.SEND}</button>
+{/function}
 
 
 
+{include file="default_form_close.tpl" submit_buttons=[submit,cancel]}
 
-</small> <input type="submit" /></form>
-{include "default_close.tpl"}
+
