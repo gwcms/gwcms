@@ -2,23 +2,20 @@
 <pre>
 Laiškų siuntimo modulis
 
--masinis laisku siuntimas (+)
--paskiri gavejai (+)
--laiško aktyvumo sekimas pakeičiant nuorodas (vartotojui paspaudus bus galima matyti ip adresą, gavėjo el paštą, naršyklę) (+)
+(+)Masinis laiškų siuntimas
+(+)Paskiri gavėjai (importavimas csv, importavimas db identifikatorių formoje)
+(+)Laiško aktyvumo sekimas pakeičiant nuorodas (vartotojui paspaudus bus galima matyti ip adresą, gavėjo el paštą, naršyklę) (turi būti site dalyje modulis)
 
--daugiakalbiai laiškai (sender, subject, body, recipients) (+)
--multiple attachments - (+)
+(+)Daugiakalbiai laiškai (sender, subject, body, recipients)
+(+)Vienas arba keli prisegtukai
 
 Naujo Laiško pridejimas:
-	pasirenkamos kalbos kurios bus naudojamos (po išsaugojimo atžymėtos kalbos neberodomos) (+)
+	(+)Pasirenkamos kalbos kurios bus naudojamos (po išsaugojimo atžymėtos kalbos neberodomos) 
 
 Foninis siuntimas:
-	Uždėjus laišką užstačius žalią vėlevėlę vykdomas siuntimas fone, matomas progresas net ir esant kitame modulyje (+)
+	(+)Uždėjus laišką užstačius žalią vėlevėlę ir paspaudus siųsti - vykdomas siuntimas fone, matomas progresas net ir esant kitame modulyje (+)
 
-Gavėjų importavimas iš teksto
-
-
-
+(+)Gavėjų importavimas iš teksto (gavėju submodulis)
 
 </pre>
 {include "default_close.tpl"}
