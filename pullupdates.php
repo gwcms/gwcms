@@ -21,7 +21,7 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 	
 	echo $res;
 	echo ".";
-	include __DIR__.'/applications/cli/after_deploy.php';	
+
 	
 	exit;
 }
@@ -33,5 +33,7 @@ if(!isset($_SERVER['HTTP_HOST'])){
 	echo shell_exec("cd '$dir' && git pull 2>&1");
 	echo shell_exec("cd '$dir' && rm repository/.sys/templates_c/*");
 	echo shell_exec("cd '$dir' && git rev-parse --short HEAD > version");	
+	
+	include __DIR__.'/applications/cli/after_deploy.php';		
 	
 }
