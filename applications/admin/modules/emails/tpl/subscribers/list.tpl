@@ -7,15 +7,7 @@
 		{toolbar_button title=GW::l('/A/VIEWS/emailsfromtext') iconclass='gwico-Import' href=$m->buildUri(emailsfromtext)}
 	{/function}	
 	
-	{$display_fields=[title=>1,
-		email=>1,
-		lang=>1,
-		groups=>1,confirmed=>1,insert_time=>1,update_time=>1,
-		unsubscribe_note=>0
-		]}
 	{$dl_smart_fields=[title,email,groups,confirmed]}
-	
-	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[importdata,exportdata,dialogconf,emailsfromtext,print]}	
@@ -62,10 +54,7 @@
 		{/if}
 	{/function}	
 	
-	
-	{gw_unassign var=$display_fields.image} 	
-	{$dl_order_enabled_fields=array_keys($display_fields)}
-	
+		
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[dialogremove]}	
 	

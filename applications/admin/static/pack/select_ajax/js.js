@@ -5,17 +5,19 @@ function formatSelect2Result(item) {
 	if(item.html)
 		return item.html;
 
-	var markup = "<div class='select2-result-repository clearfix'>" +
-		"<div class='select2-result-repository__meta'>" +
-		"<div class='select2-result-repository__title'>" + item.title + "</div>";
-
 		if(item.hasOwnProperty('footer')){
+			var markup = "<div class='select2-result-repository clearfix'>" +
+					"<div class='select2-result-repository__meta'>" +
+		"<div class='select2-result-repository__title'>" + item.title + "</div>";			
 			markup += "<small class='text-muted'>"+item.footer+"<small>";
-		}
-	"</div>" +
+			
+			markup += 	"</div>" +
 		"</div></div>";
-
-	return markup;
+			return markup;
+			
+		}else{
+			return item.title;
+		}
 }	
 
 function formatSelect2Selection(item) {

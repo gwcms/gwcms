@@ -448,7 +448,45 @@ class Module_Subscribers extends GW_Common_Module
 		
 		echo json_encode($res);
 		exit;
-	}	
+	}
+
+
+	function doCleanupRecipients()
+	{
+		$changed = 0;
+		$duplicatesremoved=0;
+		
+		foreach($this->model->findAll() as $item){
+			$item->name = trim($item->name);
+			$item->surname = trim($item->surname);
+			$item->email = trim($item->email);
+			
+			if($item->changed_fields){
+				if(isset($item->changed_fields['email']) && $this->model->find(['email=? AND id!=?', $item->email,$item->id])){
+					$item->delete();
+					$duplicatesremoved++;
+				}else{
+					$item->updateChanged();
+					$changed++;
+				}
+			}
+		}
+		
+		$this->setMessage("Fixed:$changed. Duplicates removed:$duplicatesremoved");
+		$this->jump();
+	}
 	
+	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();
+
+		$cfg['fields']['title']='L';
+
+		//$cfg['fields']['progress']="L";
+		
+		
+		return $cfg;
+	}	
 	
 }
