@@ -28,7 +28,10 @@ GW::s('ADMIN/USER_CLASS', 'GW_User');
 
 
 
+$am = GW::s('ADMIN/HOOKS/AFTER_MENU');
+$am = is_array($am) ? $am : [];
+$am[] = "emails/widgets/progress";
 
-
+GW::s('ADMIN/HOOKS/AFTER_MENU', $am);
 
 

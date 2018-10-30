@@ -6,6 +6,10 @@
 	{$display_fields=[subscriber_id,link,ip,browser,referer,insert_time]}
 	{$dl_smart_fields=[subscriber_id,link]}
 	{$dl_output_filters=[browser=>truncate40_hint,referer=>truncate40_hint]}
+	{$dl_filters=[]}
+	{*
+	{$dl_filters=[email=>1, insert_time=>1, link=>1,ip=>1,browser=>1,referer=>1]}
+	*}
 	
 	{function name=dl_output_filters_truncate40_hint}
 		{call name="truncate_hint" value=$item->$field length=40}
@@ -16,10 +20,7 @@
 	{$do_toolbar_buttons = ['filters']}	
 	
 	{$dl_actions=[]}
-	
-	{$dl_filters=[email=>1, insert_time=>1, link=>1,ip=>1,browser=>1,referer=>1]}
-	
-	
+		
 	{function dl_cell_subscriber_id}			
 		{if $item->subscriber_id}
 			<a href="{$app->ln}/{$m->module_path.0}/subscribers?id={$item->subscriber_id}">{$item->email}</a>

@@ -46,7 +46,7 @@
 		<i id="hits">Aktyvumas</i>		
 		<i id="subscriber_id">Prenumeratorius</i>		
 		<i id="sent_time">Išsiuntimo laikas</i>	
-		<i id="portion_size">Porcijos dydis</i>
+		<i id="portion_size">Masinio siuntimo porcijos dydis</i>
 		<i id="default_sender">"Laiškų siuntėjas" pagal nutylėjimą</i>
 		<i id="default_replyto">"Atsakyti į" pagal nutylėjimą</i>
 		<i id="replyto">Atsakyti į</i>
@@ -74,6 +74,9 @@
 		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>		
         <i id="id">Id</i>
 		<i id="attachments"><![CDATA[<i class="fa fa-paperclip"></i>]]></i>
+		<i id="hits"><![CDATA[<i class="fa fa-eye"></i>]]></i>	
+		<i id="progress">%</i>	
+		
     </i>	
 	
 	<i id="FIELD_NOTE">
@@ -123,8 +126,22 @@
 		<i id="recipients"><![CDATA[Formatas 1 gavėjas per eilutę: Vardas Pavardė;El pašto adresas<br>Pvz: <br/>Jonas Jonaitis;jonas.jonaitis@gmail.com<br/>Antanas Antanaitis;antanas@yahoo.com]]></i>
 		<i id="lang">Kad įvyktu pasikeitimai gali prireikti spustelti &quot;Išsaugoti liekant&quot; mygtuką po forma</i>
 		
-		<i id="groups_or_recipients">Pasirinkite gavėjus įtraukiant &quot;Gavėjų grupę&quot; arba per &quot;Paskiri gavėjai&quot; suveskite gavėjų sąrašą. Nurodant ir ten ir ten bus apjungiamas gavėjų sąrašas</i>
+		<i id="groups_or_recipients">
+			<![CDATA[
+			Pasirinkite gavėjus įtraukiant &quot;Gavėjų grupę&quot; arba per &quot;Paskiri gavėjai&quot; suveskite gavėjų sąrašą. <br />
+			<i>Nurodant ir ten ir ten bus apjungiamas gavėjų sąrašas</i><br />
+			Į paskirus gavėjus nereikomenduojama sukelti daugiau negu 200 gavėjų (gali sutrikti naršyklės darbas)</br >
+			<i>Esant didesniam gavėjų skaičiui per  &quot;Prenumeratorių modulį&quot; importuokite turimų gavėjų sąrašą į grupę, grįže į laiško redagavima pasirinkite sukurtą grupę</i>
+			]]>
+		</i>
 		<i id="optional_select">(pasirinktinai)</i>
+		<i id="message_variables"><![CDATA[
+			{$NAME} - vardas<br />
+			{$NAME|default:'Kolega'} - vardas arba jei nenustatytas vardas nurodyti bendrinį kreipinį<br />
+			{$LINKONLINE} - Nuoroda pažiūrėti laiška svetainėje<br />
+			{$UNSUBSCRIBE} - Nuoroda atsisakyti naujienų arba pakeisti naujienų grupes<br />
+		]]></i>		
+		
 	</i>
 	
 	<i id="OPT">

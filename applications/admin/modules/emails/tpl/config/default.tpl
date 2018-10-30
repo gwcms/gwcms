@@ -24,7 +24,10 @@
 
 {include file="elements/input.tpl" name=smtp_config type=read value=$tmp rowclass="smtpdetails"}
 
-
+{*
+it is in ntconfig!!!
+{include file="elements/input.tpl" name=portion_size type=number}
+*}
 
 
 {function name=df_submit_button_savetest}

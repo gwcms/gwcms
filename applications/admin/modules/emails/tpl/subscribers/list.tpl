@@ -3,14 +3,8 @@
 
 {block name="init"}
 
-	{function name=do_toolbar_buttons_import} 
-		{gw_link relative_path=import title=Importuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
-	{/function}
-	{function name=do_toolbar_buttons_export} 
-		{gw_link relative_path=export title=Eksportuoti icon="action_action"} &nbsp;&nbsp;&nbsp; 
-	{/function}
-	{function name=do_toolbar_buttons_emailsfromtext} 
-		{gw_link relative_path=emailsfromtext title="Gavėjai iš teksto" icon="action_action"} &nbsp;&nbsp;&nbsp; 
+	{function name=do_toolbar_buttons_emailsfromtext}  
+		{toolbar_button title=GW::l('/A/VIEWS/emailsfromtext') iconclass='gwico-Import' href=$m->buildUri(emailsfromtext)}
 	{/function}	
 	
 	{$display_fields=[title=>1,
@@ -24,7 +18,7 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 	
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[import,export,dialogconf,emailsfromtext,print]}	
+	{$do_toolbar_buttons_hidden=[importdata,exportdata,dialogconf,emailsfromtext,print]}	
 	
 	{$dl_actions=[invert_active,edit,delete]}
 	

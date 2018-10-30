@@ -68,26 +68,54 @@ class Module_Messages extends GW_Common_Module
 		$body = $item->body;
 		
 		
-		/*
-		$orig_links = GW_Link_Helper::getLinks($body);
-		$links = GW_Link_Helper::cleanAmps($orig_links, $body);
-		
 
-		GW::getInstance('GW_NL_Link')->storeNew($links, $item->id);
-		
-		$links = GW::getInstance('GW_NL_Link')->getAllidLink($item->id);
-		
-		foreach($links as $id => $link){
-			$body = str_replace("'".$link."'", '\'{$TRACKINK_LINK}'.$id."'", $body);
-			$body = str_replace('"'.$link.'"', '"{$TRACKINK_LINK}'.$id.'"', $body);
-		}
-		*/
-		//$item->body_prepared = $body;
+		//butina atnaujinti, kitu atveju pakeitimai neisigalios
+		$this->prepareBody($item, true);
 		
 		//$item->__processRecipients($item);
 		
 		
 		//$item->update(['body_prepared']);
+	}
+	
+	function __eventAfterInvertActive($item)
+	{
+		//boost send
+		if($item->active==1 && $item->status==10){
+			Navigator::backgroundRequest('admin/lt/emails/messages?act=doSendBackground');	
+		}
+	}
+	
+	
+	function prepareBody($item, $force = false)
+	{
+		if(!$force && ($val = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, GW_NL_Message::singleton()->table, $item->id.'/prepbody'))){
+			return json_decode($val, true);
+		}else{
+			$bodyLn = [];
+			
+			foreach($item->getActiveLangs() as $ln){
+			
+				$body = $item->get('body', $ln);
+				$orig_links = GW_Link_Helper::getLinks($body);
+				$links = GW_Link_Helper::cleanAmps($orig_links, $body);
+
+
+				GW::getInstance('GW_NL_Link')->storeNew($links, $item->id);
+
+				$links = GW::getInstance('GW_NL_Link')->getAllidLink($item->id);
+
+				foreach($links as $id => $link){
+					$body = str_replace("'".$link."'", '\'{$TRACKINK_LINK}'.$id."'", $body);
+					$body = str_replace('"'.$link.'"', '"{$TRACKINK_LINK}'.$id.'"', $body);
+				}
+				$bodyLn[$ln] = $body;
+			}
+			
+			GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, GW_NL_Message::singleton()->table, $item->id.'/prepbody', json_encode($bodyLn));
+			
+			return $bodyLn;
+		}		
 	}
 	
 	
@@ -110,17 +138,30 @@ class Module_Messages extends GW_Common_Module
 			$item->saveValues(['status'=>10]);
 		}
 		
-		$info = $this->__sendPortion($item);
+		Navigator::backgroundRequest('admin/lt/emails/messages?act=doSendBackground');	
 		
-		
-		echo json_encode($info);	
-		exit;
+		$this->jump();
 	}
 	
 	
 	function doSendBackground()
 	{
-		//
+		if($item = $this->model->find('status=10 AND active=1'))
+		{
+			$info = $this->__sendPortion($item);
+			$stat = json_encode($info);
+		}else{
+			$stat = "Nothing to send";
+		}
+		
+		$this->config->last_background_exec = date('Y-m-d H:i') . ' - '.$stat;
+		
+		if($item){
+			sleep(5);
+			Navigator::backgroundRequest('admin/lt/emails/messages?act=doSendBackground');			
+		}
+		
+		exit;			
 	}
 	
 	
@@ -129,6 +170,8 @@ class Module_Messages extends GW_Common_Module
 		
 		$portionSz = $this->config->portion_size ?? 50;
 		$recip_count = 0;
+		
+		$bodyLn = $this->prepareBody($item);
 		
 		foreach($item->getActiveLangs() as $ln)
 		{
@@ -142,7 +185,7 @@ class Module_Messages extends GW_Common_Module
 
 			if($recipients){
 
-				$info = $this->__doSend($item, $recipients, $ln);
+				$info = $this->__doSend($item, $recipients, $ln, $bodyLn);
 
 				$item->getDB()->multi_insert('gw_nl_sent_messages', $info['sent_info']);
 
@@ -164,6 +207,7 @@ class Module_Messages extends GW_Common_Module
 			$response['finished']=true;			
 		}
 		
+		$response['sent'] = $recip_count;
 		$response['total_sent']=$item->sent_count;
 		
 		return $response;
@@ -197,7 +241,7 @@ class Module_Messages extends GW_Common_Module
 	function __prepareMessage(&$msg, $letter, $linkbase , $recipient)
 	{		
 		# 1 - VARDAS PAVARDE
-		$this->smarty->assign('NAME', $recipient->name.' '.$recipient->surname);
+		$this->smarty->assign('NAME', $recipient->name.($recipient->name && $recipient->surname ? ' ':'').$recipient->surname);
 
 		$linkbase = $linkbase.strtolower($recipient->lang)."/direct/newsletter/newsletter/";
 		
@@ -221,8 +265,9 @@ class Module_Messages extends GW_Common_Module
 		$trackinglink2=$linkbase."link2?nlid={$letter->id}&rid=".$recipient->id.'&link=';	
 		$this->smarty->assign('TRACKINK_LINK', $trackinglink2);
 		
-		$msg = $this->smarty->fetch('string:'.$msg);		
+		$msg = $this->smarty->fetch('string:'.$msg);	
 		
+
 		//2015-07-13 removed
 		//$msg = str_replace('##TRACKINGLINK##', $trackinglink, $msg);
 		
@@ -253,20 +298,28 @@ class Module_Messages extends GW_Common_Module
 			
 	}	
 	
-	function __doSend($item, $recipients, $ln)
+	function __doSend($item, $recipients, $ln, $bodyLn=false)
 	{
 		$sent_info = [];
 		$sent_count=0;
 		
 		$linkbase = Navigator::getBase(true).'site/';	
 		
-		$message = $item->getBodyFull("body_$ln");
+		
+		if(!$bodyLn)
+			$bodyLn = $this->prepareBody($item);
+		
+		//$message = GW_Link_Helper::trackingLink($bodyLn[$ln]);
+		$message = $item->getBodyFull($bodyLn[$ln]);
+		
+		
+		
 		
 		//$message="<a href='http://www.menuturas.lt/newsletter_images/nl1-head.jpg'>Abc</a>";
 		//d::dumpas(htmlspecialchars(GW_Link_Helper::trackingLink($message)));
 		
 		//2015-07-13 removed
-		//$message = GW_Link_Helper::trackingLink($message);
+		//
 		//$mail = $this->initPhpmailer($item->sender, $item->replyto, $item->subject);
 	
 		
@@ -289,11 +342,12 @@ class Module_Messages extends GW_Common_Module
 		
 		foreach($recipients as $recipient){
 			
-			$msg = $message;
-
+			$msg = $message;//copy for each recipient
+			
 			$recipient = (object)$recipient;
 			
 			$message_info = $this->__prepareMessage($msg, $item, $linkbase, $recipient);
+						
 			$mail->clearAddresses();
 			
 
@@ -311,7 +365,6 @@ class Module_Messages extends GW_Common_Module
 				
 				$info['status']=0;
 			}else{
-				d::ldump([$mail]);
 				$info['status']=1;
 				$sent_count++;
 			}
@@ -467,8 +520,11 @@ class Module_Messages extends GW_Common_Module
 	function getListConfig()
 	{
 		$cfg = parent::getListConfig();
-		$cfg['fields']['recipients_count']='l';
+
 		$cfg['fields']['attachments']='l';
+		$cfg['fields']['hits']="L";
+		//$cfg['fields']['progress']="L";
+		
 		
 		return $cfg;
 	}		
@@ -574,4 +630,31 @@ class Module_Messages extends GW_Common_Module
 		}
 			
 	}
+	
+	function doGetProgessPackets()
+	{
+		$id=(int)$_GET['id'];
+		$msg = GW_NL_Message::singleton()->find(["id=?", $id] ,['select'=>'recipients_total,sent_count,id']);
+		
+		if(!$msg)
+		{
+			$this->setError("Message($id) not found");
+			goto sFinish;
+		}else{
+			//$progress = rand(1,99);//test
+			$progress = $msg->progress;
+
+			$this->app->addPacket(["action"=>"updateProgress","id"=>"massemail_".$id, "progress"=>$progress]);
+
+			if($progress==100)
+			{
+				$this->app->addPacket(["action"=>"clearInterval","id"=>"progress_massemail_".$id]);			
+			}
+		}
+		
+		sFinish:
+			$this->app->outputPackets(true);
+	}	
+	
+	
 }

@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="1000px"}
 
 {*$nowrap=1*}
 
@@ -10,7 +10,7 @@
 
 {$ck_options=[toolbarStartupExpanded=>false]}
 
-{include file="elements/input.tpl" name=subscribe_confirm_msg type=htmlarea hidden_note=$m->lang.subscribe_confirm_msg_note remember_size=1}
+{include file="elements/input.tpl" name=subscribe_confirm_msg type=htmlarea hidden_note=$m->lang.subscribe_confirm_msg_note remember_size=1 layout=wide}
 
 
 {include file="elements/input.tpl" name=dkim_private_key type=textarea height=60px}

@@ -73,7 +73,7 @@ class Module_Subscribers extends GW_Common_Module
 		
 		
 		foreach($list as $item){
-			$item->groups_string = implode(',', $item->groups);
+			$item->groups_string = isset($item->groups) && $item->groups ? implode(',', $item->groups): '';
 			
 			$row = Array();
 			foreach($this->import_field_translations as $xlsname => $sysname)
@@ -100,16 +100,21 @@ class Module_Subscribers extends GW_Common_Module
 		$ids = explode(',',$_POST['ids']);
 		
 		$ids = array_map('intval', $ids);
-		$cond = GW_DB::inCondition('id', $ids);		
 		
-		$list =  $this->model->findAll($cond);
+		$rows = [];
 		
-		
-		foreach($list as $item)
-		{
-			$row = [$item->name.' '.$item->surname, $item->email, $item->lang];
-			$row = array_map(function ($str) { return str_replace(';',',', $str); }, $row);
-			$rows[] = implode(';',$row);
+		if($ids){
+			$cond = GW_DB::inCondition('id', $ids);		
+
+			$list =  $this->model->findAll($cond);
+
+
+			foreach($list as $item)
+			{
+				$row = [$item->name.' '.$item->surname, $item->email, $item->lang];
+				$row = array_map(function ($str) { return str_replace(';',',', $str); }, $row);
+				$rows[] = implode(';',$row);
+			}
 		}
 		
 		echo implode("\n", $rows);
@@ -398,31 +403,26 @@ class Module_Subscribers extends GW_Common_Module
 	{
 		$i0 = $this->model;
 		
+		
 		if(isset($_GET['q']))
 		{
 			$search = "'%".GW_DB::escape($_GET['q'])."%'";		
-			$cond = "(name LIKE $search OR surname LIKE $search OR email LIKE $search)";		
-		}elseif(isset($_GET['ids'])){
+			$cond = "(name LIKE $search OR surname LIKE $search OR email LIKE $search)";	
 			
-			$ids = json_decode($_GET['ids'], true);
+			$page_by = 30;
+			$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
+			$params['offset'] = $page_by * $page;
+			$params['limit'] = $page_by;			
+		}elseif(isset($_POST['ids'])){
+			
+			$ids = json_decode($_POST['ids'], true);
 			
 			if(!is_array($ids))
 				$ids = [$ids];
 			
 			$ids = array_map('intval', $ids);
 			$cond = GW_DB::inCondition('id', $ids);
-			
-
 		}	
-		
-
-		
-		
-		$page_by = 30;
-		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
-		$params['offset'] = $page_by * $page;
-		$params['limit'] = $page_by;
-	
 		
 		//$params['joins']=[
 		//    ['left','mt_passengers AS psng','a.passenger_id=psng.id'],

@@ -43,7 +43,7 @@
 {$ck_options=[toolbarStartupExpanded=>false, autoParagraph=>false, contentsCss=>'applications/admin/css/newsletter.css']}
 *}
 
-{include file=$f type=htmlarea name=body remember_size=1 i18n=4}
+{include file=$f type=htmlarea name=body remember_size=1 i18n=4 hidden_note=GW::l('/m/FIELD_NOTE/message_variables') }
 {include file=$f 
 	name=groups type=multiselect options=$options.groups
 	hidden_note=GW::l('/m/FIELD_NOTE/groups_or_recipients')

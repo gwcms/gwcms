@@ -6,7 +6,9 @@ class GW_NL_Message extends GW_i18n_Data_Object
 	public $table = 'gw_nl_messages';
 
 	public $encode_fields = ['groups'=>'json', 'sent_info'=>'jsono','recipients_ids'=>'jsono'];
-	public $calculate_fields = ['body_full'=>'getBodyFull'];
+	public $calculate_fields = [
+	    'progress'=>1
+	];
 	
 	public $validators = [
 	    'title'=>['gw_string', ['required'=>1]],
@@ -26,9 +28,9 @@ class GW_NL_Message extends GW_i18n_Data_Object
 	];
 	
 	
-	function getBodyFull($field = 'body')
+	function getBodyFull($html)
 	{
-		return '<html><head><meta charset="UTF-8"></head><body style="margin:0">'.$this->$field.'</body></html>';
+		return '<html><head><meta charset="UTF-8"></head><body style="margin:0">'.$html.'</body></html>';
 	}
 	
 	function eventHandler($event, &$context_data = array()) {
@@ -40,6 +42,8 @@ class GW_NL_Message extends GW_i18n_Data_Object
 					$ids = array_map('intval', $ids);
 					$this->recipients_ids = $ids;
 				}
+				
+				$this->recipients_total = $this->countRecipientsTotal();
 			break;
 			
 		}
@@ -126,5 +130,35 @@ class GW_NL_Message extends GW_i18n_Data_Object
 			}
 		}		
 	}
+	
+	function countRecipientsTotal()
+	{
+		$total = 0;
+		foreach($this->getActiveLangs() as $ln)
+			$total += $this->get('recipients_count', $ln);
+
+		return $total;		
+	}
+	
+	function calculateField($name) {
+		
+		switch ($name) {
+			
+			case "progress":
+				if($this->sent_count && $this->recipients_total){
+					return round($this->sent_count / $this->recipients_total*100);
+				}else{
+					return 0;
+				}
+			break;	
+		}
+		
+		
+		
+		parent::calculateField($name);
+		
+	}
+	
+	
 	
 }			

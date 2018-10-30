@@ -189,7 +189,7 @@ function initSelect2Inputs(){
 
 					var that = this;
 
-					$.get($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){
+					$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){
 
 						if(data.hasOwnProperty('items'))
 						{
@@ -305,7 +305,7 @@ function addEditControls(obj)
 
 
 		var dconf = { width:400,height:250, title: ctrl.valueIdsBtn.attr('title'), buttons: { } }
-		var ids = ctrl.inputctrl.val().join(',')
+		var ids = ctrl.inputctrl.val() ? ctrl.inputctrl.val().join(',') : '';
 		dconf.html = "<textarea style='width:100%;height:100%' id='importids'>"+ids+"</textarea>";
 		dconf.buttons[translate_submit] = function () {
 			var ids = $('#importids').val();
@@ -320,15 +320,19 @@ function addEditControls(obj)
 	});
 
 	this.valueRowsBtn.click(function(){
-		var ids = ctrl.inputctrl.val().join(',')
+		var ids = ctrl.inputctrl.val() ? ctrl.inputctrl.val().join(',') : '';
 
 
 
 		$.post(obj.data('export_url'), { ids: ids }, function(data){
 
+			$('#importrows, #badrowscont').remove();
+			
 			var dconf = { title: ctrl.valueRowsBtn.attr('title'), buttons: { } }
 			var badrowsconthtml = "<div id='badrowscont' style='margin-bottom:10px;display:none;'>Check bad rows: <textarea style='width:100%;heigh:50px;'></textarea></div>";
 			dconf.html = badrowsconthtml+"<textarea id='importrows' style='width:100%;height:100%'>"+data+"</textarea>";
+			
+			
 			dconf.buttons[translate_submit] = function () {
 				var rows = $('#importrows').val();
 

@@ -42,8 +42,8 @@ class Module_Languages extends GW_Common_Module
 
 			//OR title_ru LIKE $search
 			$cond = "(`name` LIKE $search OR `native_name` LIKE $search )";
-		}elseif(isset($_GET['ids'])){
-			$ids = json_decode($_GET['ids'], true);
+		}elseif(isset($_POST['ids'])){
+			$ids = json_decode($_POST['ids'], true);
 			if(!is_array($ids))
 				$ids = [$ids];
 			
