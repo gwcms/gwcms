@@ -160,9 +160,9 @@ class Module_Subscribers extends GW_Common_Module
 				$lang = trim($row[2] ?? '');
 			}
 			
-			$name = explode(' ', $name, 2);
-			$name = $name[0] ?? '';
-			$surname = $name[1] ?? '';			
+			$nameexpl = explode(' ', $name, 2);
+			$name = $nameexpl[0] ?? '';
+			$surname = $nameexpl[1] ?? '';			
 			
 			$item = ["name"=>$name, "surname"=>$surname, "email"=>$email, "lang"=>trim($lang)];
 			

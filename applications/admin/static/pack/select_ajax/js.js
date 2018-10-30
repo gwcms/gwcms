@@ -206,7 +206,7 @@ function initSelect2Inputs(){
 					//console.log(obj.data('bybis'));
 					
 					setTimeout(function(){
-						var count = obj.data('$rendered').find('.select2-results__option').length
+						var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
 						obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
 					}, 300)
 

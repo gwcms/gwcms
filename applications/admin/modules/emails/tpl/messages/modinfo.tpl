@@ -13,7 +13,11 @@ Naujo Laiško pridejimas:
 	pasirenkamos kalbos kurios bus naudojamos (po išsaugojimo atžymėtos kalbos neberodomos) (+)
 
 Foninis siuntimas:
-	Uždėjus laišką užstačius žalią vėlevėlę vykdomas siuntimas fone, matomas progresas (-) 1h
+	Uždėjus laišką užstačius žalią vėlevėlę vykdomas siuntimas fone, matomas progresas net ir esant kitame modulyje (+)
+
+Gavėjų importavimas iš teksto
+
+
 
 
 </pre>

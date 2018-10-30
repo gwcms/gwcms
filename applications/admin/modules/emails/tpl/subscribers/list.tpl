@@ -19,8 +19,11 @@
 	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[importdata,exportdata,dialogconf,emailsfromtext,print]}	
+	{$do_toolbar_buttons[] = search}
+	
 	
 	{$dl_actions=[invert_active,edit,delete]}
+	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}	
 	
 	{$dl_filters=[
 		name=>1, 
@@ -62,4 +65,8 @@
 	
 	{gw_unassign var=$display_fields.image} 	
 	{$dl_order_enabled_fields=array_keys($display_fields)}
+	
+	{$dl_checklist_enabled=1}
+	{$dl_cl_actions=[dialogremove]}	
+	
 {/block}
