@@ -1,0 +1,1 @@
+ALTER TABLE `gw_nl_messages` ADD `recipients_total` INT NOT NULL AFTER `recipients_count_en`;
