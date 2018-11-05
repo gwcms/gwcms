@@ -21,9 +21,9 @@
 		 {if $preload}data-preload="1"{/if}
 		 {if $value}data-value="{json_encode($value)|escape}"{/if}
 		 {if $datasource}data-source="{$datasource}"{/if}
-		 data-maximumSelectionLength="{$maximumSelectionLength}"
-		 data-urlArgsAddFunc="{$urlArgsAddFunc}"
-		 data-dontCloseOnSelect="{$dontCloseOnSelect}"
+		 data-maximumselectionlength="{$maximumSelectionLength}"
+		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
+		 data-dontcloseonselect="{$dontCloseOnSelect}"
 		 data-onchangeFunc="{$onchangeFunc}"
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		 >

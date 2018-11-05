@@ -81,10 +81,8 @@ function initSelect2Inputs(){
 		$(".GWselectAjax").each(function(){
 
 			var obj = $(this)
-			var maximumSelectionLength = obj.data('maximumSelectionLength')-0;
-			var urlArgsAddFunc = obj.data('urlArgsAddFunc');
-
-
+			var maximumSelectionLength = obj.data('maximumselectionlength')-0;
+			var urlArgsAddFunc = obj.data('urlargsaddfunc');
 
 			if(!obj.data('source')){
 				console.log("Error select_ajax datasource not present");
@@ -110,7 +108,7 @@ function initSelect2Inputs(){
 							page: params.page
 						};
 						if(urlArgsAddFunc){
-							$.extend(tmp, urlArgsAddFunc);
+							$.extend(tmp, eval(urlArgsAddFunc)	);
 						}
 						
 						
@@ -149,7 +147,7 @@ function initSelect2Inputs(){
 						);
 			}
 
-			if(obj.data('dontCloseOnSelect'))
+			if(obj.data('dontcloseonselect'))
 			{
 				opts.closeOnSelect = false;
 			}		
@@ -202,19 +200,20 @@ function initSelect2Inputs(){
 
 					}, 'json')
 				}).on('resultsload', function(event, params, results){
+						
+					if(obj.data('$rendered')){
+						obj.data('$rendered').find('.selectallContain').fadeIn();
+						console.log([params, results])
+						//console.log(obj.data('bybis'));
 
-					obj.data('$rendered').find('.selectallContain').fadeIn();
-					console.log([params, results])
-					//console.log(obj.data('bybis'));
+						setTimeout(function(){
+							var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
+							obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
+						}, 300)
+						
+						obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
+					}
 					
-					setTimeout(function(){
-						var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
-						obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
-					}, 300)
-
-							
-					
-					obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
 				});
 
 				//uzkrauti antrastes
