@@ -103,7 +103,7 @@
 		
 		{if $impischanged}
 			{$tmp=$item->getOriginal($name)}
-			<i class="fa fa-floppy-o text-warning" title="{if $tmp}Orig.: {$tmp|escape}{/if}"></i>{else}
+			<i class="fa fa-floppy-o text-warning" title="{if $tmp && (is_string($tmp) || is_numeric($tmp))}Orig.: {$tmp|escape}{/if}"></i>{else}
 		{/if}
 		
 	</td>	

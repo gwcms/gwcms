@@ -169,6 +169,7 @@ class GW_Common_Module extends GW_Module
 		unset($this->app->sess['item']['id']);
 		unset($_GET['id']);
 
+		$this->fireEvent('AFTER_CLONE', $item);
 
 		//d::dumpas($this->app->path);
 		$this->app->jump();
