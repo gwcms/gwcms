@@ -72,8 +72,13 @@
 {/if}
 
 {if $app->user->isRoot()}
-	{include file="elements/input.tpl" name=owner_type}
-	{include file="elements/input.tpl" name=owner_field}
+	{$tmpreadonly=false}
+{else}
+	{$tmpreadonly=true}
 {/if}
+
+{include file="elements/input.tpl" name=owner_type readonly=$tmpreadonly}
+{include file="elements/input.tpl" name=owner_field readonly=$tmpreadonly}
+
 
 {include file="default_form_close.tpl"}

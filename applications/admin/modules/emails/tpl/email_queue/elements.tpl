@@ -13,7 +13,7 @@
 		{if $item->plain}
 			{include file="elements/input.tpl" name=$field type=textarea height=100px}
 		{else}
-			{include file="elements/input.tpl" name=$field type=htmlarea}
+			{include file="elements/input.tpl" name=$field type=htmlarea layout=wide}
 		{/if}
 	
 	{elseif $field=="plain"}

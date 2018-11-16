@@ -210,4 +210,17 @@ class Module_Email_Templates extends GW_Common_Module
 		
 	}
 	
+	//function __eventAfterForm()
+	//{
+	//	d::dumpas('test');
+		
+	//}
+	
+	function doTest()
+	{
+		d::dumpas('test');
+	}
+	
+	
+	
 }
