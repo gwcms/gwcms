@@ -2,13 +2,8 @@
 
 class d
 {
-	static $html = Array(
-	    "<pre class='hidedebug' style='border-color:",
-	    "'>",
-	    "</pre>"
-	);
 	
-	static $initcss = "<style> .hidedebug{ background:transparent;margin:5px;border:0;border-left: solid 10px;padding-left:15px;padding:10px 0px 0px 15px }</style>";
+	static $initcss = "<style> .debugblock{ background:transparent;margin:5px;border:0;border-left: solid 10px;padding-left:15px;padding:10px 0px 0px 15px }</style>";
 	
 	static $inithide = "
 		<style>
@@ -21,10 +16,10 @@ class d
 		<script>
 		document.addEventListener('DOMContentLoaded', function(event) { 
 			jQueryCode = function(){
-			    $('.hidedebug').dblclick(function(){
+			    $('.debugblock').dblclick(function(){
 				$(this).toggleClass('hiddendebug');
 			    
-			    }).dblclick();
+			    })
 			}
 
 			if(window.jQuery)  jQueryCode();
@@ -38,7 +33,20 @@ class d
 			}			
 			
 		});</script>";
+	
+	static $initHideAll = "<script>$(function(){ $('.debugblock').addClass('hiddendebug'); })</script>";
 		
+	
+	static function setAllHide()
+	{
+		self::setHide();
+			
+		if(self::$inithideAll)
+		{
+			echo self::$inithideAll;
+			self::$inithideAll = null;
+		}	
+	}
 	
 	static function setHide()
 	{
@@ -59,15 +67,30 @@ class d
 	}
 	
 
-	static function ldump($x, $add = '', $color = 'orange')
+	static function ldump($x, $opts=[])
 	{
+		$color = $opts['color'] ?? 'orange';
+		$add = $opts['color'] ?? '';
+		$hidden = $opts['hidden'] ?? false;
+		$output = $opts['output'] ?? 'print_r';
+		
 		if (!headers_sent())
 			header('content-type: text/html; charset=UTF-8');
 
 		self::initHtml();
+	    
+	   	if($hidden)
+			self::setHide();
 		
-		echo self::$html[0] . $color . self::$html[1];
+		
+		echo "<pre class='debugblock ".($hidden?'hiddendebug':'')."' style='border-color:" . $color . "'>";
 		//debug_print_backtrace();
+	   	if($hidden)
+		{
+			self::setHide();
+			echo "<span style='color:silver'>Collapsed block: </span><b>$hidden</b></br>";
+		}		
+		
 
 		if ($x === null)
 			$x = '*NULL*';
@@ -75,23 +98,40 @@ class d
 		if ($x === false)
 			$x = '*FALSE*';
 
-		print_r($x);
+
+		switch($output){
+			case 'print_r':
+				print_r($x);
+			break;
+			case 'var_dump':
+				var_dump($x);
+			break;		
+		}
+		
+		
+		
 		echo $add;
+		
+		if(isset($opts['backtrace']))
+			echo self::fbacktrace(debug_backtrace());
+		
 
-		echo self::$html[2];
+		echo  "</pre>";
+		
+		if(isset($opts['kill']))
+			exit;
 	}
 
-	static function vdump($x, $add = '', $color = 'orange')
-	{
-		self::initHtml();
-		echo self::$html[0] . $color . self::$html[1];
-		var_dump($x);
-		echo self::$html[2];
+	static function vdump($x, $opts=[])
+	{		
+		$opts['output']="var_dump";
+		d::ldump($x, $opts);
 	}
 
-	static function dump($x, $color = 'orange')
+	static function dump($x, $opts=[])
 	{
-		self::ldump($x, self::fbacktrace(debug_backtrace()), $color);
+		$opts['backtrace']=1;
+		self::ldump($x, $opts);
 	}
 
 	static function fbacktrace($bt)
@@ -141,7 +181,7 @@ class d
 		return $str;
 	}
 
-	static function dumpas($x)
+	static function dumpas($x, $opts=[])
 	{
 		//echo "<pre>";
 		//var_dump([GW::$context->app->user]);
@@ -152,9 +192,9 @@ class d
 			return false;
 		}
 		
+		$opts['kill']=1;
+		self::dump($x, $opts);
 		
-		self::dump($x);
-		exit;
 	}
 
 	static function backtrace()
