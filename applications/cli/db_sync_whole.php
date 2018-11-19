@@ -4,6 +4,8 @@
 chdir(__DIR__.'/../../');
 include __DIR__.'/../../init_basic.php';
 
+$timer = new GW_Timer;
+
 initEnviroment(GW_ENV_PROD);
 
 function parseParams()
@@ -28,6 +30,9 @@ function mypassthru($cmd)
 	echo $cmd."\n";
 	passthru($cmd);
 }
+function out($str){
+	echo $str."\n";
+}
 
 
 
@@ -47,16 +52,25 @@ if(isset($params['exclude']))
 	$extra.=" --ignore-table=$database.$tbl ";
 }
 
+$t = new GW_Timer;
 mypassthru("ssh $userhost 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
+out("----------Export-speed: {$t->stop()} secs----------");
+
+$t = new GW_Timer;
 mypassthru($cmd="sftp $userhost:$remotefile $localfile");
+out("----------Download-speed: {$t->stop()} secs----------");
 
 
 initEnviroment(GW_ENV_DEV);
 //prod
 list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
 
+
+$t = new GW_Timer;
 mypassthru("zcat $localfile | mysql -u $dbuser -p{$dbpass} $database");
+out("----------Import-speed: {$t->stop()} secs----------");
 
 
 
 	
+out("----------Sum-speed: {$timer->stop()} secs----------");
