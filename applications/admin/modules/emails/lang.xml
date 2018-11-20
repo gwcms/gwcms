@@ -61,7 +61,7 @@
 		<i id="ln_enabled">Kalbos</i>
 		
 		<i id="admin_title">Administracinis pavadinimas</i>
-		<i id="custom_sender">Keisti siuntėjo adresa</i>
+		<i id="custom_sender">Keisti siuntėjo adresą</i>
 		<i id="format_texts">Formatuojami tekstai</i>
 		<i id="body_editor">Teksto redaktorius</i>
 		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
@@ -111,7 +111,7 @@
 ]]>	
 		</i>
 		<i id="sender"><![CDATA[Formatas:<br /> Siuntejo&nbsp;pavadinimas&nbsp;&lt;siuntejo@adresas.lt&gt;]]></i>
-		<i id="custom_sender">Pagal nutylėjima imama iš nustatymų</i>
+		<i id="custom_sender">Pagal nutylėjimą siuntėjo adresas imamas iš nustatymų</i>
 		<i id="mail_admin_emails"><en>Email address or addresses separated by ; (semicolon)</en><lt>El. pašto adresas arba adresai atskirti ; (kabliataškiu)</lt></i>
 		<i id="mail_insert_succ"><en>Insert all mails, uncheck to store only not sent emails</en><lt>Saugoti visus laiškus, atžymėti jei norima saugoti tik neišsiųstus</lt></i>
 		<i id="mail_bcc_all">

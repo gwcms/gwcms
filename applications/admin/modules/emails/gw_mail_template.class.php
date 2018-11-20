@@ -12,6 +12,12 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 	];		
 	
 	public $default_order="owner_type ASC, owner_field ASC, admin_title ASC";	
+	public $i18n_fields = [
+	    "subject"=>1,
+	    "sender"=>1,
+	    "body"=>1,
+	    "ln_enabled"=>1
+	];
 	
 	
 	function validate()

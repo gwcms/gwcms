@@ -86,7 +86,7 @@ class GW_Mail_Helper
 	static function __fSubjBody($body_tru_subj_fal, &$opts, $tpl, $ln, &$vars)
 	{
 		$what = $body_tru_subj_fal ? 'body':'subject';
-		$source = $tpl->get("{$what}_{$ln}");
+		$source = $tpl->get("{$what}", $ln);
 		
 		if(!isset($opts[$what]))
 		{
@@ -102,14 +102,21 @@ class GW_Mail_Helper
 	{
 		$tpl = $opts['tpl'];
 		
+		
+		//paduodamas sablonas arba sablono id
+		//betkokiu atveju $tpl pavirsta i GW_Mail_Template objekta
 		if(is_numeric($tpl))
 			$tpl = GW_Mail_Template::singleton()->find($tpl);
+			
 		
 		$vars =& $opts['vars'] ?? [];
 		$ln = $opts['ln'] ?? GW::$context->app->ln;
 		
 		self::__fSubjBody(true, $opts, $tpl, $ln, $vars);
 		self::__fSubjBody(false, $opts, $tpl, $ln, $vars);
+		
+		if(!isset($opts['from']) && $tpl->custom_sender)
+			$opts['from'] = $tpl->get("sender", $ln);
 	}
 	
 	static function sendMail(&$opts)
