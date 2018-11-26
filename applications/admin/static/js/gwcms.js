@@ -469,7 +469,16 @@ var gw_adm_sys = {
 			nndata.title = data.title;
 
 		$.niftyNoty(nndata);		
+	},
+	
+	addscript: function(url){
+		var head=document.getElementsByTagName('head')[0];
+		var newscript=document.createElement('script');
+		newscript.async=1;
+		newscript.src=url;
+		head.appendChild(newscript);	
 	}
+	
 	
 }
 

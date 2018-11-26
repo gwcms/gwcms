@@ -55,7 +55,9 @@
 			{$title=$image->original_filename}
 			{include 
 				file="tools/image_preview.tpl" 
-				image=$image border=1 width=$img_preview_height height=$img_preview_width show_filename=1}
+				image=$image border=1 width=$img_preview_height height=$img_preview_width show_filename=1
+				fancybox=1 fancybox_group="attachments"
+			}
 		{/if}
 
 

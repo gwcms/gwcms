@@ -1,6 +1,6 @@
 
-<div class="col-md-6 col-lg-4 d-flex g-theme-bg-black-v1 g-pa-40" style="min-height:511.891px">
-	<div class="align-self-center w-100" style="position:absolute;">
+<div class="col-md-6 col-lg-4 d-flex g-theme-bg-black-v1 g-pa-40" style="min-height:500.891px">
+	<div class="align-self-center w-100" style="">
 		<div class="u-heading-v8-2 g-mb-60">
 			<h2 class="h1 text-uppercase u-heading-v8__title g-font-weight-700 g-font-size-26 g-color-white g-mb-30">
 
@@ -29,6 +29,6 @@
 			<button class="btn btn-md text-uppercase u-btn-primary g-font-weight-700 g-font-size-12 rounded-0 g-py-10 g-px-25" type="submit" role="button">{GW::ln('/g/SEND_MESSAGE')}</button>
 		</form>
 
-		<div id="supportSuccess" class="mtSuccOver" style="display:none;"><div><div>{GW::ln('/g/SUPPORT/SUCCESS_MESSAGE')} <button onclick="SupportReset()">ok</button></div> </div></div>
+		<div id="supportSuccess" class="mtSuccOver" style="display:none;"><div><div>{GW::ln('/g/SUPPORT/SUCCESS_MESSAGE')} <button onclick="SupportReset()" class="btn btn-primary">ok</button></div> </div></div>
 	</div>
 </div>
