@@ -28,5 +28,10 @@ $(function () {
 		}
 
 	});
+	
+	
+	var helpstring=["[CTRL] + [Q] - Paryškinti vertimus","[CTRL] + [Pelės pagr. mygt.] ant paryškinto vertimo - atverti redagavimą admin sistemoje"];
+	var helpboxstyle = "background-color:brown;color:white;position:absolute;top:0px;left:0px;display:inline;padding:2px;border-radius:2px;font-size:9px;z-index:99999;";
+	$('body').append('<a style="'+helpboxstyle+'" onclick=\'alert("'+helpstring.join('\\n')+'");return false\' href="#">ADM?</a>');
 
 })
