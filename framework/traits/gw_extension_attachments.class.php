@@ -92,6 +92,9 @@ class GW_Extension_Attachments
 		if($extra_conds){
 			$conds = GW_DB::mergeConditions($conds, GW_DB::prepare_query($extra_conds));
 		}
+		
+		if(!isset($opts['order']))
+			$opts['order'] = 'priority';
 				
 		return GW_Attachment::singleton()->findAll($conds, $opts);
 	}	
