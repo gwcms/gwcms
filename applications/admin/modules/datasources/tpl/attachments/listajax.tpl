@@ -64,7 +64,9 @@
 {/if}
 		<div class="attach_actions" style="display:none">
 			<i data-id="{$item->id}" class="attach_action fa fa-search link btn-preview" title='{GW::l('/g/PREVIEW')} "{$title}"'></i>
+			{if $smarty.get.readonly!=1}
 			<i data-id="{$item->id}" class="attach_action fa fa-trash-o link btn-remove" title='{GW::l('/g/REMOVE')} "{$title}" {$image->size}'></i>
+			{/if}
 		</div>
 
 	</div>
@@ -94,6 +96,7 @@
 	
 {/capture}
 
+{if $smarty.get.readonly!=1}
 <a class="fa gwAddPopover add-popover" 
     data-content="{$hidden_note|escape}"  
     data-placement="right" 
@@ -102,6 +105,7 @@
     data-html="true" 
     data-trigger="focus" 
     href="#popover" onclick="return false"></a>
+{/if}
 
 
 {if $total_size}

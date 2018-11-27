@@ -8,18 +8,23 @@
 <div class="attachments_container">
 	
 	<div class="attachments_drop" id='{$dropid}'>loading..</div>
+	{if !$readonly}
 	<a href="#" class="select_attachments_btn"><i class='fa fa-plus-circle'></i> {GW::l('/M/datasources/ADD_ATTACHMENT')}</a>
-	
+	{/if}
 
-	<span style='display:inline-block;'>
+	<span style='display:{if !$readonly}inline-block;{else}none{/if}'>
 		
 		<input style="display:none" class="gwfileinput" type="file" multiple
-	       data-url="{$app->buildUri('datasources/attachments/listajax',[dropid=>$dropid,preview=>$preview]+$owner_params)}" 
+	       data-url="{$app->buildUri('datasources/attachments/listajax',[dropid=>$dropid,preview=>$preview,readonly=>$readonly]+$owner_params)}" 
 	       data-name='files[]' 
 	       >
-	<div style="display:inline-block" class="status"></div> <br />
-	<div class="progress-bar"></div>
+	{if !$readonly}	
+		<div style="display:inline-block" class="status"></div> <br />
+		<div class="progress-bar"></div>
+	{/if}
 	</span>
+	
+	
 </div>
 
 {if !isset($GLOBALS.html_inp_attachments)}
