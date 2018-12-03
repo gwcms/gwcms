@@ -128,12 +128,11 @@ class GW_Mail_Helper
 		
 		$cfg = self::loadCfg();
 		
-		$mailer = $opts['mailer'] ?? self::initPhpmailer(isset($opts['from'])? $opts['from']:'');
-		
-		
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
 		
+		$mailer = $opts['mailer'] ?? self::initPhpmailer(isset($opts['from'])? $opts['from']:'');
+				
 		if(isset($opts['subject']))
 			$mailer->Subject = $opts['subject'];
 		
