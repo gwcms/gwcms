@@ -355,10 +355,14 @@ var gw_adm_sys = {
 		}		
 	},
 	
-	runUpdaters: function(id, url, args, intervalSecs){
-		gw_adm_sys.updintervals[id]=setInterval(function(){
+	runUpdaters: function(id, url, args, intervalSecs, instant){
+		var f=function(){
 			$.ajax({ url: url, type: "GET", dataType: "json", success: function (data) { gw_adm_sys.runPackets(data) }});
-		}, intervalSecs)
+		};
+		gw_adm_sys.updintervals[id]=setInterval(f, intervalSecs)
+		
+		if(instant==1)
+			f();
 	},
 
 	packetactions: {

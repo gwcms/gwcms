@@ -229,7 +229,11 @@ class GW
 		return GW_Lang::readWrite($key, $write);
 	}
 
-	
+	/**
+	 * pakrauna vertimus is duombazes, 
+	 * jei nera duombazeje tada pakrauna is 
+	 * lang failu arba pacio templeito jei vartotojas developeris
+	 */	
 	static function ln()
 	{
 		return forward_static_call_array(array('GW_Lang', 'ln'), func_get_args());
