@@ -25,6 +25,8 @@ class GW_DB
 	public $last_query_time;
 	public $query_times;
 	public $debug = false;
+	public $profiling = false;
+	public $speed = [0,0];//1st
 	static $datetime_format = 'Y-m-d H:i:s';
 	public $error;
 	public $error_query;
@@ -130,13 +132,19 @@ class GW_DB
 	{
 		$this->error = false;
 
-		$tmp = new GW_Timer();
+		$start = microtime(true);
+					
 		$this->result = $this->link->query($cmd);
-		$this->last_query_time = $tmp->stop(6);
+		$this->last_query_time = microtime(true)-$start;
 		$this->last_query = $cmd;
 
 		if ($this->debug)
 			$this->query_times[] = Array($cmd, (float) $this->last_query_time);
+		
+		if($this->profiling){
+			$this->speed[0]++;
+			$this->speed[1] += $this->last_query_time;
+		}
 
 		$this->result || $this->trigger_error($cmd, null, $nodie);
 
@@ -400,7 +408,7 @@ class GW_DB
 		return implode(', ', $parts);
 	}
 
-	function update($table, $filter, $entry, $nodie = false)
+	function update($table, $filter, $entry, $nodie = false, $limit=false)
 	{
 		$filter = self::prepare_query($filter);
 
@@ -411,9 +419,10 @@ class GW_DB
 		//implementation of passing back fetched array (mysqli_fetch_array)
 		//do not pass numeric field name (if(!is_numeric($elemRak)))
 
+		
+		$limitSQL = $limit===false ? "" : " LIMIT $limit";
 
-
-		$query = "UPDATE $table SET " . $this->__update_set($entry) . " WHERE $filter;";
+		$query = "UPDATE $table SET " . $this->__update_set($entry) . " WHERE $filter $limitSQL;";
 
 		if (isset($GLOBALS['show_update_sql']))
 			dump($query);

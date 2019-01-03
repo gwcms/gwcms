@@ -250,6 +250,7 @@ class Module_Movies extends GW_Common_Module
 		
 		$query_str = $_GET['q'];
 		$page = $_GET['page'] ?? 1;
+		$query_str = str_replace(".", " ", $query_str);
 		
 		$res = $this->searchMovies($query_str, $page);
 		
