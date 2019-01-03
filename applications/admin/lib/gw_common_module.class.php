@@ -379,6 +379,8 @@ class GW_Common_Module extends GW_Module
 		} elseif ($id) { // edit existing
 			$item = $this->model->createNewObject($id, false, $this->lang());
 			$item->load();
+			$item->resetChangedFields();
+			
 			$this->canBeAccessed($item, true);
 		} else { // create new
 			$item->temp_id = uniqid();

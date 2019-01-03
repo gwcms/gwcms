@@ -159,12 +159,10 @@ class GW_App_System Extends GW_App_Base
 		$dif = time() - strtotime($last_exec);
 
 		//debug
-		echo "lastexec $time_match#$interval - $last_exec\n";
-		echo "diff: $dif\n";
-		echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
+		//echo "lastexec $time_match#$interval - $last_exec\n";
+		//echo "diff: $dif\n";
+		//echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
 		
-
-
 		if ($match && ($dif >= $interval * 60 ) || (isset($GLOBALS['argv'][1]) && $GLOBALS['argv'][1] == $interval)) {
 			$this->msg('[' . date('H:i:s') . "] run $interval");
 			$config->set($cron_id, date('Y-m-d H:i:s'));
@@ -179,8 +177,6 @@ class GW_App_System Extends GW_App_Base
 		$crontask0 = new GW_CronTask;
 		$time_matches = $crontask0->getAllTimeMatches();
 		
-		print_r($time_matches);
-
 		foreach ($time_matches as $tm) {
 			list($time_match, $interval) = explode('#', $tm);
 

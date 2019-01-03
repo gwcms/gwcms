@@ -101,15 +101,17 @@ class Module_Profile extends GW_Module
 		
 		GW_Message::singleton()->message([
 			'to'=>$this->app->user->id,
-			'subject'=>"Testing push message", 
-			'message'=>"If you see this text - it works!",
-			'level'=>10
+			'subject'=>"Testing push", 
+			'message'=>"Hi, If you see this text - it workss!",
+			'level'=>15,
+			'group'=>false
 		]);		
 		
-		$data = GW_Android_Push_Notif::push($this->app->user);
+		//$data = GW_Android_Push_Notif::push($this->app->user);
 		
-		echo json_encode($data, JSON_PRETTY_PRINT);
+		//echo json_encode($data, JSON_PRETTY_PRINT);
 		
+
 		exit;
 			
 	}

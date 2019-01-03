@@ -5,6 +5,7 @@
  *
  * @author wdm
  */
+
 class GW_Mail_Helper 
 {
 	static $debug_smtp = false;
@@ -25,8 +26,16 @@ class GW_Mail_Helper
 	
 	static function initPhpmailer($from='')
 	{
-		$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		
+		if(version_compare(PHP_VERSION, '7.3.0') >= 0){
+			//bulksms project runing on 7.3
+			include_once GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php';
+
+			$mail = new PHPMailer\PHPMailer\PHPMailer;
+		}else{
+			$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
+		}
+			
 		$mail->ClearAllRecipients( );
 		$mail->clearAttachments();//jei atskiram useriui atskiras attach
 		$mail->XMailer = "GWCMS v".GW::s('GW_CMS_VERSION').' author Vidmantas Norkus';

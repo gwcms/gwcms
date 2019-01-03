@@ -73,6 +73,21 @@ class GW_Message extends GW_Data_Object
 		];
 
 		$data = array_merge($default, $data);
+		
+		$level = $data['level'] ?? 0;
+			
+		if($level >= 15 && ($user=GW_User::singleton()->find(['id=?', $data['to'] ])) && $user->email){
+
+			$opts = [
+				'to'=> $user->email,
+				'subject' => $data['subject'],
+				'body' => $data['message']
+			];
+			$status = GW_Mail_Helper::sendMail($opts);
+
+			//d::dumpas([$opts, $status]);
+		}
+		
 
 		return self::msg($data['to'], $data['subject'], $data['message'], $data['sender'], $data['group'], $data['escape'], $data);
 	}
@@ -89,11 +104,14 @@ class GW_Message extends GW_Data_Object
 	{
 		switch ($event) {
 			case 'AFTER_INSERT':
-				if ($this->level >= 10 && $this->level <= 20) {
-					if ($this->level >= 15)
+				if ($this->level >= 10) {
+					if ($this->level >= 15){
+						
+
 						$this->push_log = GW_Android_Push_Notif::push($this->user_id);
-					else
+					}else{
 						$this->push_log = GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
+					}
 				}
 		}
 

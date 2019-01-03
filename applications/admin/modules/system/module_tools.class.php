@@ -282,6 +282,7 @@ class Module_Tools extends Module_Config
 			
 		////--------------2nd test----------------------------------
 		$opts['to'] = "gwcmsmailtest@mailinator.com";
+		//$opts['debug'] = 1;
 		$status = GW_Mail_Helper::sendMail($opts);
 		$opts['to']=implode(',', $opts['to']);
 		
