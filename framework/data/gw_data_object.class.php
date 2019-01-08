@@ -716,9 +716,11 @@ class GW_Data_Object
 
 		$db = & $this->getDB();
 
-		$db->delete($this->table, $this->getIdCondition());
+		$ar = $db->delete($this->table, $this->getIdCondition());
 
 		$this->fireEvent('AFTER_DELETE');
+		
+		return $ar;
 	}
 
 	function fireEvent($event, &$context_data = [])

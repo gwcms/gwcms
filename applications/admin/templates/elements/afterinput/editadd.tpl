@@ -1,8 +1,13 @@
 
-<span class="input-group-btn addEditControls" id="addEditControls{$name}" data-name="{$name}" data-export_url="{$export_url}" data-import_url="{$import_url}" data-multiple="{if $type=="multiselect_ajax"}1{else}0{/if}">
+<span class="input-group-btn addEditControls" id="addEditControls{$name}" 
+	  data-name="{$name}" 
+	  data-export_url="{$export_url}" 
+	  data-import_url="{$import_url}" 
+	  data-minimuminputlength="{$minimuminputlength}"
+	  data-multiple="{if $type=="multiselect_ajax"}1{else}0{/if}">
 	
 	{if $type!="multiselect_ajax"}
-	<button class="btn btn-default editBtn" type="button" title="{$object_title} :: {GW::l('/g/EDIT')}" data-url="{$form_url}"><i class="fa fa-pencil-square-o"></i></button>	
+		<button class="btn btn-default editBtn" type="button" title="{$object_title} :: {GW::l('/g/EDIT')}" data-url="{$form_url}" data-listurl="{$list_url}"><i class="fa fa-pencil-square-o"></i></button>	
 	{/if}
 	{if $import_url && $export_url}
 	<div class="btn-group">
@@ -26,8 +31,7 @@
 	
 
 </span>
-		
-	
+			
 {if !isset($GLOBALS.init_addEdit_input_done)}		
 	{$GLOBALS.init_addEdit_input_done=1}
 	<script type="text/javascript">

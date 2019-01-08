@@ -25,11 +25,8 @@ function formatSelect2Selection(item) {
 }
 	
 	
-function initSelect2Inputs(){
-	require(['vendor/select2/js'], function () {
-		//$('.gwselect2').select2(); 
-
-
+function initSelectAll(obj, opts)
+{
 	$.fn.select2.amd.require([
 	  'select2/utils',
 	  'select2/dropdown',
@@ -73,31 +70,38 @@ function initSelect2Inputs(){
 		});
 
 		return $rendered;
-	  };
-
-
-
+	  };	
+	
+	
+	var dropdownAdapter = Utils.Decorate(
+		  Utils.Decorate(
+			Dropdown,
+			AttachBody
+		  ),
+		  SelectAll
+		);
+			
+	
+		opts.dropdownAdapter= dropdownAdapter;
+		finishInitSelAjax(obj, opts);
+		//alert();
+	})
+}
+	
+function initSelect2Inputs(){
+	require(['vendor/select2/js'], function () {
+		//$('.gwselect2').select2(); 
 
 		$(".GWselectAjax").each(function(){
 
 			var obj = $(this)
-			var maximumSelectionLength = obj.data('maximumselectionlength')-0;
 			var urlArgsAddFunc = obj.data('urlargsaddfunc');
 
-			if(!obj.data('source')){
-				console.log("Error select_ajax datasource not present");
-				return false
-			}
 
-
-			var opts = {					
-				minimumInputLength: 1,
-				templateResult: formatSelect2Result, // omitted for brevity, see the source of this page
-				templateSelection: formatSelect2Selection, // omitted for brevity, see the source of this page
-				escapeMarkup: function (markup) {
-							return markup;
-				},	
-				ajax: {
+			var opts = {	};
+						
+			if(obj.data('source')){
+				opts.ajax = {
 					url: obj.data('source'),
 					dataType: 'json',
 					delay: 250,
@@ -111,8 +115,6 @@ function initSelect2Inputs(){
 							$.extend(tmp, eval(urlArgsAddFunc)	);
 						}
 						
-						
-
 						return tmp;
 
 					},
@@ -134,29 +136,29 @@ function initSelect2Inputs(){
 					},
 					cache: true
 				}
-			};
-			
-			if(obj.data('btnselectall'))
-			{
-				opts.dropdownAdapter = Utils.Decorate(
-						  Utils.Decorate(
-							Dropdown,
-							AttachBody
-						  ),
-						  SelectAll
-						);
+				
+				opts.templateResult = formatSelect2Result; // omitted for brevity, see the source of this page
+				opts.templateSelection = formatSelect2Selection; // omitted for brevity, see the source of this page
+				opts.escapeMarkup = function (markup) {
+							return markup;
+				}		
 			}
+			
 
 			if(obj.data('dontcloseonselect'))
 			{
 				opts.closeOnSelect = false;
 			}		
-			if(maximumSelectionLength)
+			
+			//1 - single select
+			//0 || x - multiselect
+			var maximumSelectionLength = obj.data('maximumselectionlength')-0
+			if(maximumSelectionLength > 1)
 			{
 				opts.maximumSelectionLength = maximumSelectionLength;
 			}				
 			
-			obj.select2(opts).on('fillitems', function(event, items, append){
+			obj.on('fillitems', function(event, items, append){
 					if(append){
 						var current = $(this).val();
 
@@ -174,23 +176,38 @@ function initSelect2Inputs(){
 
 					var that = this;
 
-					//console.log(items);
-
+								
+					var multiselect = obj.data('maximumselectionlength') != '1';
+					var keys = {}
+					
 					$.each(items, function(index, item){
 						//console.log(item.title+':'+item.id)
-						$(that).append(new Option(item.title, item.id, true, true));
+						keys[item.id] = item.id;
+						
+						$(that).append(new Option(item.title, item.id, multiselect, multiselect));
 					} );
+					
+					if(!multiselect){
+						//alert($(this).data('value'));
+						//alert($(this).val());
+						var prevval = JSON.parse($(this).data('value'));					
+						
+						if( obj.find("option[value='"+prevval+"']").length > 0 ){
+							obj.val(prevval)
+						}else{
+							alert(obj.data('objecttitle')+" id("+prevval+') Not available');
+						}
+					}
 
 					$(this).trigger('change');		
 				}).on('inittitles', function(event, ids, append){
-
+					
 					if(!ids)
 						ids = $(this).val()
 
 					var that = this;
-
-					$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){
-
+					
+					$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
 						if(data.hasOwnProperty('items'))
 						{
 							$(that).trigger('fillitems', [data.items, append]);
@@ -216,10 +233,6 @@ function initSelect2Inputs(){
 					
 				});
 
-				//uzkrauti antrastes
-			if(obj.data('preload') && obj.data('value')){
-					obj.trigger('inittitles');
-			}
 
 			if(obj.data('onchangeFunc')){
 				var f = obj.data('onchangeFunc');
@@ -239,21 +252,33 @@ function initSelect2Inputs(){
 				}
 				).change();			
 			}
-
-
-
+			
+			obj.change(function(){
+				$(this).data('value', JSON.stringify($(this).val()));
+			});
+			
+			if(obj.data('btnselectall'))
+			{
+				initSelectAll(obj, opts);
+				//console.log(opts)
+			}else{
+				finishInitSelAjax(obj, opts);
+			}			
+			
 		});
-
-
-
-
-
-
-	})
+	
 
 	});	
-}	
+}
 
+function finishInitSelAjax(obj, opts)
+{
+	obj.select2(opts);
+				//uzkrauti antrastes
+	if(obj.data('preload') && obj.data('value')){
+			obj.trigger('inittitles');
+	}	
+}
 
 
 function addEditControls(obj)
@@ -266,9 +291,6 @@ function addEditControls(obj)
 	this.valueRowsBtn = obj.find('.valueRowsBtn');
 
 	this.multiple = obj.data('multiple')-0;	
-
-
-
 	this.inputctrl = $('#itemform select[name="item['+this.name+']'+(this.multiple?'[]':'')+'"]');
 
 	var ctrl = this;
@@ -279,32 +301,39 @@ function addEditControls(obj)
 		if(context.item)
 		{
 			var item = context.item
-
-			var append = ctrl.multiple ? true : false;
-
-			ctrl.inputctrl.trigger('fillitems', [[item], append]);
+			
+			if(!ctrl.multiple)
+			{
+				ctrl.inputctrl.data('value', item.id)
+			}
+			
+			ctrl.inputctrl.trigger('fillitems', [[item], true]);
 		}
+	}
+	
+	this.updateOpts = function(){
+		ctrl.inputctrl.trigger('inittitles');				
 	}
 
 	this.addBtn.click(function(){
 		rootgwcms().open_dialog2({ url: $(this).data('url'), iframe:1, title: this.title, close_callback: ctrl.selected })
 	})
 
-	this.editBtn.click(function(){	
+	this.editBtn.click(function(e){	
+		
+		var closecallback = e.shiftKey ? ctrl.updateOpts : ctrl.selected ;
+		var src = $(this).data(e.shiftKey ? 'listurl' : 'url');
+				
 		var id = ctrl.inputctrl.val();		
 		if(!id)
 			return false;
 
-		var url = gw_navigator.url($(this).data('url'), { id: id })
-		rootgwcms().open_dialog2({ url: url, iframe:1, title:this.title, close_callback: ctrl.selected })
+		var url = gw_navigator.url(src, { id: id })
+		rootgwcms().open_dialog2({ url: url, iframe:1, title:this.title, close_callback: closecallback })
 	})
 
 
-
-
 	this.valueIdsBtn.click(function(){
-
-
 		var dconf = { width:400,height:250, title: ctrl.valueIdsBtn.attr('title'), buttons: { } }
 		var ids = ctrl.inputctrl.val() ? ctrl.inputctrl.val().join(',') : '';
 		dconf.html = "<textarea style='width:100%;height:100%' id='importids'>"+ids+"</textarea>";
@@ -322,8 +351,6 @@ function addEditControls(obj)
 
 	this.valueRowsBtn.click(function(){
 		var ids = ctrl.inputctrl.val() ? ctrl.inputctrl.val().join(',') : '';
-
-
 
 		$.post(obj.data('export_url'), { ids: ids }, function(data){
 
@@ -378,15 +405,11 @@ function addEditControls(obj)
 	});					
 
 
-
-
-
 	this.resetInput = function()
 	{
 		ctrl.inputctrl.html("")
 		ctrl.inputctrl.val("").trigger("change"); 
 	}
-
 	//ctrl.on('chageevent', function(){ console.log('change'); })
 
 

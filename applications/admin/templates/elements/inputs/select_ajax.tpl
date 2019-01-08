@@ -4,6 +4,11 @@
 	{/foreach}
 {else}
 
+	
+	{if $empty_option}
+		{$options=GW::l('/g/EMPTY_OPTION')+$options}
+	{/if}	
+
 	{if $preload && $value}
 		{if is_array($value)}
 			{foreach $value as $valitm}
@@ -14,14 +19,13 @@
 		{/if}
 	{/if}
 
-
-
 	<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control GWselectAjax" name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
 		 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
-		 {if $preload}data-preload="1"{/if}
+		 {if $preload}data-preload="{$preload}"{/if}
 		 {if $value}data-value="{json_encode($value)|escape}"{/if}
 		 {if $datasource}data-source="{$datasource}"{/if}
-		 data-maximumselectionlength="{$maximumSelectionLength}"
+		 data-maximumselectionlength="{$maximumSelectionLength|default:1}"
+		 data-objecttitle="{$object_title}"
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
 		 data-dontcloseonselect="{$dontCloseOnSelect}"
 		 data-onchangeFunc="{$onchangeFunc}"

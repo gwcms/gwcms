@@ -391,7 +391,12 @@ var gw_adm_sys = {
 		},
 		update_container: function(data){
 			gw_adm_sys.updateContent(data.id, data.value, data)
-		}
+		},
+		update_containers: function(data){
+			
+			for(var key in data.data)
+				gw_adm_sys.updateContent(key, data.data[key])
+		}		
 	},
 	
 	updateRow: function(id){
