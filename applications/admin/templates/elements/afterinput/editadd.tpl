@@ -7,7 +7,7 @@
 	  data-multiple="{if $type=="multiselect_ajax"}1{else}0{/if}">
 	
 	{if $type!="multiselect_ajax"}
-		<button class="btn btn-default editBtn" type="button" title="{$object_title} :: {GW::l('/g/EDIT')}" data-url="{$form_url}" data-listurl="{$list_url}"><i class="fa fa-pencil-square-o"></i></button>	
+		<button class="btn btn-default editBtn" type="button" data-title="{$object_title} :: {GW::l('/g/EDIT')}" data-shifttitle="{$object_title} :: {GW::l('/g/LIST_CONFIG')} " data-url="{$form_url}" data-listurl="{$list_url}"><i class="fa fa-pencil-square-o"></i></button>	
 	{/if}
 	{if $import_url && $export_url}
 	<div class="btn-group">

@@ -94,7 +94,7 @@ function initSelect2Inputs(){
 
 		$(".GWselectAjax").each(function(){
 
-			var obj = $(this)
+			var obj = $(this)			
 			var urlArgsAddFunc = obj.data('urlargsaddfunc');
 
 
@@ -294,6 +294,10 @@ function addEditControls(obj)
 	this.inputctrl = $('#itemform select[name="item['+this.name+']'+(this.multiple?'[]':'')+'"]');
 
 	var ctrl = this;
+	
+
+	this.editBtn.attr('title', this.editBtn.data('title') +' (Shift: '+this.editBtn.data('shifttitle')+')');
+
 
 
 	this.selected = function (context)
@@ -323,13 +327,14 @@ function addEditControls(obj)
 		
 		var closecallback = e.shiftKey ? ctrl.updateOpts : ctrl.selected ;
 		var src = $(this).data(e.shiftKey ? 'listurl' : 'url');
+		var title = e.shiftKey ? $(this).data('shifttitle') : $(this).data('title');
 				
 		var id = ctrl.inputctrl.val();		
 		if(!id)
 			return false;
 
 		var url = gw_navigator.url(src, { id: id })
-		rootgwcms().open_dialog2({ url: url, iframe:1, title:this.title, close_callback: closecallback })
+		rootgwcms().open_dialog2({ url: url, iframe:1, title:title, close_callback: closecallback })
 	})
 
 
