@@ -308,6 +308,43 @@ class Module_Tools extends Module_Config
 		
 	}
 	
+	public $doTestUserError = ["info"=>"Test user error"];
+	
+	function doTestUserError()
+	{
+		trigger_error("This is test error (E_USER_ERROR)", E_USER_ERROR);
+	}	
+	
+	public $doTestError = ["info"=>"Test error"];
+	
+	function doTestError()
+	{
+		asdlfkjasdlkfjalsdkj();
+	}	
+	
+	public $doTestErrorOnBackgroundRequest = ["info"=>"Test user error while requested in background (run on user:GW_USER_SYSTEM_ID)"];
+	
+	function doTestErrorOnBackgroundRequest()
+	{
+		$url = Navigator::backgroundRequest($this->buildUri(false,[],['app'=>'admin']), ["act"=>'doTestError']);	
+		$this->jump();
+	}
+	
+	public $doTestWarningOnBackgroundRequest = ["info"=>"Test user warning while requested in background (run on user:GW_USER_SYSTEM_ID)"];
+	
+	function doTestWarningOnBackgroundRequest()
+	{
+		$url = Navigator::backgroundRequest($this->buildUri(false,[],['app'=>'admin']), ["act"=>'doTestWarning']);	
+		$this->jump();
+	}	
+	
+	public $doTestWarning = ["info"=>"Test user warning"];
+	
+	function doTestWarning()
+	{
+		trigger_error("This is test error (E_USER_WARNING)", E_USER_WARNING);
+	}	
+	
 	public $viewTestJqueryui = ["info"=>"Test jquery-ui compatability with jquery"];
 	
 	function viewTestJqueryui()

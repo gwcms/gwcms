@@ -78,38 +78,51 @@ class GW_Debug_Helper
 		return $code;
 	}
 	
+	static function warningHandler($errno, $errstr, $errfile, $errline, $errcontext)
+	{
+		$e=[
+		    "type"=>$errno,
+		    "message"=>$errstr,
+		    "file"=>$errfile,
+		    "line"=>$errline,
+		    "context"=>$errcontext,
+		    "warning"=>1
+		];
+		self::processError($e);
+	}
+	
 	static function errorReport()
 	{
 		$e = error_get_last();
-
-		$error = false;
+		
 		if (!is_null($e) ) {
 			switch ($e['type']) {
-				case E_ERROR: case E_CORE_ERROR:
-				case E_COMPILE_ERROR:
+				case E_ERROR: 
 				case E_USER_ERROR:
+				case E_CORE_ERROR:
+				case E_COMPILE_ERROR:	
 				case E_RECOVERABLE_ERROR:
 				case E_CORE_WARNING:
 				case E_COMPILE_WARNING:
 				case E_PARSE:
-					$error=true;
-					$e['type_name'] = array_search($e['type'], get_defined_constants());
+					$e['error']=1;
+					self::processError($e);	
 			}
-		}
-		
-		if(!$error)
-			return false;
-		
-		$errorid = date('YmdHis');
-
-		unset($e['type']);
+		}								
+	}
+	
+	static function processError($e)
+	{
 		$data = $e+[
-			    'error_id' => $errorid,
 			    'ip'=>$_SERVER["REMOTE_ADDR"],
 			    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 			    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI'],	
 			    'user_agent'=>$_SERVER['HTTP_USER_AGENT'],
 			];
+		
+		$data["errorid"] = date('YmdHis');
+		$data['type_name'] = array_search($e['type'], get_defined_constants());
+		unset($data['type']);
 
 		$data['code'] = self::getCodeCut($e,10);
 		$data['message'] = str_replace("\n", "<br />", $data['message']);
@@ -132,49 +145,50 @@ class GW_Debug_Helper
 		if(function_exists('geoip_country_code_by_name'))
 				$data['ip_country'] = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
 
-
-		
-		
 		
 		if(GW::s('REPORT_ERRORS')){
 
 			$reci = GW::s('REPORT_ERRORS');
-			$subj = "Error under project: ".GW::s('PROJECT_NAME').' env: '.GW::s('PROJECT_ENVIRONMENT');
+			$subj = $data['type_name']." under project: ".GW::s('PROJECT_NAME').' env: '.GW::s('PROJECT_ENVIRONMENT');
 	
-			
-			$body = GW_Data_to_Html_Table_Helper::doTableSingleRecord($data, ['valformat'=>[
-			    'code'=>0, 
-			    'message'=>0,
-			]]);
-			
-			$error_publ = "Ooops we have some problems... Sorry :( But problem is now in front of staff monitors and it will be destroyed ASAP. PLEASE come back later. Error id: ".GW::s('PROJECT_NAME')."$errorid\n";			
-
-			
 			
 			$nosend=[];
 			
 			if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD)
 				$nosend[]="not production environment";
 			
-			if(isset(GW::$context->app->user) && GW::$context->app->user->isRoot())
-				$nosend[]="root user request";	
+			//is background request - isset($_GET['sys_call'])
+			if(!isset($_GET['sys_call']) && isset(GW::$context->app->user) && GW::$context->app->user->isRoot())
+				$nosend[]="root user && frontend request";	
 			
 			//$nosend = false;
-						
+				
+			
+			if($nosend){
+				$data['debug']="ITS ".implode(' AND ',$nosend)." SO mail will be not sent\nMail subj: $subj, Mail recip: $reci";
+			}
+			
+			$body = GW_Data_to_Html_Table_Helper::doTableSingleRecord($data, ['valformat'=>[
+				    'code'=>0, 
+				    'message'=>0,
+				]]);	
 			
 			if($nosend)
 			{
-				echo "ITS ".implode(' AND ',$nosend)." SO mail to $reci will be not sent<br>\nMail subj: $subj, body: <br/>\n<pre>$body</pre><br />\n";
+				echo $body;			
 			}else{
-				GW_Mail_Helper::sendMail(['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1]);
+				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];
+				GW_Mail_Helper::sendMail($opts);
 			}
 			
-			echo $error_publ;
+			if(isset($e['error'])){
+				$error_publ = "Ooops we have some problems... Sorry :( But problem is now in front of staff monitors and it will be destroyed ASAP. PLEASE come back later. Error id: ".GW::s('PROJECT_NAME'). " errorid:".$data['errorid']."\n";
+				echo $error_publ;
+			}
 			
 		}else{
 			echo "error report turned off<br/>\n";
 			echo $e['message'];
-		}
-				
+		}		
 	}
 }
