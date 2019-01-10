@@ -322,7 +322,7 @@ class GW_Application
 		//if (count($path_arr) && $this->isItemIdentificator($path_arr[count($path_arr) - 1]))
 		//	$path = dirname($path);
 
-		
+		$data_object_id = $data_object_id ?? null;
 
 		return compact('ln', 'path', 'path_arr', 'path_clean', 'data_object_id', 'path_arr_parent');
 	}
