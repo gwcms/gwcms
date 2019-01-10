@@ -9,6 +9,8 @@
 class GW_Http_Agent
 {
 
+	use Singleton;
+	
 	public $headers = Array(
 	    //'Alive'=>'300',
 	    'User-Agent' => 'Mozilla/5.0',
@@ -386,5 +388,13 @@ class GW_Http_Agent
 		$html = preg_replace('/\s{2,999}/', ' ', $html); //tarpu seka keisti i viena tarpa
 
 		return $html;
+	}
+	
+	
+	function curlProxyRequest($proxyurl, $opts)
+	{
+		$json = $this->postRequest($proxyurl, ['options'=>json_encode($opts)]);
+		
+		return json_decode($json, true);
 	}
 }

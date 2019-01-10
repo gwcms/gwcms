@@ -29,8 +29,13 @@ class GW_Http_Agent_Curl
 	{
 		if($this->cookies){
 			$tmp = "";
-			foreach($this->cookies as $key => $val)
-				$tmp.=rawurlencode($key)."=".$val."; ";
+			
+			if(!is_array($this->cookies))
+				return false;
+			
+			foreach($this->cookies as $host => $cookies)
+				foreach($cookies as $key => $val)
+					$tmp.=rawurlencode($key)."=".$val."; ";
 				
 			$hdr['Cookie'] = $tmp;
 			//d::dumpas($tmp);
@@ -89,14 +94,11 @@ class GW_Http_Agent_Curl
 		
 		}
 
-		
+	
 		
 		if($method !="OPTIONS" && $this->cookies){
-			$tmp = "";
-			foreach($this->cookies as $key => $val)
-				$tmp.=rawurlencode($key)."=".$val."; ";
 				
-			$hdr['Cookie'] = $tmp;
+			$this->getCookieString($hdr);
 			//d::dumpas($tmp);
 		}
 		

@@ -41,6 +41,6 @@ class GW_Temp_Data extends GW_Data_Object
 	function readValue($user_id, $group, $name)
 	{
 		$item = $this->read($user_id, $group, $name);
-		return $item->value;
+		return $item ? $item->value : false;
 	}
 }

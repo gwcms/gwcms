@@ -277,5 +277,15 @@ class GW_Public_Module {
 			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
 	}	
 	
-
+	function jump($path)
+	{		
+		$this->app->jump($this->app->page->path.'/'.$path);
+	}
+	
+	function buildUri($path, $args=[])
+	{
+		return $this->app->buildUri($this->app->page->path.'/'.$path, $args,['carry_params'=>1]);
+	}
+	
+	
 }
