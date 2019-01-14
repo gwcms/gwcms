@@ -2,7 +2,12 @@
 
 
 {include file="elements/input.tpl" name=demo_select type=select options=[1=>'Random option1', '2'=>"Random option2"] empty_option=1}
-{include file="elements/input.tpl" name=demo_multiselect type=multiselect options=[1=>'Random option1', '2'=>"Random option2"] empty_option=1 value=json_decode($item->demo_multiselect)}
+{include file="elements/input.tpl" 
+	name=demo_multiselect type=multiselect 
+	options=[1=>'option1', '2'=>"option2", '3'=>"option3", '4'=>"option4"] 
+	empty_option=1 value=json_decode($item->demo_multiselect)
+	sorting=1
+}
 
 
 {include file="elements/input.tpl" name=demo_bool type=bool}
@@ -36,13 +41,27 @@
 
 {include file="elements/input.tpl" name=demo_tags type=tags}
 
-
+{*
 {include 
 	file="elements/input_select_edit.tpl" 
 	name=demo_select_ajax_load type=select
 	empty_option=1
 	datasource=$app->buildUri('datasources/languages',['native'=>'1'])
 }
+*}
+		{include file="elements/input.tpl"
+			name="demo_select_ajax_load"
+			type="select_ajax"
+			after_input_f="editadd"
+			object_title=GW::l('/M/datasources/MAP/childs/languages/title')
+			form_url=$app->buildUri('datasources/languages/form',['native'=>'1',clean=>2,dialog=>1])
+			list_url=$app->buildUri('datasources/languages',[clean=>2])
+			empty_option=1
+			datasource=$app->buildUri('datasources/languages/search') 
+			preload=1
+			minimuminputlength=0
+			options=[]
+		}		
 
 
 

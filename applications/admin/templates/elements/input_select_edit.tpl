@@ -7,6 +7,23 @@ module should have viewOptions viewForm
 
 *}
 
+{*
+deprecated use this like
+		{include file="elements/input.tpl"
+			after_input_f="editadd"
+			name="queue_id"
+			type="select_ajax"
+			object_title=GW::l('/m/MAP/childs/submodule/title')
+			form_url=$app->buildUri('object/submodule/form',[clean=>2,dialog=>1])
+			list_url=$app->buildUri('object/submodule',[clean=>2])
+			empty_option=1
+			datasource=$app->buildUri('object/submodule/options') 
+			preload=1
+			minimuminputlength=1
+			options=[]
+		}	
+*}
+
 {$GLOBALS.input_edit_select=$GLOBALS.input_edit_select+1}
 
 

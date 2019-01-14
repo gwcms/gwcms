@@ -14,7 +14,7 @@
 	{$dl_order_enabled_fields=$dl_fields}
 	
 	{function dl_actions_timematch}
-		{list_item_action_m url=[false,[act=>doRun]] iconclass="fa fa-caret-square-o-right" title="Run!"}
+		{list_item_action_m url=[false,[act=>doRun,id=>$item->id]] iconclass="fa fa-caret-square-o-right" title="Run!"}
 		{list_item_action_m url=[false,[act=>doTestTimeMatch,id=>$item->id]] caption=TTM title="Test time match"}	
 	{/function}	
 	

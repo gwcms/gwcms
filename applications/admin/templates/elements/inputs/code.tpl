@@ -1,7 +1,7 @@
 <textarea  id="{$id}" name="{$input_name}" style="display:none" class="inp-code">{$value|escape}</textarea>
 <pre id="{$id}_aceeditor" style="width: {$width|default:"98%"}; {if !$rows}height: {$height|default:"auto"};{/if} {if $border}border:1px solid silver;{/if}"></pre>
 
-<script src="{$app->sys_base}vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="{$app->sys_base}vendor/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	require(['gwcms'], function(){
 		var {$id}editor = ace.edit("{$id}_aceeditor");
