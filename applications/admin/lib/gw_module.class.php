@@ -712,7 +712,7 @@ class GW_Module
 		
 		if ($this->sys_call) {
 			if($this->lgr)
-				$this->lgr->msg(json_encode($opts));
+				$this->lgr->msg(json_encode($opts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 		} else {
 			
 			if($this->isPacketRequest()){
