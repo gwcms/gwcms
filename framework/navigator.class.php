@@ -123,26 +123,34 @@ class Navigator
 		$uri .= isset($parsed['host']) ? $parsed['host'] : '';
 		$uri .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
 
+		
+		if (isset($parsed['addpath'])) {
+			$parsed['path'] =  str_replace('//','/', $parsed['path'] . '/'. $parsed['addpath']);
+		}		
+		
 		if (isset($parsed['path'])) {
 			$uri .= (substr($parsed['path'], 0, 1) == '/') ?
 			    $parsed['path'] : ((!empty($uri) ? '/' : '' ) . $parsed['path']);
 		}
-
+			
 		$uri .= isset($parsed['query']) ? '?' . http_build_query($parsed['query']) : '';
 		$uri .= isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
 
 		return $uri;
 	}
 
-	static function buildURI($url, $params = Array())
+	static function buildURI($url, $params = Array(), $opts=[])
 	{
 		if (!$url)
 			$url = $_SERVER['REQUEST_URI'];
 
-		if (!$params)
+		if (!$params && !$opts)
 			return $url;
 
 		$url = self::explodeURI($url);
+		if(isset($opts['path']))
+			$url['addpath'] = $opts['path'];
+			
 		unset($url['query']['url']);
 		$url['query'] = array_merge($url['query'], $params);
 

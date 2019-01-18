@@ -133,16 +133,26 @@ class Module_Email_Templates extends GW_Common_Module
 
 	function viewOptions()
 	{
-		
 		$cond = GW_DB::buidConditions($this->filters);
+		
+		if(isset($_GET['q'])){
+			$condsearch = 'admin_title LIKE "%'.GW_DB::escape($_GET['q']).'%"';
+			$cond = GW_DB::mergeConditions(GW_DB::prepare_query($cond), $condsearch);
+		}
+		
 		
 		if(isset($_GET['byid'])){
 			$opts = $this->model->getOptionsByID($cond);
 		}else{
 			$opts = $this->model->getOptions($cond);
 		}
+		
+		$list = [];
+		foreach($opts as $id => $title){
+			$list[] =  ["id"=>$id, "title"=>$title];
+		}
 				
-		echo json_encode($opts);
+		echo json_encode(["items"=>$list, "total_count"=>count($opts)]);
 		exit;
 	}	
 		
