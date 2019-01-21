@@ -8,6 +8,7 @@ class GW_Http_Agent_Curl
 	public $acceptCookies=true;
 	public $classHeaders=[];
 	public $urlBegin="";
+	public $proxy_url;
 	
 	function explodeHeader($header)
 	{
@@ -34,6 +35,7 @@ class GW_Http_Agent_Curl
 				return false;
 			
 			foreach($this->cookies as $host => $cookies)
+				if(is_array($cookies))
 				foreach($cookies as $key => $val)
 					$tmp.=rawurlencode($key)."=".$val."; ";
 				
@@ -44,12 +46,29 @@ class GW_Http_Agent_Curl
 		
 	}
 	
+	function _request($opts)
+	{
+		$ch = curl_init();
+		curl_setopt_array($ch, $opts);
+
+		$data = curl_exec($ch);
+
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$header = substr($data, 0, $header_size);
+		$data = substr($data, $header_size);
+
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$header_info = curl_getinfo($ch,CURLINFO_HEADER_OUT);
+
+		return ['data'=>$data, 'header'=>$header, 'httpcode'=>$httpcode, 'headerinfo'=>$header_info];		
+	}
 	
 	
 	function request($url,  $data=[], $hdr=[], $opts=[])
 	{
 		$curl = curl_init();
 		$url = $this->urlBegin . $url;
+		$this->last_request_body = "";
 				
 		$default_header = [
 			    'Accept'=>'application/json, text/plain, */*',
@@ -59,13 +78,12 @@ class GW_Http_Agent_Curl
 		];
 		
 		$json = false;
+		$copts = [];
 		
 		
 		if(isset($opts['options']))
 		{
-			curl_setopt_array($curl, [
-				CURLOPT_CUSTOMREQUEST => 'OPTIONS',
-			]);	
+			$copts[CURLOPT_CUSTOMREQUEST] = 'OPTIONS';	
 				
 			$default_header['Access-Control-Request-Method'] = "POST";
 			$default_header['Access-Control-Request-Headers'] = "content-type";
@@ -80,11 +98,12 @@ class GW_Http_Agent_Curl
 			
 			if($data)
 			{
-				curl_setopt_array($curl, [
-					CURLOPT_POST => 1,
-					CURLOPT_POSTFIELDS => json_encode($data)
-				]);			
-				$method = "POST";				
+				$copts[CURLOPT_POST] = 1;
+				$copts[CURLOPT_POSTFIELDS] = json_encode($data);
+						
+				$method = "POST";	
+				
+				$this->last_request_body = json_encode($data);
 			}			
 			//default content type json
 			$default_header['Accept'] = 'application/json, text/plain, */*';
@@ -93,17 +112,13 @@ class GW_Http_Agent_Curl
 			
 		
 		}
-
-	
 		
 		if($method !="OPTIONS" && $this->cookies){
 				
 			$this->getCookieString($hdr);
 			//d::dumpas($tmp);
 		}
-		
-		
-				
+			
 		$hdr = array_merge($hdr, $default_header);
 		$hdr = array_merge($hdr, $this->classHeaders);
 		$h=[];
@@ -111,15 +126,11 @@ class GW_Http_Agent_Curl
 		foreach($hdr as $key => $value)
 		{
 			$h[] = "$key: $value";
-		}
-				
-		$this->last_request_header = $h;	
-		$this->last_request_body = $data;		
+		}		
+
+		$this->last_request_header = $h;
 		
-		
-		curl_setopt($curl, CURLOPT_ENCODING, 'gzip, deflate');
-		
-		curl_setopt_array($curl, [
+		$copts = $copts+[
 			CURLOPT_URL => $url,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HEADER => true,
@@ -127,22 +138,28 @@ class GW_Http_Agent_Curl
 			CURLOPT_TIMEOUT => 60,
 			CURLINFO_HEADER_OUT => true,
 			CURLOPT_HTTPHEADER => $h,
-		]);		
-				
-		$data = curl_exec($curl);
+			CURLOPT_ENCODING => 'gzip, deflate'
+		];
+						
+		if($this->proxy_url){
+			$data = GW_Http_Agent::singleton()->curlProxyRequest($this->proxy_url, $copts);
+		}else{
+			$data = $this->_request($opts);
+		}
 		
-		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-		$header = substr($data, 0, $header_size);
-		$data = substr($data, $header_size);
-		
+		$header = $data['header'];
+		$httpcode = $data['httpcode'];
+		$header_info = $data['headerinfo'];		
+		$data = $data['data'];
+	
+
 		$this->last_response_header = $header;
 		$this->last_response_body = $data;		
-		
-		
+				
 		
 		$hdr = $this->explodeHeader($header);
 		
-		$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);	
+
 		if(isset($hdr['Set-Cookie']) && $this->acceptCookies)
 			$this->acceptCookies($hdr['Set-Cookie']);
 		

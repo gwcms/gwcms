@@ -1,4 +1,3 @@
-
 {function "e"}
 
 	{if $eopt}{$tmpO=$eopt}{else}{$tmpO=$options[$field]}{/if}

@@ -1,3 +1,22 @@
+{if $modpath}
+	{$tmppath=explode('/', $modpath,2)}
+	{if !$datasource}
+		{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options")}
+	{/if}
+	{if !$form_url}
+		{$form_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/form", [clean=>2,dialog=>1])}
+	{/if}
+	{if !$list_url}
+		{$list_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/list", [clean=>2])}
+	{/if}	
+	{if !$object_title}
+		{$object_title=GW::l("/M/`$tmppath.0`/MAP/childs/`$tmppath.1`/title")}
+	{/if}
+{/if}
+			
+
+
+
 
 <span class="input-group-btn addEditControls" id="addEditControls{$name}" 
 	  data-name="{$name}" 

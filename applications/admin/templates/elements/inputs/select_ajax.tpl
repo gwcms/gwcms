@@ -18,6 +18,14 @@
 			{$options[$value]="`$value` {GW::l('/g/LOADING')}..."}
 		{/if}
 	{/if}
+	
+	{if $modpath}
+		{$tmppath=explode('/', $modpath,2)}
+		{if !$datasource}
+			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options")}
+		{/if}
+	{/if}	
+	
 
 	<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control GWselectAjax" name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
 		 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"

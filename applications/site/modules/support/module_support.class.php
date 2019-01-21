@@ -67,7 +67,7 @@ class Module_Support  extends GW_Public_Module {
 	
 	function doDiscount()
 	{
-		$_POST['item']['subject']="DISCOUNT 10%";
+		$_POST['item']['subject']=" Naujas prenumeratorius";
 		$this->doMessage();
 	}
 	

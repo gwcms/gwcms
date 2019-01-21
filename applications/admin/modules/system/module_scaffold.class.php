@@ -107,9 +107,10 @@ class Module_Scaffold extends GW_Common_Module
 	{
 		GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
 		
-		$config = $_POST['item']['config'];
+		$config = json_decode($_POST['item']['config'], true);
 		
 		$this->config->lastconf = json_encode($config);
+		
 		
 		
 		
@@ -133,7 +134,7 @@ class Module_Scaffold extends GW_Common_Module
 		@mkdir($tpl_dir);
 		
 		
-		header('content-type: text/plain');
+		//header('content-type: text/plain');
 		
 		
 		//1
@@ -144,6 +145,8 @@ class Module_Scaffold extends GW_Common_Module
 		//2
 		$sqls = $this->submoduleAdd_db($config);
 		$this->execSqls($sqls, true);
+		
+		
 		//changes sql
 		file_put_contents($installdir.'update.sql', $sqls);
 		
@@ -224,6 +227,10 @@ class Module_Scaffold extends GW_Common_Module
 			switch($name){
 				case 'varchar255';
 					return "varchar(255)";
+				case 'tinyint';
+					return "tinyint(4)";
+				case 'int';
+					return "int(11)";
 				default:
 					return $name;
 			}
@@ -263,6 +270,7 @@ $sqls[]= (isset($config['overwrite_tables']) && $config['overwrite_tables'] ? "D
 CREATE TABLE IF NOT EXISTS `$tbl` (
   `id` int(11) NOT NULL,
 $fieldssql
+  `active` TINYINT(1) NOT NULL,
   `insert_time` datetime NOT NULL,
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
