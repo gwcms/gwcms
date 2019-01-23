@@ -11,8 +11,9 @@
 <tr>
 <td>
 
-{assign var="width_title" value="30%" scope="root"}
-
+{if !$width_title}
+	{assign var="width_title" value="30%" scope="root"}
+{/if}
 
 <input class="gwSysFields" type="hidden" name="act" value="do:{$action|default:"save"}" />
 

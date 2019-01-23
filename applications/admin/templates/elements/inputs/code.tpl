@@ -1,5 +1,5 @@
-<textarea  id="{$id}" name="{$input_name}" style="display:none" class="inp-code">{$value|escape}</textarea>
-<pre id="{$id}_aceeditor" style="width: {$width|default:"98%"}; {if !$rows}height: {$height|default:"auto"};{/if} {if $border}border:1px solid silver;{/if}"></pre>
+<textarea  id="{$id}" name="{$input_name}" style="display:none" class="inp-code {if $class}{$class}{/if}" >{$value|escape}</textarea>
+<pre id="{$id}_aceeditor" class="codeedit {if $class}{$class}{/if}" style="{if !$rows}height: {$height|default:"auto"};{/if} {if $border}border:1px solid silver;{/if}" title="shift + [plus] - increases height"></pre>
 
 <script src="{$app->sys_base}vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -7,7 +7,7 @@
 		var {$id}editor = ace.edit("{$id}_aceeditor");
 		//editor.setTheme("ace/theme/twilight");
 		{$id}editor.session.setMode("ace/mode/{$codelang}");
-			
+						
 		var {$id}textarea = $('#{$id}');
 		{$id}editor.getSession().setValue({$id}textarea.val());
 		{$id}editor.getSession().on('change', function(){
@@ -30,9 +30,17 @@
 			}
 		},1000);
 		
-	
+		//padidint sumazint laukelio auksti
+		$('#{$id}_aceeditor').keypress(function(e) {
 
-
+		  if((e.which==45 || e.which==43) && e.shiftKey)
+		  {
+			  $(this).css('height', $(this).height()+(e.which==43 ? 100: -100) )
+				{$id}editor.resize() ;
+				{$id}editor.renderer.updateFull() ;		
+				 e.preventDefault();
+		  }	
+		});
 	})
 </script>
 

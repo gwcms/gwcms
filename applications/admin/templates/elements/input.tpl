@@ -79,7 +79,8 @@
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
 	
-	<td id="{$input_id}_inputLabel" class="input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if}" {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} >
+	<{if $rotatedlabel}span{else}td{/if} id="{$input_id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if}" 
+										 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if isset($m->lang.FIELD_NOTE.$name)}
@@ -106,10 +107,11 @@
 			<i class="fa fa-floppy-o text-warning" title="{if $tmp && (is_string($tmp) || is_numeric($tmp))}Orig.: {$tmp|escape}{/if}"></i>{else}
 		{/if}
 		
-	</td>	
+	</{if $rotatedlabel}span{else}td{/if}>	
 {/function}
 
-{capture assign=input_content}
+{function name=input_content}
+
 	{if $i18n==2}
 		{foreach $langs as $ln_code}
 			
@@ -118,8 +120,14 @@
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td" width="{$width_input}" {if $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
+		<td class="input_td" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
+			
+			
+			{if $rotatedlabel}
+				{call "input_label"}
+				{$class="`$class` withrotatedlab"}
+			{/if}			
 			
 			{if $after_input_f}
 				{capture assign="after_input"}
@@ -159,7 +167,7 @@
 			{/if}
 		</td>
 	{/if}
-{/capture}
+{/function}
 
 
 {if $tabs}
@@ -167,19 +175,27 @@
 {/if}	
 
 
-{if $layout=='wide'}
+{if $notr}
+		{if $layout!='wide'}
+			{call input_label}
+		{else}
+			{$rotatedlabel=1}
+		{/if}
+		
+		{call input_content}	
+{elseif $layout=='wide'}
 	<tr class="{$rowclass}">
 		{call input_label}
 	</tr>
 	<tr id="gw_input_{$input_id}"  class="{$rowclass}">
-		{$input_content}
+		{call input_content}
 	</tr>
 {elseif $layout=='inline'}
-	{$input_content}
+	{call input_content}
 {else}
 	<tr id="gw_input_{$input_id}"  class="{$rowclass}">
 		{call input_label}
-		{$input_content}
+		{call input_content}
 	</tr>
 {/if}
 {/if}

@@ -7923,3 +7923,24 @@ a.badge:hover{
 .inlineFormRow .inp-text, 
 .inlineFormRow .inp-number
 { padding: 2px !important; }
+
+
+.rotate-lbl {
+	transform: rotate(-90deg);
+	height: 0;
+	display:block;
+	white-space: nowrap;
+	width: 1.5em;	
+	position: relative;
+	left: -10px;
+}
+
+
+.codeedit{
+	width: 98%;
+}
+.withrotatedlab{
+	float:left;
+	margin-left: 1.6em !important;
+	width: calc(100% - 1.6em);
+}

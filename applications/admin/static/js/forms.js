@@ -74,6 +74,15 @@ gw_forms = {
 			if(gw_changetrack.isFormValuesChanged())
 				return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
 		}
+		
+		//fix rotated label position
+		$('.rotate-lbl').parent().keypress(function(){
+			if($(this).data('lastheight') != $(this).height())
+			{
+				$(this).find('.rotate-lbl').css('top', ($(this).height()-10)+'px')
+				$(this).data('lastheight', $(this).height());
+			}
+		})
 	}	
 }
 
