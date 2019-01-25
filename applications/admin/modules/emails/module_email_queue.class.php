@@ -55,6 +55,6 @@ class Module_Email_Queue extends GW_Common_Module
 		$this->tpl_vars['width_title']="120px";
 		
 	}
-
 	
+
 }

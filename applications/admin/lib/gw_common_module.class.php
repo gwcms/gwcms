@@ -182,11 +182,35 @@ class GW_Common_Module extends GW_Module
 
 	public $auto_images = 1;
 
+	public $can_be_empty_fields = [];
+	
+	function searchEmptyVals(&$vals, $fields){
+		
+		$warnempty = [];
+		foreach($fields as $field => $x)
+		{
+			if($x=1 && !isset($vals[$field]) && !isset($_FILES[$field]))
+			{
+				$empty_fields[] = $field;
+				
+				if(isset($this->can_be_empty_fields[$field])){
+					$vals[$field] = "";
+				}else{
+					$warnempty[] = $field;
+				}
+			}
+		}
+		if($warnempty)
+			$this->setMessage(["text"=>"Empty fields found: <b>".implode(", ", $warnempty).'</b>', "type"=>GW_MSG_WARN, 'footer'=>'add them to public $can_be_empty_fields=[field1=>1,field2=>1]', 'float'=>1]);
+	}
+	
 	/**
 	 * common doSave action override this if diferent functionality needed
 	 */
 	function common_doSave()
 	{
+		
+		
 		
 		//TODO : palyginti senas vertes, jei bus pakitusios mest errora
 		/*
@@ -201,6 +225,8 @@ class GW_Common_Module extends GW_Module
 		
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
+		
+		$this->searchEmptyVals($vals, $_POST['fields']);
 
 		if ($vals['id'] === '')
 			unset($vals['id']);
@@ -342,6 +368,8 @@ class GW_Common_Module extends GW_Module
 	 */
 	function common_viewForm()
 	{
+		
+		
 		$item = $this->model->createNewObject();
 		
 		$id = $this->getCurrentItemId();

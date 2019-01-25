@@ -245,9 +245,9 @@ class Module_Translations extends GW_Common_Module
 			//$cond = "$cond";
 		}
 
-		if(isset($_GET['ids']))
+		if(isset($_REQUEST['ids']))
 		{
-			$tmp = trim($_GET['ids'],'"');
+			$tmp = trim($_REQUEST['ids'],'"');
 			echo json_encode(['items'=>[['id'=>$tmp, 'title'=>$tmp]]]);
 			exit;
 		}

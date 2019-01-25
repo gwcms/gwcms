@@ -144,6 +144,11 @@ function initSelect2Inputs(){
 				}		
 			}
 			
+			if(obj.data('emptyoption'))
+			{
+				opts.allowClear = true;
+				opts.placeholder = obj.data('placeholder');				
+			}
 
 			if(obj.data('dontcloseonselect'))
 			{

@@ -42,7 +42,7 @@ add tab titles to lang.xml:
 						<td>
 							<input id="tab-{$tabid}" class="tab-switch" data-color="{$tabcolor}" type="checkbox" value="{$tabid}" {if $tabdefaultshow}checked="checked"{/if} style="width:auto;height:auto">
 						</td><td style="padding-left:5px;">
-							<a href="#" onclick="$('#tab-{$tabid}').click();return false">{GW::l("/m/INPUT_TABS/`$tabid`")}</a>
+							<a href="#" data-id="tab-{$tabid}" class="tab-handler">{GW::l("/m/INPUT_TABS/`$tabid`")}</a>
 						</td>
 					</tr>
 				</table>
@@ -76,14 +76,46 @@ add tab titles to lang.xml:
 					$('#activetabs').val(activetabs.join(','));
 				}
 				
+				function setSwitchery(switchElement, checkedBool) {
+					if((checkedBool && !switchElement.isChecked()) || (!checkedBool && switchElement.isChecked())) {
+						switchElement.setPosition(true);
+						switchElement.handleOnchange(true);
+					}
+				}	
+				
+				function tabClick(currentid, leaveopen)
+				{
+					
+					if(!leaveopen){
+						$('.tab-switch').each(function(){
+							setSwitchery($(this).data('switchery'), false)
+						}) 
+					}
+					
+					//$('.tab-switch').prop('checked',false);
+					
+					//$('.tab-switch').prop('checked',false);
+					$('#'+currentid).click();
+					
+					
+					
+				}
+				
 				require(['gwcms'], function(){
 
 					require(['vendor/switchery/switchery'], function(Switchery) {
 						$( ".tab-switch" ).each(function() {
 							 var testSwitchery = new Switchery(this, { color: $(this).data('color'), jackSecondaryColor:$(this).data('color')   });
+							 $(this).data('switchery', testSwitchery);
 						}).change(function(){
 							updateTabs()
 						});
+						
+						$('.tab-handler').click(function(e){
+							tabClick($(this).data('id'), e.shiftKey);
+							
+							e.preventDefault();
+						})
 							
 						updateTabs();
 					});						

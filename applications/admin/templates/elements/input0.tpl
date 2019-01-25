@@ -47,3 +47,6 @@
 {if $type=='password'}{$inp_type='text'}{/if}
 {include file="elements/inputs/`$inp_type`.tpl"}
 
+{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
+<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
+

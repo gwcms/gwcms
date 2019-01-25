@@ -37,6 +37,7 @@
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
 		 data-dontcloseonselect="{$dontCloseOnSelect}"
 		 data-onchangeFunc="{$onchangeFunc}"
+		 {if $empty_option}data-emptyoption="1" data-placeholder="{GW::l('/g/EMPTY_OPTION/0')}"{/if}
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		 >
 		{html_options options=$options selected=$value}
