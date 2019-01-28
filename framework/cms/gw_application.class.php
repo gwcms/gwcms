@@ -182,15 +182,14 @@ class GW_Application
 		$this->initDB();
 		$this->initSession();
 
+		$this->requestInfo();
 		$this->initAuth();
 
 		$this->initSite();
-		$this->requestInfo();
-
+		$this->initLang();
 
 		$this->getPage();
 
-		$this->initLang();
 		$this->initSmarty();
 	}
 

@@ -18,8 +18,14 @@
 {assign var="input_id" value=$id scope=parent}
 
 {if !$value}
-	{$value=$item->$name}
-		
+	
+	{if strpos($name, '/')!==false}
+		{$value=$item->get($name)}
+	{else}	
+		{$value=$item->$name}
+	{/if}
+	
+
 
 	{if $value!=='0' && !$value && $default}
 		{$value=$default}
@@ -40,13 +46,13 @@
 
 
 
+	{$inp_type=$type|default:'text'}
 
-
-{$inp_type=$type|default:'text'}
-
-{if $type=='password'}{$inp_type='text'}{/if}
-{include file="elements/inputs/`$inp_type`.tpl"}
-
-{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
-<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
-
+	{if $type=='password'}{$inp_type='text'}{/if}
+	{include file="elements/inputs/`$inp_type`.tpl"}
+	
+	
+{if !in_array($type,["read",'image','attachments','file']) && $readonly != 1}
+	{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
+	<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
+{/if}
