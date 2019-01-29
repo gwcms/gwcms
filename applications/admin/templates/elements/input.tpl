@@ -38,6 +38,7 @@
 	{$input_id=str_replace("/",'___',$input_id)}
 {/if}
 
+{$inputContainClass="gw_input_`$input_id`"}
 
 {if $i18n}
 	{if !$langs}
@@ -79,7 +80,7 @@
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
 	
-	<{if $rotatedlabel}span{else}td{/if} id="{$input_id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if}" 
+	<{if $rotatedlabel}span{else}td{/if} id="{$input_id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass}" 
 										 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
@@ -115,12 +116,12 @@
 	{if $i18n==2}
 		{foreach $langs as $ln_code}
 			
-			<td class="input_td col_i18n_{$ln_code}" width="{$width_input}" {if $wide}colspan="2"{/if}>
+			<td class="input_td col_i18n_{$ln_code} {$inputContainClass}" width="{$width_input}" {if $wide}colspan="2"{/if} data-type="inputc">
 				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
+		<td class="input_td {$inputContainClass}" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			
 			
