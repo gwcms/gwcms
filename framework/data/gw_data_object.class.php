@@ -607,6 +607,11 @@ class GW_Data_Object
 
 		return $rez;
 	}
+	
+	function isChanged()
+	{
+		return count($this->changed_fields) > 0;
+	}
 
 	/**
 	 * 2lines

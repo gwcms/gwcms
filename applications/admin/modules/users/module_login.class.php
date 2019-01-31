@@ -54,7 +54,14 @@ class Module_Login extends GW_Module
 
 		
 		if(!$dialog)
-			$this->app->jump($path,$params);	
+			if($this->app->sess('after_auth_nav')){
+				$uri = $this->app->sess('after_auth_nav');
+				$this->app->sess('after_auth_nav', "");
+				header("Location: ".$uri);
+				exit;
+			}else{
+				$this->app->jump($path,$params);	
+			}
 		
 	}
 

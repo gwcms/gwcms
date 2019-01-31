@@ -197,8 +197,10 @@ class GW_Admin_Application extends GW_Application
 		if (!$this->canAccess($this->page)){			
 			if ($this->user)
 				$this->jumpToFirstChild();
-			else
+			else{
+				$this->sess('after_auth_nav', $_SERVER['REQUEST_URI']);
 				$this->jump(GW::s("$this->app_name/PATH_LOGIN"));
+			}
 		}
 		
 		$this->preRun();
