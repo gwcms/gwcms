@@ -458,6 +458,9 @@ class GW_Application
 		
 		return $this->processModule($path_info, $request_args);
 	}
+	
+	
+	public $sys_messages=[];
 
 	function setMessage($msg, $type = 0, $title=false, $field=false, $obj_id=false)
 	{
@@ -465,11 +468,8 @@ class GW_Application
 		{
 			if(!isset($msg['type']))
 				$msg['type'] = $type;			
-			
-			$this->sess['messages'][] = $msg;
 		}else{
-		
-			$data = ['type' => $type, 'text'=>$msg];
+			$msg = ['type' => $type, 'text'=>$msg];
 
 			if($title)
 				$data['title'] = $title;
@@ -478,9 +478,20 @@ class GW_Application
 				$data['field'] = $title;
 
 			if($obj_id)
-				$data['obj_id'] = $obj_id;		
-
-			$this->sess['messages'][] = $data;
+				$data['obj_id'] = $obj_id;
+		}
+		
+		
+		if(isset($msg['sysmsg'])){
+			$store =& $this->sys_messages;
+		}else{
+			$store =& $this->sess['messages'];
+		}
+			
+		if(isset($msg['id'])){
+			$store[ $msg['id'] ] = $msg;
+		}else{
+			$store[] = $msg;
 		}
 	}
 	
@@ -494,8 +505,14 @@ class GW_Application
 		return GW::l($text);
 	}
 	
-	function acceptMessages($prepare = false)
+	function acceptMessages($prepare = false, $opts=[])
 	{
+		if(isset($opts['sysmsg']))
+		{
+			$data = $this->sys_messages;
+			$this->sys_messages = [];
+			return $data;
+		}
 		
 		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
 			return [];
@@ -521,6 +538,7 @@ class GW_Application
 
 		return $data;
 	}
+	
 
 	function fatalError($message)
 	{

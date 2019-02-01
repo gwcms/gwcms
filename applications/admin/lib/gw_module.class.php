@@ -433,6 +433,14 @@ class GW_Module
 			$this->app->outputPackets();
 		}
 		
+		if(isset($_GET['json'])){
+			
+			$messages=$this->app->acceptMessages(true,['sysmsg'=>1]);
+			echo json_encode($messages);
+			exit;
+		}
+		
+		
 		if(isset($_GET['background']) && $_GET['background']==2)
 			return false;
 		
@@ -673,9 +681,9 @@ class GW_Module
 	}
 	
 	
-	function setError($message)
+	function setError($message, $addopts=[])
 	{
-		$this->setMessageEx(["text"=>$message, "type"=>GW_MSG_ERR]);
+		$this->setMessageEx(["text"=>$message, "type"=>GW_MSG_ERR]+$addopts);
 	}
 	
 	
@@ -683,6 +691,8 @@ class GW_Module
 	{
 		return isset($_REQUEST['packets']) && $_REQUEST['packets']==1;
 	}
+	
+	
 	
 	function setMessageEx($opts=[])
 	{
@@ -710,9 +720,12 @@ class GW_Module
 			return true;
 		}
 		
+				
 		if ($this->sys_call) {
 			if($this->lgr)
 				$this->lgr->msg(json_encode($opts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+			
+			$this->app->setMessage($opts+['sysmsg'=>1]);
 		} else {
 			
 			if($this->isPacketRequest()){
@@ -730,10 +743,10 @@ class GW_Module
 		$this->loadErrorFields();		
 	}
 	
-	function setMessage($message)
+	function setMessage($message, $addopts=[])
 	{
 		$opts = is_array($message) ? $message : ["text"=>$message, "type"=>GW_MSG_SUCC];
-		$this->setMessageEx($opts);
+		$this->setMessageEx($opts+$addopts);
 	}
 	
 	function setPlainMessage($text, $type=GW_MSG_SUCC)

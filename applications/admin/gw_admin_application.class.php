@@ -213,11 +213,11 @@ class GW_Admin_Application extends GW_Application
 		return is_numeric($id) ? $id : "id_".$id;
 	}
 	
-	function innerRequest($path, $get_args, $post_args)
-	{
-				
+	function innerRequest($path, $get_args, $post_args=[])
+	{	
 		$get_args['GWSESSID']=session_id();
 		$get_args['sys_call'] = 1;
+		$get_args['json'] = 1;
 		
 		$path = $this->buildUri($path, $get_args, ['absolute'=>1]);
 		
@@ -232,13 +232,16 @@ class GW_Admin_Application extends GW_Application
 				'header'  => 'Content-type: application/x-www-form-urlencoded',
 				'content' => http_build_query($post_args)
 			    )
-			);	
-			
-			
+			);
 		}
 		
 		$this->sessionWriteClose();
-		$res = json_decode(file_get_contents($path, false, stream_context_create($opts)));
+		$raw = file_get_contents($path, false, stream_context_create($opts));
+		$res = json_decode($raw);
+		
+		if(!$res)
+			$res=['response_format_error'=>1,'raw_response'=>$raw];
+		
 		$this->reopenSessionIfClosed();
 		
 		return $res;
