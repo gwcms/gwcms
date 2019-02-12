@@ -1,4 +1,4 @@
-{if is_array($value)}
+{if is_array($value) || is_object($value)}
 	{$value=GW_Json_Format_Helper::f($value)}
 {elseif is_string($value)}
 	
