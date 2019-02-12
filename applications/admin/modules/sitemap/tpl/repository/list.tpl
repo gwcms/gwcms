@@ -70,7 +70,7 @@
 	{$dl_smart_fields=[ico,size,filename]}
 	
 	{*ext_actions*}
-	{$dl_actions=[preview,edit,delete]}
+	{$dl_actions=[preview,delete,ext_actions]}
 	
 	
 	

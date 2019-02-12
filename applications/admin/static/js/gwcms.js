@@ -200,13 +200,14 @@ var gw_adm_sys = {
 	{
 
 	},
-	notify: function (errlevel, text) {
+	notify: function (errlevel, text, opts) {
 		$.niftyNoty({
 			type: errlevel,
 			container: '#gwcms-dynamic-alerts-container',
 			html: text,
 			focus: false,
-			timer: 3000
+			container: 'floating',
+			timer: (opts && opts.hasOwnProperty('timer') ? opts.timer: 3000)
 		});
 	},
 	init_iframe_open: function(){
@@ -1369,3 +1370,59 @@ function rootgwcms() {
 		return gwcms
 	}
 }
+
+
+function fallbackCopyTextToClipboard(text) {
+	var textArea = document.createElement("textarea");
+	textArea.value = text;
+	document.body.appendChild(textArea);
+	textArea.focus();
+	textArea.select();
+
+	try {
+		var successful = document.execCommand('copy');
+		var msg = successful ? 'successful' : 'unsuccessful';
+		console.log('Fallback: Copying text command was ' + msg);
+		gw_adm_sys.notify('success',text+' copied.', { timer: 10000 });
+	} catch (err) {
+		console.error('Fallback: Oops, unable to copy', err);
+		prompt("Select all & copy", text);
+	}
+
+	document.body.removeChild(textArea);
+}
+function copyTextToClipboard(text) {
+	
+	
+	
+	if (!navigator.clipboard) {
+		fallbackCopyTextToClipboard(text);
+		return;
+	}
+	navigator.clipboard.writeText(text).then(function () {
+		console.log('Async: Copying to clipboard was successful!');
+		gw_adm_sys.notify('success',text+' copied.', { timer: 10000 });
+	}, function (err) {
+		console.error('Async: Could not copy text: ', err);
+		prompt("Select all & copy", text);
+	});
+}
+
+
+
+$("body").keydown(function (event) {
+
+
+		//ctrl + 1 = pereiti i kita environmenta
+		if (event.which == 49 && event.ctrlKey) {
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doSwitchEnvironment&uri='+encodeURIComponent(location.href)
+			event.preventDefault();
+		}
+		
+		if (event.which == 50 && event.ctrlKey) {
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doPullProductionDB&uri='+encodeURIComponent(location.href)
+			event.preventDefault();
+		}		
+		
+		//console.log(event.which)
+});

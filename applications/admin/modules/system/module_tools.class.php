@@ -384,6 +384,38 @@ class Module_Tools extends Module_Config
 		header("Content-Disposition:inline;filename=test.pdf");
 		die($pdf);		
 	}
-
+	
+	function doSwitchEnvironment()
+	{
+		$replace_what = GW::s("SITE_URL");
+		
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
+		{
+			$dest = GW_ENV_PROD;	
+		}else{
+			$dest = GW_ENV_DEV;
+		}
+			
+		initEnviroment($dest);
+		$replace_to = GW::s("SITE_URL");
+				
+		
+		$newurl = str_replace($replace_what, $replace_to, $_GET['uri']);
+		
+		header("Location: $newurl");
+		exit;
+	}
+	
+	function doPullProductionDB()
+	{
+		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
+		$sudouser = 'wdm';
+		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path pulldb 2>&1");
+		
+		$this->setMessage("<pre>".$res."</pre>");
+				
+		header("Location: ".$_GET['uri']);
+		exit;		
+	}
 	
 }
