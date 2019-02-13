@@ -212,7 +212,8 @@
 	
 	<i id="subscribe_confirm_msg_note">Iš žinutės negali būti išimtas {$CONFIRM_LINK}</i>
 	<i id="email_note"><![CDATA[Siuntėjo vardas &lt;email@address.com&gt;]]></i>
-	<i id="REPEAT_SEND_CONFIRM"><lt>Siųsti pakartotinai?</lt><en>Repeat sending?</en></i>		
+	<i id="REPEAT_SEND_CONFIRM"><lt>Siųsti pakartotinai?</lt><en>Repeat sending?</en></i>
+	<i id="SEND"><lt>Siųsti</lt><en>Send</en></i>
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">

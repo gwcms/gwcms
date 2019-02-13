@@ -154,8 +154,15 @@ class GW_Mail_Helper
 		if(!is_array($opts['to']))
 			$opts['to'] = self::explodeMultipleEmails($opts['to']);
 				
-		foreach($opts['to'] as $to)
-			$mailer->addAddress($to);
+		foreach($opts['to'] as $to){
+			
+			$name = '';
+			
+			if(strpos($to,'<')!==false)
+				list($name, $to) = GW_Email_Validator::separateDisplayNameEmail($to);
+			
+			$mailer->addAddress($to, $name);
+		}
 		
 		
 		if(isset($opts['attachments']) && is_array($opts['attachments'])){
@@ -172,13 +179,16 @@ class GW_Mail_Helper
 			d::dumpas($mailer);
 		
 		try {
-			$status = $mailer->send();
+			$mailer->send();	
 			
-			if($status){
-				$opts['error']="SENT";
+			if(!$mailer->isError()){
+				$opts['status']="SENT";
+				$status = true;
 			}else{
-				$opts['error'] = $mailer->isError() ? ($mailer->ErrorInfo ? $mailer->ErrorInfo : 'unknown error'): 'error in error';
+				$opts['status'] = $mailer->ErrorInfo ? $mailer->ErrorInfo : 'unknown error';
+				$status = false;
 			}
+			
 		} catch (phpmailerException $e) {
 			$opts['error'] = $e->errorMessage();
 		} catch (Exception $e) {

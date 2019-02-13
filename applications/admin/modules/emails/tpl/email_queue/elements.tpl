@@ -6,7 +6,7 @@
 
 	{if $field==''}
 		
-	{elseif in_array($field, [to,from,subject,error])}	
+	{elseif in_array($field, [to,from,subject,status])}	
 		{include file="elements/input.tpl" name=$field type=text}
 	{elseif $field=="body"}
 		

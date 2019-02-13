@@ -17,14 +17,15 @@ class Module_Email_Queue extends GW_Common_Module
 		
 		$status = GW_Mail_Helper::sendMail($item);
 		
-		
 		if($status){
-			
 			$this->setMessage("Mail id:{$item->id} SENT");
+			$item->status = "SENT";
 		}else{
 			$this->setError("Mail id:{$item->id} FAILED ({$item->error})");
+			$item->status = $item->error;
 		}
 		
+		$item->updateChanged();
 		
 		if($this->sys_call && !$this->isPacketRequest())
 			$this->jump();
@@ -54,6 +55,14 @@ class Module_Email_Queue extends GW_Common_Module
 		$this->tpl_vars['form_width']="1000px";
 		$this->tpl_vars['width_title']="120px";
 		
+	}
+	
+	function __eventAfterSave($item)
+	{	
+		if($_POST['submit_type']==7)
+		{
+			$this->doSend($item);
+		}
 	}
 	
 

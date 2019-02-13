@@ -3,16 +3,11 @@
 
 {block name="init"}
 
-	
-	{function name=do_toolbar_buttons_synchronizefromxml} 
-		{toolbar_button title=GW::l('/A/VIEWS/synchronizefromxml') iconclass='gwico-Refresh' href=$m->buildUri(synchronizefromxml)}	
-
-	{/function}	
-	
+		
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
-	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 		
 	{$dl_inline_edit=1}		
 	
@@ -21,7 +16,7 @@
 	{$dl_output_filters_truncate_size=100}
 	
 	{$dl_output_filters.body=truncate}
-	{$dl_output_filters.error=truncate}
+	{$dl_output_filters.status=truncate}
 	{$dl_output_filters.insert_time=short_time}
 	{$dl_output_filters.update_time=short_time}
 	
@@ -29,7 +24,7 @@
 	{$dl_actions=[edit,delete_ajax,send,preview]}	
 	
 	{function name=dl_actions_send}
-		{if $item->error=="SENT"}
+		{if $item->status=="SENT"}
 			{$tmp=1}{$color="text-warning"}
 			{$tmp2=['data-confirm_text'=>GW::l('/m/REPEAT_SEND_CONFIRM')]}
 		{else}
