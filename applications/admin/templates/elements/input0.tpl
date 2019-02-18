@@ -1,3 +1,9 @@
+{*
+DEPRECATED 2019-02
+use {call e0 field=
+instead of {include "elements/input0.tpl" name=
+*}
+
 {if $params_expand}
 	{foreach $params_expand as $k => $v}
 		{assign var=$k value=$v}

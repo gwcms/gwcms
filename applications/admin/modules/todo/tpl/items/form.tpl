@@ -4,10 +4,10 @@
 .input_label_td { width:120px; }
 </style>
 
-{include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
+{call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
 {*
-{include file="elements/input.tpl" name=project_id type=select options=$options.project_id empty_option=1}
+{call e field=project_id type=select options=$options.project_id empty_option=1}
 *}
 
 
@@ -20,36 +20,35 @@
 }
 
 
-{include file="elements/input.tpl" name=type type=select options=$m->lang.TODO_ITEM_TYPE_OPT}
+{call e field=type type=select options=$m->lang.TODO_ITEM_TYPE_OPT}
 {*include file="elements/input.tpl" name=job_type type=radio options=$m->lang.TODO_ITEM_JOB_TYPE_OPT*}
 
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=time_have value=gw_math_helper::uptime($item->time_have)}
+{call e field=title}
+{call e field=time_have value=gw_math_helper::uptime($item->time_have)}
 
-{include file="elements/input.tpl" name=description type=textarea height="100px" autoresize=1}
+{call e field=description type=textarea height="100px" autoresize=1}
 
 {*
-{include file="elements/input.tpl" name=file1 type=file}
+{call e field=file1 type=file}
 *}
-{include file="elements/input.tpl" 
-	name=attachments 
+{call e field=attachments 
 	type=attachments 
 	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
 	preview=[thumb=>'50x50']
 }
 
 
-{include file="elements/input.tpl" type=select name=state options=$m->lang.STATE_OPT|strip_tags}
+{call e field=state  type=select options=$m->lang.STATE_OPT|strip_tags}
 
 
-{include file="elements/input.tpl" type=select name=priority options=$m->lang.PRIORITY_OPT default=5 data_type=numeric}
-{include file="elements/input.tpl" type=date name=deadline}
+{call e field=priority type=select options=$m->lang.PRIORITY_OPT default=5 data_type=numeric}
+{call e field=deadline type=date}
 
 
 
-{include file="elements/input.tpl" type=select name=user_create empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
+{call e field=user_create type=select  empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
 
-{include file="elements/input.tpl" type=select name=user_exec empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
+{call e field=user_exec type=select empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
 
 
 </table>

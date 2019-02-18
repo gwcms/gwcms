@@ -226,7 +226,9 @@ class GW_Common_Module extends GW_Module
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 		
-		$this->searchEmptyVals($vals, $_POST['fields']);
+		if(isset($_POST['fields'])){
+			$this->searchEmptyVals($vals, $_POST['fields']);
+		}
 
 		if ($vals['id'] === '')
 			unset($vals['id']);

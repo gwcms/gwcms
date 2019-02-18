@@ -1,4 +1,9 @@
 {*
+DEPRECATED 2019-02
+use {call e field=
+instead of {include "elements/input.tpl" name=
+*}
+{*
 	type - laukelio tipas, pvz textarea,htmlarea,image,text,bool,select,image,file
 	hideifempty - naudingas kai laukelio tipas read ir nenorima rodyti tuscios eilutes
 	name - laukelio vardas

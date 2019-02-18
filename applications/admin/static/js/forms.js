@@ -175,8 +175,11 @@ var gw_changetrack = {
 			lab.addClass("gwinput-label-modified");
 			
 			if(gw_auto_save)
-				if(lab.find('.fa-floppy-o').length==0)
+				if(lab.find('.fa-floppy-o').length==0){
 					lab.append('<i class="fa fa-floppy-o text-muted"></i>')
+				}else{
+					lab.find('.fa-floppy-o').animate({color: "silver"}, 500 );
+				}
 			
 			return true;
 		}else{
@@ -206,7 +209,7 @@ var gw_changetrack = {
 		var lab = $('#'+obj.attr('id')+'_inputLabel');
 		var labsave = lab.find('.fa-floppy-o');
 		
-		labsave.css({color: "orange" });
+		labsave.animate({color: "orange"}, 500 );
 		
 		
 		$.post(form.attr('action'), data,

@@ -16,7 +16,7 @@
 *}
 
 
-{include file="elements/input.tpl"
+{call e 
 	after_input_f="editadd"
 	type="select_ajax"
 	object_title=GW::l('/M/emails/MAP/childs/email_templates/title')

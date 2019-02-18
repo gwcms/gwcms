@@ -1,9 +1,6 @@
 {$default_form_before_form}
 
-{function "e"}
-	{include file="elements/input.tpl" name=$field}
-{/function}
-
+{include file="elements/input_func.tpl"}
 
 <form id="itemform" class="itemform" action="{$formendpoint|default:$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data" onsubmit="gwcms.beforeFormSubmit(this)"  >
 
@@ -18,11 +15,11 @@
 <input class="gwSysFields" type="hidden" name="act" value="do:{$action|default:"save"}" />
 
 {if !$nohiddenitemid}
-<input class="gwSysFields" type="hidden" name="item[id]" value="{$item->id}" />
+<input class="gwSysFields" type="hidden" name="{call calcElmName field=id}" value="{$item->id}" />
 {/if}
 
 {if !$item->id}
-	<input class="gwSysFields" type="hidden" name="item[temp_id]" value="{$item->temp_id}" />
+	<input class="gwSysFields" type="hidden" name="{call calcElmName field=temp_id}" value="{$item->temp_id}" />
 {else}
 	<input class="gwSysFields" type="hidden" name="last_update_time" value="{$item->update_time}" data-ignorechanges="1" />
 {/if}

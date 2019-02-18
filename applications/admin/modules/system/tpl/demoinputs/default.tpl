@@ -27,7 +27,7 @@
 {$owner=['owner_type'=>'system/demoinputs']}
 
 
-{include file="elements/input_select_mailtemplate.tpl" name=demo_select_mailtemplate}
+{include file="elements/input_select_mailtemplate.tpl" field=demo_select_mailtemplate}
 {include file="elements/input.tpl" name=demo_htmlarea type=htmlarea height="100px"}
 {include file="elements/input.tpl" name=demo_textarea type=textarea  height="100px"}
 
