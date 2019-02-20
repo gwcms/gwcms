@@ -58,7 +58,7 @@
 			
 			{if $after_input_f}
 				{capture assign="after_input"}
-					{include "`$smarty.current_dir`/afterinput/`$after_input_f`.tpl"}
+					{include "elements/afterinput/`$after_input_f`.tpl"}
 				{/capture}
 			{/if}
 			

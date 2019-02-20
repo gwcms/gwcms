@@ -58,7 +58,7 @@
 	<input type="hidden" name="item[id]" value="" />
 	<input type="hidden"  name="item[user_create]" value="{$comment->user_create|default:$app->user->id}"  />
 
-
+	{include "elements/input_func.tpl"}
 	{call e0 field=description height="50px" autoresize=1 type=textarea}
 
 
