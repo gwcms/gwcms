@@ -3,30 +3,30 @@
 
 
 
-{include file="elements/input.tpl" name=mail_from type=text default="Title <email@address.lt>"}
-{include file="elements/input.tpl" name=mail_admin_emails type=text}
-{include file="elements/input.tpl" name=mail_bcc_all type=text}
+{call e field=mail_from type=text default="Title <email@address.lt>"}
+{call e field=mail_admin_emails type=text}
+{call e field=mail_bcc_all type=text}
 
 
-{include file="elements/input.tpl" name=mail_insert_succ type=bool}
+{call e field=mail_insert_succ type=bool}
 
-{include file="elements/input.tpl" name=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
+{call e field=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
 
 
 {capture assign=tmp}
 	<table>
-{include file="elements/input.tpl" name=mail_smtp_host type=text}
-{include file="elements/input.tpl" name=mail_smtp_user type=text}
-{include file="elements/input.tpl" name=mail_smtp_pass type=password}
-{include file="elements/input.tpl" name=mail_smtp_port type=number}
+{call e field=mail_smtp_host type=text}
+{call e field=mail_smtp_user type=text}
+{call e field=mail_smtp_pass type=password}
+{call e field=mail_smtp_port type=number}
 	</table>
 {/capture}
 
-{include file="elements/input.tpl" name=smtp_config type=read value=$tmp rowclass="smtpdetails"}
+{call e field=smtp_config type=read value=$tmp rowclass="smtpdetails"}
 
 {*
 it is in ntconfig!!!
-{include file="elements/input.tpl" name=portion_size type=number}
+{call e field=portion_size type=number}
 *}
 
 

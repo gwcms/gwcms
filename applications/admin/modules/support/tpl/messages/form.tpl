@@ -2,12 +2,12 @@
 
 
 
-{include file="elements/input.tpl" name=user_id}
-{include file="elements/input.tpl" name=name}
-{include file="elements/input.tpl" name=phone}
-{include file="elements/input.tpl" name=email}
-{include file="elements/input.tpl" name=subject}
-{include file="elements/input.tpl" name=message type=textarea}
+{call e field=user_id}
+{call e field=name}
+{call e field=phone}
+{call e field=email}
+{call e field=subject}
+{call e field=message type=textarea}
 
 
 

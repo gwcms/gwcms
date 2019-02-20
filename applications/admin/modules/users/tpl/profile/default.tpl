@@ -16,9 +16,9 @@
 <table class="gwTable">
 
 
-{include file="elements/input.tpl" name=email}
-{include file="elements/input.tpl" name=name}
-{include file="elements/input.tpl" name=surname}
+{call e field=email}
+{call e field=name}
+{call e field=surname}
 
 
 <tr><td></td><td><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></td></tr>
@@ -36,9 +36,9 @@
 
 
 
-{include file="elements/input.tpl" type="password" name=pass_old}
-{include file="elements/input.tpl" type="password" name=pass_new}
-{include file="elements/input.tpl" type="password" name=pass_new_repeat}
+{call e field=pass_old type="password"}
+{call e field=pass_new type="password"}
+{call e field=pass_new_repeat type="password"}
 
 
 <tr><td></td><td><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></td></tr>
@@ -52,12 +52,10 @@
 
 <script>
 
-require(['gwcms'], function(){
-		GW_SW.initBtns();
-})
-
+$(document).ready(function(){
+	GW_SW.initBtns();
 	
-
+});
 </script>
 
 <br />

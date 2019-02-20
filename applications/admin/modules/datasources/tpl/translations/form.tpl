@@ -26,12 +26,12 @@
 {/capture}
 
 
-{include file="elements/input.tpl" name=module after_input=$modopts}
-{include file="elements/input.tpl" name=key}
+{call e field=module after_input=$modopts}
+{call e field=key}
 
 
 {foreach GW::$settings.LANGS as $lncode}
-	{include file="elements/input.tpl" name="value_$lncode" type=textarea height="50px"}
+	{call e field="value_$lncode" type=textarea height="50px"}
 {/foreach}	
 
 

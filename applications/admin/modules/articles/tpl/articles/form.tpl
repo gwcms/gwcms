@@ -10,12 +10,12 @@
 	options=[]
 }
 
-{include file="elements/input.tpl" type=image name=image title=$lang.IMAGE}
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" type=textarea name=short height=70px}
+{call e field=image  type=imagetitle=$lang.IMAGE}
+{call e field=title}
+{call e field=short type=textarea height=70px}
 
-{include file="elements/input.tpl" type=htmlarea name=text layout=wide}
-{include file="elements/input.tpl" type=bool name=active}
+{call e field=text type=htmlarea layout=wide}
+{call e field=active type=bool}
 
 
 

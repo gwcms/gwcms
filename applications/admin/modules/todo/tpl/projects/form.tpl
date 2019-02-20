@@ -1,11 +1,11 @@
 {include file="default_form_open.tpl"}
 
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=description type=textarea height=100px}
-{include file="elements/input.tpl" name=color type=color}
-{include file="elements/input.tpl" name=fcolor type=select options=[white=>white,black=>black,orange=>orange,yellow=>yellow,blue=>blue,green=>green,brown=>brown,red=>red]}
+{call e field=title}
+{call e field=description type=textarea height=100px}
+{call e field=color type=color}
+{call e field=fcolor type=select options=[white=>white,black=>black,orange=>orange,yellow=>yellow,blue=>blue,green=>green,brown=>brown,red=>red]}
 
-{include file="elements/input.tpl" name=active type=bool default=1}
+{call e field=active type=bool default=1}
 
 
 {include file="default_form_close.tpl"}

@@ -4,20 +4,20 @@
 
 {if $item->path==separator}
 	{foreach GW::$settings.LANGS as $lncode}
-		{include file="elements/input.tpl" name="title_$lncode"}
+		{call e field="title_$lncode"}
 	{/foreach}	
 
 {else}
-	{include file="elements/input.tpl" name=path}
-	{include file="elements/input.tpl" name=pathname}
+	{call e field=path}
+	{call e field=pathname}
 
-	{include file="elements/input.tpl"  name=views type=code_json height=200px nopading=1}  
-	{include file="elements/input.tpl"  name=orders type=code_json height=200px nopading=1}  
+	{call e field=views type=code_json height=200px nopading=1}  
+	{call e field=orders type=code_json height=200px nopading=1}  
 
 
 	{$ck_options=[toolbarStartupExpanded=>false]}
-	{include file="elements/input.tpl" name=notes type=htmlarea width="100%"}
-	{include file="elements/input.tpl" name=active type="bool"}
+	{call e field=notes type=htmlarea width="100%"}
+	{call e field=active type="bool"}
 
 {/if}
 

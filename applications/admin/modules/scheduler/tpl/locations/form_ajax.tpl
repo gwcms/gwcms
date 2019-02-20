@@ -1,17 +1,14 @@
 
 
 {function name="df_inputs"}
-	{*$dl_checklist_enabled=1*}
-	<td></td>
-	
+
 	{foreach $m->list_config.dl_fields as $field}
-		{$field}
-		{if strpos($field, "value_")===0}
 		
-			{call e field=$field type=textarea height="50px"}
-		
+		{if strpos($field, 'title')!==false}
+			{call e field=$field}
+		{elseif $file=='123'}
 		{else}
-			<td>{$item->$field}</td>
+			<td></td>
 		{/if}
 
 	{/foreach}

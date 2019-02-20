@@ -2,7 +2,7 @@
 
 
 
-{include file="elements/input.tpl" name=config type=code_json height=700px nopading=1 layout=wide}  
+{call e field=config type=code_json height=700px nopading=1 layout=wide}  
 
 
 

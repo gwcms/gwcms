@@ -11,8 +11,8 @@ configure tabs by placing config array in form.tpl:
 
 for each input specity associations with tabs:
 
-	{include file="elements/input.tpl" name=username tabs=[base]}
-	{include file="elements/input.tpl" name=phone tabs=[contacts]}
+	{call e field=username tabs=[base]}
+	{call e field=phone tabs=[contacts]}
 
 add tab titles to lang.xml:
 	<i id="INPUT_TABS">

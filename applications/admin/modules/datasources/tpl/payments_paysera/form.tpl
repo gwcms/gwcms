@@ -1,8 +1,8 @@
 {include file="default_form_open.tpl"}
 
-{include file="elements/input.tpl" name=title_lt}
-{include file="elements/input.tpl" name=title_en}
-{include file="elements/input.tpl" name=title_ru}
+{call e field=title_lt}
+{call e field=title_en}
+{call e field=title_ru}
 
 
 

@@ -2,16 +2,16 @@
 
 
 
-{include file="elements/input.tpl" name=name}
-{include file="elements/input.tpl" name=error_code}
-{include file="elements/input.tpl" name=running}
-{include file="elements/input.tpl" name=insert_time}
-{include file="elements/input.tpl" name=halt_time}
-{include file="elements/input.tpl" name=speed}
+{call e field=name}
+{call e field=error_code}
+{call e field=running}
+{call e field=insert_time}
+{call e field=halt_time}
+{call e field=speed}
 
-{include file="elements/input.tpl" type=textarea name=output}
+{call e field=output type=textarea}
 
-{include file="elements/input.tpl" type=textarea name=arguments}
+{call e field=arguments type=textarea}
 
 
 {include file="default_form_close.tpl" extra_fields=[id,insert_time,update_time,halt_time]}

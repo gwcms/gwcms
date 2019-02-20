@@ -9,7 +9,7 @@ module should have viewOptions viewForm
 
 {*
 deprecated use this like
-		{include file="elements/input.tpl"
+		{call e field=
 			after_input_f="editadd"
 			name="queue_id"
 			type="select_ajax"
@@ -201,7 +201,7 @@ deprecated use this like
 	{$tag_params["data-selected"]=$value}
 {/if}
 
-{include file="elements/input.tpl" 
+{call e field=$name
 	type="select"
 	after_input=$addnew
 	class="`$class` editSelect editSelect`$GLOBALS.input_edit_select`"

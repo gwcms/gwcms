@@ -7,14 +7,14 @@
 
 
 
-{include file=$f name=from hidden_note=$m->lang.email_note default=$m->config->default_sender}
-{include file=$f name=to hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
-{include file=$f name=subject}
+{call e field=from hidden_note=$m->lang.email_note default=$m->config->default_sender}
+{call e field=to hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
+{call e field=subject}
 
 {if $item->plain}
-	{include file="elements/input.tpl" name=body type=textarea height=100px}
+	{call e field=body type=textarea height=100px}
 {else}
-	{include file="elements/input.tpl" name=body type=htmlarea layout=wide}
+	{call e field=body type=htmlarea layout=wide}
 {/if}
 
 

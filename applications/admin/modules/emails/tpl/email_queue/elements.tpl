@@ -7,19 +7,19 @@
 	{if $field==''}
 		
 	{elseif in_array($field, [to,from,subject,status])}	
-		{include file="elements/input.tpl" name=$field type=text}
+		{call e field=$field type=text}
 	{elseif $field=="body"}
 		
 		{if $item->plain}
-			{include file="elements/input.tpl" name=$field type=textarea height=100px}
+			{call e field=$field type=textarea height=100px}
 		{else}
-			{include file="elements/input.tpl" name=$field type=htmlarea layout=wide}
+			{call e field=$field type=htmlarea layout=wide}
 		{/if}
 	
 	{elseif $field=="plain"}
-		{include file="elements/input.tpl" name=$field type=bool}
+		{call e field=$field type=bool}
 	{else}
-		{include file="elements/input.tpl" name=$field type=read}
+		{call e field=$field type=read}
 	{/if}
 
 {/function}

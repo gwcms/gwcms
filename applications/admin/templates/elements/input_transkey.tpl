@@ -69,7 +69,7 @@
 	function transkey{$name}changed(){ $('#transkeyControls{$name}').trigger('chageevent');  }
 </script>
 
-{include file="elements/input.tpl" 
+{call e field=$name
 	type=select_ajax 
 	maximumSelectionLength=1
 	options=[]

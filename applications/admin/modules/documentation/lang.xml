@@ -40,7 +40,14 @@
 				<i id="info">
 					<i id="model">GW_Doc_Entry</i>
 				</i>
-			</i>			
+			</i>
+			<i id="features">
+				<i id="title">Features</i>
+				<i id="info">
+					<i id="model">GW_Doc_feature</i>
+				</i>
+			</i>				
+									
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->

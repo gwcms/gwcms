@@ -1,7 +1,7 @@
 {include file="default_form_open.tpl"}
 
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=description type=textarea height="100px"}
-{include file="elements/input.tpl" type=bool name=active}
+{call e field=title}
+{call e field=description type=textarea height="100px"}
+{call e field=active type=bool}
 
 {include file="default_form_close.tpl"}

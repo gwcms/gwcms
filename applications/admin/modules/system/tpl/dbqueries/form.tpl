@@ -2,8 +2,8 @@
 
 {$width_title=70px}
 
-{include file="elements/input.tpl" name=name}
+{call e field=name}
 
-{include file="elements/input.tpl"  name=sql type=code codelang=sql height=400px layout=wide nopading=1}  
+{call e field=sql type=code codelang=sql height=400px layout=wide nopading=1}  
 
 {include file="default_form_close.tpl"}

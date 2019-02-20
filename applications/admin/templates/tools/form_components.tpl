@@ -25,7 +25,7 @@
 		{/if}
 		
 		
-		{include file="elements/input.tpl" notr=true value=$tmpval}
+		{call e field=$name notr=true value=$tmpval}
 		
 		
 		{if $col >= $fields_config.cols || $col+$next.colspan-1 > $fields_config.cols}

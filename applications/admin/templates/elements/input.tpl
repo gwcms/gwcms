@@ -122,7 +122,7 @@ instead of {include "elements/input.tpl" name=
 		{foreach $langs as $ln_code}
 			
 			<td class="input_td col_i18n_{$ln_code} {$inputContainClass}" width="{$width_input}" {if $wide}colspan="2"{/if} data-type="inputc">
-				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
+				{call e0 field="`$name`_`$ln_code`"}  
 			</td>
 		{/foreach}
 	{else}
@@ -153,7 +153,7 @@ instead of {include "elements/input.tpl" name=
 				{call name="langswitch"}
 					{if $i18n==4 && !$width}{$width="calc(100% - 25px)"}{/if}
 				
-				{include file="elements/input0.tpl" name="`$name`_`$ln_code`"}  
+				{call e0 field="`$name`_`$ln_code`"}  
 				</span>
 			{/foreach}
 		{else}

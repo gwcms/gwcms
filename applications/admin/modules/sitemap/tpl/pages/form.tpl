@@ -46,34 +46,33 @@
 
 
 
-{include file="elements/input.tpl" name=type type=select options=$m->lang.TYPE_OPT}
+{call e field=type type=select options=$m->lang.TYPE_OPT}
 
 
-{include file="elements/input.tpl" name=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid}
-{include file="elements/input.tpl" name=pathname}
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=meta_description}
+{call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid}
+{call e field=pathname}
+{call e field=title}
+{call e field=meta_description}
 
 
-{include file="elements/input.tpl" name=template_id options=$lang.EMPTY_OPTION+$m->getTemplateList() type=select}
-{include file="elements/input.tpl" name=link}
+{call e field=template_id options=$lang.EMPTY_OPTION+$m->getTemplateList() type=select}
+{call e field=link}
 
 {*
-{include file="elements/input.tpl" name=gallery_id type=gallery_folder title=$lang.GALLERY_FOLDER}
+{call e field=gallery_id type=gallery_folder title=$lang.GALLERY_FOLDER}
 *}
 
 
-{include file="elements/input.tpl" type=bool name=active}
+{call e field=active type=bool}
 
 {if $update}
-	{include file="elements/input.tpl" type=bool name=in_menu}
+	{call e field=in_menu type=bool}
 	
 	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
 	{$ck_set='medium'}
 	{foreach $item->getInputs() as $input}
-		{include file="elements/input.tpl" 
-			name=$input->get(name) 
+		{call e field=$input->get(name) 
 			type=$input->get(type) 
 			note=$input->get(note) 
 			title=$input->get(title) 

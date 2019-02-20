@@ -1,12 +1,12 @@
 {include file="default_form_open.tpl"}
 
 
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=name}
-{include file="elements/input.tpl" name=params type=code_json height=100px nopading=1}  
-{include file="elements/input.tpl" name=time_match}
+{call e field=title}
+{call e field=name}
+{call e field=params type=code_json height=100px nopading=1}  
+{call e field=time_match}
 
-{include file="elements/input.tpl" name=separate_process type=bool}
+{call e field=separate_process type=bool}
 
 
 

@@ -1,84 +1,76 @@
 {include file="default_form_open.tpl"}
 
 
-{include file="elements/input.tpl" name=title}
-{include file="elements/input.tpl" name=title_short}
+{call e field=title}
+{call e field=title_short}
 
 
 {if $item->id}
 	
-	{include file="elements/input.tpl" name=path type=read}
-	{include file="elements/input.tpl" name=type type=read value_options=$m->lang.OPTIONS.page_view_types}
+	{call e field=path type=read}
+	{call e field=type type=read value_options=$m->lang.OPTIONS.page_view_types}
 	
 	
 	{if ($app->user->isRoot() && $smarty.get.shift_key==1) || $smarty.get.update}
 		
-		{include file="elements/input.tpl" name=condition type=textarea autoresize=1 height=25}
-		{include file="elements/input.tpl" name=order type=text autoresize=1 height=25}
-		{include file="elements/input.tpl" name=fields type=textarea autoresize=1 height=25}
-		{include file="elements/input.tpl" name=page_by type=number autoresize=1 height=25}
+		{call e field=condition type=textarea autoresize=1 height=25}
+		{call e field=order type=text autoresize=1 height=25}
+		{call e field=fields type=textarea autoresize=1 height=25}
+		{call e field=page_by type=number autoresize=1 height=25}
 	{else}
 		
 		{if $item->condition}
-			{include file="elements/input.tpl" name=condition type=read}
+			{call e field=condition type=read}
 		{/if}
 
 		{if $item->order}
-			{include file="elements/input.tpl" name=order type=read}
+			{call e field=order type=read}
 		{/if}
 
 		{if $item->fields}
 			{$item->set(fields,json_encode(json_decode($item->fields), $smarty.const.JSON_PRETTY_PRINT))}
-			{include file="elements/input.tpl" name=fields type=read}
+			{call e field=fields type=read}
 		{/if}
 
 		{if $item->page_by}
-			{include file="elements/input.tpl" name=page_by type=read}
+			{call e field=page_by type=read}
 		{/if}		
-		
 		
 	{/if}
 	
 	
 
 {else}
-	{include file="elements/input.tpl" name=path type=select options=$item->path_options options_fix=1}
+	{call e field=path type=select options=$item->path_options options_fix=1}
 	
 	{if $smarty.get.saveasorder==1}
 		<input name="item[type]" type="hidden" value="order">
-		{include file="elements/input.tpl" type=text name=order}
+		{call e field=order type=text}
 	{else}	
-
-		{*{include file="elements/input.tpl" name=type type=select options=$m->lang.OPTIONS.page_view_types}*}
-
+		{*{call e field=type type=select options=$m->lang.OPTIONS.page_view_types}*}
 
 
-		{include file="elements/input.tpl" type=bool name=order_enabled}
-		{include file="elements/input.tpl" type=text name=order rowclass="orderinput"}
 
-		{include file="elements/input.tpl" type=bool name=condition_enabled}
-		{include file="elements/input.tpl" type=textarea name=condition height=50 rowclass="conditioninput"}
+		{call e field=order_enabled type=bool}
+		{call e field=order type=text rowclass="orderinput"}
 
+		{call e field=condition_enabled type=bool}
+		{call e field=condition type=textarea height=50 rowclass="conditioninput"}
 
-		{include file="elements/input.tpl" type=bool name=fields_enabled}
-		{include file="elements/input.tpl" type=textarea name=fields height=50 rowclass="fieldsinput"}
+		{call e field=fields_enabled type=bool}
+		{call e field=fields type=textarea height=50 rowclass="fieldsinput"}
 
-
-		{include file="elements/input.tpl" type=bool name=pageby_enabled}
-		{include file="elements/input.tpl" type=number name=page_by rowclass="pagebyinput"}
+		{call e field=pageby_enabled type=bool}
+		{call e field=page_by type=number rowclass="pagebyinput"}
 	
 	{/if}
-
 {/if}
 
-{include file="elements/input.tpl" type=number name=priority}
-{include file="elements/input.tpl" type=bool name=default}
-{include file="elements/input.tpl" type=bool name=regular}
-{include file="elements/input.tpl" type=bool name=dropdown}
-{include file="elements/input.tpl" type=bool name=active default=1}
-
-
-
+{call e field=priority type=number}
+{call e field=default type=bool}
+{call e field=regular type=bool}
+{call e field=dropdown type=bool}
+{call e field=active type=bool default=1}
 
 
 {function "setupEnabler"}
@@ -90,8 +82,6 @@
 				}
 			}).change();	
 {/function}
-
-
 
 <script>
 	require(['gwcms'], function(){

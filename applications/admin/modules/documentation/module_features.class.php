@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Features extends GW_Common_Module_Tree_Data
+class Module_Items extends GW_Common_Module_Tree_Data
 {	
 
 	
