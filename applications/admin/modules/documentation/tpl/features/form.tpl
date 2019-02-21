@@ -14,4 +14,4 @@
 
 
 
-{include file="default_form_close.tpl"}
+{include file="default_form_close.tpl" submit_buttons=[apply]}

@@ -12,6 +12,7 @@
 			<td>
 	<div id="gwtree" class="demo"></div>
 			</td>
+			<td>&nbsp;</td>
 			<td style="width:99%">
 				<iframe id="gwtreeedit" style="width:99%" frameborder="0"></iframe>
 			</td>
@@ -61,7 +62,15 @@
 								else
 									gw_adm_sys.runPackets(data);
 							}});	
-					}					
+					}		
+					
+					function openEdit(id)
+					{
+						
+						$('#gwtreeedit').attr('src', gw_navigator.url(formurl, { id: id, clean: 1 }));							
+						$('#gwtreeedit').show();
+						$('#gwtreeedit').data('id', id)
+					}
 					
 					
 					
@@ -70,9 +79,10 @@
 							if(data.selected.length) {
 								console.log('The selected node is: ' + data.instance.get_node(data.selected[0]).text);
 								
-								if(data.selected.length == 1){
-									$('#gwtreeedit').attr('src', gw_navigator.url(formurl, { id: data.instance.get_node(data.selected[0]).id, clean: 1 }));
+								if(data.selected.length != 1 || $('#gwtreeedit').data('id') != data.instance.get_node(data.selected[0]).id ){
+									$('#gwtreeedit').hide();
 								}
+								
 							}
 						}).on("create_node.jstree", function (e, data) {
 							console.log({ "event":e, "data": data });
@@ -99,9 +109,23 @@
 					
 							action({ act: "doMoveNode", id: data.node.id, parent: data.parent, old_parent: data.old_parent, priority:data.position, old_priority:data.old_position  });
 						}).on("dblclick.jstree", function (e, data) {
+							
+							var instance = $.jstree.reference(this),
+							node = instance.get_node(e.target);		
+							if(node.id){
+									openEdit(node.id);					
+							}
+							
 							console.log({ "event":e, "data": data });
+						}).on("deselect_node.jstree", function (e, data) {
+							console.log({ "event":e, "data": data });
+							
 
-						})					
+						})	
+						
+						
+						
+						
 								
 						
 								
