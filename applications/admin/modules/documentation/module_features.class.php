@@ -70,8 +70,7 @@ class Module_Features extends GW_Common_Module_Tree_Data
 			    "parent"=>$item->parent_id==-1 ? '#' : $item->parent_id,
 			    "id"=>$item->id,
 			    //"state" => ["opened" => true, "selected" => true],
-			    "type" => 't'.$item->type,
-			    "position" => $item->priority
+			    "type" => 't'.$item->type
 			];
 			$list[] = $vals;
 		}
@@ -148,6 +147,7 @@ class Module_Features extends GW_Common_Module_Tree_Data
 		$item->title = "Unnamed";
 		$item->priority = 9999999;
 		$item->insert();
+		$item->fixOrder();
 		
 		die(json_encode($item->toArray()));
 	}
