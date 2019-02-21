@@ -837,7 +837,7 @@ class GW_Data_Object
 	/**
 	 * specify condition if items used for custom grouping
 	 */
-	function move($where, $conditions = '')
+	function move($where, $conditions = '', $times = 1)
 	{
 		$db = $this->getDB();
 		$id_field = $this->primary_fields[0];
@@ -847,26 +847,31 @@ class GW_Data_Object
 		
 
 		$rows = $db->fetch_one_column($q, $id_field);
+		$oldrows = $rows;
 
-		if (($index = array_search($id, $rows)) === false)
-			return true;
+
 
 		//dump(Array('where'=>$where,'item_id'=>$id, 'index'=>$index, 'rows'=>$rows));
+		for($loop=0;$loop < $times; $loop++){
+			
+			if (($index = array_search($id, $rows)) === false)
+				return true;		
+		
+			if ($where == 'up') {
+				if ($index == 0)
+					return true;
 
-		if ($where == 'up') {
-			if ($index == 0)
-				return true;
+				$tmp = $rows[$index - 1];
+				$rows[$index - 1] = $rows[$index];
+				$rows[$index] = $tmp;
+			}elseif ($where == 'down') {
+				if ($index == count($rows) - 1)
+					return true;
 
-			$tmp = $rows[$index - 1];
-			$rows[$index - 1] = $rows[$index];
-			$rows[$index] = $tmp;
-		}elseif ($where == 'down') {
-			if ($index == count($rows) - 1)
-				return true;
-
-			$tmp = $rows[$index + 1];
-			$rows[$index + 1] = $rows[$index];
-			$rows[$index] = $tmp;
+				$tmp = $rows[$index + 1];
+				$rows[$index + 1] = $rows[$index];
+				$rows[$index] = $tmp;
+			}
 		}
 
 		//dump(Array('rows'=>$rows));
@@ -876,6 +881,8 @@ class GW_Data_Object
 			$list[] = Array($id_field => $row, 'priority' => $i);
 
 		$db->_multi_insert($this->table, $list, true);
+		
+		return [$oldrows,$rows];
 	}
 
 	public $order_limit_fields = Array();
@@ -899,6 +906,27 @@ class GW_Data_Object
 	function fixOrder()
 	{
 		$this->move("", $this->getLimitOrdCondition());
+	}
+	
+	
+	//on drag & drop new position given, so push up all
+	function updatePositions($oldpos, $newpos)
+	{
+		$cond = $this->getLimitOrdCondition();
+		$oldpos = (int)$oldpos;
+		$newpos = (int)$newpos;
+		
+		if($oldpos == $newpos)
+			return true;
+		
+		$dir = $newpos > $oldpos ? 'down':'up';
+		
+		$rangelow = min($oldpos, $newpos);
+		$rangelhi  = max($oldpos, $newpos);
+		
+		
+		$pos_update = $this->move($dir, $cond, $rangelhi-$rangelow);
+		return [$dir, $cond, $rangelhi-$rangelow, json_encode($pos_update)];
 	}
 
 	function savePositions($shifts, $conditions = '')

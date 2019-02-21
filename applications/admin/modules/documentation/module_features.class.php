@@ -9,6 +9,8 @@ class Module_Features extends GW_Common_Module_Tree_Data
 	{	
 		parent::init();
 		
+		$this->app->carry_params['clean']=1;		
+		
 	}
 
 	
@@ -64,7 +66,7 @@ class Module_Features extends GW_Common_Module_Tree_Data
 		
 		foreach($list0 as $item){
 			$vals=[
-			    "text"=>$item->title,
+			    "text"=>$item->title, //. " ($item->id) ($item->priority)",debug
 			    "parent"=>$item->parent_id==-1 ? '#' : $item->parent_id,
 			    "id"=>$item->id,
 			    //"state" => ["opened" => true, "selected" => true],
@@ -109,23 +111,23 @@ class Module_Features extends GW_Common_Module_Tree_Data
 		if (!$item = $this->getDataObjectById())
 			return false;
 
+		$oldparent = $item->parent_id;
+		$newparent = (string)($_GET['parent']=='#' ? -1 : $_GET['parent']); // string nes jei tipai nesutaps bus nustatytas pokytis
 		
-		$item->parent_id = $_GET['parent']=='#' ? -1 : $_GET['parent'];
-		$item->priority = $_GET['priority'];
+		$item->set('parent_id', $newparent);
 			
-		if($item->isChanged()){
+		if($item->isChanged() || $_GET['old_priority']!=$_GET['priority'] ){
 			
-
-			
-			$item->updateChanged();
-			
-			if(isset($item->changed_fields['priority'])){
-				//$item->fixOrder();
-				//d::dumpas($item->getDB()->last_query);
-			}			
-			
-			
-			$this->setMessage(["text"=>GW::l("/g/SAVE_SUCCESS"), "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+			if(isset($item->changed_fields['parent_id'])){
+				$item->priority = $_GET['priority'];
+				$item->updateChanged();
+				$item->fixOrder();
+				$this->setMessage(["text"=>"Moved to new parent $oldparent -> {$item->parent_id}", "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+				
+			}else{
+				$inf = $item->updatePositions($_GET['old_priority'], $_GET['priority']);
+				$this->setMessage(["text"=>'Positions updated', "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+			}
 		}else{
 			$this->setMessage(["text"=>GW::l("/g/NO_CHANGES"), "type"=>GW_MSG_INFO, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
 		}
@@ -137,6 +139,17 @@ class Module_Features extends GW_Common_Module_Tree_Data
 		
 		if(!$this->sys_call)
 			$this->jump();
-	}	
+	}
+
+	function doCreateNode()
+	{
+		$item = $this->model->createNewObject();
+		$item->parent_id = $_GET['parent'];
+		$item->title = "Unnamed";
+		$item->priority = 9999999;
+		$item->insert();
+		
+		die(json_encode($item->toArray()));
+	}
 
 }

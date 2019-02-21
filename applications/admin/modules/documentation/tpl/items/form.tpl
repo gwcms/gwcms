@@ -1,16 +1,16 @@
 {include file="default_form_open.tpl"}
 
-{include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
+{call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
-{include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
+{call e field=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
-{include file="elements/input.tpl" name=title}
+{call e field=title}
 
 
-{include file="elements/input.tpl" name=text type=htmlarea}
+{call e field=text type=htmlarea}
 
 {$curr=date('Y-m-d H:i:s')}
-{include file="elements/input.tpl" name=time default=$curr}
+{call e field=time default=$curr}
 
 
 

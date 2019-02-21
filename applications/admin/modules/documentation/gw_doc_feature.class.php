@@ -8,7 +8,10 @@ class GW_Doc_Feature extends GW_Composite_Data_Object
 	var $table = 'gw_documentation';
 	
 	var $calculate_fields = Array('child_count'=>1, 'path'=>'getPath', 'short_descr'=>1);
-	var $default_order = 'type DESC, time DESC';		
+	var $default_order = 'type DESC, time DESC';
+	public $children=[];
+	public $id_path;
+	public $parent_path;
 	
 	function config()
 	{
@@ -133,5 +136,74 @@ class GW_Doc_Feature extends GW_Composite_Data_Object
 		}
 		
 		parent::eventHandler($event, $context_data);
-	}	
+	}
+	
+	
+	public $order_limit_fields = ['parent_id'];
+		
+	function getFullTree()
+	{
+		$list = $this->findAll(false, ['select'=>'id, title, active, parent_id','key_field'=>'id','order'=>'priority']);
+		
+		//$list = [];
+		/*
+		$get_id_path = function($item) use ($list0){ 
+			$tmp = $item;
+			$item->id_path = [];
+			
+			while($tmp){
+				$tmp = $list0[$tmp->parent_id] ?? false;
+				
+				
+				if($tmp)
+					array_unshift($item->id_path, $tmp->id);
+					
+			}
+			
+			$item->parent_path = implode('/', $item->id_path);
+			$tmpp = $item->id_path;
+			$tmpp[] = $item->id;
+			$item->id_path = implode('/', $tmpp);	
+		};
+		
+		
+		foreach($list0 as $idx => $item)
+			$get_id_path($item);
+			
+		
+		while($list0){
+			foreach($list0 as $idx => $item){
+				
+			}
+				
+		}*/
+		
+		
+		$buildTreeFromList = function (&$addto, $parent_id = -1) use (&$list, &$buildTreeFromList ) {
+			foreach ($list as $item) {
+				if ($item->parent_id == $parent_id) {
+					$vals = $item->toArray();
+					unset($vals['parent_id']);
+					
+					
+				
+					$buildTreeFromList($vals['children'], $item->id);
+					$addto[] = $vals;
+				}
+			}
+		};
+
+		$listnew=(object)['children'=>[]];
+		$buildTreeFromList($listnew->children);
+		
+		
+		return $listnew;
+	}
+	
+	
+	function getIcon()
+	{
+		return $this->type==0 ?  "fa fa-file": "fa fa-folder";
+	}
+	
 }
