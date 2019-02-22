@@ -587,8 +587,9 @@ class GW_Application
 	}
 	
 	function getMessagesAsPackets(&$packets)
-	{
-		$messages=$this->acceptMessages(true);
+	{		
+		$messages=$this->acceptMessages(true, ['sysmsg'=>1]);
+				
 		foreach($messages as $msg)
 		{
 			$msg['action'] = 'notification';

@@ -2,7 +2,8 @@
 
 {call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
-{call e field=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
+{call e field=type type=select_ajax modpath="documentation/types" after_input_f=editadd preload=1 options=[]}
+
 
 {call e field=title}
 
@@ -11,6 +12,8 @@
 
 {$curr=date('Y-m-d H:i:s')}
 {call e field=time default=$curr}
+
+
 
 
 

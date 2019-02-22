@@ -435,8 +435,7 @@ class GW_Module
 		
 		if(isset($_GET['json'])){
 			
-			$messages=$this->app->acceptMessages(true,['sysmsg'=>1]);
-			echo json_encode($messages);
+			$this->app->outputPackets(true);
 			exit;
 		}
 		

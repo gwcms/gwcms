@@ -239,8 +239,21 @@ class GW_Admin_Application extends GW_Application
 		$raw = file_get_contents($path, false, stream_context_create($opts));
 		$res = json_decode($raw);
 		
+	
+		if(isset($_GET['packets'])){
+			if(is_array($res)){
+				foreach($res as $packet)
+					if($packet->action == 'result')
+						$res['result']  = $packet;
+
+			}
+		}
+		
+		
 		if(!$res)
 			$res=['response_format_error'=>1,'raw_response'=>$raw];
+		
+		$res['request_uri']=$path;
 		
 		$this->reopenSessionIfClosed();
 		

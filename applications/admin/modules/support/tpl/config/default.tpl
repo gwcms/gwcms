@@ -3,7 +3,7 @@
 {*$nowrap=1*}
 
 
-{include file="elements/input.tpl" name=notify_mail type=text}
+{call e field=notify_mail type=text}
 
 
 
