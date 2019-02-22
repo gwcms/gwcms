@@ -4,7 +4,7 @@
 {*$nowrap=1*}
 
 
-{include file="elements/input.tpl" name=encryptkey type=password}
+{call e field=encryptkey type=password}
 
 
 

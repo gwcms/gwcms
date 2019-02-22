@@ -6,16 +6,16 @@
 {*
 
 {foreach GW::$settings.LANGS as $lncode}
-	{include file="elements/input.tpl" name="title_$lncode" type=text}
+	{call e field="title_$lncode" type=text}
 {/foreach}	
 *}
 
-{include file="elements/input.tpl" name="title" type=text}
-{include file="elements/input.tpl" name="username" type=text}
-{include file="elements/input.tpl" name="pass" type=text}
-{include file="elements/input.tpl" name="comments" type=text}
+{call e field="title" type=text}
+{call e field="username" type=text}
+{call e field="pass" type=text}
+{call e field="comments" type=text}
 
-{include file="elements/input.tpl" name="encryped" type=read}
+{call e field="encryped" type=read}
 
 
 

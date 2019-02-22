@@ -3,11 +3,11 @@
 {*$nowrap=1*}
 
 
-{include file="elements/input.tpl" name=customer_group type=select options=$options.customer_group empty_option=1}
+{call e field=customer_group type=select options=$options.customer_group empty_option=1}
 
-{include file="elements/input.tpl" name=login_with_fb type=bool}
-{include file="elements/input.tpl" name=fb_app_id type=text}
-{include file="elements/input.tpl" name=fb_app_secret type=password}
+{call e field=login_with_fb type=bool}
+{call e field=fb_app_id type=text}
+{call e field=fb_app_secret type=password}
 
 
 

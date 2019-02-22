@@ -1,9 +1,9 @@
 {include file="default_form_open.tpl"  changes_track=1 auto_save=1 form_width="100%"}
 {$width_title="100px"}
 
-{include file="elements/input.tpl" name=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
+{call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
-{include file="elements/input.tpl" name=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
+{call e field=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
 
 {*contentsCss=>'applications/admin/css/ckstyle1.css',*}
 {*
@@ -18,10 +18,10 @@
 	enterMode=>'CKEDITOR.ENTER_BR'
 ]}
 
-{include file="elements/input.tpl" name=text type=htmlarea layout=wide}
+{call e field=text type=htmlarea layout=wide}
 
 {$curr=date('Y-m-d H:i:s')}
-{include file="elements/input.tpl" name=time default=$curr}
+{call e field=time default=$curr}
 
 
 

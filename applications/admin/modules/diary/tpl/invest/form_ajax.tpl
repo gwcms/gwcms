@@ -5,7 +5,7 @@
 	{foreach $m->list_config.dl_fields as $field}
 		
 		{if in_array($field, [sum,object,platform,strategy,take_profit,stop_loss,profit,termination_date])}
-			{include file="elements/input.tpl" name=$field}
+			{call e field=$field}
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}

@@ -3,8 +3,8 @@
 {*$nowrap=1*}
 
 
-{include file="elements/input.tpl" name=encryptkey type=password}
-{include file="elements/input.tpl" name=encryptkey_repeat type=password}
+{call e field=encryptkey type=password}
+{call e field=encryptkey_repeat type=password}
 
 
 <input type='hidden' name='id' value='{$smarty.get.id}'>

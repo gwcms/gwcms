@@ -9,12 +9,12 @@
 			
 			{if $item->encrypted}
 				{$tmp=base64_encode($item->get($field))}
-				{include file="elements/input.tpl" name=$field type=read value=$tmp}
+				{call e field=$field type=read value=$tmp}
 			{else}
-				{include file="elements/input.tpl" name=$field type=text}
+				{call e field=$field type=text}
 			{/if}
 		{elseif $field=="title"}
-			{include file="elements/input.tpl" name=$field type=text}
+			{call e field=$field type=text}
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}

@@ -2,10 +2,9 @@
 {$width_title=100px}
 
 
-{include file="elements/input.tpl" name=title}
+{call e field=title}
 
-{include file="elements/input.tpl" 
-	name="mdbid"
+{call e field="mdbid"
 	type=select_ajax 
 	maximumSelectionLength=1
 	options=[]
@@ -15,14 +14,14 @@
 
 
 {include file="elements/input.tpl" type=textarea name=description autoresize=1 height=50px}
-{include file="elements/input.tpl" name=rate type=select options=[0,1,2,3,4,5,6,7,8,9,10]}
+{call e field=rate type=select options=[0,1,2,3,4,5,6,7,8,9,10]}
 
 {if $item->id}
-	{include file="elements/input.tpl" name=recommend}
+	{call e field=recommend}
 
-	{include file="elements/input.tpl" name=image1 type=image}
-	{include file="elements/input.tpl" name=name_orig}
-	{include file="elements/input.tpl"  name=imdb type=code_json height=200px nopading=1 hidden_note="Clean area, and it will be updated"}  
+	{call e field=image1 type=image}
+	{call e field=name_orig}
+	{call e field=imdb type=code_json height=200px nopading=1 hidden_note="Clean area, and it will be updated"}  
 {/if}
 
 {include file="default_form_close.tpl"}

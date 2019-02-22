@@ -1,17 +1,17 @@
 {include file="default_form_open.tpl" form_width=1000px}
 
 
-{include file="elements/input.tpl" name=sum}
-{include file="elements/input.tpl" name=object}
+{call e field=sum}
+{call e field=object}
 
-{include file="elements/input.tpl" name=platform}
-{include file="elements/input.tpl" name=strategy type=textarea height="50px" autoresize=1}
+{call e field=platform}
+{call e field=strategy type=textarea height="50px" autoresize=1}
 
-{include file="elements/input.tpl" name=take_profit}
-{include file="elements/input.tpl" name=stop_loss}
+{call e field=take_profit}
+{call e field=stop_loss}
 
-{include file="elements/input.tpl" name=profit}
-{include file="elements/input.tpl" name=termination_date type=date}
+{call e field=profit}
+{call e field=termination_date type=date}
 
 
 
