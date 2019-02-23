@@ -1,5 +1,7 @@
 <?php
 
+echo date("Y-m-d H:i:s");
+echo "<br/>";
 //test
 //this is for automatic updates, called from github after push to master branch
 //if you would like get realtime updates email me vidmantas.norkus@gw.lt your http://project.com/pullupdates.php link
