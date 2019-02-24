@@ -1,0 +1,1 @@
+ALTER TABLE `tom_order_items` ADD `removed` TINYINT NOT NULL DEFAULT '0' AFTER `state` ;

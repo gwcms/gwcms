@@ -643,13 +643,16 @@ var gwcms = {
 		$("#dialog:ui-dialog").dialog("destroy");
 		gwcms.dialog_cnt++;
 
-		var id = 'ajaxdialog' + gwcms.dialog_cnt;
-
-		$('body').append('<div id="' + id + '"></div>');
-		
 		if(conf.title)
 		{
 			$('#' + id).attr('title', conf.title)
+		}
+		
+		if(conf.elem){
+			id = conf.elem; 
+		}else{
+			var id = 'ajaxdialog' + gwcms.dialog_cnt;
+			$('body').append('<div id="' + id + '"></div>');
 		}
 
 		if (conf.iframe) {
@@ -660,18 +663,19 @@ var gwcms = {
 			$('#' + id).html(conf.html)
 		}
 
-		var dconf = {
-			buttons: {},
-			width: $(document).width() / 10 * 6,
-			height: $(window).height() / 10 * 6
-		}
-
-		dconf.buttons[translations.CLOSE] = function () {
-			$(this).dialog("close");
-			$('#' + id).dialog('destroy');
-		}
-		
-		
+		var dconf = {  }
+			
+		dconf.width =  conf.hasOwnProperty('width') ? conf.width : $(document).width() / 10 * 6
+		dconf.height =  conf.hasOwnProperty('height') ? conf.height : $(window).height() / 10 * 6
+			
+		if(conf.buttons){
+			dconf.buttons = conf.buttons;
+		}else{
+			dconf.buttons[translations.CLOSE] = function () {
+				$(this).dialog("close");
+				$('#' + id).dialog('destroy');
+			}			
+		}		
 
 		$.extend(dconf, conf);
 

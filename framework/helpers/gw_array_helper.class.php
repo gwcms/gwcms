@@ -149,6 +149,23 @@ class GW_Array_Helper
 		     });		
 		
 		return true;
+	}
+
+
+	static function sortBySubitemsCount(&$array)
+	{
+		uasort($array, function($a, $b)
+		{
+		    if (count($a) == count($b)){
+			return 0;
+		    }else if (count($a) > count($b)){
+			return -1;
+		    }else {             
+			return 1;
+		    }
+		});
+
+		return true;		
 	}	
 
 

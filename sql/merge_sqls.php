@@ -1,6 +1,6 @@
 <?php
 
-$files = glob(__DIR__.'/2010-*.sql');
+$files = glob(__DIR__.'/201*.sql');
 
 $str = '';
 $str .="#File count: ".count($files)."\n";

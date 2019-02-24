@@ -2,7 +2,7 @@
 
 
 {call e field=demo_select type=select options=[1=>'Random option1', '2'=>"Random option2"] empty_option=1}
-{call e field= 	name=demo_multiselect 
+{call e field=demo_multiselect 
 	type=multiselect 
 	options=[1=>'option1', '2'=>"option2", '3'=>"option3", '4'=>"option4"] 
 	empty_option=1 value=json_decode($item->demo_multiselect)

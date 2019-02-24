@@ -6,7 +6,9 @@
 	
 {$tmpopt=[]}
 {foreach $value as $id}	
-	{$tmpopt[$id]=$options[$id]}
+	{if isset($options[$id])}
+		{$tmpopt[$id]=$options[$id]}
+	{/if}
 {/foreach}
 	
 <select multiple="multiple" class="form-control gwselect2 " id="{$id}" name="{$input_name}" 
