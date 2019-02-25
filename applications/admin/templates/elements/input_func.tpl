@@ -1,5 +1,5 @@
 {function calcElmName}{$input_name_pattern=gw_admin_form_help::calcInputNamePattern($input_name_pattern, $type)}{$input_name_pattern|sprintf:$field}{/function}
-{function calcElmId}{str_replace(['[',']','/'],'___',$name)}{/function}
+{function calcElmId}{str_replace(['[',']','/'],'__',$input_name)}{/function}
 
 {function input_label}
 	{if method_exists($item, 'isChangedField')}

@@ -8,7 +8,7 @@ class gw_admin_form_help{
 			$input_name_pattern="item[%s]";
 		
 		if(strpos($type, 'multiselect')!==false)
-			$input_name_pattern="`$input_name_pattern`[]";
+			$input_name_pattern="{$input_name_pattern}[]";
 
 		return $input_name_pattern;
 	}
