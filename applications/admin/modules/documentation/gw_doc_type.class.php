@@ -13,13 +13,13 @@ class GW_Doc_Type extends GW_Data_Object
 		
 	
 	
-	function getOptions()
+	function getOptions($conds)
 	{
 		//args $type, $conds=null, $lang='lt'
 		//$cond = $active ? 'active!=0 AND removed=0' : '';
 		//$typecond = GW_DB::prepare_query(['`type`=?', $type]);
 		//$conds = $conds ? $conds .' AND '.$typecond : $typecond;
-		$conds = "";
+		
 		
 		return $this->getAssoc(['id','title'], $conds);
 	}	

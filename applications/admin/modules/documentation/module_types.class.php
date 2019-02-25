@@ -14,9 +14,17 @@ class Module_Types extends GW_Common_Module
 	
 	function viewOptions()
 	{
-		$opts = $this->model->getOptions();
 		
-		echo json_encode($opts);
+		$cond = isset($_GET['q']) ? GW_DB::prepare_query(['title LIKE ?', '%'.$_GET['q'].'%']) : false;
+		
+		$opts = $this->model->getOptions($cond);
+		
+		$list = [];
+		
+		foreach($opts as $id => $text)
+			$list['items'][]=["id"=>$id, "title"=>$text];
+		
+		echo json_encode($list);
 		exit;
 	}
 	

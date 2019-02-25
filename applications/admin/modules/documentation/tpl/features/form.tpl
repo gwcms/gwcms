@@ -1,6 +1,8 @@
 {include file="default_form_open.tpl"}
 
+{*
 {call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
+*}
 
 {call e field=type type=select_ajax modpath="documentation/types" after_input_f=editadd preload=1 options=[]}
 
