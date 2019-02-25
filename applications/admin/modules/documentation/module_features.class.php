@@ -1,9 +1,8 @@
 <?php
 
 
-class Module_Features extends GW_Common_Module_Tree_Data
+class Module_Features extends GW_Common_Module
 {	
-
 	
 	function init()
 	{	
@@ -19,16 +18,25 @@ class Module_Features extends GW_Common_Module_Tree_Data
 		$this->viewList();
 	}
 	
-
 	
+	function viewList()
+	{
+		$types = GW_Doc_Type::singleton()->findAll(false, ['select'=>'id, icon, color']);
+		$types_f = [];
+		foreach($types as $type)
+			$types_f["t".$type->id] = ['icon'=>$type->icon];
+		
+		$this->tpl_vars['jstree_types'] = $types_f;
+	}
+
+	/*
 	function doDelete()
 	{
 		$do=$this->getDataObjectById();
-		$do->set('active', 0);
 		$do->update();
 		
 		$this->jump();
-	}
+	}*/
     
 	
 	function doAjaxSave()
