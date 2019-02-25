@@ -1,3 +1,4 @@
+{include "elements/input_func.tpl"}
 {function "build_form"}
 
 {if $fields_config}
