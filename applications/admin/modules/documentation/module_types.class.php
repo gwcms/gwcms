@@ -52,5 +52,34 @@ class Module_Types extends GW_Common_Module
 	}
 	
 	
+	function doGetIcons()
+	{
+		$webdir = 'applications/admin/static/img/icons/';
+		$base = GW::s('DIR/ROOT').$webdir;
+		$icons = GW_File_Helper::rglob($base.'*');
+
+		$formated = [
+				["id"=>"browse", 'text'=>'Browse..', 'parent'=>'#'],
+				["id"=>"root", 'text'=>'Root', 'parent'=>'browse']
+		];
+		
+		foreach($icons as $icopath){
+			
+			$rel = str_replace($base, '', $icopath);
+			$parent = dirname($rel);
+			
+			if(is_file($icopath)){				
+				$formated[] = ["icon"=>'/'.$webdir.$rel, 'id'=>$rel,'text'=>$rel, "parent"=> $parent=='.' ? 'root': $parent];
+			}else{
+				$formated[] = ['id'=>$rel, 'text'=>$rel, "parent"=>  $parent=='.' ? 'browse': $parent];
+			}	
+			
+		}
+		
+		echo json_encode($formated);
+		exit;
+	}
+	
+	
 	
 }
