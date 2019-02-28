@@ -10,7 +10,7 @@
 	
 	{if $app->user->isRoot()}
 		
-		{$dl_actions=[invert_active,editshift,delete]}
+		{$dl_actions=[invert_active,editshift,delete,clone]}
 	{else}
 		{$dl_actions=[invert_active,edit,delete]}
 	{/if}

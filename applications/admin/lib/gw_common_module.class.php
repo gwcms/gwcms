@@ -1517,7 +1517,22 @@ class GW_Common_Module extends GW_Module
 				$this->jump();
 			} else {
 				$this->list_params['orders']['name'] = 'NIEKAS';
-				$this->list_params['order'] = $_REQUEST['order'];
+				
+				//papildyt rikiavima papapildomu stulpeliu
+				if(isset($_GET['shift'])){
+					
+					$curr = $this->list_params['order'];
+					list($col,$dir) = explode(' ', $_REQUEST['order']);
+										
+					if(strpos($curr, $col)!==false){
+						$this->list_params['order'] = str_replace(["$col ASC","$col DESC"], $_REQUEST['order'], $curr);
+					}else{
+						$this->list_params['order'] = $curr.', '.$_REQUEST['order'];
+					}
+					
+				}else{
+					$this->list_params['order'] = $_REQUEST['order'];
+				}
 			}
 		}
 

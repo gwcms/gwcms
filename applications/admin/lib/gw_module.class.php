@@ -673,7 +673,7 @@ class GW_Module
 
 		return 
 		[
-			'uri'=> Navigator::buildURI(false, ['act'=>'do:setOrder','order'=>$param] ),
+			'order'=> $param,
 			'current'=>in_array($order, $variants) ? $curr_dir : false,
 			'multiorder'=>count($orders) > 1 ? $multiorder_index : false
 		];		

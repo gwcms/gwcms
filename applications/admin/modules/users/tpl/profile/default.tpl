@@ -15,7 +15,7 @@
 
 <table class="gwTable">
 
-
+{include "elements/input_func.tpl"}
 {call e field=email}
 {call e field=name}
 {call e field=surname}

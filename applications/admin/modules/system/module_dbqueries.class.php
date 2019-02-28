@@ -3,9 +3,10 @@
 
 class Module_DBQueries extends GW_Common_Module
 {		
-	function doExecuteQuery()
+	function doExecuteQuery($item=false)
 	{
-		$item = $this->getDataObjectById();
+		if(!$item)
+			$item = $this->getDataObjectById();
 
 		if(!$item->get('active'))
 			return $this->setError("Can't run. Switch query state to active");
@@ -41,5 +42,22 @@ class Module_DBQueries extends GW_Common_Module
 		
 		return $results;
 	}
+	
+	function __eventAfterSave($item)
+	{	
+		
+		if($_POST['submit_type']==7)
+		{
+			$this->doExecuteQuery($item, true);
+			
+			
+			echo $this->processView('form');
+			exit;
+			
+			//$_POST['submit_type'] = 1; //apply
+		}
+		
+	}	
+		
 	
 }

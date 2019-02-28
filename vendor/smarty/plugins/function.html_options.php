@@ -214,7 +214,7 @@ function smarty_function_html_options_optoutput($key, $value, $selected, $id, $c
 }
 
 //Added the $disabled parameter
-function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx, $disabled)
+function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx, $disabled=false)
 {
     $optgroup_html = '<optgroup label="' . smarty_function_escape_special_chars($key) . '">' . "\n";
     foreach ($values as $key => $value) {

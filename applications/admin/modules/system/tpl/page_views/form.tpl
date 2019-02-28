@@ -42,6 +42,7 @@
 
 {else}
 	{call e field=path type=select options=$item->path_options options_fix=1}
+	{call e field=type type=select options=$m->lang.OPTIONS.page_view_types}
 	
 	{if $smarty.get.saveasorder==1}
 		<input name="item[type]" type="hidden" value="order">
