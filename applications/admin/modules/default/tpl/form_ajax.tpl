@@ -1,3 +1,4 @@
+{include file="elements/input_func.tpl"} 
 {include file="`$m->tpl_dir`elements.tpl"} 
 
 

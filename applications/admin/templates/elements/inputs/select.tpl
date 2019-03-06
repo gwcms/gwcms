@@ -11,4 +11,6 @@
 	{assign var=gwcms_input_select_loaded value=1 scope=global}	
 {/if}
 
-<script type="text/javascript">require(['vendor/bootstrap-select/js'], function(){ $('.selectpicker').selectpicker(); });</script>
+{if !$smarty.get.form_ajax}
+	<script type="text/javascript">require(['vendor/bootstrap-select/js'], function(){ $('.selectpicker').selectpicker(); });</script>
+{/if}
