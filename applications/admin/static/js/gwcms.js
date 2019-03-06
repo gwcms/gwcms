@@ -451,7 +451,7 @@ var gw_adm_sys = {
 		
 		$(".add-popover:not([data-initdone='1'])").popover().attr('data-initdone',1);
 		
-				
+		gw_adm_sys.init_iframe_open();
 		gw_checklist.init();
 	},
 	resetInitState: function(parent){

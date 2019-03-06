@@ -592,7 +592,7 @@ class GW_Application
 				
 		foreach($messages as $msg)
 		{
-			$msg['action'] = 'notification';
+			$msg['action'] =  $msg['action'] ?? 'notification';
 			$packets[]=$msg;
 		}
 	}	

@@ -296,7 +296,10 @@
 		<en>Item</en>
 		<lt>Įrašas</lt>		
 	</i>
-	
+	<i id="config">
+		<en>Config</en>
+		<lt>Nustatymai</lt>		
+	</i>	
 	<i id="dialogremove">
 		<en>Remove items</en>
 		<lt>Šalinti įrašus</lt>
@@ -318,6 +321,10 @@
 		<en>Clone</en>
 		<lt>Dublikuoti</lt>
 	</i>
+	<i id="doSend">
+		<en>Send</en>
+		<lt>Siųsti</lt>
+	</i>	
 </i>
 
 <i id="NO_ITEMS">

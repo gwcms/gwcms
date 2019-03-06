@@ -240,7 +240,7 @@ class GW_Admin_Application extends GW_Application
 		$res = json_decode($raw);
 		
 	
-		if(isset($_GET['packets'])){
+		if(isset($_GET['packets']) || isset($get_args['packets'])){
 			if(is_array($res)){
 				foreach($res as $packet)
 					if($packet->action == 'result')

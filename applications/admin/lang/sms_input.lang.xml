@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+	<i id="JS_VARS">
+		<i id="PARTS">Dalys</i>
+		<i id="ENCODING_OPT">
+			<i id="7">Ilgoji (160s)</i>
+			<i id="16"><![CDATA[<span class="unicodehelp">Trumpoji (70s)</span>]]></i>
+		</i>	
+		<i id="UNICODE_SYMBOLS">Unikodo symboliai</i>
+		<i id="UNICODE_INFO">Įvedant lietuviškus ar kitus specialiuosius simbolius žinutės ilgis sutrumpėja iki 70s</i>	
+		<i id="SYMBOLS">Simboliai</i>
+		<i id="MULTIPART_INFO">Kieviena atskira dalis skaičiuojama kaip atskira žinutė</i>				
+		<i id="ENCODING">Koduotė</i>
+	</i>
+	
+</xml>
