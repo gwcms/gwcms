@@ -157,10 +157,15 @@
 		<i id="user_agent">
 			<lt>Naršyklės pavad.</lt>
 			<en>Browser</en>
+		</i>	
+		<i id="gender">
+			<lt>Lytis</lt>
+			<en>Gender</en>
 		</i>
-		
-				
+		<i id="fields_enabled">Įgalinti laukai</i>
 	</i>
+	
+	
 	
 	<i id="FIELDS_SHORT">
 		<i id="online">O</i>

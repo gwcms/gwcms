@@ -53,7 +53,7 @@
 	{$do_toolbar_buttons[] = search}	
 	
 	
-	{$dl_actions=[invert_active,edit,delete,ext_actions]}
+	{$dl_actions=[invert_active_ajax,edit,delete_ajax,ext_actions]}
 	
 
 	

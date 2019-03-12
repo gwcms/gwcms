@@ -52,6 +52,18 @@ class GW_Config
 
 		return $rows;
 	}
+	
+	function exportLoadedValsNoPrefix()
+	{
+		$dat=[];
+		$prefix = preg_quote($this->prefix,'/');
+		
+		
+		foreach($this->_cache as $key => $val)
+			$dat[preg_replace("/^$prefix/",'', $key)] = $val;
+		
+		return $dat;
+	}
 
 	function setValues($vals)
 	{

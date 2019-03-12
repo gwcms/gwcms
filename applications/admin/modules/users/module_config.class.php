@@ -13,15 +13,43 @@ class Module_Config extends GW_Common_Module
 		parent::init();
 	}
 
+	function initEnabledFields()
+	{
+		$list = explode(',',$this->model->available_fields);
+		$opts = [];
+	
+		foreach($list as $field)
+			$opts[$field] = GW::ln('/A/FIELDS/'.$field);
+		
+		$this->options['fields_enabled'] = $opts;
+		
+		//d::dumpas($this->model->available_fields);
+	}
 	
 	function viewDefault()
 	{
-		return ['item'=>$this->model];
+		$this->initEnabledFields();
+		
+		
+		$cfg = $this->model;
+		$cfg->preload('');
+		$vals=$cfg->exportLoadedValsNoPrefix();
+		$item = (object)$vals;
+		
+		
+		
+		$item->fields_enabled = @json_decode($item->fields_enabled, true);
+		
+		
+		
+		return ['item'=>$item];
 	}
 	
 	function doSave()
 	{
 		$vals = $_REQUEST['item'];
+		$vals['fields_enabled'] = json_encode($vals['fields_enabled']);
+
 		
 		$this->model->setValues($vals);
 		

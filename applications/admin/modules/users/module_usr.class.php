@@ -25,6 +25,7 @@ class Module_Usr extends GW_Common_Module
 		$this->__initGroupOptions();
 		parent::init();
 		
+		$this->config = new GW_Config('gw_'.$this->module_path[0].'/');
 		$this->list_params['paging_enabled']=1;
 	}
 
@@ -126,15 +127,6 @@ class Module_Usr extends GW_Common_Module
 		$this->jumpAfterSave();
 	}
 	
-	function getFiltersConfig()
-	{
-		return [
-			'id' => 1,
-			'username' => 1,
-			'name' => 0,
-			'insert_time' => 1,
-		];
-	}
 
 
 	function __eventAfterList(&$list)
@@ -168,9 +160,20 @@ class Module_Usr extends GW_Common_Module
 			return "last_request_time ".($value  && $value!='0' ? '>' : '<')." '$before10mins'";
 	}
 	
+	function getEnabledFields()
+	{
+		$availfields = explode(',',$this->config->available_fields);
+		$enabled =  array_flip(json_decode($this->config->fields_enabled));
+		
+		foreach($availfields as $field)
+			$enabled[$field] = isset($enabled[$field]);
+
+		
+		return $enabled;
+	}
+	
 	function getListConfig()
 	{
-		
 		$cfg = array('fields' => [
 			'id' => 'Lof', 
 			'username' => 'Lof',
@@ -181,12 +184,23 @@ class Module_Usr extends GW_Common_Module
 			'update_time'=>'lof',
 			'parent_user_id'=>'lof',
 			'name'=>'lof',
-			'surname'=>'lof'	
+			'surname'=>'lof',
+			'city'=>'lof',
+			'gender'=>'lof',
+			'email'=>'lof',
+			'image'=>'lof',
+			'login_count'=>'lof',
+			'last_ip'=>'lof',
+			'last_request_time'=>'lof',
 			]
 		);
+	
+		foreach($this->getEnabledFields() as $field => $enabled)
+			if(!$enabled)
+				unset($cfg['fields'][$field]);
+		
 		
 		$cfg['filters']['group_ids'] = ['type'=>'multiselect','options'=>$this->options['group_ids']];
-			
 			
 		return $cfg;
 	}

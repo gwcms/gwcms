@@ -1,22 +1,47 @@
 {include file="default_form_open.tpl"}
 
+{$efields=$m->getEnabledFields()}
 
-{call e field=image type=image}
+{if $efields.image}
+	{call e field=image type=image}
+{/if}
 
 
 {call e field=username}
-{call e field=email}
-{call e field=phone}
+
+{if $efields.email}
+	{call e field=email}
+{/if}
+
+{if $efields.phone}
+	{call e field=phone}
+{/if}
 
 
 {call e field=name}
-{call e field=surname}
 
-{*
-{call e field=birth_date type=date}
-*}
-{call e field=gender type=select options=GW::l('/m/OPTIONS/gender') empty_option=1}
+{if $efields.surname}
+	{call e field=surname}
+{/if}
 
+{if $efields.birth_date}
+	{call e field=birth_date type=date}
+{/if}
+
+{if $efields.gender}
+	{call e field=gender type=select options=GW::l('/m/OPTIONS/gender') empty_option=1}
+{/if}
+
+
+{if $efields.address}
+	{call e field=address}
+{/if}
+
+{if $efields.city}
+	{call e field=city}
+{/if}
+
+{*'phone','surname','email','birth_date','gender','address','city','image'*}
 
 
 {call e field=group_ids type=multiselect options=$options.group_ids}

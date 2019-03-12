@@ -55,7 +55,7 @@
 	{$dl_fields=[title,path]}
 	{$dl_smart_fields=[title,path]}
 	{$do_toolbar_buttons=[info,rearange,synchronizefromxml]}	
-	{$dl_actions=[edit,invert_active,delete]}
+	{$dl_actions=[edit,invert_active_ajax,delete]}
 	
 	
 	
