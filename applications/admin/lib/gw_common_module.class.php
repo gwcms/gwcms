@@ -268,6 +268,11 @@ class GW_Common_Module extends GW_Module
 				exit;
 			} else {
 				$this->error_fields = array_merge($this->error_fields, $item->errors);
+				$this->setItemErrors($item);
+				
+				header("GW_AJAX_MESSAGES: ".json_encode($this->app->acceptMessages(true)));
+				header("GW_ERROR_FIELDS: ".json_encode($this->error_fields));
+				exit;
 			}
 		}
 

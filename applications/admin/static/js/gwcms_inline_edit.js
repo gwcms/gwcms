@@ -93,6 +93,18 @@ function loadRowAfterAjx(trobject, data)
 		return loadRowAfter(trobject, data);
 }
 
+function animateErrorInput(field)
+{
+		var ob =  $('.gw_input_item__'+field+'__');
+		var curr_bgcolor = ob.css("background-color");
+		var curr_color = ob.css("color");
+		
+		ob.animate({backgroundColor: "#FF0000",color: "#fff"}, 500 );
+		
+		setTimeout(function(){
+				ob.animate({backgroundColor: curr_bgcolor, color: curr_color}, 10000 );
+		},10000 )
+}
 
 function submitInlineForm()
 {
@@ -110,14 +122,13 @@ function submitInlineForm()
 		$.post($("#inlineForm").attr('action')+'&time='+new Date().getTime(), $("#inlineForm").serialize()+'&inlistform=1&ajax=1',
 				function (data, status, request) {
 						
+						var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
+						
 						if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
 						{
 							console.log(data);
 							
 								rowobj.after(data);
-								
-								
-								
 								
 								if(inlineformrow.attr('data-id')!='0')
 									rowobj.remove();
@@ -126,25 +137,25 @@ function submitInlineForm()
 								$('.activeList').trigger( "updated");//call init list
 								
 								var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
-								var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
-								var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
-								
-																
-								gwcms.showMessages(JSON.parse(messages), title);
-								
+								var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');							
 								
 								//console.log(messages);
 								
 								animateChangedRow(id);
 								initActiveListRows();
 								
-								
 								//gw_navigator.jump(location.href, {id:id})
 						} else {
-								inlineformrow.remove();
-								loadRowAfterAjx(rowobj, data)
+								//inlineformrow.remove();
+								//loadRowAfterAjx(rowobj, data)
+								var err_fields = JSON.parse(request.getResponseHeader('GW_ERROR_FIELDS'));
 								
+	
+								for(var field in err_fields)
+									animateErrorInput(field);
 						}
+						
+						gwcms.showMessages(JSON.parse(messages), title);
 
 				}
 		)
