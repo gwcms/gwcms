@@ -107,10 +107,10 @@ class Module_Profile extends GW_Module
 			'group'=>false
 		]);		
 		
-		//$data = GW_Android_Push_Notif::push($this->app->user);
-		
-		//echo json_encode($data, JSON_PRETTY_PRINT);
-		
+		if(isset($_GET['debug'])){
+			$data = GW_Android_Push_Notif::push($this->app->user);
+			d::ldump(json_encode($data, JSON_PRETTY_PRINT));
+		}
 
 		exit;
 			
