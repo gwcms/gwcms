@@ -147,6 +147,16 @@ class Module_Sms extends GW_Common_Module
 		$this->jump();
 	}
 	
+	function prepareListConfig()
+	{
+		$x = parent::prepareListConfig();
+		
+		if(isset($this->filters['number']))
+			$this->tpl_vars['dl_filters']=[];
+		
+		return $x;
+	}
+	
 /*	
 	function __eventAfterList(&$list)
 	{
