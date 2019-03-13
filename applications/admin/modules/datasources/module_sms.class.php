@@ -19,9 +19,12 @@ class Module_Sms extends GW_Common_Module
 		$this->app->carry_params['number']=1;
 		$this->app->carry_params['clean']=1;
 		
-		if(isset($_GET['number']))
+		if(isset($_GET['number'])){
 			$this->filters['number'] = $_GET['number'];
+			$this->list_params['paging_enabled']=false;	
+		}
 		
+		//d::dumpas($this->list_params);
 	}
 	
 	
