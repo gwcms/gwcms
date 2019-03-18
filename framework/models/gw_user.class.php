@@ -373,4 +373,9 @@ class GW_User extends GW_Composite_Data_Object
 		return $this->findAll(GW_DB::inCondition('id', $ids));
 	}
 	
+	function calcSMS()
+	{
+		return GW_Outg_SMS::singleton()->count(['number=?', $this->phone]);
+	}	
+	
 }

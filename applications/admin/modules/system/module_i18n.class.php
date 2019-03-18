@@ -61,7 +61,7 @@ class Module_i18n extends GW_Common_Module
 		
 		$item = $this->model->getByPath($_REQUEST['path']);
 		
-		$this->canBeAccessed($item, true);
+		$this->canBeAccessed($item, ['access'=>GW_PERM_READ]);
 		
 		echo $item->notes;
 		exit;

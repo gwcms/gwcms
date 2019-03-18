@@ -54,8 +54,10 @@
 {/function}
 
 {function name=dl_actions_move}
-	{list_item_action_m url=[false,[act=>doMove,id=>$item->id,where=>up]] iconclass="fa fa-arrow-circle-up text-success"}
-	{list_item_action_m url=[false,[act=>doMove,id=>$item->id,where=>down]] iconclass="fa fa-arrow-circle-down text-info"}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{list_item_action_m url=[false,[act=>doMove,id=>$item->id,where=>up]] iconclass="fa fa-arrow-circle-up text-success"}
+		{list_item_action_m url=[false,[act=>doMove,id=>$item->id,where=>down]] iconclass="fa fa-arrow-circle-down text-info"}
+	{/if}
 {/function}
 
 
@@ -66,7 +68,9 @@
 {/function}
 
 {function name=dl_actions_delete}
-	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 shift_button=1}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 shift_button=1}
+	{/if}
 {/function}
 
 {function name=dl_actions_delete_ajax}
@@ -95,7 +99,9 @@
 
 
 {function name=dl_actions_invert_active}
-	{list_item_action_m url=[false, [act=>doInvertActive,id=>$item->id]] iconclass="fa fa-flag gw_active_`$item->active`"}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{list_item_action_m url=[false, [act=>doInvertActive,id=>$item->id]] iconclass="fa fa-flag gw_active_`$item->active`"}
+	{/if}
 {/function}
 
 {function name=dl_actions_invert_active_ajax}

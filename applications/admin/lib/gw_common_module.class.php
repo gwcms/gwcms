@@ -102,7 +102,7 @@ class GW_Common_Module extends GW_Module
 	 * @param type $class
 	 * @return GW_Data_Object
 	 */
-	function getDataObjectById($load = true, $class = false)
+	function getDataObjectById($load = true, $class = false, $access=GW_PERM_WRITE)
 	{
 		$id = $this->getCurrentItemId();
 
@@ -123,7 +123,7 @@ class GW_Common_Module extends GW_Module
 		if ($load && !$item->loaded)
 			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
 
-		$this->canBeAccessed($item, true);
+		$this->canBeAccessed($item, ['access'=>$access]);
 
 		return $item;
 	}
@@ -133,7 +133,7 @@ class GW_Common_Module extends GW_Module
 	 */
 	function common_doDelete()
 	{
-		if (!$item = $this->getDataObjectById())
+		if (!$item = $this->getDataObjectById(true, false, GW_PERM_WRITE))
 			return false;
 
 		$this->fireEvent('BEFORE_DELETE', $item);
@@ -156,7 +156,7 @@ class GW_Common_Module extends GW_Module
 	function common_doClone()
 	{
 
-		if (!$item = $this->getDataObjectById())
+		if (!$item = $this->getDataObjectById(true, false, GW_PERM_READ))
 			return false;
 
 
@@ -250,7 +250,7 @@ class GW_Common_Module extends GW_Module
 
 		$this->fireEvent('BEFORE_SAVE_00', $item);
 
-		$this->canBeAccessed($item, true);
+		$this->canBeAccessed($item, ['access'=>GW_PERM_WRITE]);
 		$item->setValues($vals);
 
 		$this->fireEvent('BEFORE_SAVE_0', $item);
@@ -401,7 +401,7 @@ class GW_Common_Module extends GW_Module
 				$item->load();//4 inheritProps
 				$item->copyOriginal();
 
-				$this->canBeAccessed($item, true);
+				$this->canBeAccessed($item, ['access'=>GW_PERM_READ]);
 			} else {
 				//nuklonuotas
 			}
@@ -416,7 +416,7 @@ class GW_Common_Module extends GW_Module
 			$item->load();
 			$item->resetChangedFields();
 			
-			$this->canBeAccessed($item, true);
+			$this->canBeAccessed($item, ['access'=>GW_PERM_READ]);
 		} else { // create new
 			$item->temp_id = uniqid();
 		}
@@ -432,6 +432,10 @@ class GW_Common_Module extends GW_Module
 		}
 		
 		$this->prepareListConfig();
+		
+		if(! $this->canBeAccessed($item, ['access'=>GW_PERM_WRITE, 'nodie'=>1])){
+			$this->tpl_vars['readonly'] = true;
+		}
 						
 		return ['update' => $item->get('id'), 'item' => $item];
 	}
@@ -439,7 +443,7 @@ class GW_Common_Module extends GW_Module
 	function common_viewItem()
 	{
 
-		$item = $this->getDataObjectById();
+		$item = $this->getDataObjectById(true, false, GW_PERM_READ);
 		$this->tpl_vars['item'] = $item;
 	}
 
@@ -491,7 +495,7 @@ class GW_Common_Module extends GW_Module
 			if (!$item = $this->getDataObjectById())
 				return false;
 		
-		$this->canBeAccessed($item, true);
+		$this->canBeAccessed($item, ['access'=>GW_PERM_WRITE]);
 		
 		$item->active = true;
 		$item->updateChanged();
@@ -512,7 +516,9 @@ class GW_Common_Module extends GW_Module
 			if (!$item = $this->getDataObjectById())
 				return false;
 
-		$this->canBeAccessed($item, true);
+		$this->canBeAccessed($item, ['access'=>GW_PERM_WRITE]);
+		
+		$this->fireEvent("BEFORE_INVERT_ACTIVE", $item);
 
 		if (!$item->invertActive())
 			return $this->setError('/g/GENERAL/ACTION_FAIL');
@@ -1166,11 +1172,29 @@ class GW_Common_Module extends GW_Module
 		return method_exists($this, $name) || isset($this->allow_auto_actions[$name]);
 	}
 
-	function canBeAccessed($item, $die = true)
+	function canBeAccessed($item, $opts=[])
 	{
-		$result = true; //$item->canBeAccessedByUser($this->app->user);
+		$result = false;
+		
+		if($item->id)
+			$item->load_if_not_loaded();
+		
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+				
+		if(isset($item->content_base['access']))
+		{
+			$availAccess = $item->content_base['access'];
+			//1-read, 2-write check //admin/config/main.php for permission list
+			if ($availAccess & $requestAccess) {
+				$result = true;
+			}
+				
+		}else{
+			$result = true; //$item->canBeAccessedByUser($this->app->user);
+		}
 
-		if (!$die || $result)
+		
+		if (isset($opts['nodie']) || $result)
 			return $result;
 
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');

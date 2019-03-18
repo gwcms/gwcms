@@ -52,9 +52,10 @@
 
 <script>
 
-require(['gwcms'], function(){
-		GW_SW.initBtns();
-})
+$(document).ready(function(){
+	GW_SW.initBtns();
+	
+});
 </script>
 
 <br />

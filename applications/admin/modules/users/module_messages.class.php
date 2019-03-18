@@ -126,7 +126,7 @@ class Module_Messages extends GW_Common_Module
 	}
 	
 	
-	function canBeAccessed($item, $die=true, $load = true)
+	function canBeAccessed($item, $opts=[])
 	{	
 		$item->load_if_not_loaded();
 				

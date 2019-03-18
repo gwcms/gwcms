@@ -40,8 +40,9 @@ class Module_Usr extends GW_Common_Module
 	}
 		
 
-	function canBeAccessed($item, $die=true, $load = true)
+	function canBeAccessed($item, $opts=[])
 	{	
+		//parent::canBeAccessed($item);
 		$item->load_if_not_loaded();
 		
 		$result = ($this->rootadmin) || $item->id==0 || ($item->parent_user_id == $this->app->user->id);
@@ -57,32 +58,21 @@ class Module_Usr extends GW_Common_Module
 	
 	
 	
-	function doDelete()
-	{	
-		if(!$item = $this->getDataObjectById())
-			return;
-			
-		$this->canBeAccessed($item, true);	
-			
-		if($item->get('id') == $this->app->user->get('id'))
-			return $this->setError($this->lang['ERR_DELETE_SELF']);	
-			
-
-		$item->delete();
-		$this->setPlainMessage($this->app->lang['ITEM_REMOVE_SUCCESS']);
+	
+	function __eventBeforeDelete($item)
+	{
+		if($item->get('id') == $this->app->user->get('id')){
+			$this->setError($this->lang['ERR_DELETE_SELF']);
+			$this->jump();
+			exit;
+		}
 		
-		$this->jump();
 	}
 	
-	function doInvertActive()
+	function __eventBeforeInvertActive($item)
 	{
-		if(!$item = $this->getDataObjectById())
-			return;
-
 		if($item->get('id') == $this->app->user->get('id'))
-			return $this->setError($this->lang['ERR_DEACTIVATE_SELF']);
-			
-		parent::doInvertActive();
+			return $this->setError($this->lang['ERR_DEACTIVATE_SELF']);		
 	}
 	
 	
@@ -91,7 +81,7 @@ class Module_Usr extends GW_Common_Module
 		if(!$item = $this->getDataObjectById())
 			return;
 		
-		$this->canBeAccessed($item, true);	
+		$this->canBeAccessed($item);	
 		
 		// jei ne root tai neleisti pasikeisti i root
 		

@@ -4,6 +4,8 @@
 
 {$x=$app->sess("attachments/{$owner_type}",$valid)}
 
+{*PATAISYT KLAIDA*}
+
 
 <div class="attachments_container">
 	

@@ -38,13 +38,14 @@ class Module_ChangeTrack extends GW_Common_Module
 	}
 	
 	
-	function canBeAccessed($item, $die = true) {
+	function canBeAccessed($item, $opts=[]) 
+	{
+		$item->load_if_not_loaded();
 		$result = $this->checkOwnerPermission($item->owner_type);
 
 		if (!$die || $result)
 			return $result;
 
-		
 		$this->jump();
 	}	
 }

@@ -9,7 +9,7 @@ class Module_Groups extends GW_Common_Module
 		parent::init();
 	}
 	
-	function canBeAccessed($item, $die=true)
+	function canBeAccessed($item, $opts=[])
 	{
 		$result = $item->canBeAccessedByUser($this->app->user);
 		

@@ -4,8 +4,12 @@
 
 
 {function name=df_submit_button_save}
-	{if !$smarty.get.nosavebtn}
-		<button class="btn btn-primary"><i class="{$save_button_icon|default:'fa fa-save'}"></i> {$save_button_caption|default:$lang.SAVE}</button>
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{if !$smarty.get.nosavebtn}
+			<button class="btn btn-primary"><i class="{$save_button_icon|default:'fa fa-save'}"></i> {$save_button_caption|default:$lang.SAVE}</button>
+		{/if}
+	{else}
+		<button class="btn btn-primary" onclick="{if $smarty.get.dialog}window.parent.gwcms.close_dialog_all_types();{else}{if isset($smarty.get.RETURN_TO)}location.href='{$smarty.get.RETURN_TO}';{else}history.go(-1);{/if}{/if}return false"> {$lang.BACK}</button>
 	{/if}
 {/function}
 
@@ -16,7 +20,9 @@
 
 
 {function name=df_submit_button_apply}
-	<button class="btn btn-info" onclick="this.form.elements['submit_type'].value=1;"><i class="fa fa-save"></i> {$lang.APPLY}</button>
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		<button class="btn btn-info" onclick="this.form.elements['submit_type'].value=1;"><i class="fa fa-save"></i> {$lang.APPLY}</button>
+	{/if}
 {/function}
 
 {function name=df_submit_button_cancel}
