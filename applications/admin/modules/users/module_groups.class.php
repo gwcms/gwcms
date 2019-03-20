@@ -13,7 +13,7 @@ class Module_Groups extends GW_Common_Module
 	{
 		$result = $item->canBeAccessedByUser($this->app->user);
 		
-		if(!$die || $result)
+		if (isset($opts['nodie']) || $result)
 			return $result;
 
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
