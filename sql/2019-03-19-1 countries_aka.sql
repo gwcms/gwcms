@@ -1,0 +1,1 @@
+ALTER TABLE `gw_countries` ADD `aka` VARCHAR(255) NOT NULL AFTER `title_lt`;

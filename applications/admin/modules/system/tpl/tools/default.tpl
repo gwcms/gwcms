@@ -56,6 +56,12 @@
 </ul>
 {/if}
 
+
+<p>
+	FOR WGET AUTH:
+	GWSESSID={session_id()}
+</p>
+
 	</div>
 </div>
 

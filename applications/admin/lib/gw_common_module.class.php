@@ -1225,6 +1225,9 @@ class GW_Common_Module extends GW_Module
 
 	function doGetFilters()
 	{
+		
+		$this->fireEvent("BEFORE_GET_FILTERS");
+		
 		$this->prepareListConfig();
 		
 		

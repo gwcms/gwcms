@@ -4,6 +4,7 @@ class GW_Country extends GW_Data_Object
 {
 
 	public $table = 'gw_countries';
+	public $ignore_fields=['insert_time'=>1];
 
 	function getOptions($lang = 'lt')
 	{
@@ -28,5 +29,16 @@ class GW_Country extends GW_Data_Object
 	{
 		$country = $this->getAssoc(['code', 'title_' . $lang], ['code=?',$cc], ['order' => 'title_' . $lang . ' ASC']);
 		return isset($country[$cc]) ? $country[$cc] : $cc;
+	}
+	
+	function eventHandler($event, &$context_data = array()) {
+		
+		switch ($event){
+			case "BEFORE_INSERT":
+				$this->update_time = date('Y-m-d H:i:s');
+			break;
+		}
+		
+		return parent::eventHandler($event, $context_data);
 	}
 }
