@@ -29,6 +29,8 @@
 			
 		{if strpos($type,'multiselect')!==false}
 			{$compare_opt=GW::l('/g/FILTERS_SELECT_COMPARE_TYPES')}
+		{elseif strpos($type,'select')!==false}
+			{$compare_opt=GW::l('/g/FILTERS_SELECT1_COMPARE_TYPES')}
 		{else}
 			{$compare_opt=GW::l('/g/FILTERS_COMPARE_TYPES')}
 		{/if}	

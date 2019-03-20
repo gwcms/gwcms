@@ -62,6 +62,14 @@
 }
 
 
+{call e field="demo_select_country_id"
+	type="multiselect_ajax"
+	object_title=GW::l('/M/datasources/MAP/childs/countries/title')
+	modpath="datasources/countries"
+	options=[]
+	value=json_decode($item->demo_select_country_id)
+	preload=1
+}
 
 
 {*

@@ -684,6 +684,11 @@
 	<i id="NOTIN"><![CDATA[&ne;]]></i>
 </i>
 
+<i id="FILTERS_SELECT1_COMPARE_TYPES">
+	<i id="EQ">=</i>
+	<i id="NEQ"><![CDATA[&ne;]]></i>
+</i>
+
 <i id="FILTERS_COMPARE_TYPES">
 	<i id="LIKE">~</i>
 	<i id="EQ">=</i>

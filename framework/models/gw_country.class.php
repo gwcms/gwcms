@@ -10,6 +10,11 @@ class GW_Country extends GW_Data_Object
 	{
 		return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
 	}
+	
+	function getIdOptions($lang = 'lt')
+	{
+		return $this->getAssoc(['id', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
+	}	
 
 	/**
 	 * Used to update titles, codes from google maps autocomplete location service
