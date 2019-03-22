@@ -319,10 +319,11 @@ class GW_CMS_Sync
 		if(isset($this->params['date'])){
 			$datefrom = $this->params['date'];
 		}else{
-			$datefrom = strtotime($this->getLastSyncTime().' -1 DAY');
+			$datefrom = strtotime($this->getLastSyncTime());
 		}
 		//intended to get updates from core gwcms
-
+		$this->out("Last sync ".date('Y-m-d H:i:s', $datefrom));
+		
 		$newcommits = $this->getNewCommitsFromDate($datefrom);
 		
 		

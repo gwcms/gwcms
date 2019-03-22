@@ -1,9 +1,7 @@
 <?php
 
-
 class Module_NLConfig extends GW_Common_Module
 {	
-
 	public $default_view = 'default';
 	
 	function init()
@@ -12,14 +10,11 @@ class Module_NLConfig extends GW_Common_Module
 		
 		parent::init();
 	}
-
 	
 	function viewDefault()
 	{
 		return ['item'=>$this->model];
 	}
-	
-	
 	
 	function __afterSave(&$vals)
 	{
@@ -27,7 +22,6 @@ class Module_NLConfig extends GW_Common_Module
 		file_put_contents(GW::s('DIR/SYS_FILES').'.mail.key', $vals['dkim_private_key']);
 		chmod(GW::s('DIR/SYS_FILES').'.mail.key', 0600);
 	}
-	
 	
 	function doSave()
 	{
@@ -38,14 +32,7 @@ class Module_NLConfig extends GW_Common_Module
 		//jeigu saugome tai reiskia kad validacija praejo
 		$this->setPlainMessage('/g/SAVE_SUCCESS');
 		
-		
-		
 		$this->__afterSave($vals);
-		
-		
 		$this->jump();
 	}
-
 }
-
-?>
