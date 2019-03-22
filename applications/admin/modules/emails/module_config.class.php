@@ -1,7 +1,9 @@
 <?php
 
-class Module_Config extends GW_Module
+class Module_Config extends GW_Common_Module
 {	
+	public $default_view = 'default';	
+	
 	function init()
 	{
 		$this->model = new GW_Config($this->module_path[0].'/');
