@@ -1,5 +1,5 @@
 {include file="common.tpl"}
-
+{include file="elements/input_func.tpl"}
 
 
 
@@ -185,9 +185,12 @@
 	{
 		var start = $('#fillpartnr_start').val()-0;
 		
+		console.log("start: "+$('#fillpartnr_start').val())
+		console.log("visible rows: "+$('#item__visible_rows__').val())
+		
 		for(var i=1;i<=$('#item__visible_rows__').val();i++)
 		{
-			$('#item__'+i+'___participant_num__').val(start)
+			$('#item__'+i+'__participant_num__').val(start)
 			start++;
 		}
 		
@@ -219,9 +222,9 @@
 			
 			
 			
-			$('#item__'+(start+i)+'___start_time__').val(formatDate(date));
+			$('#item__'+(start+i)+'__start_time__').val(formatDate(date));
 			date = addMinutes(date, minutes);
-			$('#item__'+(start+i)+'___end_time__').val(formatDate(date));
+			$('#item__'+(start+i)+'__end_time__').val(formatDate(date));
 		}
 		
 		
