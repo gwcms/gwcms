@@ -3,6 +3,7 @@
 		<img align="absmiddle" src="{$app->icon_root}action_save.png">
 	</a>
 {/function}
+{include "elements/input_func.tpl"}
 
 <form id="inlineForm" action="{$smarty.server.REQUEST_URI}" method="post"  enctype="multipart/form-data">
 
@@ -19,10 +20,11 @@
 		{$if_actions=[save]}
 	{/block*}
 	
+	{$layout='inline'}
 	{call "df_inputs"}
 	
 	{function name="df_actions"}
-		<td>
+		<td class="dl_inlineform_actions">
 			
 		{foreach $if_actions as $if_action}
 			{call name="df_actions_`$if_action`"}
