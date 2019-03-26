@@ -223,7 +223,7 @@
 	
 	
 	
-	{if !isset($value)}
+	{if !isset($value) || $value===null}
 
 		{if strpos($name, '/')!==false}
 			{$value=$item->get($name)}

@@ -22,7 +22,7 @@
 		{if	$params_expand.value_from_var}
 			{$tmpval=${$params_expand.value_from_var}}
 		{else}
-			{$tmpval=false}
+			{$tmpval=null}
 		{/if}
 		
 		
