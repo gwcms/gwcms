@@ -191,4 +191,34 @@ class GW_Debug_Helper
 			echo $e['message'];
 		}		
 	}
+	
+	function stringVerbose($str)
+	{
+		$ret = [];
+		
+		for($i=0;$i<strlen($str);$i++)
+		{
+			$ret[] = $str[$i].':'.ord($str[$i]);
+		}	
+					
+		return implode(', ',$ret);
+	}
+	
+	function stringVerboseOutp($strArr)
+	{
+		foreach($strArr as $str)
+		{
+			echo self::stringVerbose($key);
+			echo "<hr>";
+		}
+	}
+	
+	function analiseMaxLength($arr)
+	{	
+		foreach($arr as $key => $val){
+			$max[$key] = max($max[$key] ?? -1, $val);
+		}
+	}
+	
+	
 }

@@ -297,6 +297,9 @@ class GW_DB
 		if ($cmd)
 			$this->query($cmd, $nodie);
 
+		if(!$this->result)
+			return null;
+		
 		$row = $this->result->fetch_array();
 
 		return isset($row[0]) ? $row[0] : Null;
@@ -714,6 +717,37 @@ class GW_DB
 		
 		return $this->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE ".$conds);
 	}
+	
+	function tableExists($tbl)
+	{
+		return $this->fetch_result("DESCRIBE `$tbl`", true)===Null;
+	}
+	
+	function execSqls($sqls)
+	{
+		$sqls = explode(';', $sqls);
+		$results=[];
+		
+		foreach($sqls as $sql)
+		{
+			$sql = trim($sql);
+			if(!$sql)continue;
+			
+			$t = new GW_Timer;
+			$res = $this->query($sql, true, true);
+			$result['affected'] = $db->affected();
+			
+			if (!is_object($this->result))
+				$result['err'] = $this->getError();
+			
+			$result['took'] = $t->stop();
+
+			$results[] = $result;
+		}	
+		
+		
+		return $results;
+	}	
 }
 
 class db_query_prep_helper

@@ -58,6 +58,9 @@ class GW_Data_Object
 						
 		$this->fireEvent('AFTER_CONSTRUCT');
 		$this->constructcomplete = true;
+		
+		if(!$this->table)
+			$this->table = strtolower(get_class($this));
 	}
 	
 	function initExtensions()
