@@ -163,6 +163,7 @@
 			<en>Gender</en>
 		</i>
 		<i id="fields_enabled">Įgalinti laukai</i>
+		<i id="last_request_time">Paskutinės užklausos laikas</i>
 	</i>
 	
 	
@@ -171,6 +172,7 @@
 		<i id="online">O</i>
 		<i id="parent_user_id">PU</i>
 		<i id="image"><![CDATA[<i class="fa fa-picture-o"></i>]]></i>
+		<i id="last_request_time">P.Užkl.<![CDATA[<i class="fa fa-clock-o" ></i>]]> </i>
 	</i>
 	
 

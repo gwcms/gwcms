@@ -2,6 +2,7 @@
 
 {call e field=title_lt}
 {call e field=title_en}
+{call e field=title_ru}
 
 {*
 {call e field=fcolor type=select options=[white=>white,black=>black,orange=>orange,yellow=>yellow,blue=>blue,green=>green,brown=>brown,red=>red]}

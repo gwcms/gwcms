@@ -11,7 +11,7 @@
 
 <a class="btn btn-default" href="{$m->buildUri(false,[act=>doInstall])}"><i class="fa fa-cog"></i> Install</a>
 
-{if $smarty.session.debug}{$state="off"}{else}{$state="on"}{/if}
+{if $app->sess['debug']}{$state="on"}{else}{$state="off"}{/if}
 <a class="btn btn-default" href="{$m->buildUri(false,[act=>doDebugModeToggle])}"><i class="fa fa-cog"></i> Debug mode {$state}</a>
 
 
@@ -61,6 +61,13 @@
 	FOR WGET AUTH:
 	GWSESSID={session_id()}
 </p>
+
+Hot Keys:
+<ul>
+	<li>Ctrl+1 - system/tools?act=doSwitchEnvironment</li>
+	<li>Ctrl+2 - system/tools?act=doPullProductionDB</li>
+	<li>Ctrl+3 - system/tools?act=doDebugModeToggle</li>
+</ul>
 
 	</div>
 </div>

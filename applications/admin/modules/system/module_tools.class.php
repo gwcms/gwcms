@@ -47,6 +47,12 @@ class Module_Tools extends Module_Config
 		$this->app->sess['debug']=(int)$this->app->sess['debug'];
 		$this->app->sess['debug']=($this->app->sess['debug']+1) % 2;
 		
+		
+		if(isset($_GET['uri'])){
+			header("Location: ".$_GET['uri']);
+			exit;
+		}
+		
 		$this->jump();
 	}
 	

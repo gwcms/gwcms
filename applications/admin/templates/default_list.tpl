@@ -94,7 +94,20 @@
 	{if $dl_actions_head}
 		{call dl_display_actions dl_actions=$dl_actions_head}
 	{else}
-		<i class="fa fa-cog"></i>
+		
+	<div class="btn-group dropright gwcmsAction" style="display: inline">
+		<i class="fa fa-cog dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" data-url="{$m->buildURI('configuremenu',[id=>$item->id])}"></i>	
+		<ul class="dropdown-menu dropdown-menu-right">
+			<li><i class="fa fa-spinner fa-pulse"></i></li>
+		</ul>
+	</div>
+		
+	{$GLOBALS.dropdown_init_done=1}
+		<script type="text/javascript">
+			require(['gwcms'], function(){
+				gwcms.initDropdowns();
+			});
+		</script>
 	{/if}
 {/function}
 
@@ -219,7 +232,8 @@
 							{foreach $dl_fields as $field}
 								<th>{dl_proc_th_cell}</th>
 							{/foreach}	
-							{if count($dl_actions) && !$smarty.get.print_view}
+							{* {if count($dl_actions) && !$smarty.get.print_view} show if actions present*}
+							{if !$smarty.get.print_view} {* show even no actions present*}
 								<th>{call name="dl_actions_head"}</th>
 							{/if}
 						</tr>

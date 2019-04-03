@@ -7,24 +7,22 @@
 	{/if}
 	
 	<{if $rotatedlabel}span{else}td{/if} id="{$id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass}" 
-										 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
+		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if isset($m->lang.FIELD_NOTE.$name)}
 					{$hidden_note=$m->lang.FIELD_NOTE.$name}
 				{/if}
 			{/if}
-			
+                    <span>
 
-				<span>
+                    {$title}
+                    {if $hidden_note} 
+                            <a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
+                    {/if}
 
-				{$title}
-				{if $hidden_note} 
-					<a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
-				{/if}
-
-				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
-			{if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
+                    {if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
+                    {if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		</span>
 
 		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
@@ -128,87 +126,84 @@
 	after_input - turinys pridedamas po laukeliu
 *}
 
-{if $params_expand}
-	{foreach $params_expand as $k => $v}
-		{assign var=$k value=$v}
-	{/foreach}
-	{$params_expand=[]}
-{/if}
+    {if $params_expand}
+            {foreach $params_expand as $k => $v}
+                    {assign var=$k value=$v}
+            {/foreach}
+            {$params_expand=[]}
+    {/if}
 
 
-{if !$hideifempty || $value || $item->$name}
-	
-{$title=$title|default:$m->fieldTitle($name)}
+    {if !$hideifempty || $value || $item->$name}
+
+    {$title=$title|default:$m->fieldTitle($name)}
 
 
-{*copy to {function e0}*}
+    {*copy to {function e0}*}
 
-{call calcElmName assign=input_name}
-{call calcElmId assign=id}
-{*copy to {function e0}*}
+    {call calcElmName assign=input_name}
+    {call calcElmId assign=id}
+    {*copy to {function e0}*}
 
-{$inputContainClass="gw_input_`$id`"}
+    {$inputContainClass="gw_input_`$id`"}
 
-{if $i18n}
-	{if !$langs}
-		{$langs=array_flip(GW::$settings.LANGS)}
-		{$langs=[$app->ln=>1]+$langs}
-	{/if}
-	
-
-	{if !isset($GLOBALS.form_18n_init_done)}
-		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
-		
-		{$GLOBALS.form_18n_init_done=1}
-		<script type="text/javascript">
-			require(['forms'], function(){ gw_forms.initI18nForm({json_encode($langs)}) })
-		</script>
-	{/if}		
-	
-	{$langs=array_keys($langs)}
-	
-{/if}
+    {if $i18n}
+            {if !$langs}
+                    {$langs=array_flip(GW::$settings.LANGS)}
+                    {$langs=[$app->ln=>1]+$langs}
+            {/if}
 
 
+            {if !isset($GLOBALS.form_18n_init_done)}
+                    <link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 
-{if $tabs}
-	{foreach $tabs as $tab}{$rowclass="`$rowclass` tabitm_`$tab` tabitm_row"}{/foreach}
-{/if}	
+                    {$GLOBALS.form_18n_init_done=1}
+                    <script type="text/javascript">
+                            require(['forms'], function(){ gw_forms.initI18nForm({json_encode($langs)}) })
+                    </script>
+            {/if}		
 
+            {$langs=array_keys($langs)}
 
-{if $notr}
-		{if $layout!='wide'}
-			{call input_label}
-		{else}
-			{$rotatedlabel=1}
-		{/if}
-		
-		{call input_content}	
-{elseif $layout=='wide'}
-	<tr class="{$rowclass}">
-		{call input_label}
-	</tr>
-	<tr id="gw_input_{$id}"  class="{$rowclass}">
-		{call input_content}
-	</tr>
-{elseif $layout=='inline'}
-	{call input_content}
-{else}
-	<tr id="gw_input_{$id}"  class="{$rowclass}">
-		{call input_label}
-		{call input_content}
-	</tr>
-{/if}
-{/if}
+    {/if}
 
 
+
+    {if $tabs}
+            {foreach $tabs as $tab}{$rowclass="`$rowclass` tabitm_`$tab` tabitm_row"}{/foreach}
+    {/if}	
+
+
+    {if $notr}
+        {if $layout!='wide'}
+                {call input_label}
+        {else}
+                {$rotatedlabel=1}
+        {/if}
+
+        {call input_content}	
+    {elseif $layout=='wide'}
+            <tr class="{$rowclass}">
+                    {call input_label}
+            </tr>
+            <tr id="gw_input_{$id}"  class="{$rowclass}">
+                    {call input_content}
+            </tr>
+    {elseif $layout=='inline'}
+            {call input_content}
+    {else}
+            <tr id="gw_input_{$id}"  class="{$rowclass}">
+                    {call input_label}
+                    {call input_content}
+            </tr>
+    {/if}
+    {/if}
 {/function}
 
 
 
 
 {function name=e0}
-
 	{$name=$field}
 	{if $params_expand}
 		{foreach $params_expand as $k => $v}
@@ -220,8 +215,6 @@
 	{call calcElmName assign=input_name}
 	{call calcElmId assign=id}
 	{*copy to {function e}*}
-	
-	
 	
 	{if !isset($value) || $value===null}
 
@@ -250,15 +243,12 @@
 		{$options=$tmp}
 	{/if}
 
-
-
-		{$inp_type=$type|default:'text'}
-		{include file="elements/inputs/`$inp_type`.tpl"}
+	{$inp_type=$type|default:'text'}
+	{include file="elements/inputs/`$inp_type`.tpl"}
 
 
 	{if !in_array($type,["read",'image','attachments','file']) && $readonly != 1}
 		{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
 		<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
 	{/if}
-
 {/function}

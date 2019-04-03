@@ -95,6 +95,12 @@ class GW_Application
 	function initDB()
 	{
 		$this->db = GW::db();
+				
+		if(isset($this->sess['debug']) && $this->sess['debug'])
+		{
+			$this->db->debug=1;
+			$this->db->profiling=1;
+		}
 	}
 	
 
@@ -177,10 +183,10 @@ class GW_Application
 
 	function init()
 	{
-		
 		$this->loadConfig();
+		
+		$this->initSession(); // debug or not to debug?
 		$this->initDB();
-		$this->initSession();
 
 		$this->requestInfo();
 		$this->initAuth();
@@ -409,10 +415,7 @@ class GW_Application
 		$module->module_path = $path_info['path'] ?? '';
 		$module->module_path_filtered = $path_info['path_clean'] ?? '';		
 		
-		
 		$module->module_dir = GW::s("DIR/{$this->app_name}/MODULES") . $path_info['dirname'] . '/';
-
-
 
 		return $module;
 	}

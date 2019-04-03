@@ -17,7 +17,19 @@
 		{call e field=order type=text autoresize=1 height=25}
 		{call e field=fields type=textarea autoresize=1 height=25}
 		{call e field=page_by type=number autoresize=1 height=25}
+		{call e field=group_by type=text}
+		{call e field=select type=text}
+		
+		
+		{call e field=access type=select options=['1'=>"Read", "3"=>"Read + Write"]}
+		
 	{else}
+		
+		{if $options.path}
+			{call e field=path type=select options=$options.path}
+		{else}
+			{call e field=path type=text}
+		{/if}
 		
 		{if $item->condition}
 			{call e field=condition type=read}
@@ -34,14 +46,21 @@
 
 		{if $item->page_by}
 			{call e field=page_by type=read}
-		{/if}		
+		{/if}	
 		
+		{if $item->group_by}
+			{call e field=group_by type=read}
+		{/if}	
+		{if $item->select}
+			{call e field=select type=read}
+		{/if}		
 	{/if}
+	
 	
 	
 
 {else}
-	{call e field=path type=select options=$item->path_options options_fix=1}
+	{call e field=path type=select options=$options.path}
 	{call e field=type type=select options=$m->lang.OPTIONS.page_view_types}
 	
 	{if $smarty.get.saveasorder==1}
@@ -52,8 +71,19 @@
 
 
 
-		{call e field=order_enabled type=bool}
+		
+		{call e field=order_enabled type=bool value=$tmpval}
 		{call e field=order type=text rowclass="orderinput"}
+		
+		
+		{if $item->id && $item->group_by}{$item->set(groupby_enabled,1)}{/if}
+		{call e field=groupby_enabled type=bool}
+		{call e field=group_by type=text rowclass="groupbyinput"}
+
+		{if $item->id && $item->select}{$item->set(select_enabled,1)}{/if}
+		{call e field=select_enabled type=bool}
+		{call e field=select type=text rowclass="selectinput"}
+	
 
 		{call e field=condition_enabled type=bool}
 		{call e field=condition type=textarea height=50 rowclass="conditioninput"}
@@ -90,6 +120,7 @@
 		{call "setupEnabler" trigger=condition_enabled target=".conditioninput"}
 		{call "setupEnabler" trigger=fields_enabled target=".fieldsinput"}
 		{call "setupEnabler" trigger=pageby_enabled target=".pagebyinput"}
+		{call "setupEnabler" trigger=groupby_enabled target=".groupbyinput"}
 	});
 </script>
 

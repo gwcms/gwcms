@@ -22,7 +22,12 @@ class GW_Adm_Page_View extends GW_Data_Object
 	
 	public $validators = [
 	    'title'=>['gw_string', ['required'=>1]],
-	];	
+	];
+	
+	public $ignore_fields = [
+		'groupby_enabled'=>1,
+		'select_enabled'=>1,
+	];
 	
 	/**
 	 * 
@@ -113,5 +118,23 @@ class GW_Adm_Page_View extends GW_Data_Object
 		}
 
 		return $arr;
-	}	
+	}
+
+	function eventHandler($event, &$context_data = array()) {
+		
+		switch ($event){
+			case 'BEFORE_SAVE':
+				//jeigu bus atzymeta tada bus isvalyta
+				if(isset($this->content_base['groupby_enabled']) && !$this->groupby_enabled)
+					$this->group_by = '';
+				
+				if(isset($this->content_base['select_enabled']) && !$this->select_enabled)
+					$this->select = '';
+				
+			break;
+			
+		}
+		
+		parent::eventHandler($event, $context_data);
+	}
 }

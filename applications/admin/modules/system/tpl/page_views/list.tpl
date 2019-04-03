@@ -5,7 +5,7 @@
 
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden[] = dialogconf}
-	{$dl_smart_fields=[insert_time,dropdown,calculate,default,fields,title_short,condition,order]}
+	{$dl_smart_fields=[dropdown,calculate,default,fields,title_short,condition,order]}
 	
 	
 	{if $app->user->isRoot()}
@@ -20,6 +20,7 @@
 	{$dl_filters=[]}
 	{$dl_order_enabled_fields=[]}
 	{$dl_inline_edit=1}
+	{$dl_output_filters=[insert_time=>short_time,update_time=>short_time]}	
 	
 	
 	{if $app->user->isRoot()}
@@ -64,6 +65,8 @@
 	{function dl_cell_order}
 		{$item->order|truncate:40}
 	{/function}	
+	
+	
 	
 	{function dl_cell_insert_time}
                 {$x=explode(' ',$item->insert_time)}

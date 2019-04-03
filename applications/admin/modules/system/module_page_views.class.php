@@ -12,11 +12,26 @@ class Module_Page_Views extends GW_Common_Module
 		
 		$this->app->carry_params['filterpaths']=1;		
 		$this->app->carry_params['clean']=1;		
+		$this->app->carry_params['path']=1;
 		
 		if(isset($_GET['filterpaths']))
 		{
 			$this->filterpaths=explode(',',$_GET['filterpaths']);
 		}
+		
+		if(isset($_GET['path'])){
+			$inf = $this->app->getModulePathInfo($_GET['path']);
+			$pc = array_values($inf['path_clean']);
+			
+			$this->filterpaths=[
+				implode('/',$inf['path']),
+				implode('/',$inf['path_clean']),
+				$pc[0].'/'.$pc[count($pc)-1]
+				];
+			
+		}
+		if($this->filterpaths)
+			$this->options['path'] = GW_Array_Helper::buildOpts($this->filterpaths);
 	}
 	
 	

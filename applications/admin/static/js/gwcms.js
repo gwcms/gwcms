@@ -216,18 +216,21 @@ var gw_adm_sys = {
 			if(!title)
 				title = $(this).text();
 			
+			//hold ctrl key & moouse click  to exit iframe
+			title = "<span  data-url='"+$(this).attr('href')+"' onclick='if(window.event.ctrlKey){ window.open($(this).data(\"url\")) }else{ return false }'>"+title+'</span>';
+			
 			var dialogwidth = $(this).data('dialog-width') ? $(this).data('dialog-width') : 800;
 			var opts = { url: $(this).attr('href'), iframe:1, title:title, widthOffset:0, minWidth:dialogwidth };
 			
 			if($(this).data('dialog-minheight'))
 				opts.minHeight=$(this).data('dialog-minheight');
 			
-			gwcms.open_dialog2(opts)	
+			gwcms.open_dialog2(opts)
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);
 	},
-	
+		
 	init_list: function()
 	{
 		$('.setListParams').on('submit', function(){
@@ -444,7 +447,10 @@ var gw_adm_sys = {
 						
 			var afterc = obj.data('iframe-after-close') ? obj.data('iframe-after-close') : false;
 			
-			openIframeUnderThisTr(this, this.href, afterc)
+
+			var opt = obj.data('iframeopt') ? obj.data('iframeopt') : {};
+						
+			openIframeUnderThisTr(this, this.href, afterc, opt)
 			event.preventDefault();
 		}).attr('data-initdone',1);
 		
@@ -1423,10 +1429,18 @@ $("body").keydown(function (event) {
 			event.preventDefault();
 		}
 		
+		//ctrl + 2
+		
 		if (event.which == 50 && event.ctrlKey) {
 			location.href = GW.app_base + GW.ln + '/system/tools?act=doPullProductionDB&uri='+encodeURIComponent(location.href)
 			event.preventDefault();
 		}		
-		
+
+		if (event.which == 51 && event.ctrlKey) {
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doDebugModeToggle&uri='+encodeURIComponent(location.href)
+			event.preventDefault();
+		}		
+			
+	
 		//console.log(event.which)
 });

@@ -31,7 +31,7 @@ class GW_Debug_Helper
 		$test = GW::$context->db->query_times;
 
 
-		if (isset($_SESSION['debug']) && $this->app->user->isRoot()) {
+		if (isset(GW::$context->app->sess['debug']) && GW::$context->app->sess['debug'] && GW::$context->app->user->isRoot()) {
 			$info = $GLOBALS['debug'];
 			$info['mem_use'][] = memory_get_usage(true);
 
@@ -46,8 +46,10 @@ class GW_Debug_Helper
 
 			if ($info['query_times_sum'])
 				$info['process_db_part'] = round($info['query_times_sum'] / $info['process_time'] * 100) . '%';
+			
+			$info['db_speed'] = GW::$context->db->speed;
 
-			dump($info);
+			d::dumpas($info);
 		}
 	}
 	

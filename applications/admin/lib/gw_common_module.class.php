@@ -14,6 +14,7 @@ class GW_Common_Module extends GW_Module
 		'viewform' => 1,
 		'viewitem' => 1,
 		'viewitemactions' => 1,
+		'viewconfiguremenu' => 1,
 		'viewlist' => 1,
 		'viewdialogconfig' => 1,
 		'viewdialogremove' => 1,
@@ -74,7 +75,7 @@ class GW_Common_Module extends GW_Module
 		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') . 'mod_' . $this->module_name . '.log');
 		$this->lgr->collect_messages = true;
 	}
-
+        
 	function getCurrentItemId()
 	{
 		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
@@ -451,10 +452,17 @@ class GW_Common_Module extends GW_Module
 	{
 		$item = $this->getDataObjectById();
 		$this->tpl_vars['item'] = $item;
-
+		$this->initListParams(false, 'list');
+		
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/item_actions_menu';
 	}
+	
+	function common_ViewConfigureMenu()
+	{
+		$this->initListParams(false, 'list');		
 
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'list/configure_menu';
+	}
 	
 	function getDataObjectByIds() 
 	{
@@ -529,11 +537,18 @@ class GW_Common_Module extends GW_Module
 			$this->jump();
 	}
 
+	
+	
 	function buildCond($field, $compare_type, $value, $encap_val=true, $encap_fld=true)
 	{
 		$encapChr = $encap_val ? "'" : '';
 		
-		
+		$cond =  $field. ' ';
+		if($encap_fld && isset($this->field_alias[$field])){
+			$field = $this->field_alias[$field]; //get orig field
+			$encap_fld = false;
+		}
+			
 		$cond = ($encap_fld ? GW_DB::escapeField($field, 'a') : $field). ' ';
 				
 		switch ($compare_type) {
@@ -599,23 +614,74 @@ class GW_Common_Module extends GW_Module
 			}		
 	}
 	
+	public $prep_list_params;
+	public $field_alias = [];
+	
+	function initFldAliases($params)
+	{
+		if(!isset($params['select']))
+			return false;
+		
+		$select = explode(',', $params['select']);
+		//$list_select = 
+		foreach($select as $sel){
+			$split = preg_split('/ as /i', $sel);
+			if(count($split)==2){
+				$orig = str_replace('`', '', trim($split[0]));
+				$alias = str_replace('`', '', trim($split[1]));
+				$this->field_alias[$alias] = $orig;
+			}
+		}
+	}
+	
+	
+	
+	/*
+		Todo: perdaryt saraso atvaizdavimo opciju surinkima pagal tokia hierarchija
+		PageView
+			Laukeliai
+			Filtrai
+			puslapiuot po
+			rikiuoti pagal
+		TempView
+			Laukeliai
+			Filtrai
+			puslapiuot po
+			rikiuoti pagal
+		PageView kai nustatomas jis perraso ir tempview
+		
+	 */
+	
+	function getPageView4use()
+	{
+		if(isset($_GET['pview']) && $_GET['pview']=='default'){
+			return $this->getDefaultPageView();
+		}
+			
+		return $this->list_config['pview'] ?? false;
+	}
+	
 	function setListParams(&$params = [])
 	{
+		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
+		$this->prep_list_params =& $params;
 		$this->prepareListConfig();
 		$this->tpl_vars+=$this->list_config;
+		$pview = $this->getPageView4use();
+		
+		
 		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
-
 		
-		
-		if (isset($this->list_config['pview']->condition) && $this->list_config['pview']->condition){
-			
+		$this->initFldAliases($params);
+	
+		if ($pview && $pview->condition){
 			$cond .= ($cond ? ' AND ' : '') . $this->list_config['pview']->condition;
 		}
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
-
+		
 		foreach ($this->filters as $key => $val)
 			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
 
@@ -643,18 +709,26 @@ class GW_Common_Module extends GW_Module
 			
 			$cond.=($cond ? ' AND ':'')."($subcond)";
 		}
-
+	
+			
 		foreach ($search as $filter) {
 			$this->buildConds($filter, $cond);
 		}
-
+		
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
 			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page'] - 1 : 0;
 			$params['offset'] = $this->list_params['page_by'] * $page;
 			$params['limit'] = $this->list_params['page_by'];
 		}
 		
-
+		if ($pview && $pview->group_by){
+			$params['group_by'] = $pview->group_by;
+		}		
+		
+		if ($pview && $pview->select){
+			$params['select'] = $params['select'] ?? '';
+			$params['select'] = ($params['select'] ? $params['select'].', ':'').$pview->select;
+		}
 
 		if (isset($this->list_params['order']) && $ord = $this->list_params['order'])
 			$params['order'] = $ord;
@@ -669,6 +743,8 @@ class GW_Common_Module extends GW_Module
 		//unset($this->list_params['order']);
 
 		$params['conditions'] = $cond;
+				
+		$this->fireEvent('AFTER_LIST_PARAMS', $params);		
 	}
 
 	function setDefaultOrder()
@@ -833,11 +909,8 @@ class GW_Common_Module extends GW_Module
 			exit;
 		}
 
-		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
-
+		
 		$this->setListParams($params);
-
-		$this->fireEvent('AFTER_LIST_PARAMS', $params);
 
 		$cond = isset($params['conditions']) ? $params['conditions'] : false;
 
@@ -864,11 +937,9 @@ class GW_Common_Module extends GW_Module
 			$last_querty=$this->model->getDB()->last_query;
 		}
 		
-		if(isset($_GET['verbose']) && $this->app->user->isRoot())
+		if(isset($this->app->sess['debug']) && $this->app->sess['debug'] && $this->app->user->isRoot())
 		{
-			print_r([
-			    'last_query'=>$last_querty
-			]);
+			echo SQL_Format_Helper::format($last_querty);
 		}
 		
 
@@ -926,6 +997,7 @@ class GW_Common_Module extends GW_Module
 		{	
 			$pview = $this->list_config['pview'];
 			$saved = (array) json_decode($pview->fields, true);
+			
 		}
 		
 		//prideti fields tam kad programavimo eigoje pridejus nauja laukeli veiktu
@@ -937,7 +1009,7 @@ class GW_Common_Module extends GW_Module
 
 			$fields = $saved + $fields;
 		}
-
+		
 		$rez = [];
 		
 		foreach ($fields as $id => $enabled)
@@ -1464,7 +1536,7 @@ class GW_Common_Module extends GW_Module
 	function doManagePageViews()
 	{
 		$this->app->carry_params['clean']=1;
-		$this->app->jump("system/page_views", ['filterpaths'=>implode(',', $this->__viewsSearchPaths())]);
+		$this->app->jump("system/page_views", ['path'=>$this->app->path]);
 	}
 	
 	function __currentFields()
@@ -1486,13 +1558,13 @@ class GW_Common_Module extends GW_Module
 	{
 		$params = [];
 		$cond = '';
-		$this->initListParams(false, 'list');
+		//$this->initListParams(false, 'list');//jau ir taip is list kvieciama
 		$this->setListParams($params);
 		$this->prepareListConfig();
 		$this->fireEvent("AFTER_LIST_PARAMS", $params);
 		
 		$cond = $params['conditions'];
-		
+				
 		$id = 0;
 		
 		$vals = [];
@@ -1510,6 +1582,8 @@ class GW_Common_Module extends GW_Module
 		
 		if($vals)
 			$args .= $args.'&update=1';
+		
+		$args.='&path='.rawurlencode($this->app->path);
 		
 		$url = $this->app->buildUri("system/page_views/form?id={$id}&clean=2".$args);
 		

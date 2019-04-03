@@ -53,7 +53,7 @@ class Module_Groups extends GW_Common_Module
 		if(!$this->app->user->isRoot())
 		{
 			foreach($list as $i => $page)
-				if(!$page->canAccess() || $page->get('path')=='users' || $page->get('path')=='users/groups')
+				if(!$this->app->canAccess($page) || $page->get('path')=='users' || $page->get('path')=='users/groups')
 					unset($list[$i]);
 		}
 					
