@@ -14,4 +14,12 @@ switch($argv[1]){
 			echo "Only on dev";
 		}
 	break;
+	
+	case 'sync':
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
+			echo shell_exec("php ".GW::s('DIR/ROOT')."/update.php -web 2>&1");
+		}else{
+			echo "Only on dev";
+		}
+	break;	
 }

@@ -425,6 +425,10 @@ class GW_Module
 	
 	function jump($path=false, $params=[])
 	{
+		if (isset($_REQUEST['RETURN_TO']) && ($tmp = $_REQUEST['RETURN_TO']))
+			return die(header('Location: ' . $tmp));
+		
+		
 		if(Navigator::isAjaxRequest()){
 			if(isset($_GET['id']))
 				$this->notifyRowUpdated($_GET['id'], false, false);

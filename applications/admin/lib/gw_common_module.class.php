@@ -360,13 +360,6 @@ class GW_Common_Module extends GW_Module
 			$options = $item ? ['id' => $item->get('id')] : [];
 			$this->jump(false, $options + $_GET);
 		} else { //save
-			if (isset($_REQUEST['return_to']) && ($tmp = $_REQUEST['return_to']))
-				return $this->jump($tmp);
-
-			if (isset($_REQUEST['RETURN_TO']) && ($tmp = $_REQUEST['RETURN_TO']))
-				return die(header('Location: ' . $tmp));
-
-
 			$this->jump(dirname($this->app->path));
 		}
 	}

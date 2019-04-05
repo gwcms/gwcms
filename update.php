@@ -7,10 +7,10 @@ include "init_basic.php";
 class GW_CMS_Sync
 {
 	public $params;
-	private $sourceDir;
-	private $destDir;
-	private $projDir;
-	private $sync_direction;
+	public $sourceDir;
+	public $destDir;
+	public $projDir;
+	public $sync_direction;
 	
 	function parseParams($argv)
 	{
@@ -335,13 +335,13 @@ class GW_CMS_Sync
 		if(isset($this->params['p']))
 		{
 			print_r($changed_files);
-			return true;
+			return $changed_files;
 		}			
 
 		$dir = $this->doSync($changed_files);
 
 		if(!isset($this->params['s']))
-			shell_exec("krusader --left=$dir --right='".$this->destDir."'");			
+			shell_exec("krusader --left=$dir --right='".$this->destDir."'");
 	}
 	
 	
@@ -375,11 +375,65 @@ class GW_CMS_Sync
 		$this->actSync();
 	}
 	
+	function checkOne($proj)
+	{
+		$this->params['p']=1;
+		
+		$this->params['proj'] = $proj;
+
+		$this->setDirection(true);
+		$imp = $this->actSync();
+		$this->setDirection(false);
+		$exp = $this->actSync();
+			
+		return ['exp'=>$exp, 'imp'=>$imp];
+	}
+	
+	function cmdCheck()
+	{
+		$projects = explode(',', $this->params['proj']);
+				
+		$short = [];
+		$long = [];
+		
+		foreach($projects as $project)
+		{	
+			list($exp, $imp) = $this->cmdCheckOne($project);
+			
+			$long[$project] = ['imp'=>$imp, 'exp'=>$exp];
+			$short[$project] = ['imp'=>count($imp['copy'])+count($imp['remove']), 'exp'=>count($exp['copy'])+count($exp['remove'])];			
+		}
+		
+		print_r($long);
+		print_r($short);
+	}
+	
+	function cmdWeb()
+	{
+		$optsfile=GW::s('DIR/SYS_REPOSITORY').'sync_opts';
+		if(!file_exists($optsfile))
+			die('optsfile does note exists');
+		
+		$res = file_get_contents($optsfile);
+		$res = json_decode($res);
+		
+		
+		if($res->act=='doSync'){
+			$this->params['proj'] = $res->proj;
+			$this->params['s'] = true;
+			
+			$this->setDirection($res->dir == '1');
+			$this->actSync();			
+		}			
+			
+		unlink($optsfile);
+	}
+	
 	
 	function process($argv)
 	{
 		$this->parseParams($argv);
-		
+						
 		foreach($this->params as $key => $val){
 			$act="cmd{$key}";
 			if(method_exists($this, $act)){
@@ -393,15 +447,96 @@ class GW_CMS_Sync
 	{
 		echo is_object($msg) || is_array($msg) ? print_r($msg,1) : $msg."\n";
 	}
+	
+	function fileDiffLink(&$list,$addpathopt=[])
+	{
+		foreach($list['copy'] as &$path)
+		{
+			$url = Navigator::buildURI(false, ['filediff'=>$path]+$addpathopt+$_GET);
+			$path = "<a href='$url'>$path</a>";
+		}
+	}
+	
 
 	
 }
 
-
-
-
+if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 	
+	if(isset($_GET['filediff'])){
+		$sync = new GW_CMS_Sync();
+		$sync->params['proj'] = $_GET['proj'];
+		$sync->setDirection($_GET['dir']);
+		$file1 = $sync->destDir.$_GET['filediff'];
+		$file2 = $sync->sourceDir.$_GET['filediff'];
+		$f1_proj = basename($sync->destDir);	
+		$f2_proj = basename($sync->sourceDir);	
+		
+		$file1 = file_get_contents($file1);
+		$file2 = file_get_contents($file2);
+		
+		echo "<br/><br/>File diff: <b>{$_GET['filediff']}<b/><br>";
+		echo "<table style='width:100%'><tr><th>$f1_proj</th><th>$f2_proj</th></tr></table>";
+		
+		echo diff_helper::getTableStyle();
+		echo diff_helper::toTable(diff_helper::compare($file1,$file2), "\t","");
+		echo diff_helper::scripts();
+		exit;
+	}
+	
+	if(isset($_GET['act']) && $_GET['act']=='doSync'){
+		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
+		$sudouser = 'wdm';
+		
+	
+		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_GET));
+		
+		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
+		
+		
+		
+		d::ldump($res);
+		exit;			
+	}
+	
+	if(!isset($_GET['proj'])){
 
+		foreach(glob(dirname(__DIR__).'/*') as $path)
+		{
+			$proj= basename($path);
+			echo "<li><a href='?proj=$proj'>$proj</a></li>";
+		}
+		exit;
+	}else{
+		
+		$sync = new GW_CMS_Sync();
+		$list = $sync->checkOne($_GET['proj']);
+		$sync->fileDiffLink($list['exp'],['dir'=>0]);
+		$sync->fileDiffLink($list['imp'],['dir'=>1]);
+		d::ldump($list);
+		
+		$eCp = count($list['exp']['copy']);
+		$eRm = count($list['exp']['remove']);
+		$iCp = count($list['imp']['copy']);
+		$iRm = count($list['imp']['remove']);
+		
+		if($eCp || $eRm)
+		echo "<br><a href='?proj={$_GET['proj']}&dir=0&act=doSync'>Export gwcms changes to <b>{$_GET['proj']}</b> copy($eCp) remove($eRm)</a>";
+		
+		if($iCp || $iRm)
+		echo "<br><a href='?proj={$_GET['proj']}&dir=1&act=doSync'>Import <b>{$_GET['proj']}</b> changes to gwcms copy($iCp) remove($iRm)</a>";
+		exit;
+	}
+}
+
+
+/*
+
+if(isset($_GET['diffshow'])){
+	echo diff_helper::getTableStyle();
+	echo diff_helper::toTable(diff::compare($file2,$file1), "\t","");	
+}
+*/
 
 
 // per komandine eilute priimti komanda
