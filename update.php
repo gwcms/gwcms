@@ -339,7 +339,7 @@ class GW_CMS_Sync
 		}			
 
 		$dir = $this->doSync($changed_files);
-
+		
 		if(!isset($this->params['s']))
 			shell_exec("krusader --left=$dir --right='".$this->destDir."'");
 	}
@@ -364,8 +364,10 @@ class GW_CMS_Sync
 	{
 		$this->setDirection(true);
 		
-		
 		$this->actSync();
+		
+		$op = shell_exec($cmd="cd '$this->projDir' && git add config/project_core_sync.json && git commit -m 'changes exported to gwcms' && git push");		
+		echo "SYNC VERSION FILE $cmd\nOUT: $op\n\n";			
 	}
 	
 	function cmdExp()

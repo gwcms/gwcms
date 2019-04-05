@@ -13,6 +13,7 @@ applications/admin/modules/movies/*
 pullupdates.php
 update.php
 config/db_prod.php
+framework/helpers/diff_helper.class.php
 ";
 
 $paths=explode("\n", trim($paths));
