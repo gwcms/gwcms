@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+<i id="SEARCH_REPLACE_OK">
+	<lt>Sukeitimas atliktas, galite peržiūrėti įrašus ir spausti užverti</lt>
+	<en>Replace done, you can verify items and press button</en>
+</i>
+
+<i id="SEARCH_REPLACE">
+	<lt>Ieškoti frazes ir pervadinti</lt>
+	<en>Search and replace</en>
+</i>
+
+<i id="SEARCH_PHRASE">Ieškoma frazė</i>
+<i id="REPLACE_PHRASE">Pakeičiama į</i>
+
+<i id="CONFIRM_REPLACE">
+	<en>Confirm replace</en>
+	<lt>Patvirtinkite sukeitimą</lt>
+</i>
+
+</xml>

@@ -217,7 +217,7 @@
 	<div class="row">
 
 
-		{if $dl_filters && !$smarty.get.print_view && (count($list) || $m->list_params.filters)}
+		{if $dl_filters && !$smarty.get.print_view && !$smarty.get.filterhide && (count($list) || $m->list_params.filters)}
 			<div class="col-xs-auto" id="gwFiltersContainer">
 				{include "list/filters.tpl"}
 			</div>	
@@ -288,7 +288,11 @@
 
 		
 	{capture append=footer_hidden}	
-		<script> require(['gwcms'], function(){	gw_adm_sys.init_list(); }) </script>				
+		<script> 
+			require(['gwcms'], function(){	
+				gw_adm_sys.list_items_count = {intval($query_info.item_count)};
+				gw_adm_sys.init_list(); 
+			}) </script>				
 	{/capture}		
 		
 		

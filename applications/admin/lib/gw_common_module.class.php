@@ -18,6 +18,7 @@ class GW_Common_Module extends GW_Module
 		'viewlist' => 1,
 		'viewdialogconfig' => 1,
 		'viewdialogremove' => 1,
+		'viewsearchreplace' => 1,
 		'dodialogconfigsave' => 1,
 		'doclone' => 1,
 	];
@@ -68,6 +69,9 @@ class GW_Common_Module extends GW_Module
 		}elseif(isset($_GET['id'])){
 			$this->acive_object_id = $_GET['id'];
 		}
+		
+		$this->app->carry_params['searchreplace']=1;
+		$this->app->carry_params['filterhide']=1;
 	}
 
 	function initLogger()
@@ -1645,5 +1649,112 @@ class GW_Common_Module extends GW_Module
 	function getModelCols($type='all')
 	{
 		return $this->extra_cols+$this->model->getColumns($type);
+	}
+	
+	
+	/**
+	 * Search Replaces is in multiple places 
+	 * gwcms.js:gw_adm_sys.init_list() , gwcms.js:gwSearchReplace()
+	 * templates/list/configure_menu.tpl
+	 * default/tpl/searchreplace.tpl
+	 * searchreplace=1 - nustatomas filtras laukiama vartotojo patvirtinimo kad rasti rezultatai ok
+	 * searchreplace=2 - atfiltruojami pakeisti irasai perziureti ar korektiskai ivyko keitimas
+	 * while search replace is active filters is disabled
+	 * todo: use module elements.tpl for select fields
+	 * todo: remove non varchar fields, non numeric fields | get col types from information schema
+	 * todo: add search_replace_na_fields=[id,insert_time,update_time] public variable
+	 */
+	function common_viewSearchReplace()
+	{
+		$this->initListParams(false,'list');
+		$this->prepareListConfig();
+		
+		$fields = [];
+		$ignore = ['id'=>1,'insert_time'=>1,'update_time'=>1];
+		
+		foreach($this->list_config['dl_fields'] as $field)
+		{
+			if(isset($ignore[$field]))
+				continue;
+			
+			$fields[$field] = GW::l('/A/FIELDS/'.$field);
+		}
+				
+		$this->options['fields'] = $fields;
+		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/searchreplace";
+		
+		$sr =& $this->list_params['searchreplace'];
+			
+		
+		//apsauga jei nuimtu filtrus
+		if(isset($_GET['searchreplace']) && $_GET['searchreplace']==1 && !$this->getFilterByFieldname($sr['fieldname']))
+		{
+			$_GET['searchreplace']=0;
+		}
+	}
+	
+	function doSearchReplace()
+	{
+		$this->list_params['searchreplace'] = $_POST['item'];
+		$sr =& $this->list_params['searchreplace'];
+		
+		
+		$this->prepareListConfig();			
+		$avail_fields = $this->__currentFields();		
+		
+		//security use only available fields
+		if(!isset($avail_fields[$sr['fieldname']])){
+			$this->setError(GW::l('/A/FIELDS/'.$sr['fieldname']).' is not available for this operation');
+			$this->jump();
+		}
+	
+		
+		//d::dumpas($this->list_params['searchreplace']);
+		
+		$this->list_params['filters'] = [];
+		$this->list_params['page']=1;
+		
+		$this->setFilter($sr['fieldname'], $sr['searchval'], 'LIKE');
+		
+		
+		if(isset($sr['confirm'])){
+
+			$list = $this->model->findAll([GW_DB::escapeField($sr['fieldname']).' LIKE ?', '%'.$sr['searchval'].'%']);
+			
+			if($sr['items_count']!=count($list)){
+				$this->setError("Search &amp; replace security stop: Number filtered: {$sr['items_count']} does not match real number of matching items: ".count($list));
+
+				$this->jump();
+			}
+			
+			$ids = [];
+			
+			foreach($list as $item)
+			{
+				$newval = str_ireplace($sr['searchval'], $sr['replaceval'], $item->get($sr['fieldname']));
+				$item->set($sr['fieldname'], $newval);
+				$item->update([$sr['fieldname']]);
+				$ids[] = $item->id;
+			}
+			
+			$this->list_params['filters'] = [];
+			$this->setFilter('id', $ids, 'IN');
+			
+			$this->jump(false, ['searchreplace'=>2,'filterhide'=>1]);
+		}
+		
+		$this->jump(false, ['searchreplace'=>1,'filterhide'=>1]);
+	}
+	
+	function doCancelSearchReplace()
+	{
+		unset($_GET['searchreplace']);
+		unset($_GET['filterhide']);
+		
+		$this->list_params['searchreplace'] = null;
+		unset($this->list_params['searchreplace']);
+		$this->list_params['filters'] = [];
+		$this->list_params['page']=1;
+		$this->jump();
 	}
 }

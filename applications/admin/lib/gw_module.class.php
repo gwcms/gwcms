@@ -123,7 +123,7 @@ class GW_Module
 			$viewname=$this->view_name;
 		
 		$sess_store =& $this->app->sess["$modulepath/$viewname"];
-		
+				
 		if(!$sess_store)
 			$sess_store=[];
 		
@@ -159,16 +159,9 @@ class GW_Module
 	{
 		return (stripos($name,'view')===0 || stripos($name,'do')===0) && $this->methodExists($name);
 	}
- 
-	
-	
-
-	
+ 	
 	function loadErrorFields()
-	{		
-
-		
-		
+	{
                 if(!isset($this->app->sess['messages']))
                     return;
                 
@@ -179,9 +172,7 @@ class GW_Module
 		}
 		
 		
-	}	
-	
-
+	}
 	
 	function processActionBG($act)
 	{
@@ -280,11 +271,8 @@ class GW_Module
 			$this->setError("Invalid action: \"$act\"");
 			//$this->processView();
 		}
-		
 	}
 
-
-	
 	function __processViewSolveViewName()
 	{
 		$params = $this->_args['params'];
@@ -302,8 +290,7 @@ class GW_Module
 		$this->view_name = $name;
 		
 		if(!$this->isPublic("view{$name}"))
-			$this->view_name = $this->default_view;	
-		
+			$this->view_name = $this->default_view;
 	}
 	
 	function processView($name='',$params=[])
@@ -321,7 +308,6 @@ class GW_Module
 		
 		$this->ob_end();
 
-		
 		return $this->processTemplate(false, $params['return_as_string'] ?? false);
 	}
 	
@@ -338,7 +324,6 @@ class GW_Module
 			if(isset($request_params['just_action'])) //prevent from displaying view
 				return true;
 		}
-		
 		
 		$this->processView($this->view_name, array_splice($params,1));
 	}
@@ -493,31 +478,35 @@ class GW_Module
 		return $foundfilters;
 	}
 	
-	
 	/**
 	 * if $comparetype = IN value must be json_encoded
 	 */
-	function setFilter($field, $value, $comparetype='EQ')
+	function setFilter($field, $value, $comparetype='EQ', $opts=[])
 	{	
 		if(!$value || ($comparetype=="IN" && $value=='null'))
 			return false;
 			
-		$this->list_params['filters'][] = [
+		$this->list_params['filters'][] = $opts+[
 					'field'=>$field, 
 					'value'=>$value, 
 					'ct'=>$comparetype
 				];
 	}
 	
-	function replaceFilter($field, $value, $comparetype='EQ')
+	function getFilterByFieldname($fieldname)
 	{
 		foreach($this->list_params['filters'] as $idx => $filterdata)
-			if($filterdata['field'] == $field)
-				unset($this->list_params['filters'][$idx]);
+			if($filterdata['field'] == $fieldname)
+				return ['data'=>$filterdata, 'index'=>$idx];
+	}
+	
+	function replaceFilter($field, $value, $comparetype='EQ')
+	{
+		if($filt=$this->getFilterByFieldname($field))
+				unset($this->list_params['filters'][ $filt['index'] ]);
 			
 		$this->setFilter($field, $value, $comparetype);
 	}
-	
 	
 	function fireEvent($event, &$context=false)
 	{
@@ -527,7 +516,6 @@ class GW_Module
 			foreach($event as $e)
 				$this->EventHandler($e, $context);
 	}
-	
 	
 	public $__attached_events;
 	
@@ -694,9 +682,7 @@ class GW_Module
 	{
 		return isset($_REQUEST['packets']) && $_REQUEST['packets']==1;
 	}
-	
-	
-	
+		
 	function setMessageEx($opts=[])
 	{
 		
@@ -775,7 +761,6 @@ class GW_Module
 		}	
 	}
 		
-	
 	function fieldTitle($field)
 	{
 		if(strpos($field,'/')!==false)

@@ -165,6 +165,8 @@ var gw_navigator = {
 }
 
 var gw_adm_sys = {
+	url: {},
+	
 	paging_select_box: function (object, from_val, to_val)
 	{
 		var opt = {}
@@ -182,10 +184,12 @@ var gw_adm_sys = {
 	},
 	init: function ()
 	{
+		gw_adm_sys.url = gw_navigator.explode_url(window.location.href);		
 		gwcms_project.init();
 		GW.init_time = new Date().getTime();
 		$(document).ready(gw_adm_sys.init_after_load);
 		gw_adm_sys.initObjects();
+		
 		
 	},
 	init_after_load: function ()
@@ -231,6 +235,8 @@ var gw_adm_sys = {
 		}).attr('data-initdone',1);
 	},
 		
+	list_items_count:0,
+	
 	init_list: function()
 	{
 		$('.setListParams').on('submit', function(){
@@ -266,6 +272,8 @@ var gw_adm_sys = {
 
 
 		})
+		
+		initSearchReplace();
 	},
 	
 	gwws: false,
@@ -1418,7 +1426,33 @@ function copyTextToClipboard(text) {
 	});
 }
 
+function gwSearchReplace(){
+	
+	var url = gw_navigator.explode_url(location.href);	
+	url.base+='/searchreplace';
+	url.query.items_count=gw_adm_sys.list_items_count
+	url = gw_navigator.implode_url(url);
+	
+	gw_navigator.switchHash('searchreplace');
+	//history.replaceState(undefined, undefined, "#searchreplace"
 
+	$('#additemscontainer').html('<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>');
+	$('#additemscontainer').fadeIn();
+
+	$.get(url, function(data){
+		$('#additemscontainer').html(data);
+	})
+}
+function gwSearchReplaceClose()
+{
+	$('#additemscontainer').fadeOut();
+	window.location.hash = "";
+}
+
+function initSearchReplace()
+{
+	if(window.location.hash =='#searchreplace' || gw_adm_sys.url.query.hasOwnProperty('searchreplace')){  gwSearchReplace(); } 	
+}
 
 $("body").keydown(function (event) {
 

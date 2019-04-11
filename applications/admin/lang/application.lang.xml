@@ -763,7 +763,17 @@
 
 <i id="FOUND">
 	<lt>rasta</lt>
-	<en>Found</en>
+	<en>found</en>
 </i>
+
+<i id="ITEMS">
+	<lt>įrašai</lt>
+	<en>įrašai</en>
+</i>
+<i id="FILTERED">
+	<lt>atrinkta</lt>
+	<en>filtered</en>
+</i>
+
 
 </xml>

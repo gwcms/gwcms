@@ -35,14 +35,20 @@
 			{$compare_opt=GW::l('/g/FILTERS_COMPARE_TYPES')}
 		{/if}	
 		
+		{if $compare_type=="IN" && !isset($compare_opt['IN'])}
+			{$compare_opt=array_merge($compare_opt, ["IN"=>"IN"])}
+			{if is_array($value)}
+				{$value=implode(',', $value)}
+			{/if}
+		{/if}
+		
 		<label class="gwselect">
 		
 		<select name="{$inputct_name}" class="form-control"  >
 			{html_options options=$compare_opt selected=$compare_type|default:'LIKE'}
 		</select>
 		</label>
-		
-		
+				
 		</div>
 		<div class="col-xs-auto gwFiltInput">
 			{if $type=='multiselect'}				
