@@ -628,6 +628,13 @@ class GW_Common_Module extends GW_Module
 				$alias = str_replace('`', '', trim($split[1]));
 				$this->field_alias[$alias] = $orig;
 			}
+			
+			$tbl_field = explode('.', $sel);
+			if(count($tbl_field)==2){
+				if($tbl_field[0]!='a' && $tbl_field[1]!='*'){
+					$this->field_alias[$tbl_field[1]] = $sel;
+				}
+			}
 		}
 	}
 	
