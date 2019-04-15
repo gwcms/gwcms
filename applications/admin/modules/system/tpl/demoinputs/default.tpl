@@ -71,6 +71,15 @@
 	preload=1
 }
 
+{call e field="country_code"
+	type="select_ajax"
+	object_title=GW::l('/M/datasources/MAP/childs/countries/title')
+	modpath="datasources/countries"
+	source_args=[byCode=>1]
+	options=[]
+	preload=1
+}
+
 
 {*
 	after_input=$addnew 
