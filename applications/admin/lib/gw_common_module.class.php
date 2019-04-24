@@ -1482,7 +1482,6 @@ class GW_Common_Module extends GW_Module
 		{		
 			return $this->__overrideFilterExObject("GW_Data_Instrument", "instrument_id", ["title_lt","title_en"], $value, $compare_type);
 		}
-
 	 */
 	function __overrideFilterExObject($object, $field, $searchInFields, $value, $compare_type)
 	{
