@@ -399,7 +399,7 @@ class diff_helper{
         white-space:pre;
         white-space:pre-wrap;
         font-family:Consolas,'Courier New',Courier,monospace;
-        font-size:1em;
+        font-size:10px;
         line-height:1.333;
       }
 
