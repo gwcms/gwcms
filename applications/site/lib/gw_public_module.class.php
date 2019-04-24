@@ -287,5 +287,31 @@ class GW_Public_Module {
 		return $this->app->buildUri($this->app->page->path.'/'.$path, $args,['carry_params'=>1]);
 	}
 	
+	function attachFieldOptions($list, $fieldname, $obj_classname, $options=[])
+	{
+		$ids = [];
+		foreach($list as $itm){
+			if($itm->$fieldname)
+			$ids[]=$itm->$fieldname;
+		}
+		
+		
+		$o = new $obj_classname;
+			
+		if(!$ids)
+			return false;
+		
+		$cond = GW_DB::inCondition('id', $ids);
+		
+		if(isset($options['simple_options']))
+		{
+			$key=$options['simple_options'];
+			$this->options[$fieldname] = $o->getAssoc(['id', $key], $cond);
+		}else{
+			$this->options[$fieldname] = $o->findAll($cond, ['key_field'=>'id']);
+		}	
+	}		
+	
+	
 	
 }
