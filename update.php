@@ -469,6 +469,7 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		$sync = new GW_CMS_Sync();
 		$sync->params['proj'] = $_GET['proj'];
 		$sync->setDirection($_GET['dir']);
+		
 		$file1 = $sync->destDir.$_GET['filediff'];
 		$file2 = $sync->sourceDir.$_GET['filediff'];
 		$f1_proj = basename($sync->destDir);	
@@ -478,10 +479,10 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		$file2 = file_get_contents($file2);
 		
 		echo "<br/><br/>File diff: <b>{$_GET['filediff']}<b/><br>";
-		echo "<table style='width:100%'><tr><th>$f1_proj</th><th>$f2_proj</th></tr></table>";
+		echo "<table style='width:100%'><tr><th>$f2_proj</th><th>$f1_proj</th></tr></table>";
 		
 		echo diff_helper::getTableStyle();
-		echo diff_helper::toTable(diff_helper::compare($file1,$file2), "\t","");
+		echo diff_helper::toTable(diff_helper::compare($file2,$file1), "\t","");
 		echo diff_helper::scripts();
 		exit;
 	}

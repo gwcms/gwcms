@@ -48,11 +48,22 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		readfile($file);
 	}	
 	
+	function __getFile($file)
+	{
+		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
+		//strict repositories
+		$file = preg_replace('/[^.a-z0-9_ -]/i', '', $file);
+
+		if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
+			die('dirid not specified or invalid');
+
+		$file = $repositories[$_GET['dirid']].'/'.$file;
+		
+		return $file;
+	}
+	
 	function process()
 	{
-		
-		
-		
 		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
 		
 		GW::s('DIR/SYS_IMAGES_CACHE_1', $cachedir=GW::s('DIR/SYS_REPOSITORY').'cache/images_1/');
@@ -63,18 +74,39 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 
 
 		$file = $_GET['file'];
+		$file = str_replace('..','error',$file); //prevent exit directory
+		
+		if(isset($_GET['fetch']))
+		{
+			/* Example config:
+				GW::s('IMG_FETCH_SOURCE_NATOS1', 'http://library.hlmgbdealers.com/images/large/{IMGID}_1.jpg');
+				GW::s('IMG_RESIZE_TOOL_REPOSITORIES/NATOS1', GW::s('DIR/SYS_REPOSITORY').'/productimg/');
+			 * Example request:
+			 *	http://natosnew/tools/img_resize?file=ZM507&fetch=NATOS1&size=480x700
+			 */
+			
+			$source = GW::s('IMG_FETCH_SOURCE_'.$_GET['fetch']);
+			$_GET['dirid'] = $_GET['fetch'];
+			
+			$fp = $this->__getFile($file);
+			$storepath = $repositories[$_GET['dirid']];
+			
+			if(!file_exists($fp)){
+				$data = file_get_contents(str_replace('{IMGID}', $file, $source));
+				$file = $file.'.jpg';
+				$storepath = $storepath.$file;
+				//@mkdir(dirname($storepath), 0777, true);
+				file_put_contents($storepath, $data);
+				//d::dumpas($storepath);
+			}
+		}
+		
 		
 		//public repositories - security weak
 		if($_GET['dirid']=='repository'){
 			$file = GW::s('DIR/REPOSITORY').$file;
 		}else{
-			//strict repositories
-			$file = preg_replace('/[^.a-z0-9_ ]/i', '', $file);
-
-			if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
-				die('dirid not specified or invalid');
-
-			$file = $repositories[$_GET['dirid']].'/'.$file;			
+			$file = $this->__getFile($file);		
 		}
 			
 		
