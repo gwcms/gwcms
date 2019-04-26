@@ -1683,7 +1683,7 @@ class GW_Common_Module extends GW_Module
 			if(isset($ignore[$field]))
 				continue;
 			
-			$fields[$field] = GW::l('/A/FIELDS/'.$field);
+			$fields[$field] = $this->fieldTitle($field);
 		}
 				
 		$this->options['fields'] = $fields;
@@ -1710,7 +1710,7 @@ class GW_Common_Module extends GW_Module
 		
 		//security use only available fields
 		if(!isset($avail_fields[$sr['fieldname']])){
-			$this->setError(GW::l('/A/FIELDS/'.$sr['fieldname']).' is not available for this operation');
+			$this->setError($this->fieldTitle($sr['fieldname']).' is not available for this operation');
 			$this->jump();
 		}
 	

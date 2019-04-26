@@ -243,9 +243,9 @@ class GW_Public_Module {
 			'current' => $current,
 			'length' => $length,
 			'first' => $current < 2 ? 0 : 1,
-			'prev' => $current <= 2 ? 0 : $current - 1,
+			'prev' => $current <= 1 ? 0 : $current - 1,
 			'next' => $current >= $length ? 0 : $current + 1,
-			'last' => $current >= $length ? 0 : $length,
+			'last' => $length,
 		));
 	}	
 	

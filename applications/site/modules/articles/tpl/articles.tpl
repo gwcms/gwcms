@@ -37,7 +37,7 @@
             </header>
 			
 			{$img = $item->image}
-			<img class="img-fluid mar-btm" src="/tools/img/{$img->key}&v={$img->v}&size=759x500&method=crop" alt="Image description">
+			<img class="img-fluid mar-btm" src="{$app_base}tools/img/{$img->key}&v={$img->v}&size=759x500&method=crop" alt="Image description">
 			
 			<p>{$item->short}</p>
 
@@ -64,7 +64,7 @@
 			{$img = $itm->image}
 			<div class="row" onclick="location.href = $(this).find('.mtlink{$itm->id}').attr('href')" style="cursor:pointer">
 				<div class="col-lg-5 col-md-9">
-			<img class="" src="/tools/img/{$img->key}&v={$img->v}&size={$size}&method=crop" alt="Image description">
+			<img class="" src="{$app_base}tools/img/{$img->key}&v={$img->v}&size={$size}&method=crop" alt="Image description">
 				</div>
 				<div class="col-lg-7 col-md-9">
 						{$itm->short}

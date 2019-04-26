@@ -42,7 +42,7 @@
 				<div class="js-slide" onclick="location.href = $(this).find('.mtlink').attr('href')" style="cursor:pointer">
 					<article class="u-shadow-v26 g-parent g-theme-bg-black-v1 g-bg-primary--hover g-transition-0_2 g-transition--ease-in">
 						<div class="u-bg-overlay g-bg-black-opacity-0_3--after">
-							<img class="img-fluid w-100" src="/tools/img/{$img->key}&v={$img->v}&size=570x436&method=crop" alt="Image description">
+							<img class="img-fluid w-100" src="{$app_base}/tools/img/{$img->key}&v={$img->v}&size=570x436&method=crop" alt="Image description">
 						</div>
 
 						<div class="text-center g-pa-45">

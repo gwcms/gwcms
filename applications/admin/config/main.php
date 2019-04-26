@@ -8,7 +8,7 @@ GW::s('GW_AUTOLOGIN_EXPIRATION', '+1 year'); //strtotime format
 
 $rdir =& GW::s('DIR');
 $dir =& $rdir['ADMIN'];
-$dir['ROOT']=dirname(__DIR__).'/';
+$dir['ROOT']=str_replace('\\','/',dirname(__DIR__)).'/';
 $dir['TEMPLATES']=$dir['ROOT'].'templates/';
 $dir['MODULES']=$dir['ROOT'].'modules/';
 $dir['LIB']=$dir['ROOT'].'lib/';

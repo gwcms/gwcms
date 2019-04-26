@@ -7,7 +7,7 @@ define('GW_MSG_INFO',3);
 
 
 $dir =& GW::s('DIR');
-$dir['ROOT']=dirname(__DIR__).'/';
+$dir['ROOT']=str_replace('\\','/',dirname(__DIR__)).'/';
 $dir['APPLICATIONS']=$dir['ROOT'].'applications/';
 
 $dir['LIB']=$dir['ROOT'].'framework/';

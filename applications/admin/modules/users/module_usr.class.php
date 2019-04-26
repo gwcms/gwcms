@@ -47,7 +47,7 @@ class Module_Usr extends GW_Common_Module
 		
 		$result = ($this->rootadmin) || $item->id==0 || ($item->parent_user_id == $this->app->user->id);
 		
-		if(!$die || $result)
+		if(!isset($opts['die']) || $result)
 			return $result;
 
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');

@@ -14,7 +14,7 @@
 		
 		{if $params_expand.colspan}
 			{$col=$col+$params_expand.colspan}
-			{$params_expand.colspan=$params_expand.colspan*2}
+			{$params_expand.colspan=$params_expand.colspan+1} {*+1 vienas value kitas title stulpeliai*}
 		{else}
 			{$col=$col+1}
 		{/if}
