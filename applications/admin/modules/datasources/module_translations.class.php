@@ -307,6 +307,24 @@ class Module_Translations extends GW_Common_Module
 	}
 	
 	
+	function doSaveTrans()
+	{
+		list($module, $key) = GW_Translation::fullkeyToModAndKey($_REQUEST['key']);
+		
+		$i0 = GW_Translation::singleton();
+		$lang = str_replace('/[^a-z]/','',$_REQUEST['ln']);
+		$trans = $i0->find(["`key`=? AND `module`=? AND `value_$lang`=?", $key, $module, $_REQUEST['prev_val']]);
+		
+		if(!$trans)
+			die(json_encode(['error'=>"trans not found ".GW::db()->last_query]));
+		
+		
+		$trans->saveValues(["value_$lang"=>$_REQUEST['new_val']]);
+		
+		die(json_encode(['status'=>"ok"]));
+	}
+	
+	
 /*	
 	function __eventAfterList(&$list)
 	{

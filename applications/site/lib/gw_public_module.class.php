@@ -312,6 +312,67 @@ class GW_Public_Module {
 		}	
 	}		
 	
+	function getCurrentItemId()
+	{
+		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
+
+		if ($id)
+			return $id;
+	}	
 	
+	function getDataObjectById($load = true, $class = false, $access=GW_PERM_READ)
+	{
+		$id = $this->getCurrentItemId();
+
+		if (!$id)
+			return $this->setError('/g/GENERAL/BAD_ARGUMENTS');
+
+		if ($class){
+			$item = new $class($id);
+		}else{
+			
+			$item = $this->model->createNewObject($id);
+			
+			//must be outside of create new object, in case of inheritProps is needed before load
+			if($load)
+				$item->load();
+		}
+
+		if ($load && !$item->loaded)
+			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
+
+		$this->canBeAccessed($item, ['access'=>$access]);
+
+		return $item;
+	}
+
+	function canBeAccessed($item, $opts=[])
+	{
+		$result = false;
+		
+		if($item->id)
+			$item->load_if_not_loaded();
+		
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+				
+		if(isset($item->content_base['access']))
+		{
+			$availAccess = $item->content_base['access'];
+			//1-read, 2-write check //admin/config/main.php for permission list
+			if ($availAccess & $requestAccess) {
+				$result = true;
+			}
+				
+		}else{
+			$result = true; //$item->canBeAccessedByUser($this->app->user);
+		}
+
+		
+		if (isset($opts['nodie']) || $result)
+			return $result;
+
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
+		$this->jump();
+	}	
 	
 }

@@ -36,8 +36,5 @@ GW::s('ADMIN/HOOKS/AFTER_MENU', $am);
 
 
 
-//https://stackoverflow.com/questions/27560361/how-to-test-php-bitwise-function-input-parameters
-define('GW_PERM_READ',1);
-define('GW_PERM_WRITE',2);
-//define('',4); /* then 8, 16, 32, etc... */
+
 

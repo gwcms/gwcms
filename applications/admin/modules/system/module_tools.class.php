@@ -404,8 +404,10 @@ class Module_Tools extends Module_Config
 			
 		initEnviroment($dest);
 		$replace_to = GW::s("SITE_URL");
-				
 		
+		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to]);
+				
+			
 		$newurl = str_replace($replace_what, $replace_to, $_GET['uri']);
 		
 		header("Location: $newurl");
