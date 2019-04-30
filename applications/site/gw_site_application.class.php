@@ -90,7 +90,7 @@ class GW_Site_Application extends GW_Application
 	}
 
 	
-	function processPath($path)
+	function processPath($path, $args=[])
 	{
 		$path = explode('/',$path);
 		
@@ -105,14 +105,15 @@ class GW_Site_Application extends GW_Application
 		$info['module_name']=$name;
 		
 		$fname = $this->moduleFileName($dir, $name);
-		
-	
+			
 				
-		$this->processSiteModule($fname, $path, $info);
+		return $this->processSiteModule($fname, $path, $info, $args);
 	}
 	
-	function processSiteModule($file, $params, $info)
+	function processSiteModule($file, $params, $info, $args=[])
 	{
+		
+		
 		//prevent hacking via ajax request
 		$file=str_replace('..','',$file);
 
@@ -125,9 +126,10 @@ class GW_Site_Application extends GW_Application
 		
 
 		$m = new $classname(Array(
-		    'module_file'=>$file,
-		    'app'=>$this, 
-		    'smarty'=>$this->smarty
+			'module_file'=>$file,
+			'app'=>$this, 
+			'smarty'=>$this->smarty,
+			'args'=>$args
 		)+$info);
 		
 		
@@ -144,8 +146,7 @@ class GW_Site_Application extends GW_Application
 		
 		$params = array_merge($params, $this->path_arg);
 		
-		$m->process($params);
-
+		return $m->process($params);
 	}
 
 	
@@ -190,7 +191,7 @@ class GW_Site_Application extends GW_Application
 			$this->preloadBlocks();
 			$this->processTemplate(GW::s("DIR/SITE/ROOT").$template->path);
 		}else{
-			$this->processPath($template->path);
+			$this->processPath($template->path, $_REQUEST);
 		}
 		
 	}
@@ -230,7 +231,7 @@ class GW_Site_Application extends GW_Application
 			$this->jump(false, $_GET);
 		}
 		
-
+		
 		switch($this->page->type)
 		{
 			case 0: $this->processPage($this->page);break;
@@ -247,7 +248,7 @@ class GW_Site_Application extends GW_Application
 				
 				
 				
-				$this->processPath($path);
+				$this->processPath($path, $_REQUEST);
 			break;
 		
 			default: die("Unknown page type");break;

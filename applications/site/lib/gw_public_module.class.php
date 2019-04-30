@@ -10,6 +10,7 @@ class GW_Public_Module {
 	public $smarty;
 	public $errors = Array();
 	public $tpl_name;
+	public $args = []; 
 	
 	/**
 	 *
@@ -27,7 +28,7 @@ class GW_Public_Module {
 		foreach ($variables as $key => $val)
 			$this->$key = $val;
 
-
+	
 		$this->module_dir = dirname($this->module_file) . '/';
 		$this->tpl_dir = $this->module_dir . 'tpl/';
 
@@ -68,9 +69,11 @@ class GW_Public_Module {
 			$name = "default";
 
 		$methodname = "view" . $name;
-		$this->$methodname($params);
+		$vars = $this->$methodname($params);
 
 		$this->processTemplate($name);
+		
+		return $vars;
 	}
 
 	function doJson() {
@@ -89,7 +92,7 @@ class GW_Public_Module {
 
 
 		$methodname = $name;
-		$this->$methodname();
+		return $this->$methodname();
 	}
 
 	/**
@@ -115,7 +118,7 @@ class GW_Public_Module {
 	}
 
 	function process($params) {
-		$act_name = self::__funcVN(isset($_REQUEST['act']) ? $_REQUEST['act'] : false);
+		$act_name = self::__funcVN(isset($this->args['act']) ? $this->args['act'] : false);
 
 
 		if (isset($params[0])) {
@@ -123,7 +126,7 @@ class GW_Public_Module {
 
 
 			if (!method_exists($this, 'view' . $view_name)) {
-				$view_name = 'default';
+				$view_name = 'noview';
 			} else {
 				array_shift($params);
 			}
@@ -133,11 +136,17 @@ class GW_Public_Module {
 
 		$this->params = $params;
 
-		if ($act_name)
-			$this->processAction($act_name);
+		
+		if ($act_name){
+			$vars = $this->processAction($act_name);
+			
+			if($view_name=="noview"){
+				return $vars;
+			}
+		}
 
 
-		$this->processView($view_name, $params);
+		return $this->processView($view_name, $params);
 	}
 
 
