@@ -69,7 +69,7 @@
 		{/if}
 	{/function}	
 
-	{$dl_actions=[move,invert_active,edit,delete,clone,parts]}
+	{$dl_actions=[move,invert_active,edit,parts,ext_actions]}
 	
 	{function name=dl_output_filters_truncate40_hint}
 		{call name="truncate_hint" value=htmlspecialchars($item->$field) length=40}
@@ -87,6 +87,7 @@
 		table_description_en=>truncate40_hint,
 		table_description_ru=>truncate40_hint
 	]}		
+	
 	
 {/block}
 

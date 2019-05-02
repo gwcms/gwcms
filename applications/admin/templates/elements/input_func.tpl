@@ -134,7 +134,7 @@
     {/if}
 
 
-    {if !$hideifempty || $value || $item->$name}
+    {if !$hideifempty || isset($value) || $item->$name}
 
     {$title=$title|default:$m->fieldTitle($name)}
 
@@ -218,8 +218,9 @@
 	
 	{if !isset($value) || $value===null}
 
-		{if strpos($name, '/')!==false}
+		{if strpos($name, '/')!==false && get_class($item)!='stdClass'}			
 			{$value=$item->get($name)}
+			
 		{else}	
 			{$value=$item->$name}
 		{/if}

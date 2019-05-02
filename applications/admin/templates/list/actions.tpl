@@ -1,13 +1,16 @@
 {function list_item_action}
-	<a  class="{$action_class|default:gwcmsAction} {$action_addclass}"
-		{if $onclick}onclick="{$onclick};return false"{/if} 
-		{if $shift_button}onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false }"{/if}
-		{if $query_param}onclick="var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });return false;"{/if}
+	<a  class="{$action_class|default:gwcmsAction} {$action_addclass}"		
+		{if $query_param || $shift_button || $onclick}
+		onclick="{strip}{if $query_param}var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });{/if}
+			{if $shift_button}if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 }); };{/if}
+			{if $onclick}{$onclick};{/if}
+			{if $confirm}{$app->fh()->gw_link_confirm(false)};{/if}
+			return false;{/strip}"
+		{/if}
 		href="{$href|default:'#'}"
 		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		{if $title}title="{$title|escape}"{/if}
-		
-		{if $confirm}{$app->fh()->gw_link_confirm()}{/if}>{if $iconclass}<i class="{$iconclass}"></i>{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
+		>{if $iconclass}<i class="{$iconclass}"></i>{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
 {/function}
 
 {function list_item_title}{strip}

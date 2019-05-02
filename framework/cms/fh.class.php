@@ -204,7 +204,7 @@ class FH
 	 * "2005 Oct 10" if else 
 	 */
 
-	static function shortTime($time)
+	function shortTime($time)
 	{
 		if ($time == '0000-00-00 00:00:00')
 			return '';
@@ -227,7 +227,7 @@ class FH
 		return (date('Y') != $y ? $y . ' ' : '') . $month . ' ' . $d;
 	}
 
-	static function dateFormate($date, $format)
+	function dateFormate($date, $format)
 	{
 		return date($format, strtotime($date));
 	}
@@ -235,7 +235,7 @@ class FH
 	//to use in javascript
 	//get lang strings
 	//var lang={FH::printLangStrings('FIELDS/title','BUTTONS/OK','BUTTONS/CANCEL')}
-	static function printLangStrings()
+	function printLangStrings()
 	{
 		$arr=Array();
 
