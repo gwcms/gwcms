@@ -20,6 +20,7 @@ class GW_Common_Module extends GW_Module
 		'viewdialogremove' => 1,
 		'viewsearchreplace' => 1,
 		'dodialogconfigsave' => 1,
+		'viewdialogconfig2'=>1,
 		'doclone' => 1,
 	];
 	public $filters = [];
@@ -72,6 +73,9 @@ class GW_Common_Module extends GW_Module
 		
 		$this->app->carry_params['searchreplace']=1;
 		$this->app->carry_params['filterhide']=1;
+		
+		$this->modconfig = new GW_Config($this->module_path[0].'__'.$this->module_path[1].'/');
+		$this->app->carry_params['clean']=1;
 	}
 
 	function initLogger()
@@ -460,6 +464,40 @@ class GW_Common_Module extends GW_Module
 
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'list/configure_menu';
 	}
+	
+	function common_viewDialogConfig2()
+	{
+		$this->fireEvent("BEFORE_CONFIG", $this->modconfig);
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/config';
+		
+		return ['item'=>$this->modconfig];
+	}
+	
+	function doSaveConfig()
+	{
+
+		$vals = $_REQUEST['item'];
+		
+		
+		foreach($vals as $key => $val)
+		{
+			if(is_array($val))
+				$vals[$key] = json_encode($val);
+		}
+		
+		$this->fireEvent("BEFORE_SAVE_CONFIG", $vals);
+		
+		//$original_vals = json_decode($_REQUEST['original_values'], true);
+		//$fields = array_keys($original_vals);		
+		
+		$this->modconfig->setValues($vals);
+		
+		//jeigu saugome tai reiskia kad validacija praejo
+		$this->setMessage('/g/SAVE_SUCCESS');
+		
+		$this->jump();
+	}
+	
 	
 	function getDataObjectByIds() 
 	{

@@ -235,6 +235,14 @@
 	{if is_array($value) && $type=='textarea'}
 		{$value=GW_Json_Format_Helper::f($value)}
 	{/if}
+	{if $value_format}
+		{if $value_format=="json1"}
+			{$value=json_decode($value, true)}	
+		{else}
+			{d::ldump("Format `$value_format` not implemented")}
+		{/if}
+		
+	{/if}
 
 	{if $options_fix}
 		{$tmp=[]}

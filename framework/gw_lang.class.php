@@ -265,12 +265,19 @@ class GW_Lang
 			GW::$context->app->sess['lang-results-active'];		
 	}
 	
-	static function lnResult($key, &$result)
+	static $developLnResList = [];
+	
+	static function lnResult($key, &$result, $orig_val=false)
 	{
 		if(!self::__highlightActive()) 
 			return $result;
 		
-		return is_array($result) ? $result : "<span class='lnresult' data-key='".$key."'>".$result."</span>";
+		$ret = is_array($result) ? $result : "<span class='lnresult' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
+		
+		self::$developLnResList[] = $ret;
+		
+		
+		return $ret;
 	}
 	
 	
@@ -279,12 +286,10 @@ class GW_Lang
 	 * jei nera duombazeje tada pakrauna is 
 	 * lang failu arba pacio templeito jei vartotojas developeris
 	 */
-	static function ln($fullkey, $valueifnotfound = false)
+	static function ln($fullkey, $opts=[])
 	{		
 		if($fullkey[0]!=='/')
 			return $fullkey;
-		
-
 		
 		list($module, $key) = GW_Lang::transKeyAnalise($fullkey);
 		
@@ -294,7 +299,8 @@ class GW_Lang
 			
 			$prevln = GW_Lang::$ln;
 			GW_Lang::$ln = $ln;
-			$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
+			$result = GW_Lang::ln('/'.$fullkey);
+			//$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
 			
 			GW_Lang::$ln = $prevln;
 			
@@ -320,22 +326,50 @@ class GW_Lang
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (GW::$devel_debug && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
-			if ($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln . ':') !== false) {
-				list($ln, $vr) = explode(':', $valueifnotfound, 2);
-				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
-			} else {
+			//if ($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln . ':') !== false) {
+			//	list($ln, $vr) = explode(':', $valueifnotfound, 2);
+			///	GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
+			//} else {
 				//is lang failu
 				$fromxml = GW::l($fullkey);
 				$vr = $fromxml != $fullkey ? $fromxml : '*' . $key . '*';
 
 				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
-			}
+			//}
 		}
 		
 		if(!$vr)
 			return $vr=$orig_key;
 		
-		return self::lnResult($orig_key, $vr);
+		$orig_val = false;
+			
+		if(isset($opts['l']) && self::$ln=='lt'){
+			if($orig_val ==false)
+				$orig_val = $vr;
+			
+			$vr = GW_Linksniai_Helper::getName ($vr, $opts['l']);
+		}
+		
+		if(isset($opts['c'])){
+			if($orig_val ==false)
+				$orig_val = $vr;
+			
+			if($opts['c']==1){
+				$vr = mb_strtolower($vr);
+			}elseif($opts['c']==2){
+				$vr = GW_String_Helper::ucfirst($vr);
+			}
+		}
+		
+		if(isset($opts['v'])){
+			if($orig_val ==false)
+				$orig_val = $vr;
+			
+			foreach($opts['v'] as $key => $val)
+				$vr = str_replace ('$'.$key, $val, $vr);
+		}		
+		
+		return self::lnResult($orig_key, $vr, $orig_val);
 	}
 	
 	

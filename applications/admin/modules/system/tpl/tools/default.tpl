@@ -1,4 +1,8 @@
-
+{include file="common.tpl"}
+		
+{$do_toolbar_buttons_hidden=[dialogconf2]}		
+{$do_toolbar_buttons[]=hidden}
+	
 {include file="default_open.tpl"}
 
 

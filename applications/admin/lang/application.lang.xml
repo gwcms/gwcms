@@ -325,6 +325,10 @@
 		<en>Send</en>
 		<lt>Siųsti</lt>
 	</i>	
+	<i id="dialogconfig2">
+		<lt>Nustatymai</lt>
+		<en>Settings</en>
+	</i>
 </i>
 
 <i id="NO_ITEMS">

@@ -313,15 +313,34 @@ class Module_Translations extends GW_Common_Module
 		
 		$i0 = GW_Translation::singleton();
 		$lang = str_replace('/[^a-z]/','',$_REQUEST['ln']);
-		$trans = $i0->find(["`key`=? AND `module`=? AND `value_$lang`=?", $key, $module, $_REQUEST['prev_val']]);
+		$trans = $i0->find(["`key`=? AND `module`=?", $key, $module]);
 		
-		if(!$trans)
-			die(json_encode(['error'=>"trans not found ".GW::db()->last_query]));
+		if(!$trans){
+			$t = $i0->createNewObject(['key'=>$key,'module'=>$module, "value_$lang"=>$_REQUEST['new_val']]);
+			$t->insert();
+			$method = "insert";
+		}else{
+			$trans->saveValues(["value_$lang"=>$_REQUEST['new_val']]);
+			$method = "update";
+		}
+		
+		$replace_what = GW::s("SITE_URL");
+		
+		$resp = ['status'=>"ok", 'method'=>$method];
+		
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
+		{
+			initEnviroment(GW_ENV_PROD);
+			$url = GW::s("SITE_URL").$_SERVER['REQUEST_URI'].'?'. http_build_query($_POST);			
+			$resp['prod_request'] = $url;
+		}
+			
 		
 		
-		$trans->saveValues(["value_$lang"=>$_REQUEST['new_val']]);
 		
-		die(json_encode(['status'=>"ok"]));
+		
+		
+		die(json_encode($resp));
 	}
 	
 	

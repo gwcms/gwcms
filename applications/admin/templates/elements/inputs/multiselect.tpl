@@ -18,9 +18,21 @@
 	{html_options options=$tmpopt+$options selected=$value}
 </select>
 
-	
-	
-	
+<script>
+	{*prevent empty value no send*}
+require(['gwcms'], function(){
+    $("#{$id}").change(function() {
+      if (!$("#{$id}").val()){
+	 $("#{$id}").parent().append("<input class='dummyEmpty' type='hiddden' name='{str_replace('[]','',$input_name)}' value=''>");
+      }else{
+	$("#{$id}").parent().find(".dummyEmpty").remove();
+      }
+    });
+	});
+</script>
+
+
+
 {if !$gwcms_input_select2_loaded}
 	{$m->addIncludes("bs/select2css", 'css', "`$app_root`static/vendor/select2/css.css")}
 	

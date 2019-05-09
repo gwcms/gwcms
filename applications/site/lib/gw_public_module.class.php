@@ -125,8 +125,8 @@ class GW_Public_Module {
 			$view_name = $params[0];
 
 
-			if (!method_exists($this, 'view' . $view_name)) {
-				$view_name = 'noview';
+			if (!method_exists($this, 'view' . $view_name) && $view_name != 'noview') {
+				$view_name = 'default';
 			} else {
 				array_shift($params);
 			}
@@ -383,5 +383,7 @@ class GW_Public_Module {
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		$this->jump();
 	}	
+	
+	
 	
 }

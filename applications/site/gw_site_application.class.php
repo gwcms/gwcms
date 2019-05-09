@@ -232,6 +232,7 @@ class GW_Site_Application extends GW_Application
 		}
 		
 		
+		
 		switch($this->page->type)
 		{
 			case 0: $this->processPage($this->page);break;
@@ -249,10 +250,14 @@ class GW_Site_Application extends GW_Application
 				
 				
 				$this->processPath($path, $_REQUEST);
+				
 			break;
+		
+			
 		
 			default: die("Unknown page type");break;
 		}
+		$this->postRun2();
 	}
 	
 	function prepareMessage($text)

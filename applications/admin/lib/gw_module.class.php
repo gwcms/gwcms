@@ -443,7 +443,7 @@ class GW_Module
 			$path = $_GET['return_to'];
 		
 		if(isset($_REQUEST['dialog_iframe'])){
-			echo "<script>window.parent.gwcms.dialogClose();</script>";
+			echo "<script>window.parent.gwcms.dialogClose();window.parent.gwcms.close_dialog2()</script>";
 			exit;
 		}
 		

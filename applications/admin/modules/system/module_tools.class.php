@@ -1,12 +1,13 @@
 <?php
 
-include __DIR__.'/module_config.class.php';
 
-class Module_Tools extends Module_Config
+class Module_Tools extends GW_Common_Module
 {	
-
+	public $default_view = 'default';
+		
 	function init()
 	{
+		$this->model = new stdClass();
 		parent::init();
 	}
 
@@ -424,6 +425,22 @@ class Module_Tools extends Module_Config
 				
 		header("Location: ".$_GET['uri']);
 		exit;		
+	}
+	
+	
+	function __eventBeforeConfig($cfg)
+	{
+		$tables = GW::db()->fetch_assoc("SHOW TABLES");
+		
+		$this->options['tables'] = array_keys($tables);
+		
+		//d::dumpas(json_decode($cfg->sync_ignore_tables_1));
+	}
+	
+	function __eventBeforeSaveConfig($vals)
+	{
+		
+		//d::dumpas($_REQUEST);
 	}
 	
 }

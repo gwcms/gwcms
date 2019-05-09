@@ -35,6 +35,11 @@
 	{/capture}
 {/function}	
 
+{function name=do_toolbar_buttons_dialogconf2}
+	{toolbar_button title=GW::ln('/g/VIEWS/dialogconfig2') 
+		iconclass='gwico-Horizontal-Settings-Mixer-Filled' 
+		btnclass="iframeopen" href=$m->buildURI('dialogconfig2',[dialog_iframe=>1,clean=>2,listpar_updatetime=>$m->list_params.updatetime])}
+{/function}	
 
 {function name=do_toolbar_buttons_addinlist}
 	{toolbar_button title=$lang.CREATE_NEW iconclass='gwico-Plus' onclick="gwToogleAdd($(this).hasClass('active'));" toggle=1}

@@ -255,6 +255,13 @@ class GW_Application
 		foreach ($files as $file)
 			include($file);
 	}
+	
+	function postRun2()
+	{
+		if(GW_Lang::$developLnResList){
+			d::dumpas(GW_Lang::$developLnResList);
+		}		
+	}
 
 	function ifAjaxCallProcess()
 	{
@@ -443,6 +450,8 @@ class GW_Application
 		$module->attachEvent('BEFORE_TEMPLATE', array($this, 'postRun'));
 
 		$module->process();
+		
+		$this->postRun2();
 	}
 	/*
 	 * sms/mass?act=update
