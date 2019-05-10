@@ -128,7 +128,8 @@ trait Module_Import_Export_Trait
 
 		foreach ($data as $line => $row) {
 			$item = $this->model->createNewObject();
-
+			
+			//$item->setValues($this->filters);
 
 			foreach ($header as $i => $fieldname) {
 				$val = isset($row[$i]) ? $row[$i] : '';

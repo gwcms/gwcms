@@ -1021,6 +1021,15 @@ var gwcms = {
 	{
 		
 		$(obj).find(':disabled').removeAttr('disabled');
+	},
+	
+	addCss: function(src)
+	{
+		var link = document.createElement('link');
+		link.setAttribute('rel', 'stylesheet');
+		link.setAttribute('type', 'text/css');
+		link.setAttribute('href', src);
+		document.getElementsByTagName('head')[0].appendChild(link);	
 	}
 	
 }

@@ -1491,7 +1491,13 @@ class GW_Common_Module extends GW_Module
 		$ids = [];
 		foreach($list as $itm){
 			if($itm->$fieldname)
-			$ids[]=$itm->$fieldname;
+			{
+				if(is_array($itm->$fieldname)){
+					$ids = array_merge($ids, $itm->$fieldname);
+				}else{
+					$ids[] = $itm->$fieldname;
+				}
+			}
 		}
 		
 		

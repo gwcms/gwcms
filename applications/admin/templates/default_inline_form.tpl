@@ -36,7 +36,7 @@
 	
 </form>
 	
-
+{include "includes.tpl"}
 	
 <!--AJAX-NOERR-DONT-REMOVE-->
 

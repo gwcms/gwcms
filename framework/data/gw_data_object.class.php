@@ -49,6 +49,9 @@ class GW_Data_Object
 		elseif (!is_null($values) && count($this->primary_fields) == 1)
 			$this->set($this->primary_fields[0], $values);
 
+		if(!$this->table)
+			$this->table = strtolower(get_class($this));
+		
 		if ($load)
 			$this->load();
 		
@@ -58,9 +61,6 @@ class GW_Data_Object
 						
 		$this->fireEvent('AFTER_CONSTRUCT');
 		$this->constructcomplete = true;
-		
-		if(!$this->table)
-			$this->table = strtolower(get_class($this));
 	}
 	
 	function initExtensions()
@@ -845,8 +845,8 @@ class GW_Data_Object
 		$db = $this->getDB();
 		$id_field = $this->primary_fields[0];
 		$id = (int) $this->get($id_field);
-
-		$q = "SELECT `$id_field` FROM `$this->table`" . ($conditions ? " WHERE " . $conditions : '') . ' ORDER BY priority';
+		
+		$q = "SELECT `$id_field` FROM `$this->table`" . ($conditions ? " WHERE " . GW_DB::prepare_query($conditions) : '') . ' ORDER BY priority';
 		
 
 		$rows = $db->fetch_one_column($q, $id_field);

@@ -42,6 +42,10 @@ require(['gwcms'], function(){
        
 		$(".gwselect2").select2();
 		
+		{if $smarty.get.form_ajax}
+			gwcms.addCss("{$app_root}static/vendor/select2/css.css");			
+		{/if}
+		
 		
 		$('.gwselect2[data-sorting=1]').each(function(){
 			var select = $(this);
