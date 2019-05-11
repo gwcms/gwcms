@@ -1,5 +1,6 @@
 {include file="common.tpl"}
 		
+{$dlgCfg2MWdth=300}
 {$do_toolbar_buttons_hidden=[dialogconf2]}		
 {$do_toolbar_buttons[]=hidden}
 	

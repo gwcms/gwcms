@@ -1475,11 +1475,16 @@ $("body").keydown(function (event) {
 		//ctrl + 2
 		
 		if (event.which == 50 && event.ctrlKey) {
-			location.href = GW.app_base + GW.ln + '/system/tools?act=doPullProductionDB&uri='+encodeURIComponent(location.href)
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doPullProductionDB&level=light&uri='+encodeURIComponent(location.href)
+			event.preventDefault();
+		}	
+		//ctrl + 3
+		if (event.which == 51 && event.ctrlKey) {
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doPullProductionDB&level=full&&uri='+encodeURIComponent(location.href)
 			event.preventDefault();
 		}		
-
-		if (event.which == 51 && event.ctrlKey) {
+		//ctrl + 4
+		if (event.which == 52 && event.ctrlKey) {
 			location.href = GW.app_base + GW.ln + '/system/tools?act=doDebugModeToggle&uri='+encodeURIComponent(location.href)
 			event.preventDefault();
 		}		

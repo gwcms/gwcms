@@ -419,7 +419,9 @@ class Module_Tools extends GW_Common_Module
 	{
 		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
 		$sudouser = 'wdm';
-		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path pulldb 2>&1");
+		$level = ['light'=>'light','full'=>'full'][$_GET['level'] ?? 'full'];
+		
+		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path pulldb $level  2>&1");
 		
 		$this->setMessage("<pre>".$res."</pre>");
 				
@@ -427,6 +429,11 @@ class Module_Tools extends GW_Common_Module
 		exit;		
 	}
 	
+	
+	function initModCfg()
+	{
+		$this->modconfig = new GW_Config_FS('system__tools');
+	}	
 	
 	function __eventBeforeConfig($cfg)
 	{

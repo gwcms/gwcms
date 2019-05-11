@@ -12,6 +12,8 @@
 {call e field=google_api_access_key type=text}
 
 
+{*
+moved to emails module
 {call e field=mail_from type=text default="Title <email@address.lt>"}
 {call e field=mail_admin_emails type=text}
 {call e field=mail_insert_succ type=bool}
@@ -29,6 +31,7 @@
 {/capture}
 
 {call e field=smtp_config type=read value=$tmp rowclass="smtpdetails"}
+*}
 
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

@@ -74,10 +74,15 @@ class GW_Common_Module extends GW_Module
 		$this->app->carry_params['searchreplace']=1;
 		$this->app->carry_params['filterhide']=1;
 		
-		$this->modconfig = new GW_Config($this->module_path[0].'__'.$this->module_path[1].'/');
+		$this->initModCfg();
 		$this->app->carry_params['clean']=1;
 	}
 
+	function initModCfg()
+	{
+		$this->modconfig = new GW_Config($this->module_path[0].(isset($this->module_path[1]) ? '__'.$this->module_path[1]:'' ).'/');
+	}
+	
 	function initLogger()
 	{
 		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') . 'mod_' . $this->module_name . '.log');
