@@ -58,4 +58,9 @@ class GW_Config_FS
 	{
 		return $this->get($key);
 	}
+	
+	function load_if_not_loaded()
+	{
+		
+	}
 }

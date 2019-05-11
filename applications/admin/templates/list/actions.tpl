@@ -1,8 +1,7 @@
 {function list_item_action}
-	<a  class="{$action_class|default:gwcmsAction} {$action_addclass}"		
-		{if $query_param || $shift_button || $onclick}
+	<a  class="{$action_class|default:gwcmsAction} {$action_addclass} {if $shift_button}shiftbtn{/if}"		
+		{if $query_param || $onclick || $confirm}
 		onclick="{strip}{if $query_param}var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });{/if}
-			{if $shift_button}if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 }); };{/if}
 			{if $onclick}{$onclick};{/if}
 			{if $confirm}{$app->fh()->gw_link_confirm(false)};{/if}
 			return false;{/strip}"

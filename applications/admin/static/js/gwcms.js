@@ -435,6 +435,14 @@ var gw_adm_sys = {
 	
 	initObjects: function()
 	{
+		$('.shiftbtn').click(function(e){
+			
+			if(e.shiftKey){ 
+				location.href=gw_navigator.url(this.href,{ 'shift_key':1 }); 
+				e.preventDefault();
+			};			
+		})
+		
 		$(".ajax-link:not([data-initdone='1'])").click(function(event){			
 			$(this).data('ownsrc', $(this).html());
 			$(this).html('<i class="fa fa-spinner fa-pulse"></i>');
