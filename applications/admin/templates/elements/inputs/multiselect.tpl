@@ -20,10 +20,11 @@
 
 <script>
 	{*prevent empty value no send*}
+	{*ta pati reik perkelt ant select su salyga jei multiselect*}
 require(['gwcms'], function(){
     $("#{$id}").change(function() {
       if (!$("#{$id}").val()){
-	 $("#{$id}").parent().append("<input class='dummyEmpty' type='hiddden' name='{str_replace('[]','',$input_name)}' value=''>");
+	 $("#{$id}").parent().append("<input class='dummyEmpty' type='hidden' name='{str_replace('[]','',$input_name)}' value=''>");
       }else{
 	$("#{$id}").parent().find(".dummyEmpty").remove();
       }

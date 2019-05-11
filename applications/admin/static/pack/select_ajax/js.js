@@ -184,12 +184,22 @@ function initSelect2Inputs(){
 								
 					var multiselect = obj.data('maximumselectionlength') != '1';
 					var keys = {}
+					var selectedvals = obj.data('value');
+					selectedvals = selectedvals instanceof Array ? selectedvals : [selectedvals];
+					for(var i in selectedvals)
+						selectedvals[i] = String(selectedvals[i]);
+					
 					
 					$.each(items, function(index, item){
 						//console.log(item.title+':'+item.id)
 						keys[item.id] = item.id;
+						var selected = false;
 						
-						$(that).append(new Option(item.title, item.id, multiselect, multiselect));
+						for(var i in selectedvals)
+							if(selectedvals[i]==item.id)
+								selected = true;
+						
+						$(that).append(new Option(item.title, item.id, selected, selected));
 					} );
 					
 					if(!multiselect){
@@ -200,6 +210,7 @@ function initSelect2Inputs(){
 						if( obj.find("option[value='"+prevval+"']").length > 0 ){
 							obj.val(prevval)
 						}else{
+							$(that).append(new Option(prevval, "not found: "+prevval, true, true));
 							alert(obj.data('objecttitle')+" id("+prevval+') Not available');
 						}
 					}

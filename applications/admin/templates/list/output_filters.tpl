@@ -33,3 +33,18 @@
 		<span title="{$item->$field|escape}">-</span>
 	{/if}
 {/function}	
+
+{function name=dl_output_filters_obj_options}
+	{if is_array($item->$field)}
+		{$ids=$item->$field}
+	{else}
+		{$ids=[$item->field]}
+	{/if}
+	{foreach $ids as $id}
+		{if isset($options[$field][$id])}
+			{$options[$field][$id]->get($dl_output_filters_args[$field][titlefield]|default:title)}
+		{else}
+			<span title="{$item->$field|escape}">-</span>
+		{/if}	
+	{/foreach}
+{/function}	
