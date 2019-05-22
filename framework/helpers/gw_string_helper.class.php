@@ -19,7 +19,7 @@ class GW_String_Helper
 		return $first_letter . $str_end;
 	}
 
-	static $chars = "ABCDEFGHIJKLMNOPQRSTUWVXYZ0123456789";
+	static $chars = "ABCDEFGHIJKLMNOPQRSTUWVXYZabcdefghijklmnopqrstuwxyz0123456789";
 
 	static function getRandString($length)
 	{
