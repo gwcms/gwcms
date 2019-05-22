@@ -615,7 +615,7 @@ class GW_Data_Object
 	{
 		return count($this->changed_fields) > 0;
 	}
-
+	
 	/**
 	 * 2lines
 	 * $user->setValues(Array('check_time'=>1));
