@@ -45,8 +45,15 @@ class Module_Tools extends GW_Common_Module
 	
 	function doDebugModeToggle()
 	{
-		$this->app->sess['debug']=(int)$this->app->sess['debug'];
-		$this->app->sess['debug']=($this->app->sess['debug']+1) % 2;
+		if($_GET['app']=="SITE")
+		{
+			$var  =& $_SESSION['SITE']['debug'];
+		}else{
+			$var  =& $this->app->sess['debug'];
+		}
+		
+		$var=(int)$var;
+		$var=($var+1) % 2;
 		
 		
 		if(isset($_GET['uri'])){

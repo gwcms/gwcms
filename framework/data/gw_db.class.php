@@ -283,9 +283,10 @@ class GW_DB
 		$this->query($cmd, $nodie);
 
 		$result = Array();
-
-		while ($row = $this->result->fetch_array())
-			$result[] = $row[0];
+		
+		if($this->result)
+			while ($row = $this->result->fetch_array())
+				$result[] = $row[0];
 
 		return $result;
 	}

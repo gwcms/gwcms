@@ -368,7 +368,7 @@ class GW_Data_Object
 			dump($sql);
 			exit;
 		}
-
+		
 		return $sql;
 	}
 

@@ -253,7 +253,7 @@ function initSelect2Inputs(){
 			if(obj.data('onchangeFunc')){
 				var f = obj.data('onchangeFunc');
 				obj.change(function(){
-
+					
 					if(!$(this).data('init-done')){					
 						$(this).data('init-done', 1)
 						$(this).data('prev-val', $(this).val())
@@ -271,6 +271,13 @@ function initSelect2Inputs(){
 			
 			obj.change(function(){
 				$(this).data('value', JSON.stringify($(this).val()));
+				
+				//console.log('aaa-'+obj.val());
+				
+				if(obj.data('emptyoption') && obj.val() == null){
+					obj.append(new Option('empty_option', '', true, true));
+				}
+				
 			});
 			
 			if(obj.data('btnselectall'))
