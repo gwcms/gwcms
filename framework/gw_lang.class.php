@@ -274,7 +274,7 @@ class GW_Lang
 		
 		$ret = is_array($result) ? $result : "<span class='lnresult' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
 		
-		self::$developLnResList[] = $ret;
+		self::$developLnResList[$key] = $ret;
 		
 		
 		return $ret;

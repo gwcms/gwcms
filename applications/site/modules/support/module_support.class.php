@@ -7,7 +7,7 @@ class Module_Support  extends GW_Public_Module {
 	}
 
 	function viewDefault() {
-		//$this->tpl_name = 'support';
+		$this->tpl_name = 'support';
 	}
 
 	
@@ -29,13 +29,16 @@ class Module_Support  extends GW_Public_Module {
 		$msg->setValues($vals);
 		$msg->user_id = $this->app->user ? $this->app->user->id : 0;
 		$msg->ip = $_SERVER['REMOTE_ADDR'];
+		
+		if($this->app->user)
+			$vals['name'] = "Vartotojas id: ".$this->app->user->id.", ".$this->app->user->title;
 	
 		if ($msg->validate()) {
 			$msg->insert();
 			
 			//mail(, 'New support request', $this->encodeTextMessage($vals));
 			
-			$opts['subject']="Gauta nauja zinute i menuturas.lt (".$vals['subject'].")";
+			$opts['subject']="Gauta nauja zinute i natos.lt (".($vals['subject'] ?? 'betemos').")";
 
 			$str = "Nuo: <b>".$vals['name'].'</b><br />';
 
@@ -71,12 +74,19 @@ class Module_Support  extends GW_Public_Module {
 		$this->doMessage();
 	}
 	
+	function doNewsLetter()
+	{
+		$_POST['item']['subject']=" Naujas prenumeratorius";
+		$this->doMessage();
+	}	
+	
+	
 	function viewIndex()
 	{
 		
 	}
 	
-	function viewIndexDiscount()
+	function viewSubscribe()
 	{
 		
 	}

@@ -454,7 +454,7 @@ class GW_Module
 	{		
 		$this->list_params['filters'] = [];
 		$filts=$_REQUEST['filters'];
-		
+				
 		if(! (isset($_REQUEST['filters_unset']) && $_REQUEST['filters_unset']) ) //if unset is passed skip setting
 			foreach($filts['vals'] as $field => $filters)
 				foreach($filters as $idx => $value)
@@ -462,6 +462,14 @@ class GW_Module
 		
 		$this->list_params['page']=0;
 		$this->jump();
+	}
+	
+	function doSetSingleFilter()
+	{
+		$this->list_params['filters'] = [];
+		$this->setFilter($_GET['field'], $_GET['value'], ($_GET['ct'] ?? 'EQ'));
+		$this->list_params['page']=0;
+		$this->jump();		
 	}
 	
 	function getFiltersByField($field)

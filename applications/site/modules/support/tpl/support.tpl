@@ -2,7 +2,7 @@
 
 {include file="inputs/inputs.tpl"}
 
-
+<br />
 <div class="row">
 
 	<div class="col-md-4">
@@ -21,7 +21,7 @@
 					<div class="col-md-12">
 
 						<div class="panel panel-primary animated fadeInDown">
-							<div class="panel-heading">{gw::l('/m/SUPPORT_FORM')}</div>
+							<div class="panel-heading">{gw::ln('/m/SUPPORT_FORM')}</div>
 
 							<div class="panel-body">
 								<form role="form">
@@ -48,7 +48,7 @@
 
 									<div class="row">
 										<div class="col-md-6">
-											<button type="submit" class="btn btn-ar btn-primary pull-left">{gw::l('/m/SEND')}</button>
+											<button type="submit" class="btn btn-ar btn-primary pull-left">{gw::ln('/m/SEND')}</button>
 										</div>
 									</div>
 
@@ -64,6 +64,7 @@
 	</div>	
 </div>
 
+<br ><br >
 
 
 

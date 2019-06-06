@@ -22,7 +22,7 @@ class GW_Public_Module {
 	// pvz news/list bus modulis/viewsas, news/view/1/images bus - modulis,viewsas o params = [1,'images']
 	public $params;
 	public $sys_call = false;
-
+	
 	function __construct($variables = Array()) {
 
 		foreach ($variables as $key => $val)
@@ -385,5 +385,10 @@ class GW_Public_Module {
 	}	
 	
 	
+	
+	function jsonResponse($array)
+	{
+		die(json_encode($array));
+	}	
 	
 }

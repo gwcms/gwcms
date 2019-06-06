@@ -30,8 +30,7 @@ class GW_Debug_Helper
 	{
 		$test = GW::$context->db->query_times;
 
-
-		if (isset(GW::$context->app->sess['debug']) && GW::$context->app->sess['debug'] && GW::$context->app->user->isRoot()) {
+		if (isset(GW::$context->app->sess['debug']) && GW::$context->app->sess['debug'] && GW::$context->app->user && GW::$context->app->user->isRoot()) {
 			$info = $GLOBALS['debug'];
 			$info['mem_use'][] = memory_get_usage(true);
 

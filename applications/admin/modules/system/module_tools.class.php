@@ -8,6 +8,8 @@ class Module_Tools extends GW_Common_Module
 	function init()
 	{
 		$this->model = new stdClass();
+		
+		
 		parent::init();
 	}
 
@@ -240,6 +242,7 @@ class Module_Tools extends GW_Common_Module
 		if(isset($_GET['force_http']))
 			$params['force_http']=1;
 		 */
+		$this->initModCfg();
 		
 		$url = Navigator::backgroundRequest($this->buildUri(false,[],['app'=>'admin']), ["act"=>'doATestBackgroundRequest','test_string'=>$test_string]);
 		
@@ -247,9 +250,9 @@ class Module_Tools extends GW_Common_Module
 		
 		print_r([
 			'RequestedUrl'=>$url, 
-			'$this->config->backgroundTestValue'=>$this->config->backgroundTestValue,
+			'$this->config->backgroundTestValue'=>$this->modconfig->backgroundTestValue,
 			'test_string'=>$test_string,
-			'passed'=> $test_string == $this->config->backgroundTestValue ? 'yes' : 'no'
+			'passed'=> $test_string == $this->modconfig->backgroundTestValue ? 'yes' : 'no'
 		]);
 		
 	}
@@ -257,7 +260,8 @@ class Module_Tools extends GW_Common_Module
 	
 	function doATestBackgroundRequest()
 	{
-		$this->config->backgroundTestValue = $_GET['test_string'];
+		$this->initModCfg();
+		$this->modconfig->backgroundTestValue = $_GET['test_string'];
 		echo "your test string: ".$_GET['test_string'];
 		exit;
 	}

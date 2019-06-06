@@ -70,8 +70,9 @@
 Hot Keys:
 <ul>
 	<li>Ctrl+1 - system/tools?act=doSwitchEnvironment</li>
-	<li>Ctrl+2 - system/tools?act=doPullProductionDB</li>
-	<li>Ctrl+3 - system/tools?act=doDebugModeToggle</li>
+	<li>Ctrl+2 - system/tools?act=doPullProductionDB light</li>
+	<li>Ctrl+3 - system/tools?act=doPullProductionDB full</li>
+	<li>Ctrl+4 - system/tools?act=doDebugModeToggle</li>
 </ul>
 
 	</div>
