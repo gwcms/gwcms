@@ -46,4 +46,20 @@ class GW_Country extends GW_Data_Object
 		
 		return parent::eventHandler($event, $context_data);
 	}
+	
+	function isEuCountry($country)
+	{
+		static $eucountries;
+		
+		if(!$eucountries){
+			$eucountries = GW_Config::singleton()->get('datasources__countries/eu_countries');
+
+			$eucountries = json_decode($eucountries);
+		}
+		
+		if(!$eucountries)
+			return null;		
+		
+		return in_array($country, $eucountries);
+	}
 }

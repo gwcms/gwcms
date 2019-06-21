@@ -24,8 +24,7 @@ class gw_paysera_service
 
 	function process()
 	{
-		
-		$cfg = new GW_Config('competitions/');
+		$cfg = new GW_Config('datasources__payments_paysera/');
 		$cfg->preload('');
 				
 		try {
@@ -42,17 +41,19 @@ class gw_paysera_service
 			
 			if(GW_Paysera_Log::singleton()->find(['orderid=? AND `action`=? AND handler=?', $response['orderid'],$_GET['action'],$_GET['handler']]))
 			{
-				die('Payment already accepted');
-			}else{
-				$logvals = array_intersect_key($response, GW_Paysera_Log::singleton()->getColumns());	
-				$logvals['action'] = $_GET['action'];
-				$logvals['handler'] = $_GET['handler'];
-				
-				$logvals['handler_state'] = $this->{'handler'.$_GET['handler']}($response, $_GET['action']);
-				
-				$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
-				$log_entry->insert();
+				//GW_Message::singleton();
+				//notify someone about intereestin thing
 			}
+			
+			$logvals = array_intersect_key($response, GW_Paysera_Log::singleton()->getColumns());	
+			$logvals['action'] = $_GET['action'];
+			$logvals['handler'] = $_GET['handler'];
+
+			$logvals['handler_state'] = $this->{'handler'.$_GET['handler']}($response, $_GET['action']);
+
+			$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
+			$log_entry->insert();
+			
 			
 			if($this->redirect_url){
 				header('Location: '.$this->redirect_url);
@@ -70,9 +71,9 @@ class gw_paysera_service
 	}
 	
 	
-	function handlerCompetitions($data, $action)
+	function handlerOrders($data, $action)
 	{
-		$participant = IPMC_Competition_Participant::singleton()->find(['id=?', $data['orderid']]);
+		$order = Nat_Orders::singleton()->find(['id=?', $data['orderid']]);
 		
 
 		if ($data['type'] !== 'macro') {
@@ -80,27 +81,28 @@ class gw_paysera_service
 			return -6;
 		}			
 		
-		if(!$participant){
-			$this->error = "Participant not found";
+		if(!$order){
+			$this->error = "Order not found";
 			return -1;
 		}
 		
-		
 		if($action=='accept' || $action=='callback')
 		{
-			$participant->payment_status=7;
+			$order->pay_type = 1;
+			$order->pay_status = 7;
+			$order->pay_time = date('Y-m-d H:i:s');
+			$order->status = 3; //apmoketas
 		}else{
-			$participant->payment_status=6;
+			$order->pay_status = 0;
 		}
 		
-		if($data['test'] == '0')
-			$participant->payment_test =1;
-		
+		if($data['test'] != '0')
+			$order->pay_test =1;
 		
 		if(isset($_GET['redirect_url']))
 			$this->redirect_url = $_GET['redirect_url'];
 		
-		$participant->updateChanged();
+		$order->updateChanged();
 		
 		return 1;
 	}

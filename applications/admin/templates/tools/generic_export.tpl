@@ -4,7 +4,11 @@
 {if $debug_table}
 {GW_Data_to_Html_Table_Helper::doTable($debug_table)} {/if}
 
-
+{if $smarty.get.withid}
+	<a href="{$app->buildUri()}">-id</a>
+{else}
+	<a href="{$app->buildUri(false, [withid=>1])}">+id</a>
+{/if}
 
 <table id="gwTable" style="width: 100%">
 	{*

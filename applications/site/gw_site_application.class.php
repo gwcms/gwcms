@@ -110,6 +110,17 @@ class GW_Site_Application extends GW_Application
 		return $this->processSiteModule($fname, $path, $info, $args);
 	}
 	
+	function subProcessPath($path, $args=[])
+	{
+		$langmod = GW_Lang::$module;
+		$restore_vars=$this->smarty->getTemplateVars(); 
+		
+		$this->processPath($path, $args);
+		
+		$this->smarty->assign($restore_vars);
+		GW_Lang::$module = $langmod;
+	}
+	
 	function processSiteModule($file, $params, $info, $args=[])
 	{
 		

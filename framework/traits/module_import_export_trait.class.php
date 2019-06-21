@@ -9,6 +9,9 @@ trait Module_Import_Export_Trait
 	{
 		$cols = $this->model->getColumns();
 
+		if(!isset($_GET['withid']) && $_GET['withid']==1)
+			unset($cosl['id']);
+		
 		foreach ($cols as $col => $d)
 			$cols[$col] = $col;
 

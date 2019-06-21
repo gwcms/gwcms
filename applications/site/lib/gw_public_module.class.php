@@ -68,6 +68,11 @@ class GW_Public_Module {
 		if ($name == '')
 			$name = "default";
 
+		$p = new stdClass();
+		$p->view = $name;
+		$p->params = $params;
+		$this->fireEvent("BEFORE_VIEW", $p);	
+		
 		$methodname = "view" . $name;
 		$vars = $this->$methodname($params);
 
@@ -388,6 +393,11 @@ class GW_Public_Module {
 	
 	function jsonResponse($array)
 	{
+		header('Content-type: text/json');
+		
+		if(isset($_GET['debug']))
+			die(json_encode($array, JSON_PRETTY_PRINT));
+		
 		die(json_encode($array));
 	}	
 	
