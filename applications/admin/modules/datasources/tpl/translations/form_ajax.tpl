@@ -9,7 +9,8 @@
 		{if strpos($field, "value_")===0}
 		
 			{call e field=$field type=textarea height="50px"}
-		
+		{elseif $field=='module' || $field=='key'}
+			{call e}
 		{else}
 			<td>{$item->$field}</td>
 		{/if}
