@@ -8,6 +8,8 @@ class Module_Support  extends GW_Public_Module {
 
 	function viewDefault() {
 		$this->tpl_name = 'support';
+		
+		$this->tpl_vars['page_title'] = GW::ln("/m/SUPPORT_FORM");
 	}
 
 	

@@ -748,7 +748,12 @@ class GW_DB
 		
 		
 		return $results;
-	}	
+	}
+
+	function truncate($table)
+	{
+		$this->query("TRUNCATE TABLE `$table`");
+	}
 }
 
 class db_query_prep_helper

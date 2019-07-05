@@ -780,5 +780,18 @@ class GW_Module
 		
 		return $this->app->fh()->fieldTitle($field);
 	}
+	
+	function runActInBackground()
+	{
+		if($this->sys_call){
+			return true;
+		}else{
+			Navigator::backgroundRequest($this->app->buildUri(false, $_GET));
+			$logfile = basename($this->lgr->file);
+			$this->setMessage("<iframe src='/admin/".$this->app->ln."/system/logwatch/iframe?id={$logfile}&padding=1' style='width:100%;height:200px;'></iframe>");
+			$this->jump();
+			return false;			
+		}		
+	}
 }
 

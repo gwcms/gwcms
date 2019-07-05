@@ -397,4 +397,17 @@ class GW_Http_Agent
 		
 		return json_decode($json, true);
 	}
+	
+	static function testUrl($url)
+	{
+		$headers = @get_headers($url);
+		return strpos($headers[0],'200')!==false;		
+	}
+	
+	static function urlencode($string)
+	{
+		$string = urlencode($string);
+		$string = str_replace('+','%20',$string);
+		return $string;
+	}
 }

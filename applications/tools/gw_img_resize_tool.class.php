@@ -92,7 +92,9 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			$storepath = $repositories[$_GET['dirid']];
 			
 			if(!file_exists($fp)){
-				$data = file_get_contents(str_replace('{IMGID}', $file, $source));
+				$url = str_replace('{IMGID}', GW_Http_Agent::urlencode($file), $source);
+				//d::dumpas($url);
+				$data = file_get_contents($url);
 				$file = $file.'.jpg';
 				$storepath = $storepath.$file;
 				//@mkdir(dirname($storepath), 0777, true);

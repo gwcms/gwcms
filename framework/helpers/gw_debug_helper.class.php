@@ -117,9 +117,11 @@ class GW_Debug_Helper
 		$data = $e+[
 			    'ip'=>$_SERVER["REMOTE_ADDR"],
 			    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
-			    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI'],	
-			    'user_agent'=>$_SERVER['HTTP_USER_AGENT'],
+			    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI']
 			];
+		
+		if(isset($_SERVER['HTTP_USER_AGENT']))
+			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		
 		$data["errorid"] = date('YmdHis');
 		$data['type_name'] = array_search($e['type'], get_defined_constants());

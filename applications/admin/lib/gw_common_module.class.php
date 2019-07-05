@@ -76,6 +76,7 @@ class GW_Common_Module extends GW_Module
 		
 		$this->initModCfg();
 		$this->app->carry_params['clean']=1;
+		$this->initErrorHandler();
 	}
 
 	function initModCfg()
@@ -88,7 +89,43 @@ class GW_Common_Module extends GW_Module
 		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') . 'mod_' . $this->module_name . '.log');
 		$this->lgr->collect_messages = true;
 	}
-        
+
+	function errrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		if (!(error_reporting() & $errno)) {
+			// This error code is not included in error_reporting, so let it fall
+			// through to the standard PHP error handler
+			return false;
+		}
+
+		switch ($errno) {
+			case E_USER_ERROR:
+				$type="Fatal error";
+			case E_USER_WARNING:
+				$type="Warn";
+			case E_USER_NOTICE:
+				$type="Notice";
+			default:
+				$type = $type ?? "Unknown";
+				$this->setError("$type on line $errline in file $errfile:<br /> [$errno] $errstr");
+				
+				if($errno==E_USER_ERROR)
+					exit;
+				
+				break;
+		}
+
+		/* Don't execute PHP internal error handler */
+		return true;
+	}
+
+	
+	
+	function initErrorHandler()
+	{
+		$old_error_handler = set_error_handler(array($this, 'errrorHandler'));		
+	}
+	
 	function getCurrentItemId()
 	{
 		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
