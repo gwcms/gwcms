@@ -5,6 +5,13 @@
 	{$icons=[0=>file,1=>folder,2=>link]}
 
 
+	{function name=do_toolbar_buttons_importexport}
+		{toolbar_button title=GW::l('/A/VIEWS/importexporttree') iconclass='gwico-Sorting-Arrows-Filled' href=$m->buildUri(importexporttree)}	
+	{/function}
+	
+	{$do_toolbar_buttons[] = hidden}	
+	{$do_toolbar_buttons_hidden=[dialogconf,importexport,print]}	
+	
 
 	{function dl_cell_ico}
 		{if $item->type==4}
@@ -51,24 +58,17 @@
 	
 	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}	
 	
-	{$do_toolbar_buttons[] = dialogconf}	
 	
 	
-	{function dl_actions_preview}
-		{list_item_action_m 
-			url=[false,[act=>doPreview,id=>$item->id]] 
-			iconclass="fa fa-external-link" 
-			tag_params=[target=>'_blank', title=>GW::l('/m/VIEWS/doPreview')]}
-	{/function}
 	
 	
 	
 	{if $m->filters.parent_id}
 		{*tree display*}
-		{$dl_actions=[invert_active,move,edit,delete,clone,preview]}
+		{$dl_actions=[invert_active,move,edit,ext_actions]}
 	{else}
 		{*one level list display*}
-		{$dl_actions=[invert_active,edit,delete,clone]}
+		{$dl_actions=[invert_active,edit,ext_actions]}
 	{/if}
 	
 	{gw_unassign var=$display_fields.ico}
