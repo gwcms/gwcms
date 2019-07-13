@@ -195,7 +195,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$data['childs'][] =& $subdata;	
 			
 		
-		if($export_type=='page_only')
+		if($opts['export_type']=='page_only')
 			return;
 		
 		foreach($item->getChilds() as $child)
