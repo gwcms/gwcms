@@ -407,7 +407,7 @@ class GW_DB
 
 		foreach ($entry as $elemRak => $vert)
 			if (!is_numeric($elemRak))
-				$parts[] = '`' . $elemRak . "`=\"" . addslashes($vert) . "\"";
+				$parts[] = '`' . $elemRak . "`=" . (is_numeric($vert) ? $vert :  '"'.addslashes($vert).'"') ;
 
 		return implode(', ', $parts);
 	}

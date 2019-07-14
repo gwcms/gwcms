@@ -121,7 +121,7 @@
 	{toolbar_button title=GW::l('/A/VIEWS/importdata') iconclass='gwico-Import' href=$m->buildUri(importdata)}
 	
 {/function}	
-{function name=do_toolbar_buttons_exportdata} 
+{function name=do_toolbar_buttons_exportdata}	
 	{toolbar_button title=GW::l('/A/VIEWS/exportdata') iconclass='gwico-Export' href=$m->buildUri(exportdata)}
 	
 {/function}
@@ -129,6 +129,11 @@
 {function name=do_toolbar_buttons_edit} 
 	{toolbar_button title=GW::l('/A/VIEWS/edit') iconclass='gwico-Vertical-Settings-Mixer' href=$m->buildUri(edit)}
 {/function}
+
+{function name=do_toolbar_buttons_rtlog}
+	{toolbar_button href=$app->buildUri(false, [act=>doShowLogFile]) title="Foninių veiksmų žurnalas" iconclass="gwico-Console"}
+{/function}		
+
 
 
 {function name=do_display_toolbar_buttons}
