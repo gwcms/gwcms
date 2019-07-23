@@ -62,7 +62,7 @@ class Module_Attachments extends GW_Common_Module
 		$item->load_if_not_loaded();
 		$result = $this->checkOwnerPermission($item->owner_type);
 
-		if (!$die || $result)
+		if (!isset($opts['die']) || $result)
 			return $result;
 		
 		$this->jump();
