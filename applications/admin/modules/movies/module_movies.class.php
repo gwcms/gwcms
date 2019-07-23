@@ -248,7 +248,9 @@ class Module_Movies extends GW_Common_Module
 	
 	function doSearchMovies()
 	{
-		
+		if(!isset($_GET['q']))
+			exit;
+			
 		$query_str = $_GET['q'];
 		$page = $_GET['page'] ?? 1;
 		$query_str = str_replace(".", " ", $query_str);
