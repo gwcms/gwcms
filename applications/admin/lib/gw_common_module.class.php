@@ -112,6 +112,8 @@ class GW_Common_Module extends GW_Module
 					if($this->action_name)
 						$errstr .= " (act:$this->action_name)";
 					
+				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";	
+					
 				$this->setError($errstr);
 				
 				if($errno==E_USER_ERROR)

@@ -241,11 +241,13 @@ class GW_Module
 	// process action (no check)
 	function processActionNC($act)
 	{
+		$this->action_name=$act;
+		
 		$this->ob_start();
 		$this->$act();
 		$this->ob_end();
 
-		$this->action_name=$act;
+		
 
 		if($this->isPacketRequest()){
 			$this->app->outputPackets(true);
