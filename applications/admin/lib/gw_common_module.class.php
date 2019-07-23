@@ -108,7 +108,11 @@ class GW_Common_Module extends GW_Module
 				$type="Notice";
 			default:
 				$type = $type ?? "Unknown";
-				$this->setError("$type on line $errline in file $errfile:<br /> [$errno] $errstr");
+				$errstr = "$type on line $errline in file $errfile:<br /> [$errno] $errstr";
+					if($this->action_name)
+						$errstr .= " (act:$this->action_name)";
+					
+				$this->setError();
 				
 				if($errno==E_USER_ERROR)
 					exit;
