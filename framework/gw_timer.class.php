@@ -2,9 +2,8 @@
 
 class GW_Timer
 {
-
-	var $start;
-	var $time_sum = 0;
+	public $start;
+	public $time_sum = 0;
 
 	function __construct()
 	{
@@ -24,6 +23,12 @@ class GW_Timer
 	function result($precision = 2)
 	{
 		return sprintf('%01.' . (int) $precision . 'f', $this->time_sum);
+	}
+	
+	function reset()
+	{
+		$this->time_sum = 0;
+		$this->start();
 	}
 
 	function stop($precision = 2)

@@ -47,7 +47,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		foreach($list as $item)
 			break;
 
-		if($item)
+		if(isset($item))
 			if($item->extensions['attachments'])
 				$item->extensions['attachments']->prepareList($list);
 	}

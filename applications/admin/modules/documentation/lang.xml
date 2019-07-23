@@ -35,18 +35,18 @@
 			<i id="icon"><![CDATA[<i class="fa fa-th-large"></i>]]></i>
 		</i>			
 		<i id="childs">
-			<i id="items">
-				<i id="title">Dokumentavimas</i>
-				<i id="info">
-					<i id="model">GW_Doc_Entry</i>
-				</i>
-			</i>
 			<i id="features">
-				<i id="title">Features</i>
+				<i id="title">Dokumentavimas</i>
 				<i id="info">
 					<i id="model">GW_Doc_feature</i>
 				</i>
-			</i>				
+			</i>			
+			<i id="items">
+				<i id="title">Dokumentavimas (sena versija)</i>
+				<i id="info">
+					<i id="model">GW_Doc_Entry</i>
+				</i>
+			</i>	
 			<i id="types">
 			    <i id="title">Tipai</i>
 			    <i id="info">

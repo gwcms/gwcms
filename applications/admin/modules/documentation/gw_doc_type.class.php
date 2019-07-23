@@ -48,10 +48,7 @@ class GW_Doc_Type extends GW_Data_Object
 		return !(bool)count($this->errors);
 	}
 
-	function getBySlots($slotslist)
-	{
-		return $this->attachAssocRecs($slotslist, 'type_id', 'GW_Sched_Type');
-	}
+
 	
 
 	

@@ -253,7 +253,7 @@ class GW_Admin_Application extends GW_Application
 		if(!$res)
 			$res=['response_format_error'=>1,'raw_response'=>$raw];
 		
-		$res['request_uri']=$path;
+		$res->request_uri=$path;
 		
 		$this->reopenSessionIfClosed();
 		

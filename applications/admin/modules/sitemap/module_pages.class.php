@@ -169,6 +169,153 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		$this->setMessage('Fix path complete in: '.$t->stop().' secs');
 			
-	}	
+	}
 
+	/////////////////---------------------IMPORT-EXPORT-----------------------------------------
+	function getAllChilds($item, &$data, $opts)
+	{
+		$subdata = [];
+		
+		if($item->id && !$item->skip_export){
+			$vals = $item->toArray();
+			unset($vals['site_id']);
+			unset($vals['parent_id']);
+			unset($vals['path']);
+			unset($vals['id']);
+			unset($vals['unique_pathid']);
+			unset($vals['insert_time']);
+			unset($vals['update_time']);
+			unset($vals['visit_count']);
+			
+			if($opts['content'])
+				$vals['content'] = $item->exportContent();
+
+			$subdata['item'] = $vals;
+		}
+		$data['childs'][] =& $subdata;	
+			
+		
+		if($opts['export_type']=='page_only')
+			return;
+		
+		foreach($item->getChilds() as $child)
+		{
+			$this->getAllChilds($child, $subdata, $opts);
+		}
+	}
+	
+	function doExportTree($item=false, $opts=[])
+	{
+		if(!$item)
+			$item = $this->getDataObjectById();
+		
+		$data = [];
+		
+		if($opts['export_type']=='only_childs')
+			$item->skip_export = true;
+		
+				
+		$this->getAllChilds($item, $data, $opts);
+		
+		if(isset($_GET['shift_key']) || $_POST['item']['show'] ?? false)
+		{
+			header('Content-type: text/plain');
+		}else{
+			$filename = ($item->pathname ?: 'root').'.json';
+				
+			header('Content-Type: application/octet-stream');
+			header("Content-Transfer-Encoding: Binary"); 
+			header("Content-disposition: attachment; filename=\"".$filename."\""); 
+		}		
+		
+		echo json_encode($data, JSON_PRETTY_PRINT);
+		exit;
+	}
+	
+	
+	private $importcnt = 0;
+	private $import_paths = [];
+	
+	function createPageFromFile($parent, $arr)
+	{
+		$item = GW_Page::singleton()->createNewObject();
+		
+		
+		if(isset($arr->content)){
+			$content = $arr->content;
+			unset($arr->content);
+		}
+		
+		
+		$item->setValues($arr);
+		$item->parent_id = $parent->id ?: -1;
+		
+		if(GW::s('MULTISITE'))
+			$item->site_id = $this->app->site->id;		
+		
+		
+		$item->insert();
+		
+		if(isset($content) && $content){
+			$item->importContent($content);
+		}
+		
+		$this->importcnt++;
+		$this->import_paths[] = $item->path;
+		
+		return $item;
+	}
+	
+	function importTree($parent, $data)
+	{
+		if(isset($data->item)){
+			$newparent = $this->createPageFromFile($parent, $data->item);
+		} else {
+			$newparent = $parent;
+		}
+			
+		if(isset($data->childs))
+			foreach($data->childs as $vals)
+					$this->importTree($newparent, $vals);
+		
+	}
+	
+	function viewImportExportTree()
+	{
+		
+	}
+	
+	function doImportExportTree()
+	{
+		$vals = $_POST['item'];
+		$pid = $vals['parent_id'];;
+		$act = $vals['action'];
+		
+		$item0 = GW_Page::singleton();
+		$parent = $pid == -1 ? $item0 : $item0->find(['id=?', $pid]) ;
+		
+		if($act=='export'){
+			$opts=[
+			    'export_type'=>$vals['export_type'] ?: 'only_childs', 
+			    'content'=>$vals['include_content']
+			];
+			
+			$this->doExportTree($parent, $opts);
+		}elseif($act=='import'){
+			
+			$data = file_get_contents($_FILES['importfile']['tmp_name']);
+			$data = json_decode($data);
+			
+					
+			if(!$data){
+				$this->setError("Invalid data");
+			}else{				
+				$this->importTree($parent, $data);
+			}
+			
+			$this->setMessage('Import pages: '. $this->importcnt);
+			$this->setMessage('New paths:<br><li>'.implode('<li>', $this->import_paths));
+		}
+	}
+	/////////////////---------------------IMPORT-EXPORT-----------------------------------------
 }

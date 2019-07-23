@@ -22,6 +22,8 @@ class GW_Page extends GW_i18n_Data_Object
 
 		if(!isset($params['site_id']))
 			$params['site_id'] = GW::s('MULTISITE') ? GW::$context->app->site->id : 0;
+		
+		$params['in_menu'] = $params['in_menu'] ?? false;
 
 		$cond = ['parent_id=? AND site_id = ?'.($params['in_menu']?' AND active=1 AND in_menu_'.$this->lang():''), $id, $params['site_id'] ];		
 		
@@ -158,6 +160,13 @@ class GW_Page extends GW_i18n_Data_Object
 				$this->prepare();
 			break;
 			
+			case 'BEFORE_DELETE':
+				$this->deleteContent();
+				
+				foreach($this->getChilds() as $child)
+					$child->delete();
+			break;
+			
 		}
 
 		parent::eventHandler($event, $context_data);
@@ -209,6 +218,33 @@ class GW_Page extends GW_i18n_Data_Object
 		//d::ldump([$key, $cache, $list]);
 
 		return $cache[$key];
+	}
+	
+	function exportContent()
+	{
+		return $this->getDB()->fetch_rows("SELECT `ln`,`key`,`content` FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id'));
+	}
+	
+	function deleteContent()
+	{
+		return $this->getDB()->delete('gw_sitemap_data',"page_id=".(int)$this->get('id'));
+	}
+	
+
+	
+	
+	function importContent($rows0)
+	{
+		$rows = [];
+		
+		foreach($rows0 as $row){
+			$row = (array)$row;
+			$row['page_id'] = $this->id;
+			$row['update_time'] = date('Y-m-d H:i:s');
+			$rows[] = $row;
+		}
+		
+		$this->getDB()->multi_insert('gw_sitemap_data', $rows);
 	}
 
 	function saveContent($list)

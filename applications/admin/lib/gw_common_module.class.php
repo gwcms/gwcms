@@ -39,6 +39,7 @@ class GW_Common_Module extends GW_Module
 	public $includes = [];
 	public $sys_call = false;
 	public $extra_cols = [];
+	public $lgr;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -86,7 +87,7 @@ class GW_Common_Module extends GW_Module
 	
 	function initLogger()
 	{
-		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') . 'mod_' . $this->module_name . '.log');
+		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . $this->module_name . '.log');
 		$this->lgr->collect_messages = true;
 	}
 
@@ -1848,5 +1849,14 @@ class GW_Common_Module extends GW_Module
 		$this->list_params['filters'] = [];
 		$this->list_params['page']=1;
 		$this->jump();
+	}
+	
+	function doShowLogFile($jump=true)
+	{
+		$file = basename($this->lgr->file);
+		$this->setMessage("<iframe src='/admin/lt/system/logwatch/iframe?id=$file&padding=1' style='width:100%;height:200px;'></iframe>");
+				
+		if($jump)
+			$this->jump();
 	}
 }

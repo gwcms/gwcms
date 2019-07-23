@@ -212,8 +212,10 @@ class Navigator
 		$get_args['sys_call'] = 1;
 		
 		$path .= (strpos($path, '?')===false ? '?' : '&'). http_build_query($get_args);
+		$raw = file_get_contents($path);
+		$decode = json_decode($raw);	
 
-		return json_decode(file_get_contents($path));	
+		return $decode ? $decode : ['decode_err'=>1,'raw_response'=>$raw];
 	}
 	
 	static function isAjaxRequest()
