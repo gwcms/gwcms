@@ -178,11 +178,12 @@ class Module_Movies extends GW_Common_Module
 	
 	function __eventAfterSave($item)
 	{
+		/*
 		if(!$item->imdb){
 			//Navigator::backgroundRequest("lt/movies?act=do:BackgroundAterInsert&id=".$item->id);
 			//$this->setMessage("Imdb update background process started");
 			$this->doBackgroundAterInsert($item);
-		}
+		}*/
 		
 		$this->__extendMovieDatabase($item);
 	}
@@ -247,7 +248,9 @@ class Module_Movies extends GW_Common_Module
 	
 	function doSearchMovies()
 	{
-		
+		if(!isset($_GET['q']))
+			exit;
+			
 		$query_str = $_GET['q'];
 		$page = $_GET['page'] ?? 1;
 		$query_str = str_replace(".", " ", $query_str);
