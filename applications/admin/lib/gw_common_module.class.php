@@ -1707,8 +1707,8 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->prepareListConfig();
 		
-		$this->loadOrders();
-		$orders = $this->tpl_vars['list_orders'];
+		//$this->loadOrders();
+		$orders = $this->tpl_vars['list_orders'] ?? [];
 		
 		$foundorder = false;
 
