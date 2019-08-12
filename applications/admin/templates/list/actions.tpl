@@ -124,7 +124,7 @@
 
 {function name=dl_actions_ext_actions}
 	
-	<div class="btn-group dropright gwcmsAction" style="display: inline">
+	<div class="btn-group dropright gwcmsAction" style="display: inline;vertical-align: top;">
 
 		<i class="fa fa-bars dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" data-url="{$m->buildURI('itemactions',[id=>$item->id])}"></i>	
 		    <ul class="dropdown-menu dropdown-menu-right">
