@@ -1011,7 +1011,8 @@ class GW_Data_Object
 				break;
 			case 'BEFORE_INSERT':
 				if ($this->auto_fields)
-					$this->set('insert_time', date('Y-m-d H:i:s'));
+					if(!$this->get('insert_time'))
+						$this->set('insert_time', date('Y-m-d H:i:s'));
 				break;
 
 			case 'AFTER_LOAD':
