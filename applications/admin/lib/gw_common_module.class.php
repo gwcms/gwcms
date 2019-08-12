@@ -368,12 +368,12 @@ class GW_Common_Module extends GW_Module
 		$this->fireEvent('AFTER_SAVE', $item);
 
 		//jeigu saugome tai reiskia kad validacija praejo
-		if(isset($_GET['reloadparent']) && $_REQUEST['submit_type'] != 1)
+		if(isset($_GET['reloadparent']) && $_REQUEST['submit_type']??false != 1)
 		{
 			echo "<script type='text/javascript'>parent.location.reload()</script>";
 			exit;
 		}
-		if(isset($_GET['dialog']) && $_REQUEST['submit_type'] != 1) {
+		if(isset($_GET['dialog']) && $_REQUEST['submit_type']??false != 1) {
 			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
 			
 			$messages=$this->app->acceptMessages(1);
@@ -409,7 +409,7 @@ class GW_Common_Module extends GW_Module
 		if ($item)
 			$_REQUEST['id'] = $item->get('id');
 
-		if ($_REQUEST['submit_type'] == 1) {//apply
+		if ($_REQUEST['submit_type']??false == 1) {//apply
 			
 			if(isset($_POST['activetabs']))
 				$_GET['activetabs']=$_POST['activetabs'];
