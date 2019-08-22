@@ -18,7 +18,9 @@
 
                     {$title}
                     {if $hidden_note} 
-                            <a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
+                            <a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  
+				data-placement="right" data-container="body" data-toggle="popover" data-html="true" 
+				{if !$hidden_note_copy}data-trigger="focus"{/if} href="#popover" onclick="return false"></a>
                     {/if}
 
                     {if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
