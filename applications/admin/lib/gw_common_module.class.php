@@ -91,6 +91,18 @@ class GW_Common_Module extends GW_Module
 		$this->lgr->collect_messages = true;
 	}
 
+	
+	function procError($errStr)
+	{
+		if($this->app->user->isRoot()){
+			$this->setError($errStr);
+		}else{
+			$subj = GW::s('PROJECT_NAME'). ' - Mod warning env: '.GW::s('PROJECT_ENVIRONMENT');
+			$opts = ['to'=>GW::s('REPORT_ERRORS'), 'subject'=>$subj, 'body'=>$errStr, 'noAdminCopy'=>1, 'noStoreDB'=>1];
+			GW_Mail_Helper::sendMail($opts);		
+		}		
+	}
+	
 	function errrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		if (!(error_reporting() & $errno)) {
@@ -114,7 +126,7 @@ class GW_Common_Module extends GW_Module
 					
 				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";	
 					
-				$this->setError($errstr);
+				$this->procError($errstr);
 				
 				if($errno==E_USER_ERROR)
 					exit;

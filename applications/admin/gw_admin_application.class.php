@@ -213,6 +213,10 @@ class GW_Admin_Application extends GW_Application
 		return is_numeric($id) ? $id : "id_".$id;
 	}
 	
+	
+	/*
+	 * grazins masyva su notificationais, nekeisti i objektus paskiau susimixuoja
+	 */
 	function innerRequest($path, $get_args, $post_args=[])
 	{	
 		$get_args['GWSESSID']=session_id();
@@ -237,24 +241,32 @@ class GW_Admin_Application extends GW_Application
 		
 		$this->sessionWriteClose();
 		$raw = file_get_contents($path, false, stream_context_create($opts));
-		$res = json_decode($raw);
+		$res = json_decode($raw, true);
 		
 	
-		if(isset($_GET['packets']) || isset($get_args['packets'])){
+		if(isset($_GET['packets']) || isset($get_args['packets'])){		
 			if(is_array($res)){
 				foreach($res as $packet)
-					if($packet->action == 'result')
+					if($packet['action'] == 'result')
 						$res['result']  = $packet;
 
 			}
 		}
 		
-		
-		if(!$res)
+		if(!$res){
 			$res=['response_format_error'=>1,'raw_response'=>$raw];
-		
-		$res->request_uri=$path;
-		
+			
+			if($this->user->isRoot()){
+				$this->setError("<pre>Error inner request \n". json_encode(
+					[
+						'endpoint'=>$path,
+						'get'=>$get_args, 
+						'post'=>$post_args
+					],JSON_PRETTY_PRINT).'</pre>');
+			}
+		}
+				
+		$res['request_uri']=$path;
 		$this->reopenSessionIfClosed();
 		
 		return $res;
