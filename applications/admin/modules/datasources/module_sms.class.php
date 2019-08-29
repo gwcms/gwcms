@@ -79,7 +79,7 @@ class Module_Sms extends GW_Common_Module
 			$stat = "SENT";
 		}else{
 			$item->status = 6;
-			$item->err = $err;
+			$item->err = json_encode($err);
 			$this->setError("Message failed!");
 			$stat = "FAILED (".json_encode($err).")";
 		}
@@ -96,6 +96,25 @@ class Module_Sms extends GW_Common_Module
 			
 		
 		$this->notifyRowUpdated($item->id, false);
+	}
+	
+	function doRetrySend()
+	{
+		$list = GW_Outg_SMS::singleton()->findAll(['retry < 2 AND status=6 AND insert_time + INTERVAL 3 DAY > NOW()']);
+		$found = count($list);
+		$succ = 0;
+		
+		foreach($list as $item){
+			
+			$item->saveValues(['retry'=>$item->retry+1]);
+			$this->doSend($item);
+			if($item->status==7)
+				$succ++;
+		}
+		
+		$this->setMessage($stat = "Found $found, resend success: $succ");
+		
+		$this->config->last_retry_status = $stat.', '.date('Y-m-d H:i:s');
 	}
 	
 	function viewConfig()
