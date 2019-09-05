@@ -156,6 +156,7 @@ class GW_Application
 		
 		$x = new stdClass;
 		$s->assignByRef('footer_hidden', $x);
+		$s->assignByRef('head_elements', $x);
 		$s->merge_compiled_includes = true;
 	}
 

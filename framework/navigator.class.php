@@ -2,7 +2,7 @@
 
 class Navigator
 {
-
+	
 	static public function __getAbsBase()
 	{
 		$arr = & $_SERVER;
@@ -222,4 +222,10 @@ class Navigator
 	{
 		return isset($_GET["ajax_request"]) || !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';		
 	}
+	
+	static public function isSecure() {
+		return
+		  (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+		  || $_SERVER['SERVER_PORT'] == 443;
+	}	
 }
