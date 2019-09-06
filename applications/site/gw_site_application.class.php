@@ -92,10 +92,21 @@ class GW_Site_Application extends GW_Application
 	
 	function processPath($path, $args=[])
 	{
+		$path = explode('?', $path);
+		
+		if(isset($path[1])){
+			parse_str($path[1], $args);
+			d::ldump($args);
+		}
+		
+		$path = $path[0];		
+		
 		$path = explode('/',$path);
 		
 		$dir = array_shift($path);
 		$name = array_shift($path);
+		
+		
 		
 		if(!$this->moduleExists($dir, $name))
 			die("Failed locating module $dir/$name");
@@ -112,6 +123,16 @@ class GW_Site_Application extends GW_Application
 	
 	function subProcessPath($path, $args=[])
 	{
+		$path = explode('?', $path);
+		
+		if(isset($path[1])){
+			parse_str($path[1], $args);
+			$prevget = $_GET;
+			$_GET = $args;
+		}
+		
+		$path = $path[0];		
+		
 		$langmod = GW_Lang::$module;
 		$restore_vars=$this->smarty->getTemplateVars(); 
 		
@@ -120,13 +141,14 @@ class GW_Site_Application extends GW_Application
 		$this->smarty->assign($restore_vars);
 		GW_Lang::$module = $langmod;
 		
+		if(isset($prevget))
+			$_GET = $prevget;
+		
 		return $res;
 	}
 	
 	function processSiteModule($file, $params, $info, $args=[])
 	{
-		
-		
 		//prevent hacking via ajax request
 		$file=str_replace('..','',$file);
 
@@ -299,6 +321,18 @@ class GW_Site_Application extends GW_Application
 		}else{
 			return GW_Site_Block::singleton();
 		}
+	}
+
+	function prepareContent($content)
+	{
+		
+		$content = preg_replace_callback ('({module:([^}]+)})is'  , function ($m){
+			//htmlspecialchars_decode
+			$path = htmlspecialchars_decode( $m[1], ENT_NOQUOTES );
+			return $this->subProcessPath($path);
+		}, $content);
+		
+		return $content;
 	}
 
 }
