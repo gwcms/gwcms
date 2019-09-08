@@ -157,7 +157,7 @@ class GW_Module
 
 	function isPublic($name)
 	{
-		return (stripos($name,'view')===0 || stripos($name,'do')===0) && $this->methodExists($name);
+		return (stripos($name,'view')===0 || stripos($name,'do')===0);
 	}
  	
 	function loadErrorFields()
@@ -288,6 +288,9 @@ class GW_Module
 		//nuimta paramsa pastatyti kaip kontekstini objekto id
 		
 		$name = self::__funcVN(isset($params[0]) ? $params[0] : false);
+		
+		if(!$name)
+			$name = $this->default_view;		
 		
 		$this->view_name = $name;
 		

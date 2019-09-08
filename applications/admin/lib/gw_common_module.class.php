@@ -1375,15 +1375,47 @@ class GW_Common_Module extends GW_Module
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
 		$this->jump();
 	}
-
+	
+	public $extenions;
+	
+	function ext($name)
+	{
+		$ext_name = get_class($this).'_'.$name;
+		
+		if(!isset($this->extensions[$name]))
+		{
+			$this->extensions[$name] = new $ext_name;
+			$this->extensions[$name]->mod = $this;
+		}
+				
+		return $this->extensions[$name];
+	}	
+	
+	
+	public $redirRules=[];
+	
+	function addRedirRule($rule, $ext)
+	{
+		$this->redirRules[]=['re'=>$rule, 'ext'=>$ext];
+	}
+	
+	function scanRedirRules($name){
+		foreach($this->redirRules as $rule)
+			if(preg_match($rule['re'], $name, $m))
+				return $rule['ext'];
+	}
+	
 	function __call($name, $arguments)
 	{
 		$name = strtolower($name);
-
-		if (isset($this->allow_auto_actions[$name]))
+		
+		if (isset($this->allow_auto_actions[$name])){
 			return call_user_func_array([$this, "common_$name"], $arguments);
-		else
+		}elseif($ext = $this->scanRedirRules($name)){			
+			return call_user_func_array([$this->ext($ext), $name], $arguments);
+		}else{
 			trigger_error('method "' . $name . '" not exists', E_USER_NOTICE);
+		}
 	}
 
 
