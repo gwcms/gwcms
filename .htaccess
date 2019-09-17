@@ -24,6 +24,13 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.css|\.js)$
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
+
+#leisti prie generuojamo pav pridet .jpg
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  (/tools/img/)
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
 <Files README.md>
 Deny from all
 </Files>
