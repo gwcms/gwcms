@@ -25,7 +25,17 @@ class GW_Img_Tool
 		$params=$_GET;
 		$item0 = new GW_Image();
 		
+		
+		
 		$params['id'] = array_shift($this->path_arr);
+		
+		if($this->path_arr){
+			$params_decrypt = GW_Crypt_Helper::simpleDecryptUrl($this->path_arr[0]);
+			$params = array_merge($params, $params_decrypt);
+			//d::dumpas($params);
+		}
+		
+		
 
 		$condition=$this->admin?'id=?':'`key`=?';
 

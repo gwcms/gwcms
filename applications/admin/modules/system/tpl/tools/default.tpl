@@ -78,7 +78,66 @@ Hot Keys:
 	</div>
 </div>
 
+<div class='panel'>
+	<div class='panel-body'>
+		
+<script src="https://code.highcharts.com/4.2.2/highcharts.js"></script>
 
+
+<div id="hichcontainer" style="min-width: 310px; height: 300px; max-width: 600px;"></div>
+
+<script>
+	diskusagedata = {json_encode($diskusagedata)};
+	dutotal= {intval($diskusagedata_total)};
+	{literal}
+function initGraph(){		
+Highcharts.chart('hichcontainer', {
+  chart: {
+    plotBackgroundColor: null,
+    plotBorderWidth: null,
+    plotShadow: false,
+    type: 'pie'
+  },
+  title: {
+    text: 'Repository disk usage. Total: '+dutotal+' MB'
+  },
+  tooltip: {
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+  },
+  plotOptions: {
+    pie: {
+      allowPointSelect: true,
+      cursor: 'pointer',
+      dataLabels: {
+        enabled: true,
+        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+      }
+    }
+  },
+  series: [{
+    name: 'Disk use',
+    colorByPoint: true,
+    data: diskusagedata
+    }]
+});	
+}
+
+window.onload = (event) => {
+  console.log('page is fully loaded');
+};
+
+window.onload = (event) => {
+  console.log('page is fully loaded2');
+};
+
+window.onload = (event) => {
+		initGraph();
+};
+{/literal}
+</script>
+
+	</div>
+</div>
 
 
 

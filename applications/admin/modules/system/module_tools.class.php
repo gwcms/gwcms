@@ -34,9 +34,45 @@ class Module_Tools extends GW_Common_Module
 				
 		$this->tpl_vars['test_actions']=$test_actions;
 		$this->tpl_vars['test_views']=$test_views;
+		
+		
+		$this->diskUsageData();
 				
 
 		return $vars;
+	}
+	
+	function diskUsageData()
+	{
+		$rows = shell_exec("du -S -m --apparent-size ".GW::s('DIR/REPOSITORY'));
+		$list = [];
+		$total_size = 0;
+		
+		foreach(explode("\n", $rows) as $row){
+			@list($size, $name) = explode("\t", $row);
+			$name = str_replace(GW::s('DIR/REPOSITORY'), '', $name);
+			$total_size += (int)$size;
+			
+			if($size)
+				$list[] = ['name'=>($name ? $name : './repository').' ('.$size.' MB)', 'y'=>(int)$size];
+		}
+		$list_large_dirs = $list;	
+		$others = 0;
+		
+		foreach($list_large_dirs as $idx => $row){
+			if($row['y']/$total_size < 0.01){
+				$others += $row['y'];
+				unset($list_large_dirs[$idx]);
+			}else{
+				$list_large_dirs[$idx]['r'] = $row['y']/$total_size ;
+			}
+		}
+		$list_large_dirs = array_values($list_large_dirs);
+		$list_large_dirs[] = ['name'=>"Others ($others MB)", 'y'=>$others];
+		//d::dumpas([$list_large_dirs, $total_size, $list]);
+		
+		$this->tpl_vars['diskusagedata_total'] = $total_size;
+		$this->tpl_vars['diskusagedata']=$list_large_dirs;		
 	}
 	
 
