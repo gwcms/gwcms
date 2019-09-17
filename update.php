@@ -485,10 +485,9 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		//dir==1 korektiskai veikia zalia ten kur naujas kodas
 		
 		if($_GET['dir']==1){
-			
 			echo "<table style='width:100%'><tr><th>$f1_proj</th><th>$f2_proj</th></tr></table>";
 		}else{
-			echo "<table style='width:100%'><tr><th>$f1_proj</th><th>$f2_proj</th></tr></table>";
+			echo "<table style='width:100%'><tr><th>$f2_proj</th><th>$f1_proj</th></tr></table>";
 		}
 		
 		echo diff_helper::getTableStyle();
@@ -496,7 +495,7 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		if($_GET['dir']==1){
 			echo diff_helper::toTable(diff_helper::compare($file1,$file2), "\t","");
 		}else{
-			echo diff_helper::toTable(diff_helper::compare($file1,$file2), "\t","");
+			echo diff_helper::toTable(diff_helper::compare($file2,$file1), "\t","");
 		}
 		
 		echo diff_helper::scripts();
