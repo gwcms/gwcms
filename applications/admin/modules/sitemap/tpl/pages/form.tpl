@@ -65,6 +65,10 @@
 
 {call e field=active type=bool}
 
+{if GW::s('MULTISITE')}
+	{call e field=multisite type=bool}	 
+{/if}
+
 {if $update}
 	{call e field=in_menu type=bool}
 	

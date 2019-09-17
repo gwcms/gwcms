@@ -44,15 +44,18 @@ class GW_Public_Module {
 	function init() {
 		//nekviecia sitos funkcijos
 	}
+	
+	function __eventBeforeTemplateAssignTplVars()
+	{
+		$this->smarty->assignByRef('messages', $this->messages);
+		$this->smarty->assign('m', $this);
+		$this->smarty->assign($this->tpl_vars);		
+	}	
 
 	function processTemplate($name, $fetch=false)
 	{
 		$this->fireEvent("BEFORE_TEMPLATE");		
-		
-		$this->smarty->assignByRef('messages', $this->messages);
-		$this->smarty->assign('m', $this);
-		$this->smarty->assign($this->tpl_vars);
-		
+				
 		if ($this->tpl_name)
 			$file = $this->tpl_dir . $this->tpl_name;
 		else
@@ -139,10 +142,13 @@ class GW_Public_Module {
 			$view_name = 'default';
 		}
 
+		$this->view_name = $view_name;	
+
 		$this->params = $params;
 
 		
 		if ($act_name){
+			$this->fireEvent("BEFORE_ACTION", $act_name);
 			$vars = $this->processAction($act_name);
 			
 			if($view_name=="noview"){
@@ -188,6 +194,10 @@ class GW_Public_Module {
 			case 'AFTER_SAVE':
 				$item = $context;
 				break;
+			case 'BEFORE_TEMPLATE':
+				$this->app->preloadBlocks();
+				$this->__eventBeforeTemplateAssignTplVars();
+			break;
 		}
 
 		$tmp = '__event' . str_replace('_', '', $event);
@@ -271,6 +281,18 @@ class GW_Public_Module {
 	
 	function setMessage($message)
 	{
+		if(is_string($message))
+			$message=["text"=>$message, GW_MSG_INFO];
+		
+		if(substr($message['text'], 0, 1)=='/'){
+			$message['code'] = $message['text'];
+			$message['text']=GW::l($message['text']);
+		}		
+		
+		if(is_array($message) && isset($message['vars']))
+			GW_String_Helper::replaceVarsInTpl($message['text'], $message['vars']);
+		
+		
 		if ($this->sys_call) {
 			$this->lgr->msg(json_encode($message));
 		} else {

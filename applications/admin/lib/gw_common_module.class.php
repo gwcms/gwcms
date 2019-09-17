@@ -1380,7 +1380,11 @@ class GW_Common_Module extends GW_Module
 	
 	function ext($name)
 	{
-		$ext_name = get_class($this).'_'.$name;
+		if(is_array($name)){
+			list($name, $ext_name) = $name;
+		}else{
+			$ext_name = get_class($this).'_'.$name;
+		}
 		
 		if(!isset($this->extensions[$name]))
 		{

@@ -71,7 +71,8 @@ class GW_Site_Application extends GW_Application
 
 	function jumpLink()
 	{
-		Navigator::jump($this->page->link);
+		//Navigator::jump();
+		$this->jump($this->page->link);
 	}
 
 	function processTemplate($file)
@@ -96,7 +97,6 @@ class GW_Site_Application extends GW_Application
 		
 		if(isset($path[1])){
 			parse_str($path[1], $args);
-			d::ldump($args);
 		}
 		
 		$path = $path[0];		

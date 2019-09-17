@@ -10,7 +10,7 @@ class Module_Email_Queue extends GW_Common_Module
 		$this->list_params['paging_enabled']=1;	
 	}
 	
-	function doSend($item=false)
+	function doSend($item=false, $functiononly=false)
 	{
 		if(!$item)
 			$item = $this->getDataObjectById();
@@ -18,14 +18,22 @@ class Module_Email_Queue extends GW_Common_Module
 		$status = GW_Mail_Helper::sendMail($item);
 		
 		if($status){
+			if(!$functiononly)
+				$this->setMessage("Mail id:{$item->id} SENT");
+				
 			$this->setMessage("Mail id:{$item->id} SENT");
 			$item->status = "SENT";
 		}else{
-			$this->setError("Mail id:{$item->id} FAILED ({$item->error})");
+			if(!$functiononly)
+				$this->setError("Mail id:{$item->id} FAILED ({$item->error})");
+				
 			$item->status = $item->error;
 		}
 		
 		$item->updateChanged();
+		
+		if($functiononly)
+			return true;
 		
 		if($this->sys_call && !$this->isPacketRequest())
 			$this->jump();
@@ -33,6 +41,27 @@ class Module_Email_Queue extends GW_Common_Module
 		
 		$this->notifyRowUpdated($item->id, false);			
 	}
+	
+	
+	function getReady()
+	{
+		return $this->model->findAll('status="ready"', ['limit'=>50]);		
+	}
+	
+	function doSendQueue()
+	{
+		$list = $this->getReady();
+		
+		foreach($list as $item){
+			$this->doSend($item, true);
+		}
+		
+		if($this->getReady()){
+			sleep(1);
+			Navigator::backgroundRequest('admin/lt/emails/email_queue?act=doSendQueue');
+		}
+	}
+	
 	
 	function doViewBody($item=false)
 	{
