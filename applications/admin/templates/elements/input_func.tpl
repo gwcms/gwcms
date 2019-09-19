@@ -6,8 +6,8 @@
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
 	
-	<{if $rotatedlabel}span{else}td{/if} id="{$id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass}" 
-		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
+	<{if $rotatedlabel}span{else}td{/if} id="{$id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass} {$rowclass}" 
+		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $labelright}text-align:right;{/if}{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if isset($m->lang.FIELD_NOTE.$name)}
@@ -42,12 +42,12 @@
 	{if $i18n==2}
 		{foreach $langs as $ln_code}
 			
-			<td class="input_td col_i18n_{$ln_code} {$inputContainClass}" width="{$width_input}" {if $wide}colspan="2"{/if} data-type="inputc">
+			<td class="input_td col_i18n_{$ln_code} {$inputContainClass} {$rowclass}" width="{$width_input}" {if $wide}colspan="2"{/if} data-type="inputc">
 				{call e0 field="`$name`_`$ln_code`"}
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td {$inputContainClass}" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if}" 
+		<td class="input_td {$inputContainClass} {$rowclass}" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if};" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			
 			
@@ -262,4 +262,17 @@
 		{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
 		<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
 	{/if}
+{/function}
+
+
+{function name="e_group_open"}
+	<tr class="{$rowclass} e_horizontal_group">
+		{if $label!==false}<td style="{if $labelright}text-align:right{/if}">{$label}</td>{/if}
+		<td {if $label===false}colspan="2"{/if}>
+		<table><tr>
+{/function}
+{function name="e_group_close"}
+		</tr></table>
+</td>
+</tr>
 {/function}

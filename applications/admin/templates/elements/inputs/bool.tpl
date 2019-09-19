@@ -12,7 +12,7 @@
 	<script>
 		require(['gwcms'], function(){
 			$('#{$id}').change(function(){	
-				{if $stateToggleRows}$('.{$stateToggleRows}').toggle(this.value=='1'){/if}
+				{if $stateToggleRows}$('.{$stateToggleRows}').toggle(this.value=='1');$('.{$stateToggleRows}_inv').toggle(this.value!='1'){/if}
 				{if $onchange}
 					var ln = $(this).parents('.ln_contain:first').attr('title')
 					var state = $(this).val()==1;

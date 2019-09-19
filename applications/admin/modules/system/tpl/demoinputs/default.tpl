@@ -38,6 +38,7 @@
 }
 
 
+
 {call e field=demo_tags type=tags}
 
 {*
@@ -62,7 +63,7 @@
 }
 
 
-{call e field="demo_select_country_id"
+{call e field="demo_select_country_id_multi"
 	type="multiselect_ajax"
 	object_title=GW::l('/M/datasources/MAP/childs/countries/title')
 	modpath="datasources/countries"
@@ -70,6 +71,36 @@
 	value=json_decode($item->demo_select_country_id)
 	preload=1
 }
+
+{*adds automaticaly object_title=GW::l('/M/datasources/MAP/childs/countries/title')*}
+{call e field="demo_select_country_id_single"
+	type="select_ajax"
+	after_input_f="editadd"
+	modpath="datasources/countries"
+	options=[]
+	preload=1
+}
+
+{call e field=state_toogle_demo type=bool stateToggleRows="smtpdetails"}
+
+{capture assign=tmp}
+	<table>
+{call e field=mail_smtp_host type=text}
+{call e field=mail_smtp_user type=text}
+{call e field=mail_smtp_pass type=text}
+{call e field=mail_smtp_port type=number}
+	</table>
+{/capture}
+{call e field=smtp_config type=read value=$tmp rowclass="smtpdetails"}
+
+{call e field=rodomas_jei_state_toogle_isjungtas type=text rowclass="smtpdetails_inv"}
+ 
+{call e_group_open label="Example of multiple inputs per row"}
+	{call e field=mail_smtp_host1 notr=1 type=text}
+	{call e field=mail_smtp_user1 notr=1 type=text}
+	{call e field=mail_smtp_pass1 notr=1 type=text}
+	{call e field=mail_smtp_port1 notr=1 type=number}
+{call e_group_close}	
 
 {call e field="country_code"
 	type="select_ajax"

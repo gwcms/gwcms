@@ -31,8 +31,8 @@ class Module_Attachments extends GW_Common_Module
 	{
 		$owner_vals = [
 		    'owner_type'=>($owner_type = $_GET['owner_type']), 
-		    'owner_id'=>$_GET['owner_id'], 
-		    'owner_temp_id'=>$_GET['owner_temp_id'],
+		    'owner_id'=>$_GET['owner_id'] ?? 0, 
+		    'owner_temp_id'=>$_GET['owner_temp_id'] ?? 0,
 		    'field'=>$_GET['field']
 		];
 		

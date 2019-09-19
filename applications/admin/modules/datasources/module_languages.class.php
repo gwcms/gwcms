@@ -36,6 +36,7 @@ class Module_Languages extends GW_Common_Module
 	function viewSearch()
 	{
 		$i0 = $this->model;
+		$cond="";
 		
 		if(isset($_GET['q'])){
 			$search = "'%".GW_DB::escape($_GET['q'])."%'";
