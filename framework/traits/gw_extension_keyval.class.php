@@ -41,7 +41,22 @@ class GW_Extension_KeyVal
 	
 	function __get($name) 
 	{
-		return $this->obj->$name;
+		return $this->obj->get($name);
+	}
+	
+	function get($name)
+	{
+		return $this->obj->get($name);
+	}
+	
+	function __set($name, $value) 
+	{
+		return $this->obj->replace($name, $value);
+	}
+	
+	function __isset($name)
+	{
+		return true;
 	}
 
 }

@@ -15,14 +15,16 @@
 {/function}
 
 
-{assign var=dl_output_filters_truncate_size value=80 scope=global}
+
+{*{assign var=dl_output_filters_truncate_size value=80 scope=global}*}
 {*
 	can change this value by adding bellow line to your list_template
 	{$dl_output_filters_truncate_size=70}
 *}
 
 {function name=dl_output_filters_truncate}
-	{$item->$field|escape|truncate:$dl_output_filters_truncate_size}
+	{$tmp=$dl_output_filters_truncate_size|default:80}
+	{$item->$field|escape|truncate:$tmp}
 {/function}	
 
 
