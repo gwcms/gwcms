@@ -4,6 +4,7 @@ class GW_Extension_KeyVal
 {
 	private $parent;
 	public $obj;
+	public $cacheNotSaved;
 	
 	function __construct($parent, $name)
 	{
@@ -21,7 +22,13 @@ class GW_Extension_KeyVal
 		switch ($event) {
 
 			case 'AFTER_INSERT':
-				
+				$this->obj = new GW_Generic_Extended($this->parent->id, $this->parent->table.'_extended');
+				if($this->cacheNotSaved)
+				{
+					$this->obj->storeAll($this->cacheNotSaved);
+					$this->cacheNotSaved = [];	
+				}
+
 				
 			break;
 		
@@ -46,12 +53,16 @@ class GW_Extension_KeyVal
 	
 	function get($name)
 	{
-		return $this->obj->get($name);
+		return $this->__get($name);
 	}
 	
 	function __set($name, $value) 
 	{
-		return $this->obj->replace($name, $value);
+		if($this->parent->id){
+			return $this->obj->replace($name, $value);
+		}else{
+			$this->cacheNotSaved[$name] = $value;
+		}
 	}
 	
 	function __isset($name)

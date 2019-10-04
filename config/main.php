@@ -52,8 +52,9 @@ GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
 GW::s('GW_CMS_VERSION', '3.3');
 
-include $dir['ROOT'].'config/project.php';
 include $dir['ROOT'].'config/environment.php';
+include $dir['ROOT'].'config/project.php';
+
 
 
 $env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];

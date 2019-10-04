@@ -57,7 +57,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
 			die('dirid not specified or invalid');
 
-		$file = $repositories[$_GET['dirid']].'/'.$file;
+		$file = $repositories[$_GET['dirid']].'/'.$file.'.jpg';
 		
 		return $file;
 	}
@@ -91,14 +91,20 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			$fp = $this->__getFile($file);
 			$storepath = $repositories[$_GET['dirid']];
 			
+			if(isset($_GET['debug'])){
+				d::dumpas([
+				    'src'=>$source, 
+				    'fp'=>$fp, 
+				    'exists'=>file_exists($fp)?'yes':'no'
+				]);
+			}
+			
 			if(!file_exists($fp)){
 				$url = str_replace('{IMGID}', GW_Http_Agent::urlencode($file), $source);
 				//d::dumpas($url);
 				$data = file_get_contents($url);
-				$file = $file.'.jpg';
-				$storepath = $storepath.$file;
 				//@mkdir(dirname($storepath), 0777, true);
-				file_put_contents($storepath, $data);
+				file_put_contents($fp, $data);
 				//d::dumpas($storepath);
 			}
 		}

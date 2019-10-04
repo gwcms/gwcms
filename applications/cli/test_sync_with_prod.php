@@ -33,7 +33,7 @@ $extra = "";
 
 $destinationdir = GW::s('DIR/ROOT');
 $t = new GW_Timer;
-mypassthru("rsync --exclude='*.log' -azP $userhost:$sourcedir $destinationdir");
+mypassthru("rsync --exclude='*.log' --exclude='repository/.sys/templates_c/*' -azP $userhost:$sourcedir $destinationdir");
 out("----------RSYNC speed: {$t->stop()} secs----------");
 
 $t = new GW_Timer;

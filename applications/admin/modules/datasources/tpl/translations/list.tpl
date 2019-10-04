@@ -26,6 +26,8 @@
 	{$dl_output_filters=[]}
 	
 	{$dl_output_filters_truncate_size=100}
+	{$dl_output_filters.insert_time=short_time}
+	{$dl_output_filters.update_time=short_time}	
 	
 	{foreach GW::$settings.LANGS as $lncode}
 		{$dl_output_filters["value_`$lncode`"]=truncate}

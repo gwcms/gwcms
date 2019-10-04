@@ -32,14 +32,17 @@ class GW_File_Helper
 					$valid_files[$file] = $zippath;
 				}
 			}
-		}
+		}			
 		//if we have good files...
 		if (count($valid_files)) {
 			//create the archive
 			$zip = new ZipArchive();
-			if ($zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
-				return false;
+			$createcode = $zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE);
+						
+			if ($createcode !== true) {
+				return $createcode;
 			}
+			
 			//add the files
 			foreach ($valid_files as $file => $zippath) {
 				$zip->addFile($file, $zippath);
@@ -52,7 +55,7 @@ class GW_File_Helper
 			//check to make sure the file exists
 			return file_exists($destination);
 		} else {
-			return false;
+			return -2;
 		}
 	}
 
