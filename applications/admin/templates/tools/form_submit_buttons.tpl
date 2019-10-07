@@ -1,4 +1,4 @@
-{if !$submit_buttons}
+{if !$submit_buttons && $submit_buttons!==false}
 	{$submit_buttons=[save,apply,cancel]}
 {/if}
 

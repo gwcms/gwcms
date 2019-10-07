@@ -447,7 +447,7 @@ class GW_Module
 		if(isset($_GET['return_to']))
 			$path = $_GET['return_to'];
 		
-		if(isset($_REQUEST['dialog_iframe'])){
+		if(isset($_REQUEST['dialog_iframe']) && !($this->dialog_iframe_errors ?? false)){
 			echo "<script>window.parent.gwcms.dialogClose();window.parent.gwcms.close_dialog2()</script>";
 			exit;
 		}
@@ -508,9 +508,10 @@ class GW_Module
 	
 	function getFilterByFieldname($fieldname)
 	{
-		foreach($this->list_params['filters'] as $idx => $filterdata)
-			if($filterdata['field'] == $fieldname)
-				return ['data'=>$filterdata, 'index'=>$idx];
+		if(isset($this->list_params['filters']))
+			foreach($this->list_params['filters'] as $idx => $filterdata)
+				if($filterdata['field'] == $fieldname)
+					return ['data'=>$filterdata, 'index'=>$idx];
 	}
 	
 	function replaceFilter($field, $value, $comparetype='EQ')

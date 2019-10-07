@@ -131,6 +131,14 @@
 
 				</i>			
 			</i>
+			<i id="payments_creditcard">
+				<i id="title"><en>Payments CC</en><lt>Mokėjimai KK</lt></i>
+				<i id="info">
+					<i id="model">gw_pay_creditcard</i>
+					<i id="iconclass">fa fa-cc-mastercard</i>
+
+				</i>			
+			</i>			
 			<i id="images">
 				<i id="title"><en>Pictures</en><lt>Paveiksliukai</lt></i>
 				<i id="info">

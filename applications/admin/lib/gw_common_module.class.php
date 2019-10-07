@@ -553,8 +553,13 @@ class GW_Common_Module extends GW_Module
 		
 		$this->modconfig->setValues($vals);
 		
+		$this->fireEvent("AFTER_SAVE_CONFIG", $vals);
+		
+		
 		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setMessage('/g/SAVE_SUCCESS');
+		if(!($this->dialog_iframe_errors ?? false))
+			$this->setMessage('/g/SAVE_SUCCESS');
+		
 		
 		$this->jump();
 	}

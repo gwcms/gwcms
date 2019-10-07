@@ -754,6 +754,15 @@ class GW_DB
 	{
 		$this->query("TRUNCATE TABLE `$table`");
 	}
+	
+	function aesCrypt($str, $key, $revert=false)
+	{
+		if($revert){
+			return GW::db()->fetch_result(["SELECT AES_DECRYPT(FROM_BASE64(?),SHA2('$key',512))", $str]);
+		}else{
+			return $this->fetch_result(["SELECT TO_BASE64(AES_ENCRYPT(?,SHA2('$key',512)))", $str]);
+		}
+	}
 }
 
 class db_query_prep_helper
