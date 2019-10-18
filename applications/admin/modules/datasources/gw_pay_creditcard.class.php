@@ -11,16 +11,22 @@ class GW_Pay_Creditcard extends GW_Data_Object {
 	];
 
 	function validate() {
-		/*
-
-		  list($m, $y) = explode('/', $this->expirity_time);
-
-		  if("$y-$m" < date('Y-m'))
-		  {
-		  $this->errors['expirity_time']='/M/USERS/CARD_EXPIRED';
-		  }
-		 */
-
+		
+		
+		list($num,$cvc,$exp) = explode(',',$this->num_cvc_exp);
+		
+		
+		
+		if(!self::luhn_check($num))
+			$this->setError(Gw::ln('/m/INVALID_CARD_NUMBER',['v'=>['number'=>$num]]),'number');
+		
+		if(!self::cvc_check($cvc))
+			$this->setError(Gw::ln('/m/INVALID_CARD_CVC'),'cvc');
+		
+		if(!self::expires_check($exp))
+			$this->setError(Gw::ln('/m/INVALID_CARD_EXPIRES'),'expires');
+				
+		 		
 		parent::validate();
 
 		return count($this->errors) == 0;
@@ -54,6 +60,18 @@ class GW_Pay_Creditcard extends GW_Data_Object {
 		// If the total mod 10 equals 0, the number is valid
 		return ($total % 10 == 0) ? TRUE : FALSE;
 	}
+	
+	static function cvc_check($str)
+	{
+		return is_numeric($str);
+	}
+	
+	static function expires_check($str)
+	{
+		@list($m, $y) = explode('/', $str);
+
+		return "$y-$m" > date('Y-m');	
+	}	
 
 	function crypt($revert = false) {
 		$passenc = GW_Config::singleton()->get('datasources__payments_creditcard/storage_pass');

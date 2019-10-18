@@ -225,6 +225,13 @@ class GW_Mail_Helper
 		return $status;
 	}
 	
+	
+	static function getAdminAddr()
+	{
+		$cfg = self::loadCfg();
+		
+		return $cfg->mail_admin_emails;
+	}
 		
 	/**
 	 * 
@@ -232,10 +239,8 @@ class GW_Mail_Helper
 	 * 
 	 */
 	static function sendMailAdmin(&$opts)
-	{
-		$cfg = self::loadCfg();
-		
-		$opts['to'] = $cfg->mail_admin_emails;
+	{		
+		$opts['to'] = self::getAdminMail();
 		
 		return self::sendMail($opts);
 	}

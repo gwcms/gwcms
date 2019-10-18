@@ -3,11 +3,12 @@
 {/function}
 
 {function name=dl_output_filters_expand_truncate}
-		{if mb_strlen($item->$field) > 40}
+		{$expand_truncate_size=$expand_truncate_size|default:40}
+		{if mb_strlen($item->$field) > $expand_truncate_size}
 			<a class="showsenders" href='#' onclick='$(this).find(".togl").toggle();return false' style="max-width:250px;display:inline-block">
-				{mb_substr($item->$field,0,40)}
+				{mb_substr($item->$field,0,$expand_truncate_size)}
 				<span class="togl">...</span>
-				<span class="togl" style="display:none;">{mb_substr($item->$field,40,mb_strlen($item->$field))}</span>
+				<span class="togl" style="display:none;">{mb_substr($item->$field,$expand_truncate_size,mb_strlen($item->$field))}</span>
 			</a> 
 		{else}
 			{$item->$field}
