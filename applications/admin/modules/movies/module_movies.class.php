@@ -103,6 +103,7 @@ class Module_Movies extends GW_Common_Module
 		
 	}
 	
+	/*
 	function doBackgroundAterInsert($item)
 	{
 		if(! $item)
@@ -157,6 +158,7 @@ class Module_Movies extends GW_Common_Module
 		$item->imdb= json_encode($imdb_api, JSON_UNESCAPED_SLASHES);
 		$item->updateChanged();
 	}
+	*/
 	
 	function __eventBeforeSave($item)
 	{
@@ -190,6 +192,7 @@ class Module_Movies extends GW_Common_Module
 		
 		
 	}
+	
 	
 	function doUpdateAllWithoutImdb()
 	{
