@@ -161,7 +161,8 @@ class Module_Movies extends GW_Common_Module
 	function __eventBeforeSave($item)
 	{
 		$item->title = str_replace('.', ' ', $item->title);
-				
+			
+		d::dumpas($item);
 	}
 	
 	function __extendMovieDatabase($item)
