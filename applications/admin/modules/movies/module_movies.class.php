@@ -193,7 +193,7 @@ class Module_Movies extends GW_Common_Module
 		
 		$this->__extendMovieDatabase($item);
 		
-		d::dumpas(GW::db()->query_times);
+		//d::dumpas(GW::db()->query_times);
 		
 		
 	}
