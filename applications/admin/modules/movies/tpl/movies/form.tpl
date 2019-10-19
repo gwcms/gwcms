@@ -14,7 +14,7 @@
 
 
 {call e field=description  type=textarea autoresize=1 height=50px}
-{call e field=rate type=radio options=[0,1,2,3,4,5,6,7,8,9,10]}
+{call e field=rate type=radio options=[0,1,2,3,4,5,6,7,8,9,10] separator='&nbsp;&nbsp;&nbsp;'}
 
 {if $item->id}
 	{call e field=recommend}
