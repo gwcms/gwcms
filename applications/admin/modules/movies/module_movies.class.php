@@ -162,7 +162,7 @@ class Module_Movies extends GW_Common_Module
 	{
 		$item->title = str_replace('.', ' ', $item->title);
 			
-		d::dumpas($item);
+		
 	}
 	
 	function __extendMovieDatabase($item)
@@ -187,6 +187,8 @@ class Module_Movies extends GW_Common_Module
 		}*/
 		
 		$this->__extendMovieDatabase($item);
+		
+		d::dumpas($item);
 	}
 	
 	function doUpdateAllWithoutImdb()
