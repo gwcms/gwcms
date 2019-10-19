@@ -188,7 +188,7 @@ class Module_Movies extends GW_Common_Module
 		
 		$this->__extendMovieDatabase($item);
 		
-		d::dumpas($item);
+		
 	}
 	
 	function doUpdateAllWithoutImdb()
