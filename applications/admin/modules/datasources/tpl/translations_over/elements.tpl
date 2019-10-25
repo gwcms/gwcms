@@ -1,7 +1,4 @@
 {function name="cust_inputs"}
-	
-	{$i="elements/input.tpl"}	
-
 	{if $field=='module'}
 		{call e field=module type=select empty_option=1 options=$options.module}
 	{elseif $field=="fullkey"}
@@ -29,7 +26,6 @@
 	{elseif $field=='value'}
 		{call e field=value type=textarea height=50px i18n=4 i18n_expand=1}
 	{/if}
-
 {/function}
 
 
