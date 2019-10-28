@@ -240,7 +240,7 @@ class GW_Mail_Helper
 	 */
 	static function sendMailAdmin(&$opts)
 	{		
-		$opts['to'] = self::getAdminMail();
+		$opts['to'] = self::getAdminAddr();
 		
 		return self::sendMail($opts);
 	}
