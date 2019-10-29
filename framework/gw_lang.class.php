@@ -299,7 +299,7 @@ class GW_Lang
 			
 			$prevln = GW_Lang::$ln;
 			GW_Lang::$ln = $ln;
-			$result = GW_Lang::ln('/'.$fullkey);
+			$result = GW_Lang::ln('/'.$fullkey, $opts);
 			//$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
 			
 			GW_Lang::$ln = $prevln;

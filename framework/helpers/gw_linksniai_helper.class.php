@@ -83,8 +83,8 @@ class GW_Linksniai_Helper
 	* @param string $linksnis sutrumpintas linksnio pavadinimas: kil, nau, gal, ina, vie, sau
 	* @return string
 	*/
-	static function getName ( $vardas, $linksnis = 'sau' ) {
-	
+	static function getName ( $vardas, $linksnis = 'sau' ) 
+	{
 		$vardai = explode( ' ', self::sanitizeName($vardas) );
 		$vardaiL = [];
 		foreach ( $vardai as $v ) {
@@ -100,8 +100,8 @@ class GW_Linksniai_Helper
 	* @param string $vardas lietuviškas vardas arba pavardė
 	* @return string
 	*/
-	static function sanitizeName ( $vardas ) {
-	
+	static function sanitizeName ( $vardas ) 
+	{
 		$vardas = mb_eregi_replace('[^a-ž]', ' ', $vardas);
 		$vardas = mb_eregi_replace('\s+', ' ', $vardas);
 		$vardas = trim($vardas);
@@ -118,8 +118,8 @@ class GW_Linksniai_Helper
 	* @param string $linksnis sutrumpintas linksnio pavadinimas: kil, nau, gal, ina, vie, sau
 	* @return string
 	*/
-	static function getLinksnis ( $vardas, $linksnis = 'sau' ) {
-	
+	static function getLinksnis ( $vardas, $linksnis = 'sau' ) 
+	{
 		$return = $vardas;
 
 		foreach ( self::$map[$linksnis] as $from=>$to ) {
@@ -129,7 +129,7 @@ class GW_Linksniai_Helper
 				break;
 			}
 		}
-		
+				
 		return $return;
 	}
 }
