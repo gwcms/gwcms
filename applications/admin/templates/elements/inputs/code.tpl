@@ -2,6 +2,11 @@
 	id="{$id}" name="{$input_name}" style="display:none" {if $readonly}readonly="readonly"{/if} class="inp-code {if $class}{$class}{/if}" >{$value|escape}</textarea>
 <pre id="{$id}_aceeditor" class="codeedit {if $class}{$class}{/if}" style="{if !$rows}height: {$height|default:"auto"};{/if} {if $border}border:1px solid silver;{/if}" title="shift + [plus] - increases height"></pre>
 
+
+{if $height_memory}
+	<input id="{$id}_aceeditor_height" name="{call calcElmName field="`$field`_height"}" type="hidden" value="{$item->get("`$field`_height")}"  />
+{/if}
+
 <script src="{$app->sys_base}vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	require(['gwcms'], function(){
@@ -39,12 +44,28 @@
 
 		  if((e.which==45 || e.which==43) && e.shiftKey)
 		  {
-			  $(this).css('height', $(this).height()+(e.which==43 ? 100: -100) )
+			  var newheight=$(this).height()+(e.which==43 ? 100: -100);
+			  
+			  $(this).css('height', newheight )
 				{$id}editor.resize() ;
 				{$id}editor.renderer.updateFull() ;		
 				 e.preventDefault();
+				 
+			{if $height_memory}
+				$('#{$id}_aceeditor_height').val(newheight);
+			{/if}	 
 		  }	
 		});
+		
+		{if $height_memory}
+			var restore_height=$('#{$id}_aceeditor_height').val()-0;
+			if(restore_height){
+				$('#{$id}_aceeditor').css('height', restore_height );
+				{$id}editor.resize() ;
+				{$id}editor.renderer.updateFull() ;
+			}
+		{/if}	 		
+		
 	})
 </script>
 
