@@ -82,7 +82,18 @@ gw_forms = {
 				$(this).find('.rotate-lbl').css('top', ($(this).height()-10)+'px')
 				$(this).data('lastheight', $(this).height());
 			}
-		})
+		});
+		
+		$(window).bind('keydown', function(event) {
+		    if (event.ctrlKey || event.metaKey) {
+			switch (String.fromCharCode(event.which).toLowerCase()) {
+			case 's':
+				$('#itemform').get(0).elements['submit_type'].value=1; //apply (stay in form after save)
+				$('#itemform').submit();
+				event.preventDefault();
+			break;
+		    }
+		}});		
 	}	
 }
 
