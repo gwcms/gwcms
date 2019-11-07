@@ -13,7 +13,7 @@ class GW_Site_Application extends GW_Application
 	
 	
 	function getPage()
-	{	
+	{
 		$this->page = new GW_Page();
 		
 		if(isset($this->path_arr[0]['name']) && $this->path_arr[0]['name']=='direct')
@@ -35,8 +35,6 @@ class GW_Site_Application extends GW_Application
 			
 			$this->path_arr[$i]['isarg']=1;
 		}
-
-		
 
 		return false;
 	}
@@ -179,7 +177,7 @@ class GW_Site_Application extends GW_Application
 			$this->page->title = $m->lang['VIEWS'][$this->page->path]['TITLE'];
 		
 		
-		$params = array_merge($params, $this->path_arg);
+		$params = array_merge($params, $this->path_arg);		
 		
 		return $m->process($params);
 	}
@@ -245,16 +243,61 @@ class GW_Site_Application extends GW_Application
 		}	
 	}
 
+	
+	function procInternalLink()
+	{
+		$path_args = explode('?', $this->page->link);
+		$args =[];
+		parse_str($path_args[1] ? $path_args[1]:"", $args);
+		$path = $this->ln.'/'.$path_args[0];
+
+		$_GET=$args;
+		$_GET['url'] = $path;
+		$_GET['opid'] = $this->page->id;
+
+		$GLOBALS['REDIRECT'] = 1;
+		$_REQUEST = array_merge($_REQUEST, $_GET);
+
+		GW::request();
+		exit;		
+	}
+	
+	function processType($type)
+	{		
+		switch($type)
+		{
+			case 0: $this->processPage($this->page);break;
+			case 1: $this->jumpToFirstChild();break;
+			
+			case 4: //external link
+				$this->jumpLink();
+			break;
+			case 2: //internal link
+				$this->procInternalLink();				
+			break;
+			
+			case 3: 
+				//shift off direct
+				$path = preg_replace('/^.*\//U','',$this->path);
+				$this->page->path = $path;
+				
+				$this->processPath($path, $_REQUEST);
+			break;
+		
+			default: die("Unknown page type");break;
+		}		
+	}
 
 	function process()
 	{
+
+		
 		//d::dumpas($this->page);
 		$this->preRun();
 		
+		
 		if(!$this->page->id)
 			$this->jumpToFirstPage();
-		
-		
 			
 		$this->userzoneAccess();
 		
@@ -266,32 +309,8 @@ class GW_Site_Application extends GW_Application
 			$this->jump(false, $_GET);
 		}
 		
-		
-		
-		switch($this->page->type)
-		{
-			case 0: $this->processPage($this->page);break;
-			case 1: $this->jumpToFirstChild();break;
-			
-			case 4: //external link
-			case 2: //internal link
-				$this->jumpLink();break;
-			
-			case 3: 
-				//shift off direct
-				$path = preg_replace('/^.*\//U','',$this->path);
-				$this->page->path = $path;
-				
-				
-				
-				$this->processPath($path, $_REQUEST);
-				
-			break;
-		
-			
-		
-			default: die("Unknown page type");break;
-		}
+		$this->processType($this->page->type);
+
 		$this->postRun2();
 	}
 	

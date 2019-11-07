@@ -29,6 +29,7 @@
 		<i id="seriesnumpages">Spauzdinti serijos numerius burtu traukimams</i>
 		<i id="addmulti">Pridėti seriją</i>
 		<i id="sched">Tvarkaraštis</i>
+		<i id="doCopySlots">Kopijuoti tvarkaraščio eilutes</i>
 	</i>
 	
 	<!-- =============== MODULE MAP START =================== -->

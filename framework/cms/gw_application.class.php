@@ -56,8 +56,9 @@ class GW_Application
 			session_id($_GET['GWSESSID']);
 		}
 		
-		session_start();
-
+		if(!isset($_SESSION))
+			session_start();
+		
 		$this->sess = & $_SESSION[$this->app_name]; //to avoid conflicts with site - admin apps
 		
 		unset($GLOBALS['SESSION_CLOSED']);
@@ -124,7 +125,7 @@ class GW_Application
 
 	function initSmarty()
 	{
-		require GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
+		require_once GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
 		$s = & $this->smarty;
 
 		$s = new SmartyBC;
@@ -296,14 +297,11 @@ class GW_Application
 	 * b - users/users.class.php
 	 */
 	//returns url
-	function requestInfoInner()
+	function requestInfoInner($parr)
 	{
-		$parr = $this->path_arr;
 		$ln = array_shift($parr);
 
 		$path = implode('/', $parr);
-
-
 
 		$path_clean = '';
 		$path = '';
@@ -342,7 +340,7 @@ class GW_Application
 
 	function requestInfo()
 	{
-		$pack = $this->requestInfoInner();
+		$pack = $this->requestInfoInner($this->path_arr);
 
 		if (isset($this->args['test_request_info']))
 			d::dumpas($pack);

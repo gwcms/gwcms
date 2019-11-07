@@ -86,8 +86,8 @@ gw_forms = {
 		
 		$(window).bind('keydown', function(event) {
 		    if (event.ctrlKey || event.metaKey) {
-			switch (String.fromCharCode(event.which).toLowerCase()) {
-			case 's':
+			switch (event.which) {
+			case 83:
 				$('#itemform').get(0).elements['submit_type'].value=1; //apply (stay in form after save)
 				$('#itemform').submit();
 				event.preventDefault();
@@ -109,6 +109,7 @@ var gw_changetrack = {
 		
 		return o.val();
 	},
+	
 	
 	init: function(formclass)
 	{
@@ -162,7 +163,7 @@ var gw_changetrack = {
 
 					// Runs 1 second (2000 ms) after the last change    
 					//vykdytisaugojima()
-					gw_changetrack.doSaveField(changedobj)
+					gw_changetrack.doSaveField([changedobj])
 					
 				}, 5000);
 
@@ -170,6 +171,26 @@ var gw_changetrack = {
 			}
 
 		});
+		
+	
+		
+		$(window).bind('keydown', function(event) {
+		    if (event.altKey) {
+			    console.log(event.which)
+			switch (event.which) {
+			case 83: //s
+			    event.preventDefault();
+			    
+			    var objs = []; 
+			    $('.gwinput-modified').each(function(){ objs.push($(this)) })
+			    gw_changetrack.doSaveField(objs) 
+			    
+			    
+			    break;
+			}
+		    }
+		});		
+		
 		
 	},
 	
@@ -184,6 +205,7 @@ var gw_changetrack = {
 			//console.log(obj.attr('name')+' changed');
 			
 			lab.addClass("gwinput-label-modified");
+			obj.addClass('gwinput-modified')
 			
 			if(gw_auto_save)
 				if(lab.find('.fa-floppy-o').length==0){
@@ -195,49 +217,52 @@ var gw_changetrack = {
 			return true;
 		}else{
 			lab.removeClass("gwinput-label-modified");
-			
+			obj.removeClass('gwinput-modified')
 			return false;
 		}
 	},
 	
-	doSaveField: function(obj)
+	doSaveField: function(obj) // array of inputs
 	{
 		//i forma reikia itraukti pakeistus laukelius ir sisteminius
 		
 		//console.log(obj.attr('id')+' dosave');
-		//console.log()
-		var fielddata=obj.serialize();
-		var neworigval = gw_changetrack.readValue(obj);
 		
-		//console.log(fielddata);
+		for(var i in obj){
+			obj[i].attr('data-neworigval', gw_changetrack.readValue(obj[i]));
+		}
 		
-		var form=obj.parents('form')
+		console.log('JEI BUS DVI FORMOS REIK PERZIURET KODA');
+		var form=obj[0].parents('form')
+		
 		var sysfields=form.find('.gwSysFields');
+		var data=sysfields.serialize()+'&ajax=1';
 		
-		var data=fielddata+'&'+sysfields.serialize()+'&ajax=1';
-		
-		//console.log(data);
-		var lab = $('#'+obj.attr('id')+'_inputLabel');
-		var labsave = lab.find('.fa-floppy-o');
-		
-		labsave.animate({color: "orange"}, 500 );
-		
+		for(var i in obj){
+			data += '&'+obj[i].serialize();
+			
+			var lab = $('#'+obj[i].attr('id')+'_inputLabel');
+			var labsave = lab.find('.fa-floppy-o');
+
+			labsave.animate({color: "orange"}, 500 );			
+		}			
 		
 		$.post(form.attr('action'), data,
 			function (data, status, request) {
 
 				if (request.getResponseHeader('GW_AJAX_FORM') == 'OK')
 				{
-					obj.attr('data-origval', neworigval)
-					gw_changetrack.isChanged(obj);
+					
+					for(var i in obj){
+						obj[i].attr('data-origval', obj[i].attr('data-neworigval'))
+						gw_changetrack.isChanged(obj[i]);
+					}	
 
 					var id = request.getResponseHeader('GW_AJAX_FORM_ITEM_ID');
 					var title = request.getResponseHeader('GW_AJAX_FORM_ITEM_TITLE');
 					var messages = request.getResponseHeader('GW_AJAX_MESSAGES');
 
 					//gwcms.showMessages(JSON.parse(messages), title);
-
-
 					
 					data = JSON.parse(data);
 					var last_update_time = form.find('[name="last_update_time"]');
@@ -247,13 +272,17 @@ var gw_changetrack = {
 						last_update_time.val(data.last_update_time);
 					}
 					
-					
-					labsave.animate({color: "green"}, 1000 );
-
+								
+					for(var i in obj)
+						$('#'+obj[i].attr('id')+'_inputLabel').find('.fa-floppy-o').animate({color: "green"}, 1000 );	
 
 						//gw_navigator.jump(location.href, {id:id})
 				} else {
-					labsave.animate({color: "red"}, 1000 );
+	
+					for(var i in obj)
+						$('#'+obj[i].attr('id')+'_inputLabel').find('.fa-floppy-o').animate({color: "red"}, 1000 );			
+											
+					
 					console.log('failed submit to:'+form.attr('action')+', status: '+status);
 					console.log(data);	
 				}
@@ -305,7 +334,7 @@ var gw_changetrack = {
 				
 				var container = obje.parents('tr:first');
 				
-				if(gw_auto_save && !gw_changetrack.isChanged(obje))
+				if(changes_track && !gw_changetrack.isChanged(obje))
 				{
 					console.log(field+': autosave field subsystem, ignored');
 					continue;

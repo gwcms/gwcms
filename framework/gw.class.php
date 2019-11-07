@@ -184,7 +184,7 @@ class GW
 		);
 		
 		$app_class = "GW_{$app}_application";
-		include GW::s('DIR/APPLICATIONS') . strtolower($app) . DIRECTORY_SEPARATOR . strtolower($app_class) . '.class.php';
+		include_once GW::s('DIR/APPLICATIONS') . strtolower($app) . DIRECTORY_SEPARATOR . strtolower($app_class) . '.class.php';
 
 
 		$app_o = new $app_class($context);
