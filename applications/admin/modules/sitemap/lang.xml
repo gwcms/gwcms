@@ -59,6 +59,7 @@
 		<i id="contents"><en>Content</en><lt>Turinys</lt></i>
 		<i id="ln"><en>Apply languages</en><lt>Kalbos</lt></i>
 		<i id="preload">Svarba</i>
+		<i id="multilang">Diaugiakalbis</i>
 	</i>
 	<i id="FIELDS_SHORT">
 		<i id="templatevars">TV</i>

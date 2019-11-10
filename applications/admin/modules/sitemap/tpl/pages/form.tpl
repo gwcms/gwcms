@@ -38,11 +38,12 @@
 	
 </script>	
 	
+<style>
+	#gw_input_item__title__ .ln_contain_3{ width: {round(100/count(GW::$settings.LANGS),2)-0.3}% }
 	
-	
-{$width_title=100px}
+</style>	
 
-{include file="tools/lang_select.tpl"}
+{$width_title=100px}
 
 
 
@@ -51,8 +52,11 @@
 
 {call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid}
 {call e field=pathname}
-{call e field=title}
-{call e field=meta_description}
+
+
+
+{call e field=title i18n=3 i18n_expand=1}
+{call e field=meta_description }
 
 
 {call e field=template_id options=$lang.EMPTY_OPTION+$m->getTemplateList() type=select}
@@ -70,19 +74,21 @@
 {/if}
 
 {if $update}
-	{call e field=in_menu type=bool}
+	{call e field=in_menu type=bool  i18n=3 i18n_expand=1}
 	
 	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
 	{$ck_set='medium'}
 	{foreach $item->getInputs() as $input}
+		{$if18n=$input->get(multilang)}
+		{if $if18n} {$if18n=4} {else} {$if18n=0} {/if}
 		{call e field=$input->get(name) 
 			type=$input->get(type) 
 			note=$input->get(note) 
 			title=$input->get(title) 
-			value=$item->getContent($input->get(name)) 
 			params_expand=$input->get(params)
-			i18n=1}
+			valget_func=getContent
+			i18n=$if18n}
 	{/foreach}
 {/if}
 
@@ -99,6 +105,20 @@
 	{/if}
 {/function}
 
+{function name=df_submit_button_tplvarsedit}
+	{if $item->id}
+		<a target="_blank"
+			class="btn btn-default pull-right" 
+			target="_blank"
+			href="{$app->buildUri("sitemap/templates/{$item->template_id}/tplvars")}" 
+			title="{GW::l('/MAP/childs/templates/childs/tplvars/title')}"
+			style="margin-right:2px;"><i class="fa fa-object-ungroup"></i> </a>
+	{/if}
+{/function}
+
 {$submit_buttons=[save,apply,preview,cancel]}
+{if $item->template_id && $app->user->isRoot()}
+	{$submit_buttons[]=tplvarsedit}
+{/if}
 
 {include file="default_form_close.tpl" extra_fields=[id,path,unique_pathid,insert_time,update_time]}

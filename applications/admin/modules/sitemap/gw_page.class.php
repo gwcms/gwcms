@@ -11,9 +11,9 @@
 class GW_Page extends GW_i18n_Data_Object
 {
 	public $table = 'gw_sitemap';
-	public $i18n_fields = Array('title'=>1, 'in_menu'=>1);
+	public $i18n_fields = ['title'=>1, 'in_menu'=>1];
 	public $default_order = 'priority ASC';
-	public $calculate_fields = Array('child_count'=>1);
+	public $calculate_fields = ['child_count'=>1, 'input_cfg'=>1];
 	public $level=0;
 
 	function getChilds($params=Array())
@@ -176,49 +176,63 @@ class GW_Page extends GW_i18n_Data_Object
 
 	function calculateField($key)
 	{
-		$cache =& $this->cache['calcf'];
-
-		if(isset($cache[$key]))
-			return $cache[$key];
-
 		switch($key)
 		{
 			case 'child_count':
-				$val=(int)$this->count(Array('parent_id=?',$this->get('id')));
-				break;
+				return (int)$this->count(Array('parent_id=?',$this->get('id')));
+			break;
+			case 'input_cfg':
+				return $this->getInputs();
+			break;
 		}
-
-		return $cache[$key]=$val;
 	}
 
 
 	function getInputs()
 	{
 		if(! $tpl_id=$this->get('template_id'))
-		return Array();
+			return [];
+		
+		$list = GW_TplVar::singleton()->findAll(['template_id=?', $tpl_id], ['key_field'=>'name']);
 
-		$tplvar = new GW_TplVar();
-		$list = $tplvar->findAll(Array('template_id=?', $tpl_id));
-
+		
 		return $list;
 	}
 
-	function getContent($key)
+	
+	
+	function getContent($key, $ln=false)
 	{
-		$cache =& $this->cache['input_data'];
-
-		if($cache)
-			return $cache[$key] ?? false;
-			
-
-		$db = $this->getDB();
-		$list = $db->fetch_rows("SELECT * FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id')." AND ln='".addslashes($this->lang())."'");
-
-		foreach($list as $inp_data)
-			$cache[$inp_data['key']]=$inp_data['content'];
 		
-		//d::ldump([$key, $cache, $list]);
 
+		if(!isset($this->cache['input_data'])){
+			$c =& $this->cache['input_data'];
+			
+			$list = $this->getDB()->fetch_rows("SELECT * FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id'));
+
+			foreach($list as $val){
+				$field = $val['ln'] ? $val['key'].'_'.$val['ln'] : $val['key'];
+				
+				$this->cache['input_data'][$field] = $val['content'];
+			}
+		}
+		$c =& $this->cache['input_data'];
+		
+		if(!$ln)
+			$ln = $this->lang();
+		
+		
+		//d::ldump([$key, $ln,$c]);
+		
+		
+		if(isset($c[$key]))
+			return $c[$key];
+		
+		if(isset($c["{$key}_{$ln}"]))
+			return $c["{$key}_{$ln}"];
+			
+		
+		
 		return $cache[$key];
 	}
 	
@@ -252,17 +266,51 @@ class GW_Page extends GW_i18n_Data_Object
 	function saveContent($list)
 	{
 		$default = Array('page_id'=> (int)$this->get('id'));
-
+		$db =& $this->getDB();
+		
 		$vals=Array();
 
-		foreach($list as $key => $value)
-			$vals[] = $default + Array('key'=>$key, 'content'=>$value, 'ln'=>$this->_lang);
+		
+		$inputs = $this->getInputs(['index'=>'name']);
+		
+		$langs = GW::s('LANGS');
+		$list_found = [];
 
-		$db =& $this->getDB();
+		
+		foreach($inputs as $key => $opts)
+		{
+			if(!isset($inputs[$key]))
+				continue;
+			
+			if($inputs[$key]->multilang){
+				foreach($langs as $ln){
+					if(isset($list[$key.'_'.$ln])){
+						$list_found[] = ['ln'=>$ln,  'key'=>$key, 'content'=>$list[$key.'_'.$ln] ];
+						unset($list[$key.'_'.$ln]);
+					}
+						
+				}
+			}else{
+				if(isset($list[$key])){
+					$list_found[] = ['ln'=>'',  'key'=>$key, 'content'=>$list[$key] ];
+					unset($list[$key]);
+				}			
+			}
+			
+		}
+		
+		$list['bbd']=1;
+		
+		foreach($list as $key){
+			$this->errors[] = GW::s("/G/validation/UNKNOWN_FIELD", ['v'=>['field'=>$key]]);
+		}
+		
+		
+		foreach($list_found as $key => $value)
+			$vals[]= $value+$default;
+		
 
-		$db->delete("gw_sitemap_data", Array('page_id=? AND ln=?', (int)$this->get('id'), $this->_lang));
-
-		$db->multi_insert('gw_sitemap_data', $vals);
+		$db->multi_insert('gw_sitemap_data', $vals, true);
 	}
 
 	function getTemplate()

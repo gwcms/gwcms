@@ -219,15 +219,18 @@
 	{*copy to {function e}*}
 	
 	{if !isset($value) || $value===null}
-
-		{if strpos($name, '/')!==false && get_class($item)!='stdClass'}			
-			{$value=$item->get($name)}
+		{if strpos($name, '/')!==false && get_class($item)!='stdClass'}	
+			
+			{$valget_func=$valget_func|default:'get'}
+			{$value=$item->$valget_func($name)}
 			
 		{else}	
-			{$value=$item->$name}
+			{if $valget_func}
+				{$value=$item->$valget_func($name)}
+			{else}
+				{$value=$item->$name}
+			{/if}
 		{/if}
-
-
 
 		{if $value!=='0' && !$value && $default}
 			{$value=$default}

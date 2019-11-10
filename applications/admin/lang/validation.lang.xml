@@ -58,5 +58,5 @@
 		<lt>Failo pavadinimas jau egzistuoja</lt>
 		<en>Filename already exists</en>		
 	</i>	
-	
+	<i id="UNKNOWN_FIELD">Unknown field $field</i>	
 </xml>

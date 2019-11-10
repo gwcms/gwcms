@@ -251,7 +251,9 @@ class GW_Site_Application extends GW_Application
 		parse_str($path_args[1] ? $path_args[1]:"", $args);
 		$path = $this->ln.'/'.$path_args[0];
 
-		$_GET=$args;
+		$oldget = $_GET;
+		$_GET=$args+$oldget;
+		
 		$_GET['url'] = $path;
 		$_GET['opid'] = $this->page->id;
 

@@ -16,4 +16,6 @@
 
 {*include file="elements/input.tpl" name=params type=textarea height="100px" default="{ldelim}{rdelim}"*}
 
+{call e field=multilang type=bool default=1}
+
 {include file="default_form_close.tpl"}
