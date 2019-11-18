@@ -66,13 +66,18 @@ class GW_Gallery_Item extends GW_i18n_Data_Object
 		return $arr;
 	}
 
-	function getChilds($params=Array())
+	function getChilds($params=[])
 	{
-		$id = $this->id ? (int)$this->id : -1;
+		if(isset($params['ids'])){
+			$cond = GW_DB::inCondition("id", $params['ids']);
+		}else{
+			$id = $this->id ? (int)$this->id : -1;
+			$cond = "parent_id = ".(int)$id;
+		}
 		
-		$cond = Array('parent_id=?'.($params['type']?' AND type='.(int)$params['type']:'').(isset($params['active'])?' AND active':''), $id);
+		$cond = $cond.(isset($params['type'])?' AND type='.(int)$params['type']:'').(isset($params['active'])?' AND active':'');
 
-		$p=Array();
+		$p=[];
 		
 		if(isset($params['limit']))
 			$p['limit']=$params['limit'];

@@ -233,7 +233,7 @@ class GW_Page extends GW_i18n_Data_Object
 			
 		
 		
-		return $cache[$key];
+		return $cache[$key] ?? null;
 	}
 	
 	function exportContent()
@@ -245,10 +245,7 @@ class GW_Page extends GW_i18n_Data_Object
 	{
 		return $this->getDB()->delete('gw_sitemap_data',"page_id=".(int)$this->get('id'));
 	}
-	
 
-	
-	
 	function importContent($rows0)
 	{
 		$rows = [];

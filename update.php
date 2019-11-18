@@ -538,11 +538,13 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		$iCp = count($list['imp']['copy']);
 		$iRm = count($list['imp']['remove']);
 		
-		if($eCp || $eRm)
-		echo "<br><a href='?proj={$_GET['proj']}&dir=0&act=doSync'>Export gwcms changes to <b>{$_GET['proj']}</b> copy($eCp) remove($eRm)</a>";
-		
 		if($iCp || $iRm)
-		echo "<br><a href='?proj={$_GET['proj']}&dir=1&act=doSync'>Import <b>{$_GET['proj']}</b> changes to gwcms copy($iCp) remove($iRm)</a>";
+		echo "<br><br><a href='?proj={$_GET['proj']}&dir=1&act=doSync'><b>{$_GET['proj']}</b> &raquo;&raquo;&raquo; <b>gwcms</b> copy($iCp) remove($iRm)</a>";
+	
+		
+		if($eCp || $eRm)
+		echo "<br><br><a href='?proj={$_GET['proj']}&dir=0&act=doSync'><b>gwcms</b> &raquo;&raquo;&raquo; <b>{$_GET['proj']}</b> copy($eCp) remove($eRm)</a>";
+		
 		exit;
 	}
 }

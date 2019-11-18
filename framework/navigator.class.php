@@ -258,4 +258,14 @@ class Navigator
 		}
 		return false;
 	}
+	
+	static function setCookie($name, $val)
+	{		
+		if(is_array($val) || is_object($val))
+			$val = json_encode ($val);
+		
+		$_COOKIE[$name] = $val;
+		
+		setcookie($name, $val, time()+3600*24*365*10, Navigator::getBase());	
+	}	
 }

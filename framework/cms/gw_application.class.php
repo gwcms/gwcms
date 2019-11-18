@@ -261,8 +261,8 @@ class GW_Application
 	function postRun2()
 	{
 		if(GW_Lang::$developLnResList){
-			d::dumpas(GW_Lang::$developLnResList);
-		}		
+			d::ldump(GW_Lang::$developLnResList);
+		}
 	}
 
 	function ifAjaxCallProcess()

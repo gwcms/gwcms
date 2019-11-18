@@ -114,7 +114,6 @@ class GW_Site_Application extends GW_Application
 		$info['module_name']=$name;
 		
 		$fname = $this->moduleFileName($dir, $name);
-			
 				
 		return $this->processSiteModule($fname, $path, $info, $args);
 	}
@@ -219,6 +218,7 @@ class GW_Site_Application extends GW_Application
 			
 		//$this->preRun();
 		
+		
 		if(strtolower(pathinfo($template->path, PATHINFO_EXTENSION) == 'tpl'))
 		{
 			$this->preloadBlocks();
@@ -244,24 +244,45 @@ class GW_Site_Application extends GW_Application
 	}
 
 	
-	function procInternalLink()
+	function procInternalLink($url, $proctype=1)
 	{
-		$path_args = explode('?', $this->page->link);
+		$path_args = explode('?', $url);
 		$args =[];
 		parse_str($path_args[1] ? $path_args[1]:"", $args);
 		$path = $this->ln.'/'.$path_args[0];
 
 		$oldget = $_GET;
+		$oldrequest = $_REQUEST;
 		$_GET=$args+$oldget;
 		
 		$_GET['url'] = $path;
 		$_GET['opid'] = $this->page->id;
-
+		
+		
+		$GLOBALS['OPAGE'] = $this->page;
 		$GLOBALS['REDIRECT'] = 1;
+		$GLOBALS['PAGE_BEFORE_REDIRECT'] = $this->page;
 		$_REQUEST = array_merge($_REQUEST, $_GET);
 
-		GW::request();
-		exit;		
+		
+		if($proctype==2)
+		{
+			ob_start();
+			GW::request();
+			$out = ob_get_contents();
+			ob_end_clean();
+			ob_clean();
+			
+			$_GET = $oldget;
+			$_REQUEST = $oldrequest;
+			
+			return (object)['content'=>$out, 'page'=>GW::$context->app->page, 'opage'=>$GLOBALS['PAGE_BEFORE_REDIRECT']];
+			
+		}else{
+			GW::request();	
+		}
+		
+		
 	}
 	
 	function processType($type)
@@ -275,7 +296,7 @@ class GW_Site_Application extends GW_Application
 				$this->jumpLink();
 			break;
 			case 2: //internal link
-				$this->procInternalLink();				
+				$this->procInternalLink($this->page->link);				
 			break;
 			
 			case 3: 
@@ -292,9 +313,6 @@ class GW_Site_Application extends GW_Application
 
 	function process()
 	{
-
-		
-		//d::dumpas($this->page);
 		$this->preRun();
 		
 		
@@ -312,7 +330,7 @@ class GW_Site_Application extends GW_Application
 		}
 		
 		$this->processType($this->page->type);
-
+		
 		$this->postRun2();
 	}
 	
