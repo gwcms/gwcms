@@ -14,6 +14,7 @@ pullupdates.php
 update.php
 config/db_prod.php
 framework/helpers/diff_helper.class.php
+nbproject/private/private.xml
 ";
 
 $paths=explode("\n", trim($paths));
