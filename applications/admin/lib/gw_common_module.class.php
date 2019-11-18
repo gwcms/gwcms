@@ -296,11 +296,20 @@ class GW_Common_Module extends GW_Module
 		$vals = $_REQUEST['item'];
 		$vals+=$this->filters;
 		
+		//duplicate save protection
+		if(isset($vals['temp_id']) && $vals['temp_id']){
+			$tmpid = $vals['temp_id'];
+			if($this->app->sess('last_temp_id') == $vals['temp_id']){
+				$this->setMessage(['text'=>GW::l('/G/validation/DUPLICATE_SAVE_PROTECION_WORKED'), 'type'=>GW_MSG_INFO, 'float'=>1]);
+				GOTO saveFinish;
+			}
+		}
+		
 		if(isset($_POST['fields'])){
 			$this->searchEmptyVals($vals, $_POST['fields']);
 		}
 
-		if ($vals['id'] === '')
+		if (isset($vals['id']) && $vals['id'] === '')
 			unset($vals['id']);
 
 		$item = $this->model->createNewObject(isset($vals['id']) ? ['id'=>$vals['id']]: [], false, $this->lang());
@@ -378,6 +387,11 @@ class GW_Common_Module extends GW_Module
 		$this->setMessageEx($message);
 
 		$this->fireEvent('AFTER_SAVE', $item);
+		
+		if(isset($tmpid))
+			$this->app->sess('last_temp_id', $tmpid);
+		
+		saveFinish:
 
 		//jeigu saugome tai reiskia kad validacija praejo
 		if(isset($_GET['reloadparent']) && $_REQUEST['submit_type']??false != 1)
@@ -386,6 +400,7 @@ class GW_Common_Module extends GW_Module
 			exit;
 		}
 		if(isset($_GET['dialog']) && $_REQUEST['submit_type']??false != 1) {
+			//reik tiketis kad dvigubos apsaugos atveju neuzeis cia
 			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
 			
 			$messages=$this->app->acceptMessages(1);
@@ -396,7 +411,7 @@ class GW_Common_Module extends GW_Module
 			exit;
 		}elseif(!isset($_POST['ajax'])) {
 
-			$this->jumpAfterSave($item);
+			$this->jumpAfterSave($item ?? false);
 		} else {
 			header("GW_AJAX_FORM: OK");
 			header("GW_AJAX_FORM_ITEM_ID: " . $item->id);

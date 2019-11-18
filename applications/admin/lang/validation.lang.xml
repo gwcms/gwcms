@@ -59,4 +59,8 @@
 		<en>Filename already exists</en>		
 	</i>	
 	<i id="UNKNOWN_FIELD">Unknown field $field</i>	
+	<i id="DUPLICATE_SAVE_PROTECION_WORKED">
+		<lt>Dvigubo išsaugojimo apsauga suvekė</lt>
+		<en>Duplicate save protection used</en>
+	</i>
 </xml>
