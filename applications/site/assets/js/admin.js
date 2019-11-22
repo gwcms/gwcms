@@ -82,7 +82,11 @@ $(function () {
 		}	
 	});
 	
-	var helpstring=["[CTRL] + [Q] - Paryškinti vertimus","[CTRL]ARBA[SHIFT] + [Pelės pagr. mygt.] ant paryškinto vertimo - redaguoti vertimą"];
+	var helpstring=[
+		"[CTRL] + [Q] - Paryškinti vertimus",
+		"[CTRL]ARBA[SHIFT] + [Pelės pagr. mygt.] ant paryškinto vertimo - redaguoti vertimą",
+		"[CTRL] + [5] - peršokti į puslapio redagavimą - struktūra ir tekstai modulyje"
+	];
 	var helpboxstyle = "background-color:brown;color:white;position:absolute;top:0px;left:0px;display:inline;padding:2px;border-radius:2px;font-size:9px;z-index:99999;";
 	$('body').append('<a class="no-print" style="'+helpboxstyle+'" onclick=\'alert("'+helpstring.join('\\n')+'");return false\' href="#">ADM?</a>');
 	$('body').append('<style>@media print{  .no-print, .no-print *{ display: none !important;}}</style>');
