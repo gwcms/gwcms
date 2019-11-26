@@ -113,4 +113,10 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->jump();
 	}
 
+	
+	function getOptionsCfg()
+	{
+		$typedir=GW_GALLERY_ITEM_FOLDER;
+		return ['condition_add'=>"`type` = $typedir"];
+	}
 }

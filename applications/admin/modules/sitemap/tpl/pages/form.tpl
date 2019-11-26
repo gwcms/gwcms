@@ -73,6 +73,8 @@
 	{call e field=multisite type=bool}	 
 {/if}
 
+{$tpl = $item->getTemplate()}
+
 {if $update}
 	{call e field=in_menu type=bool  i18n=3 i18n_expand=1}
 	
@@ -82,12 +84,30 @@
 	{foreach $item->getInputs() as $input}
 		{$if18n=$input->get(multilang)}
 		{if $if18n} {$if18n=4} {else} {$if18n=0} {/if}
+		
+		{$opts=[]}
+		{if strpos($input->get('type'),'select_ajax')!==false}
+			{$opts.preload=1}
+			{$opts.options=[]}
+			
+			{if $tpl}
+				{$opts.modpath=$input->get('path')}		
+			{/if}
+		{/if}
+		{$opts=array_merge($opts,$input->get(params))}
+		{$tmpval=$item->getContent($input->get('name'))}
+		
+		{if strpos($input->get('type'),'select_ajax')!==false}
+			{$tmpval=json_decode($tmpval, true)}
+		{/if}
+		
+		
 		{call e field=$input->get(name) 
 			type=$input->get(type) 
 			note=$input->get(note) 
 			title=$input->get(title) 
-			params_expand=$input->get(params)
-			valget_func=getContent
+			params_expand=$opts
+			value=$tmpval
 			i18n=$if18n}
 	{/foreach}
 {/if}

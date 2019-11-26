@@ -121,4 +121,17 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 
 		return $sqls;
 	}
+	
+	
+	function buildFieldCond($field, $search, $eq="LIKE", $join="OR"){
+
+		$conds = [];
+		
+		foreach(GW::s('LANGS') as $ln)
+		{
+			$conds[]="{$field}_{$ln} $eq $search";
+		}
+		
+		return '('.implode(" $join " , $conds).')';
+	}
 }

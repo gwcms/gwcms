@@ -119,7 +119,15 @@
 		<i id="bool">
 			<en>Yes / no toggle</en>
 			<lt>Taip / ne - žymimoji varnelė</lt>
-		</i>		
+		</i>
+		<i id="select_ajax">
+			<lt>Modulio Opcija, sufleruojama</lt>
+			<en>Module Option, with hint</en>
+		</i>
+		<i id="multiselect_ajax">
+			<lt>Modulio MultiOpcijos, sufleruojama</lt>
+			<en>Module MultiOptions, with hint</en>
+		</i>
 		
 	</i>
 	<i id="OPTIONS">

@@ -1933,4 +1933,61 @@ class GW_Common_Module extends GW_Module
 		if($jump)
 			$this->jump();
 	}
+	
+	function viewOptions()
+	{
+		$i0 = $this->model;
+		
+		$opts = $this->getOptionsCfg();
+		
+		
+		
+		if(isset($_GET['q'])){
+			$exact = GW_DB::escape($_GET['q']);
+			$search = "'%".$exact."%'";
+
+			//OR title_ru LIKE $search
+			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) : $i0->get('title'));
+			
+			if(isset($opts['condition_add'])){
+				$cond .= ($cond ? " AND " : ''). $opts['condition_add'];
+			}			
+			
+		}elseif(isset($_REQUEST['ids'])){
+			$ids = json_decode($_REQUEST['ids'], true);
+			if(!is_array($ids))
+				$ids = [$ids];
+
+			$ids = array_map('intval', $ids);
+			$cond = GW_DB::inCondition('id', $ids);
+			
+		}	
+		
+
+		
+		$page_by = 30;
+		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
+		$params['offset'] = $page_by * $page;
+		$params['limit'] = $page_by;
+	
+		
+		$list0 = $i0->findAll($cond ?? '', $params);
+	
+		$list=[];
+		
+					
+		foreach($list0 as $item)
+			$list[]=[
+			    'id' => $item->id, 
+			    "title" => isset($opts['title_func']) ? $opts['title_func']($item) : $item->get("title")
+			];
+		
+		$res['items'] = $list;
+		
+		$info = $this->model->lastRequestInfo();
+		$res['total_count'] = $info['item_count'];
+				
+		echo json_encode($res);
+		exit;
+	}	
 }
