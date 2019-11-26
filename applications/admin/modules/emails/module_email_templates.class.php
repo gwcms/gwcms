@@ -4,6 +4,9 @@
 class Module_Email_Templates extends GW_Common_Module
 {	
 
+	use Module_Import_Export_Trait;		
+	
+	
 	function init()
 	{	
 		parent::init();
