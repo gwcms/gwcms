@@ -192,14 +192,19 @@ class Module_Email_Templates extends GW_Common_Module
 	
 	function viewTestPdfGen()
 	{
-		$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
-		
-		if($_POST)
+		if(($item = $this->getDataObjectById()) && !$_POST)
 		{
-			file_put_contents($filename, $_POST['item']['htmlcontents']);
+			$this->tpl_vars['filecontents'] = $item->body_lt;
+		}else{
+			$filename=GW::s('DIR/SYS_REPOSITORY').'testpdfhtml.html';
+
+			if($_POST)
+			{
+				file_put_contents($filename, $_POST['item']['htmlcontents']);
+			}
+
+			$this->tpl_vars['filecontents'] = @file_get_contents($filename);
 		}
-		
-		$this->tpl_vars['filecontents'] = @file_get_contents($filename);
 	}		
 	
 	function doGenPdf()
