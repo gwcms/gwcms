@@ -558,9 +558,8 @@ class GW_Module
 		if(isset($this->__attached_events[$event]))
 		{
 			foreach($this->__attached_events[$event] as $callback)
-				call_user_func ($callback,$context);
-		}
-		
+				call_user_func($callback,$context);
+		}		
 		
 		//pass deeper
 		//parent::eventHandler($event, $context);

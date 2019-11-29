@@ -1417,10 +1417,15 @@ class GW_Common_Module extends GW_Module
 	
 	
 	public $redirRules=[];
+	public $ext_events=[]; //add $this->addRedirRule('events', 'myModuleExtension'); and function extEventHander in extension
 	
 	function addRedirRule($rule, $ext)
 	{
+		if($rule == 'events')
+			$this->ext_events[$ext]=1;
+			
 		$this->redirRules[]=['re'=>$rule, 'ext'=>$ext];
+		
 	}
 	
 	function scanRedirRules($name){
@@ -1990,4 +1995,13 @@ class GW_Common_Module extends GW_Module
 		echo json_encode($res);
 		exit;
 	}	
+	
+	function eventHandler($event, &$context) 
+	{
+		if($this->ext_events)
+			foreach($this->ext_events as $ext => $x)
+				$this->ext($ext)->extEventHandler($event, $context);
+		
+		parent::eventHandler($event, $context);
+	}
 }

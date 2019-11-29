@@ -8,6 +8,11 @@ class GW_General_RPC
 	public $debug_data;
 	public $last_url;
 	public $timeout = 500;
+	
+	function __construct($url)
+	{
+		$this->url = $url;
+	}
 
 	public function call($name, $get = [], $post = [])
 	{
@@ -30,8 +35,18 @@ class GW_General_RPC
 		//execute post
 		$raw_result = curl_exec($ch);
 
-		if ($this->debug)
-			$this->debug_data[] = ['url' => $url, 'act' => $name, 'get' => $get, 'post' => $post, 'response' => $raw_result, 'error' => curl_error($ch)];
+		if ($this->debug){
+			$info = [
+			    'time' => date('Y-m-d H:i:s'),
+			    'url' => $url, 
+			    'act' => $name, 
+			    'get' => $get, 
+			    'post' => $post, 
+			    'response' => $raw_result, 
+			    'error' => curl_error($ch)
+			    ];
+			$this->debug_data[] = $info;
+		}
 
 		$this->last_url = $url;
 
@@ -52,6 +67,8 @@ class GW_General_RPC
 			$this->__eventOnError($json_result);
 
 		curl_close($ch);
+		
+		
 
 		return $json_result;
 	}
