@@ -692,6 +692,7 @@ class GW_Common_Module extends GW_Module
 				break;
 			case 'LIKE%,,%':
 				$cond .= "LIKE ".($encap_val ? "'%," . $value . ",%'" : $value);
+				break;
 			case 'EQ':
 			default:
 				$cond .= "= $encapChr" . $value . "$encapChr";
@@ -1943,7 +1944,8 @@ class GW_Common_Module extends GW_Module
 	{
 		$i0 = $this->model;
 		
-		$opts = $this->getOptionsCfg();
+		
+		$opts = method_exists($this, 'getOptionsCfg') ? $this->getOptionsCfg() : [];
 		
 		
 		

@@ -35,11 +35,16 @@
 			{$compare_opt=GW::l('/g/FILTERS_COMPARE_TYPES')}
 		{/if}	
 		
+		
 		{if $compare_type=="IN" && !isset($compare_opt['IN'])}
 			{$compare_opt=array_merge($compare_opt, ["IN"=>"IN"])}
 			{if is_array($value)}
 				{$value=implode(',', $value)}
 			{/if}
+		{/if}
+		
+		{if $params.ct}
+			{$compare_opt=$params.ct}
 		{/if}
 		
 		<label class="gwselect">

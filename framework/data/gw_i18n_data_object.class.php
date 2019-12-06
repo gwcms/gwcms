@@ -3,7 +3,7 @@
 class GW_i18n_Data_Object extends GW_Composite_Data_Object
 {
 
-	var $i18n_fields = Array();
+	public $i18n_fields = Array();
 	var $_lang; //i18n
 
 	function __construct($values = Array(), $load = false, $lang = false)

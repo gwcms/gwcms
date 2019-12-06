@@ -135,7 +135,16 @@ class GW_Mail_Helper
 			$opts = $m_queue_item->toArray();
 		}
 		
+		$splitAddr = function(&$to, &$name){
+			if(strpos($to,'<')!==false){
+				list($name, $to) = GW_Email_Validator::separateDisplayNameEmail($to);	
+			}else{
+				$name="";
+			}
+		};
+		
 		$cfg = self::loadCfg();
+		$toname = '';
 		
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
@@ -155,15 +164,15 @@ class GW_Mail_Helper
 			$opts['to'] = self::explodeMultipleEmails($opts['to']);
 				
 		foreach($opts['to'] as $to){
-			
-			$name = '';
-			
-			if(strpos($to,'<')!==false)
-				list($name, $to) = GW_Email_Validator::separateDisplayNameEmail($to);
-			
-			$mailer->addAddress($to, $name);
+			$splitAddr($to, $toname);
+			$mailer->addAddress($to, $toname);
 		}
 		
+		if(isset($opts['cc'])){
+			$to = $opts['cc'];
+			$splitAddr($to, $toname);
+			$mailer->addCC($to, $toname);
+		}
 		
 		if(isset($opts['attachments']) && is_array($opts['attachments'])){
 			foreach($opts['attachments'] as $filename => $data)
