@@ -83,7 +83,7 @@ class Module_Tools extends GW_Common_Module
 	
 	function doDebugModeToggle()
 	{
-		if($_GET['app']=="SITE")
+		if($_GET['app'] ?? false=="SITE")
 		{
 			$var  =& $_SESSION['SITE']['debug'];
 		}else{
