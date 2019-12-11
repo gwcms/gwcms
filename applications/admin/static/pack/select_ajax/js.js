@@ -163,91 +163,107 @@ function initSelect2Inputs(){
 				opts.maximumSelectionLength = maximumSelectionLength;
 			}				
 			
-			obj.on('fillitems', function(event, items, append){
-					if(append){
-						var current = $(this).val();
-
-						for(var index in items){
-							if(current.indexOf(items[index].id)!=-1){
-								console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
-
-								delete index[id];
+			obj.on('fillitems', function(event, items, append, ids){
+				
+				if(obj.data('sorting')){ //surikiuot pagal paduota idu sarasa
+					var sorted=[];
+					for(var idx in ids) {
+						for(var lidx in items) {
+							if(ids[idx]==items[lidx].id){
+								sorted.push(items[lidx]);
+								delete items[lidx];
 							}
-						}			
-
-					}else{
-						$(this).empty();
+						}
 					}
 
-					var that = this;
+					items = sorted;
+				}
+				
+				if(append){
+					var current = $(this).val();
 
-								
-					var multiselect = obj.data('maximumselectionlength') != '1';
-					var keys = {}
-					var selectedvals = obj.data('value');
-					selectedvals = selectedvals instanceof Array ? selectedvals : [selectedvals];
+
+					for(var index in items){
+						if(current.indexOf(items[index].id)!=-1){
+							console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
+
+							delete index[id];
+						}
+					}			
+
+				}else{
+					$(this).empty();
+				}
+
+				var that = this;
+
+
+				var multiselect = obj.data('maximumselectionlength') != '1';
+				var keys = {}
+				var selectedvals = obj.data('value');
+				selectedvals = selectedvals instanceof Array ? selectedvals : [selectedvals];
+				for(var i in selectedvals)
+					selectedvals[i] = String(selectedvals[i]);
+
+
+				$.each(items, function(index, item){
+					//console.log(item.title+':'+item.id)
+					keys[item.id] = item.id;
+					var selected = false;
+
 					for(var i in selectedvals)
-						selectedvals[i] = String(selectedvals[i]);
-					
-					
-					$.each(items, function(index, item){
-						//console.log(item.title+':'+item.id)
-						keys[item.id] = item.id;
-						var selected = false;
-						
-						for(var i in selectedvals)
-							if(selectedvals[i]==item.id)
-								selected = true;
-						
-						$(that).append(new Option(item.title, item.id, selected, selected));
-					} );
-					
-					if(!multiselect){
-						//alert($(this).data('value'));
-						//alert($(this).val());
-						var prevval = JSON.parse($(this).data('value'));					
-						
-						if( obj.find("option[value='"+prevval+"']").length > 0 ){
-							obj.val(prevval)
-						}else{
-							$(that).append(new Option(prevval, "not found: "+prevval, true, true));
-							alert(obj.data('objecttitle')+" id("+prevval+') Not available');
-						}
+						if(selectedvals[i]==item.id)
+							selected = true;
+
+					$(that).append(new Option(item.title, item.id, selected, selected));
+				} );
+
+				if(!multiselect){
+					//alert($(this).data('value'));
+					//alert($(this).val());
+					var prevval = JSON.parse($(this).data('value'));					
+
+					if( obj.find("option[value='"+prevval+"']").length > 0 ){
+						obj.val(prevval)
+					}else{
+						$(that).append(new Option(prevval, "not found: "+prevval, true, true));
+						alert(obj.data('objecttitle')+" id("+prevval+') Not available');
+					}
+				}
+
+				$(this).trigger('change');		
+			}).on('inittitles', function(event, ids, append){
+
+				if(!ids)
+					ids = $(this).val()
+
+				var that = this;
+
+				$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
+					if(data.hasOwnProperty('items'))
+					{
+						$(that).trigger('fillitems', [data.items, append, ids]);
+					}else{
+						console.log("select_ajax: Items not received. Received content: "+data);
 					}
 
-					$(this).trigger('change');		
-				}).on('inittitles', function(event, ids, append){
-					
-					if(!ids)
-						ids = $(this).val()
+				}, 'json')
+			}).on('resultsload', function(event, params, results){
 
-					var that = this;
-					
-					$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
-						if(data.hasOwnProperty('items'))
-						{
-							$(that).trigger('fillitems', [data.items, append]);
-						}else{
-							console.log("select_ajax: Items not received. Received content: "+data);
-						}
+				if(obj.data('$rendered')){
+					obj.data('$rendered').find('.selectallContain').fadeIn();
+					console.log([params, results])
+					//console.log(obj.data('bybis'));
 
-					}, 'json')
-				}).on('resultsload', function(event, params, results){
-						
-					if(obj.data('$rendered')){
-						obj.data('$rendered').find('.selectallContain').fadeIn();
-						console.log([params, results])
-						//console.log(obj.data('bybis'));
+					setTimeout(function(){
+						var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
+						obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
+					}, 300)
 
-						setTimeout(function(){
-							var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
-							obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
-						}, 300)
-						
-						obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
-					}
-					
-				});
+					obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
+				}
+
+			});
 
 
 			if(obj.data('onchangeFunc')){
@@ -297,10 +313,107 @@ function initSelect2Inputs(){
 function finishInitSelAjax(obj, opts)
 {
 	obj.select2(opts);
-				//uzkrauti antrastes
+
+	if(obj.data('sorting'))
+		initSelect2Sorting(obj);
+	
+	//uzkrauti antrastes
 	if(obj.data('preload') && obj.data('value')){
 			obj.trigger('inittitles');
 	}	
+}
+
+
+function animateChanged(obj,speed)
+{
+	var curr_bgcolor = $(obj).css("background-color");
+	var curr_color = $(obj).css("color");
+
+	$(obj).animate({ backgroundColor: "#003311",color: "#fff" }, 300 );
+
+	setTimeout(function(){
+			$(obj).animate({ backgroundColor: curr_bgcolor, color: curr_color }, speed ? speed/2 : 300 );
+	}, (speed ? speed/2 : 300))
+}
+
+function fixOriginalSelect(select2choices, select){
+	select2choices.each(function(){ 
+		   var title = $(this).attr('title');
+			var element = select.find("option").filter(function() { return this.text == title })	
+			element.detach();
+			select.append(element);
+			select.trigger("change");
+
+	})			
+}
+
+function initSelect2Sorting(obj)
+{
+	var select = $(obj);
+	
+	select.change(function(){
+		setTimeout(function(){
+			
+			var index = 1;
+			container.find('.select2-selection__choice .sel2orders').remove();
+			container.find('.select2-selection__choice').each(function(){
+				$(this).append('<small class="sel2orders">('+index+')&nbsp;&nbsp;</small>');
+				index++;
+				//console.log($(this).attr('title')+index);
+			})					
+
+		}, 500)
+	});
+
+	var container = select.data('select2').$container;
+	
+	select.on("select2:select", function (evt) {
+		var id = evt.params.data.id;
+		var $element = $(evt.target).children('[value='+id+']');				
+		$element.detach();
+		$(this).append($element);
+		$(this).trigger("change");
+	});	
+			
+			
+
+	//allow ordering			
+	$.fn.select2.amd.require([
+		'select2/utils',
+		'select2/dropdown',
+		'select2/dropdown/attachBody'
+	], function (Utils, Dropdown, AttachBody) {
+		container.find('ul').sortable({
+			placeholder: 'ui-state-highlight',						
+			start: function(){ container.addClass('sortstarted'); },
+			helper: function(event, ui)
+			{
+				var $clone =  $(ui).clone();
+				$(ui).css({ 'opacity': '0.1' });
+				$clone.css('position','absolute');
+				return $clone.get(0);
+			},	
+			beforeStop: function(event, ui)
+			{
+				$(ui.item).css({ 'opacity': '1' });
+				animateChanged(ui.item)
+				console.log(ui.item)
+			}, 
+			containment: 'parent',
+			update: function(event, ui) 
+			{ 
+
+				//container.removeClass('sortstarted');
+				animateChanged(ui.item[0])
+				//try{ animateChanged(ui.item[0]) }catch(err){}
+				console.log($(ui.item[0]).parent().find('.select2-selection__choice'))
+				fixOriginalSelect($(ui.item[0]).parent().find('.select2-selection__choice'), select)
+
+				console.log(select.html());
+			}
+		});
+		container.find('ul').disableSelection();
+	})	
 }
 
 

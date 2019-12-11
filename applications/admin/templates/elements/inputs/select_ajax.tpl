@@ -32,6 +32,7 @@
 		 {if $preload}data-preload="{$preload}"{/if}
 		 {if $value}data-value="{json_encode($value)|escape}"{/if}
 		 {if $datasource}data-source="{$datasource}"{/if}
+		 {if $sorting}data-sorting="1"{/if}
 		 data-maximumselectionlength="{$maximumSelectionLength|default:1}"
 		 data-objecttitle="{$object_title}"
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
@@ -63,6 +64,13 @@
 			}) });
 			
 		</script>
+		
+			<style>
+			 .ui-state-highlight { height: 1.5em; line-height: 1.2em;background-color: yellow; margin-top: 5px; margin-right: 5px; width: 100px;}
+			 .sortstarted .select2-selection__choice{ 
+				 display:block !important; float:none !important; 
+			 }
+			 </style>		
 		{assign var=gwcms_input_select_ajax_loaded value=1 scope=global}
 	{/if}	
 	

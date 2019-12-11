@@ -68,8 +68,18 @@
 	object_title=GW::l('/M/datasources/MAP/childs/countries/title')
 	modpath="datasources/countries"
 	options=[]
-	value=json_decode($item->demo_select_country_id)
+	value=json_decode($item->demo_select_country_id_multi)
 	preload=1
+}
+
+
+{call e field="demo_select_country_id_multi_sorting"
+	type="multiselect_ajax"
+	modpath="datasources/countries"
+	options=[]
+	value=json_decode($item->demo_select_country_id_multi_sorting)
+	preload=1
+	sorting=1
 }
 
 {*adds automaticaly object_title=GW::l('/M/datasources/MAP/childs/countries/title')*}

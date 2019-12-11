@@ -46,10 +46,11 @@ class GW_Translation_Over extends GW_i18n_Data_Object
 	{
 		switch($event){
 			case "BEFORE_SAVE":
-				$xpld = explode('/',$this->content_base['fullkey'], 3);
-				$this->set('module', $xpld[0].'/'.$xpld[1]);
-				$this->set('key',$xpld[2]);
-				
+				if(isset($this->content_base['fullkey'])){
+					$xpld = explode('/',$this->content_base['fullkey'], 3);
+					$this->set('module', $xpld[0].'/'.$xpld[1]);
+					$this->set('key',$xpld[2]);
+				}
 				
 				
 				unset($this->content_base['fullkey']);
