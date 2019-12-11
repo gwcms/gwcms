@@ -124,7 +124,10 @@ class GW_Common_Module extends GW_Module
 					if($this->action_name)
 						$errstr .= " (act:$this->action_name)";
 					
-				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";	
+				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
+				
+				$errstr .= '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
+		
 					
 				$this->procError($errstr);
 				

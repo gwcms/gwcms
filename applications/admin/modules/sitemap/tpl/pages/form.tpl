@@ -94,7 +94,8 @@
 				{$opts.modpath=$input->get('path')}		
 			{/if}
 		{/if}
-		{$opts=array_merge($opts,$input->get(params))}
+
+		{$opts=array_merge($opts,(array)$input->get(params))}
 		{$tmpval=$item->getContent($input->get('name'))}
 		
 		{if strpos($input->get('type'),'select_ajax')!==false}

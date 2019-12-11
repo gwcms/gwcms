@@ -267,7 +267,6 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		$vals=Array();
 
-		
 		$inputs = $this->getInputs(['index'=>'name']);
 		
 		$langs = GW::s('LANGS');
@@ -293,7 +292,6 @@ class GW_Page extends GW_i18n_Data_Object
 					unset($list[$key]);
 				}			
 			}
-			
 		}
 		
 		foreach($list as $key){
