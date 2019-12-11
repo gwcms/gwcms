@@ -140,7 +140,7 @@ class GW_Module
 	{
 		if(isset($_REQUEST['list_params']) && ($tmp = $_REQUEST['list_params'])){
 			
-			if(isset($tmp['search']) && $this->list_params['page']!=1)
+			if(isset($tmp['search']) && isset($this->list_params['page']) && $this->list_params['page']!=1)
 				$this->list_params['page']=1;
 			
 			
