@@ -296,22 +296,16 @@ class GW_Page extends GW_i18n_Data_Object
 			
 		}
 		
-		$list['bbd']=1;
-		
 		foreach($list as $key){
 			$this->errors[] = GW::s("/G/validation/UNKNOWN_FIELD", ['v'=>['field'=>$key]]);
 		}
-		
-				
+			
 		foreach($list_found as $key => $value){
 			if(is_array($value['content']))
 				$value['content'] = json_encode($value['content']);
 				
 			$vals[]= $value+$default;
-		}
-		
-		
-		
+		}	
 
 		$db->multi_insert('gw_sitemap_data', $vals, true);
 	}

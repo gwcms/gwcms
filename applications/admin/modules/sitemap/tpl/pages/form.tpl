@@ -107,7 +107,7 @@
 			note=$input->get(note) 
 			title=$input->get(title) 
 			params_expand=$opts
-			value=$tmpval
+			valget_func=getContent
 			i18n=$if18n}
 	{/foreach}
 {/if}
