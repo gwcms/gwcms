@@ -49,6 +49,17 @@
 	datasource=$app->buildUri('datasources/languages',['native'=>'1'])
 }
 *}
+
+
+
+{call e field="demo_btnselectall"
+	type="multiselect_ajax"
+	options=['a1'=>'a','b1'=>'b','c1'=>'c','d1'=>'d',e1=>e,f1=>f]
+	value=json_decode($item->demo_btnselectall)
+	btnselectall=1
+	
+}
+
 {call e field="demo_select_ajax_load"
 	type="select_ajax"
 	after_input_f="editadd"
@@ -80,6 +91,7 @@
 	value=json_decode($item->demo_select_country_id_multi_sorting)
 	preload=1
 	sorting=1
+	btnselectall=1
 }
 
 {*adds automaticaly object_title=GW::l('/M/datasources/MAP/childs/countries/title')*}

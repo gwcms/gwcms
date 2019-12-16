@@ -40,6 +40,8 @@
 		 data-onchangeFunc="{$onchangeFunc}"
 		 {if $empty_option}data-emptyoption="1" data-placeholder="{GW::l('/g/EMPTY_OPTION/0')}"{/if}
 		 {if $btnselectall}data-btnselectall="1"{/if}
+		{if $required}required="required"{/if}
+		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}		 
 		 >
 		{html_options options=$options selected=$value}
 	</select>

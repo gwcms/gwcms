@@ -35,37 +35,45 @@ function initSelectAll(obj, opts)
 	  function SelectAll() { }
 
 	  SelectAll.prototype.render = function (decorated) {
+		var selectajax = this.$element.data('source'); //paprastas selectas ne ajax		
 		var $rendered = decorated.call(this);
 		var self = this;
 
+		var total_count = self.$element.find('option').length;
+		var results_text = (!selectajax)?translate_foundresults+': '+total_count : ''
+		
 		var $selectAll = $(
-		  '<div class="selectallContain" style="display:none;margin:3px"> <span class="resultinfo"></span> | <a class="selectallbnt" style="margin:2px;" href="#">['+translate_selectall+'<span class="loadeditems"></span>]</a></div>'
+			'<div class="selectallContain" style="'+(selectajax?'display:none;':'')+'margin:3px"> <span class="resultinfo">'+
+			results_text+'</span> | <a class="selectallbnt" style="margin:2px;" href="#">['+translate_selectall+'<span class="loadeditems"></span>]</a></div>'
 		);
 
 		this.$element.data('$rendered', $rendered)
 
 		$rendered.find('.select2-dropdown').append($selectAll);
-		console.log('Prideta selec2 pasirinkti visus');
+		console.log('Prideta select2'+this.$element.attr('name')+' pasirinkti visus');
+		
 
 		$selectAll.on('click', function (e) {
 			e.preventDefault();
 			
-			var $results = $rendered.find('.select2-results__option[aria-selected=false]');
+			if(!selectajax){
+				
+				self.$element.find('option').attr('selected','selected');
+				self.$element.trigger('change');
+			}else{
 
-			// Get all results that aren't selected
-			$results.each(function () {
-			  var $result = $(this);
+				var $results = $rendered.find('.select2-results__option[aria-selected=false]');
 
-			  // Get the data object for it
-			  var data = $result.data('data');
+				// Get all results that aren't selected
+				$results.each(function () {
+					// Trigger the select event
+					self.trigger('select', {
+					      data: Utils.GetData(this,'data')
+					});
+				});
+				$rendered.find('.selectallContain').hide();
+			}
 
-			  // Trigger the select event
-			  self.trigger('select', {
-				data: data
-			  });
-			});
-
-			$rendered.find('.selectallContain').hide();
 			self.trigger('close');
 		});
 
