@@ -16,7 +16,7 @@
 			{/if}
                     <span>
 
-                    {$title}
+                    {$title} 
                     {if $hidden_note} 
                             <a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  
 				data-placement="right" data-container="body" data-toggle="popover" data-html="true" 

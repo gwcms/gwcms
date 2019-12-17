@@ -1,4 +1,3 @@
-
 {*text line or password*}
 <input id="{$id}"
 	class="form-control{if $class} {$class}{/if} inp-{$type|default:text}"

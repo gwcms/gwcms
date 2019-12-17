@@ -1,5 +1,41 @@
 {*
-DEPRECATED 2019-02
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+DEPRECATED 
+2019-02
 use {call e field=
 instead of {include "elements/input.tpl" name=
 *}
@@ -86,23 +122,20 @@ instead of {include "elements/input.tpl" name=
 	{/if}
 	
 	<{if $rotatedlabel}span{else}td{/if} id="{$input_id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass}" 
-										 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
+		{if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
 				{if isset($m->lang.FIELD_NOTE.$name)}
 					{$hidden_note=$m->lang.FIELD_NOTE.$name}
 				{/if}
 			{/if}
-			
-
-				<span>
-
-				{$title}
+			<span>
+				{$title} <span title='DEPRECATED since 2019-02' style='color:red'>D</span>
 				{if $hidden_note} 
 					<a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
 				{/if}
-
-				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
+				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}
+			</span>
 			{if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		</span>
 
