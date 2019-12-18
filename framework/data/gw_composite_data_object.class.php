@@ -15,6 +15,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 
 	var $composite_content_base = Array();
 	var $composite_map;
+	var $saved_composite_ids = [];
 
 	function isCompositeField($field)
 	{
@@ -34,6 +35,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			$item->save();
 
 			$saved = 1;
+			$this->saved_composite_ids[$field][] = $item->id;
 		}
 
 		if ($saved)
