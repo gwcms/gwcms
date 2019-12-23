@@ -1,6 +1,4 @@
 
-
-
 {function name="cust_inputs"}
 	
 	{$i="elements/input.tpl"}	
@@ -9,16 +7,16 @@
 	
 	{elseif $field=="site_id"}
 		{if GW::s('MULTISITE')}
-			{include file=$i name=$field type=select options=$options.site_id}
+			{call "e" field=$field type=select options=$options.site_id}
 		{/if}
 	{elseif $field=="name"}
-		{include file=$i name=$field type=text}
+		{call "e" field=$field type=text}
 	{elseif $field=="path_filter"}
-		{include file=$i name=$field type=text}
+		{call "e" field=$field type=text}
 	{elseif $field=="contents_type"}
-		{include file=$i name=$field type=select options=GW::l('/m/OPTIONS/block_types')}
+		{call "e" field=$field type=select options=GW::l('/m/OPTIONS/block_types')}
 	{elseif $field=="ln"}
-		{include file=$i name=$field type=select options=array_merge(['*'=>GW::l('/m/ALL_LANGS')],GW::s("LANGS"))}
+		{call "e" field=$field type=select options=array_merge(['*'=>GW::l('/m/ALL_LANGS')],GW::s("LANGS"))}
 	{elseif $field=="contents"}
 		{*
 			<i id="1">Text line</i>
@@ -34,13 +32,13 @@
 			{$params_expand=['height'=>"150px",layout=>wide]}
 		{/if}
 		
-		{include file=$i name=$field type=$typemap[$item->contents_type]}
+		{call "e" field=$field type=$typemap[$item->contents_type]}
 	{elseif $field=="active"}
-		{include file=$i name=$field type=bool}
+		{call "e" field=$field type=bool}
 	{elseif $field=="preload"}
-		{include file=$i name=$field type=select options=GW::l('/m/OPTIONS/preload')}		
+		{call "e" field=$field type=select options=GW::l('/m/OPTIONS/preload')}		
 	{else}
-		{include file=$i name=$field type=read}
+		{call "e" field=$field type=read}
 	{/if}
 		
 {/function}

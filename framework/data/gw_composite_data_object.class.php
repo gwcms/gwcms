@@ -35,7 +35,9 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			$item->save();
 
 			$saved = 1;
-			$this->saved_composite_ids[$field][] = $item->id;
+			
+			if(isset($item->id))
+				$this->saved_composite_ids[$field][] = $item->id;
 		}
 
 		if ($saved)

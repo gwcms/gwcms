@@ -1,27 +1,18 @@
-
-
-
 {function name="cust_inputs"}
-	
-	{$i="elements/input.tpl"}	
-
 	{if $field==''}
 		
-		{elseif $field=="admin_name"}
-		{include file=$i name=admin_name type=text}
+	{elseif $field=="admin_name"}
+		{call e name=admin_name type=text}
 	{elseif $field=="title"}
-		{include file=$i name=title type=text i18n=4}
+		{call e type=text i18n=4}
 	{elseif $field=="admin_email"}
-		{include file=$i name=admin_email type=text}
+		{call e type=text}
 	{elseif $field=="hosts"}
-		{include file=$i name=hosts type=tags placeholder=GW::l('/m/ADD_HOST')}
+		{call e type=tags placeholder=GW::l('/m/ADD_HOST')}
 	{elseif $field=="admin_host"}
-		{*{include file=$i name=$field type=tags placeholder=GW::l('/m/ADD_HOST')}		*}
-	
+			
 	{else}
-		
-	
-		{include file=$i name=$field type=read}
+		{call e type=read}
 	{/if}
 		
 {/function}
