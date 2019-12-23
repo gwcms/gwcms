@@ -60,6 +60,11 @@
 		<i id="ln"><en>Apply languages</en><lt>Kalbos</lt></i>
 		<i id="preload">Svarba</i>
 		<i id="multilang">Diaugiakalbis</i>
+		<i id="include_content">Turinį įtraukti</i>
+		<i id="export_type">Eksportavimo parinktis</i>
+		<i id="action">Veiksmas</i>
+		<i id="site_id">Svetainė</i>
+		
 	</i>
 	<i id="FIELDS_SHORT">
 		<i id="templatevars">TV</i>
@@ -163,6 +168,7 @@
 		<i id="dialogMoveItems">Perkelį į kitą katalogą</i>
 		<i id="doUploadZip">Įkelti Zip ir išskleisti</i>
 		<i id="importexporttree">Eksportuoti / importuoti</i>
+		<i id="doFixPaths">Pataisyti url stulpelį</i>
 	</i>
 	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
 	<i id="ADD_FOLDER">

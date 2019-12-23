@@ -8,9 +8,13 @@
 	{function name=do_toolbar_buttons_importexport}
 		{toolbar_button title=GW::l('/A/VIEWS/importexporttree') iconclass='gwico-Sorting-Arrows-Filled' href=$m->buildUri(importexporttree)}	
 	{/function}
+	{function name=do_toolbar_buttons_fixpaths}
+		{toolbar_button title="<span class='text-muted'>{GW::l('/m/VIEWS/doFixPaths')}</span>" iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doFixPaths])}	
+	{/function}	
+	
 	
 	{$do_toolbar_buttons[] = hidden}	
-	{$do_toolbar_buttons_hidden=[dialogconf,importexport,print]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,importexport,print,fixpaths]}	
 	
 
 	{function dl_cell_ico}

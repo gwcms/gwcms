@@ -20,8 +20,13 @@ class GW_Page extends GW_i18n_Data_Object
 	{		
 		$id = $this->id ? (int)$this->id : -1;
 
-		if(!isset($params['site_id']))
-			$params['site_id'] = GW::s('MULTISITE') ? GW::$context->app->site->id : 0;
+		if(!isset($params['site_id'])){
+			if($this->site_id){
+				$params['site_id'] = $this->site_id;
+			}else{
+				$params['site_id'] = GW::s('MULTISITE') ? GW::$context->app->site->id : 0;
+			}
+		}
 		
 		$params['in_menu'] = $params['in_menu'] ?? false;
 
@@ -236,9 +241,16 @@ class GW_Page extends GW_i18n_Data_Object
 		return $cache[$key] ?? null;
 	}
 	
-	function exportContent()
+	function exportContent($opts=[])
 	{
-		return $this->getDB()->fetch_rows("SELECT `ln`,`key`,`content` FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id'));
+		$extra = "";
+		
+		if($opts['lns'])
+			$extra.=" AND ".GW_DB::inConditionStr('ln', $opts['lns']);
+		
+		$cond = "SELECT `ln`,`key`,`content` FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id')." $extra";
+				
+		return $this->getDB()->fetch_rows($cond);
 	}
 	
 	function deleteContent()

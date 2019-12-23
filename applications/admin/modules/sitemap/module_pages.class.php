@@ -100,7 +100,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			case 'BEFORE_SAVE':
 				$item = $context;
 
-				if ($item->id && isset($item->changed_fields['parent_id']))
+				if ($item->id && isset($item->changed_fields['parent_id']) || isset($item->changed_fields['pathname']))
 					$this->afterParentIdChanges($item);
 				
 
@@ -188,7 +188,16 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			unset($vals['visit_count']);
 			
 			if($opts['content'])
-				$vals['content'] = $item->exportContent();
+				$vals['content'] = $item->exportContent(['lns'=>$opts['export_lns_vals']]);
+			
+			
+			foreach($item->i18n_fields as $field => $x)
+				foreach(GW::s('LANGS') as $ln)
+					if(!isset($opts['export_lns'][$ln])){
+						unset($vals["{$field}_{$ln}"]);
+					}
+						
+					
 
 			$subdata['item'] = $vals;
 		}
@@ -196,9 +205,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			
 		
 		if($opts['export_type']=='page_only')
-			return;
+			return;	
 		
-		foreach($item->getChilds() as $child)
+		foreach($item->getChilds($opts) as $child)
 		{
 			$this->getAllChilds($child, $subdata, $opts);
 		}
@@ -209,15 +218,18 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		if(!$item)
 			$item = $this->getDataObjectById();
 		
+		//if root is selected
 		$data = [];
 		
 		if($opts['export_type']=='only_childs')
 			$item->skip_export = true;
 		
-				
+		if(isset($_GET['site_id']))
+			$opts['site_id'] = $_GET['site_id'];					
+		
 		$this->getAllChilds($item, $data, $opts);
 		
-		if(isset($_GET['shift_key']) || $_POST['item']['show'] ?? false)
+		if(isset($_GET['shift_key']) || $_POST['item']['show_json'] ?? false)
 		{
 			header('Content-type: text/plain');
 		}else{
@@ -250,8 +262,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$item->setValues($arr);
 		$item->parent_id = $parent->id ?: -1;
 		
-		if(GW::s('MULTISITE'))
-			$item->site_id = $this->app->site->id;		
+		if(GW::s('MULTISITE')){
+			if(isset($_GET['site_id'])){
+				$item->site_id = $_GET['site_id'];
+			}else{
+				$item->site_id = $this->app->site->id;	
+			}
+		}
+				
 		
 		
 		$item->insert();
@@ -297,8 +315,17 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		if($act=='export'){
 			$opts=[
 			    'export_type'=>$vals['export_type'] ?: 'only_childs', 
-			    'content'=>$vals['include_content']
+			    'content'=>$vals['include_content'],
 			];
+			
+			$lns = [];
+			foreach(GW::s('LANGS') as $ln){
+				if($vals['export_lns_'.$ln])
+					$lns[$ln]=1;
+			}
+			$opts['export_lns_vals'] = array_keys($lns);
+			$opts['export_lns'] = $lns;
+						
 			
 			$this->doExportTree($parent, $opts);
 		}elseif($act=='import'){
