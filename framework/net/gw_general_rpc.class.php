@@ -68,8 +68,6 @@ class GW_General_RPC
 
 		curl_close($ch);
 		
-		
-
 		return $json_result;
 	}
 
