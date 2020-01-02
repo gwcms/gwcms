@@ -9,7 +9,7 @@ class GW_General_RPC
 	public $last_url;
 	public $timeout = 500;
 	
-	function __construct($url)
+	function __construct($url = '')
 	{
 		$this->url = $url;
 	}
