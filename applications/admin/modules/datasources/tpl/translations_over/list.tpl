@@ -16,7 +16,7 @@
 	
 	
 		
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete,clone]}
 	
 	{$dl_inline_edit=1}		
 	

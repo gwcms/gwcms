@@ -232,6 +232,8 @@ class Module_Translations extends GW_Common_Module
 	{
 		$i0 = GW_Translation::singleton();
 		
+		$cond="";
+		
 		if(isset($_GET['q'])){
 			$search = "'%".GW_DB::escape($_GET['q'])."%'";
 			

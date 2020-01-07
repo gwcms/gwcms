@@ -1001,6 +1001,50 @@ class GW_Data_Object
 	{
 		return $this->encodeJSON($fieldname, $value, $revert, true);
 	}
+	
+	
+	/*
+	 * Must be unsigned if all 8 positions needed
+	 * ALTER TABLE `myThingsTable` CHANGE `flags` `flags` TINYINT(4) UNSIGNED NOT NULL;
+	 * example config:
+	 * public $flags_conf=['flags'=>[0=>'isAlive',1=>'isHomoSapiens',2=>'isMetal',3=>'isWood',4=>'isLiquid',5=>'isGas',6=>'is..',7=>'is...']];
+	 * to Encode larger than tiny int, need to write another function like encodeFlags16 or encodeFlags32
+	 */
+	function encodeFlags($fieldname, $value, $revert)
+	{
+		//d::ldump([$fieldname,$this->content_base[$fieldname],$value, $revert ? 'decode':'encode']);
+		$len=8;
+		
+		if($revert){
+			if(!is_array($value)){
+				$val = [];
+				$c = sprintf('%0'.$len.'d', decbin($value));
+				
+				for($i=0;$i<8;$i++){
+	
+					if($c[$len-$i-1]==='1' && isset($this->flags_conf[$fieldname][$i]))
+						$val[$this->flags_conf[$fieldname][$i]]=1;
+				}
+				
+				return (object)$val;
+			}
+			
+			return $value;
+		}else{
+			$val='00000000';
+						
+			foreach($value as $key => $x){
+				if($x==1){
+					$ind = array_search($key, $this->flags_conf[$fieldname]);
+					//d::ldump("search $key, index: $ind, x:$x");
+					if($ind!==false)
+						$val[$len-$ind-1] = '1';
+				}
+			}
+			//print_r(['before_encode'=>$value, 'prepared'=>$val, "encoded"=>bindec($val)]);			
+			return bindec($val);
+		}
+	}
 
 	function eventHandler($event, &$context_data = [])
 	{		

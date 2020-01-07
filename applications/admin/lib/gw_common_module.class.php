@@ -1614,6 +1614,12 @@ class GW_Common_Module extends GW_Module
 	
 	function attachFieldOptions($list, $fieldname, $obj_classname, $options=[])
 	{
+		if(isset($options['ifvisible']))
+		{
+			if(!($this->list_config['display_fields'][$fieldname] ?? false))
+				return false;
+		}	
+		
 		$ids = [];
 		foreach($list as $itm){
 			if($itm->$fieldname)

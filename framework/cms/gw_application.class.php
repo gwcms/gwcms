@@ -50,7 +50,8 @@ class GW_Application
 
 	function initSession()
 	{
-		ob_start();
+		if(!isset($this->ob_notstart))
+			ob_start();
 		
 		if(isset($_GET['GWSESSID'])){
 			session_id($_GET['GWSESSID']);
@@ -78,7 +79,7 @@ class GW_Application
 	
 	function initSite()
 	{
-		if(GW::s('MULTISITE'))
+		if(GW::s('MULTISITE') && isset($_SERVER["HTTP_HOST"]))
 		{			
 			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $_SERVER["HTTP_HOST"]]);
 			
@@ -186,7 +187,7 @@ class GW_Application
 	function init()
 	{
 		$this->loadConfig();
-		
+				
 		$this->initSession(); // debug or not to debug?
 		$this->initDB();
 

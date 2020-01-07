@@ -26,7 +26,6 @@ class GW_Img_Tool
 		$item0 = new GW_Image();
 		
 		
-		
 		$params['id'] = array_shift($this->path_arr);
 		
 		if($this->path_arr){
@@ -62,8 +61,18 @@ class GW_Img_Tool
 			header('Location: '.GW::s("SITE_URL").$_SERVER['REQUEST_URI']);
 		}
 
-		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset']))
+		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset'])){
+						
+			if(isset($params['method']))
+				$params['method'] = preg_replace('/[^a-z0-9]/','', $params['method']);
+			
+			if(isset($params['zoom'])){
+				//max zoom level 10x /// execution time not normal if zoom over 1000x
+				$params['zoom'] = min(10, (float)$params['zoom']);
+			}
+						
 			$item->resize($params);
+		}
 
 
 		GW_Cache_Control::setExpires('+24 hour');

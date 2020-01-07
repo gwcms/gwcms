@@ -59,7 +59,7 @@ class d
 	
 	static function initHtml()
 	{
-		if(self::$initcss)
+		if(self::$initcss && !isset($_SERVER['SHELL']))
 		{
 			echo self::$initcss;
 			self::$initcss = null;			
@@ -83,7 +83,11 @@ class d
 			self::setHide();
 		
 		
-		echo "<pre class='debugblock ".($hidden?'hiddendebug':'')."' style='border-color:" . $color . "'>";
+		if(isset($_SERVER['SHELL'])){
+			echo "------------------\n";
+		}else{
+			echo "<pre class='debugblock ".($hidden?'hiddendebug':'')."' style='border-color:" . $color . "'>";
+		}
 		//debug_print_backtrace();
 	   	if($hidden)
 		{
@@ -115,8 +119,11 @@ class d
 		if(isset($opts['backtrace']))
 			echo self::fbacktrace(debug_backtrace());
 		
-
-		echo  "</pre>";
+		if(isset($_SERVER['SHELL'])){
+			echo "------------------\n";
+		}else{
+			echo  "</pre>";
+		}
 		
 		if(isset($opts['kill']))
 			exit;
@@ -175,8 +182,13 @@ class d
 
 		$GLOBALS['debug_block'] = isset($GLOBALS['debug_block']) ? $GLOBALS['debug_block'] + 1 : 1;
 
-		$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>
-		<div id='debug_bl_{$GLOBALS['debug_block']}' style='display:none'><ul>$backtracestr</ul></div>";
+		if(isset($_SERVER['SHELL'])){
+			$str = "Im in {$point1['file']} {$point1['line']}\n";
+		}else{
+			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>
+			<div id='debug_bl_{$GLOBALS['debug_block']}' style='display:none'><ul>$backtracestr</ul></div>";
+		}
+		
 
 		return $str;
 	}
@@ -188,7 +200,12 @@ class d
 		
 		if(GW::$context->app && GW::$context->app->app_name=='SITE' && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD && 
 			(!GW::$context->app->user || !GW::$context->app->user->isRoot())){
-			echo "<span style='color:red' title='Test dot'>.</span>";
+			if(isset($_SERVER['SHELL'])){
+				echo "------------------\n";
+			}else{
+				echo "<span style='color:red' title='Test dot'>.</span>";
+			}
+			
 			return false;
 		}
 		

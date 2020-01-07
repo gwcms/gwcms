@@ -158,6 +158,21 @@ class GW
 		return $out2;
 	}
 	
+	static function initApp($app, $context=[])
+	{
+		$app_class = "GW_{$app}_application";
+		include_once GW::s('DIR/APPLICATIONS') . strtolower($app) . DIRECTORY_SEPARATOR . strtolower($app_class) . '.class.php';
+
+		$app_o = new $app_class($context);
+		self::$context->app = $app_o;
+
+		$app_o->app_name = $app;
+		
+		$app_o->init();
+		
+		return $app_o;
+	}
+	
 	static function request($args = Array())
 	{
 		if (!isset($args['path']))
@@ -175,24 +190,15 @@ class GW
 			$base_path = '';
 			$app = GW::s('DEFAULT_APPLICATION');
 		}
-
+		
 		$context = Array(
 		    'path_arr' => $path_arr,
 		    'app_base' => $base_path,
 		    'args' => $args['args'],
 		    'sys_base' => Navigator::getBase()
-		);
-		
-		$app_class = "GW_{$app}_application";
-		include_once GW::s('DIR/APPLICATIONS') . strtolower($app) . DIRECTORY_SEPARATOR . strtolower($app_class) . '.class.php';
+		);	
 
-
-		$app_o = new $app_class($context);
-		self::$context->app = $app_o;
-
-		$app_o->app_name = $app;
-		
-		$app_o->init();
+		$app_o = self::initApp($app, $context);
 		
 		if(isset($args['fake_user_id']))
 		{
