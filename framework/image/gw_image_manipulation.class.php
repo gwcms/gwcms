@@ -43,6 +43,10 @@ class GW_Image_Manipulation
 		}
 	}
 
+	static function image_fix_orientation(&$image, $filename) 
+	{
+		$image = imagerotate($image, array_values([0, 0, 0, 180, 0, 0, -90, 0, 90])[@exif_read_data($filename)['Orientation'] ?: 0], 0);
+	}	
 	/**
 	 * required params
 	 * width or height
@@ -155,6 +159,9 @@ class GW_Image_Manipulation
 		imagedestroy($this->im);
 
 		$this->im = & $image_resized;
+		
+		self::image_fix_orientation($this->im, $this->file);
+		
 		$this->width = $rw;
 		$this->height = $rh;
 	}

@@ -971,7 +971,11 @@ class GW_Data_Object
 	{
 		if ($revert) {
 			if ($value)
-				return explode(',', trim($value, ','));
+				if(is_string($value)){
+					return explode(',', trim($value, ','));
+				}else{
+					return $value;
+				}
 		}else {
 			if (is_array($value))
 				return ',' . implode(',', $value) . ',';
