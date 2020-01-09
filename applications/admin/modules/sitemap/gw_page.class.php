@@ -205,6 +205,11 @@ class GW_Page extends GW_i18n_Data_Object
 	}
 
 	
+	function getContentJsonDecode($key, $ln=false)
+	{
+		return json_decode($this->getContent($key, $ln), true);
+	}
+	
 	
 	function getContent($key, $ln=false)
 	{

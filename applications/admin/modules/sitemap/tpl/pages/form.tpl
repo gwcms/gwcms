@@ -99,7 +99,9 @@
 		{$tmpval=$item->getContent($input->get('name'))}
 		
 		{if strpos($input->get('type'),'select_ajax')!==false}
-			{$tmpval=json_decode($tmpval, true)}
+			{$valgetf=getContentJsonDecode}
+		{else}
+			{$valgetf=getContent}
 		{/if}
 		
 		
@@ -108,7 +110,7 @@
 			note=$input->get(note) 
 			title=$input->get(title) 
 			params_expand=$opts
-			valget_func=getContent
+			valget_func=$valgetf
 			i18n=$if18n}
 	{/foreach}
 {/if}
