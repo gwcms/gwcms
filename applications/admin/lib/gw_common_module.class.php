@@ -92,13 +92,13 @@ class GW_Common_Module extends GW_Module
 	}
 
 	
-	function procError($errStr)
+	function procError($errStr, $errMail)
 	{
 		if($this->app->user->isRoot()){
 			$this->setError($errStr);
 		}else{
 			$subj = GW::s('PROJECT_NAME'). ' - Mod warning env: '.GW::s('PROJECT_ENVIRONMENT');
-			$opts = ['to'=>GW::s('REPORT_ERRORS'), 'subject'=>$subj, 'body'=>$errStr, 'noAdminCopy'=>1, 'noStoreDB'=>1];
+			$opts = ['to'=>GW::s('REPORT_ERRORS'), 'subject'=>$subj, 'body'=>$errStr.$errMail, 'noAdminCopy'=>1, 'noStoreDB'=>1];
 			GW_Mail_Helper::sendMail($opts);		
 		}		
 	}
@@ -124,12 +124,23 @@ class GW_Common_Module extends GW_Module
 					if($this->action_name)
 						$errstr .= " (act:$this->action_name)";
 					
+						
 				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
 				
 				$errstr .= '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
 		
+				$errmail= "<pre>".
+					d::jsonNice([
+					    'user_id'=>$this->app->user->id,
+					    'username'=>$this->app->user->username,
+					    'request_uri' => $_SERVER['REQUEST_URI'] ?? '-',
+					    'referer' => $_SERVER['HTTP_REFERER'] ?? '-',
+					    'post' => $_POST,
+					    'session' => $_SESSION
+						]).
+					"</pre>";			
 					
-				$this->procError($errstr);
+				$this->procError($errstr, $errmail);
 				
 				if($errno==E_USER_ERROR)
 					exit;

@@ -223,7 +223,7 @@ class d
 
 	static function jsonNice($array)
 	{
-		return json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		return json_encode($array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
 
 	static function htmlNice($html)
