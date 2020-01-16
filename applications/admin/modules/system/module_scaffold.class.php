@@ -413,10 +413,10 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 			{
 				$opts=[];
 				
-				$inptpl="\t".'{elseif $field=="$field$"}'."\n\t\t".'{include file=$i $dropopts$}'."\n";
+				$inptpl="\t".'{elseif $field=="$field$"}'."\n\t\t".'{call e $dropopts$}'."\n";
 				
 
-				$opts['name'] = $name;
+				$opts['field'] = $name;
 				$opts['type'] = $inputtype($field['type']);
 				
 				if(isset($field['i18n']))
