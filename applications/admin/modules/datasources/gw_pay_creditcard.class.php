@@ -69,12 +69,15 @@ class GW_Pay_Creditcard extends GW_Data_Object {
 	static function expires_check($str)
 	{
 		@list($m, $y) = explode('/', $str);
-
+		
 		return "$y-$m" > date('Y-m');	
 	}	
 
-	function crypt($revert = false) {
-		$passenc = GW_Config::singleton()->get('datasources__payments_creditcard/storage_pass');
+	function crypt($revert = false, $passenc = false) 
+	{
+		if($passenc==false)
+			$passenc = GW_Config::singleton()->get('datasources__payments_creditcard/storage_pass');
+		
 		$pass = GW::db()->aesCrypt($passenc, GW::s('CC_ENC_STR'), true);
 
 		if (!$revert) {

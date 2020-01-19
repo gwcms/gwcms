@@ -172,8 +172,8 @@ function initSelect2Inputs(){
 			}				
 			
 			obj.on('fillitems', function(event, items, append, ids){
-				
-				if(obj.data('sorting')){ //surikiuot pagal paduota idu sarasa
+								
+				if(obj.data('sorting') && obj.attr('multiple')){ //surikiuot pagal paduota idu sarasa
 					var sorted=[];
 					for(var idx in ids) {
 						for(var lidx in items) {

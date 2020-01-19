@@ -246,6 +246,7 @@ class GW_Site_Application extends GW_Application
 	
 	function procInternalLink($url, $proctype=1)
 	{
+		
 		$path_args = explode('?', $url);
 		$args =[];
 		parse_str($path_args[1] ? $path_args[1]:"", $args);
@@ -262,6 +263,7 @@ class GW_Site_Application extends GW_Application
 		$GLOBALS['OPAGE'] = $this->page;
 		$GLOBALS['REDIRECT'] = 1;
 		$GLOBALS['PAGE_BEFORE_REDIRECT'] = $this->page;
+		$GLOBALS['PATHARR_BEFORE_REDIRECT'] = $this->path_arr;
 		$_REQUEST = array_merge($_REQUEST, $_GET);
 
 		

@@ -98,12 +98,11 @@
 		{$opts=array_merge($opts,(array)$input->get(params))}
 		{$tmpval=$item->getContent($input->get('name'))}
 		
-		{if strpos($input->get('type'),'select_ajax')!==false}
+		{if strpos($input->get('type'),'multiselect_ajax')!==false}
 			{$valgetf=getContentJsonDecode}
 		{else}
 			{$valgetf=getContent}
 		{/if}
-		
 		
 		{call e field=$input->get(name) 
 			type=$input->get(type) 
