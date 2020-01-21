@@ -22,6 +22,7 @@ class GW_Public_Module {
 	// pvz news/list bus modulis/viewsas, news/view/1/images bus - modulis,viewsas o params = [1,'images']
 	public $params;
 	public $sys_call = false;
+	public $cancel_tpl_process = false;
 	
 	function __construct($variables = Array()) {
 
@@ -79,7 +80,8 @@ class GW_Public_Module {
 		$methodname = "view" . $name;
 		$vars = $this->$methodname($params);
 
-		$this->processTemplate($name);
+		if(!$this->cancel_tpl_process)
+			$this->processTemplate($name);
 		
 		return $vars;
 	}

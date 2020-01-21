@@ -244,4 +244,19 @@ class GW
 	{
 		return forward_static_call_array(array('GW_Lang', 'ln'), func_get_args());
 	}
+	
+	function multiSiteSolve($cfg)
+	{
+		if(!isset($_SERVER['HTTP_HOST']))
+			return false;
+		
+		foreach($cfg as $siteid => $scfg){
+			foreach($scfg['hosts'] as $host => $env){
+				if($host==$_SERVER['HTTP_HOST']){
+					GW::s('MULTISITE_SID', $siteid);
+					GW::s('MULTISITE_VARS', $scfg);
+				}
+			}
+		}			
+	}
 }

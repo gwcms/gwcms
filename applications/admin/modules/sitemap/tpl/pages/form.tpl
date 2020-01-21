@@ -22,7 +22,7 @@
 			$('#item__type__').change(function(){
 					
 						
-				if($(this).val()==2) {
+				if($(this).val()==2 || $(this).val()==4) {
 					$('#gw_input_item__link__').fadeIn();
 				}else{
 					$('#gw_input_item__link__').hide();
