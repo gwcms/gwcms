@@ -12,7 +12,7 @@ class GW_Module_Extension
 	
 	function __get($name) 
 	{
-		return $this->mod->$name;
+		return $this->mod->$name ?? null;
 	}
 	
 	function __set($name, $val) 

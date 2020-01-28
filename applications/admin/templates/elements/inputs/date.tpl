@@ -3,7 +3,7 @@
 {/if}
 	<div class="gwcms-dp-component inp-date" style="width:150px">
 			<div class="input-group date">
-				<input type="text" class="form-control" value="{$value|escape}" name="{$input_name}" 
+				<input type="text" class="form-control {if $class} {$class}{/if}" value="{$value|escape}" name="{$input_name}" 
 					{if $hidden_note}title="{$hidden_note}"{/if}
 					{if $readonly}readonly{/if}
 					{if $maxlength}maxlength="{$maxlength}"{/if} 

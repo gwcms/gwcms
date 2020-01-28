@@ -541,7 +541,7 @@ class GW_Common_Module extends GW_Module
 
 	function common_ViewItemActions()
 	{
-		$item = $this->getDataObjectById();
+		$item = $this->getDataObjectById(true,false, GW_PERM_READ);
 		$this->tpl_vars['item'] = $item;
 		$this->initListParams(false, 'list');
 		
@@ -2025,5 +2025,35 @@ class GW_Common_Module extends GW_Module
 				$this->ext($ext)->extEventHandler($event, $context);
 		
 		parent::eventHandler($event, $context);
+	}
+	
+	
+	
+	function doWriteLock()
+	{
+		if(!$this->app->user->isRoot())
+			$this->setError("Error root user only");
+		
+		$item = $this->getDataObjectById();
+		$bitmask = $item->access;
+		$bitmask &= $bitmask ^ GW_PERM_WRITE;
+		$item->access = $bitmask;
+		$item->updateChanged();
+		$this->jump();
+	}
+	
+	function doWriteUnlock()
+	{
+		if(!$this->app->user->isRoot())
+			$this->setError("Error root user only");
+
+
+		$item = $this->getDataObjectById(true, false, GW_PERM_READ);
+		$bitmask = $item->access;
+		$bitmask |=  GW_PERM_WRITE;
+		$item->access = $bitmask;
+		$item->updateChanged();
+		$this->jump();
+		
 	}
 }

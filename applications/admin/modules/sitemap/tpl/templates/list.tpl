@@ -24,7 +24,7 @@
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 	
 	
-	{$dl_actions=[invert_active,edit,delete,clone]}
+	{$dl_actions=[invert_active,edit,ext_actions]}	
 	
 	{$dl_filters=$display_fields}
 	

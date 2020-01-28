@@ -329,6 +329,8 @@
 		<lt>Nustatymai</lt>
 		<en>Settings</en>
 	</i>
+	<i id="doWriteLock">Write Lock</i>
+	<i id="doWriteUnLock">Write UnLock</i>
 </i>
 
 <i id="NO_ITEMS">

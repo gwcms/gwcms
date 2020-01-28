@@ -2,14 +2,10 @@
 
 
 {list_item_action_m url=["`$item->id`/form", [act=>doClone, id=>$item->id]] iconclass="fa fa-files-o text-mint" caption=GW::l('/g/VIEWS/doClone')}
-{list_item_action_m 
-	url=[false,[act=>doPreview,id=>$item->id]] 
-	iconclass="fa fa-external-link" 
-	tag_params=[target=>'_blank'] caption=GW::l('/m/VIEWS/doPreview')}
 
 
-	
-{list_item_action_m url=[false,[act=>doExportTree,id=>$item->id]] iconclass="fa fa fa-upload" caption=GW::l('/g/VIEWS/export') shift_button=1}
+
+
 
 
 {if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}

@@ -99,7 +99,8 @@
 	
 	{$dl_actions=[edit,delete,ext_actions,addafter]}
 	
-
+	{$dl_checklist_enabled=1}
+	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}
 	
 {/block}
 

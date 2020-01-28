@@ -214,6 +214,7 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Page</i>
+					<i id="itemactions">1</i>
 				</i>
 			</i>
 			<i id="templates">
@@ -223,11 +224,13 @@
 				</i>
 				<i id="info">
 					<i id="model">GW_Template</i>
+					<i id="itemactions">1</i>
 				</i>
 				<i id="childs">
 					<i id="tplvars">
 						<i id="info">
 							<i id="model">GW_TplVar</i>
+							<i id="itemactions">1</i>
 						</i>
 						<i id="title">
 							<en>Template vars</en>

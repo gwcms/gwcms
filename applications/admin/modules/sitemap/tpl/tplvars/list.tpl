@@ -17,5 +17,6 @@
 
 	{$dl_smart_fields=[type,params]}
 	
-	{$dl_actions=[edit,delete,clone]}
+	
+	{$dl_actions=[edit,ext_actions]}
 {/block}

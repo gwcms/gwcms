@@ -315,9 +315,9 @@ class GW_Public_Module {
 			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field]);		
 	}	
 	
-	function jump($path)
+	function jump($path, $args=[])
 	{		
-		$this->app->jump($this->app->page->path.'/'.$path);
+		$this->app->jump($this->app->page->path.'/'.$path, $args);
 	}
 	
 	function buildUri($path, $args=[])
