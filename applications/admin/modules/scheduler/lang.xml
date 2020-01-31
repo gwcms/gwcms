@@ -14,6 +14,7 @@
 		<i id="type1">Tipas 1</i>
 		<i id="type2">Tipas 2</i>
 		<i id="participant_list_id">Dalyvių sąrašas</i>
+		<i id="show_description">Rodyti aprašymą</i>
 	</i>
 	
 	<i id="FIELDS_SHORT">
@@ -22,6 +23,7 @@
 		<i id="second_tour">IIe.</i>
 		<i id="final_tour">Fin.</i>
 		<i id="priority">Nr.</i>
+		<i id="show_description"><![CDATA[<i class="fa fa-eye"></i>]]> Apr.</i>
 	</i>
 	
 	<i id="VIEWS">

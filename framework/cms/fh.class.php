@@ -232,6 +232,24 @@ class FH
 		return date($format, strtotime($date));
 	}
 	
+	static function dateHuman($date, $withyear=false, $ln=false)
+	{		
+		if(!preg_match('/(\d{4})-(\d{2})-(\d{2})/', $date, $m)) 
+			return $date;
+		
+		$replace="";
+		if($withyear)
+			$replace.=$m[1].' ';
+		
+		
+		$trln=$ln ? "/LN/$ln":"";
+		
+		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
+		$replace .= (int)$m[3].GW::ln("/G/DATE/DAYSHORT");
+		
+		return str_replace($m[0], $replace, $date);
+	}	
+	
 	//to use in javascript
 	//get lang strings
 	//var lang={FH::printLangStrings('FIELDS/title','BUTTONS/OK','BUTTONS/CANCEL')}
