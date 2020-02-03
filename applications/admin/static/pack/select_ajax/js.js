@@ -97,10 +97,13 @@ function initSelectAll(obj, opts)
 }
 	
 function initSelect2Inputs(){
+	
 	require(['vendor/select2/js'], function () {
 		//$('.gwselect2').select2(); 
+		
 
 		$(".GWselectAjax").each(function(){
+			
 
 			var obj = $(this)			
 			var urlArgsAddFunc = obj.data('urlargsaddfunc');
@@ -274,8 +277,12 @@ function initSelect2Inputs(){
 			});
 
 
-			if(obj.data('onchangeFunc')){
+			if(obj.data('onchangeFunc') || obj.attr('data-onchangeFunc')){
 				var f = obj.data('onchangeFunc');
+				if(!f)
+					var f= obj.attr('data-onchangeFunc')
+			
+				
 				obj.change(function(){
 					
 					if(!$(this).data('init-done')){					
@@ -283,10 +290,13 @@ function initSelect2Inputs(){
 						$(this).data('prev-val', $(this).val())
 					}else{
 						if($(this).data('prev-val') != $(this).val()){
-							f(true);
+							//f(true);
 							$(this).data('prev-val', $(this).val());
+							window[f]($(this).val());
+							
 						}else{
-							f(false);
+							//f(false);
+							//window[f](false, $(this).val());
 						}
 					}
 				}

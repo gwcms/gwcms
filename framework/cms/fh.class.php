@@ -241,11 +241,15 @@ class FH
 		if($withyear)
 			$replace.=$m[1].' ';
 		
+		$mdw=date('N',strtotime($m[0]));
 		
 		$trln=$ln ? "/LN/$ln":"";
 		
 		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
-		$replace .= (int)$m[3].GW::ln("/G/DATE/DAYSHORT");
+		$replace .= (int)$m[3];//.' '. GW::ln("/G/DATE/DAYSHORT");
+		
+		$replace .=', '. mb_strtolower(GW::ln('/G/DATE/WEEKDAYS/'.$mdw));;
+
 		
 		return str_replace($m[0], $replace, $date);
 	}	

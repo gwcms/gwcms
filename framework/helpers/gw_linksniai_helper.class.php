@@ -2,6 +2,8 @@
 
 class GW_Linksniai_Helper 
 {
+	
+	
 	static $map = [
 	    // kilmininkas (ko?)
 	    'kil'=>[
@@ -25,6 +27,7 @@ class GW_Linksniai_Helper
 			'dis' => 'džiui',
 			'is' => 'iui',
 			'us' => 'ui',
+			'ius' => 'iui',
 			'tys' => 'čiui',
 			'dys' => 'džiui',
 			'ys' => 'iui'		
@@ -70,6 +73,8 @@ class GW_Linksniai_Helper
 			'ys' => 'y'		    
 		]
 	];
+	
+	static $balses='euioaąęėįųū';
 		
 	function __construct ( $encoding = 'UTF-8' ) 
 	{
@@ -83,15 +88,23 @@ class GW_Linksniai_Helper
 	* @param string $linksnis sutrumpintas linksnio pavadinimas: kil, nau, gal, ina, vie, sau
 	* @return string
 	*/
-	static function getName ( $vardas, $linksnis = 'sau' ) 
+	static function getName ( $vardas, $linksnis = 'sau') 
 	{
 		$vardai = explode( ' ', self::sanitizeName($vardas) );
+		
+		//d::ldump([$linksnis]);
+		
+		
 		$vardaiL = [];
 		foreach ( $vardai as $v ) {
-			$vardaiL[] = self::getLinksnis( $v, $linksnis );
+			if(mb_strlen($v)<3)
+				continue;
+				
+			$replacelimit = 1;
+			$vardas = str_ireplace($v,self::getLinksnis( $v, $linksnis ) , $vardas, $replacelimit);
 		}
 		
-		return count($vardaiL) ? implode(' ', $vardaiL) : $vardas;
+		return $vardas;
 	}
 	
 	/**
@@ -102,13 +115,21 @@ class GW_Linksniai_Helper
 	*/
 	static function sanitizeName ( $vardas ) 
 	{
-		$vardas = mb_eregi_replace('[^a-ž]', ' ', $vardas);
-		$vardas = mb_eregi_replace('\s+', ' ', $vardas);
-		$vardas = trim($vardas);
-		$vardas = mb_convert_case($vardas, MB_CASE_TITLE);
+		$vard = mb_eregi_replace('[^a-ž]', ' ', $vardas);
+		$vard = mb_eregi_replace('\s+', ' ', $vardas);
+		$vard = trim($vardas);
+		
+		
+		//pasalinta kad galetu veikti 
+		//$vardas = mb_convert_case($vardas, MB_CASE_TITLE);
 		
 		return $vardas;
 	
+	}
+	
+	static function arbalse($raide)
+	{
+		return strpos(self::$balses, $raide)!==false;
 	}
 
 	/**
@@ -120,9 +141,17 @@ class GW_Linksniai_Helper
 	*/
 	static function getLinksnis ( $vardas, $linksnis = 'sau' ) 
 	{
-		$return = $vardas;
+		$return = trim($vardas);
 
 		foreach ( self::$map[$linksnis] as $from=>$to ) {
+			
+			//echo "<span style='font-size:3mm'>";
+			//d::ldump(['vard'=>$vardas, 'l'=>$linksnis, 'from'=>$from, 'pirmafrom'=>mb_substr( $from, 0, 1)]);
+			//echo '</font>';
+			
+			if(self::arbalse(mb_substr( $return, -mb_strlen($from)-1,1)) && self::arbalse(mb_substr( $from, 0, 1)) )
+				continue;
+				
 			if ( mb_substr( $return, -mb_strlen($from) ) == $from ) {
 				$return = mb_substr( $return, 0, -mb_strlen($from) );
 				$return .= $to;
