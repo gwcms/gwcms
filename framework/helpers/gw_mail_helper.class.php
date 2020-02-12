@@ -259,9 +259,9 @@ class GW_Mail_Helper
 		$opts['to']=implode(',', $opts['to']);
 		
 		$controler->setMessage([
-			"text"=>"Mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'),
-			'type'=>$status ? GW_MSG_SUCC : GW_MSG_ERR,
-			'footer'=>$opts['error'],
+			"text" => "Mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'),
+			'type' => $status ? GW_MSG_SUCC : GW_MSG_ERR,
+			'footer' => $opts['error'] ?? '',
 			'float'=>1
 		]);			
 	}

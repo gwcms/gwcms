@@ -264,6 +264,8 @@ class GW_Site_Application extends GW_Application
 		$GLOBALS['REDIRECT'] = 1;
 		$GLOBALS['PAGE_BEFORE_REDIRECT'] = $this->page;
 		$GLOBALS['PATHARR_BEFORE_REDIRECT'] = $this->path_arr;
+		$GLOBALS['PATH_BEFORE_REDIRECT'] = $this->path;
+		
 		$_REQUEST = array_merge($_REQUEST, $_GET);
 
 		

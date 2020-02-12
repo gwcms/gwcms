@@ -11,7 +11,7 @@ class GW_Autoload
 		$file = $dir . $file;
 
 		if (is_file($file)) {
-			require $file;
+			require_once $file;
 			return true;
 		}
 	}

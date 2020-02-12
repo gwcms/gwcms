@@ -1080,7 +1080,7 @@ class GW_Data_Object
 
 	function calculateFieldCache($key)
 	{
-		$cache = & $this->cache['calcf'];
+		$cache =&  $this->cache['calcf'];
 
 		if (isset($cache[$key]))
 			return $cache[$key];
@@ -1089,6 +1089,7 @@ class GW_Data_Object
 
 		return $cache[$key];
 	}
+	
 
 	public static function __callStatic($name, $arguments)
 	{

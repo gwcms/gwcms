@@ -8,7 +8,8 @@
 		{if in_array($field, ["email",'phone','name', 'surname'])}	
 			{*neveikia composer inputas ant inline*}
 			{call e field=$field type=text}
-			
+		{elseif $field=="parent_user_id"}
+			{call e field=$field type=text}
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}

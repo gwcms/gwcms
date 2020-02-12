@@ -211,8 +211,14 @@ class GW_Application
 		if (isset($params['carry_params']))
 			$getparams = (is_array($getparams) ? $getparams : []) + $this->carryParams();
 		
-		if ($path === false)
+		if ($path === false){
 			$path = $this->path;
+			
+			//page type - 2 (nuoroda i vidinį puslapį)
+			if(isset($GLOBALS['PATH_BEFORE_REDIRECT'])){
+				$path = $GLOBALS['PATH_BEFORE_REDIRECT'];
+			}
+		}
 		
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
