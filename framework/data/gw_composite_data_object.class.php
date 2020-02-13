@@ -22,7 +22,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return isset($this->composite_map[$field]);
 	}
 
-	function saveCompositeItems($update_context)
+	function saveCompositeItems($update_context=[])
 	{
 		$saved = 0;
 		foreach ($this->composite_content_base as $field => $item) {
@@ -93,6 +93,13 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 
 		return $this->composite_content_base[$field] ? $this->composite_content_base[$field]->getValue() : false;
 	}
+	
+	function getCompositeObject($field)
+	{
+		$this->loadCompositeItem($field);
+
+		return $this->composite_content_base[$field] ? $this->composite_content_base[$field] : false;
+	}	
 
 	function getCompositeCached($field)
 	{
@@ -113,7 +120,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			if(is_object($this->$obj))
 				return $this->$obj->$key;
 		}			
-
+		
 		return $this->{isset($this->composite_map[$field][1]['get_cached']) ? 'getCompositeCached' : 'getComposite'}($field);
 	}
 
@@ -134,7 +141,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			
 			$obj = $this->$obj;
 			//d::dumpas([$obj,$key]);
-			
+					
 			return $obj->set($key, $value);
 		}	
 
@@ -150,19 +157,22 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		}*/	
 		
 		
-		
+				
 
 		$descript = $this->composite_map[$field];
 		$classname = $descript[0];
 
 
 		$item = new $classname();
-		$item->setValues($value);
-
+		
 		if (isset($descript[1]))
 			$item->setParams($descript[1]);
 
 		$item->setOwnerObject($this, $field);
+		
+		$item->setValues($value);
+
+
 
 		$this->composite_content_base[$field] = $item;
 	}
@@ -177,11 +187,9 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	
 	function eventHandler($event, &$context_data = [])
 	{
-		
-		switch ($event) {
+		switch ($event) 
+		{
 			case 'PREPARE_SAVE':
-				
-				
 				if($this->composite_content_base || isset($this->content_base['delete_composite'])){
 					$this->changed=1;
 				}
@@ -201,13 +209,11 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			
 			case 'BEFORE_DELETE':
 				$this->removeAllCompositeItems();
-				break;
+			break;
 
 			case 'AFTER_SAVE':
 				$this->saveCompositeItems($context_data);
-				break;
-
-
+			break;
 		}
 
 		parent::EventHandler($event, $context_data);

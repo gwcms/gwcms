@@ -1,14 +1,14 @@
 {function name=dl_output_filters_short_time}
-	<span title="{$item->$field}">{$app->fh()->shortTime($item->$field)}</span>
+	<span title="{$val}">{$app->fh()->shortTime($val)}</span>
 {/function}
 
 {function name=dl_output_filters_expand_truncate}
 		{$expand_truncate_size=$expand_truncate_size|default:40}
-		{if mb_strlen($item->$field) > $expand_truncate_size}
+		{if mb_strlen($val) > $expand_truncate_size}
 			<a class="showsenders" href='#' onclick='$(this).find(".togl").toggle();return false' style="max-width:250px;display:inline-block">
-				{mb_substr($item->$field,0,$expand_truncate_size)}
+				{mb_substr($val,0,$expand_truncate_size)}
 				<span class="togl">...</span>
-				<span class="togl" style="display:none;">{mb_substr($item->$field,$expand_truncate_size,mb_strlen($item->$field))}</span>
+				<span class="togl" style="display:none;">{mb_substr($val,$expand_truncate_size,mb_strlen($val))}</span>
 			</a> 
 		{else}
 			{$item->$field}
@@ -25,30 +25,34 @@
 
 {function name=dl_output_filters_truncate}
 	{$tmp=$dl_output_filters_truncate_size|default:80}
-	{$item->$field|escape|truncate:$tmp}
+	{$val|escape|truncate:$tmp}
 {/function}	
 
 
 {function name=dl_output_filters_options}
-	{if isset($options[$field][$item->$field])}
-		{$options[$field][$item->$field]}
+	{if isset($options[$field][$val])}
+		{$options[$field][$val]}
 	{else}
-		<span title="{$item->$field|escape}">-</span>
+		<span title="id:{$val|escape}">-</span>
 	{/if}
 {/function}	
 
 {function name=dl_output_filters_obj_options}
-	{if is_array($item->$field)}
-		{$ids=$item->$field}
+	{if is_array($val)}
+		{$ids=$val}
 	{else}
-		{$ids=[$item->$field]}
+		{$ids=[$val]}
 	{/if}
 	{foreach $ids as $id}
-		
 		{if isset($options[$field][$id])}
 			{$options[$field][$id]->get($dl_output_filters_args[$field][titlefield]|default:title)}
 		{else}
 			<span title="{$id|escape}">-</span>
 		{/if}	
 	{/foreach}
+{/function}	
+
+{function name=dl_output_filters_array}
+	{$val=json_encode($val)}
+	{call "dl_output_filters_expand_truncate"}
 {/function}	

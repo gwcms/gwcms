@@ -21,12 +21,15 @@
 
 {*functions*}
 {function dl_proc_row_cell}
+	{$val=$item->get($field)}
 	{if isset($dl_smart_fields.$field)}
 		{call name="dl_cell_$field"}
 	{elseif isset($dl_output_filters.$field)}
 		{call name="dl_output_filters_`$dl_output_filters.$field`"}
+	{elseif is_object($val) || is_array($val)}
+		{call "dl_output_filters_array"}
 	{else}
-		{$item->get($field)|escape}
+		{$val|escape}		
 	{/if}
 	
 	{if isset($dl_calc_totals[$field])}

@@ -56,7 +56,7 @@
 				
 		</div>
 		<div class="col-xs-auto gwFiltInput">
-			{if $type=='multiselect'}				
+			{if $type=='multiselect' || $type=='multiselect_ajax'}				
 				{$value=json_decode($value, true)}
 			{elseif $type=='select'}
 				{*Add empty option*}

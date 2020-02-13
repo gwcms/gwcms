@@ -10,6 +10,7 @@ class GW_Links implements GW_Composite_Slave
 	var $owner_obj_id;
 	var $id1 = "id"; //owner_object_id
 	var $id2 = "id1"; //dest_object_id
+	var $idxfield=false;
 
 	/**
 	 * @return DB
@@ -54,6 +55,9 @@ class GW_Links implements GW_Composite_Slave
 
 		if (isset($this->params['fieldnames']))
 			list($this->id1, $this->id2) = $this->params['fieldnames'];
+		
+		if(isset($this->params['idxfield']))
+			$this->idxfield = true;
 	}
 
 	public function deleteComposite($id='*')
@@ -75,7 +79,10 @@ class GW_Links implements GW_Composite_Slave
 	private function getBinds()
 	{
 		$db = $this->getDB();
-		$list = $db->fetch_rows(Array("SELECT {$this->id2} FROM $this->table WHERE $this->id1=?", $this->owner_obj_id), false);
+		
+		$ord = $this->idxfield ? " ORDER BY idx ASC":'';
+		
+		$list = $db->fetch_rows([$q="SELECT {$this->id2} FROM $this->table WHERE $this->id1=? $ord", $this->owner_obj_id], false);
 
 		$list1 = [];
 
@@ -115,21 +122,32 @@ class GW_Links implements GW_Composite_Slave
 
 		$list = Array();
 
-		foreach ($binds as $id1)
-			$list[] = Array($this->id1 => $this->owner_obj_id, $this->id2 => $id1);
-
+		foreach ($binds as $idx => $id1){
+			$vals = Array($this->id1 => $this->owner_obj_id, $this->id2 => $id1);
+			
+			if($this->idxfield)
+				$vals['idx'] = $idx;
+				
+			$list[] = $vals;
+		}
+		
 		$db->multi_insert($this->table, $list);
 	}
 
 	private function updateBinds($newbinds)
 	{
-		$newbinds = (array) $newbinds;
-		$oldbinds = (array) $this->getBinds();
+		if($this->idxfield){
+			$this->removeBinds($this->getBinds());
+			$this->addBinds($newbinds);
+		}else{
+			$newbinds = (array) $newbinds;
+			$oldbinds = (array) $this->getBinds();
 
-		$add = array_diff($newbinds, $oldbinds);
-		$remove = array_diff($oldbinds, $newbinds);
+			$add = array_diff($newbinds, $oldbinds);
+			$remove = array_diff($oldbinds, $newbinds);
 
-		$this->removeBinds($remove);
-		$this->addBinds($add);
+			$this->removeBinds($remove);
+			$this->addBinds($add);
+		}
 	}
 }
