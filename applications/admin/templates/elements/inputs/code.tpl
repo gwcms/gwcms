@@ -1,6 +1,7 @@
 <textarea  
 	id="{$id}" name="{$input_name}" style="display:none" {if $readonly}readonly="readonly"{/if} class="inp-code {if $class}{$class}{/if}" >{$value|escape}</textarea>
-<pre id="{$id}_aceeditor" class="codeedit {if $class}{$class}{/if}" style="{if !$rows}height: {$height|default:"auto"};{/if} {if $border}border:1px solid silver;{/if}" title="shift + [plus] - increases height"></pre>
+<pre id="{$id}_aceeditor" class="codeedit {if $class}{$class}{/if}" style="{if !$rows}height: {$height|default:"auto"};
+     {/if} {if $border}border:1px solid silver;{/if}{if $width}width: {$width};{/if} " title="shift + [plus] - increases height"></pre>
 
 
 {if $height_memory}

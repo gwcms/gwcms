@@ -6,7 +6,7 @@
 	{$dl_cl_actions=[invertactive,dialogremove]}
 
 	
-	{$dl_smart_fields=[relations]}
+	{$dl_smart_fields=[relations,contents]}
 	{$dl_output_filters=[site_id=>options,insert_time=>short_time,update_time=>short_time]}	
 
 	
@@ -28,6 +28,14 @@
 		{*<a class="iframeopen compositions badge bg-blu" href=''>
 			{$item->rel_compositions}</a>
 		*}
+	{/function}	
+	{function name=dl_cell_contents}
+		
+		{if $item->contents_type==3 || $item->contents_type==4}
+			<span class="text-muted">[code]</span> <i>({GW_File_Helper::cFileSize(strlen($item->contents))})</i>
+		{else}
+			{$item->contents|escape}
+		{/if}
 	{/function}	
 	
 	{*

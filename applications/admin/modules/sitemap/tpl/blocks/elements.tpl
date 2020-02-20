@@ -27,9 +27,13 @@
 			<i id="6">Color</i>
 			<i id="7">Image</i>
 		*}
-		{$typemap=[1=>text,2=>textarea,3=>code_smarty,4=>htmlarea,5=>text,6=>color,7=>text]}
-		{if $item->contents_type==3}
-			{$params_expand=['height'=>"150px",layout=>wide]}
+		{$typemap=[1=>text,2=>textarea,3=>htmlarea,4=>code_smarty,5=>text,6=>color,7=>text]}
+		{if $item->contents_type==4}
+			{if $smarty.get.form_ajax}
+				{$params_expand=['height'=>"400px","width"=>'400px']}
+			{else}
+				{$params_expand=['height'=>"400px",layout=>wide]}
+			{/if}
 		{/if}
 		
 		{call "e" field=$field type=$typemap[$item->contents_type]}
