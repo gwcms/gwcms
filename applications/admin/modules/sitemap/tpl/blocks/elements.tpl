@@ -9,7 +9,7 @@
 		{if GW::s('MULTISITE')}
 			{call "e" field=$field type=select options=$options.site_id}
 		{/if}
-	{elseif $field=="name"}
+	{elseif in_array($field, ["name", 'admnote'])}
 		{call "e" field=$field type=text}
 	{elseif $field=="path_filter"}
 		{call "e" field=$field type=text}
