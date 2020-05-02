@@ -2,16 +2,16 @@
 	height:40px;
 	width: 40px;
 	padding: 7px;
-	filter: brightness(10000%);
-	filter: grayscale(100%);
 	margin-right:2px;
 	margin-left: 10px;
-	
-	
-	    -webkit-animation:spin 180s linear infinite;
-    -moz-animation:spin 180s linear infinite;
-    animation:spin 180s linear infinite;	
 }
+
+.navbar-brand:hover .brand-icon{
+	-webkit-animation:spin 10s linear infinite;
+	-moz-animation:spin 10s linear infinite;
+	animation:spin 10s linear infinite;
+}
+
 .brand-text{
 	margin-top: 1px;
 	font-size: 15px;
