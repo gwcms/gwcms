@@ -25,6 +25,11 @@ class GW_Generic_Extended
 		
 		$this->owner_id = $owner_id;
 	}
+	
+	function setOwnerId($id)
+	{
+		$this->owner_id = $id;
+	}
 
 	/**
 	 * 

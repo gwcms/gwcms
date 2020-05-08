@@ -58,6 +58,8 @@ class GW_Extension_KeyVal
 	
 	function __set($name, $value) 
 	{
+		$this->obj->setOwnerId($this->parent->id);
+		
 		if($this->parent->id){
 			return $this->obj->replace($name, $value);
 		}else{
