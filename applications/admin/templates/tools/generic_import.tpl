@@ -30,7 +30,7 @@
 <p>
 
 <b>Atpažystami stulpeliai:</b>
-{implode(array_keys($fields),', ')}
+{implode(', ',array_keys($fields))}
 
 </p>
 
