@@ -51,7 +51,7 @@ class Module_Login extends GW_Module
 			
 		}
 		
-		if(isset($_POST['link_with_fb']) && $this->app->sess('temp_link_withfb'))
+		if(isset($_POST['link_with_fb']) && $this->app->sess('temp_link_withfb') && $this->app->user)
 		{
 			$fbid = $this->app->sess('temp_link_withfb');
 			$this->setMessage('Link success, now you can login using Facebook');
