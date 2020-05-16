@@ -64,7 +64,7 @@
 					
 					<div class="col-xs-2">
 						{if $app->sess('temp_link_withfb')}
-							<img src="https://graph.facebook.com/{$app->sess('temp_link_withfb')}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">
+							<img src="https://graph.facebook.com/{$app->sess('temp_link_withfb')}/picture?type=small" style="border-radius: 50%;height:42px;" class="mx-1">
 						{else}
 							<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
 								 <i class="fa fa-facebook" aria-hidden="true"></i>
