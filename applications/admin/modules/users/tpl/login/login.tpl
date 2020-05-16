@@ -43,16 +43,18 @@
 		                <div class="form-group {if $smarty.get.login_fail}has-error{/if}">
 		                    <input name="login[1]" type="password" class="form-control" placeholder="{$lang.PASS}">
 		                </div>
-		                <div class="checkbox pad-btm text-left">
-		                    <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox"  name="login_auto">
-		                    <label for="demo-form-checkbox">{$lang.AUTOLOGIN}</label>
-		                </div>
+
 				
 				{if $app->sess('temp_link_withfb')}
 				<div class="checkbox pad-btm text-left">
 					<input checked="checked" class="magic-checkbox" id="linkwithfbcb" type="checkbox" value="{$app->sess('temp_link_withfb')}" name="link_with_fb">
 					<label for="linkwithfbcb">Link with <i class="fa fa-facebook" aria-hidden="true"></i> </label>		
-				</div>		
+				</div>	
+				{else}
+					<div class="checkbox pad-btm text-left">
+					    <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox"  name="login_auto">
+					    <label for="demo-form-checkbox">{$lang.AUTOLOGIN}</label>
+					</div>
 				{/if}
 					
 				<div class="row">
