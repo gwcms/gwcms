@@ -137,7 +137,7 @@ class Module_Login extends GW_Module
 			if($user){
 				$this->app->user = $user;
 				$this->app->auth->login($user);	
-				$this->setMessage('Auth using Facebook success');
+				$this->setPlainMessage('Auth using Facebook success');
 				$this->app->jump('/');
 			}else{
 				$this->setError('Bad news: User might be either removed or deactivated');
