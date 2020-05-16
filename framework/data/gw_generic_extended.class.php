@@ -13,15 +13,22 @@ class GW_Generic_Extended
 
 	public $owner_id;
 	public $table = false;
+	public $own_table = false;
 	public $db;
 	private $_cache = [];
 
-	function __construct($owner_id = 0, $table=false)
+	function __construct($owner_id = 0, $table=false, $generic=false)
 	{
 		$this->table = $table;
 		
 		if(!$this->table)
 			$this->table = strtolower(get_class($this));		
+		
+		if($generic){
+			$this->own_table = $this->table;
+			$this->table = strtolower(get_class($this));
+		}
+		
 		
 		$this->owner_id = $owner_id;
 	}
@@ -52,7 +59,8 @@ class GW_Generic_Extended
 
 	function exists($key, $value)
 	{
-		return $this->getDB()->fetch_result(["SELECT id FROM {$this->table} WHERE `owner_id`=? AND `key`=? AND `value`=?", $this->owner_id, $key, $value]);
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+		return $this->getDB()->fetch_result(["SELECT id FROM {$this->table} WHERE $own_tbl_cond `owner_id`=? AND `key`=? AND `value`=?", $this->owner_id, $key, $value]);
 	}
 
 	/**
@@ -65,10 +73,13 @@ class GW_Generic_Extended
 
 	function delete($cond)
 	{
-		$user_cond = GW_DB::prepare_query(['owner_id=?', $this->owner_id]);
+		
+		$own_id_cond = GW_DB::prepare_query(['owner_id=?', $this->owner_id]);
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+			
 		$cond = GW_DB::prepare_query($cond);
 
-		return $this->getDB()->delete($this->table, "$user_cond AND $cond");
+		return $this->getDB()->delete($this->table, "$own_tbl_cond $own_id_cond AND $cond");
 	}
 
 	function deleteOld($key, $how_old = '-1 year')
@@ -85,20 +96,31 @@ class GW_Generic_Extended
 
 	function insert($key, $value)
 	{
-		return $this->getDB()->insert($this->table, [
+		$vals = [
 			'owner_id' => $this->owner_id,
 			'key' => $key,
 			'value' => $value,
 			'insert_time' => date('Y-m-d H:i:s')
-		]);
+		];
+		
+		if($this->own_table)
+			$vals['own_table'] = $this->own_table;
+		
+		return $this->getDB()->insert($this->table, $vals);
 	}
 
 	function replace($key, $value)
 	{
 		$db = $this->getDB();
+		
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+		
 
 		$vals = ['owner_id' => $this->owner_id, 'key' => $key, 'value' => $value];
-		$id = $db->fetch_result(["SELECT id FROM {$this->table} WHERE `owner_id`=? AND `key`=?", $this->owner_id, $key]);
+		if($this->own_table)
+			$vals['own_table'] = $this->own_table;		
+		
+		$id = $db->fetch_result(["SELECT id FROM {$this->table} WHERE $own_tbl_cond `owner_id`=? AND `key`=?", $this->owner_id, $key]);
 
 		if ($id)
 			$db->update($this->table, "id=" . (int) $id, $vals);
@@ -118,7 +140,7 @@ class GW_Generic_Extended
 		$list = [];
 
 		if (!$all)
-			return $rez['value'];
+			return $rez['value'] ?? false;
 
 		foreach ($rez as $row)
 			$list[$row['key']] = $row['value'];
@@ -131,10 +153,25 @@ class GW_Generic_Extended
 	{
 		$db = $this->getDB();
 		
-		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE `owner_id`=?", $this->owner_id]);
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+		
+		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE $own_tbl_cond `owner_id`=?", $this->owner_id]);
 
 		return $rez;
 	}
+	
+	function findOwner($cond)
+	{
+		$db = $this->getDB();
+		
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+		
+		$cond = GW_DB::prepare_query($cond);
+		
+		$rez = $db->fetch_one_column("SELECT owner_id FROM {$this->table} WHERE $own_tbl_cond $cond");
+
+		return $rez;
+	}	
 
 	function storeAll($list)
 	{

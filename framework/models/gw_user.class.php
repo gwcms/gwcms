@@ -7,8 +7,8 @@ class GW_User extends GW_Composite_Data_Object
 	public $min_pass_length = 4;
 	public $max_pass_length = 200;
 	public $validators = Array();
-	public $calculate_fields = Array('group_ids' => 1, 'title' => 1, 'api_key' => 1, 'online' => 1);
-	public $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1);
+	public $calculate_fields = ['group_ids' => 1, 'title' => 1, 'api_key' => 1, 'online' => 1, 'ext'=>1];
+	public $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1, 'ext' => 1);
 	public $encode_fields = Array('info' => 'serialize');
 	public $composite_map = [
 		'group_ids' => ['gw_links', ['table' => 'gw_link_user_groups']],
@@ -17,6 +17,9 @@ class GW_User extends GW_Composite_Data_Object
 	public $autologgedin = false;
 	public $validators_def;
 	public $validators_set;
+	
+	public $extensions = ['keyval'=>1];
+	public $keyval_use_generic_table = 1;
 
 	function loadValidators()
 	{
@@ -252,6 +255,9 @@ class GW_User extends GW_Composite_Data_Object
 				return md5($this->get('password'));
 			case 'online':
 				return $this->last_request_time > date('Y-m-d H:i:s', strtotime('-10 minute'));
+			case 'ext':
+				return $this->extensions['keyval'];
+						
 		}
 	}
 

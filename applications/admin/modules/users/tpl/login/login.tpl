@@ -47,9 +47,21 @@
 		                    <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox"  name="login_auto">
 		                    <label for="demo-form-checkbox">{$lang.AUTOLOGIN}</label>
 		                </div>
-						
+				
+					
+				<div class="row">
+					<div class="col-xs-10">
 		                <button class="btn btn-primary btn-lg btn-block" type="submit">{$lang.DOLOGIN}</button>
+					</div>
+					
+					<div class="col-xs-2">
+						<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
+							 <i class="fa fa-facebook" aria-hidden="true"></i>
+						</a>	
+					</div>
 		            </form>
+			    
+	    
 		        </div>
 		
 					{*

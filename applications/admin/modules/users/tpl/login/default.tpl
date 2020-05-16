@@ -43,7 +43,7 @@
 
 </table>
 </form>
-
+	
 <script type="text/javascript">
 	$('input[name=login[0]]').focus();
 </script> {include file="default_close.tpl"}

@@ -64,7 +64,19 @@ $(document).ready(function(){
 <br /><br />
 
 
+
+{if !$app->user->ext->adminfbid}
+	<a class="btn btn-primary" href="{$m->buildUri(false,[act=>doLinkWithFb])}">Link With Facebook account</a>
+{else}
+	{if $app->user->fbid}<img src="https://graph.facebook.com/{$app->user->ext->adminfbid}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">{/if}
+	
+	<a class="btn btn-primary" href="{$m->buildUri(false,[act=>doUnLinkWithFb])}">Unlink Facebook account</a>
+	
+{/if}
+
+
 {include file="extra_info.tpl" exta_fields=['id','login_time','login_count','insert_time','update_time']}
+
 
 
 </div>

@@ -81,4 +81,63 @@ class Module_Login extends GW_Module
 		$this->viewLogin();
 
 	}
+	
+	function doAuthWithFb()
+	{
+		$comebackurlAuthgw = $this->app->buildURI(false,['act'=>'doAuthFinishWithFb'],['absolute'=>1]);
+		$req_id = GW_String_Helper::getRandString(25);
+		$_SESSION['adm_auth_gw_lt_req_id']=$req_id;
+			
+		session_commit();
+		session_write_close();
+		$auth_gw_url = "https://auth.gw.lt/index.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		header('Location: '.$auth_gw_url);		
+		exit;			
+	}
+	
+	
+	function doAuthFinishWithFb()
+	{	
+		$req_id = $_SESSION['adm_auth_gw_lt_req_id'];
+		$dat = file_get_contents('https://auth.gw.lt/index.php?get_response='.$req_id);
+		$dat = json_decode($dat);
+		
+		if(!isset($dat->id)){
+			$this->setError('Fb auth failed');
+			$this->jump();
+		}
+			
+			
+		$fbid = (int)$dat->id;
+		
+		
+		$list = GW_User::singleton()->extensions['keyval']->findOwner(['`key`="adminfbid" AND value=?',$fbid]);
+		if(count($list)>1){
+			$this->setError('This facebook user linked with more than one account please unlink others');
+			$this->jump();
+		}elseif(count($list)==0){
+			$link = $this->app->buildUri('users/profile');
+			$profpage="<a href='$link'>profile page</a>";
+			$this->setError("Failed: Not linked. You should authorise using password, then goto $profpage and link with fb account to use this feature");
+			$this->jump();
+		}else{
+			
+			$user= GW_User::singleton()->find(['(id=?) AND active=1', $list[0]]);
+			
+			if($user){
+				$this->app->user = $user;
+				$this->app->auth->login($user);	
+				$this->setMessage('Auth using Facebook success');
+				$this->app->jump('/');
+			}else{
+				$this->setError('Bad news: User might be either removed or deactivated');
+			}
+				
+
+		}
+		
+
+		$this->jump();
+	}	
+	
 }

@@ -115,7 +115,38 @@ class Module_Profile extends GW_Module
 		exit;
 			
 	}
+	
+	function doLinkWithFb()
+	{
+		$comebackurlAuthgw = $this->app->buildURI(false,['act'=>'doFinishLinkWithFb'],['absolute'=>1]);
+		$req_id = GW_String_Helper::getRandString(25);
+		$_SESSION['adm_auth_gw_lt_req_id']=$req_id;
+			
+		session_commit();
+		session_write_close();
+		$auth_gw_url = "https://auth.gw.lt/index.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		header('Location: '.$auth_gw_url);		
+		exit;			
+	}
+	
+	function doUnLinkWithFb()
+	{
+		$this->app->user->ext->adminfbid = '';
+		$this->setMessage('Facebook account Unlinked');
+		$this->jump();
+	}
+	
+	function doFinishLinkWithFb()
+	{	
+		$req_id = $_SESSION['adm_auth_gw_lt_req_id'];
+		$dat = file_get_contents('https://auth.gw.lt/index.php?get_response='.$req_id);
+		$dat = json_decode($dat);
 		
+		$this->setMessage('Link success, now you can login using Facebook');
+		$this->app->user->ext->adminfbid = $dat->id;
+		$this->jump();
+	}
+	
 }
 
 ?>

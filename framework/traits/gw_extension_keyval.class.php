@@ -11,7 +11,10 @@ class GW_Extension_KeyVal
 		$this->parent = $parent;
 		$parent->registerObserver(['extension', $name]);
 		
-		$this->obj = new GW_Generic_Extended($this->parent->id, $this->parent->table.'_extended');
+		$generic = isset($this->parent->keyval_use_generic_table);
+		$table = $generic ? $this->parent->table : $this->parent->table.'_extended';
+			
+		$this->obj = new GW_Generic_Extended($this->parent->id, $table, $generic);
 		
 	}
 	
