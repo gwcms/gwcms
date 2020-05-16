@@ -50,7 +50,7 @@
 				
 				{if $app->sess('temp_link_withfb')}
 				<div class="checkbox pad-btm text-left">
-					<input id="linkwithfbcb" type="checkbox" value="{$app->sess('temp_link_withfb')}" name="link_with_fb">
+					<input class="magic-checkbox" id="linkwithfbcb" type="checkbox" value="{$app->sess('temp_link_withfb')}" name="link_with_fb">
 					<label for="linkwithfbcb">Link with <i class="fa fa-facebook" aria-hidden="true"></i> </label>		
 				</div>		
 				{/if}
