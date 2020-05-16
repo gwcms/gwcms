@@ -48,7 +48,7 @@ class Module_Blocks extends GW_Common_Module
 	
 	function __eventAfterForm()
 	{
-		$this->tpl_vars['form_width']="1000px";
+		$this->tpl_vars['form_width']="100%";
 		$this->tpl_vars['width_title']="120px";
 		
 	}	

@@ -29,4 +29,9 @@ class GW_Site_Block extends GW_Data_Object
 
 		}
 	}	
+	
+	function __toString()
+	{
+		return $this->contents ?? '';
+	}
 }
