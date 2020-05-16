@@ -110,6 +110,8 @@ class Module_Login extends GW_Module
 			
 		$fbid = $dat->id;
 		
+		d::dumpas($fbid);
+		
 		
 		$list = GW_User::singleton()->extensions['keyval']->findOwner(['`key`="adminfbid" AND value=?',$fbid]);
 		if(count($list)>1){
