@@ -106,5 +106,42 @@ class gw_paysera_service
 		
 		return 1;
 	}
+	
+	
+	function handlerPayments($data, $action)
+	{
+		$order = GW_Payments::singleton()->find(['id=?', $data['orderid']]);
+		
+
+		if ($data['type'] !== 'macro') {
+			$this->error="Only macro payment callbacks are accepted";
+			return -6;
+		}			
+		
+		if(!$order){
+			$this->error = "Order not found";
+			return -1;
+		}
+		
+		if($action=='accept' || $action=='callback')
+		{
+			$order->pay_type = 1;
+			$order->status = 7;
+			$order->paytime = date('Y-m-d H:i:s');
+			$result = Navigator::sysRequest('admin/lt/payments/items',['act'=>'doPaymentAccepted','id'=>$order->id]);
+		}else{
+			$order->pay_status = 0;
+		}
+		
+		if($data['test'] != '0')
+			$order->pay_test =1;
+		
+		if(isset($_GET['redirect_url']))
+			$this->redirect_url = $_GET['redirect_url'];
+		
+		$order->updateChanged();
+		
+		return 1;
+	}	
 
 }

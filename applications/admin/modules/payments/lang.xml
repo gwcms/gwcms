@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml>
+	<i id="FIELDS">
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="admin_id">Administratorius</i>
+		
+		<i id="admin_note">Admin. pastaba</i>	
+		<i id="customer_email">Kliento el.p.</i>	
+		<i id="amount">Suma</i>	
+		<i id="paytime">Apmokėjimo laikas</i>	
+		<i id="expires">Mokėjimo terminas</i>	
+		<i id="pay_type">Mok. metodas</i>		
+	</i>
+	<i id="FIELDS_SHORT">
+		<i id="admin_id">Admin</i>
+		<i id="seller_id">Pard.</i>
+		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="passenger"><![CDATA[<i class="fa fa-user"></i>]]></i>
+		<i id="attach_list"><![CDATA[<i class="fa fa-paperclip"></i>]]></i>
+		<i id="attachments"><![CDATA[<i class="fa fa-paperclip"></i>]]></i>
+		<i id="changetrack"><![CDATA[<i class="fa fa-pencil"></i>]]></i>
+		<i id="id">#</i>
+		<i id="paytime"><![CDATA[Mokėj. <i class="fa fa-clock-o"></i>]]></i>	
+		<i id="expires">Mok. term.</i>	
+			
+		
+	</i>
+	<i id="FIELDS_HELP">
+		
+	</i>
+	<i id="FIELD_NOTE">
+		<i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
+	</i>
+	<i id="VIEWS">
+		<i id="docsedit">Dokumentų suvestis</i>
+		<i id="passnglist">Keleiviai</i>
+		<i id="doParse">Pakartoti laiško analizę</i>
+		<i id="doFill">Pakartoti duomenų analizę</i>
+		<i id="monthlystats">Pardavimų statistika</i>
+	</i>
+	<i id="OPTIONS">
+		<i id="checkin">
+			<i id="0">No checkin (0)</i>
+
+		</i>
+	</i>
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">Mokėjimai</i>
+		<i id="info">
+			<i id="iconclass">fa fa-money</i>
+		</i>
+		<i id="childs">
+			
+			<i id="items">
+				<i id="title">Mokėjimai</i>
+				<i id="info">
+					<i id="model">GW_Payments</i>
+					<i id="iconclass">fa fa-money</i>
+				</i>
+			</i>											
+		</i>
+	</i>
+</xml>
