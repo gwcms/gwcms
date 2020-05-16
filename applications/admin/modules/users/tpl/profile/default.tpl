@@ -68,7 +68,7 @@ $(document).ready(function(){
 {if !$app->user->ext->adminfbid}
 	<a class="btn btn-primary" href="{$m->buildUri(false,[act=>doLinkWithFb])}">Link With Facebook account</a>
 {else}
-	{if $app->user->fbid}<img src="https://graph.facebook.com/{$app->user->ext->adminfbid}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">{/if}
+	{if $app->user->ext->adminfbid}<img src="https://graph.facebook.com/{$app->user->ext->adminfbid}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">{/if}
 	
 	<a class="btn btn-primary" href="{$m->buildUri(false,[act=>doUnLinkWithFb])}">Unlink Facebook account</a>
 	
