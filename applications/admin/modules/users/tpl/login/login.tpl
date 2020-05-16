@@ -48,16 +48,28 @@
 		                    <label for="demo-form-checkbox">{$lang.AUTOLOGIN}</label>
 		                </div>
 				
+				
+				
 					
 				<div class="row">
 					<div class="col-xs-10">
 		                <button class="btn btn-primary btn-lg btn-block" type="submit">{$lang.DOLOGIN}</button>
 					</div>
 					
+					
+					
 					<div class="col-xs-2">
-						<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
-							 <i class="fa fa-facebook" aria-hidden="true"></i>
-						</a>	
+						{if $app->sess('temp_link_withfb')}
+							<img src="https://graph.facebook.com/{$app->sess('temp_link_withfb')}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">
+							Link with <i class="fa fa-facebook" aria-hidden="true"></i> 
+							<input id="demo-form-checkbox" class="magic-checkbox" type="checkbox" value="{$app->sess('temp_link_withfb')}" name="link_with_fb">
+							
+						{else}
+							<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
+								 <i class="fa fa-facebook" aria-hidden="true"></i>
+							</a>							
+						{/if}
+
 					</div>
 		            </form>
 			    

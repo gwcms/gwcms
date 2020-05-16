@@ -51,6 +51,14 @@ class Module_Login extends GW_Module
 			
 		}
 		
+		if(isset($_POST['link_with_fb']) && $this->app->sess('temp_link_withfb'))
+		{
+			$fbid = $this->app->sess('temp_link_withfb');
+			$this->setMessage('Link success, now you can login using Facebook');
+			$this->app->user->ext->adminfbid = $dat->id;
+			
+			 $this->app->sess('temp_link_withfb','');
+		}	
 
 		
 		if(!$dialog)
@@ -118,7 +126,9 @@ class Module_Login extends GW_Module
 		}elseif(count($list)==0){
 			$link = $this->app->buildUri('users/profile');
 			$profpage="<a href='$link'>profile page</a>";
-			$this->setError("Failed: Not linked. You should authorise using password, then goto $profpage and link with fb account to use this feature");
+			$this->app->sess('temp_link_withfb', $fbid);
+			
+			$this->setPlainMessage("Please login now as usual", GW_MSG_INFO);
 			$this->jump();
 		}else{
 			
