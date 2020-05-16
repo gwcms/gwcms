@@ -81,8 +81,8 @@ class GW_Admin_Application extends GW_Application
 			$this->page = & $tmp;
 			return true;
 		}
-	
-		return false;		
+		return false;
+		
 	}
 	
 	
@@ -273,16 +273,15 @@ class GW_Admin_Application extends GW_Application
 	}
         
         
-        public $path_data_objects = [];
-        
-        function requestInfo() {
-            
-            parent::requestInfo();
-            
-            foreach($this->path_arr as $arr){
-                if(isset($arr['data_object_id']))
-                    $this->path_data_objects[$arr['name']] = $arr['data_object_id'];
-            }          
-            
-        }	
+	public $path_data_objects = [];
+
+	function requestInfo() {
+
+		parent::requestInfo();
+
+		foreach($this->path_arr as $arr){
+			if(isset($arr['data_object_id']))
+				$this->path_data_objects[$arr['name']] = $arr['data_object_id'];
+		}
+	}	
 }
