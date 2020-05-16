@@ -61,10 +61,10 @@
 					<div class="col-xs-2">
 						{if $app->sess('temp_link_withfb')}
 							<img src="https://graph.facebook.com/{$app->sess('temp_link_withfb')}/picture?type=small" style="border-radius: 50%;height:30px;" class="mx-1">
-							<span class="checkbox">
+							<div class="checkbox">
 							<label for="linkwithfbcb">Link with <i class="fa fa-facebook" aria-hidden="true"></i> </label>
 							<input id="linkwithfbcb" type="checkbox" value="{$app->sess('temp_link_withfb')}" name="link_with_fb">
-							</span>
+							</div>
 							
 						{else}
 							<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
