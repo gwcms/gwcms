@@ -55,7 +55,7 @@ class Module_Login extends GW_Module
 		{
 			$fbid = $this->app->sess('temp_link_withfb');
 			$this->setMessage('Link success, now you can login using Facebook');
-			$this->app->user->ext->adminfbid = $dat->id;
+			$this->app->user->ext->adminfbid = $fbid;
 			
 			 $this->app->sess('temp_link_withfb','');
 		}	
