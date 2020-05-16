@@ -55,7 +55,7 @@
 					</div>
 					
 					<div class="col-xs-2">
-						<a class="btn btn-fb btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white">
+						<a class="btn btn-primary btn-lg" href="{$m->buildUri(false,[act=>doAuthWithFb])}" style="color:white;background-color:#3b5998">
 							 <i class="fa fa-facebook" aria-hidden="true"></i>
 						</a>	
 					</div>
