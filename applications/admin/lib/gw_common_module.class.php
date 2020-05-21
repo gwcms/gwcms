@@ -820,8 +820,13 @@ class GW_Common_Module extends GW_Module
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
 		
-		foreach ($this->filters as $key => $val)
-			$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
+		foreach ($this->filters as $key => $val){
+			if(is_array($val)){
+				$search[] = ['field' => $key, 'value' => $val, 'ct' => 'IN'];
+			}else{
+				$search[] = ['field' => $key, 'value' => $val, 'ct' => 'EQ'];
+			}
+		}
 
 		
 		//example use:
