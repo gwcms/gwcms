@@ -1979,7 +1979,8 @@ class GW_Common_Module extends GW_Module
 			$search = "'%".$exact."%'";
 
 			//OR title_ru LIKE $search
-			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) : $i0->get('title'));
+			$simplecond = "title LIKE $search";
+			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) :  $simplecond);
 			
 			if(isset($opts['condition_add'])){
 				$cond .= ($cond ? " AND " : ''). $opts['condition_add'];
