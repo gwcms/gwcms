@@ -15,6 +15,7 @@ update.php
 config/db_prod.php
 framework/helpers/diff_helper.class.php
 nbproject/private/private.xml
+config/project_core_sync.json
 ";
 
 $paths=explode("\n", trim($paths));
