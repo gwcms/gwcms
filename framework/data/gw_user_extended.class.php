@@ -108,7 +108,7 @@ class GW_User_Extended
 		$list = [];
 
 		if (!$all)
-			return $full ? $rez : $rez['value'];
+			return $full ? $rez :  ($rez['value'] ?? false);
 
 		foreach ($rez as $row)
 			$list[] = $full ? $row : $row['value'];

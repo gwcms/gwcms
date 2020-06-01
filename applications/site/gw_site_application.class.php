@@ -157,6 +157,9 @@ class GW_Site_Application extends GW_Application
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 		
 
+		GW_Autoload::addAutoloadDir(dirname($file));
+		
+				
 		$m = new $classname(Array(
 			'module_file'=>$file,
 			'app'=>$this, 

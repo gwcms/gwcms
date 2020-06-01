@@ -16,9 +16,14 @@ class GW_Module_Extension
 	
 
 	
-	function __get($name) 
+	function &__get($name) 
 	{
-		return $this->mod->$name ?? null;
+		if(isset($this->mod->$name)){
+			return $this->mod->$name;
+		}else {
+			$x = $this->mod->$name;;
+			return $x;
+		}
 	}
 	
 	function __set($name, $val) 

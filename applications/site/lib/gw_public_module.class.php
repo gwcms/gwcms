@@ -135,7 +135,7 @@ class GW_Public_Module {
 			$view_name = $params[0];
 
 
-			if (!method_exists($this, 'view' . $view_name) && $view_name != 'noview') {
+			if (!$this->methodTest('view' . $view_name) && $view_name != 'noview') {
 				$view_name = 'default';
 			} else {
 				array_shift($params);
@@ -575,4 +575,70 @@ class GW_Public_Module {
 		
 		$this->app->jump('direct/users/users/login');				
 	}
+	
+	public $extenions;
+	
+	function ext($name)
+	{
+		if(is_array($name)){
+			list($name, $ext_name) = $name;
+		}else{
+			$ext_name = get_class($this).'_'.$name;
+		}
+		
+		if(!isset($this->extensions[$name]))
+		{
+			$this->extensions[$name] = new $ext_name;
+			$this->extensions[$name]->mod = $this;
+		}
+				
+		return $this->extensions[$name];
+	}	
+	
+	
+	public $redirRules=[];
+	public $ext_events=[]; //add $this->addRedirRule('events', 'myModuleExtension'); and function extEventHander in extension
+	
+	function addRedirRule($rule, $ext)
+	{
+		if($rule == 'events')
+			$this->ext_events[$ext]=1;
+			
+		$this->redirRules[]=['re'=>$rule, 'ext'=>$ext];
+		
+	}
+	
+	function scanRedirRules($name){
+		foreach($this->redirRules as $rule)
+			if(preg_match($rule['re'], $name, $m))
+				return $rule['ext'];
+	}
+	
+	
+	function methodTest($name)
+	{
+		return method_exists($this, $name) || $this->scanRedirRules($name);
+	}
+	
+	function __call($name, $arguments)
+	{
+		$name = strtolower($name);
+		
+		if($ext = $this->scanRedirRules($name)){			
+			return call_user_func_array([$this->ext($ext), $name], $arguments);
+		}else{
+			trigger_error('method "' . $name . '" not exists', E_USER_NOTICE);
+		}
+	}
+
+	/**
+	 * 
+	 * @param type $name
+	 * @param type $type js|css
+	 * @param type $src
+	 */
+	function addIncludes($name = false, $type, $src)
+	{
+		$this->includes[$name] = [$type, $src];
+	}	
 }

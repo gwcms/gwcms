@@ -27,7 +27,7 @@ class Module_Countries extends GW_Common_Module
 			$search = "'%".$exact."%'";
 
 			//OR title_ru LIKE $search
-			$cond = "(`title_lt` LIKE $search OR `title_en` LIKE $search  OR `aka` LIKE $search OR code = '$exact')";
+			$cond = "(`title_lt` LIKE $search OR `title_en` LIKE $search OR `title_ru` LIKE $search  OR `aka` LIKE $search OR code = '$exact')";
 		}elseif(isset($_REQUEST['ids'])){
 			$ids = json_decode($_REQUEST['ids'], true);
 			if(!is_array($ids))
