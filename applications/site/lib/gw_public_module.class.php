@@ -479,7 +479,6 @@ class GW_Public_Module {
 		exit;
 	}
 
-
 	function viewUploadFile()
 	{
 		$item = $this->getDataObjectForFiles();
@@ -563,8 +562,6 @@ class GW_Public_Module {
 		
 	}
 	
-	
-	
 	function userRequired()
 	{
 		if($this->app->user)
@@ -578,5 +575,4 @@ class GW_Public_Module {
 		
 		$this->app->jump('direct/users/users/login');				
 	}
-
 }
