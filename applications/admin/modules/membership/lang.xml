@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml>
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+		</i>
+
+		<i id="prises">Prizai</i>
+	</i>
+	<i id="FIELDS_SHORT">d
+		<i id="active_till"><![CDATA[<i class="fa fa-globe"></i><i class="fa fa-eye"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="registration_till"><![CDATA[<i class="fa fa-sign-in"></i><i class="fa fa-clock-o"></i>]]></i>	
+		<i id="insert_time"><![CDATA[<i class="fa fa-plus"></i><i class="fa fa-clock-o"></i>]]></i>	
+		<i id="update_time"><![CDATA[<i class="fa fa-pencil"></i><i class="fa fa-clock-o"></i>]]></i>	
+		<i id="priority"><![CDATA[<i class="fa fa-hand-o-up"></i>]]></i>
+		<i id="gender"><![CDATA[<i class="fa fa-venus-mars"></i>]]></i>
+		
+	</i>
+	<i id="FIELDS_HELP">
+		<i id="visible">Galimybė, padaryt nematomą (testavimui) arba paslėpti nereikalingoms kalboms</i>
+	</i>
+	<i id="FIELD_NOTE">
+		<!--input.tpl automatiskai pasiima pagal laukelio pavadinima-->
+		<i id="registration_success_email">Jei tuščias - bus siunčiamas laiško turinys nurodytas konkurso formoje</i>
+	</i>
+	<i id="VIEWS">
+		<i id="agreements">Sutikimai</i>
+	
+	</i>
+	<i id="OPTIONS">
+
+	</i>
+
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<lt>Narystė</lt>
+		</i>
+		<i id="info">
+			<i id="iconclass">fa fa-trophy</i>
+			<i id="model">GW_Membership</i>
+			<i id="iconclass">fa fa-universal-access</i>
+			<i id="itemactions">2</i>
+						
+		</i>
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>

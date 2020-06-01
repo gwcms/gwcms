@@ -315,7 +315,7 @@ class GW_DB
 			$values[] = "'" . addslashes($vert) . "'";
 		}
 
-		$query = ($replaceinto ? "REPLACE" : "INSERT") . " INTO $table (" . implode($names, ',') . ") VALUES (" . implode($values, ',') . ")";
+		$query = ($replaceinto ? "REPLACE" : "INSERT") . " INTO $table (" . implode(',', $names) . ") VALUES (" . implode(',', $values) . ")";
 		$this->query($query, $nodie);
 		return $this->link->affected_rows;
 	}
@@ -332,7 +332,7 @@ class GW_DB
 			
 			$values[] = "'" . addslashes($vert) . "'";
 		}
-		$query = "INSERT INTO $table (" . implode($names, ',') . ") VALUES (" . implode($values, ',') . ") ON DUPLICATE KEY UPDATE ";
+		$query = "INSERT INTO $table (" . implode(',', $names) . ") VALUES (" . implode(',', $values) . ") ON DUPLICATE KEY UPDATE ";
 
 		foreach ($entry as $elemRak => $vert)
 			if (!is_numeric($elemRak))

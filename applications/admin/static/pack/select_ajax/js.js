@@ -96,236 +96,249 @@ function initSelectAll(obj, opts)
 	})
 }
 	
-function initSelect2Inputs(){
+function initSelect2Inputs1()
+{
+	$(".GWselectAjax").each(function(){
+			
+
+	var obj = $(this)			
+	var urlArgsAddFunc = obj.data('urlargsaddfunc');
+
+
+	var opts = {	};
 	
-	require(['vendor/select2/js'], function () {
-		//$('.gwselect2').select2(); 
-		
+	if(select2_lang !== 'undefined')
+	{
+		opts.language =select2_lang
+	}
+	
+	console.log(opts);
+	
+	if(bootstrap4 !== 'undefined')
+		opts.theme= 'bootstrap4';
 
-		$(".GWselectAjax").each(function(){
-			
+	if(obj.data('source')){
+		opts.ajax = {
+			url: obj.data('source'),
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
 
-			var obj = $(this)			
-			var urlArgsAddFunc = obj.data('urlargsaddfunc');
-
-
-			var opts = {	};
-						
-			if(obj.data('source')){
-				opts.ajax = {
-					url: obj.data('source'),
-					dataType: 'json',
-					delay: 250,
-					data: function (params) {
-
-						var tmp = {
-							q: params.term, // search term
-							page: params.page
-						};
-						if(urlArgsAddFunc){
-							$.extend(tmp, eval(urlArgsAddFunc)	);
-						}
-						
-						return tmp;
-
-					},
-					processResults: function (data, params) {
-						// parse the results into the format expected by Select2
-						// since we are using custom formatting functions we do not need to
-						// alter the remote JSON data, except to indicate that infinite
-						// scrolling can be used
-						params.page = params.page || 1;
-						
-						obj.trigger('resultsload', [params, data]);
-
-						return {
-							results: data.items,
-							pagination: {
-								more: (params.page * 30) < data.total_count
-							}
-						};
-					},
-					cache: true
+				var tmp = {
+					q: params.term, // search term
+					page: params.page
+				};
+				if(urlArgsAddFunc){
+					$.extend(tmp, eval(urlArgsAddFunc)	);
 				}
-				
-				opts.templateResult = formatSelect2Result; // omitted for brevity, see the source of this page
-				opts.templateSelection = formatSelect2Selection; // omitted for brevity, see the source of this page
-				opts.escapeMarkup = function (markup) {
-							return markup;
-				}		
-			}
-			
-			if(obj.data('emptyoption'))
-			{
-				opts.allowClear = true;
-				opts.placeholder = obj.data('placeholder');				
-			}
 
-			if(obj.data('dontcloseonselect'))
-			{
-				opts.closeOnSelect = false;
-			}		
-			
-			//1 - single select
-			//0 || x - multiselect
-			var maximumSelectionLength = obj.data('maximumselectionlength')-0
-			if(maximumSelectionLength > 1)
-			{
-				opts.maximumSelectionLength = maximumSelectionLength;
-			}				
-			
-			obj.on('fillitems', function(event, items, append, ids){
-								
-				if(obj.data('sorting') && obj.attr('multiple')){ //surikiuot pagal paduota idu sarasa
-					var sorted=[];
-					for(var idx in ids) {
-						for(var lidx in items) {
-							if(ids[idx]==items[lidx].id){
-								sorted.push(items[lidx]);
-								delete items[lidx];
-							}
-						}
+				return tmp;
+
+			},
+			processResults: function (data, params) {
+				// parse the results into the format expected by Select2
+				// since we are using custom formatting functions we do not need to
+				// alter the remote JSON data, except to indicate that infinite
+				// scrolling can be used
+				params.page = params.page || 1;
+
+				obj.trigger('resultsload', [params, data]);
+
+				return {
+					results: data.items,
+					pagination: {
+						more: (params.page * 30) < data.total_count
 					}
+				};
+			},
+			cache: true
+		}
 
-					items = sorted;
+		opts.templateResult = formatSelect2Result; // omitted for brevity, see the source of this page
+		opts.templateSelection = formatSelect2Selection; // omitted for brevity, see the source of this page
+		opts.escapeMarkup = function (markup) {
+					return markup;
+		}		
+	}
+
+	if(obj.data('emptyoption'))
+	{
+		opts.allowClear = true;
+		opts.placeholder = obj.data('placeholder');				
+	}
+
+	if(obj.data('dontcloseonselect'))
+	{
+		opts.closeOnSelect = false;
+	}		
+
+	//1 - single select
+	//0 || x - multiselect
+	var maximumSelectionLength = obj.data('maximumselectionlength')-0
+	if(maximumSelectionLength > 1)
+	{
+		opts.maximumSelectionLength = maximumSelectionLength;
+	}				
+
+	obj.on('fillitems', function(event, items, append, ids){
+
+		if(obj.data('sorting') && obj.attr('multiple')){ //surikiuot pagal paduota idu sarasa
+			var sorted=[];
+			for(var idx in ids) {
+				for(var lidx in items) {
+					if(ids[idx]==items[lidx].id){
+						sorted.push(items[lidx]);
+						delete items[lidx];
+					}
 				}
-				
-				if(append){
-					var current = $(this).val();
+			}
+
+			items = sorted;
+		}
+
+		if(append){
+			var current = $(this).val();
 
 
-					for(var index in items){
-						if(current.indexOf(items[index].id)!=-1){
-							console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
+			for(var index in items){
+				if(current.indexOf(items[index].id)!=-1){
+					console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
 
-							delete index[id];
-						}
-					}			
+					delete index[id];
+				}
+			}			
+
+		}else{
+			$(this).empty();
+		}
+
+		var that = this;
+
+
+		var multiselect = obj.data('maximumselectionlength') != '1';
+		var keys = {}
+		var selectedvals = obj.data('value');
+		selectedvals = selectedvals instanceof Array ? selectedvals : [selectedvals];
+		for(var i in selectedvals)
+			selectedvals[i] = String(selectedvals[i]);
+
+
+		$.each(items, function(index, item){
+			//console.log(item.title+':'+item.id)
+			keys[item.id] = item.id;
+			var selected = false;
+
+			for(var i in selectedvals)
+				if(selectedvals[i]==item.id)
+					selected = true;
+
+			$(that).append(new Option(item.title, item.id, selected, selected));
+		} );
+
+		if(!multiselect){
+			//alert($(this).data('value'));
+			//alert($(this).val());
+			var prevval = JSON.parse($(this).data('value'));					
+
+			if( obj.find("option[value='"+prevval+"']").length > 0 ){
+				obj.val(prevval)
+			}else{
+				$(that).append(new Option(prevval, "not found: "+prevval, true, true));
+				alert(obj.data('objecttitle')+" id("+prevval+') Not available');
+			}
+		}
+
+		$(this).trigger('change');		
+	}).on('inittitles', function(event, ids, append){
+
+		if(!ids)
+			ids = $(this).val()
+
+		var that = this;
+
+		$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
+			if(data.hasOwnProperty('items'))
+			{
+				$(that).trigger('fillitems', [data.items, append, ids]);
+			}else{
+				console.log("select_ajax: Items not received. Received content: "+data);
+			}
+
+		}, 'json')
+	}).on('resultsload', function(event, params, results){
+
+		if(obj.data('$rendered')){
+			obj.data('$rendered').find('.selectallContain').fadeIn();
+			console.log([params, results])
+			//console.log(obj.data('bybis'));
+
+			setTimeout(function(){
+				var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
+				obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
+			}, 300)
+
+			obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
+		}
+
+	});
+
+
+	if(obj.data('onchangeFunc') || obj.attr('data-onchangeFunc')){
+		var f = obj.data('onchangeFunc');
+		if(!f)
+			var f= obj.attr('data-onchangeFunc')
+
+
+		obj.change(function(){
+
+			if(!$(this).data('init-done')){					
+				$(this).data('init-done', 1)
+				$(this).data('prev-val', $(this).val())
+			}else{
+				if($(this).data('prev-val') != $(this).val()){
+					//f(true);
+					$(this).data('prev-val', $(this).val());
+					window[f]($(this).val());
 
 				}else{
-					$(this).empty();
+					//f(false);
+					//window[f](false, $(this).val());
 				}
-
-				var that = this;
-
-
-				var multiselect = obj.data('maximumselectionlength') != '1';
-				var keys = {}
-				var selectedvals = obj.data('value');
-				selectedvals = selectedvals instanceof Array ? selectedvals : [selectedvals];
-				for(var i in selectedvals)
-					selectedvals[i] = String(selectedvals[i]);
-
-
-				$.each(items, function(index, item){
-					//console.log(item.title+':'+item.id)
-					keys[item.id] = item.id;
-					var selected = false;
-
-					for(var i in selectedvals)
-						if(selectedvals[i]==item.id)
-							selected = true;
-
-					$(that).append(new Option(item.title, item.id, selected, selected));
-				} );
-
-				if(!multiselect){
-					//alert($(this).data('value'));
-					//alert($(this).val());
-					var prevval = JSON.parse($(this).data('value'));					
-
-					if( obj.find("option[value='"+prevval+"']").length > 0 ){
-						obj.val(prevval)
-					}else{
-						$(that).append(new Option(prevval, "not found: "+prevval, true, true));
-						alert(obj.data('objecttitle')+" id("+prevval+') Not available');
-					}
-				}
-
-				$(this).trigger('change');		
-			}).on('inittitles', function(event, ids, append){
-
-				if(!ids)
-					ids = $(this).val()
-
-				var that = this;
-
-				$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
-					if(data.hasOwnProperty('items'))
-					{
-						$(that).trigger('fillitems', [data.items, append, ids]);
-					}else{
-						console.log("select_ajax: Items not received. Received content: "+data);
-					}
-
-				}, 'json')
-			}).on('resultsload', function(event, params, results){
-
-				if(obj.data('$rendered')){
-					obj.data('$rendered').find('.selectallContain').fadeIn();
-					console.log([params, results])
-					//console.log(obj.data('bybis'));
-
-					setTimeout(function(){
-						var count = obj.data('$rendered').find('.select2-results__option[aria-selected=false], .select2-results__option[aria-selected=true]').length
-						obj.data('$rendered').find('.loadeditems').text(' ('+count+')');						
-					}, 300)
-
-					obj.data('$rendered').find('.resultinfo').text(translate_foundresults+': '+results.total_count);
-				}
-
-			});
-
-
-			if(obj.data('onchangeFunc') || obj.attr('data-onchangeFunc')){
-				var f = obj.data('onchangeFunc');
-				if(!f)
-					var f= obj.attr('data-onchangeFunc')
-			
-				
-				obj.change(function(){
-					
-					if(!$(this).data('init-done')){					
-						$(this).data('init-done', 1)
-						$(this).data('prev-val', $(this).val())
-					}else{
-						if($(this).data('prev-val') != $(this).val()){
-							//f(true);
-							$(this).data('prev-val', $(this).val());
-							window[f]($(this).val());
-							
-						}else{
-							//f(false);
-							//window[f](false, $(this).val());
-						}
-					}
-				}
-				).change();			
 			}
-			
-			obj.change(function(){
-				$(this).data('value', JSON.stringify($(this).val()));
-				
-				//console.log('aaa-'+obj.val());
-				
-				if(obj.data('emptyoption') && obj.val() == null){
-					obj.append(new Option('empty_option', '', true, true));
-				}
-				
-			});
-			
-			if(obj.data('btnselectall'))
-			{
-				initSelectAll(obj, opts);
-				//console.log(opts)
-			}else{
-				finishInitSelAjax(obj, opts);
-			}			
-			
-		});
-	
+		}
+		).change();			
+	}
 
-	});	
+	obj.change(function(){
+		$(this).data('value', JSON.stringify($(this).val()));
+
+		//console.log('aaa-'+obj.val());
+
+		if(obj.data('emptyoption') && obj.val() == null){
+			obj.append(new Option('empty_option', '', true, true));
+		}
+
+	});
+
+	if(obj.data('btnselectall'))
+	{
+		initSelectAll(obj, opts);
+		//console.log(opts)
+	}else{
+		finishInitSelAjax(obj, opts);
+	}			
+
+	});
+
+}
+	
+function initSelect2Inputs(){
+	
+	if(typeof gw_adm_sys === 'undefined') {
+		initSelect2Inputs1();
+	}else{
+		require(['vendor/select2/js'], function () { initSelect2Inputs1() });			
+	}	
 }
 
 function finishInitSelAjax(obj, opts)
