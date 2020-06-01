@@ -246,7 +246,7 @@ class GW_Public_Module {
 		} elseif ($params['level'] == 1) {
 			$path = $this->module_path[0] . ($path ? '/' : '') . $path;
 		}
-
+		
 		return $this->app->buildURI('direct/' . $path, $getparams, $params);
 	}
 
@@ -322,7 +322,10 @@ class GW_Public_Module {
 	
 	function buildUri($path, $args=[])
 	{
-		return $this->app->buildUri($this->app->page->path.'/'.$path, $args,['carry_params'=>1]);
+		$path = $this->app->page->path.'/'.$path;
+		$path = $this->app->path_arg[0] == 'direct' ? 'direct/'.$path : $path;
+		
+		return $this->app->buildUri($path, $args,['carry_params'=>1]);
 	}
 	
 	function attachFieldOptions($list, $fieldname, $obj_classname, $options=[])
@@ -425,4 +428,155 @@ class GW_Public_Module {
 		die(json_encode($array));
 	}	
 	
+
+	function inputFilePreview($name, $onlyids=false)
+	{
+		$item = $this->app->user;
+		
+		$files = is_array($item->$name) ? $item->$name : false;
+		$file = $files ? false : $item->$name;
+		
+		$that = $this;
+		
+		$preview1 = function() use ($that, &$file){
+			if($file instanceof GW_Image)
+				return "<a href='{$that->app->app_base}tools/img/{$file->key}' target='_blank'><img  src='{$that->app->app_base}tools/img/{$file->key}?size=128x128' /></a>";
+			else
+				return "<a href='{$that->app->app_base}tools/download/{$file->key}'  target='_blank'><img style='width:50px' src='{$that->app->app_root}assets/img/files/{$file->getIcon('assets/img/files')}' /></a>";
+		};
+		
+		$preview2 = function() use ($that, &$file, &$name){
+			$remurl = $this->buildDirectUri('removefile', ['id'=>$file->id,'name'=>$name]);
+			
+			return ['caption'=>$file->original_filename, 'url'=>$remurl, 'key'=>$file->key];
+		};
+		
+		$initialPreview=[];
+		$initialPreviewConfig=[];
+		
+		if($files){
+			
+			foreach($files as $file)
+			{
+				if($onlyids && !in_array($file->id, $onlyids))
+					continue;
+					
+				$initialPreview[]=$preview1();
+				$initialPreviewConfig[]=$preview2();
+			}
+		}else if($file){
+			$initialPreview[]=$preview1();
+			$initialPreviewConfig[]=$preview2();
+		}
+		
+		
+		return json_encode(['initialPreview'=>$initialPreview, 'initialPreviewConfig' => $initialPreviewConfig]);
+	}
+	
+	function viewInputFilePreview()
+	{
+		echo $this->inputFilePreview($_GET['field']);
+		exit;
+	}
+
+
+	function viewUploadFile()
+	{
+		$item = $this->getDataObjectForFiles();
+
+		foreach ($_FILES as $name => $data) {
+			
+			
+			//leisti pdf uploadint
+			if($item->composite_map[$name][0]=='gw_image' && $data['type']=='application/pdf'){
+				
+				GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
+				
+				$newpdf=GW::s('DIR/TEMP').'/test_'.date('Ymd_His').'.pdf';
+				$newim=GW::s('DIR/TEMP').'/test'.date('Ymd_His').'.jpg';
+				$newim0=GW::s('DIR/TEMP').'/test'.date('Ymd_His').'-0.jpg';
+				$log=GW::s('DIR/TEMP').'/log'.date('Ymd_His').'-0.jpg';
+				
+
+				copy($data['tmp_name'], $newpdf);
+				$out = shell_exec($cmd = "convert -density 150 $newpdf $newim");
+				
+				file_put_contents($log, $cmd."\n\n".$out);
+				
+				$_FILES[$name]['tmp_name'] =  file_exists($newim0) ? $newim0 : $newim;
+				$_FILES[$name]['name'] =  $_FILES[$name]['name'].'.jpg';
+			}
+			
+			//d::ldump($data['tmp_name']);
+			//sleep(60);
+
+			
+			
+			if (isset($_FILES[$name]) && $item->isCompositeField($name))
+				GW_Image_Helper::__setFile($item, $name);
+
+
+			if (!$item->validate()) {
+				foreach ($item->errors as $errorc => $err){
+					
+					if(is_array($err)){
+						$item->errors[$errorc] = GW::ln($err['text']);
+					}else{
+						$item->errors[$errorc] = GW::ln($err);
+					}
+				}
+				
+				die(json_encode(['error' => implode(', ', $item->errors)]));
+			} else {
+				$item->save();	
+
+				if ($tmp = $this->inputFilePreview($name, $item->saved_composite_ids[$name]??false)) {
+					
+					//die(json_encode($dat));
+					//parodo paskutini tik tai jei atrast kaip padaryt kad atnaujint visus, arba kaip identifikuot ar uploadino ar ne
+					die($tmp);
+					
+					
+				} else {
+					die(json_encode(['error' => 'Error uploading file']));
+				}
+			}
+		}
+
+		die(json_encode(['errors' => 'File not received']));
+	}
+	
+	function viewRemoveFile() {
+
+		$item = $this->getDataObjectForFiles(); 
+
+		$id = $_GET['id'] ?? false;
+		$name = $_GET['name'] ?? false;
+		
+		//istrins visus failus
+		//$item->removeCompositeItem($name, '*');
+		
+		$item->removeCompositeItem($name, $id);
+
+		echo $this->inputFilePreview($name);
+		exit;
+		
+	}
+	
+	
+	
+	function userRequired()
+	{
+		if($this->app->user)
+			return;
+		
+		if(method_exists($this, "noUserCame")){
+			$this->noUserCame();
+		}
+		
+		$this->app->sess('after_auth_nav', $_SERVER['REQUEST_URI']);
+		
+		$this->app->jump('direct/users/users/login');				
+	}
+
 }
