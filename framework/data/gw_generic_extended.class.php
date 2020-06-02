@@ -27,8 +27,7 @@ class GW_Generic_Extended
 		if($generic){
 			$this->own_table = $this->table;
 			$this->table = strtolower(get_class($this));
-		}
-		
+		}	
 		
 		$this->owner_id = $owner_id;
 	}

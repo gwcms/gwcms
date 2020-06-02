@@ -3,7 +3,7 @@
 class GW_Extension_KeyVal
 {
 	private $parent;
-	public $obj;
+	public $obj = false;
 	public $cacheNotSaved;
 	
 	function __construct($parent, $name)
@@ -11,11 +11,18 @@ class GW_Extension_KeyVal
 		$this->parent = $parent;
 		$parent->registerObserver(['extension', $name]);
 		
-		$generic = isset($this->parent->keyval_use_generic_table);
-		$table = $generic ? $this->parent->table : $this->parent->table.'_extended';
-			
-		$this->obj = new GW_Generic_Extended($this->parent->id, $table, $generic);
 		
+		$this->constructExt();
+	}
+	
+	function constructExt()
+	{
+		if(!$this->obj){
+			$generic = isset($this->parent->keyval_use_generic_table);
+			$table = $generic ? $this->parent->table : $this->parent->table.'_extended';
+
+			$this->obj = new GW_Generic_Extended($this->parent->id, $table, $generic);
+		}		
 	}
 	
 	function eventHandler($event, &$context_data = [])
@@ -25,7 +32,7 @@ class GW_Extension_KeyVal
 		switch ($event) {
 
 			case 'AFTER_INSERT':
-				$this->obj = new GW_Generic_Extended($this->parent->id, $this->parent->table.'_extended');
+				$this->constructExt();
 				if($this->cacheNotSaved)
 				{
 					$this->obj->storeAll($this->cacheNotSaved);

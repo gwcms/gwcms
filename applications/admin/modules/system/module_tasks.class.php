@@ -28,8 +28,10 @@ class Module_Tasks extends GW_Common_Module
 			$counts = GW_Task::singleton()->findAll(false, ['group_by'=>'name','select'=>'count(*) as cnt, `name`','return_simple'=>1, 'key_field'=>'name']);
 		
 			foreach($list as $item)
-				$item->counts = $counts[$item->name]['cnt'];
+				$item->counts = $counts[$item->name]['cnt'] ?? 0;
 		}
+		
+		file_put_contents('/tmp/sms_tasks_debug', json_encode([$_GET, $_SERVER['REQUEST_URI']]));
 	}
 	
 	function __eventAfterListParams(&$params)
