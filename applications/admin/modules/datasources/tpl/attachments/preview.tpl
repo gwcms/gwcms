@@ -19,8 +19,14 @@
 	{*<a href='{$app->sys_base}tools/download/{$file->key}'>down</a>*}
 	
 	<object class="fullsize" type="application/pdf" data="{$app->sys_base}tools/download/{$file->key}?view=1"></object>
+{elseif in_array($item->attachment->getType(),['mp3'])}
+	{$file=$item->attachment}
+	<audio id='audio' controls ><source src='{$app->sys_base}tools/download/{$file->key}?view=1' type='audio/mpeg'>Your browser does not support the audio element.</audio>
 {else}
 	Unsupported type, contact vidmantas.norkus@gw.lt to implement
+	{d::ldump($item->toArray())}
+	{d::ldump($item->attachment->toArray())}
+
 {/if}
 
 <style>

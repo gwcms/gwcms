@@ -107,14 +107,14 @@ function initSelect2Inputs1()
 
 	var opts = {	};
 	
-	if(select2_lang !== 'undefined')
+	if(typeof select2_lang !== 'undefined')
 	{
 		opts.language =select2_lang
 	}
 	
 	console.log(opts);
 	
-	if(bootstrap4 !== 'undefined')
+	if(typeof bootstrap4 !== 'undefined')
 		opts.theme= 'bootstrap4';
 
 	if(obj.data('source')){

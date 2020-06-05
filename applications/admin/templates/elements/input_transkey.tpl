@@ -79,3 +79,17 @@
 	after_input=$addnew
 }
 	
+{*
+{call e field="demo_select_ajax_load"
+	type="select_ajax"
+	after_input_f="editadd"
+	object_title=GW::l('/M/datasources/MAP/childs/languages/title')
+	form_url=$app->buildUri('datasources/languages/form',['native'=>'1',clean=>2,dialog=>1])
+	list_url=$app->buildUri('datasources/languages',[clean=>2])
+	empty_option=1
+	datasource=$app->buildUri('datasources/languages/search') 
+	preload=1
+	minimuminputlength=0
+	options=[]
+}
+*}

@@ -63,4 +63,9 @@
 		<lt>Dvigubo išsaugojimo apsauga suvekė</lt>
 		<en>Duplicate save protection used</en>
 	</i>
+	
+	<i id="MULTI_FILE_INPUT_SIZE_REACHED">
+		<lt>Rinkmenų skaičius ribojamas iki $number</lt>
+		<en>Files limit reached: $number</en>
+	</i>
 </xml>

@@ -110,7 +110,7 @@ class GW_Site_Application extends GW_Application
 			die("Failed locating module $dir/$name");
 		
 		$info=[];
-		$info['module_path']=[$dir, $name];
+		$info['module_path']=[$dir, $name];		
 		$info['module_name']=$name;
 		
 		$fname = $this->moduleFileName($dir, $name);
@@ -162,6 +162,7 @@ class GW_Site_Application extends GW_Application
 				
 		$m = new $classname(Array(
 			'module_file'=>$file,
+			'module_path'=>$info['module_path'],
 			'app'=>$this, 
 			'smarty'=>$this->smarty,
 			'args'=>$args

@@ -103,12 +103,12 @@ class GW_Extension_Attachments
 	/**
 	 * note, store only after id is present // after insert done
 	 */
-	function storeAttachment($field, $filename, $vals=[])
+	function storeAttachment($field, $filename, $vals=[], $original_filename=false)
 	{
 		$fileinfo = [
 		    'new_file' => $filename,
 		    'size' => filesize($filename),
-		    'original_filename' => basename($filename),
+		    'original_filename' => $original_filename ? $original_filename : basename($filename),
 		];
 				
 		$values['owner_type'] = $this->parent->ownerkey;
@@ -139,9 +139,38 @@ class GW_Extension_Attachments
 		
 		$item->insert();		
 		
-		return true;
+		return $item->id;
 	}
 	
+	function removeDuplicates($extra_conds = false)
+	{
+		$list = $this->findAll($extra_conds);
+		
+		$grouped = [];
+		foreach($list as $item){
+			$grouped[$item->checksum][] = $item;
+		}
+		
 
+		
+		foreach($grouped as $cs => $list){
+			
+			if(count($list)>1){
+				array_shift($list);
+			
+				foreach($list as $item){
+					$item->delete();
+				}
+			}
+		}		
+	}
+	
+	function deleteAll($extra_conds = false, $opts=[])
+	{
+		$list = $this->findAll($extra_conds);
+		
+		foreach($list as $item)
+			$item->delete();
+	}
 
 }
