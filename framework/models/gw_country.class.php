@@ -1,10 +1,15 @@
 <?php
 
-class GW_Country extends GW_Data_Object
+class GW_Country extends GW_i18n_Data_Object
 {
 
 	public $table = 'gw_countries';
 	public $ignore_fields=['insert_time'=>1];
+	
+	
+	public $i18n_fields = Array(
+		'title' => 1,
+	);	
 
 	function getOptions($lang = 'lt')
 	{

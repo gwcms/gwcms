@@ -197,7 +197,7 @@ class d
 	{
 		//echo "<pre>";
 		//var_dump([GW::$context->app->user]);
-		
+		/*
 		if(GW::$context->app && GW::$context->app->app_name=='SITE' && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD && 
 			(!GW::$context->app->user || !GW::$context->app->user->isRoot())){
 			if(isset($_SERVER['SHELL'])){
@@ -207,7 +207,7 @@ class d
 			}
 			
 			return false;
-		}
+		}*/
 		
 		$opts['kill']=1;
 		self::dump($x, $opts);

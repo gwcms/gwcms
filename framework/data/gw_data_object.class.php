@@ -312,9 +312,14 @@ class GW_Data_Object
 
 		if (isset($params['from_extra'])) {
 			foreach ($params['from_extra'] as $index => $table)
-				$tables = "`$table` AS " . chr(97 + 1 + $index);
+				$tables[] = "`$table` AS " . chr(97 + 1 + $index);
 		}
-
+		
+		if (isset($params['from_add'])) {
+			foreach ($params['from_add'] as $index => $table)
+				$tables[] = "`$table` AS `$index`";
+		}
+		
 		return implode(', ', $tables);
 	}
 	/*

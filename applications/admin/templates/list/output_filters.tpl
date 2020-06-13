@@ -11,7 +11,7 @@
 				<span class="togl" style="display:none;">{mb_substr($val,$expand_truncate_size,mb_strlen($val))}</span>
 			</a> 
 		{else}
-			{$item->$field}
+			{$val}
 		{/if}
 {/function}
 
@@ -53,6 +53,5 @@
 {/function}	
 
 {function name=dl_output_filters_array}
-	{$val=json_encode($val)}
-	{call "dl_output_filters_expand_truncate"}
+	{call "dl_output_filters_expand_truncate" val=json_encode($val)}
 {/function}	

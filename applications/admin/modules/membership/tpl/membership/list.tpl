@@ -18,7 +18,8 @@
 	{$dl_inline_edit=1}	
 	
 	{function name=dl_prepare_item}
-		{if !($item->active && $item->inlist_active)}
+		
+		{if !($item->isValid())}
 			{$item->set('row_class', 'gw_notactive')}
 		{/if}
 	{/function}	

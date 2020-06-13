@@ -151,11 +151,7 @@ class GW_Http_Agent
 	{
 		$error = false;
 
-		set_error_handler(
-		    create_function(
-			'$severity, $message, $file, $line', 'throw new ErrorException($message, $severity, $severity, $file, $line);'
-		    )
-		);
+		set_error_handler(function($severity, $message, $file, $line){ throw new ErrorException($message, $severity, $severity, $file, $line); });
 
 		$body = false;
 
