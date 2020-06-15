@@ -147,6 +147,12 @@ class Module_Profile extends GW_Module
 		$this->jump();
 	}
 	
+	function doGetWsTempConfig()
+	{
+		$data = GW_WebSocket_Helper::getFrontConfig($this->app->user, true);
+		echo json_encode($data);
+		exit;
+	}	
 }
 
 ?>

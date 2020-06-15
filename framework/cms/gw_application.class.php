@@ -413,6 +413,12 @@ class GW_Application
 	{
 		include_once GW::s("DIR/{$this->app_name}/MODULES") . "{$dir}/module_{$name}.class.php";
 		$name = "Module_{$name}";
+		
+		
+		//to be implemented use cli/solve_ns1.php to convert module names
+		//$dir = strtolower($dir);
+		//$name = "AdmModule_{$dir}_{$name}";
+		
 
 		$obj = new $name();
 		$obj->app = $this;

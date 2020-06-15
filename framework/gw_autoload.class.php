@@ -30,7 +30,7 @@ class GW_Autoload
 	static function load($class)
 	{
 		$file = strtolower($class) . '.class.php';
-
+		
 		//do not try load smarty classes, smarty has own autoloader
 		if (strpos($file, 'smarty_') !== false)
 			return;
@@ -38,9 +38,9 @@ class GW_Autoload
 		//load classes under namespaces
 		if(strpos($file,'\\') !== false){
 			$parts = explode('\\', strtolower($class));
-			$file = implode('/', $parts) . '.class.php';			
+			$file = implode('/', $parts) . '.class.php';	
 		}
-
+			
 		if (self::tryLoadDirArray($file, GW::s('DIR/AUTOLOAD')))
 			return true;
 
