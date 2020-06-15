@@ -80,9 +80,15 @@ class GW_Common_Module extends GW_Module
 		$this->initErrorHandler();
 	}
 
+	function initModCfgEx($modp)
+	{
+		$modp = is_array($modp) ? $modp :  explode('/', $modp);
+		return new GW_Config($modp[0].(isset($modp[1]) ? '__'.$modp[1]:'' ).'/');
+	}
+	
 	function initModCfg()
 	{
-		$this->modconfig = new GW_Config($this->module_path[0].(isset($this->module_path[1]) ? '__'.$this->module_path[1]:'' ).'/');
+		$this->modconfig = $this->initModCfgEx($this->module_path);
 	}
 	
 	function initLogger()
@@ -2062,4 +2068,44 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 		
 	}
+	
+	
+	/*
+	 * function runPeriodicTasks(modconfig variable)
+	 * task is stored in modconfig 
+	 * example run consistently:
+	 * submodule?act=doSomeAction;other_submodule?act=doSomthing
+	 * IMPORTANT TASK SHOULD output json
+	 * 
+	 * example run parallel:
+	 * #submodule?act=doSomeAction;#other_submodule?act=doSomthing
+	 */
+
+	function runPeriodicTasks($task_store)
+	{
+		$tasks = $this->modconfig->{$task_store};
+		
+		$tasks = explode(';', $tasks);	
+		$t = new GW_Timer;
+			
+		$mod = $this->module_path[0];
+		
+		foreach($tasks as $task)
+			if($task){
+				if(substr($task, 0,1)=='#'){
+					//parallel
+					$task = substr($task, 1);
+					$url=Navigator::backgroundRequest("admin/lt/$mod/$task", ["cron"=>1]);
+				}else{		
+					//consistently
+					$url = Navigator::buildURI("admin/lt/$mod/$task", ["cron"=>1]);
+					$resp = Navigator::sysRequest($url);
+					
+					if($resp = json_encode($resp))	
+						$this->setMessage($url.': '.$resp);						
+				}	
+			}
+		
+		$this->setMessage("Took ".$t->stop().' secs');			
+	}	
 }
