@@ -11,6 +11,7 @@ class GW_Public_Module {
 	public $errors = Array();
 	public $tpl_name;
 	public $args = []; 
+	public $_args=[];//data passed from application params, request_params	
 	
 	/**
 	 *
@@ -44,6 +45,8 @@ class GW_Public_Module {
 
 	function init() {
 		//nekviecia sitos funkcijos
+		$this->__processViewSolveViewName();
+		$this->solvePageTitle();
 	}
 	
 	function __eventBeforeTemplateAssignTplVars()
@@ -641,4 +644,52 @@ class GW_Public_Module {
 	{
 		$this->includes[$name] = [$type, $src];
 	}	
+	
+	function isPublic($name)
+	{
+		return (stripos($name,'view')===0 || stripos($name,'do')===0);
+	}	
+	
+	function __processViewSolveViewName()
+	{
+		$params = $this->_args['params'];
+		
+		
+		
+		
+		//jei paduodama 100/form/abc - 100 kontekstinio objekto id, form - viewsas, abc viewso paramsas
+		while(isset($params[0]) && $this->app->isItemIdentificator($params[0]))
+			$erase=array_shift($params);
+		
+		//nuimti pirmus paramsus kurie yra number
+		//nuimta paramsa pastatyti kaip kontekstini objekto id
+		
+		$name = self::__funcVN(isset($params[0]) ? $params[0] : false);
+		
+		if(!$name)
+			$name = $this->default_view;		
+		
+		$this->view_name = $name;
+		
+		if(!$this->isPublic("view{$name}"))
+			$this->view_name = $this->default_view;
+	}	
+	
+	
+	function solvePageTitle()
+	{		
+		$p = $this->app->page;
+		
+		if($p->type==3 && isset($m->lang['VIEWS'][$p->path]['TITLE']))
+			$p->title = $m->lang['VIEWS'][$p>path]['TITLE'];	
+		
+				
+		if($p->type==3 && !$p->title){
+			
+			$p->title = GW::ln('/m/VIEWS/'.$this->view_name);
+		}
+	}
 }
+
+
+

@@ -30,7 +30,7 @@ class GW_Config
 	{
 		$db = & $this->getDB();
 
-		$key = addslashes(substr($this->prefix . $key, 0, 50));
+		$key = addslashes(substr($this->prefix . $key, 0, 100));
 
 		if (isset($this->_cache[$key])) {
 			return $this->_cache[$key];

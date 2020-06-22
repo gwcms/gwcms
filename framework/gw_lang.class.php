@@ -259,8 +259,8 @@ class GW_Lang
 	
 	static function __highlightActive()
 	{
-		return GW::$context->app->user && 
-			GW::$context->app->user->is_admin && 
+		return (GW::$context->app->user && 
+			GW::$context->app->user->is_admin || GW::$devel_debug ) && 
 			isset(GW::$context->app->sess['lang-results-active']) && 
 			GW::$context->app->sess['lang-results-active'];		
 	}

@@ -252,7 +252,35 @@ class FH
 
 		
 		return str_replace($m[0], $replace, $date);
-	}	
+	}
+
+	static function dateHumanRange($start, $end, $opts=[])
+	{
+		$start = date('Y-m-d-N', strtotime($start));
+		$end = date('Y-m-d-N', strtotime($end));
+		
+		list($sy,$sm, $sd, $sWd) = explode('-', $start);
+		list($ey,$em, $ed, $eWd) = explode('-', $end);
+		
+		$trln = isset($opts['ln'])  ? "/LN/$ln":"";
+		
+		$sM = GW::l("$trln/G/DATE/MONTH_KILMININKAS/".(int)$sm);
+		$eM = GW::l("$trln/G/DATE/MONTH_KILMININKAS/".(int)$em);
+		
+		
+		$sWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$sWd));;
+		$eWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$eWd));;
+		
+		if($sy != $ey && $sm==$em && $sd ==$ed){
+			return "$sy $sM $sd d., $sWd — $ey $eM $ed d., $eWd";
+		}elseif($sy == $ey && $sm!=$em && $sd ==$ed){
+			return "$sy $sM $sd d., $sWd — $eM $ed d., $eWd";
+		}elseif($sy == $ey && $sm==$em && $sd!=$ed){
+			return "$sy $sM $sd d., $sWd — $ed d., $eWd";
+		}else{
+			return "$sy $sM $sd d., $sWd";
+		}
+	}
 	
 	//to use in javascript
 	//get lang strings

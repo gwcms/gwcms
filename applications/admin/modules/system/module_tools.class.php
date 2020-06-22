@@ -440,7 +440,7 @@ class Module_Tools extends GW_Common_Module
 	}
 	
 	function doSwitchEnvironment()
-	{
+	{		
 		$replace_what = GW::s("SITE_URL");
 		
 		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
@@ -453,10 +453,23 @@ class Module_Tools extends GW_Common_Module
 		initEnviroment($dest);
 		$replace_to = GW::s("SITE_URL");
 		
+		if($replace_what == $replace_to)
+		{
+			d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
+		}
+		//d::Dumpas([$replace_what,$replace_to]);
 		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to]);
 				
 			
 		$newurl = str_replace($replace_what, $replace_to, $_GET['uri']);
+		
+		if($newurl == $_GET['uri'])
+		{
+			d::ldump([$_GET['uri'],$newurl]);
+			d::dumpas("Replace failed CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
+		}		
+		
+		
 		
 		header("Location: $newurl");
 		exit;

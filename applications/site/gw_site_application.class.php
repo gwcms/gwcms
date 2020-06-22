@@ -144,6 +144,7 @@ class GW_Site_Application extends GW_Application
 		return $res;
 	}
 	
+
 	function processSiteModule($file, $params, $info, $args=[])
 	{
 		//prevent hacking via ajax request
@@ -159,28 +160,23 @@ class GW_Site_Application extends GW_Application
 
 		GW_Autoload::addAutoloadDir(dirname($file));
 		
-				
+		$params = array_merge($params, $this->path_arg);		
+		
 		$m = new $classname(Array(
 			'module_file'=>$file,
 			'module_path'=>$info['module_path'],
 			'app'=>$this, 
 			'smarty'=>$this->smarty,
-			'args'=>$args
+			'args'=>$args,
+			'_args'=>['params'=>$params]
 		)+$info);
-		
+			
 		
 		$this->module =& $m;
 		
 		$m->init();
 		
-		$m->attachEvent('BEFORE_TEMPLATE', array($this,'postRun'));		
-		
-		
-		if($this->page->type==3 && isset($m->lang['VIEWS'][$this->page->path]['TITLE']))
-			$this->page->title = $m->lang['VIEWS'][$this->page->path]['TITLE'];
-		
-		
-		$params = array_merge($params, $this->path_arg);		
+		$m->attachEvent('BEFORE_TEMPLATE', array($this,'postRun'));				
 		
 		return $m->process($params);
 	}
