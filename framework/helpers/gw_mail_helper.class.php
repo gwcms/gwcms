@@ -31,7 +31,7 @@ class GW_Mail_Helper
 			//bulksms project runing on 7.3
 			include_once GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php';
 
-			$mail = new PHPMailer\PHPMailer\PHPMailer;
+			$mail = new PHPMailer;
 		}else{
 			$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		}
