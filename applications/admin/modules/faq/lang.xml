@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xml>
+
+	<i id="FIELDS">
+		<i id="text">
+			<en>Text</en>
+			<lt>Turinys</lt>
+		</i>
+		<i id="active">
+			<en>Active</en>
+			<lt>Aktyvus</lt>
+		</i>
+		<i id="title">
+			<en>Title</en>
+			<lt>Pavadinimas</lt>
+		</i>
+		<i id="desc">
+			<en>Description</en>
+			<lt>Aprašymas</lt>
+		</i>
+		
+		<i id="group_id">
+			<en>Group</en>
+			<lt>Grupė</lt>
+	</i>
+	</i>
+	
+	
+	<i id="FIELDS_SHORT">
+
+		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>
+	</i>	
+	
+	<!-- =============== MODULE MAP START =================== -->
+	<i id="MAP">
+		<i id="title">
+			<en>FAQ</en>
+			<lt>DUK</lt>
+		</i>
+		<i id="info">
+			<i id="model">gw_faq</i>
+			<i id="iconclass">fa fa-newspaper-o</i>		
+		</i>
+		
+	</i>
+	<!-- =============== MODULE MAP END ===================== -->
+	
+</xml>
