@@ -59,11 +59,27 @@ class GW_Site_Application extends GW_Application
 
 	function jumpToFirstPage()
 	{
+		if(GW::s('GW_LANG_SEL_BY_GEOIP'))
+		{
+			$this->geoIpLang();
+		}
+		
+		
+		
 		$this->_jmpFrst(0);
+	}
+	
+	function geoIpLang()
+	{
+		$country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+		if($country!="LT"){
+			$this->ln = "en";
+		}
 	}
 
 	function jumpToFirstChild()
 	{
+		
 		$this->_jmpFrst();
 	}
 
@@ -165,18 +181,19 @@ class GW_Site_Application extends GW_Application
 		
 		$params = array_merge($params, $parg);	
 		
-		$m = new $classname(Array(
+		$m = new $classname([
 			'module_file'=>$file,
 			'module_path'=>$info['module_path'],
 			'app'=>$this, 
 			'smarty'=>$this->smarty,
 			'args'=>$args,
 			'_args'=>['params'=>$params]
-		)+$info);
+		]+$info);
 			
 		
 		$this->module =& $m;
 		
+		$m->initCommon();
 		$m->init();
 		
 		
@@ -320,6 +337,9 @@ class GW_Site_Application extends GW_Application
 		}		
 	}
 
+	
+	
+	
 	function process()
 	{
 		$this->preRun();

@@ -7,6 +7,7 @@ class Module_Articles extends GW_Public_Module
 
 	function init()
 	{
+		parent::init();
 		$this->model = new GW_Article();
 		
 		

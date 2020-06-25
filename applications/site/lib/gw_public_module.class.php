@@ -41,12 +41,20 @@ class GW_Public_Module {
 
 		$this->tpl_vars['options'] = & $this->options;
 		$this->tpl_vars['links'] = & $this->links;
+		
+		
+		
+	}
+	
+	function initCommon()
+	{
+		$this->__processViewSolveViewName();
+		$this->solvePageTitle();		
 	}
 
 	function init() {
 		//nekviecia sitos funkcijos
-		$this->__processViewSolveViewName();
-		$this->solvePageTitle();
+
 	}
 	
 	function __eventBeforeTemplateAssignTplVars()

@@ -51,6 +51,7 @@ GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
 GW::s('GW_CMS_VERSION', '3.4');
+GW::s('GW_LANG_SEL_BY_GEOIP',0);
 
 include $dir['ROOT'].'config/environment.php';
 include $dir['ROOT'].'config/project.php';
@@ -67,6 +68,9 @@ GW::s('PHP_CLI_LOCATION', '/usr/bin/php');
 //https://stackoverflow.com/questions/27560361/how-to-test-php-bitwise-function-input-parameters
 define('GW_PERM_READ',1);
 define('GW_PERM_WRITE',2);
+
+
+
 //define('',4); /* then 8, 16, 32, etc... */
 
 /*
