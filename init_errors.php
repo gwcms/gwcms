@@ -7,12 +7,12 @@ define('MASTER_REQUEST', !isset($_SERVER['REMOTE_ADDR']) ? /*cli*/1 : /*apache*/
 
 if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_PROD && !MASTER_REQUEST){
 	define('_DEBUGING_', 0);
-	ini_set("display_errors", 0);
-	error_reporting(0);	
+	//ini_set("display_errors", 0);
+
 }else{
 	define('_DEBUGING_', 1);
-	ini_set("display_errors", 1);
-	error_reporting(E_ALL ^  E_STRICT);	
+	//ini_set("display_errors", 1);
+
 }
 
 

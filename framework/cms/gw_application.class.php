@@ -134,7 +134,7 @@ class GW_Application
 
 		$s->compile_check = true;
 		//$s->allow_php_tag=true;
-		$s->error_reporting = E_ALL & ~E_NOTICE;
+		$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
 
 
 		$s->compile_dir = GW::s("DIR/TEMPLATES_C");

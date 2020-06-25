@@ -2,7 +2,6 @@
 
 $debug=Array('mem_use'=>Array(memory_get_usage(true)));
 
-error_reporting(E_ALL ^ E_DEPRECATED ^ E_STRICT);
 
 if(file_exists(__DIR__ . '/vendor/autoload.php'))
 	require_once __DIR__ . '/vendor/autoload.php';
