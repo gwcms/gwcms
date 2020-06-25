@@ -67,11 +67,11 @@ class GW_Public_Module {
 		
 		if (!file_exists($tmp = $file . '.tpl'))
 			die("Template $tmp not found");
-			
+					
 		return $this->smarty->{$fetch?'fetch':'display'}($tmp);
 	}
 
-	function processView($name, $params = Array()) {
+	function processView($name, $params = Array()) {		
 		if ($name == '')
 			$name = "default";
 
@@ -81,8 +81,9 @@ class GW_Public_Module {
 		$this->fireEvent("BEFORE_VIEW", $p);	
 		
 		$methodname = "view" . $name;
+		
 		$vars = $this->$methodname($params);
-
+		
 		if(!$this->cancel_tpl_process)
 			$this->processTemplate($name);
 		
@@ -132,24 +133,14 @@ class GW_Public_Module {
 
 	function process($params) {
 		$act_name = self::__funcVN(isset($this->args['act']) ? $this->args['act'] : false);
+		
+		$view_name = $this->view_name;
 
-
-		if (isset($params[0])) {
-			$view_name = $params[0];
-
-
-			if (!$this->methodTest('view' . $view_name) && $view_name != 'noview') {
-				$view_name = 'default';
-			} else {
-				array_shift($params);
-			}
-		} else {
-			$view_name = 'default';
-		}
-
-		$this->view_name = $view_name;	
-
-		$this->params = $params;
+		
+		
+		$this->params = [];
+		
+		//d::dumpas($params);
 
 		
 		if ($act_name){
@@ -160,8 +151,8 @@ class GW_Public_Module {
 				return $vars;
 			}
 		}
-
-
+		
+	
 		return $this->processView($view_name, $params);
 	}
 
@@ -652,27 +643,30 @@ class GW_Public_Module {
 	
 	function __processViewSolveViewName()
 	{
+		
+		
 		$params = $this->_args['params'];
 		
 		
+		if (isset($params[0])) {
+			$view_name = $params[0];
+
+
+			if (!$this->methodTest('view' . $view_name) && $view_name != 'noview') {
+				$view_name = 'default';
+			} else {
+				array_shift($params);
+			}
+		} else {
+			$view_name = 'default';
+		}	
+		
+		$this->view_name = $view_name;
+
 		
 		
-		//jei paduodama 100/form/abc - 100 kontekstinio objekto id, form - viewsas, abc viewso paramsas
-		while(isset($params[0]) && $this->app->isItemIdentificator($params[0]))
-			$erase=array_shift($params);
-		
-		//nuimti pirmus paramsus kurie yra number
-		//nuimta paramsa pastatyti kaip kontekstini objekto id
-		
-		$name = self::__funcVN(isset($params[0]) ? $params[0] : false);
-		
-		if(!$name)
-			$name = $this->default_view;		
-		
-		$this->view_name = $name;
-		
-		if(!$this->isPublic("view{$name}"))
-			$this->view_name = $this->default_view;
+		if(!$this->isPublic("view{$view_name}"))
+			$this->view_name = 'default';
 	}	
 	
 	

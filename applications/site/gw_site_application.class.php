@@ -95,7 +95,7 @@ class GW_Site_Application extends GW_Application
 		
 		if(isset($path[1])){
 			parse_str($path[1], $args);
-		}
+		}	
 		
 		$path = $path[0];		
 		
@@ -157,10 +157,13 @@ class GW_Site_Application extends GW_Application
 
 		$classname=str_replace('.class','',pathinfo($file, PATHINFO_FILENAME));
 		
-
 		GW_Autoload::addAutoloadDir(dirname($file));
 		
-		$params = array_merge($params, $this->path_arg);		
+		$parg = $this->path_arg;
+		if(isset($parg[0]) && $parg[0] == 'direct')
+			array_shift($parg);
+		
+		$params = array_merge($params, $parg);	
 		
 		$m = new $classname(Array(
 			'module_file'=>$file,
@@ -175,6 +178,8 @@ class GW_Site_Application extends GW_Application
 		$this->module =& $m;
 		
 		$m->init();
+		
+		
 		
 		$m->attachEvent('BEFORE_TEMPLATE', array($this,'postRun'));				
 		

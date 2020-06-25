@@ -3,7 +3,20 @@
 class GW_Paysera_Log extends GW_Data_Object
 {
 
+	public $calculate_fields = ['title'=>1];
 	public $table = 'gw_paysera_log';
+	
+	public function calculateField($name) 
+	{
+				
+		switch($name){
+			case 'title':
+				return $this->orderid.' - '.($this->amount/100).' '.$this->currency;
+			break;
+		}
+		
+		
+	}
 
 }
 
