@@ -268,17 +268,25 @@ class FH
 		$eM = GW::l("$trln/G/DATE/MONTH_KILMININKAS/".(int)$em);
 		
 		
-		$sWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$sWd));;
-		$eWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$eWd));;
+		if($opts['weekday'] ?? false){
+			$sWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$sWd));;
+			$eWd = mb_strtolower(GW::l('/G/DATE/WEEKDAYS/'.$eWd));;
+			$sWdstr=", $sWd";
+			$eWdstr=", $eWd";
+		}else{
+			$sWdstr="";
+			$eWdstr="";
+		}
+		
 		
 		if($sy != $ey && $sm==$em && $sd ==$ed){
-			return "$sy $sM $sd d., $sWd — $ey $eM $ed d., $eWd";
+			return "$sy $sM $sd d.$sWdstr — $ey $eM $ed d.$eWdstr";
 		}elseif($sy == $ey && $sm!=$em && $sd ==$ed){
-			return "$sy $sM $sd d., $sWd — $eM $ed d., $eWd";
+			return "$sy $sM $sd d.$sWdstr — $eM $ed d.$eWdstr";
 		}elseif($sy == $ey && $sm==$em && $sd!=$ed){
-			return "$sy $sM $sd d., $sWd — $ed d., $eWd";
+			return "$sy $sM $sd d.$sWdstr — $ed d.$eWdstr";
 		}else{
-			return "$sy $sM $sd d., $sWd";
+			return "$sy $sM $sd d.$sWdstr";
 		}
 	}
 	

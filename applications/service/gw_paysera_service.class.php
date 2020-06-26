@@ -65,6 +65,8 @@ class gw_paysera_service
 				die($this->error);
 			
 			echo 'OK';
+			exit;
+			
 		} catch (Exception $e) {
 			echo get_class($e) . ': ' . $e->getMessage();
 		}
