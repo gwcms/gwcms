@@ -24,6 +24,7 @@ class GW_Public_Module {
 	public $params;
 	public $sys_call = false;
 	public $cancel_tpl_process = false;
+	public $view_name = false;
 	
 	function __construct($variables = Array()) {
 
@@ -55,6 +56,7 @@ class GW_Public_Module {
 	function init() {
 		//nekviecia sitos funkcijos
 
+		$this->initCommon();
 	}
 	
 	function __eventBeforeTemplateAssignTplVars()
@@ -142,9 +144,11 @@ class GW_Public_Module {
 	function process($params) {
 		$act_name = self::__funcVN(isset($this->args['act']) ? $this->args['act'] : false);
 		
-		$view_name = $this->view_name;
-
 		
+		if(!$this->view_name)
+			$this->__processViewSolveViewName();
+		
+		$view_name = $this->view_name;
 		
 		$this->params = [];
 		
@@ -651,14 +655,11 @@ class GW_Public_Module {
 	
 	function __processViewSolveViewName()
 	{
-		
-		
 		$params = $this->_args['params'];
 		
 		
 		if (isset($params[0])) {
 			$view_name = $params[0];
-
 
 			if (!$this->methodTest('view' . $view_name) && $view_name != 'noview') {
 				$view_name = 'default';
@@ -671,8 +672,7 @@ class GW_Public_Module {
 		
 		$this->view_name = $view_name;
 
-		
-		
+				
 		if(!$this->isPublic("view{$view_name}"))
 			$this->view_name = 'default';
 	}	

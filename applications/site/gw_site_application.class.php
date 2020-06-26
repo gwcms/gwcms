@@ -193,7 +193,6 @@ class GW_Site_Application extends GW_Application
 		
 		$this->module =& $m;
 		
-		$m->initCommon();
 		$m->init();
 		
 		
