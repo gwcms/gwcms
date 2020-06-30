@@ -39,13 +39,26 @@
 	
  
 	
-	{$dl_smart_fields=[logo,image]}	
+	{$dl_smart_fields=[logo,image,user_id]}	
 	
 	{*
 	{$dl_output_filters=[
 		group_id=>options
 	]}
 	*}
+	
+	{function dl_cell_user_id}
+		{$tmp=$options['user_id'][$item->user_id]}
+		{if $tmp}
+			{$tmp->title} / {$tmp->country} / {$tmp->lic_id}
+		{else}
+			-
+		{/if}
+	{/function}	
+	{$dl_output_filters.insert_time=short_time}
+	{$dl_output_filters.update_time=short_time}		
+	{$dl_output_filters.validfrom=short_time}
+	{$dl_output_filters.expires=short_time}		
 	
 	
 {/block}

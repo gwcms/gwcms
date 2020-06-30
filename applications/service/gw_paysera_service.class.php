@@ -101,6 +101,8 @@ class gw_paysera_service
 			$ms->active = 1;
 			$ms->pay_id = $log_entry->id;
 			
+			$customer->setLicId();
+			
 			if($data['test'] != '0')
 				$ms->test =1;			
 			

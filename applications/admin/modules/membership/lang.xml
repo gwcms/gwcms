@@ -27,7 +27,6 @@
 		<i id="update_time"><![CDATA[<i class="fa fa-pencil"></i><i class="fa fa-clock-o"></i>]]></i>	
 		<i id="priority"><![CDATA[<i class="fa fa-hand-o-up"></i>]]></i>
 		<i id="gender"><![CDATA[<i class="fa fa-venus-mars"></i>]]></i>
-		
 	</i>
 	<i id="FIELDS_HELP">
 		<i id="visible">Galimybė, padaryt nematomą (testavimui) arba paslėpti nereikalingoms kalboms</i>

@@ -15,7 +15,10 @@ class Module_Membership extends GW_Common_Module
 	}
 	
 	
-	
+	function __eventAfterList($list)
+	{		
+		$this->attachFieldOptions($list, 'user_id', 'GW_User');	
+	}		
 
 	
 

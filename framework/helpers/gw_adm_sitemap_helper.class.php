@@ -61,6 +61,9 @@ class GW_ADM_Sitemap_Helper
 		$priority = 1;
 		$page0 = GW::getInstance('GW_ADM_Page');
 
+		
+		
+		
 		foreach ($all_ln_tree as $ln => $tree) {
 			foreach ($tree as $path => $values) {
 				$path = $pathname . $path;
@@ -75,7 +78,7 @@ class GW_ADM_Sitemap_Helper
 				if (strpos($path, '/') !== false) // dont set priority for root pages
 					$values['priority'] = $priority++;
 				$values['sync_time'] = date('Y-m-d H:i:s');
-
+				
 				$item->setValues($values, $ln);
 				$list[$path] = $item;
 			}
