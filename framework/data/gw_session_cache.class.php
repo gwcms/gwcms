@@ -11,7 +11,7 @@ class GW_Session_Cache
 		
 		$var = & $_SESSION['GW_SESSION_CACHE'][$key];
 
-		if ($var[1] > time())
+		if ($var[1] ?? false > time())
 			return $var[0];
 	}
 
