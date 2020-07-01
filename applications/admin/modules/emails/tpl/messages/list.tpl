@@ -71,7 +71,7 @@
 	{/function}		
 		
 	{$dl_checklist_enabled=1}
-	{$dl_cl_actions=[dialogremove]}
+	{$dl_cl_actions=[invertactive,dialogremove]}
 	
 {/block}
 

@@ -4,7 +4,7 @@
 	
 	{$dl_checklist_enabled=1}
 	{$dl_inline_edit=1}
-	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
+	{$dl_cl_actions=[invertactive,dialogremove]}	
 	
 	{capture append=footer_hidden}
 		<style type="text/css">

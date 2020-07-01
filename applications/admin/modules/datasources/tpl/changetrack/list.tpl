@@ -33,7 +33,7 @@
 	
 	
 	{$dl_checklist_enabled=1}
-	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}
+	{$dl_cl_actions=[dialogremove]}
 	
 	
 	{if $m->filters}

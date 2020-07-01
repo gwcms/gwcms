@@ -12,6 +12,7 @@
 	{$dl_inline_edit=1}		
 	
 	{$dl_checklist_enabled=1}
+	{$dl_cl_actions=[dialogremove]}
 	
 	{$dl_output_filters_truncate_size=100}
 	
@@ -38,7 +39,7 @@
 		{list_item_action_m url=[false,[act=>doViewBody,id=>$item->id]] iconclass="fa fa-eye" action_addclass="iframe-under-tr"}
 	{/function}	
 	
-	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}
+
 	
 	
 {/block}
