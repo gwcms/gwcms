@@ -4,7 +4,7 @@ class GW_Imap
 {
 	function __construct($hostport, $user, $pass)
 	{
-		$this->conn = imap_open('{'.$hostport.'/imap/ssl/novalidate-cert}', $user, base64_decode($pass));
+		$this->conn = imap_open('{'.$hostport.'}', $user, base64_decode($pass));
 	}
 	
 	
