@@ -55,3 +55,19 @@
 {function name=dl_output_filters_array}
 	{call "dl_output_filters_expand_truncate" val=json_encode($val)}
 {/function}	
+
+
+{function name=dl_output_filters_changetrack}
+	{$tmp=$item->extensions.changetrack->count()}	
+	{if $tmp}
+		<a class='badge bg-bro iframe-under-tr' href="{$app->buildUri("datasources/changetrack",[owner_id=>$item->id,owner_type=>$item->ownerkey,clean=>2])}">{$tmp}</a>
+	{else}{/if}
+{/function}
+
+
+{function name=dl_output_filters_genderico}
+	{if strtoupper($val)==F}<i class="fa fa-female genderfe"></i>{elseif strtoupper($val)==M}<i class="fa fa-male genderma"></i>{/if}
+{/function}
+
+
+	

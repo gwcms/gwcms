@@ -1,0 +1,1 @@
+ALTER TABLE `gw_change_track` ADD `user_id` INT NOT NULL AFTER `old`;

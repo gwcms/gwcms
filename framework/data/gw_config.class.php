@@ -37,8 +37,8 @@ class GW_Config
 		}
 
 		$rez = $db->fetch_row("SELECT * FROM {$this->table} WHERE id='$key'");
-		$time = $rez['time'];
-		return $rez['value'];
+		$time = $rez['time'] ?? null;
+		return $rez['value'] ?? null;
 	}
 
 	function preload($key, &$time = 0)

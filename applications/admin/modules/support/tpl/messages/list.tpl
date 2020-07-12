@@ -17,5 +17,6 @@
 		<span title="{$x.1}">{$x.0}</span>
 	{/function}	
 
-
+	{$dl_checklist_enabled=1}
+	{$dl_cl_actions=[dialogremove]}
 {/block}

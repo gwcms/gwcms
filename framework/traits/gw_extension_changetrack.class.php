@@ -139,6 +139,7 @@ class GW_Extension_ChangeTrack
 			$itm->setValues([
 				'owner_type'=>$this->parent->ownerkey,
 				'owner_id'=>$this->parent->id,
+				'user_id'=>GW::$context->app->user->id ?? -1,
 				'new'=>$new,
 				'old'=>$old
 			]);

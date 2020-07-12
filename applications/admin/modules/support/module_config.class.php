@@ -32,7 +32,7 @@ class Module_Config extends GW_Common_Module
 		
 		
 		
-		$this->__afterSave($vals);
+		//$this->__afterSave($vals);
 		
 		
 		$this->jump();

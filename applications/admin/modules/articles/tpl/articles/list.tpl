@@ -34,6 +34,7 @@
 	
 	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
 	
-	
+{$dl_checklist_enabled=1}
+{$dl_cl_actions=[dialogremove]}	
 
 {/block}

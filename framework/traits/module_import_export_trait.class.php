@@ -61,7 +61,7 @@ trait Module_Import_Export_Trait
 				if (isset($this->export_process[$sysname]))
 					$val = call_user_func(['self', $this->export_process[$sysname]], $sysname, $val, $item);
 
-				if (is_array($val))
+				if (is_array($val) || is_object($val))
 					$val = json_encode($val);
 
 				$row[] = str_replace($this->importexport_replacibles[0], $this->importexport_replacibles[1], $val);

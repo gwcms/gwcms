@@ -306,13 +306,19 @@ class GW_DB
 		return isset($row[0]) ? $row[0] : Null;
 	}
 
+	static function sql_prepare_value($val)
+	{
+		//( || is_object($val) ? json_encode($val) :
+		return "'" . addslashes(is_array($val) ? json_encode($val) : $val). "'";
+	}
+	
 	function insert($table, $entry, $nodie = false, $replaceinto = false)
 	{
 		$names = [];
 		$values = [];
 		foreach ($entry as $elemRak => $vert) {
 			$names[] = '`' . $elemRak . '`';
-			$values[] = "'" . addslashes($vert) . "'";
+			$values[] = self::sql_prepare_value($vert) ;
 		}
 
 		$query = ($replaceinto ? "REPLACE" : "INSERT") . " INTO $table (" . implode(',', $names) . ") VALUES (" . implode(',', $values) . ")";
@@ -407,7 +413,7 @@ class GW_DB
 
 		foreach ($entry as $elemRak => $vert)
 			if (!is_numeric($elemRak))
-				$parts[] = '`' . $elemRak . "`=" . (is_numeric($vert) ? $vert :  '"'.addslashes($vert).'"') ;
+				$parts[] = '`' . $elemRak . "`=" . (self::sql_prepare_value($vert)) ;
 
 		return implode(', ', $parts);
 	}

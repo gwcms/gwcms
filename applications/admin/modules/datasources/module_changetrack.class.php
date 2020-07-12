@@ -48,4 +48,26 @@ class Module_ChangeTrack extends GW_Common_Module
 
 		$this->jump();
 	}	
+	
+	
+	function getListConfig()
+	{
+
+		$cfg = parent::getListConfig();
+		
+		if(isset($this->filters['owner_type'])){
+			unset($cfg['fields']['owner_type']);
+		}
+		
+		if(isset($this->filters['owner_id'])){
+			unset($cfg['fields']['owner_id']);
+		}
+		
+		unset($cfg['fields']['update_time']);
+
+		return $cfg;
+	}
+		
+	
+	
 }

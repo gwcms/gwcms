@@ -7945,3 +7945,6 @@ a.badge:hover{
 	margin-left: 1.6em !important;
 	width: calc(100% - 1.6em);
 }
+
+.genderma{ color:navy }
+.genderfe{ color:pink }

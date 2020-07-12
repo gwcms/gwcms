@@ -327,4 +327,11 @@ class GW_Array_Helper
 			return $idx;
 	}
 	
+	static function moveToTop(&$array, $key)
+	{
+		$temp = array($key => $array[$key]);
+		unset($array[$key]);
+		$array = $temp + $array;
+	}
+	
 }

@@ -232,23 +232,27 @@ class FH
 		return date($format, strtotime($date));
 	}
 	
-	static function dateHuman($date, $withyear=false, $ln=false)
+	static function dateHuman($date, $opts=[])
 	{		
 		if(!preg_match('/(\d{4})-(\d{2})-(\d{2})/', $date, $m)) 
 			return $date;
 		
 		$replace="";
-		if($withyear)
+		if(isset($opts['year']))
 			$replace.=$m[1].' ';
 		
 		$mdw=date('N',strtotime($m[0]));
 		
-		$trln=$ln ? "/LN/$ln":"";
+		
+		$trln = "";
+		if($ln=$opts['ln'] ?? false)
+			$trln=$ln ? "/LN/$ln":"";
 		
 		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
 		$replace .= (int)$m[3];//.' '. GW::ln("/G/DATE/DAYSHORT");
 		
-		$replace .=', '. mb_strtolower(GW::ln('/G/DATE/WEEKDAYS/'.$mdw));;
+		if(isset($opts['weekday']))
+			$replace .=', '. mb_strtolower(GW::ln('/G/DATE/WEEKDAYS/'.$mdw));;
 
 		
 		return str_replace($m[0], $replace, $date);
