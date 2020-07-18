@@ -1223,5 +1223,48 @@ class GW_Data_Object
 		}
 		
 	}
+	
+	function createIfNotExists($vals)
+	{			
+		if($obj = $this->find(GW_DB::buidConditions($vals)))
+		{
+			return $obj;
+		}else{
+			$obj = $this->createNewObject();
+			$obj->setValues($vals);
+		}
+		return $obj;
+	}
+	
+	
+	
+	
+	function findJoinsForFields($fields)
+	{
+		//composite_map configuration example:
+		//'partic2' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'participant2']]
+		
+		/* $fields array example:
+    [0] => team_name
+    [1] => partic1.name
+    [2] => partic2.name
+		 * 		 */
+		//join example: 
+		//['left','gw_nl_subscribers AS part1','a.subscriber_id=part1.id']
+		
+		$joins = [];
+		foreach($fields as $field){
+			if(strpos($field,'.')!==false){
+				
+				list($objname, $fld) = explode('.', $field);
+				$objname2  = $this->composite_map[$objname][1]['object'];
+				$relationf = $this->composite_map[$objname][1]['relation_field'];
+				$obj = $objname2::singleton();
+				$joins[$objname] = ['left', "`{$obj->table}` AS `$objname`", "a.$relationf = `$objname`.id"];
+			}
+		}
+		
+		return array_values($joins);
+	}
 }
 

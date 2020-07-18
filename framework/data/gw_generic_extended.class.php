@@ -137,7 +137,7 @@ class GW_Generic_Extended
 
 		$rez = $db->{$all ? 'fetch_rows' : 'fetch_row'}(["SELECT * FROM {$this->table} WHERE `owner_id`=? AND `key` LIKE ?", $this->owner_id, $key]);
 		$list = [];
-
+		
 		if (!$all)
 			return $rez['value'] ?? false;
 
@@ -148,13 +148,16 @@ class GW_Generic_Extended
 		return $list;
 	}
 	
-	function getAll()
+	function getAll($extra_cond=false)
 	{
 		$db = $this->getDB();
 		
 		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
 		
-		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE $own_tbl_cond `owner_id`=?", $this->owner_id]);
+		if($extra_cond)
+			$extra_cond = " AND $extra_cond";
+
+		$rez = $db->fetch_assoc(["SELECT `key`,`value` FROM {$this->table} WHERE $own_tbl_cond `owner_id`=? $extra_cond", $this->owner_id]);
 
 		return $rez;
 	}
@@ -177,44 +180,18 @@ class GW_Generic_Extended
 		foreach($list as $key => $value)
 			$this->replace($key, $value);
 	}
-	/*
+	
+	function preload($key, &$time = 0)
+	{
+		$db = & $this->getDB();
+		
+		$rows = $this->getAll("`key` LIKE '$key%'");
 
-	  function preload($key, &$time = 0) {
-	  $db = & $this->getDB();
+		$this->_cache = $rows + $this->_cache;
 
-	  $key = addslashes(substr($this->prefix . $key, 0, 50));
-	  $rows = $db->fetch_assoc($q = "SELECT id,value FROM {$this->table} WHERE id LIKE '$key%'");
-
-	  $this->_cache = $rows + $this->_cache;
-
-	  return $rows;
-	  }
-
-	  /*
-	  function setValues($vals) {
-	  foreach ($vals as $key => $val)
-	  $this->set($key, $val);
-	  }
-
-
-	  function getAge($key) {
-	  return time() - strtotime($this->getTime($key));
-	  }
-
-	  function getTime($key) {
-	  $this->get($key, $time);
-	  return $time;
-	  }
-
-	  function __set($key, $value) {
-	  return $this->set($key, $value);
-	  }
-
-	  function __get($key) {
-	  return $this->get($key);
-	  }
-	 *
-	 */
+		return $rows;
+	}
+		
 	
 	
 	function __get($name) {

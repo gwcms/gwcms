@@ -211,5 +211,16 @@ class Module_Usr extends GW_Common_Module
 		
 		$this->tpl_vars['list'] = $list;
 	}
+	
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+		    //'title_func'=>[LTF_Participants::singleton(),'getTeamName'],
+		    'search_fields'=>['name','surname','email','username']
+		];	
+		
+		return $opts;	
+	}	
 
 }

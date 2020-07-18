@@ -1076,11 +1076,13 @@ class GW_Common_Module extends GW_Module
 			$params['ajax_one_item_list'] = $_GET['ajax_row'];
 		}
 
-		if (isset($params['ajax_one_item_list'])) {
-			$list = [$this->model->createNewObject($params['ajax_one_item_list'], true)];
-		} else {
-			$list = $this->model->findAll($cond, $params);
+		
+		if(isset($params['ajax_one_item_list'])){
+			$cond = ($cond ? "($cond) AND ":'').GW_DB::prepare_query(['a.id=?',$params['ajax_one_item_list']]);
 		}
+
+		$list = $this->model->findAll($cond, $params);
+		
 		
 		if($this->model->is_db_based){
 			$last_querty=$this->model->getDB()->last_query;
@@ -1980,14 +1982,32 @@ class GW_Common_Module extends GW_Module
 		
 		$opts = method_exists($this, 'getOptionsCfg') ? $this->getOptionsCfg() : [];
 		
-		
+		$params = [];
 		
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);
 			$search = "'%".$exact."%'";
 
-			//OR title_ru LIKE $search
-			$simplecond = $this->options_search_field." LIKE $search";
+			
+			
+			if(isset($opts['search_fields'])){
+				foreach($opts['search_fields'] as $field){
+					$condarr[] = "$field LIKE $search";
+					
+					
+				}
+				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
+					$params['joins'] = $joins;
+				}
+				$simplecond = '('.implode(' OR ', $condarr).')';
+				
+				//simple cond sample:
+				//(team_name LIKE '%%'; OR partic1.name LIKE '%%'; OR partic2.name LIKE '%%'; OR partic1.surname LIKE '%%'; OR partic2.surname LIKE '%%';) AND `event_id`=6
+			}else{
+				$simplecond = ($opts['search_field'] ?? $this->options_search_field)." LIKE $search";
+			}
+			
+			
 			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) :  $simplecond);
 			
 			if(isset($opts['condition_add'])){
@@ -2003,9 +2023,9 @@ class GW_Common_Module extends GW_Module
 			$cond = GW_DB::inCondition('id', $ids);
 			
 		}	
-		
 
 		
+				
 		$page_by = 30;
 		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
 		$params['offset'] = $page_by * $page;
@@ -2027,8 +2047,14 @@ class GW_Common_Module extends GW_Module
 		
 		$info = $this->model->lastRequestInfo();
 		$res['total_count'] = $info['item_count'];
-				
-		echo json_encode($res);
+	
+		if(isset($_GET['debug'])){
+			header('content-type: text/json');
+			echo json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		}else{
+			echo json_encode($res);
+		}
+		
 		exit;
 	}	
 	
