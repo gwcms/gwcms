@@ -513,6 +513,13 @@ class GW_Data_Object
 		$sql = $this->buildSql(['conditions'=>$condition, 'count'=>1]);
 		return $this->getDB()->fetch_result($sql);
 	}
+	
+	function maxVal($field, $condition=null)
+	{
+		$sql = $this->buildSql(['select'=>"max(`$field`)", 'conditions'=>$condition]);
+		return $this->getDB()->fetch_result($sql);
+		
+	}
 
 	function countGrouped($groupby, $condition)
 	{

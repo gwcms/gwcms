@@ -18,7 +18,7 @@ class GW_Public_Module {
 	 * @var GW_Site_Application
 	 */
 	public $app;
-	public $options;
+	public $options=[];
 	public $links;
 	// pvz news/list bus modulis/viewsas, news/view/1/images bus - modulis,viewsas o params = [1,'images']
 	public $params;

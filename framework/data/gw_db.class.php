@@ -138,6 +138,9 @@ class GW_DB
 		$this->last_query_time = microtime(true)-$start;
 		$this->last_query = $cmd;
 
+		//in case of serious problems
+		//$this->logint($cmd.' - '.$_SERVER['REQUEST_URI']);
+
 		if ($this->debug)
 			$this->query_times[] = Array($cmd, (float) $this->last_query_time);
 		

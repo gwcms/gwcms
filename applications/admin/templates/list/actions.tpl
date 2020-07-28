@@ -2,10 +2,10 @@
 	{if $addlitag}<li>{/if}
 	<a  class="{$action_class|default:gwcmsAction} {$action_addclass} {if $shift_button}shiftbtn{/if}"		
 		{if $query_param || $onclick || $confirm}
-		onclick="{strip}{if $query_param}var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });{/if}
+		onclick="{strip}{if $query_param}var ss=window.prompt('{$query_param.1}');if(ss)this.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });{/if}
 			{if $onclick}{$onclick};{/if}
 			{if $confirm}{$app->fh()->gw_link_confirm(false)};{/if}
-			return false;{/strip}"
+			{/strip}"
 		{/if}
 		href="{$href|default:'#'}"
 		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}

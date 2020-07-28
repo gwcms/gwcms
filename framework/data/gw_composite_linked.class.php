@@ -30,9 +30,22 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 		
 		$this->masterobject = $master;
 		
+		$id = $master->get($this->params['relation_field']);
+		$class = $this->params['object'];;
+
+		if(isset(GW_Composite_Data_Object::$linked_cache[$class][$id])){
+			//echo "--$class--$id--cached--";
+			$this->linkedobject = GW_Composite_Data_Object::$linked_cache[$class][$id];
+			
+			return $this;
+		}
 		
-		if($tmp=$this->linkedobject->find(["id=?", $master->get($this->params['relation_field'])]))
+		
+		if($tmp=$this->linkedobject->find(["id=?", $id]))
 		{
+			//echo "--$class--$id--asked--";
+			GW_Composite_Data_Object::$linked_cache[$class][$id] = $tmp;
+			
 			$this->linkedobject = $tmp;	
 		}
 		

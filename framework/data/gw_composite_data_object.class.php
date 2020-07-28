@@ -91,6 +91,10 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	{
 		$this->loadCompositeItem($field);
 
+		//$obj =& $this->composite_content_base[$field];
+			
+		//return $obj ? (method_exists($arrow, 'getValue')? $obj->getValue() : false) : false;
+		
 		return $this->composite_content_base[$field] ? $this->composite_content_base[$field]->getValue() : false;
 	}
 	
@@ -266,4 +270,41 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	  return isset($this->composite_map[$name]) || parent::__isset($name);
 	  }
 	 */
+	
+	static $linked_cache;
+	
+	static function prepareLinkedObjects($list, $field=false) 
+	{
+		$fistel = reset($list);
+		
+		if(!isset($fistel->composite_map[$field]))
+		{
+			//trigger_error("Expected composite_map[$field]", E_USER_WARNING);
+			return false;
+		}
+		
+		$info = $fistel->composite_map[$field];
+		
+		$linkfield = $info[1]['relation_field']; 
+		$obj_classname = $info[1]['object']; 
+	
+		$ids = [];
+
+		foreach($list as $itm)
+			if(is_numeric($itm->$linkfield))
+				$ids[$itm->$linkfield] = $itm->$linkfield;
+				
+		if(!$ids)
+			return false;
+		
+		$cond = GW_DB::inCondition('id', $ids);	
+		$addlist = $obj_classname::singleton()->findAll($cond, ['key_field'=>'id']);
+		
+		if(!isset(self::$linked_cache[$obj_classname]))
+			self::$linked_cache[$obj_classname] = [];
+		
+		self::$linked_cache[$obj_classname] += $addlist;
+	}
+	
+	
 }

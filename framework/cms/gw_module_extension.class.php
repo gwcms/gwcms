@@ -19,8 +19,10 @@ class GW_Module_Extension
 	function &__get($name) 
 	{
 		if(isset($this->mod->$name)){
+			
 			return $this->mod->$name;
 		}else {
+			d::ldump('this part might have probs');
 			$x = $this->mod->$name;;
 			return $x;
 		}
