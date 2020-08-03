@@ -117,7 +117,7 @@ class gw_paypal_service
 	function handlerOrders($data, $action)
 	{
 		
-		$order = Nat_Orders::singleton()->find(['id=?', $data['orderid']]);
+		$order = Shop_Orders::singleton()->find(['id=?', $data['orderid']]);
 		
 		if($action=='callback')
 		{

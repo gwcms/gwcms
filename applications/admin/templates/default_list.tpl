@@ -21,7 +21,13 @@
 
 {*functions*}
 {function dl_proc_row_cell}
-	{$val=$item->get($field)}
+	
+	{if is_object($item)}
+		{$val=$item->get($field)}
+	{else}
+		{d::ldump($item)}
+	{/if}
+	
 	{if isset($dl_smart_fields.$field)}
 		{call name="dl_cell_$field"}
 	{elseif isset($dl_output_filters.$field)}
@@ -59,7 +65,7 @@
 	{foreach from=$list item=item}		
 		{$id=$item->id}
 		{$list_row_id=$list_row_id+1}
-
+		
 
 		{call name="dl_prepare_item" ifexists=1}
 		
@@ -181,7 +187,7 @@
 		<link href="{$app_root}static/css/list.css" rel="stylesheet" />
 	{/capture}
 	
-	{if $dl_same_values_ontop}
+	{if $dl_same_values_ontop && $list}
 		{$equal_fields=[]}
 
 		{foreach $dl_fields as $field}

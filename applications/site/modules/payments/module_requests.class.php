@@ -339,7 +339,7 @@ class Module_Requests extends GW_Public_Module
 	function doDownloadPdfs()
 	{
 		$cond = $this->getOwnerCond();
-		$order = Nat_Orders::singleton()->find($cond.' AND '. GW_DB::prepare_query(['id=?', $_GET['id']]));	
+		$order = Shop_Orders::singleton()->find($cond.' AND '. GW_DB::prepare_query(['id=?', $_GET['id']]));	
 		
 		if($order->pay_status!=7){
 			$this->setError("Cant download pdf scores, payment is still in waiting state");

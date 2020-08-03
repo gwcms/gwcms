@@ -241,4 +241,22 @@ class Module_Email_Templates extends GW_Common_Module
 	
 	
 	
+	function doSendTest()
+	{
+		$item = $this->getDataObjectById();
+		
+		
+		
+		$opts = [
+		    'to'=>$_GET['email'],
+		    'subject'=>$item->subject_lt ?: "email test, template id:".$item->id,
+		    'body'=> $item->body_lt
+		];
+
+
+		$x = GW_Mail_Helper::sendMail($opts);
+		$this->setMessage("Mail test sent to '{$_GET['email']}'");
+		$this->jump();
+	}
+	
 }

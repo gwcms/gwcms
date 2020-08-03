@@ -238,7 +238,7 @@ class FH
 			return $date;
 		
 		$replace="";
-		if(isset($opts['year']))
+		if($opts['year'] ?? false)
 			$replace.=$m[1].' ';
 		
 		$mdw=date('N',strtotime($m[0]));
