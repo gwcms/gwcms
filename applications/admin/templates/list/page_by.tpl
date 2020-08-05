@@ -10,7 +10,7 @@
 			<td style="padding-right:5px;" >
 					{$lang.PAGE_BY}:
 			</td>
-			<td style="padding-right:15px;">		
+			<td style="padding-right:15px;">	
 				<input class="gwPageBy form-control setListParams" name="list_params[page_by]" size=2 value="{$m->list_params.page_by}" />
 						
 			</td>	

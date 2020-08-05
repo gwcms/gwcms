@@ -137,11 +137,15 @@ class GW
 	}
 
 	
-	static function fakerequest($path, $user_id)
+	static function fakerequest($path, $user_id=false)
 	{
+		if(!$user_id)
+			$user_id = GW::$context->app->user->id;
+			
 		$_POST = array();
 		$args = parse_url($path, PHP_URL_QUERY);
 		parse_str($args, $args);
+		
 		$_GET = $args;
 		$_REQUEST = array_merge($_GET, $_POST);
 		

@@ -25,6 +25,7 @@ class GW_Public_Module {
 	public $sys_call = false;
 	public $cancel_tpl_process = false;
 	public $view_name = false;
+	public $skipview = false;
 	
 	function __construct($variables = Array()) {
 
@@ -164,7 +165,9 @@ class GW_Public_Module {
 			}
 		}
 		
-	
+		if($this->skipview)
+			return false;
+		
 		return $this->processView($view_name, $params);
 	}
 
@@ -431,7 +434,9 @@ class GW_Public_Module {
 		if(isset($_GET['debug']))
 			die(json_encode($array, JSON_PRETTY_PRINT));
 		
-		die(json_encode($array));
+		$this->skipview = true;
+		
+		echo json_encode($array);
 	}	
 	
 
