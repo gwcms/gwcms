@@ -71,7 +71,7 @@ class GW_User extends GW_Composite_Data_Object
 				$this->errors['pass_new_repeat'] = '/G/USER/PASS_REPEAT';
 
 		if (isset($this->validators['unique_username']))
-			if ($this->count(Array('username=? AND removed!=0', $this->get('username'))))
+			if ($this->count(Array('username=? AND removed=0', $this->get('username'))))
 				$this->errors['username'] = '/G/USER/USERNAME_TAKEN';
 
 		return $this->errors ? false : true;

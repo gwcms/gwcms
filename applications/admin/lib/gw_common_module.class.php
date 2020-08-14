@@ -2135,5 +2135,10 @@ class GW_Common_Module extends GW_Module
 			}
 		
 		$this->setMessage("Took ".$t->stop().' secs');			
-	}	
+	}
+	
+	function doCronRun()
+	{
+		$this->runPeriodicTasks("tasks_".$_GET['every'].'min');
+	}
 }

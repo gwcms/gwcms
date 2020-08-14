@@ -21,13 +21,7 @@
 
 {*functions*}
 {function dl_proc_row_cell}
-	
-	{if is_object($item)}
 		{$val=$item->get($field)}
-	{else}
-		{d::ldump($item)}
-	{/if}
-	
 	{if isset($dl_smart_fields.$field)}
 		{call name="dl_cell_$field"}
 	{elseif isset($dl_output_filters.$field)}
