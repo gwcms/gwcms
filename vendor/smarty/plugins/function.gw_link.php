@@ -30,4 +30,5 @@ function smarty_function_gw_link($params, &$smarty)
 
 /* vim: set expandtab: */
 
+
 ?>
