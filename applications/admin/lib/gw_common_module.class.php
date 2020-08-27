@@ -617,20 +617,27 @@ class GW_Common_Module extends GW_Module
 		$prev_syscall = $this->sys_call;
 		$this->sys_call = true;
 		
-		foreach($items as $item)
-			$this->$method($item);
+		if(isset($_GET['all'])){
+			$status = $this->$method($items);
+		}else{
+			foreach($items as $item)
+				$this->$method($item);			
+			$status = true;
+		}
 		
-		$this->sys_call = false;
-		
-		$script="<script>require(['gwcms'], function(){";
-		foreach($items as $item)
-			$script.="animateChangedRow($item->id, 1000);";
-		$script.="})</script>";
-		
-		$this->setMessage("Action <b>\"".GW::l("/A/VIEWS/$method")."\"</b> performed on ".count($items)." item".(count($items)>1?'s':'').$script);
-		
-		if(!$this->sys_call)
-			$this->jump();
+		if($status==true){
+			$this->sys_call = false;
+
+			$script="<script>require(['gwcms'], function(){";
+			foreach($items as $item)
+				$script.="animateChangedRow($item->id, 1000);";
+			$script.="})</script>";
+
+			$this->setMessage("Action <b>\"".GW::l("/A/VIEWS/$method")."\"</b> performed on ".count($items)." item".(count($items)>1?'s':'').$script);
+
+			if(!$this->sys_call)
+				$this->jump();
+		}
 	}
 	
 	function common_doSetActive($item=false)
@@ -2141,4 +2148,36 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->runPeriodicTasks("tasks_".$_GET['every'].'min');
 	}
+	
+	function prompt($form, $title)
+	{
+		$answers = true;
+		
+		//if already have answers ?
+		foreach($form['fields'] as $fieldname => $el){
+			if(isset($el['required']) && !isset($_GET['item'][$fieldname])){
+				$answers=false;
+			}
+		}
+				
+		
+		if($answers)
+			return $_GET['item'];
+		
+		$this->tpl_vars['getargs'] = $_GET;
+		unset($this->tpl_vars['getargs']['url']);
+		
+		$this->tpl_vars['item'] = (object)($_GET['item'] ?? []);
+		$this->tpl_vars['prompt_fields'] = $form;
+		$this->tpl_vars['prompt_title'] = $title;
+		$this->smarty->assign('m', $this);
+		$this->smarty->assign($this->tpl_vars);
+				
+	
+		$tpl_name = GW::s("DIR/".$this->app->app_name."/TEMPLATES").'tools/prompt.tpl';
+			
+		$str =  $this->smarty->fetch($tpl_name);
+		
+		$this->setMessageEx(['text'=>$str, 'type'=>4]);
+	}	
 }

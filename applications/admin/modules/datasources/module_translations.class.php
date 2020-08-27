@@ -346,6 +346,110 @@ class Module_Translations extends GW_Common_Module
 	}
 	
 	
+
+	function doSeriesTranslate($list)
+	{		
+		$this->sys_call = false;
+		
+		$sel=['type'=>'select','options'=>GW::s("LANGS"), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
+		$form = ['fields'=>['from'=>$sel, 'to'=>$sel],'cols'=>4];
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_SOURCE_DEST_LANG'))))
+			return false;
+		
+	
+		$to = $answers['to'];
+		$from = $answers['from'];
+		
+		$t = new GW_Timer;
+		
+				
+		if(!$list)
+			return $this->setError('EMPTY_LIST');
+		
+		$title_array = [];
+		
+		foreach($list as $item)
+			$title_array[] = $item->get("value_".$answers['from']);
+		
+		
+		
+		
+		$opts = http_build_query(['from'=>$from,'to'=>$answers['to']]);
+		
+		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		//$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		
+		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+		
+		$resp = json_decode($resp);
+		$count =0;
+		$confirm = [];
+		
+		foreach($list as $idx => $item)
+		{
+			$item->set("value_{$to}",$resp[$idx]);
+			
+			
+			if(isset($_GET['confirm'])){
+				if($item->changed_fields)
+					$count++;
+
+				$item->updateChanged();
+			}else{
+				$confirm[] = ['from'=>$item->get("value_{$from}"), 'to'=>$item->get("value_{$to}")];
+			}
+		}
+		
+		
+		if(isset($_GET['confirm'])){
+			$this->setMessage($m="Changed: $count, Speed: ".$t->stop());
+		}else{
+			$str = GW_Data_to_Html_Table_Helper::doTable($confirm);
+			
+			
+			$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::ln('/g/CONFIRM')."</a>";
+			$this->setMessageEx(['text'=>$str, 'type'=>4]);
+			
+			return false;
+		}
+		
+		return true;
+	}
+		
+	
+	function doAutoTrans()
+	{
+		$item = $this->getDataObjectById();
+		
+		$dest_ln = $_GET['dest'];
+		
+		$src_ln = false;
+		
+		if(trim($item->value_en)){$src_ln = 'en';}
+		if(trim($item->value_lt)){$src_ln = 'lt';}
+		
+		$title_array=[$item->get("value_{$src_ln}")];
+		
+		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		//$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		
+		$opts = http_build_query(['from'=>$src_ln,'to'=>$dest_ln]);
+		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+		$resp = json_decode($resp);;
+		
+		if($resp[0]){
+			$item->set("value_{$dest_ln}", $resp[0]);
+			$item->updateChanged();
+			
+			$this->setMEssage('OK');
+			$this->notifyRowUpdated($item->id, false);
+		}
+	}
+
+	
+	
 /*	
 	function __eventAfterList(&$list)
 	{

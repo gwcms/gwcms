@@ -650,6 +650,10 @@
 	<lt>Numatytasis</lt>
 	<en>Default</en>
 </i>
+<i id="CONFIRM">
+	<lt>Patvirtinti</lt>
+	<en>Confirm</en>
+</i>
 
 <i id="FILTER_ALL">
 	<lt>Visi</lt>

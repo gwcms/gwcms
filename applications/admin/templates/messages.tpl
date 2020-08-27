@@ -1,7 +1,7 @@
 {$tmp=$app->acceptMessages(1)}
 {if $tmp}
 
-	{$classes=[0=>'alert-success', 1=>'alert-warning', 2=>'alert-danger', 3=>'alert-info']}
+	{$classes=[0=>'alert-success', 1=>'alert-warning', 2=>'alert-danger', 3=>'alert-info',4=>'alert-neutral']}
 
 
 	{foreach $tmp as $field => $msg}

@@ -421,6 +421,9 @@ var gw_adm_sys = {
 			animateChangedRow(id, 2000);
 			
 			gw_adm_sys.initObjects();
+			
+			//if inline edit
+			try{initActiveListRows();}catch(err){}
 		})
 		
 	},

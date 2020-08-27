@@ -67,6 +67,57 @@ class Module_Countries extends GW_Common_Module
 	}	
 	
 	
+	function doTranslate()
+	{		
+		$ln = $_GET['to'];
+		$t = new GW_Timer;
+		
+		
+		
+		$list = $this->model->findAll("title_{$ln}=''",['limit'=>100]);
+		
+		if(!$list)
+			exit;
+		
+		$title_array = [];
+		
+		foreach($list as $item)
+			$title_array[] = $item->get("title_".$_GET['from']);
+		
+		
+		
+		
+		$opts = http_build_query(['from'=>$_GET['from'],'to'=>$_GET['to']]);
+		
+		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		
+		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+		
+		$resp = json_decode($resp);
+		$count =0;
+		
+		foreach($list as $idx => $item)
+		{
+			$item->set("title_{$ln}",$resp[$idx]);
+			
+			if($this->changed_fields)
+				$count++;
+			
+			$item->updateChanged();
+		}
+		
+		
+		$this->setMessage($m="Changed: $count, Speed: ".$t->stop().", Trans sample ".$title_array[0].' -> '.$resp[0].', Request count: '.count($title_array).', Response count: '.count($resp));
+		
+		
+		d::ldump([$m, $title_array, $resp]);
+		exit;
+		
+		
+	}	
+	
+	
 /*	
 	function __eventAfterList(&$list)
 	{

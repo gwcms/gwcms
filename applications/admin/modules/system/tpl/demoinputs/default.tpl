@@ -154,4 +154,21 @@
 {call e field=demo_multilang_text3 type=text i18n=3}
 {call e field=demo_multilang_text4 type=text i18n=4}
 
+
+	
+{call e field="flags/askhide" type=bool  
+	hidden_note="mysql-fieldtype: tinyint;
+	dataobject conf: public $flags_conf=['flags'=>[0=>'succmail',1=>'isadult',2=>'isman',3=>'paid',4=>'paymconfirmed',5=>'askhide',6=>'sept',7=>'ast']];
+	public $encode_fields=['flags'=>'flags']
+"}
+
+{call e field="flags2" type=multiselect options=[askhide=>'askhide', succmail=>'succmail'] note=" 
+	 mysql field:  `flags2` set('askhide','succmail') NOT NULL
+	 dataobject: public $encode_fields=['flags2'=>'comma']
+	"}
+	
+{call e field="flags3" type=multiselect options=[option1=>'option1title', option2=>'option2title'] value_format=json1 note="value_format=json1 - json read"}
+		
+	
+
 {include file="default_form_close.tpl" submit_buttons=[save]}

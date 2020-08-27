@@ -112,6 +112,7 @@
 	hideifempty - naudingas kai laukelio tipas read ir nenorima rodyti tuscios eilutes
 	name - laukelio vardas
 	value - laukelio vertė, jei laukelio verte nenustatyta tada imama $item->value
+	$value_format - dekodavimo funkcija
 	default - laukelio vertė jei laukelis neužpildytas
 	item - duomenu objektas
 	i18n - 1|0 - daugiakalbiskas laukelis

@@ -3,6 +3,7 @@
 <xml>
 	<i id="VIEWS">
 		<i id="synchronizefromxml">Synchronize from xml's</i>
+		<i id="doSeriesTranslate">Versti automatiškai su google vertėju</i>
 	</i>
 	
 	<i id="ROTATE_CLOCKWISE">
@@ -55,7 +56,10 @@
 		<en>Positions updated</en>
 		<lt>Pozicionavimas atnaujintas</lt>
 	</i>	
-	
+	<i id="SELECT_SOURCE_DEST_LANG">
+		<en>Select source and destination lang</en>
+		<lt>Nurodykite iš kurios kalbos į kurią versti</lt>
+	</i>
 	
 	
 	<i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>

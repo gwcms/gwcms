@@ -3188,6 +3188,13 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 {
 	color: #fff;
 }
+
+.alert-neutral
+{
+	border-left: 3px solid silver !important;
+	background-color: #f5f5f5 !important;
+}
+
 .alert-footer{
 	font-size: 70%;
 	display:block;
