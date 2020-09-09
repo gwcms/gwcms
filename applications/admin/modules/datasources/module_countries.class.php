@@ -115,7 +115,39 @@ class Module_Countries extends GW_Common_Module
 		exit;
 		
 		
-	}	
+	}
+
+	function doGetFlags()
+	{
+		$cnt = 0;
+		$list=GW_Country::singleton()->findAll();
+		
+		$dir = GW::s('DIR/REPOSITORY').'flags/';
+		@mkdir($dir, 0777);
+		
+		if(false)
+		foreach($list as $item){
+			
+			
+			$outname = $item->code.'.png';
+			$contryname = $item->title_en;
+			shell_exec("cd '$dir' && curl 'https://www.countries-ofthe-world.com/flags-normal/flag-of-".$contryname.".png'   -H 'authority: www.countries-ofthe-world.com'   -H 'cache-control: max-age=0'   -H 'upgrade-insecure-requests: 1'   -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'   -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'   -H 'sec-fetch-site: none'   -H 'sec-fetch-mode: navigate'   -H 'sec-fetch-user: ?1'   -H 'sec-fetch-dest: document'   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8,lt-LT;q=0.7,lt;q=0.6,ru;q=0.5'   -H 'cookie: _ga=GA1.2.36452587.1598885137; _gid=GA1.2.1016559131.1598885137'   --compressed > $outname");			
+		}
+		
+		$notfound = [];
+		
+		foreach(glob("$dir/*.png") as $file){
+			if(strpos(file_get_contents($file), "You don't have permission to access this resource.")!==false){
+				unlink($file);
+				$notfound[] = pathinfo($file, PATHINFO_BASENAME);
+			}
+		}
+		
+		d::dumpas(implode(', ', $notfound));
+	}
+	
+	
+	
 	
 	
 /*	

@@ -294,6 +294,14 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage(["text"=>"Empty fields found: <b>".implode(", ", $warnempty).'</b>', "type"=>GW_MSG_WARN, 'footer'=>'add them to public $can_be_empty_fields=[field1=>1,field2=>1]', 'float'=>1]);
 	}
 	
+	function dataLossPrevent($item)
+	{
+		if(isset($_POST['last_update_time']) && $_POST['last_update_time']!=$item->update_time)
+		{
+			$item->errors['update_time']='/g/ITEM_SAVE_PREVENT_DATA_LOSS';
+		}		
+	}
+	
 	/**
 	 * common doSave action override this if diferent functionality needed
 	 */
@@ -337,10 +345,7 @@ class GW_Common_Module extends GW_Module
 		if ($this->load_before_save){
 			$item->load();
 			
-			if(isset($_POST['last_update_time']) && $_POST['last_update_time']!=$item->update_time)
-			{
-				$item->errors['update_time']='/g/ITEM_SAVE_PREVENT_DATA_LOSS';
-			}
+			$this->dataLossPrevent($item);
 		}
 		
 		if($item->id){

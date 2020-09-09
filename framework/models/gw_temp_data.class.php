@@ -43,4 +43,32 @@ class GW_Temp_Data extends GW_Data_Object
 		$item = $this->read($user_id, $group, $name);
 		return $item ? $item->value : false;
 	}
+	
+	function rwCallback($opts=[], $callback){
+		$user_id = $opts['user_id'] ?? GW_USER_SYSTEM_ID;
+		$group = $opts['group'] ?? 'SYS';
+		$name = $opts['name'];
+		$expires = $opts['name'] ?? '24 hour';
+		$format = $opts['format'] ?? 'json';
+		$renew = $opts['renew'] ?? false;
+		
+		if(!$renew && ($tmp = $this->read($user_id, $group, $name)))
+		{
+			$val = $tmp->value;
+						
+			if($format && $format == 'json')
+				return json_decode($val, true);
+			
+			return $val;
+		}else{
+			$dataraw = $callback();
+				
+			if($format && $format == 'json')
+				$data =  json_encode($dataraw);			
+			
+			$this->store($user_id, $group, $name, isset($data) ? $data : $dataraw, $expires);
+			
+			return $dataraw;
+		}
+	}
 }

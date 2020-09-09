@@ -25,5 +25,6 @@
 	datasource=Navigator::buildURI($emltplurl,[],[path=>options])
 	preload=1
 	minimuminputlength=1
+	maximumSelectionLength=1
 	options=[]
 }	

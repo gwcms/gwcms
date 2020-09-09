@@ -14,7 +14,7 @@
 {list_item_action_m href=$m->buildUri(false,[print_view=>1],[carry_params=>1]) caption=$lang.PRINT_VIEW iconclass='fa fa-print'}
 
 
-{list_item_action_m onclick="gwSearchReplace()" caption=GW::l('/G/common_module/SEARCH_REPLACE') iconclass='fa fa-search'}
+{list_item_action_m onclick="gwSearchReplace();return false" caption=GW::l('/G/common_module/SEARCH_REPLACE') iconclass='fa fa-search'}
 
 
 {if $app->user->isRoot()}

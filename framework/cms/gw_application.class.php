@@ -222,7 +222,7 @@ class GW_Application
 		
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-			(isset($params['app']) ? $params['app'] . '/' : $this->app_base) .
+			(isset($params['app']) ? '/'.$params['app'] . '/' : $this->app_base) .
 			$ln .
 			($path ? '/' : '') . $path .
 			($getparams ? '?' . http_build_query($getparams) : '');
@@ -633,5 +633,73 @@ class GW_Application
 			$var = $value;
 
 		return $var;
+	}
+
+
+
+	/*
+	 * grazins masyva su notificationais, nekeisti i objektus paskiau susimixuoja
+	 */
+	function innerRequest($path, $get_args, $post_args=[], $reqopts=[])
+	{	
+		$get_args['GWSESSID']=session_id();
+		$get_args['sys_call'] = 1;
+		$get_args['json'] = 1;
+		$params = ['absolute'=>1];
+		
+		if(isset($reqopts['app'])){
+			$params['app'] = $reqopts['app'];
+		}
+		
+		
+		
+		$path = $this->buildUri($path, $get_args, $params);
+		//d::dumpas($_SESSION);
+		//d::dumpas($path);
+		
+		$opts=[];
+		
+		if($post_args)
+		{
+			$opts = array('http' =>
+			    array(
+				'method'  => 'POST',
+				'header'  => 'Content-type: application/x-www-form-urlencoded',
+				'content' => http_build_query($post_args)
+			    )
+			);
+		}
+		
+		$this->sessionWriteClose();
+		$raw = file_get_contents($path, false, stream_context_create($opts));
+		$res = json_decode($raw, true);
+		
+	
+		if(isset($_GET['packets']) || isset($get_args['packets'])){		
+			if(is_array($res)){
+				foreach($res as $packet)
+					if($packet['action'] == 'result')
+						$res['result']  = $packet;
+
+			}
+		}
+		
+		if(!$res){
+			$res=['response_format_error'=>1,'raw_response'=>$raw];
+			
+			if($this->user->isRoot()){
+				$this->setError("<pre>Error inner request \n". json_encode(
+					[
+						'endpoint'=>$path,
+						'get'=>$get_args, 
+						'post'=>$post_args
+					],JSON_PRETTY_PRINT).'</pre>');
+			}
+		}
+				
+		$res['request_uri']=$path;
+		$this->reopenSessionIfClosed();
+		
+		return $res;
 	}	
 }

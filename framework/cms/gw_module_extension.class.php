@@ -32,4 +32,8 @@ class GW_Module_Extension
 	{
 		$this->mod->$name = $val;
 	}	
+	
+	function __isset($name) {
+		return isset($this->mod->$name) || isset($this->$name);
+	}
 }

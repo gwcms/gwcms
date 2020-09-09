@@ -94,6 +94,17 @@
 	btnselectall=1
 }
 
+
+{call e field="multiselect_users"
+	type="multiselect_ajax"
+	modpath="users/usr"
+	options=[]
+	preload=1
+	sorting=1
+	value_format=json1
+
+}
+
 {*adds automaticaly object_title=GW::l('/M/datasources/MAP/childs/countries/title')*}
 {call e field="demo_select_country_id_single"
 	type="select_ajax"

@@ -24,7 +24,7 @@
 		{if !$datasource}
 			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options", $source_args)}
 		{/if}
-	{/if}	
+	{/if}
 	
 	
 	<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control GWselectAjax" name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
@@ -54,7 +54,7 @@
 	
 	
 	
-	{if !$gwcms_input_select_ajax_loaded || $smarty.get.act==doGetFilters}
+	{if !$GLOBALS.gwcms_input_select_ajax_loaded || $smarty.get.act==doGetFilters}
 		<script type="text/javascript">
 			translate_submit = "{GW::l('/g/SUBMIT')}";
 			translate_selectall = "{GW::l('/g/SELECT_ALL')}";
@@ -72,8 +72,8 @@
 			 .sortstarted .select2-selection__choice{ 
 				 display:block !important; float:none !important; 
 			 }
-			 </style>		
-		{assign var=gwcms_input_select_ajax_loaded value=1 scope=global}
+			 </style>
+		{$GLOBALS.gwcms_input_select_ajax_loaded=1}
 	{/if}	
 	
 
