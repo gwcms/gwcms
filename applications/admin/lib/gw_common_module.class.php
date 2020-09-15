@@ -40,6 +40,7 @@ class GW_Common_Module extends GW_Module
 	public $sys_call = false;
 	public $extra_cols = [];
 	public $lgr;
+	public $auto_translate_enabled =  true;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -2070,11 +2071,22 @@ class GW_Common_Module extends GW_Module
 		exit;
 	}	
 	
+	
+	
 	function eventHandler($event, &$context) 
 	{
 		if($this->ext_events)
 			foreach($this->ext_events as $ext => $x)
 				$this->ext($ext)->extEventHandler($event, $context);
+		
+		
+		switch($event){
+			case 'BEFORE_SAVE':
+				if($this->auto_translate_enabled)
+					$this->autoTranslate($context);
+			break;
+		}
+		
 		
 		parent::eventHandler($event, $context);
 	}
@@ -2184,5 +2196,48 @@ class GW_Common_Module extends GW_Module
 		$str =  $this->smarty->fetch($tpl_name);
 		
 		$this->setMessageEx(['text'=>$str, 'type'=>4]);
-	}	
+	}
+
+
+	function getTranslation($item, $field, $src, $dest, $check = false)
+	{
+		if($check && (!$item->get($field,$src) || $item->get($field,$dest)))
+			return false;
+
+		$title_array=[$from=$item->get($field, $src)];
+		
+		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		//$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		
+		$opts = http_build_query(['from'=>$src,'to'=>$dest]);
+		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+		$resp = json_decode($resp);;
+		
+		$to=$resp[0];
+		
+		if($resp[0]){
+			$item->set($field, "[A] ".$to , $dest);
+			$item->updateChanged();	
+			$this->setMessage("Auto translation field $field. value from '$from' ($src) to: '$to' ($dest)");
+			
+			return true;
+		}		
+	}
+	
+	
+	function autoTranslate($item)
+	{
+		if(!isset($item->i18n_fields))
+			return false;
+			
+		
+		$upd = false;
+		
+		foreach($item->i18n_fields as $field => $x){
+			$upd |= $this->getTranslation ($item, $field, "en", "ru", true);
+			$upd |= $this->getTranslation ($item, $field, "lt", "ru", true);
+			$upd |= $this->getTranslation ($item, $field, "en", "lt", true);
+			$upd |= $this->getTranslation ($item, $field, "lt", "en", true);
+		}		
+	}
 }

@@ -29,7 +29,8 @@
 		{if $url_return_to}
 			{$url.1.return_to=$url_return_to}
 		{/if}			
-		{if !$title && $url.1 && ($url.1.act || $url.0)}
+		{if !$title && $url.1 && ($url[1][act] || $url.0)}
+			
 			{$searchkey=$url.1.act|default:basename($url.0)}
 			{call list_item_title assign=title}
 		{/if}

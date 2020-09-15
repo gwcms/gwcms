@@ -45,7 +45,7 @@ class GW_Doc_Type extends GW_Data_Object
 			$this->errors['key']='/G/VALIDATION/UNIQUE';
 		*/
 			
-		return !(bool)count($this->errors);
+		 
 	}
 
 
