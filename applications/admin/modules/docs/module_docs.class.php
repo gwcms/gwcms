@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Forms extends GW_Common_Module
+class Module_Docs extends GW_Common_Module
 {	
 
 	use Module_Import_Export_Trait;		
@@ -11,7 +11,7 @@ class Module_Forms extends GW_Common_Module
 	{	
 		parent::init();
 		
-		$this->model = GW_Forms::singleton();
+		$this->model = GW_Doc::singleton();
 		
 		$this->list_params['paging_enabled']=1;	
 		$this->app->carry_params['owner_type']=1;
@@ -30,7 +30,12 @@ class Module_Forms extends GW_Common_Module
 	}
 
 	
+	function viewDefault()
+	{
+		$this->viewList();
+	}
 
+	
 	
 	function getListConfig()
 	{
@@ -45,38 +50,40 @@ class Module_Forms extends GW_Common_Module
 	}	
 
 
-	function getOptionsCfg()
-	{
-		$opts = [
-		    'title_func'=>function($item){ return $item->admin_title;  },
-		    'search_fields'=>['title_lt','title_en','title_ru','admin_title']
-		];	
 		
-		return $opts;	
-	}
 	
 	
 	
-	function __eventAfterList(&$list)
+	
+	
+	
+	function __eventBeforeDelete($item)
 	{
-		foreach($list as $item){
-			$item->element_count = GW_Form_Elements::singleton()->count('owner_id='.(int)$item->id);
-			$item->answer_count = GW_Form_Answers::singleton()->count('owner_id='.(int)$item->id);
+		if($item->protected)
+		{
+			$this->setError("Cant delete protected item");
 		}
 		
 	}
 	
-	
+	//function __eventAfterForm()
+	//{
+	//	d::dumpas('test');
+		
+	//}
 	
 	function doTest()
 	{
-		$item = $this->getDataObjectById();
-		
-		
-		d::ldump(['1st_request'=>$item->elements, '2nd_request'=>$item->elements]);
-		
-		
-		
-		
+		d::dumpas('test');
 	}
+	
+	
+	
+	function doOpenInSite()
+	{
+		$id = $_GET['id'];
+		
+		Header('Location: '.Navigator::getBase().$this->app->ln.'/direct/docs/docs/item?id='.$id);
+	}
+	
 }

@@ -1273,5 +1273,12 @@ class GW_Data_Object
 		
 		return array_values($joins);
 	}
+	
+	function getFieldTypes()
+	{
+		return $this->getDB()->getColTypes($this->table);
+	}
 }
+
+
 

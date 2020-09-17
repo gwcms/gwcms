@@ -231,32 +231,7 @@
 			<i id="iconclass">fa fa-file-o</i>
 		</i>		
 		
-		<i id="childs">
-			
-			<i id="docs">
-				<i id="title">Dokumentai</i>
-				<i id="info">
-					<i id="model">GW_Doc</i>
-					<i id="iconclass">fa fa-codepen</i>
-				</i>			
-			</i>			
-				
-			<i id="formelements">
-				<i id="title">Laukeliai</i>
-				<i id="in_menu">1</i>
-				<i id="info">
-					<i id="iconclass">fa fa-wpforms</i>
-				</i>
-			</i>																																																																			
-			<i id="formvals">
-				<i id="title">Užpildymai</i>
-				<i id="in_menu">1</i>
-				<i id="info">
-					<i id="iconclass">fa fa-files-o</i>
-				</i>
-			</i>																																																																			
-																																																																																																																																																																																																	
-		</i>
+
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->
 	

@@ -37,7 +37,9 @@
 {/if}
 
 
-{call e field=subject i18n=4 hidden_note=$tmpnote}
+{call e field=title i18n=4 hidden_note=$tmpnote}
+
+
 {call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1}
 
 
@@ -52,7 +54,26 @@
 	
 {/if}
 
+
+
 {call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote height=$item->body_editor_height|default:"200px"}	
+
+
+{if $item->form && $item->form->elements}
+	{$fieldnames=array_keys($item->form->elements)}
+
+	
+	{capture assign=tmp1}Form "{$item->form->admin_title}" variables{/capture}
+{capture assign=tmp}
+<pre style="height:auto;max-height:80px;overflow-y: scroll;padding:1px" >
+{foreach $fieldnames as $fieldname}
+{literal}{{/literal}$form.{$fieldname}|escape{literal}}{/literal}
+{/foreach}
+</pre>	
+{/capture}
+		
+	{call e type=read title=$tmp1 field="nevermind" value=$tmp}
+{/if}
 
 
 {$hidden_note_copy=1}

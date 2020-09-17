@@ -5,23 +5,14 @@
 
 
 {list_item_action_m 
-		url=[false,[act=>doSendTest,id=>$item->id]] 
-		iconclass="fa fa-paper-plane" 
-		query_param=["email","Nurodykite gavėjo el. pašto adresą"]
-		caption="Siųsti test laišką [LT]"}
+		url=[false,[act=>doOpenInSite,id=>$item->id]] 
+		iconclass="fa fa-link" 
+		tag_params=[target=>'_blank']
+		caption="Dokumento nuoroda"}
 		
 		
 
-		
-{list_item_action_m 
-	url=["{$item->id}/formelements",id=>$item->id]
-	iconclass="fa fa-wpforms" 
-	caption="Laukeliai"}
-		
-{list_item_action_m 
-	url=["{$item->id}/formvals",id=>$item->id]
-	iconclass="fa fa-files-o" 
-	caption="Užpildymai"}
+
 		
 		
 

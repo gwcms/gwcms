@@ -44,9 +44,7 @@
 			{call e field=fields type=read}
 		{/if}
 
-		{if $item->page_by}
-			{call e field=page_by type=read}
-		{/if}	
+		{call e field=page_by type=number}	
 		
 		{if $item->group_by}
 			{call e field=group_by type=read}

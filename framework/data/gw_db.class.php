@@ -728,6 +728,13 @@ class GW_DB
 		return $this->fetch_one_column("SELECT column_name FROM information_schema.columns WHERE ".$conds);
 	}
 	
+	function getColTypes($table)
+	{
+		return $this->fetch_assoc(["SELECT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS 
+  WHERE table_name = ?", $table]);
+	}
+	
+	
 	function tableExists($tbl)
 	{
 		return $this->fetch_result("DESCRIBE `$tbl`", true)===Null;

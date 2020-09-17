@@ -2201,8 +2201,10 @@ class GW_Common_Module extends GW_Module
 
 	function getTranslation($item, $field, $src, $dest, $check = false)
 	{
-		if($check && (!$item->get($field,$src) || $item->get($field,$dest)))
+		if($check && (!$item->get($field,$src) || $item->get($field,$dest))){
+			//$this->setMessage("Auto translation field $field. value from '$from' ($src) NO NEED");
 			return false;
+		}
 
 		$title_array=[$from=$item->get($field, $src)];
 		
@@ -2221,6 +2223,8 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage("Auto translation field $field. value from '$from' ($src) to: '$to' ($dest)");
 			
 			return true;
+		}else{
+			$this->setError("Auto translation field $field. value from '$from' ($src) to: ($dest) failed");
 		}		
 	}
 	
@@ -2229,15 +2233,27 @@ class GW_Common_Module extends GW_Module
 	{
 		if(!isset($item->i18n_fields))
 			return false;
-			
+		
+		
+		$cols =  $item->getFieldTypes();
 		
 		$upd = false;
 		
+		//['varchar','text'])
+		
 		foreach($item->i18n_fields as $field => $x){
+			
+			
+			if(!in_array($cols["{$field}_en"], ['varchar']))
+				continue;
+			
+			
+			
 			$upd |= $this->getTranslation ($item, $field, "en", "ru", true);
 			$upd |= $this->getTranslation ($item, $field, "lt", "ru", true);
 			$upd |= $this->getTranslation ($item, $field, "en", "lt", true);
 			$upd |= $this->getTranslation ($item, $field, "lt", "en", true);
 		}		
+		
 	}
 }
