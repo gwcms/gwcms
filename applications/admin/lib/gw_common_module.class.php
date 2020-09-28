@@ -2256,4 +2256,99 @@ class GW_Common_Module extends GW_Module
 		}		
 		
 	}
+	
+	function doClone3()
+	{		
+		$item = $this->getDataObjectById();
+		$origitem = $item;
+		
+		$vals= $item->toArray();
+
+		if(isset($item->i18n_fields['title'])){
+				foreach(GW::s('LANGS') as $ln)
+					$vals['title_'.$ln] = $vals['title_'.$ln].' ('.GW::l('/G/GENERAL/COPY').' orig_id:'.$vals['id'].')';		
+		}
+		
+		$oldid = $vals['id'];
+		
+		unset($vals['id']);
+		$item = $this->model->createNewObject();
+		$item->setValues($vals);
+		
+		$ctx = ['src'=>$origitem,'dst'=>$item];
+		
+		$this->eventHandler("BEFORE_CLONE", $ctx);
+		
+		$item->insert();
+		$newitemid = $item->id;
+		
+		$this->eventHandler("AFTER_CLONE", $ctx);
+		
+		unset($_GET['id']);
+		unset($_REQUEST['id']);
+		
+		$this->setMessage(GW::l('/G/GENERAL/ITEM_CLONE_CREATED',['v'=>['OLDID'=>$oldid,'NEWID'=>$newitemid]]));
+
+		
+		Navigator::jump($this->buildUri("$newitemid/form", ['id'=>$newitemid]));
+	}	
+	
+	function incrementFindUniqueVal($field, $lastval)
+	{
+		for($i=1;$i<1000;$i++){
+			$test = $lastval.'_'.$i;
+			if(!$this->model->count(["`$field`=?", $test]))
+				return $test;
+		}
+		
+		return false;
+	}
+	
+	function incrementSetUniqueField($ctx, $unique_key_field)
+	{
+		$source = $ctx['src'];
+		$dest = $ctx['dst'];
+		
+		$newkey = $this->incrementFindUniqueVal($unique_key_field, $source->$unique_key_field);
+		
+		if($newkey==false){
+			$this->setError("CLONE ABORT KEY TEST `$unique_key_field` FAIL");
+			$this->jump();
+		}
+		
+		$dest->$unique_key_field = $newkey;		
+	}
+
+	function recoveryEmail($item)
+	{
+		$pagetitle = $this->app->page->title;
+		
+
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD)
+		{
+			$data = $item->getRecoveryData();
+
+			$body = "Page path: <a hreg='".$this->buildUri()."'>".$this->buildUri().'</a>';
+			$body .= "Recovery json: <hr>";
+			$body .= '<small style="color:gray"><pre>'. json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE).'</pre></small>';
+
+			$admintitle = $this->app->user->title;
+
+			$subject = GW::s('PROJECT_NAME')."  :: Env(".GW::s('PROJECT_ENVIRONMENT').") :: Item \"{$item->title}\" (id:{$item->id}) in module \"$pagetitle\" is removed";
+			
+			$mailopts = ['subject'=>$subject, 'body'=>$body, 'noStoreDB'=>1];
+
+			
+			$stat = GW_Mail_Helper::sendMailAdmin($mailopts);
+
+			$this->setMessage([
+			    'text'=>"Recovery email ".($stat?'sent':'failed')." to ".implode(',', $mailopts['to']), 
+			    'type'=>$stat?GW_MSG_SUCC:GW_MSG_ERR, 
+			    'float'=>1,
+			    'footer'=>$mailopts['error']
+			    ]);
+		}else{
+			$this->setMessage(['text'=>"Environment not production, so recovery mail not sent", 'type'=>GW_MSG_INFO,'float'=>1]);
+		}		
+	}
 }

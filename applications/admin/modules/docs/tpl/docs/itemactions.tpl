@@ -1,6 +1,6 @@
 {$addlitag=1}
 
-{list_item_action_m url=["`$item->id`/testpdfgen"] iconclass="fa fa-file-pdf-o" caption="Tikrinti pdf generavimą"}
+{list_item_action_m url=["`$item->id`/testpdfgen",[id=>$item->id]] iconclass="fa fa-file-pdf-o" caption="Tikrinti pdf generavimą"}
 
 
 
@@ -10,11 +10,9 @@
 		tag_params=[target=>'_blank']
 		caption="Dokumento nuoroda"}
 		
-		
+{$cnt = $item->countAnswers()}
+{list_item_action_m href=$app->buildUri("forms/forms/{$item->form->id}/answers",["doc_id"=>$item->id]) iconclass="fa fa-wpforms" caption="Atsakymai ({$cnt})"}
 
-
-		
-		
 
 
 {*

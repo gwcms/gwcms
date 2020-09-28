@@ -440,7 +440,12 @@ class Module_Translations extends GW_Common_Module
 		$resp = json_decode($resp);;
 		
 		if($resp[0]){
-			$item->set("value_{$dest_ln}", $resp[0]);
+			$need_verify_mark = "";
+			if($this->app->user->id==9){ //developer
+				$need_verify_mark = "[A] ";
+			}
+				
+			$item->set("value_{$dest_ln}", $need_verify_mark.$resp[0]);
 			$item->updateChanged();
 			
 			$this->setMEssage('OK');

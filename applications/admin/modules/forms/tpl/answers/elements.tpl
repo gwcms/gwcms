@@ -1,4 +1,4 @@
-{assign var=form_width value="800px" scope=global}
+{assign var=form_width value="100%" scope=global}
 {assign var=width_title value="100px" scope=global}
 {assign var=labelright value=1 scope=global}
 

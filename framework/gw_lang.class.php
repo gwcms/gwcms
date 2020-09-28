@@ -343,6 +343,13 @@ class GW_Lang
 		
 		$orig_val = false;
 			
+		self::optProc($vr, $opts, $orig_val);		
+		
+		return self::lnResult($orig_key, $vr, $orig_val);
+	}
+	
+	static function optProc(&$vr, &$opts, &$orig_val=false)
+	{
 		if(isset($opts['l']) && self::$ln=='lt'){
 			if($orig_val ==false)
 				$orig_val = $vr;
@@ -368,8 +375,13 @@ class GW_Lang
 			foreach($opts['v'] as $key => $val)
 				$vr = str_replace ('$'.$key, $val, $vr);
 		}		
-		
-		return self::lnResult($orig_key, $vr, $orig_val);
+	}
+	
+	static function l($fullkey, $opts=[])
+	{
+		$vr = self::readWrite($fullkey);
+		self::optProc($vr, $opts);
+		return $vr;
 	}
 	
 	

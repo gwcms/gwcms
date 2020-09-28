@@ -578,11 +578,20 @@ class GW_Public_Module {
 		if($this->app->user)
 			return;
 		
+		$this->setMessage([
+		    'text'=>GW::ln('/g/PLEASE_LOGIN_TO_CONTINUE'),
+		    'type'=>GW_MSG_INFO
+		]);
+		
+		
+		$this->app->sess('navigate_after_auth', $_SERVER['REQUEST_URI']);
+		
+		
 		if(method_exists($this, "noUserCame")){
 			$this->noUserCame();
 		}
 		
-		$this->app->sess('after_auth_nav', $_SERVER['REQUEST_URI']);
+		
 		
 		$this->app->jump('direct/users/users/login');				
 	}

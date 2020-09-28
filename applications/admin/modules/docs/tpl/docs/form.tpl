@@ -32,6 +32,8 @@
 
 
 
+
+
 {if $custom_cfg.vars_hint}
 	{$tmpnote=GW::l($custom_cfg.vars_hint)}
 {/if}
@@ -40,7 +42,7 @@
 {call e field=title i18n=4 hidden_note=$tmpnote}
 
 
-{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1}
+{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=$m->lang.FIELD_NOTE.PUSH_APPLY_TO_TAKE_EFFECT}
 
 
 {if $item->body_editor == 0}
@@ -82,9 +84,11 @@
 {call e field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro) hidden_note=GW::l('/m/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 
-{call e0 field=config value=json_encode($custom_cfg) type=hidden}
+{call e field=config type=code_json height="100px"}
+{call e field=admin_emails type=text}
 
 
+{include file="elements/input_transkey.tpl" name=site_info_trans}
 
 {if $app->user->isRoot()}
 	{call e field=protected type=bool}

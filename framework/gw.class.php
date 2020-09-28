@@ -234,9 +234,9 @@ class GW
 	 * 
 	 * @param type $key
 	 */
-	static function &l($key, $write = null)
+	static function l()
 	{
-		return GW_Lang::readWrite($key, $write);
+		return forward_static_call_array(array('GW_Lang', 'l'), func_get_args());
 	}
 
 	/**

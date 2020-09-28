@@ -181,7 +181,11 @@ class GW_Mail_Helper
 		
 
 		if(isset($opts['bcc'])){
-			$mailer->addBCC($opts['bcc']);
+			if(!is_array($opts['bcc']))
+				$opts['bcc'] = [$opts['bcc']];
+				
+			foreach($opts['bcc'] as $bcc)
+				$mailer->addBCC($bcc);
 		}
 		
 		if($cfg->mail_bcc_all && !isset($opts['noAdminCopy'])){
@@ -226,6 +230,8 @@ class GW_Mail_Helper
 			
 			//because &$opts not $opts
 		}
+		
+		//d::dumpas($mailer);
 		
 		$mailer->ClearAllRecipients( );
 		$mailer->clearAttachments();//jei atskiram useriui atskiras attach		

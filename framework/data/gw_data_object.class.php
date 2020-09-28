@@ -1278,6 +1278,38 @@ class GW_Data_Object
 	{
 		return $this->getDB()->getColTypes($this->table);
 	}
+	
+	function getRecoveryData()
+	{
+		$data = [
+			'item_data'=>$this->toArray(),
+			'item_class'=>get_class($this)
+		];
+		
+		if(isset($this->composite_map)){
+			foreach($this->composite_map as $key => $cfg){
+				if($cfg[0] == 'gw_related_objecs'){
+					
+					$subrecovery = [];
+					
+					
+					
+					foreach($this->$key as $sub){
+						$subrecovery[] = $sub->getRecoveryData();
+					}
+					
+					$data['subitems'][$key] = $subrecovery;
+				}
+			}
+		}
+		
+		if(isset($this->extensions['keyval'])){
+			$data['keyval'] = $this->extensions['keyval']->obj->getAll();
+		}
+		
+		return $data;
+	}	
+	
 }
 
 

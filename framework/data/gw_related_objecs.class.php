@@ -73,17 +73,17 @@ class GW_Related_Objecs extends GW_Data_Object implements GW_Composite_Slave {
 
 	//duomenu paemimas
 	public function getValue() 
-	{
+	{		
 		$masterclass = get_class($this->masterobject);
 		$id = $this->masterobject->id;
 		
-		if(isset(self::$cache_related[$masterclass][$id])){
+		if(isset(self::$cache_related[$masterclass][$this->params['object']][$id])){
 			
-			return self::$cache_related[$masterclass][$id];
+			return self::$cache_related[$masterclass][$this->params['object']][$id];
 		}else{
 			$list  = $this->getValueNC();
 			
-			self::$cache_related[$masterclass][$id] = $list;
+			self::$cache_related[$masterclass][$this->params['object']][$id] = $list;
 			return $list;
 		}
 	}

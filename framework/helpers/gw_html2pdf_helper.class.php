@@ -11,7 +11,7 @@ use Dompdf\Dompdf;
 
 class GW_html2pdf_Helper
 {
-	function convert($html, $stream=true)
+	function convert($html, $stream=true, $opts=[])
 	{
 
 
@@ -20,8 +20,14 @@ class GW_html2pdf_Helper
 		
 			
 		$dompdf->set_option('enable_font_subsetting', true);
-		$dompdf->set_option('defaultFont', 'Arial');
+		$dompdf->set_option('defaultFont', 'DejaVu Sans');
 		$dompdf->set_option('isRemoteEnabled', true);
+		
+		if(isset($opts['params'])){
+			foreach($opts['params'] as $key => $val)
+				$dompdf->set_option( $key, $val );
+		}
+		
 		
 		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 		

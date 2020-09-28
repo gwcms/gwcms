@@ -91,4 +91,13 @@
 		<en>Limitation</en>
 		<lt>Ribojimas</lt>
 	</i>
+	
+	<i id="COPY">
+		<en>Copy</en>
+		<lt>Kopija</lt>
+	</i>
+	<i id="ITEM_CLONE_CREATED">
+		<en>Sukurta kūrinio kopija (id:$NEWID) seno kūrinio (id:$OLDID)</en>
+		<lt>Created item copy (id:$NEWID), old item (id:$OLDID)</lt>
+	</i>
 </xml>

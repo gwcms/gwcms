@@ -22,6 +22,7 @@ class GW_Doc extends GW_i18n_Data_Object
 		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'form_id']]
 	];
 	
+	public $encode_fields = ['config'=>'jsono'];		
 
 	
 	
@@ -105,7 +106,7 @@ class GW_Doc extends GW_i18n_Data_Object
 		
 		switch($event){
 			case 'BEFORE_SAVE':
-								
+				$this->generateKey();				
 
 				//ckeditoriaus fix, kad smarty tage nereplacintu
 				foreach($this->changed_fields as $field  => $x){
@@ -125,10 +126,17 @@ class GW_Doc extends GW_i18n_Data_Object
 		parent::eventHandler($event, $context_data);
 	}
 		
-	
-	function findByIdName($idname)
+	function generateKey($force=false)
 	{
-		return $this->find(['idname=?', $idname]);
+		if($force || !$this->key)
+			$this->key = md5(date('Y-m-d H:i:s'). $this->id);
+	}	
+		
+	function countAnswers()
+	{
+		$initial = ['doc_id'=>$this->id];		
+		return GW_Form_Answers::singleton()->count(GW_DB::buidConditions($initial));
 	}
+
 	
 }			

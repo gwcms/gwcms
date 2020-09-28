@@ -16,8 +16,10 @@
 	{$dl_smart_fields=[value]}
 	
 	
-	{$dl_actions=[invert_active_ajax,edit]}
-	
+	{$dl_actions=[invert_active_ajax,edit,delete]}
+	{$dl_output_filters=[
+		signature=>expand_truncate
+	]}	
 	
 
 	{function dl_cell_value}

@@ -11,8 +11,8 @@ class Module_Answers extends GW_Common_Module
 		
 		$this->app->carry_params['user_id']=1;
 		$this->app->carry_params['clean']=1;
-		$this->owner_id=$this->app->path_arr[1]['data_object_id'];		
-		
+		$this->owner_id=$this->app->path_arr[1]['data_object_id'];	
+		$this->app->carry_params['doc_id']=1;
 		
 		
 		//$this->filters['user_id']=$_GET['user_id'];
@@ -20,8 +20,10 @@ class Module_Answers extends GW_Common_Module
 		
 		parent::init();
 		
-		
-
+		if(isset($_GET['doc_id']))
+		{
+			$this->filters['doc_id'] = $_GET['doc_id'];
+		}
 	}
 	
 	
@@ -46,6 +48,7 @@ class Module_Answers extends GW_Common_Module
 		}
 		
 		$fields['admin_note'] = ['type'=>'text'];
+		$fields['signature'] = ['type'=>'text'];
 		$fields['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'users/usr'];
 		
 		$fields['active'] = ['type'=>'bool'];
