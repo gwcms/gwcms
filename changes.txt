@@ -29,3 +29,5 @@
 	* animated rotating gwcms logo
 	* gwcms svg to font converted font (url:system/tools/TestListIcons)
  
+3.5
+	composer update dompdf/dompdf
