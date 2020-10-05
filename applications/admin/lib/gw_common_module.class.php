@@ -2345,7 +2345,7 @@ class GW_Common_Module extends GW_Module
 			    'text'=>"Recovery email ".($stat?'sent':'failed')." to ".implode(',', $mailopts['to']), 
 			    'type'=>$stat?GW_MSG_SUCC:GW_MSG_ERR, 
 			    'float'=>1,
-			    'footer'=>$mailopts['error']
+			    'footer'=>$mailopts['error'] ?? false
 			    ]);
 		}else{
 			$this->setMessage(['text'=>"Environment not production, so recovery mail not sent", 'type'=>GW_MSG_INFO,'float'=>1]);
