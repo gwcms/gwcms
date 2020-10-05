@@ -27,6 +27,11 @@ class Module_Docs extends GW_Common_Module
 		{
 			$this->filters['owner_field'] = $_GET['owner_field'];
 		}
+		
+		
+		//$this->itax = new Itax(GW_Config::singleton()->get('itax/itax_apikey'));		
+		$this->addRedirRule('/^doItax|^viewItax/i','itax');		
+		
 	}
 
 	

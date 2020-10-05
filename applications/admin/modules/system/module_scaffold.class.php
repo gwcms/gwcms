@@ -118,10 +118,15 @@ class Module_Scaffold extends GW_Common_Module
 		$module = $config['module'];
 		
 		$scaffid = ($config['installid'] ?? date('YmdHis'));
+		
+		mkdir(GW::s('DIR/TEMP'),0777);
 		$installdir = GW::s('DIR/TEMP').'scaff_'.$scaffid.'/';
-		@mkdir($installdir);
+		mkdir($installdir);
+		d::ldump($installdir);
+		
 		$moddir = $installdir.'modules/';
 		@mkdir($moddir);
+		
 		
 		
 		$module_dir=$moddir.$module.'/';
