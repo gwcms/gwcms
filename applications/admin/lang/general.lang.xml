@@ -97,7 +97,7 @@
 		<lt>Kopija</lt>
 	</i>
 	<i id="ITEM_CLONE_CREATED">
-		<en>Sukurta įrašo kopija (id:$NEWID) seno įrašo (id:$OLDID)</en>
-		<lt>Created item copy (id:$NEWID), old item (id:$OLDID)</lt>
+		<lt>Sukurta įrašo kopija (id:$NEWID) seno įrašo (id:$OLDID)</lt>
+		<en>Created item copy (id:$NEWID), old item (id:$OLDID)</en>
 	</i>
 </xml>
