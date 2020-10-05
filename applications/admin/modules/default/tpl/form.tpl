@@ -6,9 +6,16 @@
 
 {$tmpformhtml}
 
-{foreach $m->list_config.dl_fields as $field}
-	{call "cust_inputs"}
-{/foreach}
+
+
+{if $fields_config}
+	{call "build_form"}
+{else}
+
+	{foreach $m->list_config.dl_fields as $field}
+		{call "cust_inputs"}
+	{/foreach}
+{/if}
 
 
 

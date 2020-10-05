@@ -97,7 +97,7 @@ function initSelectAll(obj, opts)
 }
 	
 function initSelect2Inputs1()
-{
+{	
 	$(".GWselectAjax").each(function(){
 			
 

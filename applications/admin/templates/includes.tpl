@@ -12,7 +12,23 @@
 			{if $include.0=='js'}
 				<script type="text/javascript" src="{$include.1}"></script>
 			{elseif $include.0=='css'}
-				<link rel="stylesheet" type="text/css" href="{$include.1}" />
+				
+				{if Navigator::isAjaxRequest()}
+					<script>
+						$(function(){
+							$( document.createElement('link') ).attr({
+								href: '{$include.1}',
+								type: 'text/css',
+								rel: 'stylesheet'
+							}).appendTo('head');						
+					    });
+					</script>
+				{else}
+					<link rel="stylesheet" type="text/css" href="{$include.1}" />
+				{/if}
+				
+				
+				
 			{elseif $include.0=='jsstring'}			
 				<script type="text/javascript">{$include.1}</script>
 			{/if}
