@@ -51,11 +51,12 @@
 
 
 <script>
-
-$(document).ready(function(){
+require(['gwcms'], function(){
 	GW_SW.initBtns();
 	
-});
+
+})
+
 </script>
 
 <br />

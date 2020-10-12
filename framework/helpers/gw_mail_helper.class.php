@@ -26,12 +26,16 @@ class GW_Mail_Helper
 	
 	static function initPhpmailer($from='')
 	{
-		
-		if(version_compare(PHP_VERSION, '7.3.0') >= 0){
-			//bulksms project runing on 7.3
+		if(version_compare(PHP_VERSION, '7.4.0') >= 0){
 			include_once GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php';
 
 			$mail = new PHPMailer;
+		}else if(version_compare(PHP_VERSION, '7.3.0') >= 0){
+			//bulksms project runing on 7.3
+			include_once GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php';
+
+			//$mail = new PHPMailer;
+			$mail = new PHPMailer\PHPMailer\PHPMailer;
 		}else{
 			$mail = GW::getInstance('phpmailer',GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php');
 		}
