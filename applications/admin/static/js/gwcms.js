@@ -468,7 +468,7 @@ var gw_adm_sys = {
 			
 
 			var opt = obj.data('iframeopt') ? obj.data('iframeopt') : {};
-						
+			
 			openIframeUnderThisTr(this, this.href, afterc, opt)
 			event.preventDefault();
 		}).attr('data-initdone',1);

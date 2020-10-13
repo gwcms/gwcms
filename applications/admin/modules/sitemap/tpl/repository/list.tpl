@@ -62,7 +62,10 @@
 	
 	{function dl_actions_preview}
 		{if $item->isdir==0}
-			{list_item_action_m url=[preview,[id=>$item->id,clean=>1]] iconclass="fa fa-eye" action_addclass="iframe-under-tr"}
+			{list_item_action_m 
+				url=[preview,[id=>$item->id,clean=>1]] iconclass="fa fa-eye" action_addclass="iframe-under-tr"
+				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
+			}
 		{/if}
 	{/function}		
 	
