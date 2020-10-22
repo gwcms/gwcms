@@ -94,7 +94,7 @@ class Module_Forms extends GW_Common_Module
 	
 	function __eventBeforeDelete($item)
 	{
-		$this->recoveryMail($item);
+		$this->recoveryEmail($item);
 	}
 	
 	

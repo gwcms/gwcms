@@ -12,11 +12,21 @@ class GW_User_service extends GW_Common_Service
 	public $username = 'aaa';
 	public $pass = 'bbb';
 
+	
+	function init()
+	{
+		parent::init();
+		
+		list($this->username, $this->pass) = explode(':', GW_Config::singleton()->get('gw_users/userapi_userpass'));
+	}
+	
 	function checkAuth()
 	{
 		if ($this->checkBasicHTTPAuth())
 			return true;
 	}
+	
+	
 
 	
 	function unsetUserAdminFields(&$user, $update=false)
@@ -34,8 +44,8 @@ class GW_User_service extends GW_Common_Service
 	{
 		$username = $_POST['user'];
 		$password = $_POST['pass'];
-		$ip = $_POST['ip'];
-		$user_agent = $_POST['user_agent'];
+		$ip = $_POST['ip'] ?? false;
+		$user_agent = $_POST['user_agent'] ?? false;
 			
 		
 		if (!$user = GW_Customer::singleton()->getByUsernamePass($username, $password)){
@@ -47,7 +57,7 @@ class GW_User_service extends GW_Common_Service
 				$resp['error_msgid'] = '/G/GENERAL/USER_NOT_ACTIVE';
 			}else{
 				//user is ok
-				$user->setRandToken();
+		//		$user->setRandToken();
 				$user->onLogin($ip, $user_agent);
 				
 				$resp['token']=$user->token;

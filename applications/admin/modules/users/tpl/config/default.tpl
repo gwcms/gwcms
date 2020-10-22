@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="900px"}
 
 {*$nowrap=1*}
 
@@ -11,6 +11,10 @@
 	{call e field=fields_enabled options=$options.fields_enabled type=multiselect note="(Root only)"}
 	{*type=tags*}
 	{call e field=available_fields  default='phone,surname,email,birth_date,gender,address,city,image,login_count,last_ip,last_request_time' note="(Root only)"}
+	
+	
+	{call e field=userapi_userpass type=text note="format: 'user:pass' (Root only)"}
+	{call e field=secondcms_userservice_endpoint type=text note="format: 'https://user:pass@domain.tld/service/user' (Root only)" hidden="used to import user if not exist in primary cms"}
 {/if}
 
 

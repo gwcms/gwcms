@@ -11,7 +11,7 @@ class GW_Doc extends GW_i18n_Data_Object
 	    'admin_title'=>['gw_string', ['required'=>1]],
 	];		
 	
-	public $default_order="owner_type ASC, owner_field ASC, admin_title ASC";	
+	public $default_order="admin_title ASC";	
 	public $i18n_fields = [
 	    "title"=>1,
 	    "body"=>1,
