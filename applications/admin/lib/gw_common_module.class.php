@@ -2166,20 +2166,35 @@ class GW_Common_Module extends GW_Module
 		$this->runPeriodicTasks("tasks_".$_GET['every'].'min');
 	}
 	
-	function prompt($form, $title)
+	function prompt($form, $title, $opts=[])
 	{
 		$answers = true;
 		
+		if(isset($opts['rememberlast'])){
+			$lastasnwers = json_decode($this->modconfig->prompt_lastanswers, true);
+		}
+		
 		//if already have answers ?
 		foreach($form['fields'] as $fieldname => $el){
+			
+			if(isset($lastasnwers[$fieldname])){
+				$form['fields'][$fieldname]['default'] = $lastasnwers[$fieldname];
+			}
+			
 			if(isset($el['required']) && !isset($_GET['item'][$fieldname])){
 				$answers=false;
 			}
 		}
 				
 		
-		if($answers)
+		if($answers){
+			if(isset($opts['rememberlast'])){
+				$this->modconfig->prompt_lastanswers = json_encode($_GET['item']);
+			}			
+			
+			
 			return $_GET['item'];
+		}
 		
 		$this->tpl_vars['getargs'] = $_GET;
 		unset($this->tpl_vars['getargs']['url']);

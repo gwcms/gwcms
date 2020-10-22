@@ -165,6 +165,7 @@ class GW_FSFile extends GW_Data_Object
 	    'extension'=>1,
 	    'subfilescount'=>1,
 	    'url'=>1,
+	    'files'=>1,
 	];
 
 
@@ -191,6 +192,10 @@ class GW_FSFile extends GW_Data_Object
 			case 'url':
 				$dir=GW::s("SITE_URL").str_replace(GW::s('DIR/REPOSITORY'),'repository/',$this->root_dir);
 				return $dir.urlencode($this->filename);
+			break;
+
+			case 'files':
+				return glob($this->path.'/*');
 			break;
 			//case 'ext':
 			//	return new IPMC_Competition_Extended($this->id);

@@ -360,6 +360,37 @@ class Module_Repository extends GW_Common_Module
 	}
 	
 	
+	function doDownloadZiped()
+	{
+		$item = $this->getDataObjectById();
+		
+		
+		$base = $item->path;
+		$archivename = $item->filename;
+		
+		foreach($item->files as $file){
+			$zipfiles[$file] = str_replace('//','/',str_replace($base, '', $file));
+		}
+			
+		
+		if(count($zipfiles)){
+
+			$reposdir = GW::s('DIR/REPOSITORY');
+			$workdir="tempdownload/";
+			@mkdir($reposdir.$workdir);
+			GW_File_Helper::unlinkOldTempFiles($reposdir.$workdir,'24 hour');
+			
+
+			$zipname = $workdir.$archivename.'_'.date('ymd_His').'.zip';
+			
+			
+			
+			GW_File_Helper::createZip($zipfiles, $reposdir.$zipname);		
+
+			header('Location: /repository/'.$zipname);
+		}		
+	}
+	
 	
 	function viewDownloadMultiple()
 	{
