@@ -22,7 +22,7 @@
 	{if $modpath}
 		{$tmppath=explode('/', $modpath,2)}
 		{if !$datasource}
-			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options", $source_args)}
+			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/{$optionsview|default:options}", $source_args)}
 		{/if}
 	{/if}
 	

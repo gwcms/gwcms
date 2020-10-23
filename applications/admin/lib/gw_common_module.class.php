@@ -449,7 +449,7 @@ class GW_Common_Module extends GW_Module
 				$this->processView('list', ['ajax_one_item_list' => $item->id]);
 				exit;
 			}else{
-				echo json_encode($vals+['last_update_time'=>$item->update_time]);
+				echo json_encode($item->toArray()+['last_update_time'=>$item->update_time]);
 				exit;
 			}
 			

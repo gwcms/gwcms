@@ -58,8 +58,15 @@ class GW_Cms_Api
 	/**
 	 * TODO 
 	 */
-	function request()
+	function request($path, $get_params = [], $headers=[], $post=[])
 	{
+		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
 		
+		$r = $this->http->getContents($url = $this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params), $headers, $post);
+
+		//d::dumpas($url);
+		//dump($this->http->flushDebugInfo());
+
+		return $r;		
 	}
 }

@@ -15,3 +15,8 @@
 
 
 {list_item_action_m url=["`$item->id`/iplog",[id=>$item->id]] iconclass="fa fa-history" caption=GW::l('/m/VIEWS/iplog')}
+
+
+{if $app->user->isRoot()}
+	{list_item_action_m onclick="copyTextToClipboard('`$item->api_key`');return false" iconclass="fa fa-user-secret" confirm=1 caption="Copy api_key to clipboard (root only)"}
+{/if}
