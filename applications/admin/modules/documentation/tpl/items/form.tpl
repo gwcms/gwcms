@@ -2,7 +2,7 @@
 
 {call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
 
-{call e field=type type=select options=$m->lang.GALLERY_ITEM_TYPE_OPT}
+{call e field=type type=select options=GW::l('/m/GALLERY_ITEM_TYPE_OPT')}
 
 {call e field=title}
 

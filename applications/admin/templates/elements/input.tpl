@@ -125,8 +125,8 @@ instead of {include "elements/input.tpl" name=
 		{if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
-				{if isset($m->lang.FIELD_NOTE.$name)}
-					{$hidden_note=$m->lang.FIELD_NOTE.$name}
+				{if GW::l("/m/FIELD_NOTE/{$name}",[asis=>1])!==null}
+					{$hidden_note=GW::l("/m/FIELD_NOTE/{$name}")}
 				{/if}
 			{/if}
 			<span>
@@ -134,7 +134,7 @@ instead of {include "elements/input.tpl" name=
 				{if $hidden_note} 
 					<a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  data-placement="right" data-container="body" data-toggle="popover" data-html="true" data-trigger="focus" href="#popover" onclick="return false"></a>
 				{/if}
-				{if $required} <span title="{$lang.REQUIRED}">*</span>{/if}
+				{if $required} <span title="{GW::l('/g/REQUIRED')}">*</span>{/if}
 			</span>
 			{if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		</span>

@@ -3,18 +3,18 @@
 {include file="list/actions.tpl"}
 
 <p>
-{gw_link relative_path=form title=$lang.CREATE_NEW icon="action_file_add" params=[id=>0]}
+{gw_link relative_path=form title=GW::l('/g/CREATE_NEW') icon="action_file_add" params=[id=>0]}
 &nbsp;&nbsp;
 {$path=import}{if $m->parent->id > 0}{$path="`$m->parent->id`/`$path`"}{/if}
-{gw_link relative_path=$path title=$m->lang.IMPORT icon="import"}
+{gw_link relative_path=$path title=GW::l('/m/IMPORT') icon="import"}
 &nbsp;&nbsp;&nbsp;&nbsp;
-{$m->lang.FIELDS.adm_list_style}: {gw_link do=toggle_list_style title=$m->lang.GALLERY_ADM_STYLE_OPT[$m->config->adm_list_style]}
+{GW::l('/m/FIELDS/adm_list_style')}: {gw_link do=toggle_list_style title=GW::l("/m/GALLERY_ADM_STYLE_OPT/{$m->config->adm_list_style}")}
 </p>
 
 <br />
 
 {if !count($list)}
-	<p>{$lang.NO_ITEMS}</p>
+	<p>{GW::l('/g/NO_ITEMS')}</p>
 {else}
 
 {if !$m->config->adm_list_style}
@@ -26,7 +26,7 @@
 	<th>{$app->fh()->fieldTitle(title)}</th>
 	<th>{$app->fh()->fieldTitle(insert_time)}</th>
 	<th>{$app->fh()->fieldTitle(update_time)}</th>
-	<th>{$lang.ACTIONS}</th>
+	<th>{GW::l('/g/ACTIONS')}</th>
 </tr>
 
 
@@ -101,8 +101,8 @@
 	</style>
 
 	<div id="sortable_actions"  style="display:none">
-		<button id="applysort">{$lang.APPLY_SORT}</button>
-		<button onclick="location.href=location.href">{$lang.CANCEL}</button>
+		<button id="applysort">{GW::l('/g/APPLY_SORT')}</button>
+		<button onclick="location.href=location.href">{GW::l('/g/CANCEL')}</button>
 	</div>
 	
 {$index=0}

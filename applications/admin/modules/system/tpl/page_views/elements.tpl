@@ -10,7 +10,7 @@
 		{elseif in_array($field,[priority])}	
 			{call e type=number}
 		{elseif $field=="type"}
-			{call e type=select_plain options=$m->lang.OPTIONS.page_view_types}	
+			{call e type=select_plain options=GW::l('/m/OPTIONS/page_view_types')}	
 		{elseif $field=="priority" || $field=="page_by"}
 			{call e type=number}				
 		{elseif $field=="fields" || $field=="condition"}	

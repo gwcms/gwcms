@@ -33,7 +33,7 @@ it is in ntconfig!!!
 {function name=df_submit_button_savetest}
 	
 	<button style='margin-left:5px;' class="btn btn-mint float-right" onclick="this.form.elements['submit_type'].value='testemail'">
-		<i class="fa fa-save"></i> {$lang.SAVE} &amp; {GW::l('/m/VIEWS/dotest')}</button>
+		<i class="fa fa-save"></i> {GW::l('/g/SAVE')} &amp; {GW::l('/m/VIEWS/dotest')}</button>
 {/function}
 
 

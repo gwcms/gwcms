@@ -1,6 +1,6 @@
 <table class="gwListViews gwTable" style="width:auto">
 	<tr>
-	<th><i class="fa fa-sort-amount-asc" aria-hidden="true" title="{$lang.ORDERS_LABEL}"></i></th> 		
+	<th><i class="fa fa-sort-amount-asc" aria-hidden="true" title="{GW::l('/g/ORDERS_LABEL')}"></i></th> 		
 	<td>
 	{foreach $list_orders as $list_order}
 		<a href="{$app->buildUri(false,[act=>doSetOrder,name=>$list_order.name],[carry_params=>1])}"

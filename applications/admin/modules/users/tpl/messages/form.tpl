@@ -10,7 +10,7 @@
 
 
 {function name=df_submit_button_send}
-	<button class="btn btn-primary"><i class="fa fa-save"></i> {$m->lang.SEND}</button>
+	<button class="btn btn-primary"><i class="fa fa-save"></i> {GW::l('/m/SEND')}</button>
 {/function}
 
 

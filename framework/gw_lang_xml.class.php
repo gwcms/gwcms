@@ -62,11 +62,16 @@ class GW_Lang_XML
 
 	static function ___getLn(&$list, $ln)
 	{
+		//d::ldump($list);
+		
 		foreach ($list as $item)
 			if ($item['tag'] == strtoupper($ln))
 				return $item['value'];
+			
+		
+		//d::dumpas($list);
 
-		return "%NOT SPECIFIED%";
+		return "%404-".$list[0]['tag'].":".$list[0]['value'].'%';
 	}
 
 	static function ___multiLangStruct($in_tree, $ln)
@@ -175,7 +180,158 @@ class GW_Lang_XML
 		
 		//return cdatas back
 		$out = preg_replace_callback("/\/{3}cdata\/{3}(\d+)\/{3}/", function($m) use (&$cdatas){ return $cdatas[0][$m[1]];  }, $out);	
-		
+				
 		return $out;
 	}
+	
+	
+	
+	static function stuctAdd(&$sxml, &$arr)
+	{
+		foreach($arr as $node){
+			$tag = strtolower($node['tag']);
+			
+			if(isset($node['childs'])){
+				$child = $sxml->addChild($tag);
+				self::stuctAdd($child, $node['childs']);
+			}else{
+				if($node['value']){
+					if(preg_match('/[<>]/',$node['value'])){
+						//d::dumpas('test');
+						$child = $sxml->addChild($tag);
+						$child->addCData($node['value']);
+					}else{
+						$child = $sxml->addChild($tag, $node['value']);
+					}
+				}
+			}
+			
+			
+			if(isset($node['attributes']))
+				foreach($node['attributes'] as $att => $val)
+					$child->addAttribute(strtolower($att), $val);
+			
+		}
+	}
+	
+	function struct2Xml($arr)
+	{
+		$sxml = new SimpleXMLExtended('<?xml version="1.0" encoding="utf-8"?><xml></xml>', 0, false);
+		
+		//$test = $sxml->xpath();
+		
+		//d::dumpas($test);
+		
+		self::stuctAdd($sxml, $arr);
+		
+		$out = $sxml->asXML();
+		
+		$out = tidy_repair_string($out, ['input-xml'=> 1, 'indent' => 10, 'wrap' => 0], 'utf8');
+		return $out;
+	}
+	
+	
+	
+	function structMod(&$arr, $key, $val, $ln=false)
+	{
+		$key = trim($key,'/');
+		$keyparts = explode('/', $key);
+		
+		$pointer =& $arr;
+		
+		
+		
+		foreach($keyparts as $search){
+		
+			$found = false;
+			foreach($pointer as &$elm){
+				
+				
+				$key = $elm['attributes']['ID'];
+				
+				
+				
+				if($key == $search)
+				{
+					$found = true;
+					if(isset($elm['childs'])){
+						$pointer =& $elm['childs'];
+					}else{
+						$pointer =& $elm;
+					}
+					d::ldump("pointer change $key");
+					
+					
+					break;
+				}
+			}
+			
+			if(!$found){
+				d::ldump("pointer not found, create new $search");
+				
+				$new = ['tag'=>'I', 'attributes'=>['ID'=>$search], 'childs'=>[]];
+				$pointer[] =& $new;
+				
+				$pointer =& $new['childs'];
+			}
+		}
+		
+		//print_r(['before'=>$pointer]);
+		
+		if($ln){
+			
+			
+			if(is_array($pointer)){
+				
+				$pointerx =& self::structLangNodeSeek($pointer, $ln, true);	
+				$pointerx['value'] = $val;
+				
+				
+				
+				
+			}else{
+				$pointer = ['tag'=>'I','childs'=>['tag'=>$ln, 'value'=> $val]];
+			}
+		}else{
+			$pointer = ['tag'=>'I', 'attributes'=>['ID'=>$search], 'value'=>$val];
+		}
+		
+		//print_r(['after'=>$pointer]);
+	}
+	
+	function &structLangNodeSeek(&$treePointer,$ln,$create=false)
+	{
+		$found = false;
+		foreach($treePointer as &$elm){
+			if($elm['tag']==$ln){
+				$treePointer =& $elm;
+				$found = true;
+			}
+		}
+		if(!$found){
+			if($create){
+				$x = ['tag'=>$ln, 'value'=> false];
+				$treePointer[] =& $x;
+				return $x;
+			}else{
+				return false;
+			}
+		}		
+				
+		return $treePointer;
+	}
+}
+
+
+
+
+
+class SimpleXMLExtended extends SimpleXMLElement {
+
+	public function addCData($cdata_text) {
+		$node = dom_import_simplexml($this);
+		$no = $node->ownerDocument;
+		$node->appendChild($no->createCDATASection(trim($cdata_text)));
+	}
+
 }

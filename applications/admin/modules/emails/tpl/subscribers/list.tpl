@@ -23,8 +23,8 @@
 		email=>1,
 		lang=>1,
 		insert_time=>1, 
-		active=>[type=>select, options=>$lang.ACTIVE_OPT],
-		unsubscribed=>[type=>select, options=>['0'=>$lang.NO, '1'=>$lang.YES]],
+		active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')],
+		unsubscribed=>[type=>select, options=>['0'=>GW::l('/g/NO'), '1'=>GW::l('/g/YES')]],
 		unsubscribe_note=>1,
 		groups=>[type=>multiselect, options=>$options.groups]]
 	}
@@ -39,7 +39,7 @@
 
 	{function dl_cell_groups}
 		{foreach from=$item->groups key=ind item=gid}
-			<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{$lang.EDIT}">{$options.groups.$gid}</a>
+			<a href="{$app->ln}/{$app->page->path}/groups?id={$gid}" title="{GW::l('/g/EDIT')}">{$options.groups.$gid}</a>
 		{/foreach}	
 	{/function}
 	
@@ -48,9 +48,9 @@
 		{if $item->confirm_code==0}
 			-
 		{elseif $item->confirm_code==7}
-			{$lang.YES}
+			{GW::l('/g/YES')}
 		{else}
-			{$lang.NO}, patvirtinimo kodas {$item->confirm_code}
+			{GW::l('/g/NO')}, {GW::l('/m/CONFIRM_CODE')} {$item->confirm_code}
 		{/if}
 	{/function}	
 	

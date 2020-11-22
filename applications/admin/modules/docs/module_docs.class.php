@@ -32,7 +32,7 @@ class Module_Docs extends GW_Common_Module
 		//$this->itax = new Itax(GW_Config::singleton()->get('itax/itax_apikey'));		
 		$this->addRedirRule('/^doItax|^viewItax/i','itax');
 
-		//GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
+		GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
 		
 	}
 
@@ -204,7 +204,7 @@ class Module_Docs extends GW_Common_Module
 		$item->setValues($vals);
 		$item->updateChanged();
 		
-		$this->setMessage(GW::ln('/g/SAVE_SUCCESS'));
+		$this->setMessage(GW::l('/g/SAVE_SUCCESS'));
 		$this->jumpOutOfAct();
 		
 	}

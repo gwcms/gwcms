@@ -42,7 +42,7 @@
 {call e field=title i18n=4 hidden_note=$tmpnote}
 
 
-{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=$m->lang.FIELD_NOTE.PUSH_APPLY_TO_TAKE_EFFECT}
+{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 
 {if $item->body_editor == 0}

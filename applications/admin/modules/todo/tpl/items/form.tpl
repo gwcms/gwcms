@@ -20,8 +20,8 @@
 }
 
 
-{call e field=type type=select options=$m->lang.TODO_ITEM_TYPE_OPT}
-{*include file="elements/input.tpl" name=job_type type=radio options=$m->lang.TODO_ITEM_JOB_TYPE_OPT*}
+{call e field=type type=select options=GW::l('/m/TODO_ITEM_TYPE_OPT')}
+{*include file="elements/input.tpl" name=job_type type=radio options=GW::l('/m/TODO_ITEM_JOB_TYPE_OPT')*}
 
 {call e field=title}
 {call e field=time_have value=gw_math_helper::uptime($item->time_have)}
@@ -38,10 +38,10 @@
 }
 
 
-{call e field=state  type=select options=$m->lang.STATE_OPT|strip_tags}
+{call e field=state  type=select options=GW::l('/m/STATE_OPT')|strip_tags}
 
 
-{call e field=priority type=select options=$m->lang.PRIORITY_OPT default=5 data_type=numeric}
+{call e field=priority type=select options=GW::l('/m/PRIORITY_OPT') default=5 data_type=numeric}
 {call e field=deadline type=date}
 
 

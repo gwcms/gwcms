@@ -5,7 +5,7 @@
 {call e field=surname}
 {call e field=email required=1}
 
-{call e field=lang type=select options=$m->lang.OPT.lang empty_option=1 required=1}
+{call e field=lang type=select options=GW::l('/m/OPT/lang') empty_option=1 required=1}
 
 {call e field=groups type=multiselect options=$options.groups}
 

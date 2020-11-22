@@ -8,7 +8,8 @@
 	{$title}
 {else}
 	{if $order.current}<i class="fa fa-sort-amount-{$order.current}" onclick="$(this).next().click()" ></i>{/if}
-	<a class="setOrder" data-order="{$order.order}" href="#" {if $order.current}style="font-weight:bold"{/if}>{$title}{if $order.multiorder} ({$order.multiorder}){/if}</a>
+	<a class="setOrder" data-order="{$order.order}" href="#" {if $order.current}style="font-weight:bold"{/if}>
+		{$title}{if $order.multiorder} ({$order.multiorder}){/if}</a>
 {/if}
 
 

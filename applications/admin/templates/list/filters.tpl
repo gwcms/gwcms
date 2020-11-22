@@ -37,8 +37,8 @@
 	
 <div style="clear:both"></div>
 <div id="gwFiltersActions" style="display:none" >	
-		<button class="btn btn-default">{$lang.APPLY_FILTER}</button>
-		{*<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;" title="{$lang.REMOVE_FILTER}"><i class="fa fa-close"></i></button>*} 
+		<button class="btn btn-default">{GW::l('/g/APPLY_FILTER')}</button>
+		{*<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;" title="{GW::l('/g/REMOVE_FILTER')}"><i class="fa fa-close"></i></button>*} 
 		
 		{if $m->list_params.filters}
 			<a class="btn btn-default iframeopen float-right" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2])}"><i class="fa fa-floppy-o" title="{GW::l('/g/CREATE_NEW_VIEW')}"></i></a>

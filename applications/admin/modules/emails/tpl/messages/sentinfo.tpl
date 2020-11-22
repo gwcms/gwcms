@@ -29,9 +29,9 @@
 	
 	{function dl_cell_status}			
 		{if $item->status}
-			<span style="color:green">{$lang.YES}</span>
+			<span style="color:green">{GW::l('/g/YES')}</span>
 		{else}
-			<span style="color:red">{$lang.NO}</span>
+			<span style="color:red">{GW::l('/g/NO')}</span>
 		{/if}
 	{/function}	
 	

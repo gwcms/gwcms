@@ -1,188 +1,226 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-<i id="MONTH_KILMININKAS">
-	<i id="1">
-		<lt>Sausio</lt>
-		<en>January</en>
-	</i>
-	<i id="2">
-		<lt>Vasario</lt>
-		<en>February</en>
-	</i>
-	<i id="3">
-		<lt>Kovo</lt>
-		<en>March</en>
-	</i>
-	<i id="4">
-		<lt>Balandio</lt>
-		<en>April</en>
-	</i>
-	<i id="5">
-		<lt>Gegužės</lt>
-		<en>May</en>
-	</i>
-	<i id="6">
-		<lt>Birželio</lt>
-		<en>June</en>
-	</i>
-	<i id="7">
-		<lt>Liepos</lt>
-		<en>July</en>
-	</i>
-	<i id="8">
-		<lt>Rugpjūčio</lt>
-		<en>August</en>
-	</i>
-	<i id="9">
-		<lt>Rugsėjo</lt>
-		<en>September</en>
-	</i>
-	<i id="10">
-		<lt>Spalio</lt>
-		<en>October</en>
-	</i>
-	<i id="11">
-		<lt>Lapkričio</lt>
-		<en>November</en>
-	</i>
-	<i id="12">
-		<lt>Gruodžio</lt>
-		<en>December</en>
-	</i>
-</i>
-
-<i id="MONTHS">
-	<i id="1">
-		<lt>Sausis</lt>
-		<en>January</en>
-	</i>
-	<i id="2">
-		<lt>Vasaris</lt>
-		<en>February</en>
-	</i>
-	<i id="3">
-		<lt>Kovas</lt>
-		<en>March</en>
-	</i>
-	<i id="4">
-		<lt>Balandis</lt>
-		<en>April</en>
-	</i>
-	<i id="5">
-		<lt>Gegužė</lt>
-		<en>May</en>
-	</i>
-	<i id="6">
-		<lt>Birželis</lt>
-		<en>June</en>
-	</i>
-	<i id="7">
-		<lt>Liepa</lt>
-		<en>July</en>
-	</i>
-	<i id="8">
-		<lt>Rugpjūtis</lt>
-		<en>August</en>
-	</i>
-	<i id="9">
-		<lt>Rugsėjis</lt>
-		<en>September</en>
-	</i>
-	<i id="10">
-		<lt>Spalis</lt>
-		<en>October</en>
-	</i>
-	<i id="11">
-		<lt>Lapkritis</lt>
-		<en>November</en>
-	</i>
-	<i id="12">
-		<lt>Gruodis</lt>
-		<en>December</en>
-	</i>
-</i>
-
-<i id="WEEKDAYS">
-	<i id="1">
-		<lt>Pirmadienis</lt>
-		<en>Monday</en>
-	</i>
-	<i id="2">
-		<lt>Antradienis</lt>
-		<en>Tuesday</en>
-	</i>
-	<i id="3">
-		<lt>Trečiadienis</lt>
-		<en>Wednesday</en>
-	</i>
-	<i id="4">
-		<lt>Ketvirtadienis</lt>
-		<en>Thursday</en>
-	</i>
-	<i id="5">
-		<lt>Penktadienis</lt>
-		<en>Friday</en>
-	</i>
-	<i id="6">
-		<lt>Šeštadienis</lt>
-		<en>Saturday</en>
-	</i>
-	<i id="7">
-		<lt>Sekmadienis</lt>
-		<en>Sunday</en>
-	</i>
-</i>
-
-<i id="MONTHS_SHORT">
-	<i id="0">
-		<lt>Sau</lt>
-		<en>Jan</en>
-	</i>
-	<i id="1">
-		<lt>Vas</lt>
-		<en>Feb</en>
-	</i>
-	<i id="2">
-		<lt>Kov</lt>
-		<en>Mar</en>
-	</i>
-	<i id="3">
-		<lt>Bal</lt>
-		<en>Apr</en>
-	</i>
-	<i id="4">
-		<lt>Geg</lt>
-		<en>May</en>
-	</i>
-	<i id="5">
-		<lt>Bir</lt>
-		<en>Jun</en>
-	</i>
-	<i id="6">
-		<lt>Lie</lt>
-		<en>Jul</en>
-	</i>
-	<i id="7">
-		<lt>Rugp</lt>
-		<en>Aug</en>
-	</i>
-	<i id="8">
-		<lt>Rugs</lt>
-		<en>Sep</en>
-	</i>
-	<i id="9">
-		<lt>Spa</lt>
-		<en>Oct</en>
-	</i>
-	<i id="10">
-		<lt>Lap</lt>
-		<en>Nov</en>
-	</i>
-	<i id="11">
-		<lt>Gruo</lt>
-		<en>Dec</en>
-	</i>		
-</i>
-
+  <i id="MONTH_KILMININKAS">
+    <i id="1">
+      <lt>Sausio</lt>
+      <en>January</en>
+      <ru>[A] Январь</ru>
+    </i>
+    <i id="2">
+      <lt>Vasario</lt>
+      <en>February</en>
+      <ru>[A] Февраль</ru>
+    </i>
+    <i id="3">
+      <lt>Kovo</lt>
+      <en>March</en>
+      <ru>[A] Март</ru>
+    </i>
+    <i id="4">
+      <lt>Balandio</lt>
+      <en>April</en>
+      <ru>[A] апрель</ru>
+    </i>
+    <i id="5">
+      <lt>Gegužės</lt>
+      <en>May</en>
+      <ru>[A] май</ru>
+    </i>
+    <i id="6">
+      <lt>Birželio</lt>
+      <en>June</en>
+      <ru>[A] июнь</ru>
+    </i>
+    <i id="7">
+      <lt>Liepos</lt>
+      <en>July</en>
+      <ru>[A] июль</ru>
+    </i>
+    <i id="8">
+      <lt>Rugpjūčio</lt>
+      <en>August</en>
+      <ru>[A] Август</ru>
+    </i>
+    <i id="9">
+      <lt>Rugsėjo</lt>
+      <en>September</en>
+      <ru>[A] сентябрь</ru>
+    </i>
+    <i id="10">
+      <lt>Spalio</lt>
+      <en>October</en>
+      <ru>[A] Октябрь</ru>
+    </i>
+    <i id="11">
+      <lt>Lapkričio</lt>
+      <en>November</en>
+      <ru>[A] ноябрь</ru>
+    </i>
+    <i id="12">
+      <lt>Gruodžio</lt>
+      <en>December</en>
+      <ru>[A] декабрь</ru>
+    </i>
+  </i>
+  <i id="MONTHS">
+    <i id="1">
+      <lt>Sausis</lt>
+      <en>January</en>
+      <ru>[A] Январь</ru>
+    </i>
+    <i id="2">
+      <lt>Vasaris</lt>
+      <en>February</en>
+      <ru>[A] Февраль</ru>
+    </i>
+    <i id="3">
+      <lt>Kovas</lt>
+      <en>March</en>
+      <ru>[A] Март</ru>
+    </i>
+    <i id="4">
+      <lt>Balandis</lt>
+      <en>April</en>
+      <ru>[A] апрель</ru>
+    </i>
+    <i id="5">
+      <lt>Gegužė</lt>
+      <en>May</en>
+      <ru>[A] май</ru>
+    </i>
+    <i id="6">
+      <lt>Birželis</lt>
+      <en>June</en>
+      <ru>[A] июнь</ru>
+    </i>
+    <i id="7">
+      <lt>Liepa</lt>
+      <en>July</en>
+      <ru>[A] июль</ru>
+    </i>
+    <i id="8">
+      <lt>Rugpjūtis</lt>
+      <en>August</en>
+      <ru>[A] Август</ru>
+    </i>
+    <i id="9">
+      <lt>Rugsėjis</lt>
+      <en>September</en>
+      <ru>[A] сентябрь</ru>
+    </i>
+    <i id="10">
+      <lt>Spalis</lt>
+      <en>October</en>
+      <ru>[A] Октябрь</ru>
+    </i>
+    <i id="11">
+      <lt>Lapkritis</lt>
+      <en>November</en>
+      <ru>[A] ноябрь</ru>
+    </i>
+    <i id="12">
+      <lt>Gruodis</lt>
+      <en>December</en>
+      <ru>[A] декабрь</ru>
+    </i>
+  </i>
+  <i id="WEEKDAYS">
+    <i id="1">
+      <lt>Pirmadienis</lt>
+      <en>Monday</en>
+      <ru>[A] понедельник</ru>
+    </i>
+    <i id="2">
+      <lt>Antradienis</lt>
+      <en>Tuesday</en>
+      <ru>[A] вторник</ru>
+    </i>
+    <i id="3">
+      <lt>Trečiadienis</lt>
+      <en>Wednesday</en>
+      <ru>[A] Среда</ru>
+    </i>
+    <i id="4">
+      <lt>Ketvirtadienis</lt>
+      <en>Thursday</en>
+      <ru>[A] Четверг</ru>
+    </i>
+    <i id="5">
+      <lt>Penktadienis</lt>
+      <en>Friday</en>
+      <ru>[A] Пятница</ru>
+    </i>
+    <i id="6">
+      <lt>Šeštadienis</lt>
+      <en>Saturday</en>
+      <ru>[A] суббота</ru>
+    </i>
+    <i id="7">
+      <lt>Sekmadienis</lt>
+      <en>Sunday</en>
+      <ru>[A] Воскресенье</ru>
+    </i>
+  </i>
+  <i id="MONTHS_SHORT">
+    <i id="0">
+      <lt>Sau</lt>
+      <en>Jan</en>
+      <ru>[A] янв.</ru>
+    </i>
+    <i id="1">
+      <lt>Vas</lt>
+      <en>Feb</en>
+      <ru>[A] фев.</ru>
+    </i>
+    <i id="2">
+      <lt>Kov</lt>
+      <en>Mar</en>
+      <ru>[A] мар</ru>
+    </i>
+    <i id="3">
+      <lt>Bal</lt>
+      <en>Apr</en>
+      <ru>[A] апр.</ru>
+    </i>
+    <i id="4">
+      <lt>Geg</lt>
+      <en>May</en>
+      <ru>[A] Май</ru>
+    </i>
+    <i id="5">
+      <lt>Bir</lt>
+      <en>Jun</en>
+      <ru>[A] июн.</ru>
+    </i>
+    <i id="6">
+      <lt>Lie</lt>
+      <en>Jul</en>
+      <ru>[A] июл.</ru>
+    </i>
+    <i id="7">
+      <lt>Rugp</lt>
+      <en>Aug</en>
+      <ru>[A] Авг</ru>
+    </i>
+    <i id="8">
+      <lt>Rugs</lt>
+      <en>Sep</en>
+      <ru>[A] сен</ru>
+    </i>
+    <i id="9">
+      <lt>Spa</lt>
+      <en>Oct</en>
+      <ru>[A] Окт</ru>
+    </i>
+    <i id="10">
+      <lt>Lap</lt>
+      <en>Nov</en>
+      <ru>[A] ноя</ru>
+    </i>
+    <i id="11">
+      <lt>Gruo</lt>
+      <en>Dec</en>
+      <ru>[A] Дек</ru>
+    </i>
+  </i>
 </xml>

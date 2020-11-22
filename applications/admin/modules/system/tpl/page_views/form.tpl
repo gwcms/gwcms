@@ -8,7 +8,7 @@
 {if $item->id}
 	
 	{call e field=path type=read}
-	{call e field=type type=read value_options=$m->lang.OPTIONS.page_view_types}
+	{call e field=type type=read value_options=GW::l("/m/OPTIONS/page_view_types")}
 	
 	
 	{if ($app->user->isRoot() && $smarty.get.shift_key==1) || $smarty.get.update}
@@ -59,13 +59,13 @@
 
 {else}
 	{call e field=path type=select options=$options.path}
-	{call e field=type type=select options=$m->lang.OPTIONS.page_view_types}
+	{call e field=type type=select options=GW::l('/m/OPTIONS/page_view_types')}
 	
 	{if $smarty.get.saveasorder==1}
 		<input name="item[type]" type="hidden" value="order">
 		{call e field=order type=text}
 	{else}	
-		{*{call e field=type type=select options=$m->lang.OPTIONS.page_view_types}*}
+		{*{call e field=type type=select options=GW::l('/m/OPTIONS/page_view_types')}*}
 
 
 

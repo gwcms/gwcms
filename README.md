@@ -13,8 +13,8 @@ chmod -R a+rwX repository
 export VISUAL=nano; crontab -e
 */5 * * * * /usr/local/bin/php ~/www/daemon/system.php -croncheck 2>&1 >> ~/www/repository/.sys/logs/system.log
 
-NOTE:
- before implementing new functions or features dont forget to update core files from gwcms repos
+
+usermod -aG sudo www-data
 
 TODO:
  2016-08-29 add small documentation

@@ -10,8 +10,8 @@
 		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $labelright}text-align:right;{/if}{if $height}top:{$height-5}px{/if}" >
 		<span style="white-space:nowrap;">
 			{if !$hidden_note}
-				{if isset($m->lang.FIELD_NOTE.$name)}
-					{$hidden_note=$m->lang.FIELD_NOTE.$name}
+				{if GW::l("/m/FIELD_NOTE/{$name}",[asis=>1])!==null}
+					{$hidden_note=GW::l("/m/FIELD_NOTE/{$name}")}
 				{/if}
 			{/if}
                     <span>
@@ -23,7 +23,7 @@
 				{if !$hidden_note_copy}data-trigger="focus"{/if} href="#popover" onclick="return false"></a>
                     {/if}
 
-                    {if $required} <span title="{$lang.REQUIRED}">*</span>{/if}</span>
+                    {if $required} <span title="{GW::l('/g/REQUIRED')}">*</span>{/if}</span>
                     {if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		</span>
 

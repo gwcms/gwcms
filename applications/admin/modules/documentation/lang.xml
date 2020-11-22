@@ -1,61 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-
-	<i id="ROOT">
-		<en>Root</en>
-		<lt>Šakninis</lt>
-		<no>Hoved</no>
-	</i>
-	
-
-	<i id="GALLERY_ITEM_TYPE_OPT">
-		<i id="0">Įrašas</i>
-		<i id="1">Kategorija</i>
-	</i>
-	
-	<i id="FIELDS"> 
-		<i id="parent_id">Kategorija</i>
-	</i>
-	
-	<i id="FIELD_NOTES">
-		<i id="page_by">
-			<en>0 - paging off</en>
-			<lt>0 - puslapiavimas išjungtas</lt>
-			<no>0 - sidedeling avslått</no>
-		</i>
-	</i>
-	
-
-	
-	<!-- =============== MODULE MAP START =================== -->
-	<i id="MAP">
-		<i id="title">Dokumentavimas</i>	
-		<i id="info">
-			<i id="icon"><![CDATA[<i class="fa fa-th-large"></i>]]></i>
-		</i>			
-		<i id="childs">
-			<i id="features">
-				<i id="title">Dokumentavimas</i>
-				<i id="info">
-					<i id="model">GW_Doc_feature</i>
-				</i>
-			</i>			
-			<i id="items">
-				<i id="title">Dokumentavimas (sena versija)</i>
-				<i id="info">
-					
-				</i>
-			</i>	
-			<i id="types">
-			    <i id="title">Tipai</i>
-			    <i id="info">
-				<i id="model">GW_Doc_Type</i>
-			    </i>
-			    <i id="in_menu">1</i>
-			</i>								
-		</i>
-	</i>
-	<!-- =============== MODULE MAP END ===================== -->
-	
+  <i id="ROOT">
+    <en>Root</en>
+    <lt>Šakninis</lt>
+  </i>
+  <i id="GALLERY_ITEM_TYPE_OPT">
+    <i id="0">
+      <lt>Įrašas</lt>
+      <en>Record</en>
+    </i>
+    <i id="1">
+      <lt>Kategorija</lt>
+      <en>Category</en>
+    </i>
+  </i>
+  <i id="FIELDS">
+    <i id="parent_id">
+      <lt>Kategorija</lt>
+      <en>Category</en>
+    </i>
+  </i>
+  <i id="FIELD_NOTES">
+    <i id="page_by">
+      <en>0 - paging off</en>
+      <lt>0 - puslapiavimas išjungtas</lt>
+    </i>
+  </i>
+  <i id="MAP">
+    <i id="title">
+      <lt>Dokumentavimas</lt>
+      <en>Documentation</en>
+    </i>
+    <i id="info">
+      <i id="icon">
+<![CDATA[<i class="fa fa-th-large"></i>]]>
+      </i>
+    </i>
+    <i id="childs">
+      <i id="features">
+        <i id="title">
+          <lt>Dokumentavimas</lt>
+          <en>Documentation</en>
+        </i>
+        <i id="info">
+          <i id="model">GW_Doc_feature</i>
+        </i>
+      </i>
+      <i id="items">
+        <i id="title">
+          <lt>Dokumentavimas (sena versija)</lt>
+          <en>Documentation (old version)</en>
+        </i>
+      </i>
+      <i id="types">
+        <i id="title">
+          <lt>Tipai</lt>
+          <en>Types</en>
+        </i>
+        <i id="info">
+          <i id="model">GW_Doc_Type</i>
+        </i>
+        <i id="in_menu">1</i>
+      </i>
+    </i>
+  </i>
 </xml>

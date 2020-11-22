@@ -8,7 +8,7 @@
 		{/if}
 		
 			<td style="padding-right:5px;" >
-					{$lang.PAGE_BY}:
+					{GW::l('/g/PAGE_BY')}:
 			</td>
 			<td style="padding-right:15px;">	
 				<input class="gwPageBy form-control setListParams" name="list_params[page_by]" size=2 value="{$m->list_params.page_by}" />
@@ -16,7 +16,7 @@
 			</td>	
 			
 		{if $query_info}
-					<td style="padding-right:5px;">{$lang.ITEM_COUNT}</td>
+					<td style="padding-right:5px;">{GW::l('/g/ITEM_COUNT')}</td>
 					<td style="padding-right:5px;"><b>{$query_info.item_count}</b></td>
 				
 

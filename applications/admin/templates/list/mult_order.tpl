@@ -1,9 +1,9 @@
 <table>
 <tr>
-	<td>{$lang.ORDER_BY}:</td>
+	<td>{GW::l('/g/ORDER_BY')}:</td>
 	<td id="order-container">
 		<select class="order-sel" onchange="gw_adm_sys.order_change()">
-			<option value="">{$lang.EMPTY_OPTION.0}</option>
+			<option value="">{GW::l('/g/EMPTY_OPTION/0')}</option>
 		{foreach $fields as $name => $labelid}
 			<option value="{$name} ASC">{$app->fh()->fieldTitle($labelid)} (123)</option>
 			<option value="{$name} DESC">{$app->fh()->fieldTitle($labelid)} (321)</option>

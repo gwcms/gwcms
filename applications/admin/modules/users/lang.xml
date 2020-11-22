@@ -1,324 +1,308 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-
-	<i id="PROFILE">
-		<en>Profile</en>
-		<lt>Profilis</lt>
-	</i>
-	<i id="CHANGE_PROFILE_DATA">
-		<en>Change profile data</en>
-		<lt>Keisti profilio duomenis</lt>
-	</i>
-	<i id="CHANGE_PASS">
-		<en>Change password</en>
-		<lt>Pakeisti slaptažodį</lt>
-	</i>
-	
-	<i id="OPTIONS">
-		<i id="gender">
-			<i id="m">
-				<lt>Vyras</lt>
-				<en>Male</en>
-			</i>
-			<i id="f">
-				<lt>Moteris</lt>
-				<en>Female</en>
-			</i>
-		</i>
-	</i>
-	
-	<i id="FIELDS">
-		<i id="email">
-			<en>E-mail</en>
-			<lt>El. pašto adresas</lt>
-		</i>
-		<i id="name">
-			<en>Name</en>
-			<lt>Vardas</lt>
-		</i>
-		<i id="surname">
-			<en>Surname</en>
-			<lt>Pavardė</lt>
-		</i>
-		<i id="birth_date">Birth date</i>
-		<i id="phone">
-			<en>Phone</en>
-			<lt>Tel. nr.</lt>
-		</i>
-		<i id="city">
-			<en>City</en>
-			<lt>Miestas</lt>
-		</i>
-		<i id="address">
-			<en>Address</en>
-			<lt>Adresas</lt>
-		</i>						
-		<i id="pass_old">
-			<en>Old password</en>
-			<lt>Senas slaptažodis</lt>
-		</i>
-		<i id="pass_new">
-			<en>New password</en>
-			<lt>Naujas slaptažodis</lt>
-		</i>
-		<i id="pass_new_repeat">
-			<en>New password (repeat)</en>
-			<lt>Naujas slaptažodis (pakartoti)</lt>
-		</i>
-		<i id="username">
-			<en>Username</en>
-			<lt>Vartotojas</lt>
-		</i>
-		<i id="pass">
-			<en>Password</en>
-			<lt>Slaptažodis</lt>
-		</i>
-		<i id="active">
-			<en>Active</en>
-			<lt>Aktyvus</lt>
-		</i>
-		
-		<i id="id">Id</i>
-		<i id="rights">
-			<en>Rights</en>
-			<lt>Teisės</lt>
-		</i>
-		<i id="login_time">
-			<en>Last login</en>
-			<lt>Paskutinis prisijungimas</lt>
-		</i>
-		<i id="login_count">
-			<en>Login count</en>
-			<lt>Prisijungimų skaičius</lt>
-		</i>
-		<i id="title">
-			<en>Title</en>
-			<lt>Pavadinimas</lt>
-		</i>
-		<i id="desc">
-			<en>Description</en>
-			<lt>Aprašymas</lt>
-		</i>
-		<i id="public">
-			<en>Public</en>
-			<lt>Vieša</lt>
-		</i>
-		<i id="group_ids">
-			<en>In groups</en>
-			<lt>Grupės</lt>			
-		</i>
-		<i id="session_validity">
-			<en>Session validity time</en>
-			<lt>Maksimalus neaktyvumo laikas</lt>
-		</i>
-		<i id="last_ip">
-			<en>Last ip address</en>
-			<lt>Paskutinio prisijungimo ip adresas</lt>
-		</i>
-		
-		<i id="autologin">
-			<en>Enable cms autologin</en>
-			<lt>Automatinis prisijungimas prie sistemos</lt>
-		</i>
-		<i id="online">
-			<en>Online</en>
-			<lt>Prisijungęs</lt>			
-		</i>
-		
-		<i id="user_id">
-			<en>To</en>
-			<lt>Kam</lt>
-		</i>
-		<i id="subject">
-			<en>Subject</en>
-			<lt>Tema</lt>
-		</i>
-		<i id="message">
-			<en>Message</en>
-			<lt>Žinutė</lt>
-		</i>
-		<i id="sender">
-			<en>Sender</en>
-			<lt>Siuntėjas</lt>
-		</i>	
-		<i id="parent_user_id">
-			<en>Root user</en>
-			<lt>Aukštesnis vartotojas</lt>
-		</i>
-		<i id="is_admin">
-			<lt>Administratorius</lt>
-			<en>Administrator</en>
-		</i>
-		<i id="ip">
-			<lt>Ip adresas</lt>
-			<en>Ip address</en>
-		</i>
-		<i id="user_agent">
-			<lt>Naršyklės pavad.</lt>
-			<en>Browser</en>
-		</i>	
-		<i id="gender">
-			<lt>Lytis</lt>
-			<en>Gender</en>
-		</i>
-		<i id="fields_enabled">Įgalinti laukai</i>
-		<i id="last_request_time">Paskutinės užklausos laikas</i>
-	</i>
-	
-	
-	
-	<i id="FIELDS_SHORT">
-		<i id="online">O</i>
-		<i id="parent_user_id">PU</i>
-		<i id="image"><![CDATA[<i class="fa fa-picture-o"></i>]]></i>
-		<i id="last_request_time">P.Užkl.<![CDATA[<i class="fa fa-clock-o" ></i>]]> </i>
-	</i>
-	
-
-	<i id="VIEWS">
-		<i id="message">
-			<lt>Siųsti žinutę</lt>
-			<en>Send message</en>
-		</i>
-		<i id="permissions">
-			<lt>Leidimai</lt>
-			<en>Permissions</en>
-		</i>
-		<i id="doInvertSeen">
-			<lt>Pažymėti kaip perskaitytą / neperskaitytą</lt>
-			<en>Mark as read / unread</en>
-		</i>
-		<i id="iplog">
-			<en>Access log</en>
-			<lt>Prisijungimų žurnalas</lt>
-		</i>
-	</i>
-			
-	<i id="SEND">
-		<lt>Siųsti</lt>
-		<lt>Send</lt>
-	</i>
-	<i id="SENT">
-		<lt>Žinutė išsiųsta</lt>
-		<lt>Message was sent</lt>		
-	</i>
-
-	<i id="PASS_UPDATED">
-		<en>Password successfully updated</en>
-		<lt>Slaptažodis sėkmingai atnaujintas</lt>
-	</i>
-	
-	<i id="ERR_DELETE_SELF">
-		<en>You can't delete yourself here</en>
-		<lt>Veiksmas ribojamas</lt>
-	</i>
-	<i id="ERR_DEACTIVATE_SELF">
-		<en>You can't deactivate yourself here</en>
-		<lt>Veiksmas ribojamas</lt>
-	</i>
-	
-	<i id="PERMISSIONS">
-		<en>Permissions</en>
-		<lt>Teisės</lt>
-	</i>
-	<i id="CHANGE_GROUP_PERMISSIONS">
-		<en>Change group "%s" permissions</en>
-		<lt>Keisti grupės "%s" teises</lt>
-	</i>
-	<i id="MESSAGES">
-		<en>Messages</en>
-		<lt>Žinutės</lt>
-	</i>
-	<i id="MARK_AS_READ">
-		<en>Mark as read</en>
-		<lt>Pažymėti kaip perskaitytą</lt>
-	</i>	
-	<i id="ALL_MESSAGES">
-		<en>All messages</en>
-		<lt>Visos žinutės</lt>
-	</i>
-	<i id="MARK_AS_READ_ALL">
-		<lt>Pažymėti visas kaip perskaitytas</lt>
-		<en>Mark all as read</en>
-	</i>
-	<i id="LOGIN_AS">
-		<lt>Prisijungti į paskyrą</lt>
-		<en>Login as</en>
-	</i>
-	
-	<i id="SESSION_VALIDITY_OPT">
-		<i id="30">30 min</i>
-		<i id="60">60 min</i>
-		<i id="90">1h 30 min</i>
-		<i id="120">2h</i>
-		<i id="180">3h</i>
-		<i id="240">4h</i>
-		<i id="-1">
-			<en>Infinite</en>
-			<lt>Neribojamas</lt>
-		</i>
-	</i>	
-	
-	<!-- =============== MODULE MAP START =================== -->
-	<i id="MAP">
-		<i id="title">
-			<en>Users</en>
-			<lt>Vartotojai</lt>
-		</i>		
-		<i id="info">
-			<i id="iconclass">fa fa-users</i>
-		</i>					
-		<i id="childs">
-			<i id="usr">
-				<i id="title">
-					<en>Users</en>
-					<lt>Vartotojai</lt>				
-				</i>
-				<i id="info"><i id="model">GW_User</i></i>
-			</i>
-			<i id="profile">
-				<i id="title">
-					<en>My profile</en>
-					<lt>Mano profilis</lt>
-					<no>Min Profil</no>
-				</i>
-				<i id="in_menu">0</i>
-				<i id="public">1</i>	
-			</i>
-			<i id="messages">
-				<i id="title">
-					<en>Messages</en>
-					<lt>Pranešimai</lt>						
-				</i>
-				<i id="info"><i id="model">GW_Message</i></i>	
-				<i id="in_menu">0</i>
-				<i id="public">1</i>		
-			</i>				
-			
-			<i id="login">
-				<i id="title">
-					<en>User identification</en>
-					<lt>Vartotojo identifikavimas</lt>
-				</i>
-				<i id="in_menu">0</i>
-				<i id="public">1</i>			
-			</i>
-			<i id="groups">
-				<i id="title">
-					<en>Groups</en>
-					<lt>Grupės</lt>
-				</i>
-				<i id="info"><i id="model">GW_Users_Group</i></i>
-			</i>
-			<i id="config">
-				<i id="title">
-					<en>Configuration</en>
-					<lt>Nustatymai</lt>	
-				</i>
-			</i>			
-		</i>
-	</i>
-	<!-- =============== MODULE MAP END ===================== -->
-	
+  <i id="PROFILE">
+    <en>Profile</en>
+    <lt>Profilis</lt>
+  </i>
+  <i id="CHANGE_PROFILE_DATA">
+    <en>Change profile data</en>
+    <lt>Keisti profilio duomenis</lt>
+  </i>
+  <i id="CHANGE_PASS">
+    <en>Change password</en>
+    <lt>Pakeisti slaptažodį</lt>
+  </i>
+  <i id="OPTIONS">
+    <i id="gender">
+      <i id="m">
+        <lt>Vyras</lt>
+        <en>Male</en>
+      </i>
+      <i id="f">
+        <lt>Moteris</lt>
+        <en>Female</en>
+      </i>
+    </i>
+  </i>
+  <i id="FIELDS">
+    <i id="email">
+      <en>E-mail</en>
+      <lt>El. pašto adresas</lt>
+    </i>
+    <i id="name">
+      <en>Name</en>
+      <lt>Vardas</lt>
+    </i>
+    <i id="surname">
+      <en>Surname</en>
+      <lt>Pavardė</lt>
+    </i>
+    <i id="birth_date">Birth date</i>
+    <i id="phone">
+      <en>Phone</en>
+      <lt>Tel. nr.</lt>
+    </i>
+    <i id="city">
+      <en>City</en>
+      <lt>Miestas</lt>
+    </i>
+    <i id="address">
+      <en>Address</en>
+      <lt>Adresas</lt>
+    </i>
+    <i id="pass_old">
+      <en>Old password</en>
+      <lt>Senas slaptažodis</lt>
+    </i>
+    <i id="pass_new">
+      <en>New password</en>
+      <lt>Naujas slaptažodis</lt>
+    </i>
+    <i id="pass_new_repeat">
+      <en>New password (repeat)</en>
+      <lt>Naujas slaptažodis (pakartoti)</lt>
+    </i>
+    <i id="username">
+      <en>Username</en>
+      <lt>Vartotojas</lt>
+    </i>
+    <i id="pass">
+      <en>Password</en>
+      <lt>Slaptažodis</lt>
+    </i>
+    <i id="active">
+      <en>Active</en>
+      <lt>Aktyvus</lt>
+    </i>
+    <i id="id">Id</i>
+    <i id="rights">
+      <en>Rights</en>
+      <lt>Teisės</lt>
+    </i>
+    <i id="login_time">
+      <en>Last login</en>
+      <lt>Paskutinis prisijungimas</lt>
+    </i>
+    <i id="login_count">
+      <en>Login count</en>
+      <lt>Prisijungimų skaičius</lt>
+    </i>
+    <i id="title">
+      <en>Title</en>
+      <lt>Pavadinimas</lt>
+    </i>
+    <i id="desc">
+      <en>Description</en>
+      <lt>Aprašymas</lt>
+    </i>
+    <i id="public">
+      <en>Public</en>
+      <lt>Vieša</lt>
+    </i>
+    <i id="group_ids">
+      <en>In groups</en>
+      <lt>Grupės</lt>
+    </i>
+    <i id="session_validity">
+      <en>Session validity time</en>
+      <lt>Maksimalus neaktyvumo laikas</lt>
+    </i>
+    <i id="last_ip">
+      <en>Last ip address</en>
+      <lt>Paskutinio prisijungimo ip adresas</lt>
+    </i>
+    <i id="autologin">
+      <en>Enable cms autologin</en>
+      <lt>Automatinis prisijungimas prie sistemos</lt>
+    </i>
+    <i id="online">
+      <en>Online</en>
+      <lt>Prisijungęs</lt>
+    </i>
+    <i id="user_id">
+      <en>To</en>
+      <lt>Kam</lt>
+    </i>
+    <i id="subject">
+      <en>Subject</en>
+      <lt>Tema</lt>
+    </i>
+    <i id="message">
+      <en>Message</en>
+      <lt>Žinutė</lt>
+    </i>
+    <i id="sender">
+      <en>Sender</en>
+      <lt>Siuntėjas</lt>
+    </i>
+    <i id="parent_user_id">
+      <en>Root user</en>
+      <lt>Aukštesnis vartotojas</lt>
+    </i>
+    <i id="is_admin">
+      <lt>Administratorius</lt>
+      <en>Administrator</en>
+    </i>
+    <i id="ip">
+      <lt>Ip adresas</lt>
+      <en>Ip address</en>
+    </i>
+    <i id="user_agent">
+      <lt>Naršyklės pavad.</lt>
+      <en>Browser</en>
+    </i>
+    <i id="gender">
+      <lt>Lytis</lt>
+      <en>Gender</en>
+    </i>
+    <i id="fields_enabled">Įgalinti laukai</i>
+    <i id="last_request_time">Paskutinės užklausos laikas</i>
+  </i>
+  <i id="FIELDS_SHORT">
+    <i id="online">O</i>
+    <i id="parent_user_id">PU</i>
+    <i id="image">
+<![CDATA[<i class="fa fa-picture-o"></i>]]>
+    </i>
+    <i id="last_request_time">
+<![CDATA[P.Užkl.<i class="fa fa-clock-o"></i>]]>
+    </i>
+  </i>
+  <i id="VIEWS">
+    <i id="message">
+      <lt>Siųsti žinutę</lt>
+      <en>Send message</en>
+    </i>
+    <i id="permissions">
+      <lt>Leidimai</lt>
+      <en>Permissions</en>
+    </i>
+    <i id="doInvertSeen">
+      <lt>Pažymėti kaip perskaitytą / neperskaitytą</lt>
+      <en>Mark as read / unread</en>
+    </i>
+    <i id="iplog">
+      <en>Access log</en>
+      <lt>Prisijungimų žurnalas</lt>
+    </i>
+  </i>
+  <i id="SEND">
+    <lt>Siųsti</lt>
+    <en>Send</en>
+  </i>
+  <i id="SENT">
+    <lt>Žinutė išsiųsta</lt>
+    <en>Message was sent</en>
+  </i>
+  <i id="PASS_UPDATED">
+    <en>Password successfully updated</en>
+    <lt>Slaptažodis sėkmingai atnaujintas</lt>
+  </i>
+  <i id="ERR_DELETE_SELF">
+    <en>You can't delete yourself here</en>
+    <lt>Veiksmas ribojamas</lt>
+  </i>
+  <i id="ERR_DEACTIVATE_SELF">
+    <en>You can't deactivate yourself here</en>
+    <lt>Veiksmas ribojamas</lt>
+  </i>
+  <i id="PERMISSIONS">
+    <en>Permissions</en>
+    <lt>Teisės</lt>
+  </i>
+  <i id="CHANGE_GROUP_PERMISSIONS">
+    <en>Change group "%s" permissions</en>
+    <lt>Keisti grupės "%s" teises</lt>
+  </i>
+  <i id="MESSAGES">
+    <en>Messages</en>
+    <lt>Žinutės</lt>
+  </i>
+  <i id="MARK_AS_READ">
+    <en>Mark as read</en>
+    <lt>Pažymėti kaip perskaitytą</lt>
+  </i>
+  <i id="ALL_MESSAGES">
+    <en>All messages</en>
+    <lt>Visos žinutės</lt>
+  </i>
+  <i id="MARK_AS_READ_ALL">
+    <lt>Pažymėti visas kaip perskaitytas</lt>
+    <en>Mark all as read</en>
+  </i>
+  <i id="LOGIN_AS">
+    <lt>Prisijungti į paskyrą</lt>
+    <en>Login as</en>
+  </i>
+  <i id="SESSION_VALIDITY_OPT">
+    <i id="30">30 min</i>
+    <i id="60">60 min</i>
+    <i id="90">1h 30 min</i>
+    <i id="120">2h</i>
+    <i id="180">3h</i>
+    <i id="240">4h</i>
+    <i id="-1">
+      <en>Infinite</en>
+      <lt>Neribojamas</lt>
+    </i>
+  </i>
+  <i id="MAP">
+    <i id="title">
+      <en>Users</en>
+      <lt>Vartotojai</lt>
+    </i>
+    <i id="info">
+      <i id="iconclass">fa fa-users</i>
+    </i>
+    <i id="childs">
+      <i id="usr">
+        <i id="title">
+          <en>Users</en>
+          <lt>Vartotojai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_User</i>
+        </i>
+      </i>
+      <i id="profile">
+        <i id="title">
+          <en>My profile</en>
+          <lt>Mano profilis</lt>
+        </i>
+        <i id="public">1</i>
+      </i>
+      <i id="messages">
+        <i id="title">
+          <en>Messages</en>
+          <lt>Pranešimai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Message</i>
+        </i>
+        <i id="public">1</i>
+      </i>
+      <i id="login">
+        <i id="title">
+          <en>User identification</en>
+          <lt>Vartotojo identifikavimas</lt>
+        </i>
+        <i id="public">1</i>
+      </i>
+      <i id="groups">
+        <i id="title">
+          <en>Groups</en>
+          <lt>Grupės</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Users_Group</i>
+        </i>
+      </i>
+      <i id="config">
+        <i id="title">
+          <en>Configuration</en>
+          <lt>Nustatymai</lt>
+        </i>
+      </i>
+    </i>
+  </i>
 </xml>

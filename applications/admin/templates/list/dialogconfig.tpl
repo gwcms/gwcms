@@ -61,7 +61,7 @@
 <table style="" class="gwTable">
 
 
-<tr><th>{$lang.LDS_FIELD_PRIORITY_VISIBILITY}</th><th>{GW::l('/g/ORDERS_LABEL')}</th></tr>
+<tr><th>{GW::l('/g/LDS_FIELD_PRIORITY_VISIBILITY')}</th><th>{GW::l('/g/ORDERS_LABEL')}</th></tr>
 
 <tr>
 <td valign="top" class="columns">

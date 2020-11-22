@@ -1,10 +1,10 @@
 {include file="default_form_open.tpl"}
 
-{call e field=title hidden_note=$m->lang.FIELD_NOTE.template_title}
-{call e field=name hidden_note=$m->lang.FIELD_NOTE.template_name}
+{call e field=title hidden_note=GW::l('/m/FIELD_NOTE/template_title')}
+{call e field=name hidden_note=GW::l('/m/FIELD_NOTE/template_name')}
 
 {call e field=note}
-{call e field=type type=select options=$m->lang.VAR_TYPE_OPT}
+{call e field=type type=select options=GW::l('/m/VAR_TYPE_OPT')}
 
 
 {capture assign=defaultparams}

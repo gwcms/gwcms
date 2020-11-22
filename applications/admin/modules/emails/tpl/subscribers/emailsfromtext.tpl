@@ -12,7 +12,7 @@
 	</tr>
 	
 	
-{call e field=lang type=select options=$m->lang.OPT.lang empty_option=1}
+{call e field=lang type=select options=GW::l('/m/OPT/lang') empty_option=1}
 {call e field=groups type=multiselect options=$options.groups}	
 {call e field=active type=bool}	
 
@@ -27,7 +27,7 @@
 
 
 {function name=df_submit_button_send}
-	<button class="btn btn-primary"><i class="fa fa-save"></i> {$m->lang.SEND}</button>
+	<button class="btn btn-primary"><i class="fa fa-save"></i> {GW::l('/m/SEND')}</button>
 {/function}
 
 

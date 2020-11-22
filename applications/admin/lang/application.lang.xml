@@ -1,789 +1,828 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-
-<i id="LANG">
-	<i id="lt">Lietuvių</i>
-	<i id="en">English</i>
-	<i id="ru">Rusų</i>
-</i>
-
-<i id="LANGUAGE">
-	<en>Language</en>
-	<lt>Kalba</lt>
-</i>	
-
-
-<i id="SAVE">
-	<en>Save</en>
-	<lt>Išsaugoti</lt>
-</i>
-
-<i id="APPLY">
-	<en>Apply</en>
-	<lt>Išsaugoti liekant</lt>
-</i>
-
-<i id="APPLY_1">
-	<en>Apply</en>
-	<lt>Taikyti</lt>
-</i>
-
-<i id="EXECUTE">
-	<en>Execute</en>
-	<lt>Vykdyti</lt>
-</i>
-<i id="UPDATE">
-	<en>Refresh</en>
-	<lt>Atnaujinti</lt>
-</i>
-<i id="CANCEL">
-	<en>Cancel</en>
-	<lt>Atšaukti</lt>
-</i>
-<i id="CLOSE">
-	<en>Close</en>
-	<lt>Užverti</lt>
-</i>
-<i id="CONTINUE">
-	<en>Continue</en>
-	<lt>Tęsti</lt>
-</i>
-<i id="SUBMIT">
-	<en>Submit</en>
-	<lt>Pateikti</lt>
-</i>
-
-<i id="BACK">
-	<en>&amp;laquo; Back</en>
-	<lt>&amp;laquo; Atgal</lt>
-</i>
-
-
-<i id="EDIT">
-	<en>Edit</en>
-	<lt>Redaguoti</lt>
-</i>
-<i id="REMOVE">
-	<en>Remove</en>
-	<lt>Panaikinti</lt>
-</i>
-<i id="SELECTED_ITEMS_REMOVED">
-	<lt>Pasirinkti įrašai (%s) pašalinti</lt>
-	<en>Removed selected items: %s</en> 
-</i>
-
-<i id="LOGOUT">
-	<en>Logout</en>
-	<lt>Atsijungti</lt>
-</i>
-<i id="USER">
-	<en>Username</en>
-	<lt>Vartotojas</lt>
-</i>
-<i id="PASS">
-	<en>Password</en>
-	<lt>Slaptažodis</lt>
-</i>
-<i id="CHANGE_PASS">
-	<en>Change password</en>
-	<lt>Keisti slaptažodį</lt>
-</i>
-
-<i id="ACCOUNT_LOGIN">
-	<en>Account login</en>
-	<lt>Uždara zona</lt>
-</i>
-<i id="SIGN_IN_TO_YOUR_ACCOUNT">
-	<en>Sign In to your account</en>
-	<lt>Prisijunkite prie savo paskyros</lt>
-</i>
-
-<i id="DOLOGIN">
-	<en>Login</en>
-	<lt>Prisijungti</lt>
-</i>
-
-<i id="AUTOLOGIN">
-	<en>Autologin on this browser</en>
-	<lt>Prisiminti šioje naršyklėje</lt>
-</i>
-
-<i id="CREATE_NEW">
-	<en>Create new</en>
-	<lt>Sukurti naują</lt>
-</i>
-
-<i id="CREATE_NEW_VIEW">
-	<en>Save page view params</en>
-	<lt>Išsaugoti peržiūros parametrus</lt>
-</i>
-
-<i id="PAGE_VIEWS">
-	<en>Page views</en>
-	<lt>Paruoštos peržiūros</lt>
-</i>
-<i id="PAGE_VIEW">
-	<en>Page view</en>
-	<lt>Paruošta peržiūra</lt>
-</i>
-
-<i id="PAGE_VIEW_REGULAR">
-	<lt>Įprastasis</lt>
-	<en>Regular</en>
-</i>
-<i id="PAGE_VIEW_DEFAULT">
-	<lt>Numatytasis</lt>
-	<en>Default</en>
-</i>
-	
-
-<i id="CREATE_NEW_ORDER">
-	<en>Save current ordering</en>
-	<lt>Išsaugoti dabartinį rikiavimą</lt>
-</i>
-
-<i id="SAVE_AS_DEFAULT_PAGE_VIEW">	
-	<en>Save as default view</en>
-	<lt>Saugoti kaip pagrindinę peržiūrą</lt>
-</i>
-
-<i id="UPDATE_CURRENT_VIEW">
-	<en>Update current view</en>
-	<lt>Atnaujinti pasirinktąją peržiūrą</lt>
-</i>
-
-<i id="ACTION_CONFIRM_REQUIRED">
-	<en>Action confirm required. Continue?</en>
-	<lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
-</i>
-
-<i id="REQUIRED">
-	<en>Required</en>
-	<lt>Būtinas užpildyti</lt>
-</i>
-
-<i id="LOGGED_AS">
-	<en>Logged as</en>
-	<lt>Prisijungęs kaip</lt>
-</i>
-
-<i id="SWITCH_USER_RETURN">
-	<en><![CDATA[Return to <b>%s</b> account]]></en>
-	<lt><![CDATA[Sugrįžti į <b>%s</b> paskyrą]]></lt>
-</i>
-
-<i id="UPDATE_SUCCESS">
-	<en>Data successfully updated</en>
-	<lt>Duomenys atnaujinti</lt>
-</i>
-<i id="SAVE_SUCCESS">
-	<en>Data successfully saved</en>
-	<lt>Duomenys išsaugoti</lt>
-</i>
-<i id="NO_CHANGES">
-	<en>No data changes</en>
-	<lt>Duomenų pakeitimų nėra</lt>
-</i>
-<i id="ITEM_REMOVE_SUCCESS">
-	<en>Item removed</en>
-	<lt>Įrašas panaikintas</lt>
-</i>
-<i id="ITEM_REMOVE_FAILED">
-	<en>Item remove failed</en>
-	<lt>Įrašo panaikinimas neįvyko</lt>
-</i>
-
-<i id="ITEM_ADD_SUCCESS">
-	<en>Item added</en>
-	<lt>Įrašas idetas</lt>
-</i>
-<i id="CONFIRM_DELETE">
-	<en>Confirm delete</en>
-	<lt>Patvirtinkite įrašo šalinimą</lt>
-</i>
-<i id="NEW_MESSAGES">
-	<en>New messages</en>
-	<lt>Nauji pranešimai</lt>
-</i>
-
-<i id="NO_NEW_MESSAGES">
-	<en>No new messages found</en>
-	<lt>Naujų pranešimų nėra</lt>
-</i>
-
-
-
-<i id="FIELDS">
-	<i id="insert_time">
-		<en>Creation time</en>
-		<lt>Sukūrimo laikas</lt>
-	</i>
-	<i id="update_time">
-		<en>Last edited</en>
-		<lt>Pask. redagavimas</lt>
-	</i>
-	<i id="title">
-		<en>Title</en>
-		<lt>Pavadinimas</lt>
-	</i>
-	<i id="active">
-		<en>Active</en>
-		<lt>Aktyvus</lt>
-	</i>
-	<i id="image">
-		<en>Image</en>
-		<lt>Atvaizdas</lt>
-	</i>
-	<i id="type">
-		<en>Type</en>
-		<lt>Tipas</lt>
-	</i>
-	<i id="group">
-		<en>Group</en>
-		<lt>Grupė</lt>
-	</i>
-	<i id="category">
-		<en>Category</en>
-		<lt>Kategorija</lt>
-	</i>
-	<i id="text">
-		<en>Text</en>
-		<lt>Tekstas</lt>
-	</i>
-	<i id="time">
-		<en>Time</en>
-		<lt>Laikas</lt>
-	</i>	
-	<i id="id">
-		<en>Id. num.</en>
-		<lt>Id. num.</lt>
-	</i>
-	<i id="description">
-		<en>Description</en>
-		<lt>Aprašymas</lt>
-	</i>
-</i>
-
-
-<i id="VIEWS">
-	<i id="form">
-		<en>Form</en>
-		<lt>Forma</lt>
-	</i>
-	
-	<i id="print">
-		<en>Print</en>
-		<lt>Spausdinti</lt>
-	</i>
-	<i id="export">
-		<en>Export</en>
-		<lt>Eksportuoti</lt>
-	</i>
-	<i id="importdata">
-		<en>Import</en>
-		<lt>Importuoti</lt>
-	</i>		
-	<i id="exportdata">
-		<en>Export</en>
-		<lt>Eksportuoti</lt>
-	</i>
-	<i id="edit">
-		<en>Edit</en>
-		<lt>Redaguoti</lt>
-	</i>
-	<i id="item">
-		<en>Item</en>
-		<lt>Įrašas</lt>		
-	</i>
-	<i id="config">
-		<en>Config</en>
-		<lt>Nustatymai</lt>		
-	</i>	
-	<i id="dialogremove">
-		<en>Remove items</en>
-		<lt>Šalinti įrašus</lt>
-	</i>
-	
-	<i id="doDelete">
-		<en>Remove</en>
-		<lt>Šalinti</lt>
-	</i>
-	<i id="doInvertActive">
-		<en>Invert active state</en>
-		<lt>Pakeisti aktyvumo būklę</lt>
-	</i>
-	<i id="doSetActive">
-		<en>Activate</en>
-		<lt>Aktyvuoti</lt>
-	</i>	
-	<i id="doClone">
-		<en>Clone</en>
-		<lt>Dublikuoti</lt>
-	</i>
-	<i id="doSend">
-		<en>Send</en>
-		<lt>Siųsti</lt>
-	</i>	
-	<i id="dialogconfig2">
-		<lt>Nustatymai</lt>
-		<en>Settings</en>
-	</i>
-	<i id="doWriteLock">Write Lock</i>
-	<i id="doWriteUnLock">Write UnLock</i>
-</i>
-
-<i id="NO_ITEMS">
-	<en>No items</en>
-	<lt>Nėra įrašų</lt>
-</i>
-
-<i id="ITEM_COUNT">
-	<lt>Įrašų skaičius</lt>
-	<en>Item count</en>
-</i>
-
-<i id="ACTIONS">
-	<en>Actions</en>
-	<lt>Veiksmai</lt>
-</i>
-
-<i id="IMAGE">
-	<en>Image</en>
-	<lt>Paveikslas</lt>
-</i>
-
-<i id="FIELD">
-	<en>Field</en>
-	<lt>Laukelis</lt>
-</i>
-
-<i id="FILTER_VALUE">
-	<en>Value</en>
-	<lt>Filtras</lt>
-</i>
-
-<i id="APPLY_FILTER">
-	<en>Apply filters</en>
-	<lt>Filtruoti</lt>
-</i>
-
-<i id="REMOVE_FILTER">
-	<en>Remove filters</en>
-	<lt>Nuimti filtrus</lt>	
-</i>
-
-<i id="UNHIDE_FILTER">
-	<en>Unhide hidden</en>
-	<lt>Atslėpti paslėptus</lt>	
-</i>
-
-<i id="ADD_FILTER_4_FIELD">
-	<en>Add filter for field</en>
-	<lt>Pridėti filtrą laukui</lt>
-</i>
-<i id="ADD_ALL_FILTERS">
-	<en>Add all filters</en>
-	<lt>Pridėti visus filtrus</lt>
-</i>
-
-<i id="COMPARE_TYPE">
-	<i id="SHORT">
-		<en>C. t.</en>
-		<lt>P. m.</lt>
-	</i>
-	<i id="FULL">
-		<en>Compare type</en>
-		<lt>Palyginimo metodas</lt>
-	</i>
-</i>
-
-<i id="FILTER_FROM">
-	<en>from</en>
-	<lt>nuo</lt>
-</i>
-<i id="FILTER_TO">
-	<en>to</en>
-	<lt>iki</lt>
-</i>
-
-<i id="FILTER_EMPTY_OPTION">
-	<i id=''>
-		<lt>-- Nefiltruoti --</lt>
-		<en>-- Any --</en>
-	</i>
-</i>
-
-<i id="ACTIVE_OPT">
-	<i id="0">Not active</i>
-	<i id="1">Active</i>	
-</i>
-
-<i id="YES">
-	<en>Yes</en>
-	<lt>Taip</lt>
-</i>
-<i id="NO">
-	<en>No</en>
-	<lt>Ne</lt>
-</i>
-
-<i id="SEARCH">
-	<en>Search</en>
-	<lt>Paieška</lt>
-</i>
-
-<i id="QUICK_SEARCH">
-	<en>Quick search</en>
-	<lt>Greita paieška</lt>
-</i>
-
-
-<i id="ORDER_BY">
-	<en>Order by</en>
-	<lt>Rikiuoti pagal</lt>
-</i>
-
-
-<i id="ICON_TITLES">
-	<i id="active_0">Enable</i>
-	<i id="active_1">Disable</i>
-	<i id="action_move_up">Move up</i>
-	<i id="action_move_down">Move down</i>
-	<i id="action_edit">
-		<lt>Redaguoti</lt>
-		<en>Edit</en>
-	</i>
-	<i id="action_edit_shift">
-		<lt>Redaguoti (shift)</lt>
-		<en>Edit (shift)</en>		
-	</i>
-	<i id="copy">
-		<lt>Klonuoti</lt>
-		<en>Clone</en>
-	</i>
-	<i id="action_file_delete">Delete</i>	
-	<i id="print">
-		<en>Print</en>
-		<lt>Spauzdinti</lt>
-		<no>Print ut</no>
-	</i>
-	<i id="switch_user">
-		<en>Login to user account</en>
-		<lt>Prisijungti į vartotojo paskyrą</lt>
-	</i>
-</i>
-
-<i id="EXTRA_INFO">
-	<en>Extra information</en>
-	<lt>Papildoma informacija</lt>
-</i>
-
-<i id="SESSION_VALIDITY">
-	<lt>Sesijos galiojimo laikas</lt>
-	<en>Session validity</en>
-</i>
-
-<i id="LOGIN_TO_EXTEND_SESSION">
-	<lt>Neaktyvumo limitas pasiektas. Tęsti sesiją?</lt>
-	<en>Session expired. Continue session?</en>
-</i>
-
-<i id="SESSION_EXTEND_SUCCESS">
-	OK
-</i>
-
-<i id="SERVER_TIME">
-	<lt>Serverio laikas</lt>
-	<en>Server time</en>
-</i>
-
-<i id="YOUR_IP">
-	<lt>Jūsų ip adresas</lt>
-	<en>Your ip</en>
-</i>
-
-
-<i id="PAGE_BY">
-	<lt>Įrašų per puslapį</lt>
-	<en>Page by</en>
-</i>
-
-<i id="NEXT">
-	<lt>Sekantis</lt>
-	<en>Next</en>
-</i>
-
-<i id="STEP">
-	<lt>žingsnis</lt>
-	<en>step</en>
-</i>
-
-
-<i id="PREVIOUS">
-	<lt>Ankstesnis</lt>
-	<en>Previuos</en>
-</i>
-
-<i id="FIRST">
-	<lt>Pirmas</lt>
-	<en>First</en>
-</i>
-
-<i id="LAST">
-	<lt>Paskutinis</lt>
-	<en>Last</en>
-</i>
-
-<i id="PAGE">
-	<lt>Puslapis</lt>
-	<en>Page</en>
-</i>
-
-<i id="GALLERY_FOLDER">
-	<en>Gallery folder</en>
-	<lt>Galerijos katalogas</lt>
-</i>
-
-
-<i id="EMPTY_OPTION">
-	<i id="0">
-		<en>-- Not selected --</en>
-		<lt>-- Nepasirinkta --</lt>
-	</i>
-</i>
-
-
-
-
-<i id="FOOTER">
-	<![CDATA[
-		<a href="http://cms.gw.lt/">Gateway CMS</a> <br>%year% ©	
-	]]>
-</i>
-
-<i id="GW_CMS_DESCRIPTION">
-	<en>Gateway content management system</en>
-	<lt>Gateway turinio valdymo sistema</lt>
-</i>
-
-<i id="DIMENSIONS">
-	<lt>Dydis</lt>
-	<en>Dimensions</en>
-</i>
-<i id="FILE_SIZE">
-	<lt>Rinkmenos dydis</lt>
-	<en>File size</en>
-</i>
-
-<i id="MAX_UPLOAD_SIZE">
-	<lt>Maksimalus įkėlimo dydis %s</lt>
-	<en>Max upload size %s</en>
-</i>
-
-<i id="APPLY_SORT">
-	<lt>Saugoti rikiavimo pakeitimus</lt>
-	<en>Apply sort</en>
-</i>
-
-<i id="CHECKLIST_SELECT_ACTION">
-	<lt>Veiksmai su pasirinktais įrašais</lt>
-	<en>Actions with selected items</en>
-</i>
-
-<i id="LIST_DISPLAY_SETTINGS">
-	<lt>Rodymo parinktys</lt>
-	<en>Display settings</en>
-</i>
-
-<i id="LDS_FIELD_PRIORITY_VISIBILITY">
-	<lt>Laukelių eiliškumas ir rodymas</lt>
-	<en>Column priority &amp; visibility</en>
-</i>
-
-
-<i id="RESET_TO_DEFAULTS">
-	<lt>Atstatyti numatytuosius</lt>
-	<en>Reset to defaults</en>
-</i>
-
-<i id="MONTHS_SHORT">
-	<i id="0">Jan</i>
-	<i id="1">Feb</i>
-	<i id="2">Mar</i>
-	<i id="3">Apr</i>
-	<i id="4">May</i>
-	<i id="5">Jun</i>
-	<i id="6">Jul</i>
-	<i id="7">Aug</i>
-	<i id="8">Sep</i>
-	<i id="9">Oct</i>
-	<i id="10">Nov</i>
-	<i id="11">Dec</i>
-</i>
-
-<i id="VIEWS_LABEL">
-	<en>Views</en>
-	<lt>Filtrai</lt>
-</i>
-<i id="ORDERS_LABEL">
-	<en>Order</en>
-	<lt>Rikiavimas</lt>
-</i>
-
-
-<i id="GO_BACK">
-	<lt>Atgal</lt>
-	<en>Back</en>	
-</i>
-
-<i id="ABOUT">
-	<lt>Apie</lt>
-	<en>About</en>	
-</i>
-
-<i id="ERROR">
-	<lt>klaida</lt>
-	<en>error</en>
-</i>
-<i id="DEFAULT">
-	<lt>Numatytasis</lt>
-	<en>Default</en>
-</i>
-<i id="CONFIRM">
-	<lt>Patvirtinti</lt>
-	<en>Confirm</en>
-</i>
-
-<i id="FILTER_ALL">
-	<lt>Visi</lt>
-	<en>All</en>
-</i>
-<i id="ITEM_COPY">
-	<lt>Kopija</lt>
-	<en>Cloned</en>
-</i>
-<i id="ACTION">
-	<lt>Veiksmas</lt>
-	<en>Action</en>
-</i>
-<i id="PRINT_VIEW">
-	<lt>Spauzdinimo versija</lt>
-	<en>Print view</en>
-</i>
-<i id="LIST_CONFIG">
-	<lt>Sąrašo konfigūravimas</lt>
-	<en>List configūration</en>
-</i>
-<i id="SAVE_NAME">
-	<lt>Išsaugoti pavadinimu</lt>
-	<en>Name ordering</en>
-</i>
-<i id="MY_ORDERING">
-	<lt>Mano rikiavimas</lt>
-	<en>My ordering</en>
-</i>
-
-<i id="SET_AS_DEFAULT">
-	<lt>Nustatyti kaip pagrindinį</lt>
-	<en>Set as default</en>
-</i>
-
-<i id="FILTERS_SELECT_COMPARE_TYPES">
-	<i id="IN">=</i>
-	<i id="NOTIN"><![CDATA[&ne;]]></i>
-</i>
-
-<i id="FILTERS_SELECT1_COMPARE_TYPES">
-	<i id="EQ">=</i>
-	<i id="NEQ"><![CDATA[&ne;]]></i>
-</i>
-
-<i id="FILTERS_COMPARE_TYPES">
-	<i id="LIKE">~</i>
-	<i id="EQ">=</i>
-	<i id="EQ">=</i>
-	<i id="LT"><![CDATA[&lt;]]></i>
-	<i id="GT"><![CDATA[&gt;]]></i>
-	<i id="NEQ"><![CDATA[&ne;]]></i>
-</i>
-
-<i id="ITEM_CHANGE_INTERUPED">
-	<lt>Duomenys pakeisti po formos atidarymo, įrašymas nutrauktas siekiant apsisaugoti nuo duomenų praradimo</lt>
-	<en>Data has been changed after form open, save was canceled to prevent data loss</en>
-</i>
-
-<i id="MANAGE">
-	<lt>Tvarkyti</lt>
-	<en>Manage</en>
-</i>
-
-<i id="DEACTIVATED_FIELDS">
-	<lt>Deaktyvuoti</lt>
-	<en>Deaktyvuoti</en>
-</i>
-<i id="BACKGROUND_TASKS">
-	<lt>Foniniai veiksmai</lt>
-	<en>Background tasks</en>
-</i>
-
-<i id="ITEM_SAVE_PREVENT_DATA_LOSS">
-	<lt>Prieš jus įvykdytas nenumatytas išsaugojimas, tai galėjo padaryti kitas administratorius/vartotojas arba pasekoje fone vykstančių procesų</lt>
-	<en>Save interupted, unexpected save detected, that might be cause of other admin/user or background process</en>
-</i>
-
-<i id="ADD">
-	<lt>Pridėti</lt>
-	<en>Add</en>
-</i>
-<i id="PREVIEW">
-	<lt>Peržiūra</lt>
-	<en>Preview</en>
-</i>
-
-
-<i id="AS_CSV_ROWS">
-	<lt>Kaip csv eilutes</lt>
-	<en>As csv rows</en>
-</i>
-<i id="AS_DB_ID">
-	<lt>Kaip DB identifikatorius</lt>
-	<en>As database id's</en>
-</i>
-
-<i id="LOADING">
-	<lt>Kraunama</lt>
-	<en>Loading</en>
-</i>
-
-<i id="VALUE">
-	<lt>Vertė</lt>
-	<en>Value</en>
-</i>
-
-<i id="SELECT_ALL">
-	<lt>Pasirinkti visus</lt>
-	<en>Select all</en>
-</i>
-
-<i id="TOTAL">
-	<lt>viso</lt>
-	<en>Total</en>
-</i>
-
-<i id="FOUND">
-	<lt>rasta</lt>
-	<en>found</en>
-</i>
-
-<i id="ITEMS">
-	<lt>įrašai</lt>
-	<en>įrašai</en>
-</i>
-<i id="FILTERED">
-	<lt>atrinkta</lt>
-	<en>filtered</en>
-</i>
-
-
+  <i id="LANG">
+    <i id="lt">Lietuvių</i>
+    <i id="en">English</i>
+    <i id="ru">Руский</i>
+  </i>
+  <i id="LANGUAGE">
+    <en>Language</en>
+    <lt>Kalbaa</lt>
+    <ru>Язык</ru>
+  </i>
+  <i id="SAVE">
+    <lt>Išsaugoti ir išeiti</lt>
+    <ru>Сохранить и выйти</ru>
+    <en>Save</en>
+  </i>
+  <i id="APPLY">
+    <lt>Išsaugoti liekant</lt>
+    <ru>Сохранить оставаясь</ru>
+  </i>
+  <i id="APPLY_1">
+    <en>Apply</en>
+    <lt>Taikyti</lt>
+    <ru>Применять</ru>
+  </i>
+  <i id="EXECUTE">
+    <en>Execute</en>
+    <lt>Vykdyti</lt>
+    <ru>Выполнять</ru>
+  </i>
+  <i id="UPDATE">
+    <en>Refresh</en>
+    <lt>Atnaujinti</lt>
+    <ru>Обновить</ru>
+  </i>
+  <i id="CANCEL">
+    <en>Cancel</en>
+    <lt>Atšaukti</lt>
+    <ru>Отменить</ru>
+  </i>
+  <i id="CLOSE">
+    <en>Close</en>
+    <lt>Užverti</lt>
+    <ru>Закрыть</ru>
+  </i>
+  <i id="CONTINUE">
+    <en>Continue</en>
+    <lt>Tęsti</lt>
+    <ru>Продолжить</ru>
+  </i>
+  <i id="SUBMIT">
+    <en>Submit</en>
+    <lt>Pateikti</lt>
+    <ru>Отправить</ru>
+  </i>
+  <i id="BACK">
+    <en>« Back</en>
+    <lt>« Atgal</lt>
+    <ru>« Назад</ru>
+  </i>
+  <i id="EDIT">
+    <en>Edit</en>
+    <lt>Redaguoti</lt>
+    <ru>Редактировать</ru>
+  </i>
+  <i id="REMOVE">
+    <en>Remove</en>
+    <lt>Panaikinti</lt>
+    <ru>Удалить</ru>
+  </i>
+  <i id="SELECTED_ITEMS_REMOVED">
+    <lt>Pasirinkti įrašai: %s bus pašalinti</lt>
+    <en>Selected items: %s will be removed</en>
+    <ru>Выбранные элементы: %s будут удалены</ru>
+  </i>
+  <i id="LOGOUT">
+    <en>Logout</en>
+    <lt>Atsijungti</lt>
+    <ru>Выйти</ru>
+  </i>
+  <i id="USER">
+    <en>Username</en>
+    <lt>Vartotojas</lt>
+    <ru>Имя пользователя</ru>
+  </i>
+  <i id="PASS">
+    <en>Password</en>
+    <lt>Slaptažodis</lt>
+    <ru>Пароль</ru>
+  </i>
+  <i id="CHANGE_PASS">
+    <en>Change password</en>
+    <lt>Keisti slaptažodį</lt>
+    <ru>Поменять пароль</ru>
+  </i>
+  <i id="ACCOUNT_LOGIN">
+    <en>Account login</en>
+    <lt>Prisijungimas prie paskyros</lt>
+    <ru>Вход в учетную запись</ru>
+  </i>
+  <i id="SIGN_IN_TO_YOUR_ACCOUNT">
+    <en>Sign In to your account</en>
+    <lt>Prisijunkite prie savo paskyros</lt>
+    <ru>Войдите в свою учетную запись</ru>
+  </i>
+  <i id="DOLOGIN">
+    <en>Login</en>
+    <lt>Prisijungti</lt>
+    <ru>Вход в систему ArtistDB</ru>
+  </i>
+  <i id="AUTOLOGIN">
+    <en>Autologin on this browser</en>
+    <lt>Prisiminti šioje naršyklėje</lt>
+    <ru>Автоматический вход в систему</ru>
+  </i>
+  <i id="CREATE_NEW">
+    <en>Create new</en>
+    <lt>Sukurti naują</lt>
+    <ru>Создать новый</ru>
+  </i>
+  <i id="CREATE_NEW_VIEW">
+    <en>Save page view parameters</en>
+    <lt>Išsaugoti puslapio peržiūros parametrus</lt>
+    <ru>Сохранение параметров просмотра страницы</ru>
+  </i>
+  <i id="PAGE_VIEWS">
+    <en>Saved views</en>
+    <lt>Paruoštos peržiūros</lt>
+    <ru>Сохраненные просмотры</ru>
+  </i>
+  <i id="PAGE_VIEW">
+    <en>Save view</en>
+    <lt>Paruošta peržiūra</lt>
+    <ru>Сохраненный просмотр</ru>
+  </i>
+  <i id="PAGE_VIEW_REGULAR">
+    <lt>Standartinis</lt>
+    <en>Regular</en>
+    <ru>Стандартный</ru>
+  </i>
+  <i id="PAGE_VIEW_DEFAULT">
+    <lt>Numatytasis</lt>
+    <en>Default</en>
+    <ru>По умолчанию</ru>
+  </i>
+  <i id="CREATE_NEW_ORDER">
+    <en>Save current ordering</en>
+    <lt>Išsaugoti dabartinį rikiavimą</lt>
+    <ru>Сохранить текущую очередность</ru>
+  </i>
+  <i id="SAVE_AS_DEFAULT_PAGE_VIEW">
+    <en>Save as default view</en>
+    <lt>Saugoti kaip pagrindinę peržiūrą</lt>
+    <ru>Сохранить как просмотр по умолчанию</ru>
+  </i>
+  <i id="UPDATE_CURRENT_VIEW">
+    <en>Update current view</en>
+    <lt>Atnaujinti pasirinktąją peržiūrą</lt>
+    <ru>Обновить текущий вид</ru>
+  </i>
+  <i id="ACTION_CONFIRM_REQUIRED">
+    <en>Action confirm required. Continue?</en>
+    <lt>Reikalingas veiksmo patvirtinimas. Vykdyti veiksmą?</lt>
+    <ru>Требуется подтверждение команды. Продолжить?</ru>
+  </i>
+  <i id="REQUIRED">
+    <en>Required</en>
+    <lt>Būtina užpildyti</lt>
+    <ru>Необходимо заполнить</ru>
+  </i>
+  <i id="LOGGED_AS">
+    <en>Logged as</en>
+    <lt>Prisijungęs kaip</lt>
+    <ru>Зарегистрирован как</ru>
+  </i>
+  <i id="SWITCH_USER_RETURN">
+    <en>
+<![CDATA[Return to <b>%s</b> account]]>
+    </en>
+    <lt>
+<![CDATA[Sugrįžti į <b>%s</b> paskyrą]]>
+    </lt>
+    <ru>
+<![CDATA[Вернуться в учетную запись <b>%s</b>]]>
+    </ru>
+  </i>
+  <i id="UPDATE_SUCCESS">
+    <en>Data successfully updated</en>
+    <lt>Duomenys atnaujinti</lt>
+    <ru>Данные успешно обновлены</ru>
+  </i>
+  <i id="SAVE_SUCCESS">
+    <en>Data successfully saved</en>
+    <lt>Duomenys išsaugoti</lt>
+    <ru>Данные успешно сохранены</ru>
+  </i>
+  <i id="NO_CHANGES">
+    <en>No data changes</en>
+    <lt>Duomenų pakeitimų nėra</lt>
+    <ru>Никаких изменений данных</ru>
+  </i>
+  <i id="ITEM_REMOVE_SUCCESS">
+    <en>Item removed</en>
+    <lt>Įrašas panaikintas</lt>
+    <ru>Запись удалена</ru>
+  </i>
+  <i id="ITEM_REMOVE_FAILED">
+    <en>Item remove failed</en>
+    <lt>Įrašo panaikinti nepavyko</lt>
+    <ru>Произошла ошибка при удалении записи</ru>
+  </i>
+  <i id="ITEM_ADD_SUCCESS">
+    <en>Item added</en>
+    <lt>Įrašas išsaugotas</lt>
+    <ru>Запись сохранена</ru>
+  </i>
+  <i id="CONFIRM_DELETE">
+    <en>Confirm delete</en>
+    <lt>Patvirtinkite įrašo šalinimą</lt>
+    <ru>Подтвердите удаление записи</ru>
+  </i>
+  <i id="NEW_MESSAGES">
+    <en>New messages</en>
+    <lt>Nauji pranešimai</lt>
+    <ru>Новые сообщения</ru>
+  </i>
+  <i id="NO_NEW_MESSAGES">
+    <en>No new messages found</en>
+    <lt>Naujų pranešimų nėra</lt>
+    <ru>Новых сообщений нет</ru>
+  </i>
+  <i id="FIELDS">
+    <i id="insert_time">
+      <en>Creation time</en>
+      <lt>Sukūrimo laikas</lt>
+      <ru>Время создания</ru>
+    </i>
+    <i id="update_time">
+      <en>Last edited</en>
+      <lt>Paskutinis redagavimas</lt>
+      <ru>Последние изменения</ru>
+    </i>
+    <i id="title">
+      <en>Title</en>
+      <lt>Pavadinimas</lt>
+      <ru>Название</ru>
+    </i>
+    <i id="active">
+      <en>Active</en>
+      <lt>Aktyvus</lt>
+      <ru>Активный</ru>
+    </i>
+    <i id="image">
+      <en>Image</en>
+      <lt>Paveikslas</lt>
+      <ru>Изображение</ru>
+    </i>
+    <i id="type">
+      <en>Type</en>
+      <lt>Tipas</lt>
+      <ru>Тип</ru>
+    </i>
+    <i id="group">
+      <en>Group</en>
+      <lt>Grupė</lt>
+      <ru>Группа</ru>
+    </i>
+    <i id="category">
+      <en>Category</en>
+      <lt>Kategorija</lt>
+      <ru>Категория</ru>
+    </i>
+    <i id="text">
+      <en>Text</en>
+      <lt>Tekstas</lt>
+      <ru>Текст</ru>
+    </i>
+    <i id="time">
+      <en>Time</en>
+      <lt>Laikas</lt>
+      <ru>Время</ru>
+    </i>
+    <i id="id">
+      <en>Id. num.</en>
+      <lt>Id. num.</lt>
+      <ru>Id. №</ru>
+    </i>
+    <i id="description">
+      <en>Description</en>
+      <lt>Aprašymas</lt>
+      <ru>Описание</ru>
+    </i>
+  </i>
+  <i id="VIEWS">
+    <i id="form">
+      <en>Form</en>
+      <lt>Forma</lt>
+      <ru>Форма</ru>
+    </i>
+    <i id="print">
+      <en>Print</en>
+      <lt>Spausdinti</lt>
+      <ru>Печатать</ru>
+    </i>
+    <i id="export">
+      <en>Export</en>
+      <lt>Eksportuoti</lt>
+      <ru>Экспортировать</ru>
+    </i>
+    <i id="importdata">
+      <en>Import</en>
+      <lt>Importuoti</lt>
+      <ru>Импортировать</ru>
+    </i>
+    <i id="exportdata">
+      <en>Export</en>
+      <lt>Eksportuoti</lt>
+      <ru>Экспортировать</ru>
+    </i>
+    <i id="edit">
+      <en>Edit</en>
+      <lt>Redaguoti</lt>
+      <ru>Редактировать</ru>
+    </i>
+    <i id="item">
+      <en>Item</en>
+      <lt>Įrašas</lt>
+      <ru>Запись</ru>
+    </i>
+    <i id="config">
+      <en>Config</en>
+      <lt>Nustatymai</lt>
+      <ru>Параметры</ru>
+    </i>
+    <i id="dialogremove">
+      <en>Remove items</en>
+      <lt>Šalinti įrašus</lt>
+      <ru>Удалить записи</ru>
+    </i>
+    <i id="doDelete">
+      <en>Remove</en>
+      <lt>Šalinti</lt>
+      <ru>Удалить</ru>
+    </i>
+    <i id="doInvertActive">
+      <en>Invert active state</en>
+      <lt>Pakeisti aktyvumo būklę</lt>
+      <ru>Изменить состояние активности</ru>
+    </i>
+    <i id="doSetActive">
+      <en>Activate</en>
+      <lt>Aktyvuoti</lt>
+      <ru>Активировать</ru>
+    </i>
+    <i id="doClone">
+      <en>Clone</en>
+      <lt>Kopijuoti</lt>
+      <ru>Копировать</ru>
+    </i>
+    <i id="doSend">
+      <en>Send</en>
+      <lt>Siųsti</lt>
+      <ru>Отправить</ru>
+    </i>
+    <i id="dialogconfig2">
+      <lt>Nustatymai</lt>
+      <en>Settings</en>
+      <ru>Параметры</ru>
+    </i>
+    <i id="doWriteLock">Write Lock</i>
+    <i id="doWriteUnLock">Write UnLock</i>
+  </i>
+  <i id="NO_ITEMS">
+    <en>No items</en>
+    <lt>Įrašų nėra</lt>
+    <ru>Записей не найдено</ru>
+  </i>
+  <i id="ITEM_COUNT">
+    <lt>Įrašų skaičius</lt>
+    <en>Item count</en>
+    <ru>Количество записей</ru>
+  </i>
+  <i id="ACTIONS">
+    <en>Actions</en>
+    <lt>Veiksmai</lt>
+    <ru>Действия</ru>
+  </i>
+  <i id="IMAGE">
+    <en>Image</en>
+    <lt>Paveikslas</lt>
+    <ru>Изображение</ru>
+  </i>
+  <i id="FIELD">
+    <en>Field</en>
+    <lt>Laukelis</lt>
+    <ru>Поле</ru>
+  </i>
+  <i id="FILTER_VALUE">
+    <en>Value</en>
+    <lt>Vertė</lt>
+    <ru>Значимость</ru>
+  </i>
+  <i id="APPLY_FILTER">
+    <en>Apply filters</en>
+    <lt>Filtruoti</lt>
+    <ru>Применить фильтры</ru>
+  </i>
+  <i id="REMOVE_FILTER">
+    <en>Remove filters</en>
+    <lt>Nuimti filtrus</lt>
+    <ru>Снять фильтры</ru>
+  </i>
+  <i id="UNHIDE_FILTER">
+    <en>Unhide hidden</en>
+    <lt>Parodyti paslėptus</lt>
+    <ru>Показать скрытые</ru>
+  </i>
+  <i id="ADD_FILTER_4_FIELD">
+    <en>Add filter for field</en>
+    <lt>Pridėti filtrą laukui</lt>
+    <ru>Добавить фильтр для поля</ru>
+  </i>
+  <i id="ADD_ALL_FILTERS">
+    <en>Add all filters</en>
+    <lt>Pridėti visus filtrus</lt>
+    <ru>Добавить все фильтры</ru>
+  </i>
+  <i id="COMPARE_TYPE">
+    <i id="SHORT">
+      <en>C. t.</en>
+      <lt>P. m.</lt>
+      <ru>C. t.</ru>
+    </i>
+    <i id="FULL">
+      <en>Compare type</en>
+      <lt>Palyginimo metodas</lt>
+      <ru>Сравнить тип</ru>
+    </i>
+  </i>
+  <i id="FILTER_FROM">
+    <en>from</en>
+    <lt>nuo</lt>
+    <ru>от</ru>
+  </i>
+  <i id="FILTER_TO">
+    <en>to</en>
+    <lt>iki</lt>
+    <ru>до</ru>
+  </i>
+  <i id="FILTER_EMPTY_OPTION">
+    <i id="">
+      <lt>-- Nefiltruoti --</lt>
+      <en>-- Any --</en>
+      <ru>Любые</ru>
+    </i>
+  </i>
+  <i id="ACTIVE_OPT">
+    <i id="0">Not active</i>
+    <i id="1">Active</i>
+  </i>
+  <i id="YES">
+    <en>Yes</en>
+    <lt>Taip</lt>
+    <ru>Да</ru>
+  </i>
+  <i id="NO">
+    <en>No</en>
+    <lt>Ne</lt>
+    <ru>Нет</ru>
+  </i>
+  <i id="SEARCH">
+    <en>Search</en>
+    <lt>Paieška</lt>
+    <ru>Поиск</ru>
+  </i>
+  <i id="QUICK_SEARCH">
+    <en>Quick search</en>
+    <lt>Greita paieška</lt>
+    <ru>Быстрый поиск</ru>
+  </i>
+  <i id="ORDER_BY">
+    <en>Order by</en>
+    <lt>Rikiuoti pagal</lt>
+    <ru>Очерёдность</ru>
+  </i>
+  <i id="ICON_TITLES">
+    <i id="active_0">Enable</i>
+    <i id="active_1">Disable</i>
+    <i id="action_move_up">Move up</i>
+    <i id="action_move_down">Move down</i>
+    <i id="action_edit">
+      <lt>Redaguoti</lt>
+      <en>Edit</en>
+      <ru>Редактировать</ru>
+    </i>
+    <i id="action_edit_shift">
+      <lt>Redaguoti (shift)</lt>
+      <en>Edit (shift)</en>
+      <ru>Редактировать (shift)</ru>
+    </i>
+    <i id="copy">
+      <lt>Kopijuoti</lt>
+      <en>Clone</en>
+      <ru>Копировать</ru>
+    </i>
+    <i id="action_file_delete">Delete</i>
+    <i id="print">
+      <en>Print</en>
+      <lt>Spausdinti</lt>
+      <ru>Печатать</ru>
+    </i>
+    <i id="switch_user">
+      <en>Login to user account</en>
+      <lt>Prisijungti prie vartotojo paskyros</lt>
+      <ru>Войти в учетную запись пользователя</ru>
+    </i>
+  </i>
+  <i id="EXTRA_INFO">
+    <en>Extra information</en>
+    <lt>Papildoma informacija</lt>
+    <ru>Дополнительная информация</ru>
+  </i>
+  <i id="SESSION_VALIDITY">
+    <lt>Sesijos galiojimo laikas</lt>
+    <en>Session validity</en>
+    <ru>Продолжительность сессии</ru>
+  </i>
+  <i id="LOGIN_TO_EXTEND_SESSION">
+    <lt>Neaktyvumo limitas pasiektas. Tęsti sesiją?</lt>
+    <en>Session expired. Continue session?</en>
+    <ru>Время сессии истекло. Продолжить сессию?</ru>
+  </i>
+  <i id="SESSION_EXTEND_SUCCESS">OK</i>
+  <i id="SERVER_TIME">
+    <lt>Serverio laikas</lt>
+    <en>Server time</en>
+    <ru>Время сервера</ru>
+  </i>
+  <i id="YOUR_IP">
+    <lt>Jūsų IP adresas</lt>
+    <en>Your IP</en>
+    <ru>Ваш IP</ru>
+  </i>
+  <i id="PAGE_BY">
+    <lt>Įrašų per puslapį</lt>
+    <en>Page by</en>
+    <ru>Записей в странице</ru>
+  </i>
+  <i id="NEXT">
+    <lt>Sekantis</lt>
+    <en>Next</en>
+    <ru>Следующий</ru>
+  </i>
+  <i id="STEP">
+    <lt>žingsnis</lt>
+    <en>step</en>
+    <ru>шаг</ru>
+  </i>
+  <i id="PREVIOUS">
+    <lt>Ankstesnis</lt>
+    <en>Previuos</en>
+    <ru>Предыдущий</ru>
+  </i>
+  <i id="FIRST">
+    <lt>Pirmas</lt>
+    <en>First</en>
+    <ru>Первый</ru>
+  </i>
+  <i id="LAST">
+    <lt>Paskutinis</lt>
+    <en>Last</en>
+    <ru>Последний</ru>
+  </i>
+  <i id="PAGE">
+    <lt>Puslapis</lt>
+    <en>Page</en>
+    <ru>Страница</ru>
+  </i>
+  <i id="GALLERY_FOLDER">
+    <en>Gallery folder</en>
+    <lt>Galerijos katalogas</lt>
+    <ru>Папка галереи</ru>
+  </i>
+  <i id="EMPTY_OPTION">
+    <i id="0">
+      <en>-- Not selected --</en>
+      <lt>-- Nepasirinkta --</lt>
+      <ru>Не выбрано</ru>
+    </i>
+  </i>
+  <i id="FOOTER">
+<![CDATA[<a href="http://cms.gw.lt/">Gateway CMS</a> <br>%year% ©]]>
+  </i>
+  <i id="GW_CMS_DESCRIPTION">
+    <en>Gateway content management system</en>
+    <lt>GW turinio valdymo sistema</lt>
+    <ru>Cистема управления содержанием GW</ru>
+  </i>
+  <i id="DIMENSIONS">
+    <lt>Matmenys</lt>
+    <en>Dimensions</en>
+    <ru>Размеры</ru>
+  </i>
+  <i id="FILE_SIZE">
+    <lt>Rinkmenos dydis</lt>
+    <en>File size</en>
+    <ru>Размер файла</ru>
+  </i>
+  <i id="MAX_UPLOAD_SIZE">
+    <lt>Maksimalus įkėlimo dydis %s</lt>
+    <en>Max upload size %s</en>
+    <ru>Максимальный размер загрузки %s</ru>
+  </i>
+  <i id="APPLY_SORT">
+    <lt>Saugoti rikiavimo pakeitimus</lt>
+    <en>Save order changes</en>
+    <ru>Сохранить изменения сортировки</ru>
+  </i>
+  <i id="CHECKLIST_SELECT_ACTION">
+    <lt>Veiksmai su pasirinktais įrašais</lt>
+    <en>Actions with selected items</en>
+    <ru>Действия с выбранными элементами</ru>
+  </i>
+  <i id="LIST_DISPLAY_SETTINGS">
+    <lt>Rodymo parinktys</lt>
+    <en>Display settings</en>
+    <ru>Настройки отображения</ru>
+  </i>
+  <i id="LDS_FIELD_PRIORITY_VISIBILITY">
+    <lt>Laukelių eiliškumas ir rodymas</lt>
+    <ru>Приоритет и отображение полей</ru>
+  </i>
+  <i id="RESET_TO_DEFAULTS">
+    <lt>Atstatyti numatytuosius</lt>
+    <en>Reset to defaults</en>
+    <ru>Сброс к значениям по умолчанию</ru>
+  </i>
+  <i id="MONTHS_SHORT">
+    <i id="0">Jan</i>
+    <i id="1">Feb</i>
+    <i id="2">Mar</i>
+    <i id="3">Apr</i>
+    <i id="4">May</i>
+    <i id="5">Jun</i>
+    <i id="6">Jul</i>
+    <i id="7">Aug</i>
+    <i id="8">Sep</i>
+    <i id="9">Oct</i>
+    <i id="10">Nov</i>
+    <i id="11">Dec</i>
+  </i>
+  <i id="VIEWS_LABEL">
+    <en>Views</en>
+    <lt>Peržiūros</lt>
+    <ru>Просмотры</ru>
+  </i>
+  <i id="ORDERS_LABEL">
+    <en>Order</en>
+    <lt>Rikiavimas</lt>
+    <ru>Порядок</ru>
+  </i>
+  <i id="GO_BACK">
+    <lt>Atgal</lt>
+    <en>Back</en>
+    <ru>Назад</ru>
+  </i>
+  <i id="ABOUT">
+    <lt>Apie</lt>
+    <en>About</en>
+    <ru>О</ru>
+  </i>
+  <i id="ERROR">
+    <lt>klaida</lt>
+    <en>error</en>
+    <ru>ошибка</ru>
+  </i>
+  <i id="DEFAULT">
+    <lt>Numatytasis</lt>
+    <en>Default</en>
+    <ru>По умолчанию</ru>
+  </i>
+  <i id="CONFIRM">
+    <lt>Patvirtinti</lt>
+    <en>Confirm</en>
+    <ru>Подтвердить</ru>
+  </i>
+  <i id="FILTER_ALL">
+    <lt>Visi</lt>
+    <en>All</en>
+    <ru>Все</ru>
+  </i>
+  <i id="ITEM_COPY">
+    <lt>Kopija</lt>
+    <en>Cloned</en>
+    <ru>Копия</ru>
+  </i>
+  <i id="ACTION">
+    <lt>Veiksmas</lt>
+    <en>Action</en>
+    <ru>Действие</ru>
+  </i>
+  <i id="PRINT_VIEW">
+    <lt>Spausdinimo versija</lt>
+    <en>Print view</en>
+    <ru>Версия для печати</ru>
+  </i>
+  <i id="LIST_CONFIG">
+    <lt>Sąrašo konfigūravimas</lt>
+    <en>List configuration</en>
+    <ru>Список конфигураций</ru>
+  </i>
+  <i id="SAVE_NAME">
+    <lt>Išsaugoti pavadinimu</lt>
+    <en>Name ordering</en>
+    <ru>Сохранить как</ru>
+  </i>
+  <i id="MY_ORDERING">
+    <lt>Mano rikiavimas</lt>
+    <en>My ordering</en>
+    <ru>Мой порядок</ru>
+  </i>
+  <i id="SET_AS_DEFAULT">
+    <lt>Nustatyti kaip pagrindinį</lt>
+    <en>Set as default</en>
+    <ru>Установить по умолчанию</ru>
+  </i>
+  <i id="FILTERS_SELECT_COMPARE_TYPES">
+    <i id="IN">=</i>
+    <i id="NOTIN">≠</i>
+  </i>
+  <i id="FILTERS_SELECT1_COMPARE_TYPES">
+    <i id="EQ">=</i>
+    <i id="NEQ">≠</i>
+  </i>
+  <i id="FILTERS_COMPARE_TYPES">
+    <i id="LIKE">~</i>
+    <i id="EQ">=</i>
+    <i id="EQ">=</i>
+    <i id="LT">
+<![CDATA[<]]>
+    </i>
+    <i id="GT">
+<![CDATA[>]]>
+    </i>
+    <i id="NEQ">≠</i>
+  </i>
+  <i id="ITEM_CHANGE_INTERUPED">
+    <lt>Duomenys pakeisti po formos atidarymo, įrašymas nutrauktas siekiant apsisaugoti nuo duomenų praradimo</lt>
+    <en>Data has been changed after form open, save was canceled to prevent data loss</en>
+    <ru>Данные были изменены после открытия формы, сохранение было отменено, чтобы предотвратить потерю данных</ru>
+  </i>
+  <i id="MANAGE">
+    <lt>Tvarkyti</lt>
+    <en>Manage</en>
+    <ru>Управлять</ru>
+  </i>
+  <i id="DEACTIVATED_FIELDS">
+    <lt>Deaktyvuoti</lt>
+    <en>Deactivate</en>
+    <ru>Дезактивировать</ru>
+  </i>
+  <i id="BACKGROUND_TASKS">
+    <lt>Foniniai veiksmai</lt>
+    <en>Background tasks</en>
+    <ru>Фоновые действия</ru>
+  </i>
+  <i id="ITEM_SAVE_PREVENT_DATA_LOSS">
+    <lt>Išsaugojimas negalimas, nes kitas administratorius,vartotojas ar automatinis procesas atliko išsaugojimo veiksmą anksčiau nei Jūs</lt>
+    <en>Save interupted. Unexpected earlier save of other admin/user or background process detected</en>
+    <ru>Сохранение невозможнл.Обнаружено неожиданное более раннее сохранение другого администратора/пользователя или фонового процесса</ru>
+  </i>
+  <i id="ADD">
+    <lt>Pridėti</lt>
+    <en>Add</en>
+    <ru>Добавить</ru>
+  </i>
+  <i id="PREVIEW">
+    <lt>Peržiūra</lt>
+    <en>Preview</en>
+    <ru>Предварительный просмотр</ru>
+  </i>
+  <i id="AS_CSV_ROWS">
+    <lt>Kaip csv eilutės</lt>
+    <en>As csv rows</en>
+    <ru>Как csv строки</ru>
+  </i>
+  <i id="AS_DB_ID">
+    <lt>Kaip DB identifikatorius</lt>
+    <en>As database id's</en>
+    <ru>Как идентификатор базы данных</ru>
+  </i>
+  <i id="LOADING">
+    <lt>Kraunama</lt>
+    <en>Loading</en>
+    <ru>Идет загрузка</ru>
+  </i>
+  <i id="VALUE">
+    <lt>Vertė</lt>
+    <en>Value</en>
+    <ru>Значимость</ru>
+  </i>
+  <i id="SELECT_ALL">
+    <lt>Pasirinkti visus</lt>
+    <en>Select all</en>
+    <ru>Выделить все</ru>
+  </i>
+  <i id="TOTAL">
+    <lt>viso</lt>
+    <en>Total</en>
+    <ru>Всего</ru>
+  </i>
+  <i id="FOUND">
+    <lt>rasta</lt>
+    <en>found</en>
+    <ru>найдено</ru>
+  </i>
+  <i id="ITEMS">
+    <lt>įrašai</lt>
+    <en>records</en>
+    <ru>записи</ru>
+  </i>
+  <i id="FILTERED">
+    <lt>atrinkta</lt>
+    <en>filtered</en>
+    <ru>выбрано</ru>
+  </i>
 </xml>

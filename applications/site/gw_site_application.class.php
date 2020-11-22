@@ -349,14 +349,6 @@ class GW_Site_Application extends GW_Application
 			
 		$this->userzoneAccess();
 		
-		
-		if(isset($_GET['toggle-lang-results-active']))
-		{
-			$this->sess['lang-results-active'] = isset($this->sess['lang-results-active']) && $this->sess['lang-results-active'] ? 0 : 1;
-			unset($_GET['toggle-lang-results-active']);
-			$this->jump(false, $_GET);
-		}
-		
 		$this->processType($this->page->type);
 		
 		$this->postRun2();

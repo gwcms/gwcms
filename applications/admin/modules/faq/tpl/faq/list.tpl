@@ -34,7 +34,7 @@
 	
 	{$dl_actions=[invert_active,move,edit,delete]}
 	
-	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
+	{$dl_filters=[title=>1, insert_time=>1, active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')]]}
 	
 	
 

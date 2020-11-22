@@ -3,7 +3,7 @@
 <div style="max-width:600px;">
 
 
-{$labels=$m->lang.FIELDS}
+{$labels=GW::l('/m/FIELDS')}
 {$width_title="30%"}
 
 
@@ -11,7 +11,7 @@
 
 <input type="hidden" name="act" value="do:update_my_profile" />
 
-<h3>{$m->lang.CHANGE_PROFILE_DATA}</h3>
+<h3>{GW::l('/m/CHANGE_PROFILE_DATA')}</h3>
 
 <table class="gwTable">
 
@@ -21,12 +21,12 @@
 {call e field=surname}
 
 
-<tr><td></td><td><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></td></tr>
+<tr><td></td><td><input class="btn btn-primary" type="submit" value="{GW::l('/g/SAVE')}"/></td></tr>
 </table>
 
 </form>
 
-<h3>{$m->lang.CHANGE_PASS}</h3>
+<h3>{GW::l('/m/CHANGE_PASS')}</h3>
 
 <form action="{$smarty.server.REQUEST_URI}" method="post">
 
@@ -41,7 +41,7 @@
 {call e field=pass_new_repeat type="password"}
 
 
-<tr><td></td><td><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></td></tr>
+<tr><td></td><td><input class="btn btn-primary" type="submit" value="{GW::l('/g/SAVE')}"/></td></tr>
 </table>
 
 </form>

@@ -32,4 +32,64 @@ switch($argv[1]){
 			echo "Only on dev";
 		}
 	break;	
+	case 'writelang':
+		$id = $argv[2];
+				
+		$t = new GW_Timer;
+		
+		$rdir =& GW::s('DIR');
+		$dir =& $rdir['SITE'];
+
+		$rdir['ADMIN']['ROOT']=$rdir['APPLICATIONS'].'admin/';
+		$rdir['ADMIN']['MODULES']=$rdir['ADMIN']['ROOT'].'modules/';
+		$rdir['ADMIN']['LANG']=$rdir['ADMIN']['ROOT'].'lang/';
+		
+		
+
+		$rdir['AUTOLOAD'][] = @$dir['LIB'];
+		$rdir['AUTOLOAD_RECURSIVE'] = $rdir['ADMIN']['MODULES'];	
+		
+		
+		$user = $argv[3];
+		echo "user is $user;\n";
+		
+		GW_Lang::$ln = 'en';
+		GW_Lang::$app = "ADMIN";
+		GW_Lang::$langf_dir = GW::s("DIR/APPLICATIONS") . 'ADMIN' . '/lang/';
+		
+		$lf = new GW_Lang_File($id);
+		$lf->load();
+		
+		if(!$lf->newexists)
+			die('temp not exists');
+		
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
+			$lf->writeToOriginal();	
+			
+		
+		}else{
+			$projdir = GW::s('PROJECT_NAME');
+			$projrepos = GW::s('PROJECT_CODE_REPOS');
+			$tmpdir = "/tmp/code_adj_{$projdir}/";
+			
+			if(!file_exists($tmpdir.'index.php')){
+				mkdir($tmpdir);
+				passthru("cd $tmpdir && git clone $projrepos .");
+			}
+			
+			
+			$dest = str_replace(GW::s('DIR/ROOT'),$tmpdir,$lf->filename);
+			
+			
+			chdir($tmpdir);
+			passthru('git pull');
+			
+			$lf->writeToOriginal($dest);
+			
+			passthru("git add *.xml");
+			passthru("git commit -m 'translations from $user'");
+			passthru("git push");
+			echo "Speed is {$t->stop()} secs\n";
+		}
+	break;
 }

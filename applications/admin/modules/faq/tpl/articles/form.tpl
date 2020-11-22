@@ -10,7 +10,7 @@
 	options=[]
 }
 
-{call e field=image  type=image title=$lang.IMAGE}
+{call e field=image  type=image title=GW::l('/g/IMAGE')}
 {call e field=title}
 {call e field=short type=textarea height=70px}
 

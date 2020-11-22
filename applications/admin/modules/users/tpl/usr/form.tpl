@@ -45,14 +45,14 @@
 
 
 {call e field=group_ids type=multiselect options=$options.group_ids}
-{call e field=session_validity type=select options=$m->lang.SESSION_VALIDITY_OPT}
+{call e field=session_validity type=select options=GW::l('/m/SESSION_VALIDITY_OPT')}
 
 
 
 
 {call e field=description type=textarea height="100px"}
 {call e field=active type=bool}
-{call e field=pass_new type=pass_visible title=$m->lang.FIELDS.pass}
+{call e field=pass_new type=pass_visible title=GW::l('/m/FIELDS/pass')}
 
 {if $m->rootadmin}
 	{call e field=is_admin type=bool}

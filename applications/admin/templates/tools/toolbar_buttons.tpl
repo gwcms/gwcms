@@ -1,30 +1,30 @@
 {function name=do_toolbar_buttons_addnew}
-	{toolbar_button title=$lang.CREATE_NEW iconclass='gwico-Plus' href=$m->buildUri('form',[id=>0])}
+	{toolbar_button title=GW::l('/g/CREATE_NEW') iconclass='gwico-Plus' href=$m->buildUri('form',[id=>0])}
 	
 {/function}
 
 {function name=do_toolbar_buttons_filters}
-		{*toolbar_button title=$lang.SEARCH iconclass='gwico-SearchFilled' onclick="$('#filters').toggle();" toggle=1*}
+		{*toolbar_button title=GW::l('/g/SEARCH') iconclass='gwico-SearchFilled' onclick="$('#filters').toggle();" toggle=1*}
 {/function}	
 
 {function name=do_toolbar_buttons_print}
 	
-	{toolbar_button title=$lang.PRINT_VIEW iconclass='gwico-Print-Filled' href=$m->buildUri(false,[print_view=>1],[carry_params=>1])}
+	{toolbar_button title=GW::l('/g/PRINT_VIEW') iconclass='gwico-Print-Filled' href=$m->buildUri(false,[print_view=>1],[carry_params=>1])}
 {/function}
 
 
 {function name=do_toolbar_buttons_info}
 	{if $page->notes}
-		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}	
+		{toolbar_button title="`GW::l('/g/ABOUT')` `$page->title`" iconclass='gwico-Info' href=$app->buildUri('system/modules',[act=>doGet_Notes,path=>$app->path]) btnclass="iframeopen"}	
 	{/if}
 {/function}
 
 {function name=do_toolbar_buttons_modinfo}
-		{toolbar_button title="`$lang.ABOUT` `$page->title`" iconclass='gwico-Info' href=$m->buildUri('modinfo',[clean=>2]) btnclass="iframeopen"}
+		{toolbar_button title="`GW::l('/g/ABOUT')` `$page->title`" iconclass='gwico-Info' href=$m->buildUri('modinfo',[clean=>2]) btnclass="iframeopen"}
 {/function}
 
 {function name=do_toolbar_buttons_dialogconf}
-	{toolbar_button title=$lang.LIST_DISPLAY_SETTINGS iconclass='gwico-Vertical-Settings-Mixer' onclick="lds_config(this);" }
+	{toolbar_button title=GW::l('/g/LIST_DISPLAY_SETTINGS') iconclass='gwico-Vertical-Settings-Mixer' onclick="lds_config(this);" }
 	{capture append="footer_hidden"}
 	<script type="text/javascript">
 		function lds_config(obj)
@@ -43,7 +43,7 @@
 {/function}	
 
 {function name=do_toolbar_buttons_addinlist}
-	{toolbar_button title=$lang.CREATE_NEW iconclass='gwico-Plus' onclick="gwToogleAdd($(this).hasClass('active'));" toggle=1}
+	{toolbar_button title=GW::l('/g/CREATE_NEW') iconclass='gwico-Plus' onclick="gwToogleAdd($(this).hasClass('active'));" toggle=1}
 
 	{capture append="footer_hidden"}
 	<script type="text/javascript">

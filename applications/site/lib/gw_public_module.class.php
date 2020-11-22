@@ -697,7 +697,7 @@ class GW_Public_Module {
 		$p = $this->app->page;
 		
 		if($p->type==3 && isset($m->lang['VIEWS'][$p->path]['TITLE']))
-			$p->title = $m->lang['VIEWS'][$p>path]['TITLE'];	
+			$p->title = $m->lang['VIEWS'][$p->path]['TITLE'];	
 		
 				
 		if($p->type==3 && !$p->title){

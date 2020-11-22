@@ -36,7 +36,7 @@
 	{/function}
 
 	{function name=dl_cell_state_title}
-				{$m->lang.STATE_OPT[$item->state]}
+		{GW::l("/m/STATE_OPT/{$item->state}")}
 	{/function}
 	
 	{function name=dl_cell_title}
@@ -59,12 +59,12 @@
 			url=[false,[act=>doSwitchState,id=>$item->id,state=>$state]] 
 			iconclass="fa `$addclass`" 
 			action_addclass="ajax-link" 
-			title=$m->lang.CHANGE_STATE_TO[$state]}
+			title=GW::l("/m/CHANGE_STATE_TO/{$state}")}
 	{/function}
 
 	{function name=dl_cell_state}
 		
-		{$states=$m->lang.STATE_OPT|strip_tags}
+		{$states=GW::l('/m/STATE_OPT')|strip_tags}
 		{$state_colors=[200=>red,100=>green,12=>yellow,50=>orange,15=>violet]}
 		{$curr_color=$state_colors[$item->state]}
 		

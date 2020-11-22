@@ -12,7 +12,7 @@
 	
 	{$dl_actions=[edit,delete]}
 	
-	{$dl_filters=[iso639_1=>1,name=>1,native_name=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
+	{$dl_filters=[iso639_1=>1,name=>1,native_name=>1, insert_time=>1, active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')]]}
 	
 	
 	{gw_unassign var=$display_fields.image} 	

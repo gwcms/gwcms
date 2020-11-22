@@ -13,9 +13,9 @@
 	
 	<table class="gwTable" cellspacing="" cellpadding="1">
 		<tr>
-			<th>{$lang.FIELD}</th>
-			<th title="{$lang.COMPARE_TYPE.FULL}">{$lang.COMPARE_TYPE.SHORT}</th>
-			<th>{$lang.FILTER_VALUE}</th>
+			<th>{GW::l('/g/FIELD')}</th>
+			<th title="{GW::l('/g/COMPARE_TYPE/FULL')}">{GW::l('/g/COMPARE_TYPE/SHORT')}</th>
+			<th>{GW::l('/g/FILTER_VALUE')}</th>
 		</tr>
 	
 
@@ -30,8 +30,8 @@
 	
 	</td><td valign="top">
 	
-		<button >{$lang.APPLY_FILTER}</button><br>
-		<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;" title="{$lang.REMOVE_FILTER}"><i class="fa fa-close"></i></button>
+		<button >{GW::l('/g/APPLY_FILTER')}</button><br>
+		<button style="margin-top:5px" onclick="this.form.elements['filters_unset'].value=1;" title="{GW::l('/g/REMOVE_FILTER')}"><i class="fa fa-close"></i></button>
 		<button style="margin-top:5px" onclick="$('.dl_hidden_filter').fadeIn();$(this).fadeOut();return false" title="{GW::l('/g/UNHIDE_FILTER')}"><i class="fa fa-search-plus"></i></button>
 	
 	</td></tr>

@@ -3,9 +3,9 @@
 <div style="max-width:600px;">
 
 
-<h3>{$m->lang.CHANGE_GROUP_PERMISSIONS|sprintf:$item->title}</h3>
+<h3>{GW::l('/m/CHANGE_GROUP_PERMISSIONS')|sprintf:$item->title}</h3>
 
-<p>{gw_link levelup=1 title=$lang.BACK}</p>
+<p>{gw_link levelup=1 title=GW::l('/g/BACK')}</p>
 <br />
 
 
@@ -18,8 +18,8 @@
 
 <table class="gwTable gwActiveTable gwlisttable">
 <tr>
-	<th width="20%">{$m->lang.FIELDS.id}</th>
-	<th width="80%">{$m->lang.FIELDS.title}</th>
+	<th width="20%">{GW::l('/m/FIELDS/id')}</th>
+	<th width="80%">{GW::l('/m/FIELDS/title')}</th>
 	<th></th>
 </tr>
 
@@ -45,7 +45,7 @@
 </table>
 <br />
 
-<p><input class="btn btn-primary" type="submit" value="{$lang.SAVE}"/></p>
+<p><input class="btn btn-primary" type="submit" value="{GW::l('/g/SAVE')}"/></p>
 
 </form>
 

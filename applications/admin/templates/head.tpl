@@ -22,7 +22,7 @@
 	
 	<title>{include "title_breadcrumbs.tpl"}
 		{*$title|default:$app->page->get(title,$ln)*} - {GW::s(SITE_TITLE)}</title>
-	<meta name="description" content="{$lang.GW_CMS_DESCRIPTION}" />
+	<meta name="description" content="{GW::l('/g/GW_CMS_DESCRIPTION')}" />
 	
 	{if GW::s('SW_NOTIFICATIONS')}
 		<link rel="manifest" href="{$app->buildUri('default/public/manifest/manifest.json')}">	
@@ -125,7 +125,7 @@
 		
 		translations = {};
 		{foreach $translations as $key}
-			translations['{$key}']='{GW::l("/A/$key")}';
+			translations['{$key}']='{GW::l("/A/$key", [noedit=>1])}';
 		{/foreach}		
 	</script>
 	

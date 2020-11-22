@@ -470,6 +470,17 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 	}	
 	
 	
+	
+	
+	function viewLangEdit()
+	{
+		
+	}
+	
+	function doLangEdit()
+	{
+		
+	}
 
 	
 }

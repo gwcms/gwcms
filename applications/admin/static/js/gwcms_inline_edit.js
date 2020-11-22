@@ -47,7 +47,7 @@ function fireInlineEdit(trigger)
 	var url = trigger.data('url') ? trigger.data('url') : gw_navigator.url(inline_edit_form_url, {id:id,form_ajax:1})
 
 	var name = 'list_row_' + id;
-	var trobject = $('#'+name)
+	var trobject = trigger;
 
 	$('.inlineFormRow').remove();
 	$('.inlineFormRowHidd').show().removeClass('inlineFormRowHidd');
@@ -56,7 +56,7 @@ function fireInlineEdit(trigger)
 
 	$.get(url, function (data) {
 			loadRowAfterAjx(trobject, data);
-			$('#' + name).hide().addClass('inlineFormRowHidd');	
+			$(trobject).hide().addClass('inlineFormRowHidd');	
 			triggerLoading(trigger, 0);
 			
 			$('#inlineForm').submit(function( event ) {

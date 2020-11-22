@@ -1,103 +1,122 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-	<i id="VALIDATION_FAIL">
-		<en>Validation failed</en>
-		<lt>Klaida, validuojant</lt>
-	</i>
-	<i id="REMOVE_FAIL">
-		<en>Failed to remove</en>
-		<lt>Nepasisekė pašalinti</lt>
-	</i>
-	<i id="BAD_ARGUMENTS">
-		<en>Bad arguments</en>
-		<lt>Neteisingi argumentai</lt>
-	</i>
-	<i id="ACTION_FAIL">
-		<en>Action failed</en>
-		<lt>Klaida atliekant veiksmą</lt>
-	</i>
-	<i id="MISSING_ARGUMENTS">
-		<en>Missing arguments</en>
-		<lt>Trūksta argumentų</lt>
-	</i>
-	
-
-	<i id="IMAGE">
-		<i id="ERR_DIMENSIONS_MAX">
-			<lt>Pateiktas paveikslėlis per didelis</lt>
-			<en>Image dimensions exceeds the maximum dimensions</en>
-		</i>
-		<i id="ERR_DIMENSIONS_MIN">
-			<lt>Pateiktas paveikslėlis per mažas</lt>
-			<en>Image dimensions does not meet the minimum dimensions condition</en>
-		</i>
-	</i>
-	
-	<i id="FILE">
-		<i id="DOESNT_EXIST">File doesn't exist</i>
-		<i id="TOO_LARGE">File too large</i>
-	</i>
-	
-	<i id="ACTION_RESTRICTED">
-		<en>Action restricted</en>
-		<lt>Veiksmas ribojamas</lt>
-
-	</i>
-	
-	<i id="SESSION_EXPIRED">
-		<en>Session expired, please login again</en>
-		<lt>Bagėsi sesijos galiojimo laikas</lt>
-
-	</i>	
-	<i id="USER_BANNED">
-		<en>This user is banned.</en>
-		<lt>Šis vartotojas yra užblokuotas.</lt>
-	</i>
-	<i id="USER_INNACTIVE">
-		<en>This user has not been activated yet, follow instructions in your email.</en>
-		<lt>Šis vartotojas yra neaktyvus, aktyvacijai sekite instrukcijas nurodytas e-pašte.</lt>
-	</i>
-	<i id="NOT_LOGGEDIN">
-		<en>Not logged in</en>
-		<lt>Nesate prisijungęs</lt>
-	</i>
-	<i id="NOT_VALID_USER_OR_PASS">
-		<en>Not logged in</en>
-		<lt>Nesate prisijungęs</lt>
-	</i>
-	<i id="LOGIN_FAIL">
-		<en>Wrong username or password</en>
-		<lt>Neteisingas vartotojo vardas arba slaptažodis</lt>
-	</i>
-	<i id="REMOTE_AUTH_FAILED">
-		<en>Remote authorisation failed</en>
-		<lt>Nuotolinė autorizacija nepavyko</lt>
-	</i>
-	
-	<i id="REQUIRED">
-		<en>Required</en>
-		<lt>Privaloma</lt>
-	</i>
-	<i id="PROVIDED">
-		<en>Provided</en>
-		<lt>Pateikta</lt>
-	</i>
-	<i id="ITEM">
-		<en>Item</en>
-		<lt>Įrašas</lt>
-	</i>
-	<i id="LIMITATION">
-		<en>Limitation</en>
-		<lt>Ribojimas</lt>
-	</i>
-	
-	<i id="COPY">
-		<en>Copy</en>
-		<lt>Kopija</lt>
-	</i>
-	<i id="ITEM_CLONE_CREATED">
-		<lt>Sukurta įrašo kopija (id:$NEWID) seno įrašo (id:$OLDID)</lt>
-		<en>Created item copy (id:$NEWID), old item (id:$OLDID)</en>
-	</i>
+  <i id="VALIDATION_FAIL">
+    <en>Validation failed</en>
+    <lt>Klaida, validuojant</lt>
+    <ru>[A] Проверка не удалась</ru>
+  </i>
+  <i id="REMOVE_FAIL">
+    <en>Failed to remove</en>
+    <lt>Nepasisekė pašalinti</lt>
+    <ru>[A] Не удалось удалить</ru>
+  </i>
+  <i id="BAD_ARGUMENTS">
+    <en>Bad arguments</en>
+    <lt>Neteisingi argumentai</lt>
+    <ru>[A] Плохие аргументы</ru>
+  </i>
+  <i id="ACTION_FAIL">
+    <en>Action failed</en>
+    <lt>Klaida atliekant veiksmą</lt>
+    <ru>[A] Действие не удалось</ru>
+  </i>
+  <i id="MISSING_ARGUMENTS">
+    <en>Missing arguments</en>
+    <lt>Trūksta argumentų</lt>
+    <ru>[A] Отсутствующие аргументы</ru>
+  </i>
+  <i id="IMAGE">
+    <i id="ERR_DIMENSIONS_MAX">
+      <lt>Pateiktas paveikslėlis per didelis</lt>
+      <en>Image dimensions exceeds the maximum dimensions</en>
+      <ru>[A] Размеры изображения превышают максимальные.</ru>
+    </i>
+    <i id="ERR_DIMENSIONS_MIN">
+      <lt>Pateiktas paveikslėlis per mažas</lt>
+      <en>Image dimensions does not meet the minimum dimensions condition</en>
+      <ru>[A] Размеры изображения не соответствуют условию минимальных размеров</ru>
+    </i>
+  </i>
+  <i id="FILE">
+    <i id="DOESNT_EXIST">
+      <en>File doesn't exist</en>
+      <ru>[A] Файл не существует</ru>
+      <lt>Rinkmena neegzistuoja</lt>
+    </i>
+    <i id="TOO_LARGE">
+      <en>File too large</en>
+      <ru>[A] Файл слишком большой</ru>
+      <lt>Rinkmena per didelė</lt>
+    </i>
+  </i>
+  <i id="ACTION_RESTRICTED">
+    <en>Action restricted</en>
+    <lt>Veiksmas ribojamas</lt>
+    <ru>[A] Действие ограничено</ru>
+  </i>
+  <i id="SESSION_EXPIRED">
+    <en>Session expired, please login again</en>
+    <lt>Bagėsi sesijos galiojimo laikas</lt>
+    <ru>[A] Срок действия сеанса истек, пожалуйста, войдите снова</ru>
+  </i>
+  <i id="USER_BANNED">
+    <en>This user is banned.</en>
+    <lt>Šis vartotojas yra užblokuotas.</lt>
+    <ru>[A] Этот пользователь забанен.</ru>
+  </i>
+  <i id="USER_INNACTIVE">
+    <en>This user has not been activated yet, follow instructions in your email.</en>
+    <lt>Šis vartotojas yra neaktyvus, aktyvacijai sekite instrukcijas nurodytas e-pašte.</lt>
+    <ru>[A] Этот пользователь еще не активирован, следуйте инструкциям в электронном письме.</ru>
+  </i>
+  <i id="NOT_LOGGEDIN">
+    <en>Not logged in</en>
+    <lt>Nesate prisijungęs</lt>
+    <ru>[A] Не авторизован</ru>
+  </i>
+  <i id="NOT_VALID_USER_OR_PASS">
+    <en>Not logged in</en>
+    <lt>Nesate prisijungęs</lt>
+    <ru>[A] Не авторизован</ru>
+  </i>
+  <i id="LOGIN_FAIL">
+    <en>Wrong username or password</en>
+    <lt>Neteisingas vartotojo vardas arba slaptažodis</lt>
+    <ru>[A] Неверное имя пользователя или пароль</ru>
+  </i>
+  <i id="REMOTE_AUTH_FAILED">
+    <en>Remote authorisation failed</en>
+    <lt>Nuotolinė autorizacija nepavyko</lt>
+    <ru>[A] Удаленная авторизация не удалась</ru>
+  </i>
+  <i id="REQUIRED">
+    <en>Required</en>
+    <lt>Privaloma</lt>
+    <ru>[A] Обязательно</ru>
+  </i>
+  <i id="PROVIDED">
+    <en>Provided</en>
+    <lt>Pateikta</lt>
+    <ru>[A] При условии</ru>
+  </i>
+  <i id="ITEM">
+    <en>Item</en>
+    <lt>Įrašas</lt>
+    <ru>[A] Пункт</ru>
+  </i>
+  <i id="LIMITATION">
+    <en>Limitation</en>
+    <lt>Ribojimas</lt>
+    <ru>[A] Ограничение</ru>
+  </i>
+  <i id="COPY">
+    <en>Copy</en>
+    <lt>Kopija</lt>
+    <ru>[A] Копировать</ru>
+  </i>
+  <i id="ITEM_CLONE_CREATED">
+    <lt>Sukurta įrašo kopija (id:$NEWID) seno įrašo (id:$OLDID)</lt>
+    <en>Created item copy (id:$NEWID), old item (id:$OLDID)</en>
+    <ru>[A] Созданная копия элемента (id: $NEWID), старый элемент (id: $OLDID)</ru>
+  </i>
 </xml>

@@ -1,181 +1,203 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <xml>
-	<i id="VIEWS">
-		<i id="synchronizefromxml">Synchronize from xml's</i>
-		<i id="doSeriesTranslate">Versti automatiškai su google vertėju</i>
-	</i>
-	
-	<i id="ROTATE_CLOCKWISE">
-		<en>Rotate clockwise</en>
-		<lt>Pasukti (pagal l. rodykl.)</lt>
-	</i>
-
-
-    <i id="FIELDS_SHORT">
-		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
-		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>		
-        <i id="id">Id</i>
-    </i>	
-	<i id="FIELDS">
-		<i id="text">
-			<en>Text</en>
-			<lt>Turinys</lt>
-		</i>
-		<i id="active">
-			<en>Active</en>
-			<lt>Aktyvus</lt>
-		</i>
-		<i id="title">
-			<en>Title</en>
-			<lt>Pavadinimas</lt>
-		</i>
-		<i id="desc">
-			<en>Description</en>
-			<lt>Aprašymas</lt>
-		</i>
-	</i>
-	<i id="FIELD_NOTE">
-		<i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>
-	</i>	
-	<i id="VALIDATION_PARAMS">
-		<i id="dimensions_min"><en>Minimum width x height</en><lt>Minimalus dydis</lt></i>
-		<i id="dimensions_max"><en>Minimum width x height</en><lt>Maks. dydis</lt></i>
-		<i id="dimensions_resize"><en>Store width x height</en><lt>Saugojimo dydis</lt></i>
-		<i id="size_max"><en>Max file size</en><lt>Maks. rinkmenos dydis</lt></i>
-		<i id="limit"><en>Limit attachments quantity</en><lt>Ribojamas rinkmenų kiekis</lt></i>
-	</i>
-	<i id="ATTACHMENTS_LIMIT_REACHED">
-		<en>Quantity limit exceed</en>
-		<lt>Kiekio ribojimas pasiektas</lt>
-	</i>
-	<i id="ADD_ATTACHMENT">
-		<en>Add</en><lt>Prisegti</lt>
-	</i>
-	<i id="UPDATED_POSITIONS">
-		<en>Positions updated</en>
-		<lt>Pozicionavimas atnaujintas</lt>
-	</i>	
-	<i id="SELECT_SOURCE_DEST_LANG">
-		<en>Select source and destination lang</en>
-		<lt>Nurodykite iš kurios kalbos į kurią versti</lt>
-	</i>
-	
-	
-	<i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
-	<i id="EDIT_TRANSKEY">Redaguoti vertimą</i>	
-	
-	<!-- =============== MODULE MAP START =================== -->
-	<i id="MAP">
-		<i id="title">
-			<en>Data sources</en>
-			<lt>Duomenų lentelės</lt>
-		</i>
-		
-		<i id="info">
-			<i id="model">GW_Country</i>
-			<i id="iconclass">fa fa-cubes</i>
-		</i>			
-
-		
-		<i id="childs">
-
-			<i id="translations">
-				<i id="title">
-					<en>Translations</en>
-					<lt>Vertimai</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Translation</i>
-					<i id="iconclass">fa fa-language</i>
-				</i>			
-			</i>
-			<i id="translations_over">
-				<i id="title">
-					<en>Translations (context)</en>
-					<lt>Vertimai kontekstiniai</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Translation_Over</i>
-					<i id="iconclass">fa fa-language</i>
-				</i>			
-			</i>				
-			<i id="countries">
-				<i id="title">
-					<en>Countries</en>
-					<lt>Šalys</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Country</i>
-					<i id="iconclass">fa fa-flag</i>
-				</i>			
-			</i>			
-			<i id="languages">
-				<i id="title">
-					<en>Languages</en>
-					<lt>Kalbos</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Data_Language</i>
-					<i id="iconclass">fa fa-flag-o</i>
-				</i>			
-			</i>
-			<i id="payments_paysera">
-				<i id="title"><en>Payments PS</en><lt>Mokėjimai PS</lt></i>
-				<i id="info">
-					<i id="model">gw_paysera_log</i>
-					<i id="iconclass">fa fa-money</i>
-				</i>			
-			</i>	
-			<i id="payments_paypal">
-				<i id="title"><en>Payments PP</en><lt>Mokėjimai PP</lt></i>
-				<i id="info">
-					<i id="model">gw_paypal_log</i>
-					<i id="iconclass">fa fa-paypal</i>
-
-				</i>			
-			</i>
-			<i id="payments_creditcard">
-				<i id="title"><en>Payments CC</en><lt>Mokėjimai KK</lt></i>
-				<i id="info">
-					<i id="model">gw_pay_creditcard</i>
-					<i id="iconclass">fa fa-cc-mastercard</i>
-
-				</i>			
-			</i>			
-			<i id="images">
-				<i id="title"><en>Pictures</en><lt>Paveiksliukai</lt></i>
-				<i id="info">
-					<i id="model">gw_image</i>
-					<i id="iconclass">fa fa-picture-o</i>
-
-				</i>			
-			</i>
-	
-			<i id="attachments">
-				<i id="title"><en>Attachments</en><lt>Prisegtukai</lt></i>
-				<i id="info">
-					<i id="model">GW_Attachment</i>
-					<i id="iconclass">fa fa-paperclip</i>
-				</i>			
-			</i>	
-			<i id="changetrack">
-				<i id="title"><en>Change Track</en><lt>Redagavimo istorija</lt></i>
-				<i id="info">
-					<i id="model">GW_Change_Track</i>
-					<i id="iconclass">fa fa-pencil</i>
-				</i>			
-			</i>							
-			<i id="sms">
-				<i id="title"><en>Outgoing Sms</en><lt>Išeinančios žinutės</lt></i>
-				<i id="info">
-					<i id="model">GW_Outg_Sms</i>
-					<i id="iconclass">fa fa-envelope</i>
-				</i>			
-			</i>				
-																													
-		</i>
-	</i>
-	<!-- =============== MODULE MAP END ===================== -->
-	
+  <i id="VIEWS">
+    <i id="synchronizefromxml">Synchronize from xml's</i>
+    <i id="doSeriesTranslate">Versti automatiškai su google vertėju</i>
+  </i>
+  <i id="ROTATE_CLOCKWISE">
+    <en>Rotate clockwise</en>
+    <lt>Pasukti (pagal l. rodykl.)</lt>
+  </i>
+  <i id="FIELDS_SHORT">
+    <i id="update_time">
+<![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]>
+    </i>
+    <i id="insert_time">
+<![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]>
+    </i>
+    <i id="id">Id</i>
+  </i>
+  <i id="FIELDS">
+    <i id="text">
+      <en>Text</en>
+      <lt>Turinys</lt>
+    </i>
+    <i id="active">
+      <en>Active</en>
+      <lt>Aktyvus</lt>
+    </i>
+    <i id="title">
+      <en>Title</en>
+      <lt>Pavadinimas</lt>
+    </i>
+    <i id="desc">
+      <en>Description</en>
+      <lt>Aprašymas</lt>
+    </i>
+  </i>
+  <i id="FIELD_NOTE">
+    <i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>
+  </i>
+  <i id="VALIDATION_PARAMS">
+    <i id="dimensions_min">
+      <en>Minimum width x height</en>
+      <lt>Minimalus dydis</lt>
+    </i>
+    <i id="dimensions_max">
+      <en>Minimum width x height</en>
+      <lt>Maks. dydis</lt>
+    </i>
+    <i id="dimensions_resize">
+      <en>Store width x height</en>
+      <lt>Saugojimo dydis</lt>
+    </i>
+    <i id="size_max">
+      <en>Max file size</en>
+      <lt>Maks. rinkmenos dydis</lt>
+    </i>
+    <i id="limit">
+      <en>Limit attachments quantity</en>
+      <lt>Ribojamas rinkmenų kiekis</lt>
+    </i>
+  </i>
+  <i id="ATTACHMENTS_LIMIT_REACHED">
+    <en>Quantity limit exceed</en>
+    <lt>Kiekio ribojimas pasiektas</lt>
+  </i>
+  <i id="ADD_ATTACHMENT">
+    <en>Add</en>
+    <lt>Prisegti</lt>
+  </i>
+  <i id="UPDATED_POSITIONS">
+    <en>Positions updated</en>
+    <lt>Pozicionavimas atnaujintas</lt>
+  </i>
+  <i id="SELECT_SOURCE_DEST_LANG">
+    <en>Select source and destination lang</en>
+    <lt>Nurodykite iš kurios kalbos į kurią versti</lt>
+  </i>
+  <i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
+  <i id="EDIT_TRANSKEY">Redaguoti vertimą</i>
+  <i id="MAP">
+    <i id="title">
+      <en>Data sources</en>
+      <lt>Duomenų lentelės</lt>
+    </i>
+    <i id="info">
+      <i id="model">GW_Country</i>
+      <i id="iconclass">fa fa-cubes</i>
+    </i>
+    <i id="childs">
+      <i id="translations">
+        <i id="title">
+          <en>Translations</en>
+          <lt>Vertimai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Translation</i>
+          <i id="iconclass">fa fa-language</i>
+        </i>
+      </i>
+      <i id="translations_over">
+        <i id="title">
+          <en>Translations (context)</en>
+          <lt>Vertimai kontekstiniai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Translation_Over</i>
+          <i id="iconclass">fa fa-language</i>
+        </i>
+      </i>
+      <i id="countries">
+        <i id="title">
+          <en>Countries</en>
+          <lt>Šalys</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Country</i>
+          <i id="iconclass">fa fa-flag</i>
+        </i>
+      </i>
+      <i id="languages">
+        <i id="title">
+          <en>Languages</en>
+          <lt>Kalbos</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Data_Language</i>
+          <i id="iconclass">fa fa-flag-o</i>
+        </i>
+      </i>
+      <i id="payments_paysera">
+        <i id="title">
+          <en>Payments PS</en>
+          <lt>Mokėjimai PS</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_paysera_log</i>
+          <i id="iconclass">fa fa-money</i>
+        </i>
+      </i>
+      <i id="payments_paypal">
+        <i id="title">
+          <en>Payments PP</en>
+          <lt>Mokėjimai PP</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_paypal_log</i>
+          <i id="iconclass">fa fa-paypal</i>
+        </i>
+      </i>
+      <i id="payments_creditcard">
+        <i id="title">
+          <en>Payments CC</en>
+          <lt>Mokėjimai KK</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_pay_creditcard</i>
+          <i id="iconclass">fa fa-cc-mastercard</i>
+        </i>
+      </i>
+      <i id="images">
+        <i id="title">
+          <en>Pictures</en>
+          <lt>Paveiksliukai</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_image</i>
+          <i id="iconclass">fa fa-picture-o</i>
+        </i>
+      </i>
+      <i id="attachments">
+        <i id="title">
+          <en>Attachments</en>
+          <lt>Prisegtukai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Attachment</i>
+          <i id="iconclass">fa fa-paperclip</i>
+        </i>
+      </i>
+      <i id="changetrack">
+        <i id="title">
+          <en>Change Track</en>
+          <lt>Redagavimo istorija</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Change_Track</i>
+          <i id="iconclass">fa fa-pencil</i>
+        </i>
+      </i>
+      <i id="sms">
+        <i id="title">
+          <en>Outgoing Sms</en>
+          <lt>Išeinančios žinutės</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Outg_Sms</i>
+          <i id="iconclass">fa fa-envelope</i>
+        </i>
+      </i>
+    </i>
+  </i>
 </xml>

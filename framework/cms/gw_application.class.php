@@ -200,6 +200,18 @@ class GW_Application
 		$this->getPage();
 
 		$this->initSmarty();
+		
+		$this->langEditMode();
+	}
+	
+	function langEditMode()
+	{
+		if(isset($_GET['toggle-lang-results-active']))
+		{
+			$this->sess['lang-results-active'] = isset($this->sess['lang-results-active']) && $this->sess['lang-results-active'] ? 0 : 1;
+			unset($_GET['toggle-lang-results-active']);
+			$this->jump(false, $_GET);
+		}		
 	}
 
 	function buildUri($path = false, $getparams = Array(), $params = [])

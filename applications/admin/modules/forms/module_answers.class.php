@@ -120,7 +120,7 @@ class Module_Answers extends GW_Common_Module
 				$error = [];
 				$error['type'] = GW_MSG_ERR;
 				$error['field'] = $e->fieldname;
-				$error['text'] = GW::ln('/G/validation/REQUIRED');
+				$error['text'] = GW::l('/G/validation/REQUIRED');
 				
 						
 				$this->setMessage($error);

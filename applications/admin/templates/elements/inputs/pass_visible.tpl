@@ -1,7 +1,7 @@
 
 
 {if $item->id}
-	<a href="#" onclick="$(this).next().toggle();$(this).toggle();return false">{$lang.CHANGE_PASS}</a>
+	<a href="#" onclick="$(this).next().toggle();$(this).toggle();return false">{GW::l('/g/CHANGE_PASS')}</a>
 	<div style="display:none">
 {/if}
 

@@ -26,12 +26,12 @@
 		{if $item->status < 10 && $item->active}
 			{list_item_action_m url=[false,[act=>doSend,id=>$item->id]] confirm=1 iconclass="fa fa-send" title="Send email"} 
 		{else}
-			{list_item_action_m url=[sentinfo,[id=>$item->id]] iconclass="fa fa-info-circle" title=$m->lang.VIEWS.sentinfo} 
+			{list_item_action_m url=[sentinfo,[id=>$item->id]] iconclass="fa fa-info-circle" title=GW::l('/m/VIEWS/sentinfo')} 
 		{/if}
 	{/function}
 	
 	{function dl_cell_status}
-		{$m->lang.OPT.status[$item->status]}
+		{GW::l("/m/OPT/status/{$item->status}")}
 		{if $item->status==10}
 			- {$item->progress}%
 		{/if}

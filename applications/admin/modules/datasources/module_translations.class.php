@@ -409,7 +409,7 @@ class Module_Translations extends GW_Common_Module
 			
 			
 			$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
-			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::ln('/g/CONFIRM')."</a>";
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
 			$this->setMessageEx(['text'=>$str, 'type'=>4]);
 			
 			return false;

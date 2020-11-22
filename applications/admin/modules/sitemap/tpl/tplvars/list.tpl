@@ -3,7 +3,7 @@
 {block name="init"}
 
 	{function dl_cell_type}
-		{$m->lang.VAR_TYPE_OPT[$item->type]}	
+		{GW::l("/m/VAR_TYPE_OPT/{$item->type}")}
 	{/function}	
 	{function dl_cell_params}
 		{json_encode($item->params)}

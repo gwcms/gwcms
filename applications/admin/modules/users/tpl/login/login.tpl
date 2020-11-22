@@ -2,7 +2,7 @@
 
 {if $success}
 	<br />
-	<div style="color:green">{$lang.SESSION_EXTEND_SUCCESS}</div>
+	<div style="color:green">{GW::l('/g/SESSION_EXTEND_SUCCESS')}</div>
 	<script type="text/javascript">
 		window.parent.gw_session.login_dialog_close();
 	</script>
@@ -38,10 +38,10 @@
 		            <form action="{$app->uri}" method="post">
 						<input type="hidden" name="act" value="do_login" />
 		                <div class="form-group {if $smarty.get.login_fail}has-error{/if}">
-		                    <input name="login[0]" type="text" class="form-control" placeholder="{$lang.USER}" autofocus value="{if isset($smarty.cookies.login_0)}{$smarty.cookies.login_0}{/if}">
+		                    <input name="login[0]" type="text" class="form-control" placeholder="{GW::l('/g/USER')}" autofocus value="{if isset($smarty.cookies.login_0)}{$smarty.cookies.login_0}{/if}">
 		                </div>
 		                <div class="form-group {if $smarty.get.login_fail}has-error{/if}">
-		                    <input name="login[1]" type="password" class="form-control" placeholder="{$lang.PASS}">
+		                    <input name="login[1]" type="password" class="form-control" placeholder="{GW::l('/g/PASS')}">
 		                </div>
 
 				
@@ -53,13 +53,13 @@
 				{else}
 					<div class="checkbox pad-btm text-left">
 					    <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox"  name="login_auto">
-					    <label for="demo-form-checkbox">{$lang.AUTOLOGIN}</label>
+					    <label for="demo-form-checkbox">{GW::l('/g/AUTOLOGIN')}</label>
 					</div>
 				{/if}
 					
 				<div class="row">
 					<div class="col-xs-10">
-		                <button class="btn btn-primary btn-lg btn-block" type="submit">{$lang.DOLOGIN}</button>
+		                <button class="btn btn-primary btn-lg btn-block" type="submit">{GW::l('/g/DOLOGIN')}</button>
 					</div>
 					
 					

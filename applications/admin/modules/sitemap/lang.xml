@@ -1,269 +1,371 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xml>
-	<i id="ROOT">
-		<en>Root</en>
-		<lt>Šakninis</lt>
-	</i>
-	<i id="PATH">
-		<en>Path</en>
-		<lt>Kelias</lt>
-	</i>
-	<i id="FIELDS">
-		<i id="meta_description">
-			<en>Meta description</en>
-			<lt>Meta aprašas</lt>
-		</i>
-		<i id="params">
-			<en>Parameters (json)</en>
-			<lt>Parametrai (json)</lt>
-		</i>
-		<i id="priority">
-			<en>Priority</en>
-			<lt>Svarbumas</lt>
-		</i>
-		<i id="pathname">
-			<en>URL name</en>
-			<lt>URL pavadinimas</lt>
-		</i>
-		<i id="in_menu">
-			<en>Show in menu</en>
-			<lt>Įtraukti į meniu</lt>
-		</i>
-		<i id="parent_id">
-			<en>Parent page</en>
-			<lt>Puslapio tėvas</lt>
-		</i>
-		<i id="path">
-			<en>Path</en>
-			<lt>Kelias</lt>
-		</i>
-		<i id="note">
-			<en>Note</en>
-			<lt>Pastaba</lt>
-		</i>
-		<i id="template_id">
-			<en>Template</en>
-			<lt>Šablonas</lt>
-		</i>
-		<i id="name">
-			<en>Name</en>
-			<lt>Unikalus vardas</lt>
-		</i>
-		<i id="admin_name">Ident. vardas</i>
-		<i id="relations"><en>Relations</en><lt>Sąsajos</lt></i>
-		<i id="hosts">Hosts</i>
-		<i id="site_id"><en>Site</en><lt>Svetainė</lt></i>
-		<i id="name"><en>Identif. name</en><lt>Identif. vardas</lt></i>
-		<i id="path_filter"><en>Path filter</en><lt>URL kelio filtras</lt></i>
-		<i id="contents_type"><en>Content type</en><lt>Turinio tipas</lt></i>
-		<i id="contents"><en>Content</en><lt>Turinys</lt></i>
-		<i id="ln"><en>Apply languages</en><lt>Kalbos</lt></i>
-		<i id="preload">Svarba</i>
-		<i id="multilang">Diaugiakalbis</i>
-		<i id="include_content">Turinį įtraukti</i>
-		<i id="export_type">Eksportavimo parinktis</i>
-		<i id="action">Veiksmas</i>
-		<i id="site_id">Svetainė</i>
-		
-	</i>
-	<i id="FIELDS_SHORT">
-		<i id="templatevars">TV</i>
-		<i id="relations"><![CDATA[<i class="fa fa-link"></i>]]></i>
-	</i>
-	<i id="TYPE_OPT">
-		<i id="0">
-			<en>Page</en>
-			<lt>Puslapis</lt>
-		</i>
-		<i id="1">
-			<en>Link to first child</en>
-			<lt>Nuoroda į žemesnį lygį</lt>
-		</i>
-		<i id="2">
-			<en>Link</en>
-			<lt>Nuoroda</lt>
-		</i>
-		<i id="4">
-			<en>External link</en>
-			<lt>Išorinė nuoroda</lt>
-	</i>
-	</i>
-	<i id="FIELD_NOTE">
-		<i id="template_title">
-			<en>Human readable, for admin</en>
-		</i>
-		<i id="template_name">
-			<en>Unique name, lowercase without spaces [a-z0-9_]</en>
-		</i>
-	</i>
-	<i id="VAR_TYPE_OPT">
-		<i id="text">
-			<lt>Teksto eilutė</lt>
-			<en>Text line</en>
-		</i>
-		<i id="textarea">
-			<lt>Teksto laukas</lt>
-			<en>Text area</en>
-		</i>
-		<i id="htmlarea">
-			<lt>HTML teksto laukas</lt>
-			<en>HTML text area</en>
-		</i>
-		<i id="image">
-			<lt>Paveiksliukas</lt>
-			<en>Image</en>
-		</i>
-		<i id="gallery_folder">
-			<en>Gallery folder</en>
-			<lt>Galerijos katalogas</lt>
-		</i>
-		<i id="code_smarty">
-			<en>Html code</en>
-			<lt>Html kodas</lt>
-		</i>
-		<i id="bool">
-			<en>Yes / no toggle</en>
-			<lt>Taip / ne - žymimoji varnelė</lt>
-		</i>
-		<i id="select_ajax">
-			<lt>Modulio Opcija, sufleruojama</lt>
-			<en>Module Option, with hint</en>
-		</i>
-		<i id="multiselect_ajax">
-			<lt>Modulio MultiOpcijos, sufleruojama</lt>
-			<en>Module MultiOptions, with hint</en>
-		</i>
-		
-	</i>
-	<i id="OPTIONS">
-		<i id="block_types">
-			<i id="1">Text line</i>
-			<i id="2">Text area</i>
-			<i id="3">Formated text</i>
-			<i id="4">Html code</i>
-			<i id="5">Template file</i>
-			<i id="6">Color</i>
-			<i id="7">Image</i>
-		</i>
-		<i id="preload">
-			<i id="0">
-				<lt>Naudotinas pagal paklausima</lt>
-				<en>Used on by demand</en>
-			</i>
-			<i id="1">
-				<lt>Dažno naudojimo, visada pakraunamas</lt>
-				<en>Used on every template, preload every time</en>
-			</i>
-		</i>
-		
-	</i>	
-	<i id="ADD_HOST"><lt>Pridėti host</lt><en>Add host</en></i>
-	<i id="ALL_LANGS"><lt>Visos kalbos</lt><en>All languages</en></i>
-	
-	<i id="VIEWS">
-		<i id="doPreview">Peržiūrėti svetainėje</i>
-		<i id="fileselect">Failo parinktis</i>
-		<i id="doMkDir">Sukurti katalogą</i>
-		<i id="doStore">Įkelti rinkmenas</i>
-		<i id="dialogMoveItems">Perkelį į kitą katalogą</i>
-		<i id="doUploadZip">Įkelti Zip ir išskleisti</i>
-		<i id="importexporttree">Eksportuoti / importuoti</i>
-		<i id="doFixPaths">Pataisyti url stulpelį</i>
-	</i>
-	<i id="PREVIEW_SHIFTKEY">Press using shift or ctrl key for headless version</i>
-	<i id="ADD_FOLDER">
-		<en>New folder</en>
-		<lt>Sukurti tuščią katalogą</lt>
-	</i>
-	<i id="ROOT_DIR">
-		<en>Root dir</en>
-		<lt>Šakninis</lt>
-	</i>
-	<i id="NEW_FOLDER_ADDED">
-		<lt>Pridėtas naujas katalogas</lt>
-		<en>New folder created</en>
-	</i>
-	<i id="SELECTED_FILES_FOLDERS">
-		<lt>Pasirinkta failų, katalogų</lt>
-		<en>Selected files, folders</en>
-	</i>
-	<i id="SELECT_DEST_FOLDER">
-		<lt>Katalogas į kurį perkelti</lt>
-		<en>Move to folder</en>
-	</i>
-	<i id="MANAGE_REPOSITORY">
-		<lt>Failų saugyklos tvarkymas</lt>
-		<en>Manage file repository</en>
-	</i>
-	
-	
-	<!-- =============== MODULE MAP START =================== -->
-	<i id="MAP">
-		<i id="title">
-			<en>Structure &amp; Content</en>
-			<lt>Struktūra ir tekstai</lt>
-		</i>
-		<i id="info">
-			<i id="iconclass">fa fa-sitemap</i>
-		</i>
-		<i id="childs">
-			<i id="pages">
-				<i id="title">
-					<en>Sitemap</en>
-					<lt>Svetainės medis</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Page</i>
-					<i id="itemactions">1</i>
-				</i>
-			</i>
-			<i id="templates">
-				<i id="title">
-					<en>Templates</en>
-					<lt>Šablonai</lt>
-				</i>
-				<i id="info">
-					<i id="model">GW_Template</i>
-					<i id="itemactions">1</i>
-				</i>
-				<i id="childs">
-					<i id="tplvars">
-						<i id="info">
-							<i id="model">GW_TplVar</i>
-							<i id="itemactions">1</i>
-						</i>
-						<i id="title">
-							<en>Template vars</en>
-							<lt>Šablono įvestys</lt>
-						</i>
-					</i>
-				</i>
-			</i>
-			<i id="sites">
-				<i id="title"><lt>Svetainės</lt><en>Sites</en></i>
-				<i id="info">
-					<i id="model">gw_site</i>
-				</i>
-				<i id="in_menu">1</i>
-			</i>
-			<i id="blocks">
-				<i id="title"><lt>Blokeliai</lt><en>Blocks</en></i>
-				<i id="info">
-					<i id="model">gw_site_block</i>
-				</i>
-				<i id="in_menu">1</i>
-			</i>
-			<i id="repository">
-				<i id="title"><lt>Failų saugykla</lt><en>File repository</en></i>
-				<i id="in_menu">1</i>
-			</i>			
-			<i id="config">
-				<i id="title">Nustatymai</i>
-				<i id="info">
-					<!--<i id="iconclass">fa fa-gears</i>-->
-				</i>
-			</i>			
-		</i>
-	</i>
-	<!-- =============== MODULE MAP END ===================== -->
+  <i id="ROOT">
+    <en>Root</en>
+    <lt>Šakninis</lt>
+  </i>
+  <i id="PATH">
+    <en>Path</en>
+    <lt>Kelias</lt>
+  </i>
+  <i id="FIELDS">
+    <i id="meta_description">
+      <en>Meta description</en>
+      <lt>Meta aprašas</lt>
+    </i>
+    <i id="params">
+      <en>Parameters (json)</en>
+      <lt>Parametrai (json)</lt>
+    </i>
+    <i id="priority">
+      <en>Priority</en>
+      <lt>Svarbumas</lt>
+    </i>
+    <i id="pathname">
+      <en>URL name</en>
+      <lt>URL pavadinimas</lt>
+    </i>
+    <i id="in_menu">
+      <en>Show in menu</en>
+      <lt>Įtraukti į meniu</lt>
+    </i>
+    <i id="parent_id">
+      <en>Parent page</en>
+      <lt>Puslapio tėvas</lt>
+    </i>
+    <i id="path">
+      <en>Path</en>
+      <lt>Kelias</lt>
+    </i>
+    <i id="note">
+      <en>Note</en>
+      <lt>Pastaba</lt>
+    </i>
+    <i id="template_id">
+      <en>Template</en>
+      <lt>Šablonas</lt>
+    </i>
+    <i id="name">
+      <en>Name</en>
+      <lt>Unikalus vardas</lt>
+    </i>
+    <i id="admin_name">
+      <lt>Ident. vardas</lt>
+      <en>[A] Ident. name</en>
+    </i>
+    <i id="relations">
+      <en>Relations</en>
+      <lt>Sąsajos</lt>
+    </i>
+    <i id="hosts">
+      <lt>Hosts</lt>
+      <en>[A] Hosts</en>
+    </i>
+    <i id="site_id">
+      <en>Site</en>
+      <lt>Svetainė</lt>
+    </i>
+    <i id="name">
+      <en>Identif. name</en>
+      <lt>Identif. vardas</lt>
+    </i>
+    <i id="path_filter">
+      <en>Path filter</en>
+      <lt>URL kelio filtras</lt>
+    </i>
+    <i id="contents_type">
+      <en>Content type</en>
+      <lt>Turinio tipas</lt>
+    </i>
+    <i id="contents">
+      <en>Content</en>
+      <lt>Turinys</lt>
+    </i>
+    <i id="ln">
+      <en>Apply languages</en>
+      <lt>Kalbos</lt>
+    </i>
+    <i id="preload">
+      <lt>Svarba</lt>
+      <en>[A] Importance</en>
+    </i>
+    <i id="multilang">
+      <lt>Diaugiakalbis</lt>
+      <en>[A] Dialer</en>
+    </i>
+    <i id="include_content">
+      <lt>Turinį įtraukti</lt>
+      <en>[A] Include content</en>
+    </i>
+    <i id="export_type">
+      <lt>Eksportavimo parinktis</lt>
+      <en>[A] Export option</en>
+    </i>
+    <i id="action">
+      <lt>Veiksmas</lt>
+      <en>[A] Action</en>
+    </i>
+    <i id="site_id">
+      <lt>Svetainė</lt>
+      <en>[A] Website</en>
+    </i>
+  </i>
+  <i id="FIELDS_SHORT">
+    <i id="templatevars">TV</i>
+    <i id="relations">
+<![CDATA[<i class="fa fa-link"></i>]]>
+    </i>
+  </i>
+  <i id="TYPE_OPT">
+    <i id="0">
+      <en>Page</en>
+      <lt>Puslapis</lt>
+    </i>
+    <i id="1">
+      <en>Link to first child</en>
+      <lt>Nuoroda į žemesnį lygį</lt>
+    </i>
+    <i id="2">
+      <en>Link</en>
+      <lt>Nuoroda</lt>
+    </i>
+    <i id="4">
+      <en>External link</en>
+      <lt>Išorinė nuoroda</lt>
+    </i>
+  </i>
+  <i id="FIELD_NOTE">
+    <i id="template_title">
+      <en>Human readable, for admin</en>
+    </i>
+    <i id="template_name">
+      <en>Unique name, lowercase without spaces [a-z0-9_]</en>
+    </i>
+  </i>
+  <i id="VAR_TYPE_OPT">
+    <i id="text">
+      <lt>Teksto eilutė</lt>
+      <en>Text line</en>
+    </i>
+    <i id="textarea">
+      <lt>Teksto laukas</lt>
+      <en>Text area</en>
+    </i>
+    <i id="htmlarea">
+      <lt>HTML teksto laukas</lt>
+      <en>HTML text area</en>
+    </i>
+    <i id="image">
+      <lt>Paveiksliukas</lt>
+      <en>Image</en>
+    </i>
+    <i id="gallery_folder">
+      <en>Gallery folder</en>
+      <lt>Galerijos katalogas</lt>
+    </i>
+    <i id="code_smarty">
+      <en>Html code</en>
+      <lt>Html kodas</lt>
+    </i>
+    <i id="bool">
+      <en>Yes / no toggle</en>
+      <lt>Taip / ne - žymimoji varnelė</lt>
+    </i>
+    <i id="select_ajax">
+      <lt>Modulio Opcija, sufleruojama</lt>
+      <en>Module Option, with hint</en>
+    </i>
+    <i id="multiselect_ajax">
+      <lt>Modulio MultiOpcijos, sufleruojama</lt>
+      <en>Module MultiOptions, with hint</en>
+    </i>
+  </i>
+  <i id="OPTIONS">
+    <i id="block_types">
+      <i id="1">
+        <lt>Text line</lt>
+        <en>[A] Text line</en>
+      </i>
+      <i id="2">
+        <lt>Text area</lt>
+        <en>[A] Text area</en>
+      </i>
+      <i id="3">
+        <lt>Formated text</lt>
+        <en>[A] Formated text</en>
+      </i>
+      <i id="4">
+        <lt>Html code</lt>
+        <en>[A] Html code</en>
+      </i>
+      <i id="5">
+        <lt>Template file</lt>
+        <en>[A] Template file</en>
+      </i>
+      <i id="6">
+        <lt>Color</lt>
+        <en>[A] Color</en>
+      </i>
+      <i id="7">
+        <lt>Image</lt>
+        <en>[A] Image</en>
+      </i>
+    </i>
+    <i id="preload">
+      <i id="0">
+        <lt>Naudotinas pagal paklausima</lt>
+        <en>Used on by demand</en>
+      </i>
+      <i id="1">
+        <lt>Dažno naudojimo, visada pakraunamas</lt>
+        <en>Used on every template, preload every time</en>
+      </i>
+    </i>
+  </i>
+  <i id="ADD_HOST">
+    <lt>Pridėti host</lt>
+    <en>Add host</en>
+  </i>
+  <i id="ALL_LANGS">
+    <lt>Visos kalbos</lt>
+    <en>All languages</en>
+  </i>
+  <i id="VIEWS">
+    <i id="doPreview">
+      <lt>Peržiūrėti svetainėje</lt>
+      <en>[A] View the site</en>
+    </i>
+    <i id="fileselect">
+      <lt>Failo parinktis</lt>
+      <en>[A] File option</en>
+    </i>
+    <i id="doMkDir">
+      <lt>Sukurti katalogą</lt>
+      <en>[A] Create a directory</en>
+    </i>
+    <i id="doStore">
+      <lt>Įkelti rinkmenas</lt>
+      <en>[A] Upload files</en>
+    </i>
+    <i id="dialogMoveItems">
+      <lt>Perkelį į kitą katalogą</lt>
+      <en>[A] Move to another directory</en>
+    </i>
+    <i id="doUploadZip">
+      <lt>Įkelti Zip ir išskleisti</lt>
+      <en>[A] Upload Zip and extract</en>
+    </i>
+    <i id="importexporttree">
+      <lt>Eksportuoti / importuoti</lt>
+      <en>[A] Export / import</en>
+    </i>
+    <i id="doFixPaths">
+      <lt>Pataisyti url stulpelį</lt>
+      <en>[A] Correct the url column</en>
+    </i>
+  </i>
+  <i id="PREVIEW_SHIFTKEY">
+    <lt>Press using shift or ctrl key for headless version</lt>
+    <en>[A] Press using shift or ctrl key for headless version</en>
+  </i>
+  <i id="ADD_FOLDER">
+    <en>New folder</en>
+    <lt>Sukurti tuščią katalogą</lt>
+  </i>
+  <i id="ROOT_DIR">
+    <en>Root dir</en>
+    <lt>Šakninis</lt>
+  </i>
+  <i id="NEW_FOLDER_ADDED">
+    <lt>Pridėtas naujas katalogas</lt>
+    <en>New folder created</en>
+  </i>
+  <i id="SELECTED_FILES_FOLDERS">
+    <lt>Pasirinkta failų, katalogų</lt>
+    <en>Selected files, folders</en>
+  </i>
+  <i id="SELECT_DEST_FOLDER">
+    <lt>Katalogas į kurį perkelti</lt>
+    <en>Move to folder</en>
+  </i>
+  <i id="MANAGE_REPOSITORY">
+    <lt>Failų saugyklos tvarkymas</lt>
+    <en>Manage file repository</en>
+  </i>
+  <i id="MAP">
+    <i id="title">
+      <en />
+      <lt>Struktūra ir tekstai</lt>
+    </i>
+    <i id="info">
+      <i id="iconclass">fa fa-sitemap</i>
+    </i>
+    <i id="childs">
+      <i id="pages">
+        <i id="title">
+          <en>Sitemap</en>
+          <lt>Svetainės medis</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Page</i>
+          <i id="itemactions">1</i>
+        </i>
+      </i>
+      <i id="templates">
+        <i id="title">
+          <en>Templates</en>
+          <lt>Šablonai</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Template</i>
+          <i id="itemactions">1</i>
+        </i>
+        <i id="childs">
+          <i id="tplvars">
+            <i id="info">
+              <i id="model">GW_TplVar</i>
+              <i id="itemactions">1</i>
+            </i>
+            <i id="title">
+              <en>Template vars</en>
+              <lt>Šablono įvestys</lt>
+            </i>
+          </i>
+        </i>
+      </i>
+      <i id="sites">
+        <i id="title">
+          <lt>Svetainės</lt>
+          <en>Sites</en>
+        </i>
+        <i id="info">
+          <i id="model">gw_site</i>
+        </i>
+        <i id="in_menu">1</i>
+      </i>
+      <i id="blocks">
+        <i id="title">
+          <lt>Blokeliai</lt>
+          <en>Blocks</en>
+        </i>
+        <i id="info">
+          <i id="model">gw_site_block</i>
+        </i>
+        <i id="in_menu">1</i>
+      </i>
+      <i id="repository">
+        <i id="title">
+          <lt>Failų saugykla</lt>
+          <en>File repository</en>
+        </i>
+        <i id="in_menu">1</i>
+      </i>
+      <i id="config">
+        <i id="title">
+          <lt>Nustatymai</lt>
+          <en>[A] Settings</en>
+        </i>
+      </i>
+    </i>
+  </i>
 </xml>

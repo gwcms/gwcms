@@ -9,7 +9,7 @@
 	{$item->set(lang,1)}
 {/if}
 
-{call e field=lang type=bool i18n=3 i18n_expand=1 hidden_note=$m->lang.FIELD_NOTE.lang}
+{call e field=lang type=bool i18n=3 i18n_expand=1 hidden_note=GW::l('/m/FIELD_NOTE/lang')}
 
 {*disablinti atzymetas kalbas*}
 {if $item->id}
@@ -34,8 +34,8 @@
 
 
 
-{call e field=sender hidden_note=$m->lang.email_note default=$m->config->default_sender i18n=4}
-{call e field=replyto hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
+{call e field=sender hidden_note=GW::l('/m/email_note') default=$m->config->default_sender i18n=4}
+{call e field=replyto hidden_note=GW::l('/m/email_note')  default=$m->config->default_replyto}
 {call e field=subject i18n=4}
 
 
@@ -72,7 +72,7 @@
 
 
 {if $app->user->isRoot()}
-	{call e field=status type=select options=$m->lang.OPT.status}
+	{call e field=status type=select options=GW::l('/m/OPT/status')}
 {/if}
 
 

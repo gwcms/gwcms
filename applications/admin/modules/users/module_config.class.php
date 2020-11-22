@@ -19,7 +19,7 @@ class Module_Config extends GW_Common_Module
 		$opts = [];
 	
 		foreach($list as $field)
-			$opts[$field] = GW::ln('/A/FIELDS/'.$field);
+			$opts[$field] = GW::l('/A/FIELDS/'.$field);
 		
 		$this->options['fields_enabled'] = $opts;
 		

@@ -3060,7 +3060,9 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
 .lang-flag
 {
 	display: inline-block;
-	padding: 3px 5px 3px 0;
+	opacity: 0.8;
+	border-radius: 3px;
+	margin-right: 3px;
 }
 .lang-selected>.lang-flag
 {

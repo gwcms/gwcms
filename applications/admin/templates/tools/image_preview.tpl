@@ -1,4 +1,4 @@
-{capture name=info}{$lang.DIMENSIONS}: {$image->width}x{$image->height}, {$lang.FILE_SIZE}: {GW_Math_Helper::cfilesize($image->size)} {if $show_filename}{$image->original_filename}{/if}{/capture}
+{capture name=info}{GW::l('/g/DIMENSIONS')}: {$image->width}x{$image->height}, {GW::l('/g/FILE_SIZE')}: {GW_Math_Helper::cfilesize($image->size)} {if $show_filename}{$image->original_filename}{/if}{/capture}
 
 <a href="{$app->sys_base}tools/img/{$image->key}?x=file.jpg" {if $fancybox}class="fancybox-thumbs" data-fancybox-group="{$fancybox_group}"{/if}>
 	<img title="{$smarty.capture.info|escape}" src="{$app->sys_base}tools/img/{$image->key}?size={$width}x{$height}&x=file.jpg" border="{$border|default:0}" />

@@ -47,7 +47,7 @@
 
 
 
-{call e field=type type=select options=$m->lang.TYPE_OPT}
+{call e field=type type=select options=GW::l('/m/TYPE_OPT')}
 
 
 {call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid}
@@ -59,11 +59,11 @@
 {call e field=meta_description }
 
 
-{call e field=template_id options=$lang.EMPTY_OPTION+$m->getTemplateList() type=select}
+{call e field=template_id options=GW::l('/g/EMPTY_OPTION')+$m->getTemplateList() type=select}
 {call e field=link}
 
 {*
-{call e field=gallery_id type=gallery_folder title=$lang.GALLERY_FOLDER}
+{call e field=gallery_id type=gallery_folder title=GW::l('/g/GALLERY_FOLDER')}
 *}
 
 

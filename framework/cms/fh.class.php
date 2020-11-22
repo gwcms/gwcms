@@ -39,7 +39,7 @@ class FH
 
 	function fieldTitle($key)
 	{
-		$title = GW::l($fkey = '/A/FIELDS/' . $key);
+		$title = GW::l($fkey = '/A/FIELDS/' . $key, ['noedit'=>1]);
 
 		return $title != $fkey ? $title : $key;
 	}
@@ -48,8 +48,8 @@ class FH
 	{
 		$title = self::fieldTitle($key);
 
-		if (($tmp = GW::l($fkey="/m/FIELDS_SHORT/$key")) && ($fkey!=$tmp))
-			return "<span title='$title'>$tmp</span>";
+		if (($tmp = GW::l($fkey="/m/FIELDS_SHORT/$key", ['noedit'=>1])) && ($fkey!=$tmp))
+			return "<span title='".strip_tags ($title)."'>$tmp</span>";
 
 		return $title;
 	}

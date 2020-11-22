@@ -26,7 +26,7 @@
     <div class="btn-group">
 	<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-	    <i class="fa fa-filter" aria-hidden="true" title="{$lang.VIEWS_LABEL}"></i>
+	    <i class="fa fa-filter" aria-hidden="true" title="{GW::l('/g/VIEWS_LABEL')}"></i>
 	</button>
 	<ul class="dropdown-menu">
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2])}">{GW::l('/g/CREATE_NEW_VIEW')}</a></li>
@@ -64,7 +64,7 @@
     <div class="btn-group">
 	<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-	    <i class="fa fa-sort-amount-asc" aria-hidden="true" title="{$lang.VIEWS_LABEL}"></i>
+	    <i class="fa fa-sort-amount-asc" aria-hidden="true" title="{GW::l('/g/VIEWS_LABEL')}"></i>
 	</button>
 	<ul class="dropdown-menu">
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2,saveasorder=>1])}">{GW::l('/g/CREATE_NEW_ORDER')}</a></li>

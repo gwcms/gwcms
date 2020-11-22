@@ -268,4 +268,37 @@ class Navigator
 		
 		setcookie($name, $val, time()+3600*24*365*10, Navigator::getBase());	
 	}	
+	
+	function postLink($url, $title, $args)
+	{
+		$GLOBALS['postlinkformidx'] = ($GLOBALS['postlinkform'] ?? 0) +1;
+		
+		$str = "<form id='postlinkform".$GLOBALS['postlinkformidx']."' action='$url' method='post' style='display:none'>";
+		$postkeys = GW_Array_Helper::arrayFlattenSep('/:/', $args);
+		$newpostkeys = [];
+		foreach($postkeys as $key => $val)
+		{
+			$key = explode('/:/', $key);
+			
+			if(count($key)>1){
+				
+				$newkey = '';
+				for($i=0;$i<count($key);$i++){
+					$newkey .= $key[$i] . (($i>0)?'][':'[');
+				}
+				$key = substr($newkey,0, -1);
+				
+			}else{
+				$key = $key[0];
+			}
+			$newpostkeys[$key] = $val;
+			
+		}
+		foreach($newpostkeys as $key => $value){
+			$str.='<input type="hidden" name="'.htmlspecialchars($key).'" value="'.htmlspecialchars($value).'">';
+		}
+		
+		$str.='</form><a href="'.$url.'" onclick="document.querySelector(\'#postlinkform'.$GLOBALS['postlinkformidx'].'\').submit();return false;">'.$title.'</a>';
+		return $str;
+	}
 }

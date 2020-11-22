@@ -17,7 +17,7 @@
 	
 
 	{function dl_cell_message}
-			<a href="#show_msg" onclick="gwcms.open_iframe({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{$m->lang.MESSAGES}' }); return false">
+			<a href="#show_msg" onclick="gwcms.open_iframe({ url:GW.ln+'/'+GW.path+'/{$item->id}/view', title:'{GW::l('/m/MESSAGES')}' }); return false">
 				{$item->message|truncate:'60'}
 			</a>		
 	{/function}
@@ -54,7 +54,7 @@
 
 	
 	{function do_toolbar_buttons_readall}
-		{toolbar_button href=$m->buildUri(false, [act=>doMarkasReadAll]) title=$m->lang.MARK_AS_READ_ALL iconclass="gwico-Read-Message"}
+		{toolbar_button href=$m->buildUri(false, [act=>doMarkasReadAll]) title=GW::l('/m/MARK_AS_READ_ALL') iconclass="gwico-Read-Message"}
 	{/function}
 	
 {/block}

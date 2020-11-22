@@ -7,8 +7,8 @@
 
 
 
-{call e field=from hidden_note=$m->lang.email_note default=$m->config->default_sender}
-{call e field=to hidden_note=$m->lang.email_note  default=$m->config->default_replyto}
+{call e field=from hidden_note=GW::l('/m/email_note') default=$m->config->default_sender}
+{call e field=to hidden_note=GW::l('/m/email_note')  default=$m->config->default_replyto}
 {call e field=subject}
 
 {if $item->plain}

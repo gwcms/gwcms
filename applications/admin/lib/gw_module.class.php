@@ -783,7 +783,8 @@ class GW_Module
 			$field = $field[count($field)-1];//return last section
 		}
 		
-		return $this->app->fh()->fieldTitle($field);
+		$title= GW::l($fkey = '/A/FIELDS/' . $field);
+		return $title != $fkey ? $title : $field;
 	}
 	
 	function runActInBackground()

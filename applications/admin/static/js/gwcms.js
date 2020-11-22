@@ -102,11 +102,20 @@ var gw_navigator = {
 		if (typeof params == 'object')
 		{
 			url = gw_navigator.explode_url(url);
+						
+			for(var key in params){
+				
+				if(params[key] === false){					
+					delete params[key];
+					delete url.query[key];
+				}
+			}
 			
 			if(params.baseadd){
 				url.base += params.baseadd
 				delete params.baseadd;
 			}
+			
 
 			$.extend(url.query, params);
 						
@@ -736,6 +745,17 @@ var gwcms = {
 					<div class="modal-header"><button type="button" class="close" data-dismiss="modal" onclick="gwcms.close_dialog2()"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
 					</div></div></div></div>'
 					);
+				
+			$('.modal-title').click(function(event){
+				if(event.ctrlKey){
+					var url = $('#gwDialogConfiFrm').attr('src');
+					
+					gwcms.close_dialog2()
+					
+					window.open(gw_navigator.url(url, { clean:false }), btoa(conf.title)).focus();
+				}
+				
+			})
 
 			$("#gwDialogConfiFrm").iframeAutoHeight(conf);
 			$("#gwDialogConfiFrm").load(function () {
@@ -1474,6 +1494,8 @@ function initSearchReplace()
 	if(window.location.hash =='#searchreplace' || gw_adm_sys.url.query.hasOwnProperty('searchreplace')){  gwSearchReplace(); } 	
 }
 
+
+
 $("body").keydown(function (event) {
 
 
@@ -1498,8 +1520,56 @@ $("body").keydown(function (event) {
 		if (event.which == 52 && event.ctrlKey) {
 			location.href = GW.app_base + GW.ln + '/system/tools?act=doDebugModeToggle&uri='+encodeURIComponent(location.href)
 			event.preventDefault();
+		}
+		
+		
+		if (event.which == 81 && event.ctrlKey) {
+			$(".lnresult").toggleClass('lnresulthighl');
+
+			location.href = gw_navigator.url(location.href, {"toggle-lang-results-active": 1});
+
+			event.preventDefault();
 		}		
 			
 	
 		//console.log(event.which)
 });
+
+function updateTranslation(newval){
+	lasttranslation.html(newval);
+}
+
+function opentranslation(trkey, module){
+		var endpoint =GW.app_base+GW.ln+"/system/translations/editline";
+		var url = endpoint+"?lang-edit-of=1&clean=1&key=" + encodeURIComponent(trkey)+'&module='+module;
+		gwcms.open_dialog2({ url: url, iframe:1, title:'Edit '+trkey})	
+}	
+	
+	
+$(function(){
+	$(".lnresult").click(function (event) {
+		//var searchmod = $(this).hasClass('transover') ? 'translations_over': 'translations';
+		//var endpoint =GW.app_base+GW.ln+"/datasources/"+searchmod;
+		
+		
+		if (event.ctrlKey) {
+			lasttranslation = $(this);
+			//new_val = window.prompt("Please enter new val for "+$(this).data('key'), $(this).html());
+			//Please enter new val for "+$(this).data('key'), $(this).html()
+			//window.prompt("test");
+			//alert($(this).data('key') + event.button);
+			
+			opentranslation($(this).data('key'), $(this).data('module'))
+			
+			
+			//setTimeout(function(){  },1000)
+			event.stopImmediatePropagation();
+			event.preventDefault();
+		}
+		
+
+	});	
+})	
+
+	
+	

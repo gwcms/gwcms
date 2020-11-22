@@ -20,7 +20,7 @@
 		{foreach from=$item->group_ids key=ind item=gid}{if 
 			$ind!=0}, {/if}<a 
 				href="{$m->buildUri(groups,[id=>$gid],[level=>1])}" 
-				title="{$lang.EDIT}">{$options.group_ids.$gid}</a>{/foreach}	
+				title="{GW::l('/g/EDIT')}">{$options.group_ids.$gid}</a>{/foreach}	
 	{/function}
 
 	{function dl_cell_name}

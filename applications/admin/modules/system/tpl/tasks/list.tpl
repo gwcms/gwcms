@@ -49,13 +49,13 @@
 		{if $item->running > 0}
 			PID: {$item->running}
 		{else}
-			{$m->lang.OPTIONS.running[$item->running]}
+			{GW::l("/m/OPTIONS/running/{$item->running}")}
 		{/if}
 	{/function}	
 	
 	{$dl_actions=[edit,delete,halt]}
 	
-	{$dl_filters=[title=>1, name=>1, insert_time=>1, active=>[type=>select, options=>$lang.ACTIVE_OPT]]}
+	{$dl_filters=[title=>1, name=>1, insert_time=>1, active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')]]}
 	
 	{$dl_order_enabled_fields=$dl_fields}
 	
@@ -74,7 +74,7 @@
 		</tr>
 		<tr>
 			<th>Tasks list</th>
-			<th>{$lang.ACTIONS}</th>
+			<th>{GW::l('/g/ACTIONS')}</th>
 			<th>Info</th>			
 		</tr>		
 	<tr>
@@ -83,8 +83,8 @@
 	
 	<table class="gwTable">
 		<tr>
-			<th>{$m->lang.TASK_NAME}</th>
-			<th>{$lang.ACTIONS}</th>
+			<th>{GW::l('/m/TASK_NAME')}</th>
+			<th>{GW::l('/g/ACTIONS')}</th>
 		</tr>
 
 	{foreach $tasks as $task}

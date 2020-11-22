@@ -15,10 +15,10 @@
 {/function}
 
 {function list_item_title}{strip}
-	{if isset($app->lang.VIEWS[$searchkey])}
-		{$app->lang.VIEWS[$searchkey]}
-	{elseif isset($m->lang.VIEWS[$searchkey])}
-		{$m->lang.VIEWS[$searchkey]}
+	{if GW::l("/g/VIEWS/{$searchkey}",[asis=>1])}
+		{GW::l("/g/VIEWS/{$searchkey}")}
+	{elseif GW::l("/m/VIEWS/{$searchkey}",[asis=>1])}
+		{GW::l("/m/VIEWS/{$searchkey}")}
 	{else}
 		{$searchkey}
 	{/if}

@@ -9,7 +9,7 @@ class GW_Lang
 	static $module_dir;
 	static $module;
 	static $debug=false;
-	static $app='admin';
+	static $app='ADMIN';
 	
 	static function setCurrentLang($ln)
 	{
@@ -32,7 +32,7 @@ class GW_Lang
 	}
 
 	static function getModuleLangFile($module)
-	{
+	{		
 		return GW::s("DIR/".self::$app."/MODULES") . $module . "/lang.xml";
 	}
 
@@ -61,6 +61,26 @@ class GW_Lang
 		self::$cache[$cid] = GW_Lang_XML::load($filename, self::$ln);
 
 		return true;
+	}
+	
+	static function getFilename($trans)
+	{
+		$filename = false;
+		
+		list($root, $name) = explode('/', $trans);
+		
+		switch($root){
+			case 'G': // /G/failopavadinimas/kelias 
+				$filename = self::getGlobalLangFile($name);
+			break;
+			case 'M':
+				$filename = self::getModuleLangFile($name);		
+			break;
+		}
+		
+		
+		return $filename;
+		
 	}
 
 	static function &getFromCache($file_id, $module, $path, $create = false)
@@ -119,7 +139,8 @@ class GW_Lang
 	// /M/modulis/kelias
 	// /A/alternatyvus vertimas - jei ras modulyje ims is modulio, jei neras ieskos application.lang.xml
 	// key butinai turi prasidet ne "/" - tuo atveju bus rodomas pats key	
-	static function &readWrite($key, $write = null)
+	// opts - asis: (AsIs - return null if not exists) 	
+	static function readWrite($key, $opts=[])
 	{
 		if ($key[0] != '/')
 			return $key;
@@ -135,7 +156,7 @@ class GW_Lang
 			
 			GW_Lang::setCurrentApp($app);
 			
-			$res = self::readWrite($key, $write);	
+			$res = self::readWrite($key, $opts);	
 			
 			GW_Lang::setCurrentApp($prevapp);
 			
@@ -151,52 +172,67 @@ class GW_Lang
 			
 			GW_Lang::setCurrentLang($ln);
 			
-			$res = self::readWrite($key, $write);
+			$res = self::readWrite($key, $opts);
 						
 			GW_Lang::setCurrentLang($prevln);
 			
 			return $res;
 		}
 
-		$create = $write !== null;
+		self::$last_realkey = '';
 
 		switch ($type) {
 			case 'G': // /G/failopavadinimas/kelias 
 				list($fileid, $path) = explode('/', $otherargs, 2);
 
-				$r = & self::readG($fileid, '', $path, $create);
+				$r = & self::readG($fileid, '', $path);
 				break;
 			case 'g'://globalus_vertimo failas
-				$r = & self::readG('application', '', $otherargs, $create);
+				$r = & self::readG('application', '', $otherargs);
+				self::$last_realkey = 'G/application/'. $otherargs;
 				break;
 			case 'M':
 				list($module, $path) = explode('/', $otherargs, 2);
-				$r = & self::readG('', $module, $path, $create);
+				$r = & self::readG('', $module, $path);
 				break;
 			case 'm':
-				$r = & self::readG('', self::$module, $otherargs, $create);
+				$r = & self::readG('', self::$module, $otherargs);
+				self::$last_realkey = 'M/'.self::$module.'/'. $otherargs;
 				break;
 
 			case 'A':
 				$r = & self::readG('', self::$module, $otherargs);
-				if (!$r)
-					$r = & self::readG('application', '', $otherargs, $create);
+				self::$last_realkey = 'M/'.self::$module.'/'. $otherargs;;
+				
+				if (!$r){
+					
+					$r = & self::readG('application', '', $otherargs);
+					
+					if($r)
+						self::$last_realkey = 'G/application/'. $otherargs;
+					
+				}
 				break;
 		}
 
 		
+		
 		if(isset($prevapp))
 			GW_Lang::setCurrentApp($prevapp);
 
-		if ($write !== null) {
-			$r = $write;
-		}
 
-		if ($r !== null || $write)
+		if ($r === null ){
+			if($opts['asis']??false){
+				return null;
+			}else{
+				return $key;
+			}
+		}else{
 			return $r;
-		else
-			return $key;
+		}
 	}
+	
+	static $last_realkey='';
 	
 	
 	
@@ -250,7 +286,7 @@ class GW_Lang
 		
 		if (!isset(self::$transcache[$cid])) {
 			$tr = GW_Translation::singleton()->getAssoc(['key', 'value_' . GW_Lang::$ln], ['module=?', $module], ['order' => 'priority ASC']);
-
+			
 			self::__dbTrans2arr($tr, self::$transcache[$cid]);
 		}
 		
@@ -262,19 +298,25 @@ class GW_Lang
 		return (GW::$context->app->user && 
 			GW::$context->app->user->is_admin || GW::$devel_debug ) && 
 			isset(GW::$context->app->sess['lang-results-active']) && 
-			GW::$context->app->sess['lang-results-active'];		
+			GW::$context->app->sess['lang-results-active'] && !isset($_GET['lang-edit-of']);		
 	}
 	
 	static $developLnResList = [];
 	
-	static function lnResult($key, &$result, $orig_val=false)
+	static function lnResult($key, &$result, $orig_val=false, $afteronly=false)
 	{
 		if(!self::__highlightActive()) 
 			return $result;
 		
-		$ret = is_array($result) ? $result : "<span class='lnresult' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
+		if($afteronly)
+			$ret = $result;
 		
-		self::$developLnResList[$key] = $ret;
+		$ret_rich = is_array($result) ? $result : "<span class='lnresult' data-module='".self::$module."' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
+		$ret = $ret ?? $ret_rich;
+		
+		
+		if(!is_array($result))
+			self::$developLnResList[$key] = $ret_rich;
 		
 		
 		return $ret;
@@ -324,7 +366,7 @@ class GW_Lang
 		//d::dumpas([$transcache, $vr, explode('/', $key)]);
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
-		if (GW::$devel_debug && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
+		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
 			//if ($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln . ':') !== false) {
 			//	list($ln, $vr) = explode(':', $valueifnotfound, 2);
@@ -334,6 +376,8 @@ class GW_Lang
 				$fromxml = GW::l($fullkey);
 				$vr = $fromxml != $fullkey ? $fromxml : '*' . $key . '*';
 
+				
+				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
 				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
 			//}
 		}
@@ -379,9 +423,31 @@ class GW_Lang
 	
 	static function l($fullkey, $opts=[])
 	{
-		$vr = self::readWrite($fullkey);
-		self::optProc($vr, $opts);
-		return $vr;
+		
+
+		
+		list($module, $key) = GW_Lang::transKeyAnalise($fullkey);
+		
+		
+		$orig_key = $module.'/'.$key;	
+		
+		
+		
+		$vr = self::readWrite($fullkey, $opts);
+		
+		if(self::$last_realkey)
+			$orig_key = self::$last_realkey;
+
+		
+		$orig_val = false;
+		self::optProc($vr, $opts, $orig_val);
+		
+		$afteronly = ($opts['asis'] ?? false) || ($opts['noedit'] ?? false);
+		
+		
+		
+		
+		return self::lnResult($orig_key, $vr, $orig_val, $afteronly);
 	}
 	
 	

@@ -228,7 +228,7 @@
 
 		<div>
 			{if !count($list)}
-				<div class="gwcmsNoItems">{$lang.NO_ITEMS}</div>
+				<div class="gwcmsNoItems">{GW::l('/g/NO_ITEMS')}</div>
 			{else}
 					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable" data-context="{get_class(current($list))}">
 						<tr>	

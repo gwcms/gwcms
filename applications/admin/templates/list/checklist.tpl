@@ -4,7 +4,7 @@
 
 	<select name="action" onchange="eval(this.value);
 						this.selectedIndex = 0">
-		<option value="">{$lang.CHECKLIST_SELECT_ACTION}</option>
+		<option value="">{GW::l('/g/CHECKLIST_SELECT_ACTION')}</option>
 		{foreach $dl_cl_actions as $action}
 			{call name="dl_cl_actions_`$action`"}
 		{/foreach}
