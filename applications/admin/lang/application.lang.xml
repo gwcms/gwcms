@@ -11,13 +11,14 @@
     <ru>Язык</ru>
   </i>
   <i id="SAVE">
-    <lt>Išsaugoti ir išeiti</lt>
-    <ru>Сохранить и выйти</ru>
+    <lt>Išsaugoti</lt>
+    <ru>Сохранить</ru>
     <en>Save</en>
   </i>
   <i id="APPLY">
     <lt>Išsaugoti liekant</lt>
     <ru>Сохранить оставаясь</ru>
+    <en>Apply</en>
   </i>
   <i id="APPLY_1">
     <en>Apply</en>
