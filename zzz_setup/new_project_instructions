@@ -1,0 +1,43 @@
+# 1 populate files
+git clone git@github.com:gwcms/gwcms.git
+
+# 2 add repository folder and chmod
+sudo chmod -R a=rwX repository
+
+
+# 3 add host
+# 3.1 add apache config like apache2_site_cfg.conf
+# 3.2 a2ensite or move to sitesenabled 
+# 3.3 service apache2 reload
+
+# 4 populate database
+# 4.1 create datase
+# 4.2 create user
+
+
+
+# 5 setup remote /var/www
+ssh root@server
+cd /home/git
+php create_project.php
+
+# 5.1 setup deployment after
+# 5.2 add letsencrypt certificate
+# 5.3 add apache2 conf
+
+# 6 git remote 
+git add origin ssh://git@serv2.voro.lt/home/git/flamingo
+
+
+unzip /var/www/gw/projectname/zzz_setup/copy2root.zip -d /var/www/gw/projectname
+chmod +x daemon/tasks.php
+sudo chmod -R a=rwX repository
+
+
+
+# 7 use & update // create_project.php
+
+
+unzip /var/www/gw/flamingo/zzz_setup/copy2root.zip -d /var/www/gw/flamingo
+
+
