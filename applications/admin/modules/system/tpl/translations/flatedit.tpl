@@ -1,7 +1,18 @@
 {include "default_open.tpl"}
 
-
+{if $smarty.get.addln}
+	{$langsfound[strtoupper($smarty.get.addln)]=1}
+{/if}
 {$fields=array_merge(['ANY'],array_keys($langsfound))}
+
+
+{foreach GW::s('LANGS') as $sysln}
+	{$sysln=strtoupper($sysln)}
+	{if !isset($langsfound[$sysln])}
+		<a href="{Navigator::buildURI(false, [addln=>$sysln])}">+{$sysln}</a>
+	{/if}
+{/foreach}
+
 
 <button class="btn btn-default" id="openclosebnt" onclick='$(".cell").trigger("flip",[true])'>Open / close</button>
 <button class="btn btn-default" id="savebtn" onclick='trsave()'><i class="fa fa-floppy-o"></i> Save</button>
@@ -9,7 +20,7 @@
 <span class="text-muted"><i class="fa fa-info-circle"></i> Write to column "ANY" if all langs value same</span>
 <br /><br />
 
-	<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable">
+	<table id="trTable" class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable">
 		
 		<tr>
 			<th>ID</th>
@@ -31,18 +42,73 @@
 			</tr>
 				
 		{/foreach}
+		
+		<tr id="addnew"><td><button onclick="addnew()">Add new</button></td></tr>
 	</table>
 	
 	<br /><br />
 	<a href="{$m->buildUri(autotranslate,[id=>$smarty.get.id])}" class="btn btn-primary"><i class="fa fa-google"></i> Auto translate empty cells</a>
 	
 
+<textarea id="rowtpl" style="display:none">	
+	<tr data-id='idplace'>
+		<td>idplace</td>
+		{foreach $fields as $field}
+			<td 
+				class="cell modified" 
+				data-initial=""
+				data-field='{$field}'></td>
+		{/foreach}
+	</tr>	
+</textarea>
+	
 <script>
 	require(['gwcms'], function(){
+		initCells('.cell')
+	})
 	
-		$('.cell').on('flip',function(x,dontclose){
-			
-			
+	
+	function trsave(){
+		var data = [];
+		
+		$(".open").trigger("flip");
+		
+		$('.modified').each(function(){
+			var e = $(this);
+			var id = e.parent().data('id');
+			;
+			data.push({ "id":id, "field": e.data('field'), 'value':e.html() })
+		})
+		
+		console.log(data);
+		
+		gw_navigator.post('{$m->buildUri(flatedit,[act=>doSaveLines,id=>$smarty.get.id])}', { rows: JSON.stringify(data) }, 'post' )
+	}
+	
+	function testBtnStates()
+	{
+		if($('.modified').length){
+			$('#savebtn').fadeIn();
+		}else{
+			$('#savebtn').fadeOut();
+		}
+	}
+	
+	function addnew()
+	{
+		var key = window.prompt('Key ex: "OPTIONS/STATUS/0" or "NAUJAS_VERTIMO_KODAS" please make key human readable use caps lock and "_" symbol');
+		console.log(key)
+		var html = $('#rowtpl').val();
+		
+		html = html.replaceAll('idplace', key)
+		console.log(html)
+	
+		$('#trTable').find('tr:last').prev().after(html);
+		initCells($('#trTable').find('tr:last').prev().find('.cell'))
+	}
+	
+	function initCells(querysel){
+		$(querysel).on('flip',function(x,dontclose){
 			
 			var e = $(this)
 			
@@ -73,36 +139,7 @@
 			testBtnStates();
 		}).dblclick(function(){
 			$(this).trigger("flip");
-		})
-		
-		
-	})
-	
-	
-	function trsave(){
-		var data = [];
-		
-		$(".open").trigger("flip");
-		
-		$('.modified').each(function(){
-			var e = $(this);
-			var id = e.parent().data('id');
-			;
-			data.push({ "id":id, "field": e.data('field'), 'value':e.html() })
-		})
-		
-		console.log(data);
-		
-		gw_navigator.post('{$m->buildUri(flatedit,[act=>doSaveLines,id=>$smarty.get.id])}', { rows: JSON.stringify(data) }, 'post' )
-	}
-	
-	function testBtnStates()
-	{
-		if($('.modified').length){
-			$('#savebtn').fadeIn();
-		}else{
-			$('#savebtn').fadeOut();
-		}
+		})		
 	}
 </script>
 
