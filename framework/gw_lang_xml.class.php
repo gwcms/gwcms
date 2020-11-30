@@ -195,7 +195,7 @@ class GW_Lang_XML
 				$child = $sxml->addChild($tag);
 				self::stuctAdd($child, $node['childs']);
 			}else{
-				if($node['value']){
+				if($node['value']!==''){
 					if(preg_match('/[<>]/',$node['value'])){
 						//d::dumpas('test');
 						$child = $sxml->addChild($tag);
@@ -236,10 +236,11 @@ class GW_Lang_XML
 	{
 		$key = trim($key,'/');
 		$keyparts = explode('/', $key);
+		$lastkey  = $keyparts[count($keyparts)-1];
 		
 		$pointer =& $arr;
 		
-		
+		//d::dumpas($val, ['hidden'=>"test point 1"]);
 		
 		foreach($keyparts as $search){
 		
@@ -272,11 +273,16 @@ class GW_Lang_XML
 				$new = ['tag'=>'I', 'attributes'=>['ID'=>$search], 'childs'=>[]];
 				$pointer[] =& $new;
 				
-				$pointer =& $new['childs'];
+				if($search == $lastkey){
+					$pointer =& $new;
+				}else{
+					$pointer =& $new['childs'];
+				}
 			}
 		}
 		
 		//print_r(['before'=>$pointer]);
+		
 		
 		if($ln){
 			
@@ -285,9 +291,6 @@ class GW_Lang_XML
 				
 				$pointerx =& self::structLangNodeSeek($pointer, $ln, true);	
 				$pointerx['value'] = $val;
-				
-				
-				
 				
 			}else{
 				$pointer = ['tag'=>'I','childs'=>['tag'=>$ln, 'value'=> $val]];

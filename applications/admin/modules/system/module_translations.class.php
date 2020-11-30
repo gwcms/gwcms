@@ -69,7 +69,7 @@ class Module_Translations extends GW_Common_Module
 		$filename = $item->filename;
 		
 		$data = GW_Lang_XML::parseXML($filename);
-		
+				
 		$new = GW_Lang_XML::struct2Xml($data);
 		
 		
@@ -511,8 +511,13 @@ class Module_Translations extends GW_Common_Module
 		}
 		
 		if($vals['ANY']){
-			GW_Lang_XML::structMod($data, $vals['id'], $row['ANY']);
+			if($vals['ANY'] == 'debug')
+				d::ldump($data, ['hidden'=>"before"]);
 			
+			GW_Lang_XML::structMod($data, $vals['id'], $vals['ANY']);
+			
+			if($vals['ANY'] == 'debug')
+				d::dumpas($data, ['hidden'=>"after"]);
 		}else{
 			foreach($lns as $ln){
 				if($vals[$ln])
