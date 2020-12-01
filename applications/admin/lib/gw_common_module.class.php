@@ -2292,12 +2292,12 @@ class GW_Common_Module extends GW_Module
 		
 		$ctx = ['src'=>$origitem,'dst'=>$item];
 		
-		$this->eventHandler("BEFORE_CLONE", $ctx);
+		$this->fireEvent(["BEFORE_CLONE","BEFORE_CLONE3"], $ctx);
 		
 		$item->insert();
 		$newitemid = $item->id;
 		
-		$this->eventHandler("AFTER_CLONE", $ctx);
+		$this->fireEvent(["AFTER_CLONE","AFTER_CLONE3"], $ctx);
 		
 		unset($_GET['id']);
 		unset($_REQUEST['id']);

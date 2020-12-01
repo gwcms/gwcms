@@ -168,7 +168,7 @@ class GW_Http_Agent
 		return Array($body, $error, isset($http_response_header) ? $http_response_header : false);
 	}
 
-	function postRequest($url, $post_vars, $headers = [])
+	function postRequest($url, $post_vars, $headers = [], $opts=[])
 	{
 		$headers['Content-type'] = 'application/x-www-form-urlencoded';
 
@@ -180,7 +180,8 @@ class GW_Http_Agent
 		    array(
 			'method' => 'POST',
 			'header' => $header,
-			'content' => http_build_query($post_vars)
+			'content' => http_build_query($post_vars),
+			'timeout' => $opts['timeout'] ?? 400,
 		    )
 		);
 
