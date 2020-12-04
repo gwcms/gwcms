@@ -359,6 +359,11 @@
       <lt>Kopijuoti</lt>
       <ru>Копировать</ru>
     </i>
+    <i id="doClone3">
+      <en>Create clone (with all related details)</en>
+      <lt>Sukurti kopija (su visa susijusia inf.)</lt>
+      <ru>Создать клон (со всеми соответствующими деталями)</ru>
+    </i>
     <i id="doSend">
       <en>Send</en>
       <lt>Siųsti</lt>

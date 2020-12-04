@@ -543,7 +543,8 @@ class Module_Translations extends GW_Common_Module
 		
 		
 		if(isset($_GET['clean'])){
-			$result = addslashes($vals[strtoupper($this->app->ln)]);
+			$r = $vals[strtoupper($this->app->ln)] ?? ($vals['ANY'] ?? first($vals));
+			$result = addslashes($r);
 			echo "<script>window.parent.updateTranslation('$result'); window.parent.gwcms.close_dialog2();</script>";
 			exit;
 		}
@@ -573,7 +574,56 @@ class Module_Translations extends GW_Common_Module
 		$item->writeTemp($xml);
 		
 		unset($_GET['act']);
+		
+		
+		if(isset($_GET['ajax'])){
+			die("SAVEOK");
+		}
+		
 		$this->app->jump(false, $_GET);
+	}
+	
+	function viewFlatedit1()
+	{
+		$loadlist = [];
+		foreach(GW_Lang::$developLnResList as $key => $x){
+			list($group, $key) = GW_Lang::transKeyAnalise("/".$key);
+			$loadlist[$group][]=$key;
+		}
+		
+		$grouped = [];
+		$langfiles = [];
+		$changed = [];
+		$fields = array_merge(['ANY'], GW::s('LANGS'));
+		
+		foreach($loadlist as $group => $keys){
+			$lf = new GW_Lang_File($group, 1);
+			
+			$data = $lf->getLines();
+			$orig = $lf->getLines(true);
+			
+			foreach($keys as $key){
+				$grouped[$group][$key] = $data['list'][$key] ?? [];
+				
+				foreach($fields as $field)
+					if(($data['list'][$key][$field] ?? false) != ($orig['list'][$key][$field] ?? false))
+						$changed[$group][$key][$field]=1;
+			}
+			
+			$langfiles[$group] = $lf;
+		}
+		
+		$app = $grouped['G/application'];
+		unset($grouped['G/application']);
+		$grouped['G/application'] = $app;
+		
+		
+		$this->tpl_vars['groupedlist']=$grouped;
+		$this->tpl_vars['langfiles'] = $langfiles;
+		$this->tpl_vars['changedlines'] = $changed;
+		
+		//d::ldump($changed);
+		//exit;
 	}
 
 }

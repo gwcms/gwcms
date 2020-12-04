@@ -227,5 +227,10 @@ class GW_Admin_Application extends GW_Application
 			if(isset($arr['data_object_id']))
 				$this->path_data_objects[$arr['name']] = $arr['data_object_id'];
 		}
-	}	
+	}
+
+	function postRun2()
+	{
+
+	}
 }

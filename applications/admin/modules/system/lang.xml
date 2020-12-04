@@ -104,6 +104,8 @@
     <i id="translatetest">Translate test</i>
     <i id="xmlmodifications">View modifications</i>
     <i id="flatedit">Edit</i>
+    <i id="doPushTemp">Push changes</i>
+    <i id="autotranslate">Auto translations</i>
   </i>
   <i id="FIELD_NOTE">
     <i id="time_match">

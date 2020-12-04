@@ -277,12 +277,7 @@ class GW_Application
 			include($file);
 	}
 	
-	function postRun2()
-	{
-		if(GW_Lang::$developLnResList){
-			d::ldump(GW_Lang::$developLnResList);
-		}
-	}
+
 
 	function ifAjaxCallProcess()
 	{

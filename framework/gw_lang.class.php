@@ -307,13 +307,14 @@ class GW_Lang
 	{
 		if(!self::__highlightActive()) 
 			return $result;
-		
-		if($afteronly)
-			$ret = $result;
-		
+	
 		$ret_rich = is_array($result) ? $result : "<span class='lnresult' data-module='".self::$module."' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
-		$ret = $ret ?? $ret_rich;
 		
+		if($afteronly){
+			$ret = $result;
+		}else{
+			$ret = $ret_rich;
+		}
 		
 		if(!is_array($result))
 			self::$developLnResList[$key] = $ret_rich;
@@ -443,6 +444,7 @@ class GW_Lang
 		self::optProc($vr, $opts, $orig_val);
 		
 		$afteronly = ($opts['asis'] ?? false) || ($opts['noedit'] ?? false);
+		
 		
 		
 		

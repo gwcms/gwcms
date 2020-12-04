@@ -394,4 +394,11 @@ class GW_Site_Application extends GW_Application
 		return $content;
 	}
 
+	function postRun2()
+	{
+		if(GW_Lang::$developLnResList){
+			d::ldump(GW_Lang::$developLnResList);
+		}
+	}	
+	
 }

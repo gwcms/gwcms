@@ -260,7 +260,7 @@ class GW_Lang_XML
 					}else{
 						$pointer =& $elm;
 					}
-					d::ldump("pointer change $key");
+					//d::ldump("pointer change $key");
 					
 					
 					break;
@@ -268,7 +268,7 @@ class GW_Lang_XML
 			}
 			
 			if(!$found){
-				d::ldump("pointer not found, create new $search");
+				//d::ldump("pointer not found, create new $search");
 				
 				$new = ['tag'=>'I', 'attributes'=>['ID'=>$search], 'childs'=>[]];
 				$pointer[] =& $new;

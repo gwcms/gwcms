@@ -33,6 +33,15 @@
     <!-- END OF CONTAINER -->
 {/if}
 
+
+
+
+
+{if GW_Lang::$developLnResList}
+	{$app->innerProcess('system/translations/flatedit1')}
+{/if}
+
+
 {include "default_close_clean.tpl"}
 
 {*

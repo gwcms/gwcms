@@ -85,6 +85,14 @@
 		gw_navigator.post('{$m->buildUri(flatedit,[act=>doSaveLines,id=>$smarty.get.id])}', { rows: JSON.stringify(data) }, 'post' )
 	}
 	
+	function focus(e)
+	{
+		var fieldInput = e;
+		var fldLength= fieldInput.val().length;
+		fieldInput.focus();
+		fieldInput[0].setSelectionRange(fldLength, fldLength);		
+	}	
+	
 	function testBtnStates()
 	{
 		if($('.modified').length){
@@ -122,6 +130,7 @@
 					$(".open").trigger("flip")
 				
 				e.html("<textarea class='tredit'>"+e.html()+"</textarea>");
+				focus(e.find('textarea'))
 				e.data('isedit', true)
 				e.addClass('open');
 				
@@ -139,7 +148,11 @@
 			testBtnStates();
 		}).dblclick(function(){
 			$(this).trigger("flip");
-		})		
+		}).keydown(function(e){
+			if(e.which == 27){
+			   $(this).trigger("flip");
+			}
+		});	
 	}
 </script>
 

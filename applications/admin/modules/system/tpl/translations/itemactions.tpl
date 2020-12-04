@@ -5,25 +5,26 @@
 {$autocaption=1}
 
 
-
+{*
 {list_item_action_m url=[tree,[id=>$item->id]]}	
+*}
 
+{list_item_action_m url=[flatedit,[id=>$item->id]] iconclass="fa fa-pencil-square-o"}	
+{list_item_action_m url=[autotranslate,[id=>$item->id]] iconclass="fa fa-language"}
 
 
 
 {if $item->newsize}
-	{list_item_action_m url=[false,[id=>$item->id,act=>doPushTemp]]}	
-	{list_item_action_m url=[false,[id=>$item->id,act=>doResetTemp]]}	
+	<li class="divider"></li>
+	{list_item_action_m url=[false,[id=>$item->id,act=>doPushTemp]] iconclass="fa fa-upload"}	
+	{list_item_action_m url=[false,[id=>$item->id,act=>doResetTemp]] confirm=1 iconclass="fa fa-trash-o text-danger"}	
 	
 	{list_item_action_m url=[xmlmodifications,[id=>$item->id]]}	
 {else}
 	{list_item_action_m url=[false,[id=>$item->id,act=>doCreateTemp]]}	
 {/if}
 
-{list_item_action_m url=[autotranslate,[id=>$item->id]]}	
+	
 
 
 
-
-<li class="divider"></li>
-{list_item_action_m url=[false,[act=>doClean,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}	
