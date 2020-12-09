@@ -134,23 +134,30 @@ class GW_Common_Module extends GW_Module
 						
 				//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
 				
-				$errstr .= '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
-		
-				$errmail= "<pre>".
-					d::jsonNice([
-					    'user_id'=>$this->app->user->id,
-					    'username'=>$this->app->user->username,
-					    'request_uri' => $_SERVER['REQUEST_URI'] ?? '-',
-					    'referer' => $_SERVER['HTTP_REFERER'] ?? '-',
-					    'post' => $_POST,
-					    'session' => $_SESSION
-						]).
-					"</pre>";			
-					
-				$this->procError($errstr, $errmail);
 				
-				if($errno==E_USER_ERROR)
-					exit;
+				
+				if ($this->sys_call && $this->lgr) {
+					$this->lgr->msg($_SERVER['REQUEST_URI'].": $errstr");
+				}else{
+					$errstr .= '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
+					
+					$errmail= "<pre>".
+						d::jsonNice([
+						    'user_id'=>$this->app->user->id,
+						    'username'=>$this->app->user->username,
+						    'request_uri' => $_SERVER['REQUEST_URI'] ?? '-',
+						    'referer' => $_SERVER['HTTP_REFERER'] ?? '-',
+						    'post' => $_POST,
+						    'session' => $_SESSION
+							]).
+						"</pre>";			
+
+					$this->procError($errstr, $errmail);
+
+
+					if($errno==E_USER_ERROR)
+						exit;
+				}
 				
 				break;
 		}

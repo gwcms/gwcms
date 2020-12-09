@@ -23,7 +23,7 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 	var $auto_fields = false;
 	var $original_file = false; //used with resize
 	var $ignore_fields = Array('new_file' => 1);
-	public $calculate_fields = ['size_human' => 1, 'full_filename' => 1, 'extension' => 'getType'];
+	public $calculate_fields = ['size_human' => 1, 'full_filename' => 1, 'extension' => 'getType','relpath'=>'relPath'];
 	var $validators = Array
 	    (
 	    'file' => Array
@@ -205,5 +205,10 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 			return 'type_' . $this->extension . '.png';
 
 		return 'type_file.png';
+	}
+	
+	function relPath()
+	{
+		return str_replace(GW::s('DIR/REPOSITORY'), '', $this->getFilename());
 	}
 }

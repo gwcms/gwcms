@@ -5,7 +5,9 @@
 	{$thumbn_sz=800x600}
 	{$image=$item->image}
 	<img src="{$app->sys_base}tools/imga/{$image->id}?size={$thumbn_sz}" align="absmiddle" vspace="2" />
-{elseif $item->content_type=='pdf'}
+{elseif $item->attachment->extension=='svg'}
+	<img src='{$app->sys_base}tools/download/{$item->attachment->key}?view=1' style="max-width: 600px;max-height:600px;">
+{elseif strpos($item->content_type,'pdf')!==false}
 	{$file=$item->file}
 	
 	{$filename=pathinfo($file->original_filename)}
