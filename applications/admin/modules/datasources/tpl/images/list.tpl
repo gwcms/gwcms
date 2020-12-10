@@ -9,9 +9,10 @@
 	{$dl_fields=$m->getDisplayFields($display_fields)}
 
 	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons[] = search}
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
 
-	{$dl_actions=[imagesactions,edit,delete]}
+	{$dl_actions=[imagesactions,edit,ext_actions]}
 
 	{$dl_filters=[owner=>1,original_filename=>1,insert_time=>1,v=>1,height=>1,width=>1,size=>1]}
 	{$dl_smart_fields=[image,insert_time,original_filename,size]}

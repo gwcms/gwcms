@@ -34,7 +34,7 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 	    )
 	);
 	public $original;
-	public $calculate_fields = ['size_human' => 1, 'full_filename' => 1, 'extension' => 'getType'];	
+	public $calculate_fields = ['size_human' => 1, 'full_filename' => 1, 'extension' => 'getType','dimensions'=>1];	
 
 	function calculateField($name)
 	{
@@ -43,6 +43,8 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 
 		if ($name == 'full_filename')
 			return $this->dir . $this->get('filename');
+		if($name == 'dimensions')
+			return "{$this->width}x{$this->height}";
 
 		parent::calculateField($name);
 	}	
@@ -229,6 +231,18 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 
 		$this->saveValues(['v' => $this->v + 1]); //update file version
 	}
+	
+	function cropSelf($opts)
+	{
+		$file = $this->getFilename();
+		$im = new GW_Image_Manipulation($file);
+		$im->cropSelf($opts);
+		$im->clean();
+
+		$this->deleteCached();
+
+		$this->saveValues(['v' => $this->v + 1]); //update file version
+	}	
 
 	function eventHandler($event, &$context_data = [])
 	{
