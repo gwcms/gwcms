@@ -13,11 +13,11 @@
 <div id="{$preview_container_id}">
 	{if $image}
 		<p class="gwcms-iinp-prev-exist">
-			{include 
+			{include in_form=1
 				file="tools/image_preview.tpl" 
-				image=$image border=1 width=$img_preview_height height=$img_preview_width}
+				image=$image border=1 width=$img_preview_height height=$img_preview_width fancybox=1}
 
-			{include "elements/zz_remove_composite.tpl"}
+			
 		</p>	
 	{/if}
 

@@ -34,8 +34,8 @@
 			{$searchkey=$url.1.act|default:basename($url.0)}
 			{call list_item_title assign=title}
 		{/if}
-
-		{if $autocaption && !$caption && $url.1}
+		
+		{if $autocaption && !$caption}
 			{$searchkey=$url.1.act|default:basename($url.0)}
 			{call list_item_title assign=caption}
 		{/if}
@@ -127,8 +127,10 @@
 {function name=dl_actions_ext_actions}
 	
 	<div class="btn-group dropright gwcmsAction" style="display: inline;vertical-align: top;">
-
-		<i class="fa fa-bars dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" data-url="{$m->buildURI('itemactions',[id=>$item->id])}"></i>	
+		{$argadd=$argadd|default:[]}
+		<i class="fa fa-bars dropdown-toggle dropdown-toggle-icon gwcms-ajax-dd" data-toggle="dropdown" 
+		   data-url="{if $modpath}{$app->buildURI("{$modpath}/itemactions",[id=>$item->id]+$argadd)}{else}{$m->buildURI('itemactions',[id=>$item->id]+$argadd)}{/if}
+		  "></i>	
 		    <ul class="dropdown-menu dropdown-menu-right">
 			<li><i class="fa fa-spinner fa-pulse"></i></li>
 		    </ul>

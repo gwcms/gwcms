@@ -279,8 +279,7 @@ class GW_Image_Manipulation
 
 	function rotateSelf($degree)
 	{
-		$this->im = 
-
+		$this->im = imagerotate($this->im, $degree, 0);
 		$this->save($this->file);
 	}
 	function cropSelf($opts)

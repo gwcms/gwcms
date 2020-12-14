@@ -41,6 +41,7 @@ class GW_Common_Module extends GW_Module
 	public $extra_cols = [];
 	public $lgr;
 	public $auto_translate_enabled =  true;
+	public $readonly = false;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -79,6 +80,12 @@ class GW_Common_Module extends GW_Module
 		$this->initModCfg();
 		$this->app->carry_params['clean']=1;
 		$this->initErrorHandler();
+		
+		
+		if($this->allowed_ids = GW_Permissions::getTempReadAccess(implode('/',$this->module_path)) ){
+			$this->filters['id'] = $this->allowed_ids;
+		}
+		
 	}
 
 	function initModCfgEx($modp)
@@ -1228,6 +1235,9 @@ class GW_Common_Module extends GW_Module
 		$this->__doDialogConfigPrepareOrders();		
 		
 		
+		if($item->readonly)
+			$this->jump();
+		
 		if($pageviewid=$_POST['pageviewid'])
 		{
 			$avail = $this->getImportantPageViews();
@@ -1423,6 +1433,11 @@ class GW_Common_Module extends GW_Module
 			$item->load_if_not_loaded();
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		
+
+		
+		
 				
 		if(isset($item->content_base['access']))
 		{
@@ -1435,7 +1450,19 @@ class GW_Common_Module extends GW_Module
 		}else{
 			$result = true; //$item->canBeAccessedByUser($this->app->user);
 		}
-
+		
+		
+		
+		
+		if($this->allowed_ids){
+			if(isset($this->allowed_ids[$item->id])){
+				return $this->allowed_ids[$item->id] & $requestAccess;
+			}else{
+				$result = false;
+			}
+		}
+		
+		//d::dumpas([$result, $this->allowed_ids, $item->id]);
 		
 		if (isset($opts['nodie']) || $result)
 			return $result;
@@ -1543,14 +1570,18 @@ class GW_Common_Module extends GW_Module
 	{
 		$ids = explode(',',$_REQUEST['ids']);
 		
-		
+		$cnt = 0;
 		foreach($ids as $id)
 		{
 			$item = $this->model->createNewObject($id, true);
-			$item->delete();
+			
+			if($this->canBeAccessed($item,['nodie'=>1])){
+				$item->delete();
+				$cnt++;
+			}
 		}
 		
-		$this->setPlainMessage(sprintf(GW::l('/g/SELECTED_ITEMS_REMOVED'), count($ids)), GW_MSG_SUCC);
+		$this->setPlainMessage(sprintf(GW::l('/g/SELECTED_ITEMS_REMOVED'), $cnt), GW_MSG_SUCC);
 
 		
 		$this->jump($this->app->path_arr_parent['path']);

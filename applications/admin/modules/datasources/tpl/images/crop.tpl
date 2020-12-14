@@ -69,11 +69,13 @@ window.addEventListener('DOMContentLoaded', function () {
       max-width: 100%;
       max-height: 80vh;
       margin: 20px auto;
+      min-height: 300px;
     }
 
-    img {
+    #cropimage {
       max-width: 100%;
       max-height: 80vh;
+      
     }
   </style>	
 {/capture}

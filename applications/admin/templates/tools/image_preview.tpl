@@ -1,8 +1,25 @@
 {capture name=info}{GW::l('/g/DIMENSIONS')}: {$image->width}x{$image->height}, {GW::l('/g/FILE_SIZE')}: {GW_Math_Helper::cfilesize($image->size)} {if $show_filename}{$image->original_filename}{/if}{/capture}
 
-<a href="{$app->sys_base}tools/img/{$image->key}?x=file.jpg" {if $fancybox}class="fancybox-thumbs" data-fancybox-group="{$fancybox_group}"{/if}>
-	<img title="{$smarty.capture.info|escape}" src="{$app->sys_base}tools/img/{$image->key}?size={$width}x{$height}&x=file.jpg" border="{$border|default:0}" />
-</a>
+<table>
+	<tr>
+	<td>
+<a href="{$app->sys_base}tools/img/{$image->key}?{$item->v}&x=file.jpg" {if $fancybox}class="fancybox-thumbs" data-fancybox-group="{$fancybox_group}"{/if} target="_blank">
+	<img title="{$smarty.capture.info|escape}" src="{$app->sys_base}tools/img/{$image->key}?size={$width}x{$height}&v={$image->v}&x=file.jpg" border="{$border|default:0}" />
+</a>	</td>
+{if $in_form}
+<td valign="top">{include "elements/zz_remove_composite.tpl"}</td>
+<td valign="top" style="padding-left:5px">
+	{include "list/actions.tpl"}
+	{call dl_actions_ext_actions item=$image modpath="datasources/images" argadd=[frompreview=>1]}
+	
+	
+	
+	
+	</td>	
+{/if}	
+	
+	</tr>
+</table>
 
 
 

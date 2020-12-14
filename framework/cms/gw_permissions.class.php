@@ -87,15 +87,36 @@ class GW_Permissions
 			}else{				
 				return GW_ADM_Page::singleton()->count(['path=? AND active=1', $path]) > 0;
 			}
-		}		
-
+		}
+		
 		if ($load_once)
 			$paths = self::getPrmByMltGrpIds($gids);
 		else
 			$paths = self::__getPrmByMltGrpIds($gids, $path);
-
-		return isset($paths[$path]);
+		
+		if(isset($paths[$path]))
+			return true;
+		
+		$tmpacc = GW::$context->app->sess('temp_read_access');
+		
+		
+		if(is_array($tmpacc) && $tmpacc[$path]){
+			return true;
+		}
 	}
+	
+	static function setTempReadAccess($path, $ids)
+	{
+		$x = GW::$context->app->sess('temp_read_access');
+		$x[$path] = $ids;
+		GW::$context->app->sess('temp_read_access', $x);
+	}
+	
+	static function getTempReadAccess($path)
+	{
+		$x = GW::$context->app->sess('temp_read_access');
+		return $x[$path] ?? false;
+	}	
 
 	static function isRoot($gids)
 	{
