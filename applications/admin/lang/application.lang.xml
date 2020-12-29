@@ -4,6 +4,7 @@
     <i id="lt">Lietuvių</i>
     <i id="en">English</i>
     <i id="ru">Руский</i>
+    <i id="fr">Français</i>
   </i>
   <i id="LANGUAGE">
     <en>Language</en>
@@ -830,5 +831,13 @@
     <lt>atrinkta</lt>
     <en>filtered</en>
     <ru>выбрано</ru>
+  </i>
+  <i id="REPEAT">
+    <lt>Pakartoti</lt>
+    <en>Repeat</en>
+  </i> 
+  <i id="I18N_EXTEND_LANGS"> 
+	  <lt>Papild. kalbos</lt>
+	  <en>Additional langs</en>
   </i>
 </xml>

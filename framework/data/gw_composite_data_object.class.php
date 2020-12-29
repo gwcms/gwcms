@@ -306,5 +306,22 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		self::$linked_cache[$obj_classname] += $addlist;
 	}
 	
+	static function prepareImages($list, $field)
+	{
+		
+		$im0 = GW_image::singleton();
+		foreach($list as $itm)
+			$owners[] = $im0->getOwnerFormat($itm, $field);
+		
+		
+		$cond = GW_DB::inConditionStr('owner', $owners);	
+		$addlist = GW_Image::singleton()->findAll($cond, ['key_field'=>'owner']);	
+		
+		if(!isset(self::$linked_cache['GW_Image']))
+			self::$linked_cache['GW_Image'] = [];
+		
+		self::$linked_cache['GW_Image'] += $addlist;		
+	}
+	
 	
 }

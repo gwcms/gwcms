@@ -34,6 +34,9 @@
 	{call e field="value_$lncode" type=textarea height="50px"}
 {/foreach}	
 
+{foreach $app->i18next as $lncode => $x}
+	{call e field="value_$lncode" type=textarea height="50px"}
+{/foreach}	
 
 
 

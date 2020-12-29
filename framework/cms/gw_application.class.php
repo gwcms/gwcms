@@ -31,6 +31,8 @@ class GW_Application
 	public $inner_request = false;
 	public $user_class = false;
 	public $sess; //application session - to avoid conflicts with site - admin apps
+	public $i18next=[];
+	public $langs = [];
 	
 	/**
 	 *
@@ -153,7 +155,7 @@ class GW_Application
 
 		$s->assignByRef('ln', $this->ln);
 		$s->assignByRef('l', GW::$l);
-		$s->assignByRef('lang', $this->lang);
+		//$s->assignByRef('lang', $this->lang);
 		$s->assignByRef('page', $this->page);
 		
 		$x = new stdClass;
@@ -165,10 +167,10 @@ class GW_Application
 	function initLang()
 	{
 		$this->setCurrentLang($this->ln);
-
 		GW_Lang::setCurrentApp($this->app_name);
+		$this->langs = GW::s('LANGS');
 
-		$this->lang = GW::l('/g/');
+		//$this->lang = GW::l('/g/');
 	}
 	
 	function setCurrentLang($ln)
@@ -370,7 +372,7 @@ class GW_Application
 		$this->path_clean = $path_clean;
 
 
-		$this->ln = in_array($ln, GW::$settings['LANGS']) ? $ln : GW::$settings['LANGS'][0];
+		$this->ln = in_array($ln, GW::s('LANGS')) || in_array($ln, GW::s('i18nExt')) ? $ln : GW::$settings['LANGS'][0];
 
 
 
@@ -708,5 +710,21 @@ class GW_Application
 		$this->reopenSessionIfClosed();
 		
 		return $res;
+	}
+
+	function initI18nSchema()
+	{
+		$this->i18next_schema = GW::db()->fetch_assoc("SELECT `type`,`str`,`id` FROM gw_i18next_schema");
+	}
+	
+	function i18nSchemaQuery($type, $str)
+	{
+		//learn tables
+		if(!isset($this->i18next_schema[$type][$str])){
+			GW::db()->insert('gw_i18next_schema', ['type'=>$type,'str'=>$str, 'id'=>count($this->i18next_schema[$type])+1]);
+			$this->initI18nSchema();
+		}		
+		
+		return $this->i18next_schema[$type][$str];
 	}	
 }

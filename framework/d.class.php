@@ -3,7 +3,7 @@
 class d
 {
 	
-	static $initcss = "<style> .debugblock{ background:transparent;margin:5px;border:0;border-left: solid 10px;padding-left:15px;padding:10px 0px 0px 15px }</style>";
+	static $initcss = "<style> .debugblock{ background:white;margin:5px;border:0;border-left: solid 10px;padding-left:15px;padding:10px 0px 0px 15px }</style>";
 	
 	static $inithide = "
 		<style>

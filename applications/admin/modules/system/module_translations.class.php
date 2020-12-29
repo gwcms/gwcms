@@ -250,8 +250,7 @@ class Module_Translations extends GW_Common_Module
 	{
 		$item = $this->getDataObjectById();
 		
-		
-		$sel=['type'=>'select','options'=>GW::s("LANGS"), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
+		$sel=['type'=>'select','options'=>array_merge(GW::s("LANGS"),GW::s('i18nExt')), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
 		$form = ['fields'=>['mainlang'=>$sel, 'addlang'=>$sel],'cols'=>4];
 		if($this->app->user->isRoot())
 			$form['fields']['interupt'] = ['type'=>'bool','note'=>'(Debug mode)'];

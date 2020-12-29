@@ -1434,11 +1434,6 @@ class GW_Common_Module extends GW_Module
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
-		
-
-		
-		
-				
 		if(isset($item->content_base['access']))
 		{
 			$availAccess = $item->content_base['access'];
@@ -1450,8 +1445,6 @@ class GW_Common_Module extends GW_Module
 		}else{
 			$result = true; //$item->canBeAccessedByUser($this->app->user);
 		}
-		
-		
 		
 		
 		if($this->allowed_ids){
@@ -2261,8 +2254,8 @@ class GW_Common_Module extends GW_Module
 
 		$title_array=[$from=$item->get($field, $src)];
 		
-		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
-		//$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		//$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
 		
 		$opts = http_build_query(['from'=>$src,'to'=>$dest]);
 		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
@@ -2297,7 +2290,7 @@ class GW_Common_Module extends GW_Module
 		foreach($item->i18n_fields as $field => $x){
 			
 			
-			if(!in_array($cols["{$field}_en"], ['varchar']))
+			if(!in_array($cols["{$field}_en"], ['varchar','text']))
 				continue;
 			
 			
@@ -2306,6 +2299,11 @@ class GW_Common_Module extends GW_Module
 			$upd |= $this->getTranslation ($item, $field, "lt", "ru", true);
 			$upd |= $this->getTranslation ($item, $field, "en", "lt", true);
 			$upd |= $this->getTranslation ($item, $field, "lt", "en", true);
+			
+			if($this->app->i18next){
+				foreach($this->app->i18next as $ln =>$x)
+					$upd |= $this->getTranslation ($item, $field, "en", $ln, true);
+			}
 		}		
 		
 	}

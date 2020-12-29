@@ -6,14 +6,14 @@
 	
 	{function name=do_toolbar_buttons_synchronizefromxml} 
 		{toolbar_button title=GW::l('/A/VIEWS/synchronizefromxml') iconclass='gwico-Refresh' href=$m->buildUri(synchronizefromxml)}	
-
+		{toolbar_button title=GW::l('/A/VIEWS/doSeriesTranslate') iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doSeriesTranslate])}	
 	{/function}	
 	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
 	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
-	
+
 	
 	
 	

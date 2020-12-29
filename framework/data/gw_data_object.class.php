@@ -31,6 +31,8 @@ class GW_Data_Object
 	public $constructcomplete=false;
 	public $is_db_based = true;
 	public $inherit_props = [];
+	public $extra_cols = [];
+	public $base_args=[];	
 
 	/**
 	 * pvz 
@@ -52,13 +54,13 @@ class GW_Data_Object
 		if(!$this->table)
 			$this->table = strtolower(get_class($this));
 		
+		$this->initExtensions();
+		
 		if ($load)
 			$this->load();
 		
 		$this->ignore_fields += $this->_ignore_fields;
-		
-		$this->initExtensions();
-						
+				
 		$this->fireEvent('AFTER_CONSTRUCT');
 		$this->constructcomplete = true;
 	}
@@ -321,7 +323,7 @@ class GW_Data_Object
 		}
 		
 		return implode(', ', $tables);
-	}
+	}	
 	/*
 	 * PAGAL susitarima FROM lenteles gauna aliasus a-z
 	 * LEFT JOIN lenteles aa-az
@@ -329,15 +331,22 @@ class GW_Data_Object
 	 * INNER JOIN ca-cz
 	 * SUBQUERIU lenteles is select aaa-aaz
 	 */
+	
+	function __addJoins($joins, &$sql){
+		foreach ($joins as $join)
+				$sql.=" " . $join[0] . " JOIN " . $join[1] . " ON " . $join[2];
+	}
 
 	function buildSql($options)
 	{
-
 		if (isset($options['sql']))
 			return $options['sql']; // nothing to build, already have sql
 
 		$conditions = isset($options['conditions']) ? $options['conditions'] : '';
 		$select = isset($options['select']) ? $options['select'] : 'a.*';
+		
+		if(isset($this->base_args['select_add']))
+			$select.=', '.$this->base_args['select_add'];
 
 		$offset = isset($options['offset']) ? $options['offset'] : 0;
 		$order = isset($options['order']) ? $options['order'] : $this->getDefaultOrderBy();
@@ -353,10 +362,12 @@ class GW_Data_Object
 
 		//ussage example $options=['joins'=>[['RIGHT','table_name','condition AND condition']]]
 		if (isset($options['joins']))
-			foreach ($options['joins'] as $join)
-				$sql.=" " . $join[0] . " JOIN " . $join[1] . " ON " . $join[2];
-
-
+			self::__addJoins($options['joins'], $sql);
+		
+		if (isset($this->base_args['joins_add']))
+			self::__addJoins($this->base_args['joins_add'], $sql);
+		
+		
 		if ($conditions)
 			$sql.= ' WHERE ' . GW_DB::prepare_query($conditions);
 
@@ -391,12 +402,12 @@ class GW_Data_Object
 		$db = & $this->getDB();
 
 		$nodie = isset($options['soft_error']) && $options['soft_error'] ? true : false;
-
+		
 		if (
 		    isset($options['assoc_fields']) && $options['assoc_fields'] &&
 		    isset($options['return_simple']) && $options['return_simple']
 		) {
-			$entries = $db->fetch_assoc($sql, $nodie);
+			$entries = $db->fetch_assoc_exactnum($sql, count($options['assoc_fields']), $nodie);
 		} elseif (isset($options['key_field'])){
 			$fields = explode(',',$options['key_field']);
 			
@@ -470,17 +481,17 @@ class GW_Data_Object
 		$options['limit'] = 1;
 		
 		if(is_numeric($conditions))
-			$conditions="id = $conditions";
+			$conditions="a.id = $conditions";
 
 		return count($r = $this->findAll($conditions, $options)) ? $r[0] : false;
 	}
 	
-	function loadVals($fields = "*")
+	function loadVals($fields = "a.*")
 	{
 		return $this->find($this->getIdCondition(), Array('select' => $fields, 'return_simple' => 1));
 	}
 
-	function load($fields = '*')
+	function load($fields = 'a.*')
 	{
 		$vals = $this->loadVals($fields);
 
@@ -537,12 +548,18 @@ class GW_Data_Object
 	{
 		$db = & $this->getDB();
 		
+		
+		
 		if($type=='all'){
 			$cols = $db->getColumns($this->table);
 		}elseif($type=='text'){
 			$cols = $db->getColumns($this->table, GW_DB::inConditionStr('DATA_TYPE', ['char','varchar','text','tinytext','mediumtext','longtext']));
 		}
-			
+		
+		if($this->extra_cols)
+			$cols= array_merge($cols,$this->extra_cols);
+		
+		
 
 		return array_flip($cols);
 	}
@@ -557,7 +574,7 @@ class GW_Data_Object
 	function getIdCondition()
 	{
 		$idfield = $this->primary_fields[0];
-		return $this->getDB()->prepare_query(Array('`' . $idfield . '`=?', $this->get($idfield)));
+		return $this->getDB()->prepare_query(Array('a.`' . $idfield . '`=?', $this->get($idfield)));
 	}
 
 	/**
@@ -602,7 +619,7 @@ class GW_Data_Object
 		unset($entry[$idfield]);
 
 		$db = & $this->getDB();
-		$rez = $db->update($this->table, $this->getIdCondition(), $entry);
+		$rez = $db->update($this->table.' AS a', $this->getIdCondition(), $entry);
 
 		$this->fireEvent(['AFTER_UPDATE', 'AFTER_SAVE'], $context);
 
@@ -736,7 +753,7 @@ class GW_Data_Object
 
 		$db = & $this->getDB();
 
-		$ar = $db->delete($this->table, $this->getIdCondition());
+		$ar = $db->delete("`$this->table` AS a", $this->getIdCondition());
 
 		$this->fireEvent('AFTER_DELETE');
 		

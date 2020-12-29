@@ -4,12 +4,22 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 {
 
 	public $i18n_fields = Array();
+	public $i18next_langs = [];
+	public $skip_i18next = false;
+		
 	var $_lang; //i18n
 
 	function __construct($values = Array(), $load = false, $lang = false)
 	{
 		if ($lang)
 			$this->_lang = $lang;
+		
+		
+		if (GW::$context->app->i18next && !$this->skip_i18next)
+		{
+			$this->extensions = $this->extensions + ['i18next'=>1];	
+			$this->i18next_langs = array_keys(GW::$context->app->i18next);
+		}		
 
 		parent::__construct($values, $load);
 	}
@@ -61,8 +71,27 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 
 	function get($name, $ln = false)
 	{
+		
+		if($this->isI18NField($name) && GW::$context->app->app_name == 'SITE'){
+			$ln = $ln ? $ln : $this->getDefaultLn();
+			if($ln !='en'){
+				if($tmpO = parent::get($this->getI18NFieldName($name, $ln)))
+					return $tmpO;
+
+				$tmp = parent::get($this->getI18NFieldName($name, 'en'));
+
+				return is_string($tmp) && !is_numeric($tmp) ? "EN: ".$tmp: $tmpO;
+			}
+		}
+		
 		return parent::get($this->getI18NFieldName($name, $ln));
 	}
+	
+	function getOrig($name, $ln=false)
+	{
+		return parent::get($this->getI18NFieldName($name, $ln));
+	}
+	
 
 	function setValues($vals, $ln = false)
 	{

@@ -218,6 +218,10 @@ class Module_Translations extends GW_Common_Module
 		
 		foreach(GW::s("LANGS") as $lang)
 			$cfg["fields"]["value_".$lang]="Lof";
+		
+		foreach($this->app->i18next as $lang => $x)
+			$cfg["fields"]["value_".$lang]="Lof";		
+		
 			
 		
 		$cfg["fields"]['update_time'] = 'lof';
@@ -347,48 +351,97 @@ class Module_Translations extends GW_Common_Module
 	
 	
 
-	function doSeriesTranslate($list)
+	function doSeriesTranslate($list=false)
 	{		
 		$this->sys_call = false;
 		
 		$sel=['type'=>'select','options'=>GW::s("LANGS"), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
-		$form = ['fields'=>['from'=>$sel, 'to'=>$sel],'cols'=>4];
+		$limitinp=['type'=>'select','options'=>[100=>100,200=>200,500=>500,1=>1,10=>10,50=>50]];
+		$form = ['fields'=>['from'=>$sel, 'to'=>$sel, 'limit'=>$limitinp],'cols'=>4];
+		
 		
 		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_SOURCE_DEST_LANG'))))
 			return false;
 		
 	
 		$to = $answers['to'];
+		$to = preg_replace('/[^a-z0-9]/i','', $to);//safe input
+		
 		$from = $answers['from'];
+		$from = preg_replace('/[^a-z0-9]/i','', $from);//safe input
+		
+		$limit = (int)$answers['limit'];
+
 		
 		$t = new GW_Timer;
-		
+		$offer_to_rpeat = false;
 				
+		
+		if(!$list){
+			$list = $this->model->findAll("value_$to='' AND value_$from!=''", ['limit'=>$limit]);
+			$this->setMessage("Selected list limit $limit, selection cnt: ".count($list));
+			
+			if($limit==count($list))
+				$offer_to_rpeat = true;
+		}		
+		
 		if(!$list)
 			return $this->setError('EMPTY_LIST');
 		
 		$title_array = [];
 		
+		$skips = 0;
+		foreach($list as $idx => $item){
+			if(trim(strip_tags($item->get("value_$from")))==''){
+				
+				$this->setMessage("translation skipped {$item->module}/{$item->key}". htmlspecialchars($item->get("value_$from")));
+				unset($list[$idx]);
+				$skips++;
+			}
+		}
+		if($skips)
+		$list = array_values($list);
+		
+		
 		foreach($list as $item)
-			$title_array[] = $item->get("value_".$answers['from']);
+			$title_array[] = $item->get("value_$from");
+		
 		
 		
 		
 		
 		$opts = http_build_query(['from'=>$from,'to'=>$answers['to']]);
 		
-		$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
+		$serviceurl = GW_Config::singleton()->get('system__translations/main_service_url');
 		//$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		$this->setMessage('Service url took from syste/translations config. url: '.$serviceurl);
 		
-		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
-		
-		$resp = json_decode($resp);
+		$resp_raw = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+				
+		$resp = json_decode($resp_raw);
 		$count =0;
 		$confirm = [];
 		
+		
+		if(!isset($resp->result))
+		{
+			$errinfo = json_encode(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], JSON_PRETTY_PRINT);
+			$this->setError("Translation request failed <pre>". htmlspecialchars($resp_raw)."</pre>");
+			$this->setError("<pre>$errinfo</pre>");
+			$failed = $idxmap;
+			return $failed;
+		}		
+		
+				
+		
 		foreach($list as $idx => $item)
 		{
-			$item->set("value_{$to}",$resp[$idx]);
+			if(isset($resp->failed_idxs[$idx])){
+				$this->setMessage("Failed trans '".$resp->result[$idx]->q."'");
+				continue;
+			}
+			
+			$item->set("value_{$to}",$resp->result[$idx]->res);
 			
 			
 			if(isset($_GET['confirm'])){
@@ -403,7 +456,22 @@ class Module_Translations extends GW_Common_Module
 		
 		
 		if(isset($_GET['confirm'])){
-			$this->setMessage($m="Changed: $count, Speed: ".$t->stop());
+			
+			$addstr="";
+			if($offer_to_rpeat){
+				$confirmurl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
+				$addstr="<br/><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/REPEAT')."</a>";
+				$this->setMessageEx(['text'=>$str, 'type'=>4]);				
+			}
+			
+			
+			$this->setMessage($m="Changed: $count, Speed: ".$t->stop().$addstr);	
+			
+			
+			
+			$this->jump();
+			
+			
 		}else{
 			$str = GW_Data_to_Html_Table_Helper::doTable($confirm);
 			
@@ -418,7 +486,7 @@ class Module_Translations extends GW_Common_Module
 		return true;
 	}
 		
-	
+
 	function doAutoTrans()
 	{
 		$item = $this->getDataObjectById();

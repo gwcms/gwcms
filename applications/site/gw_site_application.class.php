@@ -12,6 +12,36 @@ class GW_Site_Application extends GW_Application
 	public $page;
 	
 	
+	
+	function initLang()
+	{
+		parent::initLang();
+		
+		
+		//kol kas atjungiam PIECES KOL TVARKOM ant prancuzu konkurso
+		return true;
+		gw::s("LANGS",array_merge(gw::s("LANGS"),GW::s('i18nExt')));;
+
+		if(in_array($this->ln, GW::s('i18nExt'))){
+			$this->i18next = array_flip(GW::s('i18nExt'));
+
+			$this->initI18nSchema();
+		}
+	}
+	
+	function init()
+	{
+		
+		parent::init();
+	
+		
+
+
+	}
+	
+	
+	
+	
 	function getPage()
 	{
 		$this->page = new GW_Page();
@@ -396,9 +426,23 @@ class GW_Site_Application extends GW_Application
 
 	function postRun2()
 	{
+		//d::dumpas('testas');
 		if(GW_Lang::$developLnResList){
 			d::ldump(GW_Lang::$developLnResList);
+			d::ldump(GW::db()->query_times);
+		}			
+	}
+	
+	function postRun()
+	{
+	
+	}
+
+	function preRun() {
+		if((GW::$context->app->sess['lang-results-active'] ?? false) == '1'){
+			GW::db()->debug = true;
 		}
-	}	
+		return parent::preRun();
+	}
 	
 }

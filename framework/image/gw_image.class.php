@@ -77,7 +77,16 @@ class GW_Image extends GW_Data_Object implements GW_Composite_Slave
 
 	function getValue()
 	{
-		return $this->find(Array('owner=?', $this->owner));
+		if(isset(GW_Composite_Data_Object::$linked_cache['GW_Image'][$this->owner])){
+			return GW_Composite_Data_Object::$linked_cache['GW_Image'][$this->owner];
+		}
+		
+		$item = $this->find(Array('owner=?', $this->owner));
+		
+		GW_Composite_Data_Object::$linked_cache['GW_Image'][$this->owner] = $item;
+		
+		return $item;
+		
 	}
 
 	function setOwnerObject($owner_obj, $fieldname)

@@ -6,12 +6,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	
 	function init()
 	{	
+		$this->app->carry_params['site_id']=1;
+		
+		
 		parent::init();
 
 		
 	
 
-		$this->app->carry_params['site_id']=1;
 		
 		if(isset($_GET['site_id']))
 		{
@@ -21,7 +23,25 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		}
 		
 		
+		
+		
+		
+		if($this->filters['site_id']){
+						
+			
+			$this->site = GW_Site::singleton()->createNewObject($this->filters['site_id'], true);
+			$this->tpl_vars['breadcrumbs_attach'] = $this->tpl_vars['breadcrumbs_attach'] ?: [];
+			array_unshift($this->tpl_vars['breadcrumbs_attach'], [
+			    'title'=>$this->site->title, 
+			    'path'=>$this->buildUri('', ['site_id'=>$this->site->id,'pid'=>0])
+			    ]);
+		}
+		
+		
 		$this->app->carry_params['clean']=1;
+		
+		
+		
 	}
 	
 	
@@ -192,8 +212,8 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			
 			
 			foreach($item->i18n_fields as $field => $x)
-				foreach(GW::s('LANGS') as $ln)
-					if(!isset($opts['export_lns'][$ln])){
+				foreach($this->app->langs as $ln)
+					if(!isset($opts['alllns']) && !isset($opts['export_lns'][$ln])){
 						unset($vals["{$field}_{$ln}"]);
 					}
 						
@@ -220,6 +240,10 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		//if root is selected
 		$data = [];
+		
+		if(isset($_GET["opts"])){
+			$opts = array_merge($opts, $_GET['opts']);
+		}
 		
 		if($opts['export_type']=='only_childs')
 			$item->skip_export = true;
@@ -248,6 +272,12 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	private $importcnt = 0;
 	private $import_paths = [];
 	
+	
+	function getSiteId()
+	{
+		return $_GET['site_id'] ?? $this->app->site->id;
+	}
+	
 	function createPageFromFile($parent, $arr)
 	{
 		$item = GW_Page::singleton()->createNewObject();
@@ -263,11 +293,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$item->parent_id = $parent->id ?: -1;
 		
 		if(GW::s('MULTISITE')){
-			if(isset($_GET['site_id'])){
-				$item->site_id = $_GET['site_id'];
-			}else{
-				$item->site_id = $this->app->site->id;	
-			}
+			$item->site_id = $this->getSiteId();
 		}
 				
 		
@@ -319,13 +345,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			];
 			
 			$lns = [];
-			foreach(GW::s('LANGS') as $ln){
-				if($vals['export_lns_'.$ln])
+			foreach($this->app->langs as $ln){
+				if($vals['export_lns_'.$ln] || isset($_GET['alllns']))
 					$lns[$ln]=1;
 			}
 			$opts['export_lns_vals'] = array_keys($lns);
-			$opts['export_lns'] = $lns;
-						
+			
+			
+			$opts['export_lns'] = $lns;			
 			
 			$this->doExportTree($parent, $opts);
 		}elseif($act=='import'){
@@ -343,6 +370,45 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$this->setMessage('Import pages: '. $this->importcnt);
 			$this->setMessage('New paths:<br><li>'.implode('<li>', $this->import_paths));
 		}
+	}
+	
+	function doAddExtLn()
+	{
+		$form = ['fields'=>[
+		    'from'=>['type'=>'select','options'=>GW::s("LANGS"), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1], 
+		    'to'=>['type'=>'select','options'=>array_keys($this->app->i18next), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1], 
+		    ],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/i18n_EXT_ADD_LN'))))
+			return false;		
+		
+		
+		$src = $answers['from'];
+		$dst = $answers['to'];
+		
+		
+		$cond = false;
+		
+		if(GW::s('MULTISITE')){
+			$cond = "site_id = ".$this->getSiteId();
+		}
+		
+		$list = $this->model->findAll($cond);
+		
+		$cnt=0;
+		
+		foreach($list as $item){
+			$item->set("in_menu_{$dst}", $item->get("in_menu_{$src}"));
+			$item->updateChanged();
+			$this->autotranslate($item);
+			$cnt++;
+		}
+		
+		$this->setMessage("Prepare pages: $cnt");
+		
+		$this->jump();
+		
 	}
 	/////////////////---------------------IMPORT-EXPORT-----------------------------------------
 }

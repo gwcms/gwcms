@@ -153,6 +153,24 @@ class Module_Profile extends GW_Module
 		echo json_encode($data);
 		exit;
 	}	
+	
+	
+	function doSetI18nExtState()
+	{
+		$item =& $this->app->user;
+		$lns = $item->i18next_lns;
+		$ln = $_GET['ln'];
+		if(!in_array($ln,GW::s('i18nExt')))
+			die('no hacking');
+		
+		
+		$lns[$ln]=(int)$_GET['state'];
+		$item->set('ext/i18next_lns',json_encode($lns));
+		$this->setMessage(GW::l('/g/ACTION').' '.GW::l('/m/VIEWS/doSetI18nExtState').' <b>'.GW::l("/g/LANG/$ln").'</b> '.($lns[$ln]?'ON':'OFF'), ['float'=>1]);
+		
+		header('Location: '.$_SERVER['HTTP_REFERER']);
+		exit;
+	}
 }
 
 ?>

@@ -9,7 +9,7 @@
 
 
 	
-{list_item_action_m url=[false,[act=>doExportTree,id=>$item->id]] iconclass="fa fa fa-upload" caption=GW::l('/g/VIEWS/export') shift_button=1}
+{list_item_action_m url=[false,[act=>doExportTree,id=>$item->id,opts=>[alllns=>1,content=>1]]] iconclass="fa fa fa-upload" caption=GW::l('/g/VIEWS/export') shift_button=1}
 
 
 {if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}

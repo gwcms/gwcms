@@ -185,6 +185,9 @@
       <en>Access log</en>
       <lt>Prisijungimų žurnalas</lt>
     </i>
+    <i id="doSetI18nExtState">
+	    Switch additional language
+    </i>
   </i>
   <i id="SEND">
     <lt>Siųsti</lt>

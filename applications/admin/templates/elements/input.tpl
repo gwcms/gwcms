@@ -83,7 +83,7 @@ instead of {include "elements/input.tpl" name=
 
 {if $i18n}
 	{if !$langs}
-		{$langs=array_flip(GW::$settings.LANGS)}
+		{$langs=array_flip(GW::$settings.LANGS)}		
 		{$langs=[$app->ln=>1]+$langs}
 	{/if}
 	

@@ -19,6 +19,7 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 	public $encode_fields=['info'=>'jsono'];
 	public $ignore_fields = ['data_object_id'=>1];
 	public $calculate_fields = ['VIEWS'=>'getViews', 'ORDERS'=>'getOrders'];
+	public $skip_i18next = true;
 
 	function getViews()
 	{

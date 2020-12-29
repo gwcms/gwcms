@@ -12,7 +12,7 @@ class GW_Extension_KeyVal
 		$parent->registerObserver(['extension', $name]);
 		
 		
-		$this->constructExt();
+		//$this->constructExt();
 	}
 	
 	function constructExt()
@@ -31,6 +31,10 @@ class GW_Extension_KeyVal
 		
 		switch ($event) {
 
+			case "AFTER_CONSTRUCT":
+				$this->constructExt();
+			break;
+			
 			case 'AFTER_INSERT':
 				$this->constructExt();
 				if($this->cacheNotSaved)
@@ -57,7 +61,7 @@ class GW_Extension_KeyVal
 	}
 	
 	function __get($name) 
-	{
+	{		
 		return $this->obj->get($name);
 	}
 	

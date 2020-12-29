@@ -250,8 +250,9 @@ class GW_Page extends GW_i18n_Data_Object
 	{
 		$extra = "";
 		
+		$lnscond = "";
 		if($opts['lns'])
-			$extra.=" AND ".GW_DB::inConditionStr('ln', $opts['lns']);
+			$extra.=" AND ((".GW_DB::inConditionStr('ln', $opts['lns']).' ) OR ln="" ) ';
 		
 		$cond = "SELECT `ln`,`key`,`content` FROM gw_sitemap_data WHERE page_id=".(int)$this->get('id')." $extra";
 				

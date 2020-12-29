@@ -10,6 +10,10 @@
 	{/function}
 	{function name=do_toolbar_buttons_fixpaths}
 		{toolbar_button title="<span class='text-muted'>{GW::l('/m/VIEWS/doFixPaths')}</span>" iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doFixPaths])}	
+		
+		{if $app->user->isRoot()}
+			{toolbar_button title="<span class='text-muted'>{GW::l('/m/VIEWS/doAddExtLn')}</span>" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doAddExtLn])}	
+		{/if}
 	{/function}	
 	
 	

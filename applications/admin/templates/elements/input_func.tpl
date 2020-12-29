@@ -153,7 +153,14 @@
     {if $i18n}
             {if !$langs}
                     {$langs=array_flip(GW::$settings.LANGS)}
-                    {$langs=[$app->ln=>1]+$langs}
+		    
+		
+		{if $app->i18next && !$item->skip_i18next}
+			{$langs=$langs+$app->i18next}
+			
+		{/if}
+		
+                {$langs=[$app->ln=>1]+$langs}
             {/if}
 
 

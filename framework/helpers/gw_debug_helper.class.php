@@ -149,6 +149,8 @@ class GW_Debug_Helper
 				$data['ip_country'] = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
 
 		
+		$data['backtrace'] = debug_backtrace();
+		
 		if(GW::s('REPORT_ERRORS')){
 
 			$reci = GW::s('REPORT_ERRORS');

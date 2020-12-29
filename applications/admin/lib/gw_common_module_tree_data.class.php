@@ -58,7 +58,7 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 				'title'=>$item->title
 			);
 		
-		$breadcrumbs_attach[]=['title'=>$this->parent->title, 'path'=>$this->app->fh()->gw_path(['params' => ['pid'=>$this->parent->id]] )];
+		$breadcrumbs_attach[]=['title'=>$this->parent->title, 'path'=>$this->app->buildUri(false, ['pid'=>$this->parent->id], ['carry_params'=>1])];
 		
 		
 		$this->tpl_vars['breadcrumbs_attach'] =& $breadcrumbs_attach;

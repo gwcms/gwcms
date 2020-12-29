@@ -96,13 +96,28 @@ class GW_Admin_Application extends GW_Application
 		return $tmp;
 	}
 	
+	
+	
+	
+	function initLang() {
+		parent::initLang();
+		
+			
+		if(GW::s('i18nExt') && $this->user && $this->user->i18next_lns)
+		{
+			$this->i18next = array_intersect_key(array_flip(GW::s('i18nExt')), $this->user->i18next_lns);			
+			$this->initI18nSchema();
+			
+			$this->langs = array_merge($this->langs, array_keys($this->i18next));
+		}		
+	}
+	
 	function init()
 	{
 		parent::init();
 		
 		$this->autoPrepare();
 		
-	
 		
 		$this->icon_root = $this->app_root . $this->icon_root;
 	}

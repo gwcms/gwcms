@@ -68,7 +68,7 @@ class GW_Public_Module {
 	}	
 
 	function processTemplate($name, $fetch=false)
-	{
+	{		
 		$this->fireEvent("BEFORE_TEMPLATE");		
 				
 		if ($this->tpl_name)

@@ -96,8 +96,14 @@ class GW_DB
 		$this->error = $msg;
 		$this->error_query = $cmd;
 
-		if (!$soft_error)
-			throw new Exception("ERROR: $msg \nCMD: $cmd", E_USER_ERROR);
+		if (!$soft_error){
+			if(GW::$context->app->user->id == 9 && !isset($_GET['syscall']))
+			{
+				d::dumpas("ERROR: $msg \nCMD: $cmd");
+			}else{
+				throw new Exception("ERROR: $msg \nCMD: $cmd", E_USER_ERROR);
+			}
+		}
 	}
 
 	function getError()
@@ -275,6 +281,47 @@ class GW_DB
 
 		return $result;
 	}
+	
+	/**
+	 * return associative array
+	 * associative array key - $fields[0]
+	 * associative array values - $fields[1]
+	 */
+	function fetch_assoc_exactnum($cmd, $num, $nodie = false)
+	{
+		$cmd = self::prepare_query($cmd);
+
+		$this->query($cmd, $nodie);
+
+		$result = [];
+
+		
+
+		switch($num){
+			case 1:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]] = 1;
+			case 2:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]] = $row[1];
+			break;
+
+			case 3:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]][$row[1]] = $row[2];
+			break;
+			case 4:
+				while ($row = $this->result->fetch_array())
+					$result[$row[0]][$row[1]][$row[2]] = $row[3];
+			break;			
+			default:
+				$this->trigger_error($cmd, "FETCH ASSOC $num - NUM FIELDS NOT SUPPORTED");
+			break;
+			
+		}
+
+		return $result;
+	}	
 
 	function fetch_one_column($cmd, $nodie = false)
 	{
