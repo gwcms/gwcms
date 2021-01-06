@@ -2275,6 +2275,7 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	
+
 	function autoTranslate($item)
 	{
 		if(!isset($item->i18n_fields))
@@ -2287,18 +2288,55 @@ class GW_Common_Module extends GW_Module
 		
 		//['varchar','text'])
 		
+		$testsrc = function(&$m) use (&$item, &$field, &$ln, &$cols){
+			//$val = $item->get($field, $ln);
+			//$m->setMessage("test $field $ln: $val");
+			
+			if(isset($cols["{$field}_{$ln}"]) && !in_array($cols["{$field}_{$ln}"], ['varchar','text']))
+					return 1;
+			
+			$val = $item->get($field, $ln);
+			
+			if($val == ""){
+				return 2;
+			}		
+			
+			if(is_numeric($val))
+				return 3;
+			
+			if(preg_match('/\d{4}-\d{2}-\d{2}|\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $val))
+				return 4;
+			
+			return 0;
+		};
+		
+		
+		
+		
 		foreach($item->i18n_fields as $field => $x){
 			
+			$srcln =false;
 			
-			if(!in_array($cols["{$field}_en"], ['varchar','text']))
+			foreach(GW::s('LANGS') as $ln){
+				if(!($reas=$testsrc($this))){
+					$srcln = $ln;
+					break;
+				}//else{
+				//	$this->setMessage("src reject $field, $ln. Reason $reas");
+				//}
+			}
+			
+			if(!$srcln)
 				continue;
 			
-			
-			
-			$upd |= $this->getTranslation ($item, $field, "en", "ru", true);
-			$upd |= $this->getTranslation ($item, $field, "lt", "ru", true);
-			$upd |= $this->getTranslation ($item, $field, "en", "lt", true);
-			$upd |= $this->getTranslation ($item, $field, "lt", "en", true);
+			$destlns = [];
+			foreach(GW::s('LANGS') as $ln){
+				if($ln==$srcln)
+					continue;
+				
+				if(!$item->get($field, $ln))
+					$upd |= $this->getTranslation ($item, $field, $srcln, $ln, true);
+			}
 			
 			if($this->app->i18next){
 				foreach($this->app->i18next as $ln =>$x)
