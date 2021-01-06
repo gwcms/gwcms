@@ -69,7 +69,7 @@
 
 {call e field=active type=bool}
 
-{if GW::s('MULTISITE')}
+{if GW::s('MULTISITE') && !$smarty.get.site_id}
 	{call e field=multisite type=bool}	 
 {/if}
 

@@ -80,7 +80,7 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 
 				$tmp = parent::get($this->getI18NFieldName($name, 'en'));
 
-				return is_string($tmp) && !is_numeric($tmp) ? "EN: ".$tmp: $tmpO;
+				return $tmp && is_string($tmp) && !is_numeric($tmp) ? "EN: ".$tmp: $tmpO;
 			}
 		}
 		

@@ -308,7 +308,13 @@ class GW_Lang
 		if(!self::__highlightActive()) 
 			return $result;
 	
+		
 		$ret_rich = is_array($result) ? $result : "<span class='lnresult' data-module='".self::$module."' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
+		
+		//allow only root user to edit abstract translations within module context
+		if(self::$module && strpos($key, 'G/application')===0 && GW::$context->app->user && GW::$context->app->user!=9){
+			$ret_rich = $result;
+		}
 		
 		if($afteronly){
 			$ret = $result;
