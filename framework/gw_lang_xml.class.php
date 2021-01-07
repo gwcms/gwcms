@@ -234,7 +234,7 @@ class GW_Lang_XML
 	
 	function structMod(&$arr, $key, $val, $ln=false)
 	{
-		$key = trim($key,'/');
+		$key = trim($key,'/');		
 		$keyparts = explode('/', $key);
 		$lastkey  = $keyparts[count($keyparts)-1];
 		
@@ -286,10 +286,14 @@ class GW_Lang_XML
 		
 		if($ln){
 			
-			
+		
 			if(is_array($pointer)){
 				
-				$pointerx =& self::structLangNodeSeek($pointer, $ln, true);	
+				if(isset($pointer['childs']))
+					$pointer =& $pointer['childs'];
+				
+				$pointerx =& self::structLangNodeSeek($pointer, $ln, true);
+				
 				$pointerx['value'] = $val;
 				
 			}else{

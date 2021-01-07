@@ -125,6 +125,8 @@ class GW_Lang_File extends GW_Data_Object
 	
 	function getTempName()
 	{
+		@mkdir(GW::s('DIR/TEMP').'lang/');
+		
 		return GW::s('DIR/TEMP').'lang/'.str_replace('/','__',$this->id).'.xml';
 	}
 

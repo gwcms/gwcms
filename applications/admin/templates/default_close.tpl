@@ -37,7 +37,8 @@
 
 
 
-{if GW_Lang::$developLnResList}
+
+{if GW_Lang::$developLnResList && $app->path!="system/translations/flatedit"}
 	{$app->innerProcess('system/translations/flatedit1')}
 {/if}
 
