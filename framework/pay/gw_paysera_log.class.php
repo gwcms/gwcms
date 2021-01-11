@@ -11,7 +11,7 @@ class GW_Paysera_Log extends GW_Data_Object
 				
 		switch($name){
 			case 'title':
-				return $this->orderid.' - '.($this->amount/100).' '.$this->currency;
+				return $this->orderid.' - '.($this->amount/100).' '.$this->currency. ($this->test ? ' (!TEST)':'');
 			break;
 		}
 		
