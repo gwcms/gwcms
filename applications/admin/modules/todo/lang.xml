@@ -286,6 +286,10 @@
           <i id="model">gw_todo_project</i>
         </i>
       </i>
+      <i id="comments">
+        <i id="title">Komentarai</i>
+        <i id="in_menu">0</i>
+      </i>      
     </i>
   </i>
 </xml>
