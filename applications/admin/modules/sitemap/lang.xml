@@ -179,6 +179,10 @@
       <lt>Modulio MultiOpcijos, sufleruojama</lt>
       <en>Module MultiOptions, with hint</en>
     </i>
+    <i id="datetime">
+      <lt>Data,laikas</lt>
+      <en>Date, time</en>
+    </i>
   </i>
   <i id="OPTIONS">
     <i id="block_types">

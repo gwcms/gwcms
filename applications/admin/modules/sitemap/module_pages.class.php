@@ -28,7 +28,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		if(isset($this->filters['site_id'])){
 			$this->site = GW_Site::singleton()->createNewObject($this->filters['site_id'], true);
-			$this->tpl_vars['breadcrumbs_attach'] = $this->tpl_vars['breadcrumbs_attach'] ?: [];
+			$this->tpl_vars['breadcrumbs_attach'] = $this->tpl_vars['breadcrumbs_attach'] ?? [];
 			array_unshift($this->tpl_vars['breadcrumbs_attach'], [
 			    'title'=>$this->site->title, 
 			    'path'=>$this->buildUri('', ['site_id'=>$this->site->id,'pid'=>0])

@@ -48,7 +48,7 @@ class GW_Temp_Data extends GW_Data_Object
 		$user_id = $opts['user_id'] ?? GW_USER_SYSTEM_ID;
 		$group = $opts['group'] ?? 'SYS';
 		$name = $opts['name'];
-		$expires = $opts['name'] ?? '24 hour';
+		$expires = $opts['expires'] ?? '24 hour';
 		$format = $opts['format'] ?? 'json';
 		$renew = $opts['renew'] ?? false;
 		

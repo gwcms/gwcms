@@ -1,13 +1,14 @@
 {if $modpath}
 	{$tmppath=explode('/', $modpath,2)}
 	{if !$datasource}
-		{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options")}
+		{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/{$optionsview|default:options}", $source_args)}
 	{/if}
+
 	{if !$form_url}
-		{$form_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/form", [clean=>2,dialog=>1])}
+		{$form_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/form", [clean=>2,dialog=>1]+$source_args)}
 	{/if}
 	{if !$list_url}
-		{$list_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/list", [clean=>2])}
+		{$list_url=$app->buildUri("`$tmppath.0`/`$tmppath.1`/list", [clean=>2]+$source_args)}
 	{/if}	
 	{if !$object_title}
 		{$object_title=GW::l("/M/`$tmppath.0`/MAP/childs/`$tmppath.1`/title")}

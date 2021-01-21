@@ -7,6 +7,8 @@ class Module_Blocks extends GW_Common_Module
 
 	public $default_view = 'list';
 	
+	use Module_Import_Export_Trait;	
+	
 	function init()
 	{
 	
