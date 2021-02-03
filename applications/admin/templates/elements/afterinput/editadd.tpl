@@ -1,4 +1,5 @@
 {if $modpath}
+	{$source_args = $source_args|default:[]}
 	{$tmppath=explode('/', $modpath,2)}
 	{if !$datasource}
 		{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/{$optionsview|default:options}", $source_args)}

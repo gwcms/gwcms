@@ -50,7 +50,7 @@ define('GW_GENERIC_ERROR', 100);
 GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
-GW::s('GW_CMS_VERSION', '3.4');
+GW::s('GW_CMS_VERSION', '3.5');
 GW::s('GW_LANG_SEL_BY_GEOIP',0);
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 

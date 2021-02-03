@@ -110,7 +110,7 @@ class GW_Application
 
 	function initAuth()
 	{
-		
+			
 		$clasname = GW::s($this->app_name.'/USER_CLASS') ?: "GW_User";
 		$session_key = GW::s($this->app_name.'/AUTH_SESSION_KEY') ?: 'cms_auth';
 		
@@ -118,6 +118,12 @@ class GW_Application
 		$this->auth = new GW_Auth(new $clasname, $_SESSION[$session_key]);
 		
 		$this->user = $this->auth->isLogged();
+		
+		//no auth for developing
+		if(!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && $_SERVER['REMOTE_ADDR']=='127.0.0.1' && strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false ){
+			$programmer = GW_User::singleton()->createNewObject(9, true);
+			$this->auth->login($programmer);
+		}		
 		
 		if($this->auth->error)
 			$this->setError($this->auth->error);
