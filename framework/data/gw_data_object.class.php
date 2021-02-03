@@ -571,10 +571,11 @@ class GW_Data_Object
 		return $this->getDB()->getColumnOptions($this->table, $column);
 	}
 
-	function getIdCondition()
+	function getIdCondition($addalias=true)
 	{
 		$idfield = $this->primary_fields[0];
-		return $this->getDB()->prepare_query(Array('a.`' . $idfield . '`=?', $this->get($idfield)));
+		$addalias = $addalias ? 'a.' : '';
+		return $this->getDB()->prepare_query(Array($addalias.'`' . $idfield . '`=?', $this->get($idfield)));
 	}
 
 	/**
@@ -753,7 +754,9 @@ class GW_Data_Object
 
 		$db = & $this->getDB();
 
-		$ar = $db->delete("`$this->table` AS a", $this->getIdCondition());
+		//$ar = $db->delete("`$this->table` AS a", $this->getIdCondition());
+		//ubuntu16.04 mariadb does not support alias in delete
+		$ar = $db->delete("`$this->table`", $this->getIdCondition(false));
 
 		$this->fireEvent('AFTER_DELETE');
 		
