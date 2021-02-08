@@ -62,7 +62,14 @@
 					<i id="model">GW_Payments</i>
 					<i id="iconclass">fa fa-money</i>
 				</i>
-			</i>											
+			</i>	
+			<i id="cartgroups">
+				<i id="title">Krepšeliai</i>
+				<i id="info">
+					<i id="model">GW_Cart_Group</i>
+					<i id="iconclass">fa fa-shopping-cart</i>
+				</i>
+			</i>														
 		</i>
 	</i>
 </xml>

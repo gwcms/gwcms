@@ -1,0 +1,69 @@
+{extends file="default_list.tpl"}
+
+
+
+
+{block name="init"}
+
+	
+	{$dl_inline_edit=1}
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons[] = search}
+
+
+	{function name=do_toolbar_buttons_types} 
+		{toolbar_button title="Katalogo tipai" href=$m->buildUri(cattypes,[clean=>2],[level=>1]) btnclass="iframeopen" iconclass="fa fa-chevron-circle-down" tag_params=['data-dialog-width'=>"1200px"]}
+	{/function}	
+
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,types]}		
+	
+	
+	{$display_fields=['tour_part_id'=>0]}
+	
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,instruments]}	
+
+	
+	{$dl_actions=[items,edit,ext_actions]}
+	{$dl_group_list_by=['tour_part_id']}
+	
+	
+	{function dl_actions_items}
+		{$url=$m->buildUri("`$item->id`/cartitems",[clean=>2,composition_id=>$item->id])}
+
+		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Cart items" caption="Items({$item->items_count})"}
+	{/function}	
+
+	{function dl_prepare_item}
+		{if !$item->approved}{$item->set(row_class,notapproved)}{/if}
+	{/function}
+	
+		
+	
+
+	{function dl_cell_user_title}
+		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>
+	{/function}	
+	{function dl_cell_user_id}
+		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$item->user_id}</a>
+	{/function}
+	{function dl_cell_admin_id}
+		<a class="iframeopen" href="{$app->buildUri("users/usr/`$item->admin_id`/form",[clean=>2])}" title="Admin info">{$item->admin_id}</a>
+	{/function}		
+	
+
+
+	{capture append=footer_hidden}	
+		
+	
+	{/capture}	
+
+
+	{$dl_checklist_enabled=1}
+	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
+	{capture append="dl_checklist_actions"}<option value="checked_action2('dialoggroupcompositions', $(this).find(':selected').text())">{GW::l('/A/VIEWS/dialoggroupcompositions')}</option>{/capture}	
+	
+	
+	
+{/block}
+
+

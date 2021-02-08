@@ -120,9 +120,19 @@ class GW_Application
 		$this->user = $this->auth->isLogged();
 		
 		//no auth for developing
+		/*d::dumpas([
+		    'test0a' => $this->user->id,
+		    'test0b' => GW::s('PROJECT_ENVIRONMENT'),
+		    'test1' => (!$this->user->id && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV),
+		    'test2' => $_SERVER['REMOTE_ADDR']=='127.0.0.1',
+		    'test3' => strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false
+			]);*/
+		
 		if(!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && $_SERVER['REMOTE_ADDR']=='127.0.0.1' && strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false ){
 			$programmer = GW_User::singleton()->createNewObject(9, true);
 			$this->auth->login($programmer);
+			$this->setMessage('Development auto authorise');
+			$this->jump('/');
 		}		
 		
 		if($this->auth->error)

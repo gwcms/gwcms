@@ -41,7 +41,7 @@ class GW_Related_Objecs extends GW_Data_Object implements GW_Composite_Slave {
 	//saugojimas
 	public function save() {
 
-		d::dumpas('why save?');
+		//d::dumpas('why save?');
 		
 	}
 
