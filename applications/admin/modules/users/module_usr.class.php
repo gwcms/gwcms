@@ -10,11 +10,14 @@ class Module_Usr extends GW_Common_Module
 		$this->model = new GW_User();
 		$this->group0 = new GW_Users_Group();
 				
-		$this->rootadmin = $this->app->user->isRoot();
+		
 		
 		$this->filters['removed'] = 0;
 		
-		if(!$this->rootadmin){
+		$this->config = new GW_Config('gw_'.$this->module_path[0].'/');
+		$this->initAdmin();
+		
+		if(!$this->rootadmin && !$this->isSuperAdmin){
 			$this->filters['parent_user_id'] = $this->app->user->id;
 		}
 		
@@ -25,8 +28,15 @@ class Module_Usr extends GW_Common_Module
 		$this->__initGroupOptions();
 		parent::init();
 		
-		$this->config = new GW_Config('gw_'.$this->module_path[0].'/');
+		
 		$this->list_params['paging_enabled']=1;
+	}
+	
+	function initAdmin()
+	{
+		$this->rootadmin = $this->app->user->isRoot();
+		
+		$this->isSuperAdmin = in_array($this->config->superadmin_group, $this->app->user->group_ids);
 	}
 
 	function __initGroupOptions()

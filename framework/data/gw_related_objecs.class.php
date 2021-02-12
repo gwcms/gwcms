@@ -87,5 +87,12 @@ class GW_Related_Objecs extends GW_Data_Object implements GW_Composite_Slave {
 			return $list;
 		}
 	}
+	
+	public function cleanCache()
+	{
+		$masterclass = get_class($this->masterobject);
+		$id = $this->masterobject->id;
+		unset(self::$cache_related[$masterclass][$this->params['object']][$id]);
+	}
 
 }

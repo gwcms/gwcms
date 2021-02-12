@@ -332,7 +332,7 @@ class GW_Public_Module {
 	function buildUri($path, $args=[])
 	{
 		$path = $this->app->page->path.'/'.$path;
-		$path = $this->app->path_arg[0] == 'direct' ? 'direct/'.$path : $path;
+		$path = ($this->app->path_arg[0] ?? '') == 'direct' ? 'direct/'.$path : $path;
 		
 		return $this->app->buildUri($path, $args,['carry_params'=>1]);
 	}

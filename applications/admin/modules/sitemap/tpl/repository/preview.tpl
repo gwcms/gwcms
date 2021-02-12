@@ -15,7 +15,7 @@
 {else}
 	Unsupported type, contact vidmantas.norkus@gw.lt to implement
 	{d::ldump([
-		extension=>item->extension,
+		extension=>$item->extension,
 		item=>$item->toArray()
 	])}
 {/if}

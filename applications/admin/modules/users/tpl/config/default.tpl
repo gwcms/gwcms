@@ -17,6 +17,6 @@
 	{call e field=secondcms_userservice_endpoint type=text note="format: 'https://user:pass@domain.tld/service/user' (Root only)" hidden="used to import user if not exist in primary cms"}
 {/if}
 
-
+{call e field="superadmin_group" type=select_ajax modpath="users/groups" preload=1 options=[]}
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

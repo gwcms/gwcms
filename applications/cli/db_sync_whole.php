@@ -6,7 +6,7 @@ include __DIR__.'/../../init_basic.php';
 
 $timer = new GW_Timer;
 
-initEnviroment(GW_ENV_PROD);
+
 
 function parseParams()
 {
@@ -21,6 +21,12 @@ function parseParams()
 }
 
 $params = parseParams();
+
+if($params['env'] ?? false == 'test'){
+	initEnviroment(GW_ENV_TEST);
+}else{
+	initEnviroment(GW_ENV_PROD);
+}
 
 
 list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));

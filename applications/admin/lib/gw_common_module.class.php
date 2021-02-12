@@ -1235,7 +1235,7 @@ class GW_Common_Module extends GW_Module
 		$this->__doDialogConfigPrepareOrders();		
 		
 		
-		if($item->readonly)
+		if($item->readonly ?? false)
 			$this->jump();
 		
 		if($pageviewid=$_POST['pageviewid'])
