@@ -99,10 +99,10 @@ class Module_OrderGroups extends GW_Common_Module
 	}
  
  */	
-	function viewInvoice()
+	
+	function initInvoiceVars($item)
 	{
 		
-		$item = $this->getDataObjectById();
 		$user =  $item->user;
 		
 		$payconfirm = $item->pay_confirm;
@@ -168,17 +168,40 @@ class Module_OrderGroups extends GW_Common_Module
 		}
 		
 		$attachuservars($v, $user);
-			
+		
+		return [$tpl_code, $v];
+	}
+	
+	function viewInvoice()
+	{
+		$item = $this->getDataObjectById();
+		list($tpl_code, $v) = $this->initInvoiceVars($item);
 			
 			
 			
 		$html = GW_Mail_Helper::prepareSmartyCode($tpl_code, $v);
+		
+		
+		
+		$tmp = $this->mute_errors; $this->mute_errors = true;
 		$pdf=GW_html2pdf_Helper::convert($html, false);
-
+		$this->mute_errors=$tmp;
 
 		header('Content-type: application/pdf');
 		echo $pdf;
 		exit;		
-	}	
+	}
+
+
+	function doSaveInvoice()
+	{
+		$item = $this->getDataObjectById();
+		list($tpl_code, $v) = $this->initInvoiceVars($item);
+		
+		$item->invoicevars = json_encode($v);
+		$item->updateChanged();
+		
+		exit;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+	}
 
 }

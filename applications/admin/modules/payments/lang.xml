@@ -15,11 +15,13 @@
     <i id="user_id">
       <lt>Vartotojo id.</lt>
     </i>
+    <i id="adm_processed">Buhalterija apdorojo</i>
     <i id="pay_confirm_id">
       <lt>Mokėjimo patvirtinimas</lt>
     </i>
   </i>
   <i id="FIELDS_SHORT">
+	  
     <i id="admin_id">Admin</i>
     <i id="seller_id">Pard.</i>
     <i id="update_time">
@@ -55,6 +57,7 @@
     <i id="payment_status">
 	<![CDATA[<i class="fa fa-credit-card"></i>?]]>
     </i>    
+    <i id="adm_processed"><![CDATA[Buhal. <i class="fa fa-check"></i>]]></i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>

@@ -117,6 +117,8 @@ class GW_Common_Module extends GW_Module
 		}		
 	}
 	
+	public $mute_errors=false;
+	
 	function errrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		if (!(error_reporting() & $errno)) {
@@ -124,6 +126,9 @@ class GW_Common_Module extends GW_Module
 			// through to the standard PHP error handler
 			return false;
 		}
+		
+		if($this->mute_errors)
+			return true;
 
 		switch ($errno) {
 			case E_USER_ERROR:

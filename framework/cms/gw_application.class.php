@@ -128,7 +128,13 @@ class GW_Application
 		    'test3' => strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false
 			]);*/
 		
-		if(!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && $_SERVER['REMOTE_ADDR']=='127.0.0.1' && strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false ){
+		if(
+			!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && 
+			$_SERVER['REMOTE_ADDR']=='127.0.0.1' && 
+			strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false &&
+			$this->app_name!='SERVICE'
+		){
+	
 			$programmer = GW_User::singleton()->createNewObject(9, true);
 			$this->auth->login($programmer);
 			$this->setMessage('Development auto authorise');
