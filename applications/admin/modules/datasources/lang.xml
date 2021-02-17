@@ -130,37 +130,6 @@
           <i id="iconclass">fa fa-flag-o</i>
         </i>
       </i>
-      <i id="payments_paysera">
-        <i id="title">
-          <en>Payments PS</en>
-          <lt>Mokėjimai PS</lt>
-        </i>
-        <i id="info">
-          <i id="model">gw_paysera_log</i>
-          <i id="iconclass">fa fa-money</i>
-        </i>
-      </i>
-      <i id="payments_paypal">
-        <i id="title">
-          <en>Payments PP</en>
-          <lt>Mokėjimai PP</lt>
-        </i>
-        <i id="info">
-          <i id="model">gw_paypal_log</i>
-          <i id="iconclass">fa fa-paypal</i>
-        </i>
-      </i>
-      <i id="payments_creditcard">
-        <i id="title">
-          <en>Payments CC</en>
-          <lt>Mokėjimai KK</lt>
-        </i>
-        <i id="info">
-          <i id="model">gw_pay_creditcard</i>
-          <i id="iconclass">fa fa-cc-mastercard</i>
-	  <i id="itemactions">1</i>
-        </i>
-      </i>
       <i id="images">
         <i id="title">
           <en>Pictures</en>

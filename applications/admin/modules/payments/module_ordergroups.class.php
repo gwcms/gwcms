@@ -48,7 +48,6 @@ class Module_OrderGroups extends GW_Common_Module
 	function __eventAfterList(&$list)
 	{		
 		$this->attachFieldOptions($list, 'user_id', 'GW_User');
-		
 
 		foreach($list as $item)
 		{
@@ -56,16 +55,7 @@ class Module_OrderGroups extends GW_Common_Module
 		}	
 	}
 	
-	function __eventAfterForm($item)
-	{
-		$list=[$item];
-		
-		//if(isset($_GET['composer_id']))
-		//	$item->composer_id = $_GET['composer_id'];
-		
-		//if($item->composer_id)
-		//	$this->attachFieldOptions($list, 'composer_id', 'IPMC_Composer', ['simple_options'=>'title_'.$this->app->ln]);
-	}
+
 	
 	function overrideFilterUser_title($value, $compare_type)
 	{	
@@ -184,6 +174,10 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		$tmp = $this->mute_errors; $this->mute_errors = true;
+		
+		if(isset($_GET['html']))
+			die($html);
+		
 		$pdf=GW_html2pdf_Helper::convert($html, false);
 		$this->mute_errors=$tmp;
 
@@ -193,15 +187,42 @@ class Module_OrderGroups extends GW_Common_Module
 	}
 
 
-	function doSaveInvoice()
+	function doSaveInvoice($item=false)
 	{
-		$item = $this->getDataObjectById();
+		if(!$item){
+			$item = $this->getDataObjectById();
+			$die=1;
+		}else{
+			$die=0;
+		}
+		
 		list($tpl_code, $v) = $this->initInvoiceVars($item);
 		
 		$item->invoicevars = json_encode($v);
 		$item->updateChanged();
 		
-		exit;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		$dir = GW::s('DIR/REPOSITORY') . ($this->modconfig->invoice_directory_name ?: 'invoices').'/';
+		
+		@mkdir($dir);
+		
+		$html = GW_Mail_Helper::prepareSmartyCode($tpl_code, $v);
+		$fname="invoice-{$item->id}";
+		file_put_contents($dir.$fname.'.html', $html);
+		
+		shell_exec($cmd="cd '$dir' && unlink '$fname.zip' ; zip -Z bzip2 '$fname.zip' '$fname.html' && unlink '$fname.html'");
+		
+		
+		if($die)
+			exit;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+	}
+	
+	function doUpdateInvoices()
+	{
+		$list = $this->model->findAll();
+		
+		foreach($list as $item)
+			$this->doSaveInvoice($item);
+		
 	}
 
 }

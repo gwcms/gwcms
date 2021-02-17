@@ -9,7 +9,7 @@
 	cols=>1,
 	fields=>[
 		user_id=>[type=>select_ajax,modpath=>"users/usr", preload=>1,options=>[],default=>$app->user->id],
-		pay_confirm_id=>[type=>select_ajax, modpath=>"datasources/payments_paysera",preload=>1,options=>[], after_input_f=>editadd],
+		pay_confirm_id=>[type=>select_ajax, modpath=>"payments/payments_paysera",preload=>1,options=>[], after_input_f=>editadd],
 		amount=>[type=>number,step=>0.01],
 		adm_processed=>[type=>bool]
 	]
