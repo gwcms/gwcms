@@ -1,0 +1,1 @@
+ALTER TABLE `gw_sites` ADD `key` VARCHAR(25) NOT NULL AFTER `id`;
