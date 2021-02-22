@@ -30,6 +30,8 @@ class GW_Membership extends GW_Composite_Data_Object
 		$this->active = 1;
 		//$this->status = 80;
 		
+		$this->user->setLicId();
+		
 		$this->updateChanged();			
 		
 	}
