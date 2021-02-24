@@ -935,6 +935,7 @@ var gwcms = {
 		$.get(location.href, data, function (rdata) {
 			$('#gwDropFilters').append(rdata);
 			gwcms.filtersChanged();
+			$('#filterSpecialsInfo').fadeIn();
 		});
 	},
 	addAllFilters: function () {
@@ -958,6 +959,7 @@ var gwcms = {
 
 		if ($(btn).hasClass('active'))
 		{
+			
 
 			var filtersPresent = $('#gwFiltersForm').attr('data-filters-present')
 
@@ -969,8 +971,10 @@ var gwcms = {
 			$('.filterRow').remove();
 			gwcms.filtersChanged();
 			$('#gwFilterTgglBtn').addClass('active');//workaround cause on prev line class is removed & later toogleClass works
+			
 
 		} else {
+			$('#filterSpecialsInfo').fadeIn();
 			//add all filters
 			gwcms.addAllFilters();
 		}

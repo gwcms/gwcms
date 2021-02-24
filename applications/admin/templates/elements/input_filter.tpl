@@ -49,7 +49,7 @@
 		
 		<label class="gwselect">
 		
-		<select name="{$inputct_name}" class="form-control"  >
+		<select name="{$inputct_name}" class="form-control filtertype">
 			{html_options options=$compare_opt selected=$compare_type|default:'LIKE'}
 		</select>
 		</label>
@@ -74,3 +74,9 @@
 		
 	</div>
 </div>
+
+		
+
+
+	
+</script>

@@ -39,12 +39,14 @@ class Module_Sites extends GW_Common_Module
 
 		$cfg["fields"]["title"]="Lof";
 		$cfg["fields"]["hosts"]="Lof";
+		$cfg["fields"]["key"]="Lof";
 		//$cfg["fields"]["admin_host"]="Lof";
 					
 		
 		
 		$cfg["fields"]['relations']='L';		
 		$cfg["fields"]['update_time'] = 'lof';
+		$cfg["fields"]['langs'] = 'Lof';
 		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;

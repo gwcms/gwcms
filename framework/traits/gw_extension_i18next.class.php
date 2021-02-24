@@ -62,6 +62,10 @@ class GW_Extension_i18next
 		foreach($p->i18next_langs as $extln){
 			foreach($p->i18n_fields as $field => $x){
 				
+				//skip field contains ext/short_description 
+				if(strpos($field,'/')!==false)
+					continue;
+				
 				$fieldid = $this->schemaQuery('field', $field);			
 				
 				
@@ -120,6 +124,9 @@ class GW_Extension_i18next
 		$select = isset($options['select']) ? $options['select'] : 'a.*';
 		
 		if(isset($options['conditions'])){
+			//d::ldump(get_class($this->parent));
+			
+			
 			if(is_array($options['conditions']))
 				$options['conditions'] = GW_DB::prepare_query($options['conditions']);
 			

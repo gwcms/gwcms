@@ -762,7 +762,13 @@ class GW_Common_Module extends GW_Module
 			$field = $filter['field'];
 			
 			if($value==="" || $value===null)
-				return;			
+				return;	
+			
+			if($value=="#empty#")
+				$value="";
+			
+			if($value=="#zero#")
+				$value="0";			
 
 			if (($compare_type == "IN" || $compare_type == "NOTIN") && !is_array($value)) {
 				
@@ -893,6 +899,7 @@ class GW_Common_Module extends GW_Module
 	
 			
 		foreach ($search as $filter) {
+			
 			$this->buildConds($filter, $cond);
 		}
 		
@@ -1999,7 +2006,7 @@ class GW_Common_Module extends GW_Module
 		}
 		
 		$this->jump(false, ['searchreplace'=>1,'filterhide'=>1]);
-	}
+	}	
 	
 	function doCancelSearchReplace()
 	{
@@ -2445,4 +2452,154 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage(['text'=>"Environment not production, so recovery mail not sent", 'type'=>GW_MSG_INFO,'float'=>1]);
 		}		
 	}
+	
+	function __getListFields(){
+		$this->initListParams(false,'list');
+		$this->prepareListConfig();
+		
+		$fields = [];
+		$ignore = ['id'=>1,'insert_time'=>1,'update_time'=>1];
+		
+		foreach($this->list_config['dl_fields'] as $field)
+		{
+			if(isset($ignore[$field]))
+				continue;
+			
+			$fields[$field] = $this->fieldTitle($field);
+		}
+		return $fields;		
+	}
+	
+	function doCopyFieldData()
+	{
+		if(!$this->app->user->isRoot())
+		{
+			$this->setError("Need root access");
+			$this->jump();
+		}
+		$fields = $this->__getListFields();
+				
+	
+		
+		$sel=['type'=>'select','options'=>$fields, 'empty_option'=>1, 'required'=>1];
+		$form = ['fields'=>['from'=>$sel, 'to'=>$sel],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/SELECT_SOURCE_AND_DEST'))))
+			return false;		
+		
+		
+		$vars = $this->viewList();
+		
+		$changeinf = [];
+		
+		foreach($vars['list'] as $item){
+			
+			$changeinf[] = ['id'=>$item->id, 'before '.$answers['to']=>$item->get($answers['to']),'after '.$answers['to']=>$item->get($answers['from'])];
+			
+			if(isset($_GET['confirm'])){
+				$item->set($answers['to'], $item->get($answers['from']));
+				$item->updateChanged();
+			}
+		}
+		
+		if(!isset($_GET['confirm'])){
+			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
+			
+			
+			$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
+			$this->setMessageEx(['text'=>$str, 'type'=>4]);	
+			
+		}else{
+			$this->setMessage("action performed on ".count($vars['list'])." items");
+			$this->jump();
+		}
+	}
+
+
+	function doAutoTranslate()
+	{
+		if(!$this->app->user->isRoot())
+		{
+			$this->setError("Need root access");
+			$this->jump();
+		}
+						
+	
+		$fields = array_flip($this->model->i18n_fields);
+		
+		$selfield=['type'=>'select','options'=>$fields, 'options_fix'=>1, 'empty_option'=>1, 'required'=>1];
+		$sellangs=['type'=>'select','options'=>$this->app->langs, 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
+		
+		
+
+		$form = ['fields'=>['field'=>$selfield,'fromln'=>$sellangs, 'toln'=>$sellangs],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/SELECT_SOURCE_AND_DEST_AND_FIELD'))))
+			return false;		
+		
+				
+		$vars = $this->viewList();
+		
+		$changeinf = [];
+		
+		$list = $vars['list'];
+		
+		foreach($list as $item){
+			$changeinf[$item->id] = [
+			    'id'=>$item->id, 
+			    'source'=>$item->get($answers['field'], $answers['fromln']),
+			    'before'=>$item->get($answers['field'], $answers['toln'])
+			    ];
+		}
+		
+		
+		$opts = ['log'=>1,'commit'=>0];
+		
+		if(isset($_GET['confirm'])){
+			$opts['commit']=1;
+		}
+		
+		$t = new GW_Timer;
+		
+		foreach(array_chunk($vars['list'], 30) as $chunk)
+		{
+			GW_Auto_Translate_Helper::seriesTranslate($chunk, $answers['field'], $answers['fromln'], $answers['toln'], $opts);
+		}
+						
+		
+		foreach($vars['list'] as $item){
+			
+			$changeinf[$item->id]['after'] = $item->get($answers['field'], $answers['toln']);//json_encode($item->toArray());//
+		}
+		
+		$took = $t->stop();
+		$this->setMessage("Translation took: $took secs");
+		
+		
+		if(!isset($_GET['confirm'])){
+			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
+			
+			
+			$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
+			$this->setMessageEx(['text'=>$str, 'type'=>4]);	
+			
+		}else{
+			$this->setMessage("action performed on ".count($vars['list'])." items");
+			
+			
+			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
+			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doAutoTranslate')."</a> <small>(Add filter to show non empty rows)</small>";
+			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);				
+			
+						
+			
+			
+			$this->jump();
+		}
+	}
+	
 }

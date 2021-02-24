@@ -443,6 +443,7 @@ class Module_Tools extends GW_Common_Module
 	{		
 		$replace_what = GW::s("SITE_URL");
 		
+		
 		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
 		{
 			$dest = GW_ENV_PROD;	
@@ -460,8 +461,10 @@ class Module_Tools extends GW_Common_Module
 		//d::Dumpas([$replace_what,$replace_to]);
 		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to]);
 				
-			
-		$newurl = str_replace($replace_what, $replace_to, $_GET['uri']);
+		
+		$url  = str_replace("https://", "http://", $_GET['uri']);//redirect should solve return to https protocol
+		
+		$newurl = str_replace($replace_what, $replace_to, $url);
 		
 		if($newurl == $_GET['uri'])
 		{

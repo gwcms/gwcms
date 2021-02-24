@@ -13,7 +13,15 @@ class GW_Country extends GW_i18n_Data_Object
 
 	function getOptions($lang = 'lt')
 	{
-		return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
+		//return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
+		$opts= [];
+		
+		foreach($this->findAll(false) as $country)
+		{
+			$opts[$country->code] = $country->get('title', $lang);
+		}
+		
+		return $opts;
 	}
 	
 	function getIdOptions($lang = 'lt')

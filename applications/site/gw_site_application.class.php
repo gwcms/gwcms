@@ -19,7 +19,7 @@ class GW_Site_Application extends GW_Application
 		
 		
 		//kol kas atjungiam PIECES KOL TVARKOM ant prancuzu konkurso
-		return true;
+	
 		gw::s("LANGS",array_merge(gw::s("LANGS"),GW::s('i18nExt')));;
 
 		if(in_array($this->ln, GW::s('i18nExt'))){

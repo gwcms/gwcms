@@ -1,6 +1,6 @@
 
 {call e field="service_url_list"
-	type="tags"	
+	type="textarea"	
 	note="apply needed before setting new to main_service_url"
 }
 

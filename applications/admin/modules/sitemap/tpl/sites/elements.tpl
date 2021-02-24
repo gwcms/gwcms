@@ -11,6 +11,10 @@
 		{call e type=tags placeholder=GW::l('/m/ADD_HOST')}
 	{elseif $field=="admin_host"}
 			
+	{elseif $field=="key"}
+		{call e type=text}	
+	{elseif $field=="langs"}
+		{call e type=multiselect options=array_merge(GW::s('LANGS'),GW::s('i18nExt')) sorting=1 options_fix=1}
 	{else}
 		{call e type=read}
 	{/if}

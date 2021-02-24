@@ -354,8 +354,8 @@ class Module_Translations extends GW_Common_Module
 	function doSeriesTranslate($list=false)
 	{		
 		$this->sys_call = false;
-		
-		$sel=['type'=>'select','options'=>GW::s("LANGS"), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
+				
+		$sel=['type'=>'select','options'=>$this->app->langs, 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
 		$limitinp=['type'=>'select','options'=>[100=>100,200=>200,500=>500,1=>1,10=>10,50=>50]];
 		$form = ['fields'=>['from'=>$sel, 'to'=>$sel, 'limit'=>$limitinp],'cols'=>4];
 		
@@ -461,7 +461,7 @@ class Module_Translations extends GW_Common_Module
 			if($offer_to_rpeat){
 				$confirmurl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
 				$addstr="<br/><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/REPEAT')."</a>";
-				$this->setMessageEx(['text'=>$str, 'type'=>4]);				
+				$this->setMessageEx(['text'=>$addstr, 'type'=>4]);				
 			}
 			
 			

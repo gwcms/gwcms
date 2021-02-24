@@ -74,10 +74,22 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 		
 		if($this->isI18NField($name) && GW::$context->app->app_name == 'SITE'){
 			$ln = $ln ? $ln : $this->getDefaultLn();
-			if($ln !='en'){
+			
+			
+			if($tmpO = parent::get($this->getI18NFieldName($name, $ln)))
+					return $tmpO;
+			
+			if($ln == 'ua'){
+				$tmp = parent::get($this->getI18NFieldName($name, 'ru'));
+				if($tmp && is_string($tmp) && !is_numeric($tmp)){
+					GW_Auto_Translate_Helper::collectTrans($this, $name,'ru','ua');
+				}
+				
 				if($tmpO = parent::get($this->getI18NFieldName($name, $ln)))
 					return $tmpO;
-
+			}
+			
+			if($ln !='en'){
 				$tmp = parent::get($this->getI18NFieldName($name, 'en'));
 
 				return $tmp && is_string($tmp) && !is_numeric($tmp) ? "EN: ".$tmp: $tmpO;

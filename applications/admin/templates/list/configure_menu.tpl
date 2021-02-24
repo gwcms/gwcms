@@ -24,6 +24,8 @@
 	<li>
 
 	{list_item_action_m url=[false, [act=>doresetListVars]] iconclass="fa fa-cog" caption="doResetListVars" action_addclass="rootactions"}
+	{list_item_action_m url=[false, [act=>doCopyFieldData]] iconclass="fa fa-cog" caption="doCopyFieldData" action_addclass="rootactions"}
+	{list_item_action_m url=[false, [act=>doAutoTranslate]] iconclass="fa fa-cog" caption="doAutoTranslate" action_addclass="rootactions"}
 	<script>
 		require(['gwcms'], function(){
 			$('#gwlrootmenutr').click(function(event){

@@ -5,6 +5,7 @@
     <i id="en">English</i>
     <i id="ru">Руский</i>
     <i id="fr">Français</i>
+    <i id="ua">Ukrainian</i>
   </i>
   <i id="LANGUAGE">
     <en>Language</en>
@@ -293,6 +294,10 @@
       <lt>Aprašymas</lt>
       <ru>Описание</ru>
     </i>
+    <i id="field"><en>Field</en><lt>Laukelis</lt></i>
+   <i id="fromln">From lang</i>
+   <i id="toln">To lang</i>
+	 
   </i>
   <i id="VIEWS">
     <i id="form">
@@ -377,6 +382,7 @@
     </i>
     <i id="doWriteLock">Write Lock</i>
     <i id="doWriteUnLock">Write UnLock</i>
+    <i id="doAutoTranslate">doAutoTranslate</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>
@@ -835,9 +841,19 @@
   <i id="REPEAT">
     <lt>Pakartoti</lt>
     <en>Repeat</en>
-  </i> 
-  <i id="I18N_EXTEND_LANGS"> 
-	  <lt>Papild. kalbos</lt>
-	  <en>Additional langs</en>
+  </i>
+  <i id="I18N_EXTEND_LANGS">
+    <lt>Papild. kalbos</lt>
+    <en>Additional langs</en>
+  </i>
+  <i id="SELECT_SOURCE_AND_DEST">
+    <en>Select source and destination</en>
+    <lt>Pasirinkite šaltinį ir tikslą</lt>
+    <ru>Выбираем источник и место назначения</ru>
+  </i>
+  <i id="SELECT_SOURCE_AND_DEST_AND_FIELD">
+    <en>Select field, source and destination languages</en>
+    <lt>Pasirinkite laukelį, šaltinio ir paskirties kalbas</lt>
+    <ru>[A] Выбираем языки поля, источника и назначения</ru>
   </i>
 </xml>

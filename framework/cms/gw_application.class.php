@@ -218,8 +218,9 @@ class GW_Application
 		$this->requestInfo();
 		$this->initAuth();
 
-		$this->initSite();
 		$this->initLang();
+		$this->initSite();
+		
 
 		$this->getPage();
 

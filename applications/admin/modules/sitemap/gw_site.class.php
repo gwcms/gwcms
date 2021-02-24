@@ -10,6 +10,7 @@ class GW_Site extends GW_i18n_Data_Object
 	    'count_sitemap'=>1,
 	    'relations'=>1,
 	];
+	public $encode_fields = ['langs'=>'comma'];
 
 
 

@@ -80,4 +80,29 @@ class Module_Translations_Over extends GW_Common_Module
 		
 		return $cfg;
 	}
+	
+	
+	
+	function doVolodymyrMove()
+	{
+		$vars = parent::viewList();
+		
+		foreach($vars['list'] as $item){
+			
+			$tr = GW_Translation::singleton()->find(['`key`=? AND module=?',$item->key,$item->module]);
+			if(!$tr)
+			{
+				d::ldump("Cant find {$item->fullkey}");
+				continue;
+			}
+			
+			$tr->set("value_ua", $item->value_ru);
+			//if(GW::ln($item->))
+			$tr->update();
+			d::ldump("{$item->key} : {$item->value_ru}");
+		}
+		
+		//d::dumpas(count($vars['list']));
+		
+	}
 }
