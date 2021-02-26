@@ -42,6 +42,7 @@ $adir['LANG']=$adir['ROOT'].'lang/';
 //GW::$static_conf['REMOTE_SERVICES']['MAIL1'] = 'http://uostas.net/services/mail.php?key=fh5ad2fg1ht4a6s5dg1hy4a5d4fg';	
 GW::s('DEFAULT_APPLICATION','SITE');		
 GW::s('LANGS', Array('lt','en'));
+GW::s('i18nExt', []);
 
 define('GW_USER_SYSTEM_ID', 1);
 define('GW_GENERIC_ERROR', 100);

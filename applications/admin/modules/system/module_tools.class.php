@@ -458,21 +458,25 @@ class Module_Tools extends GW_Common_Module
 		{
 			d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
 		}
-		//d::Dumpas([$replace_what,$replace_to]);
-		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to]);
-				
+		//DEBUG : UNCOMMENT THIS:::
 		
-		$url  = str_replace("https://", "http://", $_GET['uri']);//redirect should solve return to https protocol
+				
+		$url = $_GET['uri'];
+		//$url  = str_replace("https://", "http://", $_GET['uri']);//redirect should solve return to https protocol
+		
+		
 		
 		$newurl = str_replace($replace_what, $replace_to, $url);
+		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to,'result'=>$newurl]);
 		
+
 		if($newurl == $_GET['uri'])
 		{
 			d::ldump([$_GET['uri'],$newurl]);
 			d::dumpas("Replace failed CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
 		}		
 		
-		
+			
 		
 		header("Location: $newurl");
 		exit;
