@@ -2582,11 +2582,7 @@ class GW_Common_Module extends GW_Module
 		if(!isset($_GET['confirm'])){
 			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
 			
-			
-			$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
-			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
-			$this->setMessageEx(['text'=>$str, 'type'=>4]);	
-			
+			$this->askConfirm($str);
 		}else{
 			$this->setMessage("action performed on ".count($vars['list'])." items");
 			
@@ -2602,4 +2598,19 @@ class GW_Common_Module extends GW_Module
 		}
 	}
 	
+	
+	function askConfirm($str)
+	{
+		$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
+		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
+		$this->setMessageEx(['text'=>$str, 'type'=>4]);			
+}
+	function confirm($str)
+	{
+		if(isset($_GET['confirm'])){
+			return true;
+		}
+		$this->askConfirm($str);
+		$this->jump();
+	}
 }
