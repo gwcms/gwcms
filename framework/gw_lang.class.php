@@ -371,6 +371,7 @@ class GW_Lang
 		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($transcache, explode('/', $key));
 		
 		//d::dumpas([$transcache, $vr, explode('/', $key)]);
+		
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
@@ -385,8 +386,9 @@ class GW_Lang
 
 				
 				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
-				GW_Translation::singleton()->store($module, $key, $vr, GW_Lang::$ln);
+				GW_Translation::singleton()->store($module, $key, $key, GW_Lang::$ln);
 			//}
+			return self::lnResult($orig_key, $orig_key, $orig_val);
 		}
 		
 		if(!$vr)
