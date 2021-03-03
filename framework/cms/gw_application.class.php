@@ -139,9 +139,9 @@ class GW_Application
 			$this->auth->login($programmer);
 			$this->setMessage('Development auto authorise');
 			
-			if($this->app->sess('after_auth_nav')){
-				$uri = $this->app->sess('after_auth_nav');
-				$this->app->sess('after_auth_nav', "");
+			if($this->sess('after_auth_nav')){
+				$uri = $this->sess('after_auth_nav');
+				$this->sess('after_auth_nav', "");
 				header("Location: ".$uri);
 				exit;				
 			}
