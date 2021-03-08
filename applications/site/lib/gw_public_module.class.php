@@ -705,6 +705,18 @@ class GW_Public_Module {
 			$p->title = GW::ln('/m/VIEWS/'.$this->view_name);
 		}
 	}
+	
+	function initModCfgEx($modp)
+	{
+		$modp = is_array($modp) ? $modp :  explode('/', $modp);
+		return new GW_Config($modp[0].(isset($modp[1]) ? '__'.$modp[1]:'' ).'/');
+	}
+
+	function initModCfg()
+	{
+		$this->modconfig = $this->initModCfgEx($this->module_path);
+	}	
+
 }
 
 

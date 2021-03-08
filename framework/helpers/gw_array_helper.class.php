@@ -186,10 +186,14 @@ class GW_Array_Helper
 	 * : 123
 	 */
 	static function &getPointer2XlevelAssocArr(&$var, $keys, $value=null)
-	{
-
-		foreach ($keys as $part)
-			$var = & $var[$part];
+	{		
+		foreach ($keys as $part){
+			if(isset($var[$part])){
+				$var = & $var[$part];
+			}else{
+				$var = null;
+			}
+		}
 
 		if ($value !== Null)
 			$var = $value;
