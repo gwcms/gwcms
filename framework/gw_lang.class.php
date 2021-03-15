@@ -388,7 +388,7 @@ class GW_Lang
 				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
 				GW_Translation::singleton()->store($module, $key, $key, GW_Lang::$ln);
 			//}
-			return self::lnResult($orig_key, $orig_key, $orig_val);
+			return self::lnResult($orig_key, $orig_key, $orig_val ?? false);
 		}
 		
 		if(!$vr)
