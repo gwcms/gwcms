@@ -138,13 +138,16 @@ class GW_Application
 			$programmer = GW_User::singleton()->createNewObject(9, true);
 			$this->auth->login($programmer);
 			$this->setMessage('Development auto authorise');
-			
+					
 			if($this->sess('after_auth_nav')){
 				$uri = $this->sess('after_auth_nav');
 				$this->sess('after_auth_nav', "");
 				header("Location: ".$uri);
 				exit;				
 			}
+			
+			header("Location: ".$_SERVER["REQUEST_URI"]);
+			exit;
 		}		
 		
 		if($this->auth->error)
