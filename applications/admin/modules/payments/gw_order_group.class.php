@@ -48,4 +48,15 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		return parent::eventHandler($event, $context);
 	}	
 	
+	
+	function getItem($item)
+	{
+		$class = strtolower(get_class($item));
+		if($this->items)
+		foreach($this->items as $citem)
+			if($citem->obj_type == $class && $citem->obj_id==$item->id){
+				return $citem;
+			}
+	}
+	
 }
