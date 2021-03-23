@@ -14,6 +14,16 @@ class Module_Page_Views extends GW_Common_Module
 		$this->app->carry_params['clean']=1;		
 		$this->app->carry_params['path']=1;
 		
+		
+		$this->modid = $this->app->path_arr['1']['data_object_id'] ?? false;
+		
+		$page = GW_ADM_Page::singleton()->find(['id=?', $this->modid]);
+				
+		if($page){
+			$_GET['path'] = $page->path;
+		}
+		
+		
 		if(isset($_GET['filterpaths']))
 		{
 			$this->filterpaths=explode(',',$_GET['filterpaths']);

@@ -10,21 +10,9 @@ class Module_Modules extends GW_Common_Module
 	}
 	
 	
-	function viewList()
+	function __eventAfterList(&$list)
 	{
-		$list = $this->model->getChilds(Array('menu'=>false));
-		
-		$list1=Array();
-		
-		foreach($list as $item)
-		{
-			$list1[]=$item;
-			$childs=$item->findAll("path LIKE '$item->path/%'");
-			
-			$list1=array_merge($list1, $childs);
-		}
-		
-		return ['list'=>$list1];	
+		GW_ADM_Sitemap_Helper::arrayToTree($list);
 	}
 	
 	function doMove($params=false)
@@ -123,6 +111,27 @@ class Module_Modules extends GW_Common_Module
 				$this->setMessage(['type' => GW_MSG_INFO, 'text'=>$msg, 'float'=>1, 'footer'=>$t->stop().'s']);		
 	}
 	
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+			'title_func'=>function($item){ return ($item->parent_id?'&nbsp;&nbsp;':'').$item->path;  },
+			'search_fields'=>['path','info'],
+			'list_process'=>function(&$list){ GW_ADM_Sitemap_Helper::arrayToTree($list); },
+			'page_by'=>1000, //kad suveiktu array to tree
+			
+		];	
+		
+		foreach(GW::s('LANGS') as $ln)
+			$opts['search_fields'][]="title_{$ln}";		
+		
+		if(isset($_GET['byPath'])){
+			$opts['idx_field'] = 'path';
+		}
+		
+		return $opts;	
+	}
+		
 }
 
 ?>

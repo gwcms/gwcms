@@ -17,6 +17,35 @@ class GW_ADM_Sitemap_Helper
 
 		return $list;
 	}
+	
+	
+	static function arrayToTree(&$list)
+	{
+		$childs = [];
+		foreach($list as $idx =>  $item)
+		{
+			
+			if($item->parent_id!=0)
+			{
+				$childs[$item->parent_id][] = $item;
+				unset($list[$idx]);
+			}
+			
+
+		}	
+
+		$newlist=[];
+
+		foreach($list as $item){
+			$newlist[] =$item;
+			
+			if(isset($childs[$item->id])){
+				$item->__child_count=count($childs[$item->id]);
+				$newlist = array_merge($newlist, $childs[$item->id]);
+			}
+		}
+		$list = $newlist;		
+	}
 
 	static function treeToArray(&$tree)
 	{

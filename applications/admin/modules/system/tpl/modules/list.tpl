@@ -13,6 +13,8 @@
 		.gw_listicon { margin: 0px 0px 0px 10px;}
 		.gw_listicon > i{ margin-right: .3em; width: 1.28571429em;text-align: center; }
 		.gw_separator { background-color: #ffc; }		
+		{if !$smarty.get.expand}.gwroot_node{ display:none; }{else}{$expanded="expanded"}{/if}
+		.expanded{ color:orange !important; }
 	</style>
 	{/capture}
 	
@@ -24,12 +26,26 @@
 		{toolbar_button title=GW::l('/A/VIEWS/doSyncFromXmls') iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doSyncFromXmls])}	
 	{/function}		
 	
+	
+	
+
+	
+	{function name=do_toolbar_buttons_expand} 
+		{if $smarty.get.expand}
+			{toolbar_button title=Shrink iconclass='gwico-CircledUp2' href=$m->buildUri(false,[expand=>0]+$smarty.get)}
+		{else}
+			{toolbar_button title=Expand iconclass='gwico-CircledDown2' href=$m->buildUri(false,[expand=>1]+$smarty.get)}
+		{/if}
+	{/function}		
+	
 	{function name=dl_prepare_item}
 	
 		{if $item->path=='separator'}
 			{$item->set('row_class', 'gw_separator')}
 		{elseif $item->parent_id}
-			{$item->set('row_class', 'gwroot_node')}
+			
+			{$item->set('row_class', "gwroot_node childs{$item->parent_id}")}
+			
 		{/if}
 	{/function}	
 	
@@ -54,9 +70,17 @@
 		
 	{$dl_fields=[title,path]}
 	{$dl_smart_fields=[title,path]}
-	{$do_toolbar_buttons=[info,rearange,synchronizefromxml]}	
-	{$dl_actions=[edit,invert_active_ajax,delete]}
+	{$do_toolbar_buttons=[info,rearange,synchronizefromxml,expand]}
+	{$do_toolbar_buttons[] = search}	
+	{$dl_actions=[invert_active,ext_actions,expand]}
 	
+
 	
+	{function name=dl_actions_expand}
+		{if $item->__child_count}
+			{list_item_action_m onclick="$(this).toggleClass('expanded');$('.childs{$item->id}').toggle(400);return false"  
+				iconclass='fa fa-chevron-down' title="sub {$item->__child_count}" action_class="{$expanded}"}	
+		{/if}
+	{/function}
 	
 {/block}

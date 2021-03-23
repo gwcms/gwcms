@@ -135,7 +135,11 @@
           <i id="model">GW_Payments</i>
           <i id="iconclass">fa fa-level-down</i>
         </i>
-      </i>          
+      </i>
+	<i id="config">
+		<i id="title">Nustatymai</i>
+	</i>     
+		          
     </i>
   </i>
 </xml>

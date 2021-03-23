@@ -26,6 +26,12 @@
 	{list_item_action_m url=[false, [act=>doresetListVars]] iconclass="fa fa-cog" caption="doResetListVars" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doCopyFieldData]] iconclass="fa fa-cog" caption="doCopyFieldData" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doAutoTranslate]] iconclass="fa fa-cog" caption="doAutoTranslate" action_addclass="rootactions"}
+	{list_item_action_m url=[false, [act=>doMultiSetValue]] iconclass="fa fa-cog" caption="doMultiSetValue" action_addclass="rootactions"}
+	
+	{list_item_action_m url=[false, [act=>doManageFields,clean=>2]] iconclass="fa fa-pencil-square-o" 
+		caption="Manage fields"
+	}
+
 	<script>
 		require(['gwcms'], function(){
 			$('#gwlrootmenutr').click(function(event){

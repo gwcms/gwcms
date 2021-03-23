@@ -37,7 +37,7 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;
 		
 			case 'expirable':
-				return $item->expires && strpos($item->expires, "0000-00-00")===false;
+				return $this->expires && strpos($this->expires, "0000-00-00")===false;
 			break;
 			case 'is_expired':
 				return  $this->expires_enabled  && $this->expires_secs < 0;

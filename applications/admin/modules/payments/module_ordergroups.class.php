@@ -134,7 +134,7 @@ class Module_OrderGroups extends GW_Common_Module
 			
 		$build = false;
 		$v = [];
-		$v['PRICE'] = $item->amount;
+		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], 'lt');
 
 		$v['INVOICE_NUM'] = $payconfirm->orderid;

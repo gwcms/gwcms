@@ -2038,6 +2038,8 @@ class GW_Common_Module extends GW_Module
 		
 		$opts = method_exists($this, 'getOptionsCfg') ? $this->getOptionsCfg() : [];
 		
+		$idx_field = $opts['idx_field'] ?? 'id';
+		
 		$params = [];
 		
 		if(isset($_GET['q'])){
@@ -2075,14 +2077,13 @@ class GW_Common_Module extends GW_Module
 			if(!is_array($ids))
 				$ids = [$ids];
 
-			$ids = array_map('intval', $ids);
-			$cond = GW_DB::inCondition('id', $ids);
-			
+			//$ids = array_map('intval', $ids);
+			$cond = GW_DB::inConditionStr($idx_field, $ids);
 		}	
 
 		
 				
-		$page_by = 30;
+		$page_by = $opts['page_by'] ?? 30;
 		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
 		$params['offset'] = $page_by * $page;
 		$params['limit'] = $page_by;
@@ -2090,12 +2091,17 @@ class GW_Common_Module extends GW_Module
 		
 		$list0 = $i0->findAll($cond ?? '', $params);
 	
+				
+		if(isset($opts['list_process'])){
+			$opts['list_process']($list0);
+		}
+		
 		$list=[];
 		
 					
 		foreach($list0 as $item)
 			$list[]=[
-			    'id' => $item->id, 
+			    'id' => $item->get($idx_field), 
 			    "title" => isset($opts['title_func']) ? $opts['title_func']($item) : $item->get("title")
 			];
 		
@@ -2518,6 +2524,56 @@ class GW_Common_Module extends GW_Module
 	}
 
 
+	function doMultiSetValue()
+	{
+		$fields = $this->__getListFields();
+		
+		$selfield=['type'=>'select','options'=>$fields, 'empty_option'=>1, 'required'=>1];
+		$form = ['fields'=>['field'=>$selfield,'value'=>['type'=>'text']],'cols'=>4];
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/SELECT_FIELD_AND_SET_VALUE'))))
+			return false;		
+		
+				
+		$vars = $this->viewList();
+		
+		$changeinf = [];
+		
+		$list = $vars['list'];		
+		
+		
+		$changeinf = [];
+		foreach($list as $item){
+			$inf = [];
+			$inf['id'] = $item->id;
+			$inf['title'] = $item->title;
+			$inf['before'] = $item->get($answers['field']);
+			$inf['after'] = $answers['value'];
+			$changeinf[] = $inf;
+		
+			$item->set($answers['field'], $answers['value']);
+			
+			if(isset($_GET['confirm'])){
+				$item->updateChanged();
+			}			
+		}
+		
+		if(!isset($_GET['confirm'])){
+			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
+			
+			$this->askConfirm($str);
+		}else{	
+			$this->setMessage("action performed on ".count($vars['list'])." items");
+			
+			
+			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
+			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doMultiSetValue')."</a> <small>(Add filter to show non empty rows)</small>";
+			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);
+			$this->jump();
+		}
+		
+	}
+	
 	function doAutoTranslate()
 	{
 		if(!$this->app->user->isRoot())
@@ -2585,14 +2641,9 @@ class GW_Common_Module extends GW_Module
 			$this->askConfirm($str);
 		}else{
 			$this->setMessage("action performed on ".count($vars['list'])." items");
-			
-			
 			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
 			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doAutoTranslate')."</a> <small>(Add filter to show non empty rows)</small>";
 			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);				
-			
-						
-			
 			
 			$this->jump();
 		}
@@ -2604,7 +2655,8 @@ class GW_Common_Module extends GW_Module
 		$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
 		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
 		$this->setMessageEx(['text'=>$str, 'type'=>4]);			
-}
+	}
+	
 	function confirm($str)
 	{
 		if(isset($_GET['confirm'])){
@@ -2613,4 +2665,12 @@ class GW_Common_Module extends GW_Module
 		$this->askConfirm($str);
 		$this->jump();
 	}
+	
+	
+	function doManageFields()
+	{
+		$this->app->carry_params['clean']=1;
+		$this->app->jump("system/managefields", ['path'=>$this->app->path]);
+	}	
+	
 }

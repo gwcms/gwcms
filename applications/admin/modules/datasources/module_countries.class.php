@@ -18,6 +18,24 @@ class Module_Countries extends GW_Common_Module
 		
 	}
 	
+	function getOptionsCfg()
+	{
+		$opts = [
+			'title_func'=>function($item){ return $item->get("title_".$this->app->ln).' ('.$item->get('code').')';  },
+			'search_fields'=>['path','info']			
+		];	
+		
+		foreach(GW::s('LANGS') as $ln)
+			$opts['search_fields'][]="title_{$ln}";
+		
+		if(isset($_GET['byCode'])){
+			$opts['idx_field'] = 'code';
+		}
+		
+		return $opts;	
+	}	
+	
+	/*
 	function viewOptions()
 	{
 		$i0 = $this->model;
@@ -65,7 +83,7 @@ class Module_Countries extends GW_Common_Module
 		echo json_encode($res);
 		exit;
 	}	
-	
+	*/
 	
 	function doTranslate()
 	{		

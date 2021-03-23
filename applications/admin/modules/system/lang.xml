@@ -135,13 +135,22 @@
     <i id="childs">
       <i id="modules">
         <i id="title">Module Configuration</i>
+	<i id="info">
+		<i id="itemactions">1</i>
+	</i>	
       </i>
       <i id="page_views">
-        <i id="title">Suformuotos peržiūros</i>
+        <i id="title">Sąrašo formacija</i>
         <i id="info">
           <i id="model">GW_Adm_Page_View</i>
         </i>
       </i>
+       <i id="module_fields">
+        <i id="title">Laukelių konf.</i>
+        <i id="info">
+          <i id="model">GW_Adm_Page_Fields</i>
+        </i>
+      </i>     
       <i id="tools">
         <i id="title">Tools</i>
       </i>

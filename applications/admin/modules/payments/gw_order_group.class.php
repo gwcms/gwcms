@@ -25,7 +25,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		
 		
 		
-		$this->amount = $amount;
+		$this->amount_items = $amount;
+		$this->amount_total = $this->amount_items + $this->amount_shipping;
 		$this->updateChanged();
 	}
 	
