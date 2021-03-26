@@ -13,6 +13,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	function updateTotal()
 	{
 		$amount = 0;
+		$deliverable = 0;
 		
 		if($relobj = $this->getCompositeObject('items'))
 			$relobj->cleanCache();
@@ -21,10 +22,11 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		
 		foreach($this->items as $item){
 			$amount+= $item->unit_price*$item->qty;
+			$deliverable = max($item->deliverable, $deliverable);
 		}
 		
 		
-		
+		$this->deliverable = $deliverable;
 		$this->amount_items = $amount;
 		$this->amount_total = $this->amount_items + $this->amount_shipping;
 		$this->updateChanged();
@@ -35,6 +37,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		$item->save();
 		
 		$this->updateTotal();
+		
 	}
 	
 	function eventHandler($event, &$context_data=[]) {
