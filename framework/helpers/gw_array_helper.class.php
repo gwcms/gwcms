@@ -185,8 +185,8 @@ class GW_Array_Helper
 	 * echo GW_Array_Helper::getPointer2XlevelAssocArr($x, [a,b,c]);
 	 * : 123
 	 */
-	static function &getPointer2XlevelAssocArr(&$var, $keys, $value=null)
-	{		
+	static function &getPointer2XlevelAssocArrNew(&$var, $keys, $value=null)
+	{
 		foreach ($keys as $part){
 			if(isset($var[$part])){
 				$var = & $var[$part];
@@ -200,7 +200,18 @@ class GW_Array_Helper
 
 		return $var;
 	}
+	
+	static function &getPointer2XlevelAssocArr(&$var, $keys, $value=null)
+	{
 
+		foreach ($keys as $part)
+			$var = & $var[$part];
+
+		if ($value !== Null)
+			$var = $value;
+
+		return $var;
+	}
 	
 	/**
 	 * groupArray groups array by given keys example:
@@ -252,7 +263,7 @@ class GW_Array_Helper
 				
 				unset($vals[$id]);
 			}
-		}		
+		}	
 	}	
 	
 	
