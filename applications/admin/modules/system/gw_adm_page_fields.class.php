@@ -29,6 +29,13 @@ class GW_Adm_Page_Fields extends GW_i18n_Data_Object
 		return  $this->getDB()->getColumnOptions($this->table, $field);
 	}
 	
+	function modelFromModpath()
+	{
+		$page = GW_ADM_Page::singleton()->getByPath($this->modpath);
+		if($page)
+			return $page->info->model;
+	}
+	
 	function validate(){
 		
 		parent::validate();

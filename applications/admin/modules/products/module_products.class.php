@@ -45,6 +45,21 @@ class Module_Products extends GW_Common_Module
 	{
 		GW_Composite_Data_Object::prepareLinkedObjects($list, 'typeObj');
 		
+		foreach($this->mod_fields as $field){
+			if($field->inp_type=="select_ajax"){
+				$sources[$field->modpath][] = $field->fieldname;
+			}
+		}
+		foreach($sources as $modpath => $fields){
+			$model = $field->modelFromModpath();
+			
+			foreach($fields as $field)
+				$dynfieldsopts[$field] = $model;
+		}
+		
+		//d::Dumpas($dynfieldsopts);
+		
+		
 		
 		$ids = array_keys($list);
 		
@@ -52,6 +67,21 @@ class Module_Products extends GW_Common_Module
 		foreach($cnts as $pid => $cnt)
 			$list[$pid]->mod_count = $cnt;
 		
+		
+		$dynopts = [];
+		
+		foreach($list as $item){
+			foreach($dynfieldsopts as $field => $class)
+				if($item->$field)
+					$dynopts[$class][$item->$field]=1;
+		}
+		
+		foreach($dynopts as $class => $ids){
+			$ids = array_keys($ids);
+			$this->options[$class] = $class::singleton()->findAll(GW_DB::inCondition ('id', $ids),['key_field'=>'id']);
+		}
+				
+		$this->tpl_vars['dynfieldopts']=$dynfieldsopts;
 	}	
 
 	function getListConfig()

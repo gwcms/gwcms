@@ -27,6 +27,14 @@
 		</a>
 {/function}	
 
+{function name=dl_output_filters_dynfieldoptions}
+	
+		{$class=$dynfieldopts[$field]}
+		{$obj=$options[$class][$item->$field]}
+		<span title="id: {$obj->id}">{$obj->title}</span>
+		
+{/function}	
+
 
 {function dl_cell_mod}
 	{$url=$m->buildUri(false,[parent_id=>$item->id,clean=>2])}
@@ -43,14 +51,21 @@
 	{/if}
 {/function}	
 	
+{function dl_cell_type}
+	<span title="id: {$item->type}">{$item->typeObj->title}</span>
+{/function}
 
-{$dl_smart_fields=[mod,image]} 
+{$dl_smart_fields=[mod,image,type]} 
 
 
 {$dl_toolbar_buttons[] = hidden}
 {$dl_toolbar_buttons_hidden=[import,export,dialogconf,fail_img]}
 
 {$dl_actions=[edit,invert_active_ajax,ext_actions]} 
+
+{foreach $dynfieldopts as $field => $class}
+	{$dl_output_filters[$field]=dynfieldoptions}
+{/foreach}
 
 		
 	{$dl_checklist_enabled=1}

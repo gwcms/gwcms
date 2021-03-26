@@ -213,4 +213,10 @@
       </i>
     </i>
   </i>
+  <i id="UPDATE_AFTER_CHANGE">
+    <lt>Pakeitus išaugokite</lt>
+  </i>
+  <i id="UPDATE_AFTER_CHANGE_HIDD">
+    <lt>Priklausomai nuo produkto tipo rodomi skirtingi laukeliai, pakeitę tipą spauskite [išsaugoti liekant] kad pasimatytų naujai pasirinkto tipo laukeliai</lt>
+  </i>
 </xml>
