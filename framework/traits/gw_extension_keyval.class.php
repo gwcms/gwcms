@@ -37,8 +37,11 @@ class GW_Extension_KeyVal
 			
 			case 'AFTER_INSERT':
 				$this->constructExt();
+				
+				
 				if($this->cacheNotSaved)
 				{
+					$this->obj->setOwnerId($this->parent->id);
 					$this->obj->storeAll($this->cacheNotSaved);
 					$this->cacheNotSaved = [];	
 				}
@@ -72,9 +75,9 @@ class GW_Extension_KeyVal
 	
 	function __set($name, $value) 
 	{
-		$this->obj->setOwnerId($this->parent->id);
-		
-		if($this->parent->id){
+		if($this->parent->id){			
+			$this->obj->setOwnerId($this->parent->id);
+			
 			return $this->obj->replace($name, $value);
 		}else{
 			$this->cacheNotSaved[$name] = $value;
