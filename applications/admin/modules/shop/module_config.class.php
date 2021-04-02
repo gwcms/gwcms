@@ -11,7 +11,10 @@ class Module_Config extends GW_Common_Module
 		$this->initLogger();
 		
 		
-
+		$this->addRedirRule('/^doItax|^viewItax/i','itax');
+		$this->addRedirRule('events','itax');
+		
+				
 		
 		parent::init();
 	}

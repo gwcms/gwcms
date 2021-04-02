@@ -170,7 +170,7 @@ class Module_Answers extends GW_Common_Module
 		"keyval/description"=>[type=>textarea,colspan=>1],
 		
 		title=>[type=>text, colspan=>1],
-		type=>[modpath=>'products/prodtypes', colspan=>1]+$sel_ajax,
+		type=>[modpath=>'shop/prodtypes', colspan=>1]+$sel_ajax,
 		active=>[type=>bool, colspan=>1],
 		price=>[type=>number, colspan=>1],
 		price_scheme=>[type=>text,colspan=>1]
