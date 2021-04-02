@@ -180,6 +180,8 @@
 	
 {call e field="flags3" type=multiselect options=[option1=>'option1title', option2=>'option2title'] value_format=json1 note="value_format=json1 - json read"}
 		
-	
+
+{call e field=class_ids type=multiselect_ajax modpath="datasources/classificators" source_args=[group=>demoinputs] after_input_f=editadd preload=1 options=[]}
+
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

@@ -239,7 +239,7 @@
 				{$value=$item->$name}
 			{/if}
 		{/if}
-
+	
 		{if $value!=='0' && !$value && $default}
 			{$value=$default}
 		{/if}

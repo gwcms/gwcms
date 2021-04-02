@@ -171,6 +171,21 @@
           <i id="iconclass">fa fa-envelope</i>
         </i>
       </i>
+      
+      <i id="classificators">
+        <i id="title">Klasifikatoriai</i>
+        <i id="info">
+          <i id="model">GW_Classificators</i>
+	  <i id="iconclass">fa fa-server</i>
+        </i>
+      </i>
+      <i id="classificator_types">
+        <i id="title">Klasifikatorių tipai</i>
+        <i id="info">
+          <i id="model">GW_Classificator_Types</i>
+	  <i id="iconclass">fa fa-certificate</i>
+        </i>
+      </i>     
     </i>
   </i>
 </xml>

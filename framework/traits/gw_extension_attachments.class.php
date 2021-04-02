@@ -173,4 +173,11 @@ class GW_Extension_Attachments
 			$item->delete();
 	}
 
+	
+	
+	function getFirstImage()
+	{
+		$list = $this->findAll('content_cat="image"', ['limit'=>1]);
+		return $list[0] ?: false;
+	}	
 }

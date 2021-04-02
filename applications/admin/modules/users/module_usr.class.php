@@ -226,7 +226,7 @@ class Module_Usr extends GW_Common_Module
 	function getOptionsCfg()
 	{
 		$opts = [
-		    //'title_func'=>[LTF_Participants::singleton(),'getTeamName'],
+		    'title_func'=>function($item){ return "(".$item->id.") ". $item->title; },
 		    'search_fields'=>['name','surname','email','username']
 		];	
 		

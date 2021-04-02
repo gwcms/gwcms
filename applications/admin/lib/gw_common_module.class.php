@@ -2068,10 +2068,6 @@ class GW_Common_Module extends GW_Module
 			
 			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) :  $simplecond);
 			
-			if(isset($opts['condition_add'])){
-				$cond .= ($cond ? " AND " : ''). $opts['condition_add'];
-			}			
-			
 		}elseif(isset($_REQUEST['ids'])){
 			$ids = json_decode($_REQUEST['ids'], true);
 			if(!is_array($ids))
@@ -2081,7 +2077,9 @@ class GW_Common_Module extends GW_Module
 			$cond = GW_DB::inConditionStr($idx_field, $ids);
 		}	
 
-		
+		if(isset($opts['condition_add'])){
+			$cond .= ($cond ? " AND " : ''). $opts['condition_add'];
+		}	
 				
 		$page_by = $opts['page_by'] ?? 30;
 		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
