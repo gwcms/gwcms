@@ -491,6 +491,9 @@ class Module_Tools extends GW_Common_Module
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path pulldb $level  2>&1");
 		
 		$this->setMessage("<pre>".$res."</pre>");
+		
+		if(GW::s('PROJECT_NAME')=='tometa')
+			$url=Navigator::backgroundRequest('admin/lt/system/dbqueries?act=doExecuteQuery&id=5');
 				
 		header("Location: ".$_GET['uri']);
 		exit;		

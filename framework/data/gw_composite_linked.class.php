@@ -56,8 +56,11 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 	//saugojimas
 	public function save() {
 
-		$this->linkedobject->save();
-		
+		if($this->linkedobject->id && method_exists($this->linkedobject, 'updateChanged')){
+			$this->linkedobject->updateChanged();
+		}else{
+			$this->linkedobject->save();
+		}		
 	}
 
 	//pasalinimas

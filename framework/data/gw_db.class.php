@@ -154,6 +154,14 @@ class GW_DB
 			$this->speed[0]++;
 			$this->speed[1] += $this->last_query_time;
 		}
+		
+		if(isset($this->backtracing)){
+			ob_start();
+			debug_print_backtrace();
+			$trace = ob_get_clean();
+			
+			$this->query_times[] = $trace;
+		}
 
 		$this->result || $this->trigger_error($cmd, null, $nodie);
 
