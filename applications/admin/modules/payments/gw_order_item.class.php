@@ -23,7 +23,12 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;			
 			case "obj":
 				$class = $this->obj_type;
-				return $class::singleton()->createNewObject($this->obj_id, true);
+				
+				if(!$class)
+					return false;
+				
+				if($class)				
+					return $class::singleton()->createNewObject($this->obj_id, true);
 			break;
 			case "total":
 				return $this->unit_price * $this->qty;
