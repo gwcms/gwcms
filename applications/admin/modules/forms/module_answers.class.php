@@ -11,8 +11,13 @@ class Module_Answers extends GW_Common_Module
 		
 		$this->app->carry_params['user_id']=1;
 		$this->app->carry_params['clean']=1;
-		$this->owner_id=$this->app->path_arr[1]['data_object_id'];	
+		
+		
+		
+		$this->owner_id=$this->app->path_arr[1]['data_object_id'] ?? false;	
 		$this->app->carry_params['doc_id']=1;
+		
+		
 		
 		
 		//$this->filters['user_id']=$_GET['user_id'];
@@ -24,6 +29,10 @@ class Module_Answers extends GW_Common_Module
 		{
 			$this->filters['doc_id'] = $_GET['doc_id'];
 		}
+		if(isset($_GET['owner_id']))
+		{
+			$this->owner_id = $this->filters['owner_id'] = $_GET['owner_id'];
+		}		
 	}
 	
 	
@@ -52,7 +61,7 @@ class Module_Answers extends GW_Common_Module
 		$fields['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'users/usr'];
 		
 		$fields['active'] = ['type'=>'bool'];
-		
+		$fields['ln'] = ['type'=>'select', 'options'=>$this->app->langs,'options_fix'=>1, 'empty_option'=>1];
 		
 		$this->tpl_vars['fields_config'] = [
 		    'cols'=>2,
@@ -170,7 +179,7 @@ class Module_Answers extends GW_Common_Module
 		"keyval/description"=>[type=>textarea,colspan=>1],
 		
 		title=>[type=>text, colspan=>1],
-		type=>[modpath=>'shop/prodtypes', colspan=>1]+$sel_ajax,
+		type=>[modpath=>'products/prodtypes', colspan=>1]+$sel_ajax,
 		active=>[type=>bool, colspan=>1],
 		price=>[type=>number, colspan=>1],
 		price_scheme=>[type=>text,colspan=>1]
@@ -181,5 +190,19 @@ class Module_Answers extends GW_Common_Module
 	 * 
 	 */
 
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+		    'title_func'=>function($item){ return $item->admin_note;  },
+		    'search_fields'=>['admin_note']
+		];	
+		    
+		if($this->owner_id){
+			$opts['condition_add'] = "owner_id=".(int)$this->owner_id;
+		}
+
+		return $opts;	
+	}	
 	
 }

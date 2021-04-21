@@ -32,7 +32,8 @@ class Module_Docs extends GW_Common_Module
 		//$this->itax = new Itax(GW_Config::singleton()->get('itax/itax_apikey'));		
 		$this->addRedirRule('/^doItax|^viewItax/i','itax');
 
-		GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
+		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_DEV)
+			GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
 		
 	}
 

@@ -25,7 +25,7 @@
 
 {call e field="active" type=bool}
 
-
+{call e field="i18n" type=select options=GW::l('/m/OPTIONS/i18n')}
 
 
 {include file="default_form_close.tpl"}

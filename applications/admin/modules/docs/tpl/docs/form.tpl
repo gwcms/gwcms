@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" form_width="1000px"}
+{include file="default_form_open.tpl" form_width="100%"}
 
 <style>
 	.input_label_td{ width: 150px; }
@@ -45,6 +45,17 @@
 {call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 
+
+{call e field="doc_adm_fields" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/doc_adm_fields')}
+{call e field="doc_vars" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+
+
+
+{foreach $item->doc_forms as $groupid => $form}
+	{call e field="keyval/vars_{$groupid}" type="select_ajax"  modpath="forms/answers"  source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+{/foreach}
+
+
 {if $item->body_editor == 0}
 	{$ck_set='minimum'}
 	{$ck_options.height=$item->body_editor_height|default:"200px"}
@@ -67,11 +78,30 @@
 	
 	{capture assign=tmp1}Form "{$item->form->admin_title}" variables{/capture}
 {capture assign=tmp}
-<pre style="height:auto;max-height:80px;overflow-y: scroll;padding:1px" >
+<textarea style="min-height:100px;width:100%;overflow-y: scroll;padding:1px" >
 {foreach $fieldnames as $fieldname}
 {literal}{{/literal}$form.{$fieldname}|escape{literal}}{/literal}
 {/foreach}
-</pre>	
+{foreach $item->doc_forms as $groupid => $form}{$fieldnames=array_keys($form->elements)}
+{foreach $fieldnames as $fieldname}
+{literal}{{/literal}$vars_{$groupid}.{$fieldname}|escape{literal}}{/literal}
+{/foreach}
+{foreach $item->doc_ext_fields as $groupid => $form}
+{foreach $form->elements as $fieldname => $input}
+{if $input->get(i18n)}{$i18n_suff="_{$app->ln}"}{else}{$i18n_suff=""}{/if}
+{$var="ext_fields_{$groupid}.{$fieldname}{$i18n_suff}"}
+{if $input->type == 'date'}
+{literal}{{/literal}FH::dateHuman(${$var},[year=>1]){literal}}{/literal}
+{elseif $input->type==number}
+{literal}{{/literal}${$var}{literal}}{/literal}, ({literal}{{/literal}GW_Sum_To_Text_Helper::sum2text(${$var}, {$app->ln}){literal}}{/literal});
+{else}
+{literal}{{/literal}${$var}|escape{literal}}{/literal}
+{/if}
+{/foreach}
+{/foreach}
+{/foreach}
+
+</textarea>	
 {/capture}
 		
 	{call e type=read title=$tmp1 field="nevermind" value=$tmp}
@@ -99,6 +129,43 @@
 {else}
 	{$tmpreadonly=true}
 {/if}
+
+
+
+{foreach $item->doc_ext_fields as $groupid => $form}
+	
+	
+	
+	{foreach $form->elements as $input}
+				
+		{$field=[
+			field=>"keyval/{$groupid}_{$input->get(fieldname)}",
+			type=>$input->get(type),
+			note=>$input->get(note),
+			hidden_note=>$input->hidden_note,
+			title=>$input->get(title),
+			placeholder=>$input->placeholder,
+			i18n=>$input->get(i18n),
+			colspan=>1
+		]}
+		{$opts=$input->get('config')}		
+		{if $input->get(inp_type)=='select_ajax'}
+			{$opts.preload=1}
+			{$opts.modpath=$input->get('modpath')}
+		{/if}	
+		{if is_array($opts)}
+			{$field = array_merge($field, $opts)}
+		{/if}	
+		
+		{$fields_config.fields[$field.field]=$field}
+	
+	{/foreach}
+	
+	
+{/foreach}
+
+{include "tools/form_components.tpl"}
+{call "build_form_normal"}
 
 {*
 {call e field=owner_type readonly=$tmpreadonly}

@@ -35,6 +35,8 @@
 		<i id="groups">Gavėjų grupės</i>
 		<i id="groups_string">Grupės</i>
 		<i id="status">Būklė</i>
+		<i id="doc_adm_fields">Prijungiami laukai</i>
+		<i id="doc_vars">Prijungiami kintamieji</i>
 		
 		<i id="unsubscribed">Atsisakė</i>
 		<i id="recipients_total">Gavėjų sk.</i>
@@ -67,6 +69,8 @@
 		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
 		<i id="recipients_ids">Paskiri gavėjai</i>
 		<i id="attachments"><lt>Prisegtukai</lt><en>Attachments</en></i>
+		<i id="form_id"><lt>Svetainės vartotojo forma</lt><en>Site user form</en></i>
+		<i id="site_info_trans">Svetainėje paaiškinamasis tekstas</i>
 	</i>
 	
     <i id="FIELDS_SHORT">
@@ -76,7 +80,7 @@
 		<i id="attachments"><![CDATA[<i class="fa fa-paperclip"></i>]]></i>
 		<i id="hits"><![CDATA[<i class="fa fa-eye"></i>]]></i>	
 		<i id="progress">%</i>	
-		
+		<i id="doc_vars">Kint. grp</i>
     </i>	
 	
 	<i id="FIELD_NOTE">
@@ -88,6 +92,9 @@
 		<i id="PUSH_APPLY_TO_TAKE_EFFECT">
 			<en>Push Apply after changes</en>
 			<lt>Po pakeitimo spauskite išsaugoti liekant</lt>
+		</i>
+		<i id="doc_adm_fields">
+			Iš formų modulio galima pasirinkti prijungiamus laukus, pasirinke išsaugokite, kad galėtumėte pradėti suvedinėti naujus duomenis
 		</i>
 	</i>
 	
@@ -176,6 +183,7 @@
 		<i id="info">
 			
 			<i id="iconclass">fa fa-file-o</i>
+			<i id="itemactions">1</i>
 		</i>		
 		
 

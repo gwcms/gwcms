@@ -66,6 +66,11 @@
 			<i id="textarea">Text area</i>
 			<i id="number">Number</i>
 		</i>
+		<i id="i18n">
+			<i id="">No</i>
+			<i id="3">Enabled, short text 100chars</i>
+			<i id="4">Enabled, text, more than 100 chars</i>
+		</i>
 	</i>
 	
 	<i id="VIEWS">
@@ -85,6 +90,7 @@
 	<i id="UPDATED">Atnaujintas</i>
 	<i id="SKIPPED">Praleistas</i>
 	<i id="UPDATED_NAME">Atnaujintas vard./pavard.</i>
+	
 	
 
 	<!-- =============== MODULE MAP START =================== -->
