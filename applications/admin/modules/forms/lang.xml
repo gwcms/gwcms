@@ -111,9 +111,10 @@
 				<i id="info">
 					<i id="iconclass">fa fa-wpforms</i>
 					<i id="model">GW_Forms</i>
+					<i id="itemactions">1</i>
 				</i>
 			</i>			
-			<i id="formelements">
+			<i id="elements">
 				<i id="title">Laukeliai</i>
 				<i id="in_menu">0</i>
 				<i id="info">

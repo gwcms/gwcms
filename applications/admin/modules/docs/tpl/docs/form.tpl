@@ -19,18 +19,23 @@
 </script>
 
 
+{function "display_field_var"}{strip}
+	{if $input->get(i18n)}{$i18n_suff="_{$app->ln}"}{else}{$i18n_suff=""}{/if}
+	{$var="{$vargroup}_{$groupid}.{$input->get(fieldname)}{$i18n_suff}"}
+	{if $input->type == 'date'}
+		{literal}{{/literal}FH::dateHuman(${$var},[year=>1]){literal}}{/literal}
+	{elseif $input->type==number}
+		{literal}{{/literal}${$var}{literal}}{/literal}, ({literal}{{/literal}GW_Sum_To_Text_Helper::sum2text(${$var}, {$app->ln}){literal}}{/literal});
+	{else}
+		{literal}{{/literal}${$var}|escape{literal}}{/literal}
+	{/if}
+{/strip}{/function}
+
 {call e field=admin_title}
 
 {if !$custom_cfg.no_idname}
 	{call e field=idname}
 {/if}
-
-
-
-
-
-
-
 
 
 
@@ -42,18 +47,21 @@
 {call e field=title i18n=4 hidden_note=$tmpnote}
 
 
-{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+{call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT') empty_option=1}
 
-
-
-{call e field="doc_adm_fields" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/doc_adm_fields')}
 {call e field="doc_vars" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
-
-
 {foreach $item->doc_forms as $groupid => $form}
-	{call e field="keyval/vars_{$groupid}" type="select_ajax"  modpath="forms/answers"  source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+	{call e field="keyval/vars_{$groupid}" type="select_ajax" title="{GW::l('/m/FIELDS/doc_adm_fields')} \"{$form->title}\" atsakymas"  modpath="forms/answers"  source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 {/foreach}
+
+
+
+
+
+
+
+
 
 
 {if $item->body_editor == 0}
@@ -82,23 +90,16 @@
 {foreach $fieldnames as $fieldname}
 {literal}{{/literal}$form.{$fieldname}|escape{literal}}{/literal}
 {/foreach}
-{foreach $item->doc_forms as $groupid => $form}{$fieldnames=array_keys($form->elements)}
-{foreach $fieldnames as $fieldname}
-{literal}{{/literal}$vars_{$groupid}.{$fieldname}|escape{literal}}{/literal}
+{foreach $item->doc_forms as $groupid => $form}
+{foreach $form->elements as $input}
+{call  "display_field_var" vargroup=vars}
 {/foreach}
-{foreach $item->doc_ext_fields as $groupid => $form}
+
+{*foreach $item->doc_ext_fields as $groupid => $form}
 {foreach $form->elements as $fieldname => $input}
-{if $input->get(i18n)}{$i18n_suff="_{$app->ln}"}{else}{$i18n_suff=""}{/if}
-{$var="ext_fields_{$groupid}.{$fieldname}{$i18n_suff}"}
-{if $input->type == 'date'}
-{literal}{{/literal}FH::dateHuman(${$var},[year=>1]){literal}}{/literal}
-{elseif $input->type==number}
-{literal}{{/literal}${$var}{literal}}{/literal}, ({literal}{{/literal}GW_Sum_To_Text_Helper::sum2text(${$var}, {$app->ln}){literal}}{/literal});
-{else}
-{literal}{{/literal}${$var}|escape{literal}}{/literal}
-{/if}
+{call "display_field_var"}
 {/foreach}
-{/foreach}
+{/foreach*}
 {/foreach}
 
 </textarea>	
@@ -130,23 +131,43 @@
 	{$tmpreadonly=true}
 {/if}
 
+{call e field="doc_adm_fields" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/doc_adm_fields')}
+
 
 
 {foreach $item->doc_ext_fields as $groupid => $form}
+
 	
-	
-	
+		{capture assign=tmp}
+			<tr><th colspan="99" class="th_h3 th_single">
+				{$form->title} 
+				<a class="iframeopen" href="{$app->buildUri("forms/forms/{$form->id}/elements",['clean'=>2])}" title='{$form->title} laukeliai'><i class="fa fa-pencil-square-o text-muted"></i></a>
+			</th></tr>
+		{/capture}
+		{$fields_config.fields[]=$tmp}
+		
 	{foreach $form->elements as $input}
-				
+			
+		{capture assign=tmp}
+			{$input->get(note)}{if $input->get(note)}<br>{/if}
+			<small>{call "display_field_var" vargroup=ext_fields}</small>
+		{/capture}
+			
+		{if $input->size > 6}
+			{$tmpcolsp=3}
+		{else}
+			{$tmpcolsp=1}
+		{/if}
+		
 		{$field=[
 			field=>"keyval/{$groupid}_{$input->get(fieldname)}",
 			type=>$input->get(type),
-			note=>$input->get(note),
 			hidden_note=>$input->hidden_note,
 			title=>$input->get(title),
 			placeholder=>$input->placeholder,
 			i18n=>$input->get(i18n),
-			colspan=>1
+			colspan=>$tmpcolsp,
+			note=>$tmp
 		]}
 		{$opts=$input->get('config')}		
 		{if $input->get(inp_type)=='select_ajax'}
@@ -161,11 +182,15 @@
 	
 	{/foreach}
 	
-	
-{/foreach}
 
+{/foreach}
+{$fields_config.cols=2}
+
+
+</table><table class="gwTable gwcmsTableForm">
 {include "tools/form_components.tpl"}
 {call "build_form_normal"}
+
 
 {*
 {call e field=owner_type readonly=$tmpreadonly}

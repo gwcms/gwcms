@@ -22,6 +22,11 @@
 	{if $fields_config}
 
 		{foreach $fields_config.fields as $field => $params_expand}
+			{if is_numeric($field)}
+				{$params_expand} {*html*}
+				{$col=0}
+				{continue}
+			{/if}
 			
 			{if $col==0 && !$smarty.get.form_ajax}
 				<tr>
@@ -37,6 +42,7 @@
 			
 
 			{$next=next($fields_config.fields)}
+			{if is_string($next)}{$next=next($fields_config.fields)}{/if}
 
 
 			{call "build_input"}
