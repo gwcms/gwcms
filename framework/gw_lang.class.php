@@ -368,7 +368,7 @@ class GW_Lang
 				
 		//paimti vertima is cache
 		
-		$vr = GW_Array_Helper::getPointer2XlevelAssocArr($transcache, explode('/', $key));
+		$vr = GW_Array_Helper::getPointer2XlevelAssocArrNew($transcache, explode('/', $key));
 		
 		//d::dumpas([$transcache, $vr, explode('/', $key)]);
 		
