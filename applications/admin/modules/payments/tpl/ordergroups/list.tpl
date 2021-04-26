@@ -28,7 +28,7 @@
 	
 	
 	{function dl_actions_items}
-		{$url=$m->buildUri("`$item->id`/orderitems",[clean=>2,composition_id=>$item->id])}
+		{$url=$m->buildUri("`$item->id`/orderitems",[clean=>2])}
 
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Cart items" caption="Items({$item->items_count})"}
 	{/function}	

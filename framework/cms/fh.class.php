@@ -249,7 +249,7 @@ class FH
 			$trln=$ln ? "/LN/$ln":"";
 		
 		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
-		$replace .= (int)$m[3];//.' '. GW::ln("/G/DATE/DAYSHORT");
+		$replace .= (int)$m[3].' '. GW::ln("/G/DATE/DAYSHORT");
 		
 		if(isset($opts['weekday']))
 			$replace .=', '. mb_strtolower(GW::ln('/G/DATE/WEEKDAYS/'.$mdw));;

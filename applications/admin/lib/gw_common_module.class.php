@@ -2260,9 +2260,14 @@ class GW_Common_Module extends GW_Module
 		$this->setMessageEx(['text'=>$str, 'type'=>4]);
 	}
 
-
-	function getTranslation($item, $field, $src, $dest, $check = false)
+	
+	/** 
+	* @param type $opts array : ['item'=>(object), 'field'=>(fieldname), 'src'=>(source lang), 'dest'=>(dest lang), 'check'=>(bool)]
+	 */
+	function getTranslation($opts)
 	{
+		extract($opts);
+		
 		if($check && (!$item->get($field,$src) || $item->get($field,$dest))){
 			//$this->setMessage("Auto translation field $field. value from '$from' ($src) NO NEED");
 			return false;
@@ -2346,17 +2351,17 @@ class GW_Common_Module extends GW_Module
 				continue;
 			
 			$destlns = [];
-			foreach(GW::s('LANGS') as $ln){
+			foreach(GW::s('LANGS') as $ln)
+			{	
 				if($ln==$srcln)
 					continue;
 				
-				if(!$item->get($field, $ln))
-					$upd |= $this->getTranslation ($item, $field, $srcln, $ln, true);
+					$upd |= $this->getTranslation (['item'=>$item,'field'=>$field, 'src'=>$srcln,'dest'=>$ln,'check'=>true]);
 			}
 			
 			if($this->app->i18next){
 				foreach($this->app->i18next as $ln =>$x)
-					$upd |= $this->getTranslation ($item, $field, "en", $ln, true);
+					$upd |= $this->getTranslation (['item'=>$item,'field'=>$field, 'src'=>'en','dest'=>$ln,'check'=>true]);
 			}
 		}		
 		

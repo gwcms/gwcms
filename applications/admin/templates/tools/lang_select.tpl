@@ -7,7 +7,7 @@
 				
 				<a href="{$app->buildUri(false, [lang=>$ln_code]+$smarty.get)}"
 				   {if $ln_code==$curr_lang}class="selected"{/if}
-				   >{GW::l('/g/LANG/')$ln_code}</a>
+				   >{GW::l("/g/LANG/`$ln_code`")}</a>
 				
 			{/foreach}
 </div>

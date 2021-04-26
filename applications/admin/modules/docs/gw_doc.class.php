@@ -5,7 +5,12 @@ class GW_Doc extends GW_i18n_Data_Object
 {
 	public $table = 'gw_docs';
 	
-	public $calculate_fields = ['title'=>1];
+	public $calculate_fields = [
+	    'title'=>1,
+	    'doc_forms'=>1,
+	    'doc_ext_fields'=>1,
+	    'keyval'=>1
+	];
 	
 	public $validators = [
 	    'admin_title'=>['gw_string', ['required'=>1]],
@@ -22,8 +27,16 @@ class GW_Doc extends GW_i18n_Data_Object
 		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'form_id']]
 	];
 	
-	public $encode_fields = ['config'=>'jsono'];		
+	public $encode_fields = [
+	    'config'=>'jsono',
+	    'doc_vars'=>'json',
+	    'doc_adm_fields'=>'json'
+	];		
 
+	
+	public $ownerkey = 'docs/docs';
+	public $extensions = ['keyval'=>1];	
+	public $keyval_use_generic_table = 1;
 	
 	
 	function validate()
@@ -55,6 +68,18 @@ class GW_Doc extends GW_i18n_Data_Object
 			case 'title':
 				return $this->admin_title;
 			break;
+			case 'doc_forms':
+				$ids = $this->doc_vars;
+				return GW_Forms::singleton()->findAll(GW_DB::inCondition('id', $ids), ['key_field'=>'idname']);
+			break;
+			case 'doc_ext_fields':
+				$ids = $this->doc_adm_fields;
+				return GW_Forms::singleton()->findAll(GW_DB::inCondition('id', $ids), ['key_field'=>'idname']);				
+			break;
+		
+			case 'keyval':
+				return $this->extensions['keyval'];
+			break;		
 		}
 		
 		

@@ -26,4 +26,14 @@ class Module_Payments_Paysera extends GW_Common_Module
 	}
  
  */	
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+			'search_fields'=>['p_firstname','p_lastname','id'],
+		];	
+		
+		
+		return $opts;	
+	}	
 }

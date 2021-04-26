@@ -1362,9 +1362,19 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	if(!opts)
 		opts = {}
 
-	var framewidth = opts.hasOwnProperty('width') ? opts.width : '100%';		
-	var frameheight = opts.hasOwnProperty('height') ? opts.height : 'auto';		
-
+	var style = {}
+	var key;
+	
+	style.width = opts.hasOwnProperty('width') ? opts.width : '100%';		
+	style.height = opts.hasOwnProperty('height') ? opts.height : 'auto';		
+	
+	if(opts.hasOwnProperty('min-width'))
+		style['min-width'] = opts['min-width'];
+	
+	var css ='';
+	for(key in style){
+		css += key+':'+style[key]+';'
+	}
 
 	if($(trig).hasClass('expanded'))
 	{
@@ -1381,7 +1391,7 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	triggerLoading(trig, 1);
 	
 
-	loadRowAfter(rowobj, "<td colspan='100'><iframe class='iframeunderrow iframe_auto_sz' src='"+url+"' style='width:"+framewidth+";height:"+frameheight+"'></td></iframe>", 'iframeunderrowcont');
+	loadRowAfter(rowobj, "<td colspan='100'><iframe class='iframeunderrow iframe_auto_sz' src='"+url+"' style='"+css+"'></td></iframe>", 'iframeunderrowcont');
 
 	$('#'+rowaftername+' .iframeunderrow').load(function(){
 			triggerLoading(trig, 0);

@@ -32,17 +32,15 @@ class Module_Docs extends GW_Common_Module
 		//$this->itax = new Itax(GW_Config::singleton()->get('itax/itax_apikey'));		
 		$this->addRedirRule('/^doItax|^viewItax/i','itax');
 
-		GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
+		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_DEV)
+			GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
 		
 	}
 
-	
 	function viewDefault()
 	{
 		$this->viewList();
-	}
-
-	
+	}	
 	
 	function getListConfig()
 	{
@@ -54,15 +52,7 @@ class Module_Docs extends GW_Common_Module
 		//$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
-	}	
-
-
-		
-	
-	
-	
-	
-	
+	}		
 	
 	function __eventBeforeDelete($item)
 	{
@@ -84,8 +74,6 @@ class Module_Docs extends GW_Common_Module
 		d::dumpas('test');
 		
 	}
-	
-	
 	
 	function doOpenInSite()
 	{
@@ -258,6 +246,17 @@ class Module_Docs extends GW_Common_Module
 		$this->setMEssage("Answer $cnt clones done");
 		$this->jump();		
 	}
+
+
+	/**
+	 * dont translate disabled languages
+	 */
 	
-	
+	function getTranslation($opts)
+	{
+		if(!$opts['item']->get('ln_enabled', $opts['dest']))
+			return false;
+		
+		return parent::getTranslation($opts);
+	}
 }

@@ -25,7 +25,7 @@
 
 
 	{function name=dl_actions_preview}
-		<a href="{$m->buildUri(false,[act=>doPreview,id=>$item->id, clean=>1])}" class="iframe-under-tr" data-iframeopt="{"width":"1000px"}"><i class="fa fa-search"></i></span>		
+		<a href="{$m->buildUri(false,[act=>doPreview,id=>$item->id, clean=>1])}" class="iframe-under-tr" data-iframeopt='{ "min-width":"1000px" }'><i class="fa fa-search"></i></span>		
 	{/function}
 	
 	
