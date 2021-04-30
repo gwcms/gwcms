@@ -27,7 +27,7 @@
 	{elseif $field=="pay_type"}
 		{call e type=read}
 	{elseif $field=="pay_id"}
-		{call e field=pay_id type=select_ajax modpath="datasources/payments_paysera"  preload=1 options=[] after_input_f=editadd}
+		{call e field=pay_id type=select_ajax modpath="payments/payments_paysera"  preload=1 options=[] after_input_f=editadd}
 	{elseif $field=="pay_test"}
 		{call e type=bool}		
 	{else}
