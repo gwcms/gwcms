@@ -137,9 +137,14 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], 'lt');
 
+		$v['COMPANY'] = $item->company;
+		$v['COMPANY_ID'] = $item->company_code;
+		$v['COMPANY_VAT_ID'] = $item->vat_code;
+		$v['COMPANY_ADDR'] = $item->company_addr;
+		
 		$v['INVOICE_NUM'] = $payconfirm->orderid;
 		$v['DATE'] = explode(' ',$item->insert_time)[0];
-		$v['EMAIL'] = $payconfirm->p_email;
+		$v['EMAIL'] = $payconfirm->p_email ?: $item->email;
 		$v['ITEMS'] = [];
 			//$pdf=GW_html2pdf_Helper::convert($html, false);			
 			
@@ -157,7 +162,12 @@ class Module_OrderGroups extends GW_Common_Module
 			];
 		}
 		
-		$attachuservars($v, $user);
+		if($user->id){
+			$attachuservars($v, $user);
+		}else{
+			$v['FULLNAME'] = $item->name.' '.$item->surname;
+			$v['PHONE'] = $user->phone;			
+		}
 		
 		return [$tpl_code, $v];
 	}

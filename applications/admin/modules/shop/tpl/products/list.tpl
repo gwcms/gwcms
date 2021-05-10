@@ -14,7 +14,11 @@
 		
 	{/function}	
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,config,rtlog]}		
+	{function name=do_toolbar_buttons_createorder} 
+		{toolbar_button title="Sukurti užsakymą pagal kainą" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doCreateOrderByPrice])}	
+	{/function}		
+	
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,config,rtlog,createorder]}		
 		
 	
 

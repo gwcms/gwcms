@@ -9,6 +9,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id']],
 	];		
 	
+	public $encode_fields = [
+	    'extra'=>'jsono',
+	];	
+	
 	
 	function updateTotal()
 	{

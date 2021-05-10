@@ -108,5 +108,54 @@ class Module_Products extends GW_Common_Module
 		
 		Navigator::jump($this->buildUri("$mod->id/form"));
 	}
+	
+	
+	
+	
+	
+	function doCreateOrderByPrice()
+	{
+		$form = ['fields'=>[
+		    'price'=>['type'=>'text', 'required'=>1],
+		    "cardnr"=>['type'=>'text', 'required'=>1],
+		    "receiptnr"=>['type'=>'text', 'required'=>1]
+		],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, "Add order with 1 item, product will be identified by price")))
+			return false;
+		
+		
+		$price = $answers['price'];
+		$item = Shop_Products::singleton()->find(['price=?', $price]);
+		
+		
+		$order = GW_Order_Group::singleton()->createNewObject();
+		$order->extra = ['cardnr'=>$answers['cardnr'],'receiptnr'=>$answers['receiptnr']];
+		$order->delivery_opt = 3;
+		//$order->pay_type = 5;
+		$order->payment_status = 7;;
+		$order->status = 7;
+		$order->insert();
+		
+		$url = $this->app->buildUri('direct/shop/products/p',['id'=>$item->id],['app'=>'site']);
+		
+		$cartitem = new GW_Order_Item;
+		$cartitem->setValues([
+			'obj_type'=>'shop_products',
+			'obj_id'=>$item->id,
+			'qty' => 1,
+			'unit_price'=>$price,
+			//'context_obj_id'=>$user->id,
+			//'context_obj_type'=>'gw_customer'
+			'qty_range'=>"1;1",
+			'deliverable'=>10, //real item
+			'link' =>$url
+		]);
+		
+		$order->addItem($cartitem);		
+
+		d::dumpas([$answers,$item, $order, $order->errors,GW::db()->last_query]);
+	}
 }
 
