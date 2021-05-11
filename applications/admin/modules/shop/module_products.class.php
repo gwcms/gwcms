@@ -113,22 +113,10 @@ class Module_Products extends GW_Common_Module
 	
 	
 	
-	function doCreateOrderByPrice()
+	function createOrder($answers)
 	{
-		$form = ['fields'=>[
-		    'price'=>['type'=>'text', 'required'=>1],
-		    "cardnr"=>['type'=>'text', 'required'=>1],
-		    "receiptnr"=>['type'=>'text', 'required'=>1]
-		],'cols'=>4];
-		
-		
-		if(!($answers=$this->prompt($form, "Add order with 1 item, product will be identified by price")))
-			return false;
-		
-		
 		$price = $answers['price'];
-		$item = Shop_Products::singleton()->find(['price=?', $price]);
-		
+		$item = Shop_Products::singleton()->find(['price=?', $price]);		
 		
 		$order = GW_Order_Group::singleton()->createNewObject();
 		$order->extra = ['cardnr'=>$answers['cardnr'],'receiptnr'=>$answers['receiptnr']];
@@ -137,6 +125,10 @@ class Module_Products extends GW_Common_Module
 		$order->payment_status = 7;;
 		$order->status = 7;
 		$order->insert();
+		
+		if($answers['insert_time'])
+			$order->saveValues(['insert_time'=>$answers['insert_time']]);
+		
 		
 		$url = $this->app->buildUri('direct/shop/products/p',['id'=>$item->id],['app'=>'site']);
 		
@@ -153,9 +145,59 @@ class Module_Products extends GW_Common_Module
 			'link' =>$url
 		]);
 		
-		$order->addItem($cartitem);		
+		$order->addItem($cartitem);			
+	}
+	
+	function doCreateOrderByPrice()
+	{
+		$form = ['fields'=>[
+		    'price'=>['type'=>'text', 'required'=>1],
+		    "cardnr"=>['type'=>'text', 'required'=>1],
+		    "receiptnr"=>['type'=>'text', 'required'=>1]
+		],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, "Add order with 1 item, product will be identified by price")))
+			return false;
+		
+		
+		
+		$this->createOrder($answers);	
 
 		d::dumpas([$answers,$item, $order, $order->errors,GW::db()->last_query]);
+	}
+	
+
+	function doOrdersImportSwedXml()
+	{
+		$form = ['fields'=>[
+		    'file'=>['type'=>'file', 'required'=>1],
+		],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, "Attach xml file")))
+			return false;		
+		
+		$file = $answers['file']['tmp_name'];
+		
+		$tree = GW_XML::xmlToArray(file_get_contents($file));
+		$transactions = GW_XML::simpleXmlArrFixList($tree['company']['outlet']['terminal']['batch']['card_group']['transaction']);
+		//$flat = GW_Array_Helper::arrayFlattenSep('/', $tree);
+
+		foreach($transactions as $tr){
+			$answers = [
+			    'price'=>$tr['paym_amount'],
+			    'cardnr'=>$tr['hidden_pan'],
+			    'receiptnr'=>$tr['stan'],
+			    'insert_time'=>$tr['local_date'].' '.$tr['local_time'],
+			];
+			
+			$this->createOrder($answers);
+			
+			$this->setMessage("Price: {$answers['price']}; Cardnr: {$answers['cardnr']}; ReceiptNr: {$answers['receiptnr']}, Time: {$answers['insert_time']}");
+		}
+
+		
 	}
 }
 

@@ -2221,6 +2221,17 @@ class GW_Common_Module extends GW_Module
 			$lastasnwers = json_decode($this->modconfig->prompt_lastanswers, true);
 		}
 		
+		$src =& $_GET;
+		$this->tpl_vars['method'] = 'get';
+		
+		foreach($form['fields'] as $fieldname => $el){
+			if(($el['type'] ?? false)=='file'){
+				$src =& $_POST;
+				$this->tpl_vars['method'] = 'post';	
+				
+			}	
+		}
+		
 		//if already have answers ?
 		foreach($form['fields'] as $fieldname => $el){
 			
@@ -2228,7 +2239,13 @@ class GW_Common_Module extends GW_Module
 				$form['fields'][$fieldname]['default'] = $lastasnwers[$fieldname];
 			}
 			
-			if(isset($el['required']) && !isset($_GET['item'][$fieldname])){
+			
+			
+			if( ($el['type'] ?? false)=='file' && isset($el['required']) && isset($_FILES[$fieldname])){
+				continue;
+			}
+			
+			if(isset($el['required']) && !isset($src['item'][$fieldname])){
 				$answers=false;
 			}
 		}
@@ -2236,17 +2253,17 @@ class GW_Common_Module extends GW_Module
 		
 		if($answers){
 			if(isset($opts['rememberlast'])){
-				$this->modconfig->prompt_lastanswers = json_encode($_GET['item']);
+				$this->modconfig->prompt_lastanswers = json_encode($src['item']);
 			}			
 			
 			
-			return $_GET['item'];
+			return array_merge($src['item'] ?? [], $_FILES);
 		}
 		
 		$this->tpl_vars['getargs'] = $_GET;
 		unset($this->tpl_vars['getargs']['url']);
 		
-		$this->tpl_vars['item'] = (object)($_GET['item'] ?? []);
+		$this->tpl_vars['item'] = (object)($src['item'] ?? []);
 		$this->tpl_vars['prompt_fields'] = $form;
 		$this->tpl_vars['prompt_title'] = $title;
 		$this->smarty->assign('m', $this);

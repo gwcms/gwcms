@@ -129,4 +129,27 @@ class GW_XML
 
 		return $theXML;
 	}
+	
+	static function xmlToArray($xmlstring)
+	{
+		$xml = simplexml_load_string($xmlstring, "SimpleXMLElement", LIBXML_NOCDATA);
+		$json = json_encode($xml);
+		$data = json_decode($json,TRUE);
+			
+		return $data;
+	}
+
+	static function simpleXmlArrFixList($arr)
+	{
+		if(!$arr)
+			return [];
+			
+		//d::dumpas(array_keys($arr)[0]);
+		if(array_keys($arr)[0]=="0"){
+			return $arr;
+		}else{
+			return [$arr];
+		}
+	}	
+	
 }

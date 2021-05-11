@@ -9,7 +9,7 @@
 
 <h6>{$prompt_title}</h6>
 
-<form id="promptform" class="promptform" action="{$smarty.server.REQUEST_URI}" method="get"  enctype="multipart/form-data"  >
+<form id="promptform" class="promptform" action="{$smarty.server.REQUEST_URI}" method="{$method|default:get}"  enctype="multipart/form-data"  >
 	
 	{foreach $smarty.get as $key =>$val}
 		{if $key=='url'}{continue}{/if}
