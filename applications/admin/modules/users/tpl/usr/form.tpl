@@ -56,7 +56,7 @@
 
 {if $m->rootadmin}
 	{call e field=is_admin type=bool}
-	{call e field=parent_user_id type=select options=$options.parent_user_id empty_option=1 default=$app->user->id}
+	{call e field=parent_user_id type=select_ajax modpath="users/usr"  preload=1 options=[] default=$app->user->id}
 {/if}
 
 
