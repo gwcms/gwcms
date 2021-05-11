@@ -15,7 +15,7 @@
 				{$page->getContent('submit_text')|nl2br}
 			</p>
 		{else}
-			<form role="form" action="{$smarty.server.REQUEST_URI}" method="post">
+			<form role="form" id="supportForm" action="{$smarty.server.REQUEST_URI}" method="post">
 				<input type="hidden" name="act" type="hidden" value="do:message" />
 				<div class="row" style="max-width: 600px">
 					<div class="col-md-12">
@@ -36,12 +36,33 @@
 												{call "input" field=name required=1 type=text}
 											</div>								
 										</div>
+			  {if $m->cfg->recapPublicKey}
+				  {$recapPublicKey=$m->cfg->recapPublicKey}
+				  <div class="row">
+					<div class="col-md-6">
+				     <div class="g-recaptcha" data-sitekey="{$recapPublicKey}" style="margin-bottom:5px;"></div>
+					     </div>	  
+
+				     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+				     <script>
+					 $('#supportForm').submit(function(event) {
+
+					     var response = grecaptcha.getResponse();
+
+					     if(response.length == 0){
+						     event.preventDefault();
+						     alert('{GW::ln('/G/validation/RECAPTCHA_FAILED')|escape:'javascript'}');
+					     }
+				       });
+				     </script>
+				</div>				
+			{/if}
 									{/if}
 
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												{call "input" field=message required=1 type=textarea rows=8}
+												{call "input" field=message required=1 type=textarea rows=8 default=$smarty.get.message}
 											</div>
 										</div>
 									</div>				    

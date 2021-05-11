@@ -2,8 +2,10 @@
 
 class Module_Support  extends GW_Public_Module {
 
-	function init() {		
+	function init() {
+		parent::init();
 		$this->config = new GW_Config('support/');
+		$this->cfg = $this->config;
 	}
 
 	function viewDefault() {
@@ -25,6 +27,17 @@ class Module_Support  extends GW_Public_Module {
 
 	function doMessage() 
 	{
+		if(!$this->app->user && $this->cfg->recapPublicKey){
+			$recaprez = $this->verifyRecaptchaV2();
+
+				//d::dumpas($recaprez);
+
+			if(!$recaprez['pass']){
+				$this->setError(GW::ln('/G/validation/RECAPTCHA_FAILED'));
+				$this->app->jump();
+			}			
+		}		
+		
 		$vals = $_POST['item'];
 		$msg = GW_Support_Message::singleton()->createNewObject();
 		
@@ -40,7 +53,7 @@ class Module_Support  extends GW_Public_Module {
 			
 			//mail(, 'New support request', $this->encodeTextMessage($vals));
 			
-			$opts['subject']="Gauta nauja zinute i natos.lt (".($vals['subject'] ?? 'betemos').")";
+			$opts['subject']="Gauta nauja zinute i ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
 
 			$str = "Nuo: <b>".$vals['name'].'</b><br />';
 
@@ -62,12 +75,20 @@ class Module_Support  extends GW_Public_Module {
 
 			$status = GW_Mail_Helper::sendMail($opts);		
 			
-			echo json_encode(['status'=>'1']);
+			if($_GET['json'])
+				die(json_encode(['status'=>'1']));
+			
+			$this->setMessage(GW::ln('/m/MESSAGE_SENT'));
+			$this->jump('/');
 		}else{
-			echo json_encode(['status'=>'0']);
+			if($_GET['json'])
+				die(json_encode(['status'=>'0']));
+			
+			
+			$this->jump();
 		}
 
-		exit;
+		
 	}
 	
 	function doDiscount()
@@ -92,5 +113,33 @@ class Module_Support  extends GW_Public_Module {
 	{
 		
 	}
+	
+	function verifyRecaptchaV2()
+	{
+		//https://www.google.com/u/3/recaptcha/admin/site/437873903
+		
+		if(isset($_POST['g-recaptcha-response'])){
+			$captcha=$_POST['g-recaptcha-response'];
+		}
+		
+		if(!$captcha){
+			return [];
+		}
+		$secretKey = $this->cfg->recapPrivateKey;
+		$ip = $_SERVER['REMOTE_ADDR'];
+		// post request to server
+		$url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+		$response = file_get_contents($url);
+		$arrResponse = json_decode($response,true);
+	      // should return JSON with success as true
+		if($arrResponse["success"]) {
+			$arrResponse['pass']=1;
+		} else {
+			$arrResponse['pass']=1;
+		}
+		
+		return $arrResponse;
+	}	
+	
 
 }
