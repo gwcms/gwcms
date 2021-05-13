@@ -71,6 +71,16 @@
 			<i id="3">Enabled, short text 100chars</i>
 			<i id="4">Enabled, text, more than 100 chars</i>
 		</i>
+		
+		<i id="linkedfields">
+			<i id="user/ext/iban">Vartotojas / iban</i>
+			<i id="user/ext/tax_payer_id">Vartotojas / mokesčių mokėtojo kodas</i>
+			<i id="user/ext/xtitle">Vartotojas / kreipinys</i>
+			<i id="user/birthdate">Vartotojas / gimimo data</i>
+			<i id="user/ext/contract_address">Vartotojas / adresas sutartims</i>
+			<i id="user/ext/contract_fullname">Vartotojas / pilnas vardas sutartims</i>
+			<i id="itax/contact/fullname">Itax / kontaktas / pilnas vardas</i>
+		</i>
 	</i>
 	
 	<i id="VIEWS">

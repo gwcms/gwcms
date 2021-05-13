@@ -128,7 +128,11 @@ class GW_User_Extended
 	function __set($name, $value)
 	{
 		//d::ldump(['set'=>[$name, $value] ]);
-		$this->replace($name, $value);
+		if(!$value){
+			$this->delete(GW_DB::prepare_query(["`key`=?",$name]));
+		}else{
+			$this->replace($name, $value);
+		}
 	}
 	
 	function __get($name)

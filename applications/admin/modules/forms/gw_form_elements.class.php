@@ -15,8 +15,8 @@ class GW_Form_Elements extends GW_i18n_Data_Object
 	    "placeholder"=>1,
 	    "note"=>1,
 	    "hidden_note"=>1,
-	];	
-
+	];
+	public $encode_fields = ['linkedfields'=>'json', 'selectcfg'=>'jsono'];
 	
 	function getTypes()
 	{

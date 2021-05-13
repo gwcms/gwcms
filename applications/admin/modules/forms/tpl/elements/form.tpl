@@ -27,5 +27,25 @@
 
 {call e field="i18n" type=select options=GW::l('/m/OPTIONS/i18n')}
 
+{call e field="linkedfields" type=multiselect options=GW::l('/m/OPTIONS/linkedfields') rowclass="field_linkedfields"}
+{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,config,size,linkedfields] options_fix=1}
+
+<script>
+	require(['gwcms'], function(){
+		$('#item__selectcfg______').change(function(){			
+			
+		
+			$(this).find('option').each(function(){
+				
+				var value = $(this).val()
+				
+				$('#gw_input_item__'+value+'__, .field_'+value).toggle($(this).is(":selected"))
+						
+			})
+			
+			
+		}).change()			
+	})
+</script>
 
 {include file="default_form_close.tpl"}
