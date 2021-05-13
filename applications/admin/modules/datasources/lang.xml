@@ -185,7 +185,14 @@
           <i id="model">GW_Classificator_Types</i>
 	  <i id="iconclass">fa fa-certificate</i>
         </i>
-      </i>     
+      </i>
+      <i id="config">
+        <i id="title">Registras</i>
+        <i id="info">
+          <i id="model">GW_Config_Item</i>
+	  <i id="iconclass">fa fa-list</i>
+        </i>
+      </i>       
     </i>
   </i>
 </xml>

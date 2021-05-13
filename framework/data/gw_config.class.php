@@ -23,7 +23,7 @@ class GW_Config
 	function set($key, $value)
 	{
 		$db = & $this->getDB();
-		$db->save($this->table, Array('id' => $this->prefix . $key, 'value' => $value));
+		$db->save($this->table, Array('key' => $this->prefix . $key, 'value' => $value));
 	}
 
 	function get($key, &$time = 0)
@@ -36,7 +36,7 @@ class GW_Config
 			return $this->_cache[$key];
 		}
 
-		$rez = $db->fetch_row("SELECT * FROM {$this->table} WHERE id='$key'");
+		$rez = $db->fetch_row("SELECT * FROM {$this->table} WHERE `key`='$key'");
 		$time = $rez['time'] ?? null;
 		return $rez['value'] ?? null;
 	}
@@ -46,7 +46,7 @@ class GW_Config
 		$db = & $this->getDB();
 
 		$key = addslashes(substr($this->prefix . $key, 0, 50));
-		$rows = $db->fetch_assoc($q = "SELECT id,value FROM {$this->table} WHERE id LIKE '$key%'");
+		$rows = $db->fetch_assoc($q = "SELECT `key`,value FROM {$this->table} WHERE `key` LIKE '$key%'");
 
 		$this->_cache = $rows + $this->_cache;
 
