@@ -8,6 +8,10 @@
 {list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 caption=GW::l('/g/REMOVE')}
 
 
+{if $item->user_id}
+	{list_item_action_m url=[false,[act=>doSyncWithLinked,id=>$item->id]] iconclass="fa fa-upload" confirm=1 caption=GW::l('/m/VIEWS/doSyncWithLinked')}
+{/if}
+
 
 
 	

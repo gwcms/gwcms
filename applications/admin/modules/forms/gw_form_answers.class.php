@@ -1,12 +1,15 @@
 <?php
 
 
-class GW_Form_Answers extends GW_Data_Object
+class GW_Form_Answers extends GW_i18n_Data_Object
 {
 	
 	public $ownerkey = 'forms/answers';	
 	public $extensions = ['keyval'=>1, 'attachments'=>1];	
-	
+	public $composite_map = [
+		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'owner_id']],
+		'user' => ['gw_composite_linked', ['object'=>'GW_User','relation_field'=>'user_id']],
+	];		
 
 	/*
 	function getFiles()

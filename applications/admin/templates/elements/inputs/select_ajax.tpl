@@ -1,3 +1,7 @@
+{if $type==select_ajax}
+	{$maximumSelectionLength=1}
+{/if}
+
 {if $readonly}
 	{foreach $value as $selected}
 		{$options[$selected]}{if !$selected@last},{/if}

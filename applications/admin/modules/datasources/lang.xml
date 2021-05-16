@@ -193,6 +193,12 @@
 	  <i id="iconclass">fa fa-list</i>
         </i>
       </i>       
+      <i id="itax">
+        <i id="title">Itax</i>
+        <i id="info">
+	  <i id="iconclass">fa fa-cog</i>
+        </i>
+      </i>        
     </i>
   </i>
 </xml>

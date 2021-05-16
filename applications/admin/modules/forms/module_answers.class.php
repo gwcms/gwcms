@@ -110,7 +110,16 @@ class Module_Answers extends GW_Common_Module
 				
 				$params['select'].=', pext'.$jnum.'.value AS '.$fieldname2;
 			}
-	}	
+			
+			
+			
+		
+	}
+
+	function __eventAfterList(&$list){
+		
+		GW_Composite_Data_Object::prepareLinkedObjects($list, 'user');
+	}
 	
 
 	
@@ -203,6 +212,43 @@ class Module_Answers extends GW_Common_Module
 		}
 
 		return $opts;	
-	}	
+	}
+
+	function doSyncWithLinked()
+	{
+		$item = $this->getDataObjectById();
+		
+		$list = [];
+			
+		//sasajos su vartotojo laukais // issaugoti-atnaujinti
+		if($item->user_id && $item->user){
+			$user = $item->user;
+			foreach($item->form->elements as $e){
+
+				if($e->linkedfields){
+					foreach($e->linkedfields as $field){
+						list($obj, $key) = explode('/',$field,2);
+
+						if($obj=='user'){
+							$prev = $user->get($key);
+							$user->set($key, $val=$item->get("keyval/".$e->fieldname));
+							$list[]=['user_id'=>$user->id,'formfield'=>$e->fieldname,'field'=>$key, 'prev_value'=>$prev, 'value'=>$val];
+						}
+					}
+				}
+			}
+			
+			//d::ldump($user);
+			$user->updateChanged();
+			//d::ldump(GW_Data_to_Html_Table_Helper::doTable($list));
+			//d::dumpas($user);
+		}
+		
+		if($list){
+			$this->setMessage("Updated data: <br/>".GW_Data_to_Html_Table_Helper::doTable($list));
+		}
+		
+		$this->jump();
+	}
 	
 }
