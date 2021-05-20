@@ -34,7 +34,7 @@ class GW_Admin_Application extends GW_Application
 		if($this->user->isRoot())
 			return true;
 		
-		return $page->get('active') && GW_Permissions::canAccess($page->get('path'), $this->user->group_ids) ;
+		return $page->get('active') && GW_Permissions::canAccess($page->get('path'), $this->user->group_ids_cached) ;
 	}
 	
 	function jumpToFirstChild()

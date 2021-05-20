@@ -146,7 +146,7 @@ class GW_DB
 
 		//in case of serious problems
 		//$this->logint($cmd.' - '.$_SERVER['REQUEST_URI']);
-
+		
 		if ($this->debug)
 			$this->query_times[] = Array($cmd, (float) $this->last_query_time);
 		
@@ -164,6 +164,7 @@ class GW_DB
 		}
 
 		$this->result || $this->trigger_error($cmd, null, $nodie);
+		
 
 		return $this->result;
 	}

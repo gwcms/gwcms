@@ -23,7 +23,7 @@ class GW_Data_Object
 	
 	public $calculate_fields = [];
 	static $_instance;
-	public $cache;
+	public $cache=[];
 	public $changed_fields = [];
 	public $changed=false; //indicates if changed related composite objects
 	public $extensions=[];
@@ -1113,12 +1113,12 @@ class GW_Data_Object
 	function calculateFieldCache($key)
 	{
 		$cache =&  $this->cache['calcf'];
-
+		
 		if (isset($cache[$key]))
 			return $cache[$key];
-
+		
 		$cache[$key] = $this->calculateField($key);
-
+		
 		return $cache[$key];
 	}
 	
