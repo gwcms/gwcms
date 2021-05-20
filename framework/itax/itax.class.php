@@ -13,6 +13,20 @@ class Itax
 		$this->apikey = $apikey;
 	}
 	
+	function initConfig()
+	{
+		$this->config = new GW_Config('itax/');		
+		$this->db = GW::db();
+	}
+	
+	
+	
+	function insert($groupname,$model, $data)
+	{
+		$url = self::ENDPOINT.$groupname . (isset($data['id'])?'/'.$data['id']:'');
+		$result = $this->apiCall(isset($data['id']) ? "PUT" : "POST", $url, [$model=>$data]);		
+		return $result;
+	}
 	
 	function update($what='purchases', $id, $data)
 	{
@@ -602,12 +616,12 @@ class Itax
 		return $this->apiCall("GET", self::ENDPOINT.'supliers');
 	}
 	
-	function searchSupliers($search=[])
+	function searchAny($groupname, $search=[])
 	{		
-		$result = $this->apiCall("GET", self::ENDPOINT.'supliers?'. http_build_query($search));
+		$result = $this->apiCall("GET", self::ENDPOINT.$groupname.'?'. http_build_query($search));
 		
 		return $result;
-	}	
+	}
 	
 	
 	function getSalesTaxes()
@@ -621,6 +635,14 @@ class Itax
 		
 		return $this->apiCall("GET", self::ENDPOINT.'products'.$q);
 	}
+	
+	function getAny($name,$opts=[])
+	{
+		$q = $opts ? '?'.http_build_query($opts):'';
+		
+		return $this->apiCall("GET", self::ENDPOINT.$name.$q);
+	}	
+	
 	
 	function getLocations()
 	{
@@ -703,7 +725,7 @@ class Itax
 		
 		$cond = isset($args['search']) ? GW_DB::prepare_query(["`name` LIKE ?", $args['search']]) : '1=1';
 		$cond.= " AND ".$groupcond;
-			
+		
 		$sql = "SELECT SQL_CALC_FOUND_ROWS id, name FROM `$table` WHERE " .$cond." LIMIT $offset, $limit";
 		$resp['options'] = $this->db->fetch_assoc($sql);
 		
@@ -727,7 +749,12 @@ class Itax
 
 	function getOptions($obj)
 	{
-		$response = $this->{"get".$obj}();
+		
+		if(method_exists($this, "get{$obj}")){
+			$response = $this->{"get".$obj}();
+		}else{
+			$response = $this->getAny($obj);
+		}
 		
 		$opts = [];
 		foreach($response->response as $row)
@@ -844,4 +871,5 @@ class Itax
 		
 		return $this->apiCall("DELETE", self::ENDPOINT.$objType.'/'.$id);
 	}
+	
 }

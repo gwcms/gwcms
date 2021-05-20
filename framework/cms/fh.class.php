@@ -233,7 +233,7 @@ class FH
 	}
 	
 	static function dateHuman($date, $opts=[])
-	{		
+	{				
 		if(!preg_match('/(\d{4})-(\d{2})-(\d{2})/', $date, $m)) 
 			return $date;
 		
@@ -249,10 +249,28 @@ class FH
 			$trln=$ln ? "/LN/$ln":"";
 		
 		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
-		$replace .= (int)$m[3].' '. GW::ln("/G/DATE/DAYSHORT");
+		//$replace .= (int)$m[3].' '. GW::ln("/G/DATE/DAYSHORT");
+		$replace .= (int)$m[3];
 		
 		if(isset($opts['weekday']))
 			$replace .=', '. mb_strtolower(GW::ln('/G/DATE/WEEKDAYS/'.$mdw));;
+		
+		if($opts['format']){
+			switch($opts['format']){
+				case 'adb_en':
+					//17th January 2021
+					$nf = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
+					$letters = str_replace([0,1,2,3,4,5,6,7,8,9],'',$nf->format($m[3]));
+					$letters = '<sup>'.$letters.'</sup>';
+					
+					return  $m[3].$letters.' '. GW::ln("$trln/G/DATE/MONTHS/".(int)$m[2]).' '.$m[1];
+				break;
+			}
+		}
+		
+		
+		
+		
 
 		
 		return str_replace($m[0], $replace, $date);

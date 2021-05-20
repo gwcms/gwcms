@@ -224,7 +224,15 @@ var gw_adm_sys = {
 		});
 	},
 	init_iframe_open: function(){
-		$(".iframeopen:not([data-initdone='1'])").click(function(event){			
+		$(".iframeopen:not([data-initdone='1'])").click(function(event){
+			
+			if(event.ctrlKey){
+				event.stopPropagation();
+				var url = gw_navigator.url($(this).attr('href'), { 'clean': false })
+				window.open(url, '_blank').focus();
+				return;
+			}
+			
 			var title = $(this).attr('title');
 			if(!title)
 				title = $(this).text();

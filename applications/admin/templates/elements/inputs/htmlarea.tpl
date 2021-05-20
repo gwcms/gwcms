@@ -41,6 +41,10 @@ require(["ckeditor"], function() {
 	
 	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',':'') + 'codemirror,filebrowser,resize';
 	
+	config.protectedSource = [];
+	{literal}config.protectedSource.push( /\{[\s\S]*?\}/g );{/literal}
+	config.extraPlugins += ',showprotected';
+	
 	{if $height}
 		config.height = "{$height}";
 	{else}
