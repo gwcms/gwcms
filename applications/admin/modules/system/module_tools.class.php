@@ -454,10 +454,10 @@ class Module_Tools extends GW_Common_Module
 		initEnviroment($dest);
 		$replace_to = GW::s("SITE_URL");
 		
-		if($replace_what == $replace_to)
-		{
-			d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
-		}
+		//if($replace_what == $replace_to)
+		//{
+		//	d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
+		//}
 		//DEBUG : UNCOMMENT THIS:::
 		
 				
@@ -466,7 +466,9 @@ class Module_Tools extends GW_Common_Module
 		
 		
 		
-		$newurl = str_replace($replace_what, $replace_to, $url);
+		//$newurl = str_replace($replace_what, $replace_to, $url);
+		$newurl = $replace_to . $url;
+		
 		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to,'result'=>$newurl]);
 		
 
