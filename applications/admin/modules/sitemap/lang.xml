@@ -225,6 +225,9 @@
         <en>Used on every template, preload every time</en>
       </i>
     </i>
+	<i id="additfields">
+		<i id="icon">Ikonėlė</i>
+	</i>    
   </i>
   <i id="ADD_HOST">
     <lt>Pridėti host</lt>

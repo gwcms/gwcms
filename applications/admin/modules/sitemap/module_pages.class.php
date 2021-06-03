@@ -11,7 +11,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		parent::init();
 
-		
+		$this->config = new GW_Config($this->module_path[0].'/');
+		$this->config->preload('');	
+		$this->tpl_vars['additfields'] = json_decode($this->config->additfields, true);
 	
 
 		
@@ -37,9 +39,6 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		
 		$this->app->carry_params['clean']=1;
-		
-		
-		
 	}
 	
 	
