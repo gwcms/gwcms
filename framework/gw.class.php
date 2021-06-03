@@ -201,7 +201,7 @@ class GW
 		    'args' => $args['args'],
 		    'sys_base' => Navigator::getBase()
 		);	
-
+		
 		$app_o = self::initApp($app, $context);
 		
 		if(isset($args['fake_user_id']))
