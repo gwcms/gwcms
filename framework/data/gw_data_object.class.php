@@ -292,8 +292,17 @@ class GW_Data_Object
 		return $new;
 	}
 
+	private $lastRequestInfoPrepared;
+	
 	function lastRequestInfo()
 	{
+		if($this->lastRequestInfoPrepared)
+		{
+			$tmp = $this->lastRequestInfoPrepared;
+			$this->lastRequestInfoPrepared = false;
+			return $tmp;
+		}
+		
 		$db = & $this->getDB();
 
 		$info = Array
@@ -357,7 +366,9 @@ class GW_Data_Object
 		if(isset($options['count'])){
 			$sql = "SELECT count(*) FROM " . $this->findAllTable($options);
 		}else{	
-			$sql = "SELECT SQL_CALC_FOUND_ROWS {$select} FROM " . $this->findAllTable($options);
+			$countertag =  isset($options['count_cached']) ? "" : "SQL_CALC_FOUND_ROWS" ;
+			
+			$sql = "SELECT $countertag {$select} FROM " . $this->findAllTable($options);
 		}
 
 		//ussage example $options=['joins'=>[['RIGHT','table_name','condition AND condition']]]
@@ -366,7 +377,6 @@ class GW_Data_Object
 		
 		if (isset($this->base_args['joins_add']))
 			self::__addJoins($this->base_args['joins_add'], $sql);
-		
 		
 		if ($conditions)
 			$sql.= ' WHERE ' . GW_DB::prepare_query($conditions);
@@ -397,6 +407,30 @@ class GW_Data_Object
 		$this->fireEvent('BEFORE_LIST', $options);
 		
 		$sql = $this->buildSql($options);
+		
+		if(isset($options['resultcache'])){
+						
+		
+			
+			list($entries, $query_info) = GW_Temp_Data::singleton()->rwCallback([
+			    'name'=>"CACHED_".$this->findAllTable($options).'_'.md5($sql. serialize($options)),
+			    'renew'=>isset($_GET['gw_renew_cache']),
+			    'format'=>'serialize',
+			    'expires'=>$options['resultcache']], function() use ($options) {
+				if(isset($_GET['renew_debug']))
+					d::ldump('renew cache');
+				unset($options['resultcache']);
+				return [$this->findAll(null, $options), $this->lastRequestInfo()];;
+			});
+			$this->lastRequestInfoPrepared = $query_info;
+			
+			
+			//d::dumpas($entries);
+			
+			//d::ldump($entries);
+			return $entries;
+		}
+		
 
 
 		$db = & $this->getDB();

@@ -56,15 +56,21 @@ class GW_Temp_Data extends GW_Data_Object
 		{
 			$val = $tmp->value;
 						
-			if($format && $format == 'json')
+			if($format == 'json'){
 				return json_decode($val, true);
+			}elseif($format == 'serialize'){
+				return unserialize($val);
+			}
 			
 			return $val;
 		}else{
 			$dataraw = $callback();
 				
-			if($format && $format == 'json')
-				$data =  json_encode($dataraw);			
+			if($format == 'json'){
+				$data =  json_encode($dataraw);	
+			}elseif($format == 'serialize'){
+				$data = serialize($dataraw);		
+			}
 			
 			$this->store($user_id, $group, $name, isset($data) ? $data : $dataraw, $expires);
 			

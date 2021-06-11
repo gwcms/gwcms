@@ -15,6 +15,8 @@ class GW_CSV_Helper
 				break;
 			$i++;
 		}
+		
+		$callback("last", -1);
 			
 		fclose($file);		
 	}
