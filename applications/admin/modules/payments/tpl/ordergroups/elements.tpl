@@ -11,7 +11,8 @@
 		user_id=>[type=>select_ajax,modpath=>"users/usr", preload=>1,options=>[],default=>$app->user->id],
 		pay_confirm_id=>[type=>select_ajax, modpath=>"payments/payments_paysera",preload=>1,options=>[], after_input_f=>editadd],
 		amount_total=>[type=>number,step=>0.01],
-		adm_processed=>[type=>bool]
+		adm_processed=>[type=>bool],
+		extra=>[type=>text]
 	]
 
 ]}

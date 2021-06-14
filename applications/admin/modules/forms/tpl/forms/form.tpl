@@ -21,6 +21,7 @@
 
 {call e field=admin_title}
 {call e field=title i18n=4}
+{call e field=description type=textarea i18n=4}
 
 
 {if !$custom_cfg.no_idname}

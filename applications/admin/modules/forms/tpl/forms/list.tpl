@@ -6,7 +6,11 @@
 	
 	{$dl_smart_fields=[recipients_total]}	
 	
-
+	{$dl_output_filters=[
+		description_lt=>expand_truncate,
+		description_en=>expand_truncate,
+		description_ru=>expand_truncate
+	]}	
 	
 	{$do_toolbar_buttons[] = hidden}
 	
