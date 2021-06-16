@@ -69,6 +69,14 @@
 
 {call e field=active type=bool}
 
+
+{foreach $additfields as $field}
+	{if $field=="icon"}
+		{call e type=text}
+	{/if}
+{/foreach}
+
+
 {if GW::s('MULTISITE') && !$smarty.get.site_id && $app->site->id==1}
 	{call e field=multisite type=bool}	 
 {/if}

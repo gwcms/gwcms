@@ -31,6 +31,11 @@
 		<img src="{$app->icon_root}{$icons[$item->type]}.png" align="absmiddle" vspace="2" />	
 		{/if}
 	{/function}
+	{function dl_cell_icon}
+		{if $item->icon}
+		<img style="height:16px;background-color:silver" src="{$item->icon}" align="absmiddle" vspace="2" />	
+		{/if}
+	{/function}	
 	{function dl_cell_title}
 		{if $item->type!=2}
 			{gw_link params=[pid=>$id] title=$item->title}
@@ -51,18 +56,10 @@
 			{/foreach}		
 	{/function}
 	
-	{$display_fields = [
-		ico=>1,
-		path=>1,
-		pathname=>0,
-		title=>1,
-		in_menu=>1,
-		insert_time=>1,
-		update_time=>1
-	]}
+
+	{$dl_smart_fields=[title,in_menu,ico,icon]}
 	
-	{$dl_fields=$m->getDisplayFields($display_fields)}	
-	{$dl_smart_fields=[title,in_menu,ico]}
+	
 	
 	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}	
 	

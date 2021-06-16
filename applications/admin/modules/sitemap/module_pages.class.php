@@ -14,7 +14,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$this->config = new GW_Config($this->module_path[0].'/');
 		$this->config->preload('');	
 		$this->tpl_vars['additfields'] = json_decode($this->config->additfields, true);
-	
+			
 
 		
 		if(isset($_GET['site_id']))
@@ -414,4 +414,42 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 	}
 	/////////////////---------------------IMPORT-EXPORT-----------------------------------------
+	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();
+		
+		foreach($cfg['fields'] as $field => $opts){
+			$cfg['fields'][$field] = 'lof';
+		}
+		
+		$cfg['fields']['ico'] = 'Lo';
+		$cfg['fields']['path'] = 'lof';
+		$cfg['fields']['pathname'] = 'Lof';
+		$cfg['fields']['title'] = 'Lof';
+		$cfg['fields']['in_menu'] = 'Lof';
+		
+		if(!GW::s('MULTISITE')){
+			unset($cfg['fields']['multisite']);
+			unset($cfg['fields']['site_id']);
+		}		
+		
+
+		
+		$cfg['filters']['type'] = ['type'=>'select','options'=>GW::l('/m/TYPE_OPT')];
+
+		
+		
+		if(isset($this->tpl_vars['additfields'])){
+			foreach($this->tpl_vars['additfields'] as $field)
+				$cfg['fields'][$field] = 'lof';
+		}
+		
+		//d::dumpas($cfg);
+					
+		
+		
+		return $cfg;
+	}	
+	
 }

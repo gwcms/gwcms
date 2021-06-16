@@ -459,15 +459,19 @@ class Module_Tools extends GW_Common_Module
 		//	d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
 		//}
 		//DEBUG : UNCOMMENT THIS:::
-		
-				
+		$base = Navigator::getBase(true);
+					
 		$url = $_GET['uri'];
+		$url = str_replace($base,'', $url);
+		
 		//$url  = str_replace("https://", "http://", $_GET['uri']);//redirect should solve return to https protocol
 		
 		
 		
 		//$newurl = str_replace($replace_what, $replace_to, $url);
 		$newurl = $replace_to . $url;
+		
+		//d::dumpas([$url, $replace_to,$newurl]);
 		
 		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to,'result'=>$newurl]);
 		

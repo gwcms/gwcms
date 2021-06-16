@@ -38,7 +38,10 @@ class Module_Config extends GW_Common_Module
 	{
 		$vals = $_REQUEST['item'];
 		
-		//$vals['array'] = json_encode($vals['array']);
+		foreach($vals as $key => $val)
+			if(is_array($val))
+				$vals[$key] = json_encode($val);
+			
 		
 		
 		$this->model->setValues($vals);
@@ -48,7 +51,7 @@ class Module_Config extends GW_Common_Module
 		
 		
 		
-		$this->__afterSave($vals);
+		//$this->__afterSave($vals);
 		
 		
 		$this->jump();

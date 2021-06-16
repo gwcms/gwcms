@@ -9,6 +9,28 @@
 
 {call e field=ln_enabled type=bool  i18n_expand=1 default=1 onchange="lnenabler(ln,state,this)" i18n=3}
 
+{*
+{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,config,size,linkedfields] options_fix=1}
+
+<script>
+	require(['gwcms'], function(){
+		$('#item__selectcfg______').change(function(){			
+			
+		
+			$(this).find('option').each(function(){
+				
+				var value = $(this).val()
+				
+				$('#gw_input_item__'+value+'__, .field_'+value).toggle($(this).is(":selected"))
+						
+			})
+			
+			
+		}).change()			
+	})
+</script>
+*}
+
 <script>
 	function lnenabler(ln, state, obj)
 	{
@@ -51,10 +73,22 @@
 
 {call e field="doc_vars" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
-{foreach $item->doc_forms as $groupid => $form}
-	{call e field="keyval/vars_{$groupid}" type="select_ajax" title="{GW::l('/m/FIELDS/doc_adm_fields')} \"{$form->title}\" atsakymas"  modpath="forms/answers"  source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
-{/foreach}
+{if $item->id > 25}
+	
+	{foreach $item->doc_forms as $groupid => $form}
+		{call e field="keyval/vars_{$groupid}" type="multiselect_ajax" title="{GW::l('/m/FIELDS/doc_adm_fields')} \"{$form->title}\" atsakymai"  
+			modpath="forms/answers"  
+			value_format=json1
+			sorting=1
+			source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 
+			hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+	{/foreach}
 
+{else}
+	{foreach $item->doc_forms as $groupid => $form}
+		{call e field="keyval/vars_{$groupid}" type="select_ajax" title="{GW::l('/m/FIELDS/doc_adm_fields')} \"{$form->title}\" atsakymas"  modpath="forms/answers"  source_args=[owner_id=>$form->id] options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+	{/foreach}	
+{/if}
 
 
 
