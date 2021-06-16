@@ -445,4 +445,35 @@ class GW_Site_Application extends GW_Application
 		return parent::preRun();
 	}
 	
+	function initAnonymousUser()
+	{
+		if($this->user)
+			return false;
+			
+		// Anonymous User Identification cookie
+		if(!isset($_COOKIE['AUID'])){
+			Navigator::setCookie("AUID", $uid = GW_String_Helper::getRandString(40));			
+		}else{
+			$uid = $_COOKIE['AUID'];
+		}
+		
+		$user = GW_Anonymous_User::singleton()->find(['idcookie=?', $uid]);
+		
+			
+		if(!$user){
+			$vals = ['idcookie'=>$uid];
+			
+			$user = GW_Anonymous_User::singleton()->createNewObject($vals);
+			$user->insert();
+		}
+		
+		$user->setValues([
+				'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+			    'lastip'=>$_SERVER['REMOTE_ADDR']
+		]);
+		$user->updateChanged();
+		
+		return $user;		
+	}	
+	
 }

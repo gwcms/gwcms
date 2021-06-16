@@ -735,7 +735,8 @@ var gwcms = {
 			 minWidth : 200,
 			 heightOffset : 0,
 			 widthOffset:0,
-			 delay: 1000
+			 delay: 1000,
+			 interval: 5000
 		 };
 		 
 		 var conf = $.extend({}, defaults, conf || {});		

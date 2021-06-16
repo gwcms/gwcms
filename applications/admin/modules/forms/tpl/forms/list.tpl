@@ -35,7 +35,9 @@
 	{function dl_actions_elements}
 		{$url=$m->buildUri("`$item->id`/elements",[clean=>2])}
 		{*iconclass="fa fa-globe"*}
-		{list_item_action_m href=$url action_addclass="iframe-under-tr" caption="Įvestys({$item->element_count})"}
+		{list_item_action_m href=$url 
+			action_addclass="iframe-under-tr" caption="Įvestys({$item->element_count})" 
+			tag_params=["data-iframeopt"=>'{ "min-width":"1000px" }']}
 	{/function}		
 	
 	{function dl_actions_answers}

@@ -12,7 +12,10 @@
 		{toolbar_button title="Tipai" href=$m->buildUri(classificator_types,[clean=>2],[level=>1]) btnclass="iframeopen" iconclass="fa fa-chevron-circle-down" tag_params=['data-dialog-width'=>"1200px"]}
 	{/function}	
 	
+	
+	{$do_toolbar_buttons = [addinlist]}	
 	{$do_toolbar_buttons_hidden=[modactions,types]}
+	
 	
 	{$do_toolbar_buttons[]=dialogconf}
 	{$do_toolbar_buttons[]=hidden}
@@ -43,5 +46,7 @@
 	
 	
 	{$dl_smart_fields=[type,count]}
+	
+	
 	
 {/block}

@@ -18,6 +18,13 @@ class GW_Form_Elements extends GW_i18n_Data_Object
 	];
 	public $encode_fields = ['linkedfields'=>'json', 'selectcfg'=>'jsono'];
 	
+
+
+	public $composite_map = [
+		'optionsgroup' => ['gw_composite_linked', ['object'=>'GW_Classificator_Types','relation_field'=>'options_src']],
+	];
+	
+	
 	function getTypes()
 	{
 		return  $this->getDB()->getColumnOptions($this->table, 'type');

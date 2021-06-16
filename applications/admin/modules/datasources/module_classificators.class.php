@@ -12,8 +12,12 @@ class Module_Classificators  extends GW_Common_Module
 		$this->app->carry_params['clean']=1;
 		$this->app->carry_params['type']=1;
 		
+		if( ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
+			$_GET['type'] = $tmp;
+		}			
+		
 		if(isset($_GET['type'])){
-			$this->filters['type'] = $_GET['id'];
+			$this->filters['type'] = $_GET['type'];
 		}
 		
 		
@@ -22,7 +26,7 @@ class Module_Classificators  extends GW_Common_Module
 			$group = $this->getGroupByKey();
 			
 			$this->filters['type'] = $group->id;
-		}		
+		}	
 	}
 	
 	function getGroupByKey()

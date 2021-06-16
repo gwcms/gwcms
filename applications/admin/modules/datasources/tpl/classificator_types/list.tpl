@@ -26,9 +26,15 @@
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[invertactive,dialogremove]}
 	
+		
 	{function dl_cell_count}
-		<a href="{$m->buildUri("products",[act=>doSetSingleFilter,field=>$prod_field,value=>$item->id],[level=>1])}">{$item->count}</a>
-	{/function}
+		{$url=$m->buildUri("`$item->id`/classificators",[clean=>2])}
+		{*iconclass="fa fa-globe"*}
+		{list_item_action_m href=$url 
+			action_addclass="iframe-under-tr" caption="Items({$item->count})" 
+			tag_params=["data-iframeopt"=>'{ "min-width":"1000px" }']}
+	{/function}			
+		
 	{function dl_cell_type}
 	
 		{$m->lang.OPTIONS.classificator_types[$item->type]}
@@ -37,5 +43,7 @@
 	
 	
 	{$dl_smart_fields=[type,count]}
+	
+	
 	
 {/block}

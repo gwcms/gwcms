@@ -21,6 +21,31 @@ class Module_Elements extends GW_Common_Module
 		$this->model->getTypes();
 	}
 	
+	function __eventAfterList(&$list){
+		
+		
+		
+		$optids = [];
+		foreach($list as $item)
+			if($item->options_src)
+				$optids[$item->options_src]=1;
+			
+		if($optids){
+			GW_Composite_Data_Object::prepareLinkedObjects($list, 'optionsgroup');
+			$this->tpl_vars['classificator_type_cnt'] = GW::db()->fetch_assoc(
+				"SELECT type,count(*) FROM `".GW_Classificators::singleton()->table."` "
+				. "WHERE ".GW_DB::inCondition('type', array_keys($optids))." "
+				. "GROUP BY type", 0);
+			
+		}
+		
+
+		
+		
+		
+	}	
+	
+	
 	
 	
 }
