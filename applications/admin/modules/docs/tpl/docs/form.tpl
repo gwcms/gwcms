@@ -203,7 +203,7 @@
 			colspan=>$tmpcolsp,
 			note=>$tmp
 		]}
-		{$opts=$input->get('config')}		
+		{$opts=json_decode($input->get('config'),true)}	
 		{if $input->get(inp_type)=='select_ajax'}
 			{$opts.preload=1}
 			{$opts.modpath=$input->get('modpath')}

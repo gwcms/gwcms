@@ -20,7 +20,7 @@
 
 {include "tools/form_components.tpl"}
 
-<table>
+<table >
 	{call "build_form" fields_config=$prompt_fields}
 </table>
 
@@ -28,3 +28,5 @@
 
 <button class='btn btn-success'>{GW::l('/g/SUBMIT')}</button>
 </form>
+
+
