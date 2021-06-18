@@ -5,7 +5,7 @@
 	
 	
 	{function name=do_toolbar_buttons_modactions} 
-		{toolbar_button title="Suskaiciuoto produktus" href=$m->buildUri(false,[act=>doCounts])  iconclass="fa fa-refresh"}
+		{toolbar_button title="Add from text (1 item per line)" href=$m->buildUri(false,[act=>doImportOnePerLine])  iconclass="fa fa-download"}
 	{/function}	
 	
 	{function name=do_toolbar_buttons_types} 
@@ -25,7 +25,7 @@
 	
 	
 	
-	{$dl_actions=[invert_active,edit,delete]}
+	{$dl_actions=[move,invert_active,edit,delete]}
 
 	{$dl_output_filters=[
 		insert_time=>short_time, 

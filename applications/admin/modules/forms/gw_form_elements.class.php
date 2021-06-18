@@ -22,6 +22,7 @@ class GW_Form_Elements extends GW_i18n_Data_Object
 
 	public $composite_map = [
 		'optionsgroup' => ['gw_composite_linked', ['object'=>'GW_Classificator_Types','relation_field'=>'options_src']],
+		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'owner_id']]
 	];
 	
 	

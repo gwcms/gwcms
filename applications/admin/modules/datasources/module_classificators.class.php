@@ -64,5 +64,38 @@ class Module_Classificators  extends GW_Common_Module
 	}
 	
 	
+	
+	function doImportOnePerLine()
+	{
+		
+		$form = ['fields'=>['rows'=>['type'=>'textarea', 'required'=>1]],'cols'=>1];
+
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/ONE_PER_LINE'))))		
+			return false;
+		
+		
+		$rows = explode("\n", $answers['rows']);
+		$cnt = 0;
+		
+		foreach($rows as $row)
+		{
+			if(!$row)
+				continue;
+			
+			$item = new GW_Classificators;
+			$item->set('title',$row);
+			
+			if($this->filters)
+				$item->setValues($this->filters);
+			
+			$item->active=1;
+			$item->priority = $cnt;
+			
+			$item->insert();
+			$cnt++;
+		}
+		$this->setMessage("New entries cnt: $cnt");
+	}
 
 }

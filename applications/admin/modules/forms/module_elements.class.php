@@ -47,5 +47,25 @@ class Module_Elements extends GW_Common_Module
 	
 	
 	
+	function doCreateClassificatorGroup()
+	{
+		$item = $this->getDataObjectById();
+		$form=$item->form;
+		
+		$key = "{$form->admin_title}/{$item->fieldset}/{$item->fieldname}";
+		
+		$classtype = GW_Classificator_Types::singleton()->createNewObject();
+		
+		$classtype->key = $key;
+		$classtype->title = $key;
+		$classtype->insert();
+		
+		$item->options_src = $classtype->id;
+		$item->updateChanged();
+		
+		$this->jump();
+	}
+	
+	
 	
 }

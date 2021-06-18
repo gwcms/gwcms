@@ -16,3 +16,4 @@ ALTER TABLE `gw_classificators` CHANGE `title_en` `title_en` VARCHAR(255) CHARAC
 ALTER TABLE `gw_classificators` CHANGE `title_ru` `title_ru` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
 ALTER TABLE `gw_form_answers` ADD `auid` INT NOT NULL COMMENT 'gw_anonynous_user' AFTER `user_id`;
+ALTER TABLE `gw_classificators` ADD `priority` INT NOT NULL AFTER `count`;
