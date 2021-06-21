@@ -41,7 +41,17 @@
 	{if !isset($required) && $required_fields[$field]}
 		{$required=1}
 	{/if}
-		       
+		      
+	
+	
+	
+	{if $params_expand}
+		{foreach $params_expand as $k => $v}
+			{assign var=$k value=$v}
+		{/foreach}
+		{$params_expand=[]}
+	{/if}					
+				
 	{if $type==checkbox}
 		
 	<div class="mb-3 {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}">
@@ -107,6 +117,7 @@
 			       {if $placeholder}placeholder="{$placeholder|escape}"{/if}
 			       style="{if $width}width:'{$width}'{/if}"
 			       {if $rows}rows="{$rows}"{/if}
+			       {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 			       >{$value|escape}</textarea>
 		{else}
 			{include file="inputs/input_`$type`.tpl"}
