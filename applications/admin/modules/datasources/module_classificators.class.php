@@ -96,6 +96,7 @@ class Module_Classificators  extends GW_Common_Module
 			$cnt++;
 		}
 		$this->setMessage("New entries cnt: $cnt");
+		$this->jump();
 	}
 
 }

@@ -22,30 +22,45 @@
 {call e field=config type=code_json height=200px nopading=1}  
 
 {call e field="hidden_note" i18n=4}
-{call e field="note"  i18n=4}
+
+{if $item->type==infotext}
+	{call e field=note type=textarea  i18n=4}	
+{else}
+	{call e field=note i18n=4}
+{/if}
 {call e field="placeholder"  i18n=4}
 
 {call e field="active" type=bool}
 
 {call e field="i18n" type=select options=GW::l('/m/OPTIONS/i18n')}
 
+
+
+{call e field=conditions}
+
 {call e field="linkedfields" type=multiselect options=GW::l('/m/OPTIONS/linkedfields') rowclass="field_linkedfields"}
-{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,config,size,linkedfields] options_fix=1}
+{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,config,size,linkedfields,conditions] options_fix=1}
 
 
 
 <script>
+	function selectRow(name)
+	{
+		return $('#gw_input_item__'+name+'__, .field_'+name);
+	}
+	
 	require(['gwcms'], function(){
 		$('#item__selectcfg______').change(function(){			
 			
-		
 			$(this).find('option').each(function(){
 				
 				var value = $(this).val()
-				
-				$('#gw_input_item__'+value+'__, .field_'+value).toggle($(this).is(":selected"))
-						
+				selectRow(value).toggle($(this).is(":selected"))	
 			})
+			
+			if($('#item__type__').val()=='infotext'){
+				selectRow('note').show();
+			}
 			
 			
 		}).change()	
