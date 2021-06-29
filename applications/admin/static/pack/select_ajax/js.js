@@ -201,7 +201,7 @@ function initSelect2Inputs1()
 
 
 			for(var index in items){
-				if(current.indexOf(items[index].id)!=-1){
+				if(current && current.indexOf(items[index].id)!=-1){
 					console.log('select_ajax: fillitems append. Remove duplicate id:'+id+', title: '+items[index].title);
 
 					delete index[id];
@@ -469,6 +469,8 @@ function addEditControls(obj)
 
 	this.selected = function (context)
 	{
+		console.log(context);
+		
 		if(context.item)
 		{
 			var item = context.item
@@ -478,7 +480,11 @@ function addEditControls(obj)
 				ctrl.inputctrl.data('value', item.id)
 			}
 			
+			
+						
+			
 			ctrl.inputctrl.trigger('fillitems', [[item], true]);
+			ctrl.inputctrl.trigger('inittitles');
 		}
 	}
 	
@@ -487,6 +493,9 @@ function addEditControls(obj)
 	}
 
 	this.addBtn.click(function(){
+		
+		//ctrl.selected({ item: { id: 1150, title: "bbd" } })
+		//ctrl.inputctrl.trigger('inittitles');
 		rootgwcms().open_dialog2({ url: $(this).data('url'), iframe:1, title: this.title, close_callback: ctrl.selected })
 	})
 

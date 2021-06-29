@@ -444,7 +444,8 @@ class GW_Common_Module extends GW_Module
 			echo "<script type='text/javascript'>parent.location.reload()</script>";
 			exit;
 		}
-		if(isset($_GET['dialog']) && $_REQUEST['submit_type']??false != 1) {
+		if(isset($_GET['dialog']) && ($_REQUEST['submit_type']??false) != 1) {
+			
 			//reik tiketis kad dvigubos apsaugos atveju neuzeis cia
 			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
 			
