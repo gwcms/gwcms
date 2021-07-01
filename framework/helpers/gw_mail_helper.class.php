@@ -251,6 +251,11 @@ class GW_Mail_Helper
 		
 		return $cfg->mail_admin_emails;
 	}
+	
+	static function getDeveloperAddr()
+	{
+		return GW_User::singleton()->find('id=9')->email;
+	}
 		
 	/**
 	 * 
@@ -263,6 +268,13 @@ class GW_Mail_Helper
 		
 		return self::sendMail($opts);
 	}
+	
+	static function sendMailDeveloper(&$opts)
+	{		
+		$opts['to'] = self::getDeveloperAddr();
+		
+		return self::sendMail($opts);
+	}	
 	
 	static function setAdminStatusMSG($controler, $status, $opts)
 	{
