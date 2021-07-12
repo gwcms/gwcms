@@ -47,7 +47,7 @@ class Module_Config extends GW_Common_Module
 		$this->model->setValues($vals);
 		
 		//jeigu saugome tai reiskia kad validacija praejo
-		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
+		$this->app->setMessage(GW::l('/g/SAVE_SUCCESS'));
 		
 		
 		

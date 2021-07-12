@@ -109,6 +109,8 @@
       <lt>Svetainė</lt>
       <en>[A] Website</en>
     </i>
+    <i id="editor"><lt>HTML redaktoriaus nustatymo perašymas</lt><en>HTML editor override</en></i>
+    <i id="editor_height"><lt>HTML redaktoriaus aukštis</lt><en>HTML editor height</en></i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="templatevars">TV</i>
@@ -185,6 +187,11 @@
     </i>
   </i>
   <i id="OPTIONS">
+	  
+		<i id="body_editor">
+			<i id="1"><lt>Formatuotas tekstas</lt><en>Formatted text</en></i>		
+			<i id="2"><lt>HTML / Smarty kodo redakt.</lt><en>HTML / Smarty code editor</en></i>			
+		</i>	  
     <i id="block_types">
       <i id="1">
         <lt>Text line</lt>
@@ -376,4 +383,5 @@
     </i>
   </i>
   <i id="i18n_EXT_ADD_LN">Additional language setup: input language copy from in_menu presence. !Warning in "to" field specify only new language.</i>
+  
 </xml>

@@ -349,4 +349,23 @@ class GW_Array_Helper
 		$array = $temp + $array;
 	}
 	
+	
+	/**
+	 * kad atiduot i JSON.parse nepakintanti indeksa, jei skaicius pakinta rikiavimo 
+	 */
+
+	function idValueArray(array $input) 
+	{
+		$return = array();
+		foreach ($input as $key => $value) {
+
+
+			if (is_array($value))
+				$value = self::idValueArray($value);
+
+			$return[] = ['id' => $key, 'value' => $value];
+		}
+
+		return $return;
+	}
 }

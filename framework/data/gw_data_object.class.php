@@ -1248,8 +1248,28 @@ class GW_Data_Object
 			return [];
 		
 		$opts['key_field']='id';
+		
 			
-		return $this->findAll(GW_DB::inCondition('id', $ids), $opts);
+		$list = $this->findAll(GW_DB::inCondition('id', $ids), $opts);
+		
+		
+		
+		if($opts['preserve_order'] ?? false){
+			$list0 = $list;
+			$list = [];
+			foreach($ids as $id)
+				if(isset($list0[$id]))
+					$list[$id] = $list0[$id];
+				
+				
+				
+			//d::dumpas([$ids,$list]);	
+		}
+		
+		
+		
+		return $list;
+		
 	}
 	
 	function isChangedField($field)

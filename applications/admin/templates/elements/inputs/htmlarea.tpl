@@ -62,6 +62,8 @@ require(["ckeditor"], function() {
 	{/if}
 	 
 	 config.entities = false;
+	 config.autoParagraph = false;
+	 config.coreStyles_bold = { element: 'b', overrides: 'strong' };
 	 
 	 //https://docs.ckeditor.com/ckeditor4/latest/guide/dev_file_browser_api.html
 

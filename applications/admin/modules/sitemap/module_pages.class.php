@@ -14,9 +14,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$this->config = new GW_Config($this->module_path[0].'/');
 		$this->config->preload('');	
 		$this->tpl_vars['additfields'] = json_decode($this->config->additfields, true);
-			
-
-		
+					
 		if(isset($_GET['site_id']))
 		{
 			$this->filters['site_id']=$_GET['site_id'];

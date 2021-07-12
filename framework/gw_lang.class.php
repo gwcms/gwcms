@@ -334,6 +334,13 @@ class GW_Lang
 	 * pakrauna vertimus is duombazes, 
 	 * jei nera duombazeje tada pakrauna is 
 	 * lang failu arba pacio templeito jei vartotojas developeris
+	 * opcijos
+	 *	nocreate - nekurti vertimo
+	 *	v - vertimu kintamieji
+	 *	c - 1 lowercase, 2 - pirma didzioji
+	 *	l - linksniavimas
+	 *	asis - jei neegzistuoja grazins null
+	 *	
 	 */
 	static function ln($fullkey, $opts=[])
 	{		
@@ -371,6 +378,10 @@ class GW_Lang
 		$vr = GW_Array_Helper::getPointer2XlevelAssocArrNew($transcache, explode('/', $key));
 		
 		//d::dumpas([$transcache, $vr, explode('/', $key)]);
+		if($opts['asis'] ?? false )
+			return $vr;
+		
+		
 		
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti

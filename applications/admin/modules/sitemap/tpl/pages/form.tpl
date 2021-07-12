@@ -112,8 +112,18 @@
 			{$valgetf=getContent}
 		{/if}
 		
+		{$tmptype=$input->get(type)}
+		{if $m->config->get("user/{$app->user->id}/editor")==2}
+			{$tmptype=code_smarty}	
+		{/if}
+		{if $m->config->get("user/{$app->user->id}/editor_height")}
+			{$ck_options.height=$m->config->get("user/{$app->user->id}/editor_height")}
+			{$opts.height=$ck_options.height}
+		{/if}
+		
+		
 		{call e field=$input->get(name) 
-			type=$input->get(type) 
+			type=$tmptype
 			note=$input->get(note) 
 			title=$input->get(title) 
 			params_expand=$opts

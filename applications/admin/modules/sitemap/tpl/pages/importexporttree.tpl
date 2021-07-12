@@ -10,11 +10,11 @@
 {call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid required=1}
 
 
-{call e field=action type=select options=[export=>Eksportuoti,import=>Importuoti] empty_option=1 rowclass=ie_action}
+{call e field=action type=radio options=[export=>Eksportuoti,import=>Importuoti] empty_option=1 rowclass=ie_action}
 
 {call e field=importfile type=file rowclass=row_import}
 {call e field=include_content type=bool rowclass=row_export}
-{call e field=export_type type=select options=[item_and_childs=>'Puslapį ir vaikus',only_childs=>'Pasirinkto puslapio vaikus',page_only=>'Tik puslapį'] rowclass=row_export}
+{call e field=export_type type=radio options=[item_and_childs=>'Puslapį ir vaikus',only_childs=>'Pasirinkto puslapio vaikus',page_only=>'Tik puslapį'] rowclass=row_export}
 
 {if $app->user->isRoot()}
 	{call e field=show_json type=bool rowclass=row_export}
@@ -33,8 +33,11 @@
 <script>
 	require(['gwcms'], function(){
 		$('.ie_action').change(function(){
+			
 			$('.row_import, .row_export').hide();
-			var act = $('.ie_action select').val()
+			var act = $('.ie_action [type="radio"]:checked').val()
+			
+			console.log('test:'+act);
 			$('.row_'+act).fadeIn();
 		}).change();
 	})
