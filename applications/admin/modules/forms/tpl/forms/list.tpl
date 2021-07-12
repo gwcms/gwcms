@@ -37,7 +37,7 @@
 		{*iconclass="fa fa-globe"*}
 		{list_item_action_m href=$url 
 			action_addclass="iframe-under-tr" caption="Įvestys({$item->element_count})" 
-			tag_params=["data-iframeopt"=>'{ "min-width":"1000px" }']}
+			tag_params=["data-iframeopt"=>'{ "min-width":"1300px" }']}
 	{/function}		
 	
 	{function dl_actions_answers}

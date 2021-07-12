@@ -14,7 +14,11 @@
 	{$dl_actions=[invert_active_ajax,edit,move,ext_actions]}
 	{$dl_smart_fields=[options_src]}
 	
-	
+	{$dl_output_filters=[
+		title_lt=>expand_truncate,
+		title_en=>expand_truncate,
+		title_ru=>expand_truncate
+	]}		
 
 	{function dl_cell_options_src}
 		{$id=$item->options_src}
