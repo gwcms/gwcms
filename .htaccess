@@ -13,6 +13,7 @@ RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP_HOST} !=localhost
 RewriteCond %{HTTP_HOST} !=127.0.0.1
 RewriteCond %{REMOTE_ADDR} !=127.0.0.1
+RewriteCond %{REMOTE_ADDR} !=cms2.gw.lt
 RewriteCond %{REMOTE_ADDR} !=::1
 RewriteCond %{QUERY_STRING} !(^|&)sys_call=1
 RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
