@@ -310,6 +310,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	{
 		
 		$im0 = GW_image::singleton();
+		$owners = [];
+		
 		foreach($list as $itm)
 			$owners[] = $im0->getOwnerFormat($itm, $field);
 		
