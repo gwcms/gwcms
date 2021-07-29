@@ -2346,6 +2346,11 @@ class GW_Common_Module extends GW_Module
 			if(preg_match('/\d{4}-\d{2}-\d{2}|\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $val))
 				return 4;
 			
+			//too long
+			if(strlen($val) > 500){
+				return 5;
+			}
+			
 			return 0;
 		};
 		
