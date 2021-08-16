@@ -74,6 +74,7 @@
 <div style="display:none" id="imageOpts">
 	Width <input type="number" id="width" value="300">
 	Height <input type="number" id="height" value="300">
+	<p><small>{GW::l('/m/EMPTY_IMAGE_DIMENSION_NOTE')}</small></p>
 </div>
 
 <input type="text" id="filename" style="width:300px;">
