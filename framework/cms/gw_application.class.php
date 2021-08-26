@@ -355,10 +355,10 @@ class GW_Application
 		$path = '';
 		$item = false;
 		$path_arr = Array();
-
+		
 		foreach ($parr as $i => $name) {
 			$path.=($path ? '/' : '') . $name;
-
+			
 			if ($this->requestInfoInnerDataObject($name, $item))
 				continue;
 
@@ -692,6 +692,11 @@ class GW_Application
 			$params['app'] = $reqopts['app'];
 		}
 		
+		
+		if($reqopts['user'] ?? false){
+			$token = GW::getInstance('gw_temp_access')->getToken($reqopts['user']);
+			$get_args['temp_access'] = $reqopts['user'] . ',' . $token;	
+		}
 		
 		
 		$path = $this->buildUri($path, $get_args, $params);

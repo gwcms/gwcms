@@ -112,7 +112,6 @@ function initSelect2Inputs1()
 		opts.language =select2_lang
 	}
 	
-	console.log(opts);
 	
 	if(typeof bootstrap4 !== 'undefined')
 		opts.theme= 'bootstrap4';
@@ -160,12 +159,32 @@ function initSelect2Inputs1()
 					return markup;
 		}		
 	}
+	
+	
+	if(obj.data('addifnotexist')){
+		var tmp = obj.data('addifnotexist');
+		var id=obj.attr('id')
+		
+		if(tmp==1)
+			tmp = 'select2AddNewItem'
+	
+		
+         opts.language= {
+             noResults: function() {
+            return translate_not_found+`<button style="width: 100%" type="button"
+            class="btn btn-primary" 
+            onClick="`+tmp+`('`+id+`')"><i class="fa fa-plus-circle"></i> `+translate_add_new+` </button>
+            </li>`;
+            }
+         }		
+	}
 
 	if(obj.data('emptyoption'))
-	{
 		opts.allowClear = true;
-		opts.placeholder = obj.data('placeholder');				
-	}
+					
+	if(obj.data('placeholder'))
+		opts.placeholder = obj.data('placeholder');	
+	
 
 	if(obj.data('dontcloseonselect'))
 	{
@@ -182,6 +201,7 @@ function initSelect2Inputs1()
 
 	obj.on('fillitems', function(event, items, append, ids){
 
+		//console.log({e:event,i:items,a:append,ids:ids})
 		if(obj.data('sorting') && obj.attr('multiple')){ //surikiuot pagal paduota idu sarasa
 			var sorted=[];
 			for(var idx in ids) {
@@ -222,6 +242,7 @@ function initSelect2Inputs1()
 		for(var i in selectedvals)
 			selectedvals[i] = String(selectedvals[i]);
 
+		
 
 		$.each(items, function(index, item){
 			//console.log(item.title+':'+item.id)
@@ -248,15 +269,22 @@ function initSelect2Inputs1()
 			}
 		}
 
-		$(this).trigger('change');		
+		console.log("test admin & remove this");
+		//kodel cia reikejo to nzn bet blogai veike ant site
+		//$(this).trigger('change');		
 	}).on('inittitles', function(event, ids, append){
 
 		if(!ids)
 			ids = $(this).val()
 
+
 		var that = this;
 
+		
+		//console.log(['fillitems',$(this).data('source'), JSON.stringify(ids) ]);
+		
 		$.post($(this).data('source'), { ids: JSON.stringify(ids) }, function(data){						
+						
 			if(data.hasOwnProperty('items'))
 			{
 				$(that).trigger('fillitems', [data.items, append, ids]);
@@ -468,9 +496,7 @@ function addEditControls(obj)
 
 
 	this.selected = function (context)
-	{
-		console.log(context);
-		
+	{		
 		if(context.item)
 		{
 			var item = context.item
@@ -478,6 +504,10 @@ function addEditControls(obj)
 			if(!ctrl.multiple)
 			{
 				ctrl.inputctrl.data('value', item.id)
+			}else{
+				var selected = ctrl.inputctrl.val()
+				selected.push(item.id)
+				ctrl.inputctrl.data('value',selected)
 			}
 			
 			
@@ -594,4 +624,76 @@ function addEditControls(obj)
 	//ctrl.on('chageevent', function(){ console.log('change'); })
 
 
+}
+
+
+
+function select2AddNewItem(id)
+{
+	var select = $('#'+id);
+	var select2 = select.data('select2');
+	
+	newtitle=select2.$container.find('.select2-search__field').val();
+	
+	
+	
+	console.log(select2.$container);
+	
+	if(!newtitle) // single select deatachintas nuo konteinerio
+	{
+		$('.select2-search__field').each(function(){
+			if(this.value)
+				newtitle=this.value
+		})
+	}
+		
+	
+	
+	select.select2('close');	
+	
+	
+	var url = gw_navigator.url(select.data('formurl'), { dialog:1, newtitle:newtitle, clean:1} )
+	
+	
+	this.multiple = select.data('maximumselectionlength') > 1;	
+
+
+	var ctrl = this;	
+	
+	var opts = { url: url, iframe:1, close_callback: function(context){
+			
+		if(context.item)
+		{
+			var item = context.item
+			
+			//select.trigger('fillitems', );
+
+			
+			if(!ctrl.multiple)
+			{
+				select.data('value', item.id)
+			}else{
+				var selected = select.val()
+				selected.push(item.id)
+				select.data('value',selected)
+				
+			}
+			
+			select.trigger('inittitles',[[item.id], true]);						
+			
+			
+		}
+	} }
+	
+	
+	if(select.data('dialog-size')){
+		var dim = select.data('dialog-size').split(',');
+		opts.width = dim[0]
+		opts.height = dim[1]
+	}
+	
+	rootgwcms().open_dialog2(opts)
+	
+
+	
 }

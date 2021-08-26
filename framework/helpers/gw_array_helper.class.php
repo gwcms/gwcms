@@ -249,6 +249,17 @@ class GW_Array_Helper
 		return $newlist;
 	}
 	
+	static function groupObjects(array $arr, $key)
+	{
+		$groupedlist = [];
+		
+		foreach($arr as $itm)
+			$groupedlist[$itm->$key][] = $itm;
+		
+		
+		return $groupedlist;
+	}	
+	
 	/**
 	 * transform to multilevel array
 	 */

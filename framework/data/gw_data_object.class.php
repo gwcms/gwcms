@@ -196,7 +196,6 @@ class GW_Data_Object
 	
 	function get($key)
 	{
-		
 		if(strpos($key, '/')!==false)
 		{
 			$keys=explode('/', $key);

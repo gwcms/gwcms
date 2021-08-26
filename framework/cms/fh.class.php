@@ -329,4 +329,17 @@ class FH
 	{
 		return preg_replace('/[^a-z0-9]/i', '-', strtolower(gw_url_crypt_helper::convertAccentsAndSpecialToNormal($s)));
 	}
+	
+	
+	
+	static function calcInputNamePattern($input_name_pattern, $type='')
+	{
+		if(!$input_name_pattern)
+			$input_name_pattern="item[%s]";
+		
+		if(strpos($type, 'multiselect')!==false)
+			$input_name_pattern="{$input_name_pattern}[]";
+
+		return $input_name_pattern;
+	}	
 }

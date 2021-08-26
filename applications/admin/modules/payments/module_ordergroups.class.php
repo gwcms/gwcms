@@ -142,7 +142,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['COMPANY_VAT_ID'] = $item->vat_code;
 		$v['COMPANY_ADDR'] = $item->company_addr;
 		
-		$v['INVOICE_NUM'] = $payconfirm->orderid;
+		$v['INVOICE_NUM'] = GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX').'-'.$item->id;
 		$v['DATE'] = explode(' ',$item->insert_time)[0];
 		$v['EMAIL'] = $payconfirm->p_email ?: $item->email;
 		$v['ITEMS'] = [];
@@ -164,12 +164,24 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		if($user->id){
 			$attachuservars($v, $user);
+			
+			if(!$v['EMAIL'])
+				$v['EMAIL'] = $user->email;
 		}else{
 			$v['FULLNAME'] = $item->name.' '.$item->surname;
 			$v['PHONE'] = $user->phone;			
 		}
 		
 		return [$tpl_code, $v];
+	}
+	
+	function viewInvoiceVars()
+	{
+		$item = $this->getDataObjectById();
+		list($tpl_code, $v) = $this->initInvoiceVars($item);
+		
+		
+		die(json_encode(['tpl'=>$tpl_code, 'vars'=>$v], JSON_PRETTY_PRINT));
 	}
 	
 	function viewInvoice()

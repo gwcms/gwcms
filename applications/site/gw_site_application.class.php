@@ -41,7 +41,6 @@ class GW_Site_Application extends GW_Application
 	
 	
 	
-	
 	function getPage()
 	{
 		$this->page = new GW_Page();
@@ -72,6 +71,10 @@ class GW_Site_Application extends GW_Application
 	//no data objects catching
 	function requestInfoInnerDataObject(&$name, &$item)
 	{
+		
+		if($this->path_arr[1] == 'direct'){
+			return parent::requestInfoInnerDataObject($name, $item);
+		}
 	}	
 
 	function _jmpFrst($cp=true)
@@ -164,6 +167,34 @@ class GW_Site_Application extends GW_Application
 		return $this->processSiteModule($fname, $path, $info, $args);
 	}
 	
+	
+	function processModule($path_info, $request_params)
+	{
+		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
+			$this->jumpToFirstChild();
+		
+		$module = $this->constructModule1($path_info);
+
+		$this->module = & $module;
+
+		
+		$path_info['params'] = isset($path_info['params']) ? $path_info['params'] : [];
+
+		//d::dumpas($path_info);
+		
+		$module->_args = ['params' => $path_info['params'], 'request_params' => $request_params];
+		$module->init();
+
+		//if(GW::$app->inner_request)
+		//	$module->ob_collect = false;
+
+		$module->attachEvent('BEFORE_TEMPLATE', array($this, 'postRun'));
+
+		$module->process();
+		
+		$this->postRun2();
+	}	
+	
 	function subProcessPath($path, $args=[])
 	{
 		$path = explode('?', $path);
@@ -206,8 +237,9 @@ class GW_Site_Application extends GW_Application
 		GW_Autoload::addAutoloadDir(dirname($file));
 		
 		$parg = $this->path_arg;
-		if(isset($parg[0]) && $parg[0] == 'direct')
-			array_shift($parg);
+		if(isset($parg[0]) && $parg[0] == 'direct'){
+			$parg=[];//array_shift($parg);
+		}
 		
 		$params = array_merge($params, $parg);	
 		
@@ -217,7 +249,7 @@ class GW_Site_Application extends GW_Application
 			'app'=>$this, 
 			'smarty'=>$this->smarty,
 			'args'=>$args,
-			'_args'=>['params'=>$params]
+			'_args'=>['params'=>$params,'request_params' => $args]
 		]+$info);
 			
 		
@@ -474,6 +506,22 @@ class GW_Site_Application extends GW_Application
 		$user->updateChanged();
 		
 		return $user;		
+	}
+
+	function idInPath($id)
+	{
+		return is_numeric($id) ? $id : "id_".$id;
 	}	
+	
+	
+	function requestInfo() {
+
+		parent::requestInfo();
+
+		foreach($this->path_arr as $arr){
+			if(isset($arr['data_object_id']))
+				$this->path_data_objects[$arr['name']] = $arr['data_object_id'];
+		}
+	}
 	
 }

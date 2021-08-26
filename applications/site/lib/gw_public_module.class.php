@@ -26,6 +26,8 @@ class GW_Public_Module {
 	public $cancel_tpl_process = false;
 	public $view_name = false;
 	public $skipview = false;
+	public $action_name;
+	public $default_view = 'default';
 	
 	function __construct($variables = Array()) {
 
@@ -82,9 +84,13 @@ class GW_Public_Module {
 		return $this->smarty->{$fetch?'fetch':'display'}($tmp);
 	}
 
+	
+	
+	
 	function processView($name, $params = Array()) {		
+		
 		if ($name == '')
-			$name = "default";
+			$name = $this->default_view;
 
 		$p = new stdClass();
 		$p->view = $name;
@@ -115,7 +121,8 @@ class GW_Public_Module {
 		if (substr($name, 0, 2) != 'do')
 			die('Invalid action name');
 
-
+		$this->action_name=$name;
+		
 		$methodname = $name;
 		return $this->$methodname();
 	}
@@ -170,7 +177,7 @@ class GW_Public_Module {
 		
 		return $this->processView($view_name, $params);
 	}
-
+	
 
 
 	function loadErrorFields() {
@@ -373,7 +380,7 @@ class GW_Public_Module {
 	function getDataObjectById($load = true, $class = false, $access=GW_PERM_READ)
 	{
 		$id = $this->getCurrentItemId();
-
+		
 		if (!$id)
 			return $this->setError('/g/GENERAL/BAD_ARGUMENTS');
 
@@ -390,9 +397,9 @@ class GW_Public_Module {
 
 		if ($load && !$item->loaded)
 			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
-
+		
 		$this->canBeAccessed($item, ['access'=>$access]);
-
+		
 		return $item;
 	}
 
@@ -400,9 +407,9 @@ class GW_Public_Module {
 	{
 		$result = false;
 		
-		if($item->id)
-			$item->load_if_not_loaded();
-		
+		//if($item->id)
+		//	$item->load_if_not_loaded();
+				
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 				
 		if(isset($item->content_base['access']))
@@ -414,7 +421,7 @@ class GW_Public_Module {
 			}
 				
 		}else{
-			$result = true; //$item->canBeAccessedByUser($this->app->user);
+			$result = true;
 		}
 
 		
@@ -440,9 +447,15 @@ class GW_Public_Module {
 	}	
 	
 
+	function getInputFileItem()
+	{
+		$item = $this->getDataObjectById();
+		return $item;
+	}	
+	
 	function inputFilePreview($name, $onlyids=false)
 	{
-		$item = $this->app->user;
+		$item = $this->getDataObjectById();
 		
 		$files = is_array($item->$name) ? $item->$name : false;
 		$file = $files ? false : $item->$name;
@@ -492,11 +505,12 @@ class GW_Public_Module {
 
 	function viewUploadFile()
 	{
-		$item = $this->getDataObjectForFiles();
+		$item = $this->getInputFileItem();
+		
+		//d::ldump($_FILES);
+		//d::dumpas($item);
 
 		foreach ($_FILES as $name => $data) {
-			
-			
 			//leisti pdf uploadint
 			if($item->composite_map[$name][0]=='gw_image' && $data['type']=='application/pdf'){
 				
@@ -628,7 +642,8 @@ class GW_Public_Module {
 		
 	}
 	
-	function scanRedirRules($name){
+	function scanRedirRules($name)
+	{		
 		foreach($this->redirRules as $rule)
 			if(preg_match($rule['re'], $name, $m))
 				return $rule['ext'];
@@ -644,7 +659,7 @@ class GW_Public_Module {
 	{
 		$name = strtolower($name);
 		
-		if($ext = $this->scanRedirRules($name)){			
+		if($ext = $this->scanRedirRules($name)){	
 			return call_user_func_array([$this->ext($ext), $name], $arguments);
 		}else{
 			trigger_error('method "' . $name . '" not exists', E_USER_NOTICE);
@@ -671,24 +686,23 @@ class GW_Public_Module {
 	{
 		$params = $this->_args['params'];
 		
-		
 		if (isset($params[0])) {
 			$view_name = $params[0];
 
 			if (!$this->methodTest('view' . $view_name) && $view_name != 'noview') {
-				$view_name = 'default';
+				$view_name = $this->default_view;
 			} else {
 				array_shift($params);
 			}
 		} else {
-			$view_name = 'default';
+			$view_name = $this->default_view;
 		}	
 		
 		$this->view_name = $view_name;
 
 				
 		if(!$this->isPublic("view{$view_name}"))
-			$this->view_name = 'default';
+			$this->view_name = $this->default_view;
 	}	
 	
 	
@@ -701,8 +715,8 @@ class GW_Public_Module {
 		
 				
 		if($p->type==3 && !$p->title){
-			
-			$p->title = GW::ln('/m/VIEWS/'.$this->view_name);
+			if($this->view_name!='noview')
+				$p->title = GW::ln('/m/VIEWS/'.$this->view_name);
 		}
 	}
 	
@@ -717,7 +731,22 @@ class GW_Public_Module {
 		$this->modconfig = $this->initModCfgEx($this->module_path);
 	}	
 
+	function fieldTitle($field)
+	{
+		if(strpos($field,'/')!==false)
+		{
+			// user/name -> name
+			$field = explode('/', $field);
+			$field = $field[count($field)-1];//return last section
+		}
+		
+		$title= GW::ln($fkey = '/m/FIELDS/' . $field);
+		return $title != $fkey ? $title : $field;
+	}	
+	
+	function filterPermitFields(&$vals, $permit_fields)
+	{
+		$vals = array_intersect_key($vals, $permit_fields);		
+	}		
+	
 }
-
-
-

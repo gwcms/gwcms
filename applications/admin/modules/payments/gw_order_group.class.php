@@ -13,6 +13,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	    'extra'=>'jsono',
 	];	
 	
+	public $calculate_fields = [
+	    'banktransfer_allow'=>1
+	];
+	
 	
 	function updateTotal()
 	{
@@ -65,6 +69,28 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			if($citem->obj_type == $class && $citem->obj_id==$item->id){
 				return $citem;
 			}
+	}
+	
+	
+	function calculateField($name) 
+	{
+		
+		if($name=='banktransfer_allow'){
+			
+			
+			$ret = true;
+			
+			foreach($this->items as $item){
+				//d::ldump($item);
+				if(!$item->banktransfer_allow){	$ret = false; break; }
+			}
+				
+			
+			
+			return $ret;
+		}
+		
+		return parent::calculateField($name);
 	}
 	
 }
