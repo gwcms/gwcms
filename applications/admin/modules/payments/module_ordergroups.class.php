@@ -35,10 +35,8 @@ class Module_OrderGroups extends GW_Common_Module
 	{
 		$cfg = parent::getListConfig();
 		
-		$cfg['fields']['user_title'] = 'Lf';		
-		//$cfg['filters']['catalog_type'] = ['type'=>'select','options'=>$this->options['catalog_type']];
-		//$cfg['filters']['tonality'] = ['type'=>'select','options'=>$this->options['tonality']];
-		//$cfg['filters']['instruments'] = ['type'=>'select','options'=>$this->options['instrument_id'], 'ct'=>['LIKE%,,%'=>'==']];
+		$cfg['fields']['user_title'] = 'Lf';
+		$cfg['fields']['changetrack'] = 'L';
 		
 		//d::dumpas($cfg);
 					
@@ -53,7 +51,18 @@ class Module_OrderGroups extends GW_Common_Module
 		{
 			$item->items_count = GW_Order_Item::singleton()->count(['group_id=?', $item->id]);
 		}	
+		
+		if($list)
+		foreach($list as $item)
+			break;		
+		
+		if(isset($item) && $item){
+			
+			if($item->extensions['changetrack'])
+				$item->extensions['changetrack']->prepareList($list);
+		}		
 	}
+	
 	
 
 	
@@ -246,5 +255,80 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->doSaveInvoice($item);
 		
 	}
+	
+	
+	function doMarkAsPayd()
+	{		
+		$item = $this->getDataObjectById();
+		
+	
+		$query = $_GET['rcv_amount'] ?? false;
+		
+		
+		if($query != $item->amount_total)
+		{
+			$this->setError(GW::l('/m/RECEIVED_AMOUNT_DOES_NOT_MATCH'));
+		}
+		
+		
 
+		
+		$item->fireEvent('BEFORE_CHANGES');
+		
+		$item->payment_status=7;
+		$item->updateChanged();		
+		
+		$this->doMarkAsPaydSystem($item);
+		
+		$this->setMessage('/m/PAYMENT_APPROVED');
+	}
+
+	
+	
+	function doMarkAsPaydSystem($order=false)
+	{
+		
+		file_put_contents(GW::s('DIR/TEMP').'doMarkAsPaydSystem_test', json_encode($_GET));
+		
+		if(!$order)
+			$order = $this->getDataObjectById();
+		
+		$log_entry_id = $_GET['log_entry_id'] ?? false;
+		$rcv_amount = $_GET['rcv_amount'] ?? false;
+		
+		if($log_entry_id){
+			
+			$log_entry = GW_Paysera_Log::singleton()->find(['id=?', $log_entry_id]);
+			$order->pay_type = 'paysera';
+		}else{
+			$log_entry = false;
+		}
+			
+			
+		if($rcv_amount != $order->amount_total){
+			$order->status = "WrongAmount exp: $cart->amount_total rcv: $rcv_amount";
+			$order->payment_status = 8;
+		}else{
+			$order->payment_status = 7;
+		}
+
+		foreach($order->items as $item){
+			$obj = $item->obj;
+			if($obj){
+				$obj->orderItemPayd($item->unit_price, $item->qty, $log_entry);
+			}
+		}
+
+		if(isset($_GET['paytest']))
+			$order->pay_test =1;	
+
+		$order->pay_confirm_id = $log_entry_id;
+
+		$order->updateChanged();
+			
+			
+		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
+		
+		return false;
+	}
 }

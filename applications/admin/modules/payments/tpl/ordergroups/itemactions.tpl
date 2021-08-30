@@ -4,6 +4,17 @@
 
 	{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id]] iconclass="fa fa-file-o" caption=GW::l('/m/VIEWS/invoice')}
 
+	
+	
+	{if $item->pay_status != 7}
+		{list_item_action_m 
+			url=[false,[act=>doMarkAsPayd,id=>$item->id]] 
+			iconclass="fa fa-legal text-danger" 
+			query_param=[rcv_amount,GW::l('/m/ENTER_EXACT_RECEIVED_AMOUNT')]
+			caption=GW::l('/m/VIEWS/doMarkAsPayd')
+			
+		}
+	{/if}
 
 
 {if $app->user->isRoot()}

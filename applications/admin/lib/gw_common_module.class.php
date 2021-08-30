@@ -2042,6 +2042,7 @@ class GW_Common_Module extends GW_Module
 		$idx_field = $opts['idx_field'] ?? 'id';
 		
 		$params = [];
+		$cond = "";
 		
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);

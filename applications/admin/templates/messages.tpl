@@ -11,7 +11,12 @@
 		<div class="alert {$classes[$msg.type]}" data-objid="{$msg.obj_id}" {if $msg.title}title="{$msg.title|escape}"{/if}>
 			<button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
 			
-			{if isset($msg.field)}<small>"<b>{$app->fh()->fieldTitle($msg.field)}</b>" {GW::ln('/g/ERROR')}: </small> {/if} {if is_array($msg.text)}<pre>{print_r($msg, true)}</pre>{else}{$msg.text}{/if}
+			{if isset($msg.field)}
+				<small>"<b>{$app->fh()->fieldTitle($msg.field)}</b>" {GW::ln('/g/ERROR')}: </small> 
+			{/if} 
+				
+			{if is_array($msg.text)}<pre>{print_r($msg, true)}</pre>{else}{$msg.text}{/if}
+			{if $msg.html}{$msg.html}{/if}
 		</div>
 		{/if}
 	{/foreach}

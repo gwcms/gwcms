@@ -7,6 +7,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'items' => ['gw_related_objecs', ['object'=>'GW_Order_Item','relation_field'=>'group_id']],
 		'pay_confirm' => ['gw_composite_linked', ['object'=>'GW_Paysera_Log','relation_field'=>'pay_confirm_id']],
 		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id']],
+		'banktransfer_confirm'=>['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '100x100']],
 	];		
 	
 	public $encode_fields = [
@@ -17,6 +18,11 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	    'banktransfer_allow'=>1
 	];
 	
+	
+	public $ownerkey = 'payments/ordergroups';
+	public $extensions = [
+	    'changetrack'=>1
+	];			
 	
 	function updateTotal()
 	{

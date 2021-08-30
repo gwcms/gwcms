@@ -579,8 +579,36 @@ class GW_Application
 			return $data;
 		}
 		
-		if (!isset($this->sess['messages']) || !($data = $this->sess['messages']))
+		
+		$data = $this->sess['messages'] ?? [];
+
+		
+		if($this->user)
+		{
+			$msg = GW_Message::singleton()->find(['seen=0 AND user_id=?', $this->user->id]);
+			
+			if($msg){
+				$new = [];
+				$new['type']=3;
+				
+				$text ="<small><b>". $msg->sender.":</b> ".$msg->subject."</small><br>";
+				$text.=$msg->message;
+				
+				$data[] = ['type'=> GW_MSG_INFO, 'html'=> $text];
+				
+							
+				$msg->seen = 1;
+				$msg->updateChanged();
+			}
+			
+		}		
+		
+		
+		if (!$data)
 			return [];
+		
+		
+
 
 		if($prepare){
 			foreach($data as $i => $msg){

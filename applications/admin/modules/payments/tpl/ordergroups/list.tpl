@@ -70,10 +70,13 @@
 
 	{$dl_checklist_enabled=1}
 	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
-	{capture append="dl_checklist_actions"}<option value="checked_action2('dialoggroupcompositions', $(this).find(':selected').text())">{GW::l('/A/VIEWS/dialoggroupcompositions')}</option>{/capture}	
+	
+	
+	
 	
 	{$dl_output_filters.insert_time=short_time}
-	{$dl_output_filters.update_time=short_time}		
+	{$dl_output_filters.update_time=short_time}	
+	{$dl_output_filters.changetrack=changetrack}
 	
 {/block}
 

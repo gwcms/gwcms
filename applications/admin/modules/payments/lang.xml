@@ -19,6 +19,8 @@
     <i id="pay_confirm_id">
       <lt>Mokėjimo patvirtinimas</lt>
     </i>
+    <i id="amount_items">Pirkinių kaina</i>
+    <i id="amount_total">Viso kaina</i>
   </i>
   <i id="FIELDS_SHORT">
 	  
@@ -69,7 +71,12 @@
     <i id="doFill">Pakartoti duomenų analizę</i>
     <i id="monthlystats">Pardavimų statistika</i>
     <i id="invoice">Sąskaita faktūra</i>
+    <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
   </i>
+  <i id="PAYMENT_APPROVED">Mokėjimas įskaitytas</i>
+  <i id="ENTER_EXACT_RECEIVED_AMOUNT">Įveskite tikslią gautą sumą</i>
+  <i id="RECEIVED_AMOUNT_DOES_NOT_MATCH">Gauta suma ir užsakymo suma nesutampa</i>
+  
   <i id="OPTIONS">
     <i id="checkin">
       <i id="0">No checkin (0)</i>
@@ -87,6 +94,7 @@
         <i id="info">
           <i id="model">GW_Order_Group</i>
           <i id="iconclass">fa fa-shopping-cart</i>
+	  <i id="itemactions">1</i>
         </i>
       </i>
       <i id="orderitems">
@@ -142,4 +150,5 @@
 		          
     </i>
   </i>
+  
 </xml>
