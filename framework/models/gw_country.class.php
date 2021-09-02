@@ -16,7 +16,7 @@ class GW_Country extends GW_i18n_Data_Object
 		//return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
 		$opts= [];
 		
-		foreach($this->findAll(false) as $country)
+		foreach($this->findAll(false, ['order'=>"title_$lang ASC"]) as $country)
 		{
 			$opts[$country->code] = $country->get('title', $lang);
 		}

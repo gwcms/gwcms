@@ -116,6 +116,10 @@ class GW_Auth
 			return $this->setError('/G/GENERAL/USER_BANNED');
 		if ($user->active == 0)
 			return $this->setError('/G/GENERAL/USER_INNACTIVE');
+		
+		
+		if($user)
+			$this->session['last_request'] = time();
 
 		
 		return $user;

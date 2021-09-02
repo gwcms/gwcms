@@ -12,8 +12,18 @@
 		user_id=>[type=>select_ajax,modpath=>"users/usr", preload=>1,options=>[],default=>$app->user->id],
 		pay_confirm_id=>[type=>select_ajax, modpath=>"payments/payments_paysera",preload=>1,options=>[], after_input_f=>editadd],
 		amount_total=>[type=>number,step=>0.01],
+		amount_items=>[type=>text],
 		adm_processed=>[type=>bool],
-		extra=>[type=>text]
+		extra=>[type=>text],
+		active=>[type=>bool],
+		company=>[type=>text],
+		company_code=>[type=>text],
+		company_addr=>[type=>text],
+		vat_code=>[type=>text],
+		name=>[type=>text],
+		surname=>[type=>text],
+		city=>[type=>text],
+		email=>[type=>text]
 	]
 ]}
 
