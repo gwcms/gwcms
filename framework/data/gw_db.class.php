@@ -421,7 +421,7 @@ class GW_DB
 			$keys1[$key] = '`' . $key . '`';
 		}
 		
-		$query = "INSERT INTO $table (" . implode($keys1, ',') . ") VALUES ";
+		$query = "INSERT INTO $table (" . implode(',', $keys1) . ") VALUES ";
 
 		foreach ($entries as $entry) {
 			$values = Array();
@@ -429,7 +429,7 @@ class GW_DB
 			foreach ($keys as $key)
 				$values[] = "'" . addslashes($entry[$key]??'') . "'";
 
-			$query.= "(" . implode($values, ',') . "),\n";
+			$query.= "(" . implode(',', $values) . "),\n";
 		}
 
 		$query = substr($query, 0, -2);

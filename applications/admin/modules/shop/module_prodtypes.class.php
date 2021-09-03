@@ -32,7 +32,7 @@ class Module_prodtypes extends Module_GenericClassificator
 		$t = new GW_Timer;
 		$affected = 0;
 	
-		$results = GW::db()->fetch_rows("SELECT `type`,count(*) FROM shop_products GROUP BY `type`", 0);
+		$results = GW::db()->fetch_rows("SELECT `type`,count(*) FROM shop_products WHERE active=1 AND qty>0 GROUP BY `type`", 0);
 
 		//header('Content-type: text/plain');
 		$rows = [];
@@ -42,7 +42,7 @@ class Module_prodtypes extends Module_GenericClassificator
 
 
 		//GW::db()->multi_insert(nat_p_instrumentation::singleton()->table, $rows, true);
-
+		GW::db()->query("UPDATE `".Shop_ProdTypes::singleton()->table."` SET `count`=0");
 		GW::db()->updateMultiple(Shop_ProdTypes::singleton()->table, $rows);
 
 		if(GW::db()->error){

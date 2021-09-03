@@ -54,6 +54,9 @@ class GW_Debug_Helper
 	
 	static function getCodeCut($error, $lines)
 	{
+		if(!isset($error['file']) || $error['file']=="Unknown")
+			return false;
+		
 		$code = str_replace("\r", "", file_get_contents($error['file']));
 		
 		
@@ -193,7 +196,7 @@ class GW_Debug_Helper
 			
 		}else{
 			echo "error report turned off<br/>\n";
-			echo $e['message'];
+			d::ldump($e);
 		}		
 	}
 	

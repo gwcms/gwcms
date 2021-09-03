@@ -54,7 +54,7 @@ class Module_Classificators  extends Module_GenericClassificator
 		
 		foreach($classif as $id => $nevermind){
 			$field = GW_DB::escapeField($class_map[$id]);
-			$results = GW::db()->fetch_rows("SELECT $field,count(*) FROM shop_products GROUP BY $field", 0);
+			$results = GW::db()->fetch_rows("SELECT $field,count(*) FROM shop_products WHERE active=1 AND qty>0 GROUP BY $field", 0);
 			
 			//header('Content-type: text/plain');
 			$rows = [];
@@ -64,7 +64,7 @@ class Module_Classificators  extends Module_GenericClassificator
 
 
 			//GW::db()->multi_insert(nat_p_instrumentation::singleton()->table, $rows, true);
-
+			GW::db()->query("UPDATE `".Shop_Classificators::singleton()->table."` SET `count`=0");
 			GW::db()->updateMultiple(Shop_Classificators::singleton()->table, $rows);
 
 			if(GW::db()->error){
