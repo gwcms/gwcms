@@ -98,9 +98,17 @@ class GW_CMS_Sync
 	{
 		
 		$commits = explode("\n", trim($this->exec('git log -n 1 --reverse  --until="'.$date.'" --pretty=format:"%H %s %ai"')));
-
+		
 		if(!isset($commits[0]))
 			return false;
+		
+		
+		//nerasta gauti tada starto commita
+		if($commits[0]==''){
+			$commits = explode("\n", trim($this->exec('git log  --pretty=format:"%H %s %ai"')));
+		
+			$commits[0] = $commits[count($commits)-1];
+		}
 
 		list($commitid,$whatever) = explode(' ', $commits[0],2);
 
@@ -108,7 +116,7 @@ class GW_CMS_Sync
 	}
 
 
-	
+
 	function getNewCommitsFromDate($lastcommit_date)
 	{
 		$format='--pretty=format:"%H %s %ai"';	
