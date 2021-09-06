@@ -137,6 +137,9 @@ class GW_CMS_Sync
 
 		include $dir.'config/project_specific_files.php';
 
+		$paths=explode("\n", trim($paths));
+		
+		$filterarr_orig=$filesarr;
 
 		foreach($filesarr as $idx => $file)
 		{
@@ -146,6 +149,24 @@ class GW_CMS_Sync
 					echo "--(projspec) $file ($pattern)\n";
 				}
 		}	
+		
+		
+		
+		//force include
+		if(isset($include_paths)){
+			$include_paths=explode("\n", trim($paths));
+			
+			foreach($filterarr_orig as $idx => $file)
+			{
+				foreach($include_paths as $pattern)
+					if(fnmatch($pattern, $file)){
+						$filesarr[$idx]=$filterarr_orig[$idx];
+
+					}
+			}	
+		}
+		
+		
 		echo "filterProjectSpecific: ".$t->stop(5)." secs\n";
 	}
 

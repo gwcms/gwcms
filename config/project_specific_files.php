@@ -18,7 +18,14 @@ nbproject/private/private.xml
 config/project_core_sync.json
 ";
 
-$paths=explode("\n", trim($paths));
 
 
+$include_paths = "
+applications/site/templates/common_module/*
+applications/site/templates/inputs/*
+applications/site/templates/admin_func.tpl
+applications/site/assets/js/gw.js
+applications/site/assets/js/admin.js
+";
+//inc
 
