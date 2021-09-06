@@ -41,17 +41,7 @@
 	{if !isset($required) && $required_fields[$field]}
 		{$required=1}
 	{/if}
-		      
-	
-	
-	
-	{if $params_expand}
-		{foreach $params_expand as $k => $v}
-			{assign var=$k value=$v}
-		{/foreach}
-		{$params_expand=[]}
-	{/if}					
-				
+		       
 	{if $type==checkbox}
 		
 	<div class="mb-3 {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}">
@@ -61,22 +51,31 @@
 			    name="{$input_name}" 
 			    type="checkbox"  
 			    	id="{$id}" 
-			    value="1" {if $required}required="1"{/if} {if $value}checked="checked"{/if}
+			    value="1" {if $required}required="required"{/if} {if $value}checked="checked"{/if}
 			    {if $disabled}disabled="disabled"{/if}
 			    />
 		    
                     <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
                       <i class="fa" data-check-icon=""></i>
                     </span>
-                    {$title} {if $note}<i>({$note})</i>{/if} {if $hidden_note}<i class="fa fa-question-circle" onclick="alert('{$hidden_note|escape:js}')"></i>{/if} {if $required}<sup title="{GW::ln('/G/validation/REQUIRED')}">*</sup>{/if}
+                    {$title} {if $note}<i>({$note})</i>{/if} {if $note_raw}{$note_raw}{/if} {if $help}<i class="fa fa-question-circle" onclick="alert('{$help|escape:js}')"></i>{/if} 
+		    
+		    {if $longtext}
+			 <div style="padding:10px;border:1px solid #eee;float:right;margin-right:10px;"> {$longtext} </div>
+		     {/if}
+		     
+		    {if $required}<sup title="{GW::ln('/G/validation/REQUIRED')}">*</sup>{/if}
+		    
+
                   </label>
+		
                 </div>			
 			
 	{else}
 	<div class="form-group {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}" {if $type==hidden}style='display:none'{/if}>
 		{if $type!=hidden && $title!==false}<label class="control-label" for="{$id}" 
 		       {if $help} data-original-title="{$help|escape:'html'}" rel="tooltip" class="btn btn-default" data-toggle="tooltip" data-placement="top" title=""{/if}
-		       >{$title} {if $required}<sup title="{GW::ln('/G/validation/REQUIRED')}">*</sup>{/if} {if $help}<i class="fa fa-question-circle primary-color"></i>{/if} {if $note}<small style="font-weight: normal;font-style: italic">{$note|escape}</small>{/if}</label>{/if}
+		       >{$title} {if $required}<sup title="{GW::ln('/G/validation/REQUIRED')}">*</sup>{/if} {if $help}<i class="fa fa-question-circle primary-color"></i>{/if} {if $note}<small style="font-weight: normal;font-style: italic">{$note|escape}</small>{/if} {if $note_raw}{$note_raw}{/if} </label>{/if}
 		       
 		
 		{if in_array($type, ['text','email','password','url','hidden','number'])}
@@ -86,15 +85,23 @@
 			{foreach $options as $key => $opttitle}
 				<div class="form-check form-check-inline mb-0">
 				<label class="form-check-label mr-2">
-					<input type="radio" name="{$input_name}" value="{$key|escape}" 
-					       {if $value==$key}checked="checked"{/if} 
-					       {if $required}required="1"{/if} 
-					       class="form-check-input mr-1"
-					       >{$opttitle}
+					<input type="radio" name="{$input_name}" value="{$key|escape}" {if $value==$key}checked="checked"{/if} class="form-check-input mr-1">{$opttitle}
 				</label>
 				</div>
 				{if $newline}<br>{/if}
 			{/foreach}
+
+			{if $onchangeFunc}
+				{capture append=footer_hidden}
+				<script type="text/javascript">
+					$('input[type=radio][name="{$input_name}"]').change(function() {
+						{$onchangeFunc}(this.value, this);
+					});
+				</script>
+				{/capture}
+
+			{/if}			
+			
 		{elseif $type=='checkboxes'}
 
 			{$selected=$value}
@@ -104,10 +111,9 @@
 			
 			<div class="row">
 			{foreach $options as $key => $opttitle}
-				<div class="{if $newline}col-md-12{else}col-md-4{/if}">
+				<div class="col-md-4">
 				 <label class="checkbox-inline"><input style="opacity:1" type="checkbox" name="{$input_name}" value="{$key|escape}" {if isset($selected[$key])}checked="checked"{/if}>{$opttitle}</label>
 				</div>
-				
 			{/foreach}
 			</div>			
 					
@@ -117,7 +123,6 @@
 			       {if $placeholder}placeholder="{$placeholder|escape}"{/if}
 			       style="{if $width}width:'{$width}'{/if}"
 			       {if $rows}rows="{$rows}"{/if}
-			       {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 			       >{$value|escape}</textarea>
 		{else}
 			{include file="inputs/input_`$type`.tpl"}

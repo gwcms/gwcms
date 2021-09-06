@@ -11,6 +11,7 @@
 	<script src="../js/fileinput_locale_fr.js" type="text/javascript"></script>
 	<script src="../js/fileinput_locale_es.js" type="text/javascript"></script>			
 	*}	
+	<script src="{$app->sys_base}vendor/bootstrap-fileinput//js/fileinput_locale_{$ln}.js" type="text/javascript"></script>	
 	{assign scope=global var=input_image_loaded value=1}
 {/if}
 
@@ -57,6 +58,8 @@
 		display:none;
 	}	
 	.hide{ display:none }
+	
+
 </style>
 
 <script>
@@ -89,9 +92,10 @@ function initImageInput{$id}(initialPreview)
 			{if $imresize}resizeImage: true,{/if}
 
 			uploadExtraData : {json_encode($extra_params)},
-			uploadUrl: '{$endpoint}/uploadfile',
+			uploadUrl: '{$endpoint}/uploadfile?id={$item->id}',
 			progress: '',
-			dropZoneEnabled: false
+			dropZoneEnabled: false,
+			language: "{$ln}"
 		}, initialPreview)			
 	).on('fileerror', function (event, data) {
 
@@ -116,7 +120,7 @@ function initImageInput{$id}(initialPreview)
 }
 	
 $(function () {
-	$.get('{$endpoint}/inputFilePreview', { field: '{$field}'  }, function(data){  initImageInput{$id}(JSON.parse(data)) });
+	$.get('{$endpoint}/inputFilePreview', { field: '{$field}', id:{$item->id}  }, function(data){  initImageInput{$id}(JSON.parse(data)) });
 	
 
 });

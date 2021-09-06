@@ -137,6 +137,7 @@ class GW_CMS_Sync
 
 		include $dir.'config/project_specific_files.php';
 
+		d::ldump($paths);
 		$paths=explode("\n", trim($paths));
 		
 		$filterarr_orig=$filesarr;
@@ -154,7 +155,8 @@ class GW_CMS_Sync
 		
 		//force include
 		if(isset($include_paths)){
-			$include_paths=explode("\n", trim($paths));
+			$include_paths=explode("\n", trim($include_paths));
+			
 			
 			foreach($filterarr_orig as $idx => $file)
 			{
