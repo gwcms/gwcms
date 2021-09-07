@@ -11,11 +11,19 @@
 	{$do_toolbar_buttons[] = search}
 
 
-	{function name=do_toolbar_buttons_types} 
-		{toolbar_button title="Katalogo tipai" href=$m->buildUri(cattypes,[clean=>2],[level=>1]) btnclass="iframeopen" iconclass="fa fa-chevron-circle-down" tag_params=['data-dialog-width'=>"1200px"]}
-	{/function}	
+	{function name=do_toolbar_buttons_orderacts} 		
+		{*
+		{toolbar_button iconclass="fa fa-money"
+				title=GW::ln('/m/VIEWS/doCreateInvoices')
+				href=$m->buildUri(false, [act=>doCreateInvoices])}
+		*}
+		{toolbar_button iconclass="fa fa-money"
+				title=GW::l('/m/VIEWS/paymentsummary')
+				href=$m->buildUri(paymentsummary)}		
+	{/function}
+	
 
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,dialogconf2,print,types]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,dialogconf2,print,orderacts]}		
 	
 	
 	{$display_fields=['tour_part_id'=>0]}

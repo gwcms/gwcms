@@ -276,7 +276,39 @@ class GW_Image_Manipulation
 		}
 		return $count > 1;
 	}
+	
+	
+	
+	function filter($name, $arg)
+	{
+		switch ($name){
+			case 'tint':
+				list($r,$g,$b) = $this->hex2array($arg);
 
+				$filter_r_opp = 255 - $r; // = 0
+				$filter_g_opp = 255 - $g; // = 255
+				$filter_b_opp = 255 - $b; // = 255		
+
+				imagefilter($this->im, IMG_FILTER_NEGATE);
+				imagefilter($this->im, IMG_FILTER_COLORIZE, $filter_r_opp, $filter_g_opp, $filter_b_opp);
+				imagefilter($this->im, IMG_FILTER_NEGATE);				
+			break;
+			case 'colorize':
+				list($r,$g,$b) = $this->hex2array($arg);
+
+				imagefilter($this->im, IMG_FILTER_COLORIZE, $r, $g, $b);				
+			break;
+			case 'brightness':
+				imagefilter($this->im, IMG_FILTER_BRIGHTNESS, (int)$arg);
+			break;
+			case 'contrast':
+				imagefilter($this->im, IMG_FILTER_CONTRAST, (int)$arg);
+			break;
+		}
+	}
+	
+	
+	
 	function rotateSelf($degree)
 	{
 		$this->im = imagerotate($this->im, $degree, 0);

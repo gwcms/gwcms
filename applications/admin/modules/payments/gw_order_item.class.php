@@ -10,7 +10,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	    'expirable'=>1,
 	    'expires_secs'=>1,
 	    'is_expired'=>1,
-	    'title'=>1
+	    'title'=>1,
+		'type'=>1,
+		'invoice_line'=>1
 	];
 	
 	
@@ -38,7 +40,13 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;
 
 			case 'title':
-				return GW::ln("/g/CART_ITM_{$this->obj_type}"). ' - '.$this->obj->title;
+				return $this->type. ' - '.$this->obj->title;
+			break;
+			case 'type':
+				return GW::ln("/g/CART_ITM_{$this->obj_type}");
+			break;
+			case  'invoice_line':
+				return $this->obj->invoice_line ?: $this->obj->title;
 			break;
 		
 			case 'expirable':

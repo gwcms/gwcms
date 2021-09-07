@@ -72,10 +72,12 @@
     <i id="monthlystats">Pardavimų statistika</i>
     <i id="invoice">Sąskaita faktūra</i>
     <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
+       <i id="paymentsummary">Mokėjimų suvestinė</i>
   </i>
   <i id="PAYMENT_APPROVED">Mokėjimas įskaitytas</i>
   <i id="ENTER_EXACT_RECEIVED_AMOUNT">Įveskite tikslią gautą sumą</i>
   <i id="RECEIVED_AMOUNT_DOES_NOT_MATCH">Gauta suma ir užsakymo suma nesutampa</i>
+  
   
   <i id="OPTIONS">
     <i id="checkin">

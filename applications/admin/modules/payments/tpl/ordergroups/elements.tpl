@@ -23,7 +23,8 @@
 		name=>[type=>text],
 		surname=>[type=>text],
 		city=>[type=>text],
-		email=>[type=>text]
+		email=>[type=>text],
+		pay_test=>[type=>bool]
 	]
 ]}
 

@@ -148,6 +148,17 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		//doresize & output file
 		$im = new GW_Image_Manipulation($file);
 		$im->resize($params);
+		
+		
+		if(isset($_GET['filters'])){
+			$filters = explode(';',$_GET['filters']);
+			foreach($filters as $filter)
+			{
+				list($name, $arg) = explode(':', $filter);
+				$im->filter($name, $arg);
+			}
+		}
+				
 
 		$params['save_format']='auto';
 

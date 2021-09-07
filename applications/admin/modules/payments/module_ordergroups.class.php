@@ -163,8 +163,8 @@ class Module_OrderGroups extends GW_Common_Module
 		foreach($item->items as $oitem){
 			
 			$v['ITEMS'][] = [
-			    'title'=> $oitem->obj->invoice_line ?: $oitem->obj->title, 
-			    'type'=>GW::ln('/g/CART_ITM_'.$oitem->obj_type), 
+			    'title'=> $oitem->invoice_line, 
+			    'type'=> $oitem->type, 
 			    'qty'=>$oitem->qty, 
 			    'unit_price'=>$oitem->unit_price, 
 			    'total'=>$oitem->total
@@ -331,4 +331,54 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		return false;
 	}
+	
+	
+	function viewPaymentSummary()
+	{
+		$this->config = new GW_Config($this->module_path[0].'/');
+		
+		if(isset($_GET['date_from'])){
+			$date_from = $_GET['date_from'];
+			$this->config->date_from = $date_from;
+		}elseif($this->config->date_from){
+			$date_from=$this->config->date_from;
+		}else{
+			$date_from=date('Y-m-d', strtotime('-1 YEAR'));
+		}
+		
+		if(isset($_GET['date_to'])){
+			$date_to = $_GET['date_to'];
+			$this->config->date_to = $date_to;
+		}elseif($this->config->date_to){
+			$date_to=$this->config->date_to;
+		}else{
+			$date_to=date('Y-m-d');
+		}
+		$this->tpl_vars['date_from'] = $date_from;
+		$this->tpl_vars['date_to'] = $date_to;		
+		
+		$conds = ['payment_status=7 AND pay_test=0'];
+				
+		$conds[] = GW_DB::prepare_query(['insert_time >= ?', $date_from]);
+		$conds[] = GW_DB::prepare_query(['insert_time <= ?', $date_to." 23:59"]);		
+	
+		
+		
+		$list = $this->model->findAll(implode(' AND ', $conds),['order'=>'id DESC','key_field'=>'id']);
+		$order_ids = array_keys($list);
+		
+
+		
+		
+		
+		$orderitems = GW_Order_Item::singleton()->findAll(GW_DB::inCondition('group_id', $order_ids));
+		
+		$this->tpl_vars['list'] = $list;
+		$this->tpl_vars['orderitems']=GW_Array_Helper::groupObjects($orderitems,'group_id');
+	}
+	
+	
+
+	
+	
 }
