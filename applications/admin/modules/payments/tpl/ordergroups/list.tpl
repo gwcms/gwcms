@@ -31,7 +31,7 @@
 	{$dl_smart_fields=[user_title,relations,user_id,admin_id,instruments]}	
 
 	
-	{$dl_actions=[items,invoice,edit,ext_actions]}
+	{$dl_actions=[items,invoice,editshift,ext_actions]}
 	{$dl_group_list_by=['tour_part_id']}
 	
 	

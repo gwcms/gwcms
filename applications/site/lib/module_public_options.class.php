@@ -57,6 +57,10 @@ class Module_Public_Options extends GW_Module_Extension
 		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
 		$params['offset'] = $page_by * $page;
 		$params['limit'] = $page_by;
+		
+		if(isset($opts['params_over'])){
+			$params = array_merge($params, $opts['params_over']);
+		}
 	
 		
 		$list0 = $i0->findAll($cond ?? '', $params);

@@ -34,6 +34,11 @@
 	{$fields_config.fields.banktransfer_confirm=[type=>image]}
 {/if}
 
+
+{if $smarty.get.shift_key}
+	{$fields_config.fields.payment_status=[type=>number]}
+{/if}
+
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}
 {assign var="item" value=$item scope=global}
