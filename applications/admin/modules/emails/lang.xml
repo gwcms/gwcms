@@ -274,6 +274,13 @@
 					<i id="model">GW_Mail_Template</i>
 					<i id="iconclass">fa fa-codepen</i>
 				</i>			
+			</i>	
+			<i id="periodic">
+				<i id="title">Periodinis siuntimas</i>
+				<i id="info">
+					<i id="model">GW_Mail_Periodic</i>
+					<i id="iconclass">fa fa-codepen</i>
+				</i>			
 			</i>			
 																																																																			
 		</i>

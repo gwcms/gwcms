@@ -490,6 +490,13 @@ class Module_Tools extends GW_Common_Module
 	
 	function doPullProductionDB()
 	{
+		//d::dumpas('testas');
+		//tiesiai galima butu atiduot variantas
+		//list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+		//$extra = "";
+		//echo shell_exec("mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database");
+		
+		
 		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
 		$sudouser = 'wdm';
 		$level = ['light'=>'light','full'=>'full'][$_GET['level'] ?? 'full'];

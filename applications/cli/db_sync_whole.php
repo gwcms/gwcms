@@ -44,6 +44,13 @@ function out($str){
 
 //backup cmd:
 $userhost = GW::s("SSH_USERHOST");
+$pcmd="";$pcmd2="";
+$tmp = explode(':', $userhost);
+if(count($tmp)>1){
+	$userhost = $tmp[0];
+	$pcmd="-p".$tmp[1];
+	$pcmd2="-oPort=".$tmp[1];
+}
 
 
 $remotefile="/tmp/$database.gz";
@@ -59,11 +66,11 @@ if(isset($params['exclude']))
 }
 
 $t = new GW_Timer;
-mypassthru("ssh $userhost 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
+mypassthru("ssh $userhost $pcmd 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
 out("----------Export-speed: {$t->stop()} secs----------");
 
 $t = new GW_Timer;
-mypassthru($cmd="sftp $userhost:$remotefile $localfile");
+mypassthru($cmd="sftp $pcmd2 $userhost:$remotefile $localfile");
 out("----------Download-speed: {$t->stop()} secs----------");
 
 
