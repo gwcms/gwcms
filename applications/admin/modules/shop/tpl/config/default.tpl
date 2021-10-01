@@ -64,7 +64,7 @@
 
 
 
-{if $m->enabled_mods.modifications}
+{if $m->features.modifications}
 	{call e field="modification_display" type=select options=[select,list] options_fix=1 empty_option=1}
 {/if}
 

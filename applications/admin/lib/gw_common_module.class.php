@@ -765,10 +765,10 @@ class GW_Common_Module extends GW_Module
 			if($value==="" || $value===null)
 				return;	
 			
-			if($value=="#empty#")
+			if($value==="#empty#")
 				$value="";
 			
-			if($value=="#zero#")
+			if($value==="#zero#")
 				$value="0";			
 
 			if (($compare_type == "IN" || $compare_type == "NOTIN") && !is_array($value)) {
@@ -1097,7 +1097,7 @@ class GW_Common_Module extends GW_Module
 			$this->processView('form');
 			exit;
 		}
-
+		
 		
 		$this->setListParams($params);
 

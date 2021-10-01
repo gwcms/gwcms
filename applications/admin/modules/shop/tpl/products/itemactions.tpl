@@ -1,6 +1,6 @@
 {$addlitag=true}
 
-{if $m->enabled_mods.modifications}
+{if $m->features.modifications}
 	{list_item_action_m url=[false,[act=>doCreateModification,id=>$item->id]] iconclass="fa fa-clone" caption=GW::l('/m/VIEWS/doCreateModification')}
 {/if}
 

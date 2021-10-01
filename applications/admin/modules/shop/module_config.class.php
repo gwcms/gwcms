@@ -18,7 +18,7 @@ class Module_Config extends GW_Common_Module
 				
 		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table]);
 		
-		$this->enabled_mods = array_fill_keys((array)json_decode($this->config->modules), 1);
+		$this->features = array_fill_keys((array)json_decode($this->config->modules), 1);
 		
 		parent::init();
 	}

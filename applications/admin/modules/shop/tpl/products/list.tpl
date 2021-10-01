@@ -21,7 +21,7 @@
 
 	
 	{function name=do_toolbar_buttons_modules} 
-		{if $m->enabled_mods.doublef}
+		{if $m->features.doublef}
 			</li><li class="divider"></li><li>
 			{toolbar_button title="Sukurti užsakymą pagal kainą" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doCreateOrderByPrice])}	
 			{toolbar_button title="Importuoti užsakymus iš swedbank xml" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doOrdersImportSwedXml])}	

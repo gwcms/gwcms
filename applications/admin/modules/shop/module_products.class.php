@@ -14,7 +14,7 @@ class Module_Products extends GW_Common_Module
 		$this->initLogger();
 
 		$this->config = new GW_Config($this->module_path[0].'/');
-		$this->enabled_mods = array_fill_keys((array)json_decode($this->config->modules), 1);
+		$this->features = array_fill_keys((array)json_decode($this->config->modules), 1);
 		
 		parent::init();
 		$this->model = Shop_Products::singleton();
@@ -30,9 +30,11 @@ class Module_Products extends GW_Common_Module
 		//is import in progress
 		
 		
-		$this->filters['parent_id'] = $_GET['parent_id'] ?? 0;
+		if(isset($_GET['parent_id']))
+			$this->filters['parent_id']=$_GET['parent_id'];
 		
-		if($this->filters['parent_id']){
+		
+		if($this->filters['parent_id'] ?? false){
 			$this->list_params['paging_enabled']=false;
 		}
 		
@@ -65,7 +67,7 @@ class Module_Products extends GW_Common_Module
 		
 		$ids = array_keys($list);
 		
-		if(isset($this->enabled_mods['modifications'])){
+		if(isset($this->features['modifications'])){
 			$cnts = Shop_Products::singleton()->getModCounts($ids);
 			foreach($cnts as $pid => $cnt)
 				$list[$pid]->mod_count = $cnt;
@@ -95,7 +97,7 @@ class Module_Products extends GW_Common_Module
 
 		$cfg['fields']["image"] = "L";
 		
-		if(isset($this->enabled_mods['modifications']))
+		if(isset($this->features['modifications']))
 			$cfg['fields']["mod"] = "L";
 		
 		
@@ -115,11 +117,18 @@ class Module_Products extends GW_Common_Module
 		$mod->parent_id = $item->id;
 		$mod->title = "Modification of ".$item->title;
 		$mod->insert();
+		//d::dumpas($mod);
 		$this->setMessage("Mofication was created");
 		
 		
 		Navigator::jump($this->buildUri("$mod->id/form"));
 	}
+	
+	function __eventBeforeListParams(&$params)
+	{
+
+		$params['conditions']="parent_id=0";
+	}	
 	
 	
 	
