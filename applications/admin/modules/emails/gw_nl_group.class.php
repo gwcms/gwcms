@@ -48,4 +48,5 @@ class GW_NL_Group extends GW_Composite_Data_Object
 		return $opt;
 	}
 	
+	
 }

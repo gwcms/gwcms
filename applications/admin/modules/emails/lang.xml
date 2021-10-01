@@ -214,6 +214,7 @@
 	<i id="email_note"><![CDATA[Siuntėjo vardas &lt;email@address.com&gt;]]></i>
 	<i id="REPEAT_SEND_CONFIRM"><lt>Siųsti pakartotinai?</lt><en>Repeat sending?</en></i>
 	<i id="SEND"><lt>Siųsti</lt><en>Send</en></i>
+	<i id="PERIODIC">Periodinis</i>
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
@@ -279,7 +280,7 @@
 				<i id="title">Periodinis siuntimas</i>
 				<i id="info">
 					<i id="model">GW_Mail_Periodic</i>
-					<i id="iconclass">fa fa-codepen</i>
+					<i id="iconclass">fa fa-clock-o</i>
 				</i>			
 			</i>			
 																																																																			

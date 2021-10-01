@@ -1,11 +1,16 @@
 <?php
 
-class GW_Mail_Periodic extends GW_Data_Object
+class GW_Mail_Periodic extends GW_Composite_Data_Object
 {
 
 	public $encode_fields = ['groups'=>'json'];
 	
 	public $validators = ['params' => 'gw_json'];
+	
+	
+	public $composite_map = [
+	    'template' => ['gw_composite_linked', ['object'=>'GW_Mail_Template','relation_field'=>'template_id']],
+	];	
 
 	function getAllTimeMatches()
 	{
@@ -40,5 +45,10 @@ class GW_Mail_Periodic extends GW_Data_Object
 		}
 
 		return $inner_run;
+	}
+	
+	function getGroups()
+	{
+		return GW_NL_Group::singleton()->findAll(GW_DB::inCondition('id', $this->groups));
 	}
 }

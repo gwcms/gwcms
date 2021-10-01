@@ -1,8 +1,13 @@
 {include file="common.tpl"}
-		
+
+
 {function name=do_toolbar_buttons_configtabs}
+	{*
 	{toolbar_button title=GW::l('/A/VIEWS/itax') iconclass='gwico-Create-New' href=$m->buildUri(itax)}
+	*}
 {/function}
+
+
 
 {function name=do_toolbar_buttons_cronruns} 
 	{toolbar_button title="doCronRun&every=2" href=$m->buildUri(false,[act=>doCronRun,every=>2])}
@@ -53,6 +58,15 @@
 
 {call e field="wishlist_enabled" type=bool}
 
+
+
+{call e field="modules" type=multiselect options=[doublef,modifications,quantities] value_format=json1 options_fix=1}
+
+
+
+{if $m->enabled_mods.modifications}
+	{call e field="modification_display" type=select options=[select,list] options_fix=1 empty_option=1}
+{/if}
 
 
 

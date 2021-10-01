@@ -8,8 +8,9 @@
 {call e field=params type=code_json height=100px nopading=1}  
 {call e field=time_match}
 
-{call e field=separate_process type=bool}
-
+{if $smarty.get.shift_key==1}
+	{call e field=last_run type=text}		
+{/if}
 
 
 {include file="default_form_close.tpl"}

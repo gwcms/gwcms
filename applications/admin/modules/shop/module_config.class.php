@@ -8,6 +8,7 @@ class Module_Config extends GW_Common_Module
 	function init()
 	{
 		$this->model = new GW_Config($this->module_path[0].'/');
+		$this->config = $this->model;
 		$this->initLogger();
 		
 		
@@ -15,6 +16,9 @@ class Module_Config extends GW_Common_Module
 		$this->addRedirRule('events','itax');
 		
 				
+		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table]);
+		
+		$this->enabled_mods = array_fill_keys((array)json_decode($this->config->modules), 1);
 		
 		parent::init();
 	}

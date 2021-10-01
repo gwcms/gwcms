@@ -14,6 +14,7 @@ class Module_Products extends GW_Common_Module
 		$this->initLogger();
 
 		$this->config = new GW_Config($this->module_path[0].'/');
+		$this->enabled_mods = array_fill_keys((array)json_decode($this->config->modules), 1);
 		
 		parent::init();
 		$this->model = Shop_Products::singleton();
@@ -38,6 +39,7 @@ class Module_Products extends GW_Common_Module
 		
 		$this->app->carry_params['clean'] = 1;
 		$this->app->carry_params['parent_id'] = 1;
+		$this->app->carry_params['mods'] = 1;
 
 	}
 
@@ -63,9 +65,11 @@ class Module_Products extends GW_Common_Module
 		
 		$ids = array_keys($list);
 		
-		$cnts = Shop_Products::singleton()->getModCounts($ids);
-		foreach($cnts as $pid => $cnt)
-			$list[$pid]->mod_count = $cnt;
+		if(isset($this->enabled_mods['modifications'])){
+			$cnts = Shop_Products::singleton()->getModCounts($ids);
+			foreach($cnts as $pid => $cnt)
+				$list[$pid]->mod_count = $cnt;
+		}
 		
 		
 		$dynopts = [];
@@ -90,7 +94,15 @@ class Module_Products extends GW_Common_Module
 		
 
 		$cfg['fields']["image"] = "L";
-		$cfg['fields']["mod"] = "L";
+		
+		if(isset($this->enabled_mods['modifications']))
+			$cfg['fields']["mod"] = "L";
+		
+		
+		if(isset($_GET['mods'])){
+			//unset($cfg['fields']["mod"]);
+			$cfg['fields']["modif_title"] = "L";
+		}
 		
 		return $cfg;
 	}		

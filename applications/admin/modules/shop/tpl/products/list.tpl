@@ -3,6 +3,10 @@
 
 {block name="init"} 
 
+	{if $smarty.get.mods}
+		{$dl_fields=[modif_title]+$dl_fields}
+	{/if}
+	
 	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
@@ -14,13 +18,22 @@
 		
 	{/function}	
 	
-	{function name=do_toolbar_buttons_createorder} 
-		{toolbar_button title="Sukurti užsakymą pagal kainą" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doCreateOrderByPrice])}	
-		{toolbar_button title="Importuoti užsakymus iš swedbank xml" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doOrdersImportSwedXml])}	
+
+	
+	{function name=do_toolbar_buttons_modules} 
+		{if $m->enabled_mods.doublef}
+			</li><li class="divider"></li><li>
+			{toolbar_button title="Sukurti užsakymą pagal kainą" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doCreateOrderByPrice])}	
+			{toolbar_button title="Importuoti užsakymus iš swedbank xml" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doOrdersImportSwedXml])}	
+		{/if}
 	{/function}		
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,config,rtlog,createorder]}		
-		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,config,rtlog,modules]}	
+
+	
+	{*
+	{d::ldump($m->config)}
+	*}	
 	
 
 
@@ -42,7 +55,7 @@
 
 
 {function dl_cell_mod}
-	{$url=$m->buildUri(false,[parent_id=>$item->id,clean=>2])}
+	{$url=$m->buildUri(false,[parent_id=>$item->id,mods=>1,clean=>2])}
 	{*iconclass="fa fa-globe"*}
 	{if $item->mod_count}
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Mod({$item->mod_count})"}

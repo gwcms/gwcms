@@ -18,7 +18,7 @@ class Module_Periodic extends GW_Common_Module
 	{
 		$this->attachFieldOptions($list, 'template_id', 'GW_Mail_Template');
 		
-		$this->options['subscribers'] = GW_NL_Subscriber::singleton()->findAll(false,['key_field'=>'id']);
+		$this->options['group_id'] = GW_NL_Group::singleton()->findAll(false,['key_field'=>'id']);
 	}
 	
 
@@ -73,11 +73,86 @@ class Module_Periodic extends GW_Common_Module
 	{
 	}
 	
-	function doRun()
+	function doRun($item = false)
 	{
-		if(! $item = $this->getDataObjectById())
-			return false;
-
-		GW_Tasks_App::runDirect($item->name, Array('debug'=>1)+(array)json_decode($item->params, true));
+		if(! $item)
+			$item = $this->getDataObjectById();
+		
+		
+		
+		
+		$msg = new GW_NL_Message;
+		$msg ->title = $item->title." (".GW::l('/m/PERIODIC').") #".$item->id. ' '.date('Y-m-d H');
+		$template = $item->template;
+		
+		$fields = [
+		    'subject_lt',
+		    'subject_en',
+		    'subject_ru',
+		    'body_lt',
+		    'body_ru',
+		    'body_en',
+		    ];
+		GW_Array_Helper::objectCopy($template, $msg, $fields);
+		$msg->groups = $item->groups;
+		$msg->active = 1; 
+		$msg->status = 10; 
+		$msg->lang_lt = $template->ln_enabled_lt;
+		$msg->lang_en = $template->ln_enabled_en;
+		$msg->lang_ru = $template->ln_enabled_ru;
+		$msg->updateRecipientsCount();
+		
+		$msg->insert();
+		Navigator::backgroundRequest('admin/lt/emails/messages?act=doSendBackground');	
+		
+		
+		
+		
+		$item->last_run = date('Y-m-d H:i:s');
+		$item->updateChanged();
+		
+		$this->jump();
 	}
+	
+	
+	
+	function doCheckAndRun()
+	{
+		
+		$list = $this->model->findAll('active=1');
+		
+		
+		foreach($list as $item){
+			$time_match = $item->time_match;
+			list($time_match, $interval) = explode('#', $time_match);
+
+
+			if (strpos($time_match, ' ') === false)
+				$time_match = '....-..-.. ' . $time_match;
+			
+			
+
+			$match = preg_match("/$time_match/", date('Y-m-d H:i:s'), $m) ? 1 : 0;
+
+			$last_exec = $item->last_run;
+
+
+
+			$dif = time() - strtotime($last_exec);
+			
+			if(isset($_GET['debug'])){
+				d::ldump(['id'=>$item->id,'time_match'=>$time_match, 'nowdate'=>date('Y-m-d H:i:s'), 'ismatching'=>$match, 'difference'=>$dif, 'interval'=>$interval]);
+			}
+
+			//debug
+			//echo "lastexec $time_match#$interval - $last_exec\n";
+			//echo "diff: $dif\n";
+			//echo "exec?: ".($match && $dif >= $interval * 60 ?'yes':'no')."\n";
+
+			if ($match && ($dif >= $interval * 60 )){
+				$this->doRun($item);
+			}
+		
+		}
+	}	
 }

@@ -6,9 +6,14 @@
 {block name="init"}	
         
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,divider,print]}        
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,divider,print,divider,runtest]}   
+	
+	{function name=do_toolbar_buttons_runtest}  
+		{toolbar_button title="Check and run" iconclass='gwico-cog' href=$m->buildUri(false, [act=>doCheckAndRun])}
+	{/function}		
+	
 
-	{$dl_actions=[timematch,invert_active,edit,delete,clone]}
+	{$dl_actions=[timematch,invert_active,editshift,delete,clone]}
 	
 		
 	{$dl_smart_fields=[template_id,groups]}
@@ -18,9 +23,9 @@
 	{/function}
 	
 	{function dl_cell_groups}
-		{d::ldump($groups)}
+		
 		{foreach $item->groups as $groupid}
-			{$options.template_id[$groupid]->title}
+			{$options.group_id[$groupid]->title}
 		{/foreach}
 		
 	{/function}	
