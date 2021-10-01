@@ -24,6 +24,20 @@ class Module_OrderItems  extends GW_Common_Module
 			$this->filters['group_id']=$this->cartgroup_id;
 		}
 
+		if(isset($_GET['obj_type']))
+			$this->filters['obj_type']=$_GET['obj_type'];
+		
+		if(isset($_GET['obj_id']))
+			$this->filters['obj_id']=$_GET['obj_id'];		
+		
+		
+		
+		$this->app->carry_params['clean'] = 1;
+		$this->app->carry_params['obj_type'] = 1;
+		$this->app->carry_params['obj_id'] = 1;	
+		$this->app->carry_params['orderflds'] = 1;	
+		
+		
 	}
 	
 
@@ -46,13 +60,53 @@ class Module_OrderItems  extends GW_Common_Module
 			]
 		);
 		
-		//$cfg['filters']['project_id'] = ['type'=>'select','options'=>$this->options['project_id']];
-					
+		
+		if(isset($_GET['orderflds'])){
+			$cfg['fields']['user_id'] = "Lof";
+			$cfg['fields']['user_title'] = 'Lf';	
+			$cfg['fields']['payment_status'] = 'Lof';	
+			
+		}
+		
 		return $cfg;
 	}
 	
+	
+
+	function __eventBeforeListParams(&$params)
+	{		
+		
+		
+		
+		
+		if(isset($_GET['orderflds']))
+		{
+			
+			$order_fields = "aa.user_id, aa.payment_status";
+			$params['select']='a.*, '.$order_fields;
+			$params['joins']=[
+			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
+			];	
+		}
+			
+		if($this->view_name=='email')
+			$params['limit']=9999999;
+		
+	}
+	
+	function overrideFilterUser_title($value, $compare_type)
+	{	
+		$x=$this->__overrideFilterExObject("GW_User", "user_id", ["name","surname",'email'], $value, $compare_type);
+		
+		return $x;
+	}	
+		
+	
+	
 	function __eventAfterList(&$list)
 	{
+		$this->attachFieldOptions($list, 'user_id', 'GW_User');
+		
 		///$this->attachFieldOptions($list, 'composer_id', 'IPMC_Composer');
 		
 		

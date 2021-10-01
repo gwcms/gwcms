@@ -6,7 +6,6 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	public $calculate_fields = [
 	    'obj'=>1,
 	    'total'=>1,
-	    'order'=>1,
 	    'expirable'=>1,
 	    'expires_secs'=>1,
 	    'is_expired'=>1,
@@ -15,14 +14,15 @@ class GW_Order_Item extends GW_Composite_Data_Object
 		'invoice_line'=>1
 	];
 	
+	public $composite_map = [
+		'order' => ['gw_composite_linked', ['object'=>'GW_Order_Group','relation_field'=>'group_id']],
+	];		
+	
 	
 	function calculateField($name) {
 		
 		switch ($name)
-		{
-			case "order":
-				return GW_Order_Group::singleton()->createNewObject($this->group_id, true);
-			break;			
+		{				
 			case "obj":
 				$class = $this->obj_type;
 				

@@ -88,6 +88,18 @@ class Module_Products extends GW_Common_Module
 		}
 				
 		$this->tpl_vars['dynfieldopts']=$dynfieldsopts;
+		
+		
+
+		
+		
+		if($this->list_config['display_fields']['orders']==1){
+			$t = GW_Order_Item::singleton()->table;
+			$t1 = $this->model->table;
+			$sql = "SELECT obj_id, count(*) FROM `$t` WHERE obj_type='$t1' GROUP BY obj_id";
+			$rez = GW::db()->fetch_assoc($sql);
+			$this->tpl_vars['count_orders'] = $rez;
+		}
 	}	
 
 	function getListConfig()
@@ -105,6 +117,8 @@ class Module_Products extends GW_Common_Module
 			//unset($cfg['fields']["mod"]);
 			$cfg['fields']["modif_title"] = "L";
 		}
+		
+		$cfg['fields']["orders"] = "L";
 		
 		return $cfg;
 	}		
@@ -126,8 +140,9 @@ class Module_Products extends GW_Common_Module
 	
 	function __eventBeforeListParams(&$params)
 	{
-
-		$params['conditions']="parent_id=0";
+		//modifikacijoms
+		if(!isset($_GET['parent_id']))
+			$params['conditions']="parent_id=0";
 	}	
 	
 	

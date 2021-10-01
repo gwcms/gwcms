@@ -323,6 +323,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$order->pay_test =1;	
 
 		$order->pay_confirm_id = $log_entry_id;
+		$order->pay_time = date('Y-m-d H:i:s');
 
 		$order->updateChanged();
 			

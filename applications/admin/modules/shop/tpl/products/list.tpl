@@ -2,6 +2,8 @@
 
 
 {block name="init"} 
+	
+	
 
 	{if $smarty.get.mods}
 		{$dl_fields=[modif_title]+$dl_fields}
@@ -61,6 +63,17 @@
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Mod({$item->mod_count})"}
 	{/if}
 {/function}
+{function dl_cell_orders}
+	{$url=$app->buildUri("payments/orderitems",[obj_type=>$m->model->table,obj_id=>$item->id,orderflds=>1,clean=>2])}
+	{*iconclass="fa fa-globe"*}
+
+	{if isset({$count_orders[$item->id]})}
+		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Orders({$count_orders[$item->id]})"}
+	{/if}
+	
+{/function}
+
+
 
 {function dl_cell_image}
 	{$image=$item->image}
@@ -73,7 +86,7 @@
 	<span title="id: {$item->type}">{$item->typeObj->title}</span>
 {/function}
 
-{$dl_smart_fields=[mod,image,type]} 
+{$dl_smart_fields=[mod,orders,image,type]} 
 
 
 {$dl_toolbar_buttons[] = hidden}
