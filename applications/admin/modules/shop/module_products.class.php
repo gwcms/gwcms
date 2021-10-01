@@ -14,7 +14,7 @@ class Module_Products extends GW_Common_Module
 		$this->initLogger();
 
 		$this->config = new GW_Config($this->module_path[0].'/');
-		$this->features = array_fill_keys((array)json_decode($this->config->modules), 1);
+		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
 		
 		parent::init();
 		$this->model = Shop_Products::singleton();

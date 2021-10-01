@@ -60,7 +60,7 @@
 
 
 
-{call e field="modules" type=multiselect options=[doublef,modifications,quantities] value_format=json1 options_fix=1}
+{call e field="features" type=multiselect options=[doublef,modifications,quantities] value_format=json1 options_fix=1}
 
 
 
