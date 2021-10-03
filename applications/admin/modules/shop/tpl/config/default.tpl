@@ -55,18 +55,17 @@
 {include file="elements/input_select_mailtemplate.tpl" field=post_pay_mail_default default_vals=[admin_title=>GW::l('/m/FIELDS/post_pay_mail_default'),idname=>post_pay_mail_default]}
 
 
-
-{call e field="wishlist_enabled" type=bool}
-
-
-
-{call e field="features" type=multiselect options=[doublef,modifications,quantities] value_format=json1 options_fix=1}
+{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
 
 
 
 {if $m->features.modifications}
 	{call e field="modification_display" type=select options=[select,list] options_fix=1 empty_option=1}
 {/if}
+
+
+{call e field=site_list_types type=multiselect_ajax options=[grid,list,listbigrow] options_fix=1 sorting=1 value_format=json1}
+{call e field=site_itemspp type=multiselect_ajax options=[12,24,32,64,100,200,300] options_fix=1  value_format=json1}
 
 
 

@@ -22,8 +22,13 @@
 
 	{$dl_filters=[]}
 
-	{$dl_actions=[delete,edit]}
-	{$dl_smart_fields=[obj_id,user_title]}		
+	{if $smarty.get.noactions}
+		{$dl_actions=[]}
+	{else}
+		{$dl_actions=[delete,edit]}
+	{/if}
+	
+	{$dl_smart_fields=[obj_id,group_id,user_title]}		
 	{$dl_output_filters=[catalog_type=>options,tonality=>options]}
 
 
@@ -34,6 +39,11 @@
 			{$item->obj_id}
 		{/if}
 	{/function}
+	
+	{function dl_cell_group_id}
+		<a target='_blank' href="{$app->buildUri("payments/ordergroups/{$item->group_id}/form")}">{$item->group_id}</a>
+	{/function}	
+	
 	
 	{function dl_cell_user_title}
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>

@@ -98,7 +98,8 @@ class Module_Login extends GW_Module
 			
 		session_commit();
 		session_write_close();
-		$auth_gw_url = "https://auth.gw.lt/index.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		$auth_gw_url = "https://auth.gw.lt/fblogin.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		d::dumpas($auth_gw_url);
 		header('Location: '.$auth_gw_url);		
 		exit;			
 	}
@@ -107,7 +108,7 @@ class Module_Login extends GW_Module
 	function doAuthFinishWithFb()
 	{	
 		$req_id = $_SESSION['adm_auth_gw_lt_req_id'];
-		$dat = file_get_contents('https://auth.gw.lt/index.php?get_response='.$req_id);
+		$dat = file_get_contents('https://auth.gw.lt/fblogin.php?get_response='.$req_id);
 		$dat = json_decode($dat);
 		
 		if(!isset($dat->id)){

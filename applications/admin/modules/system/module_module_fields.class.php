@@ -19,6 +19,15 @@ class Module_Module_Fields extends GW_Common_Module
 			if(isset($page->info->model))
 				$this->filters['parent'] = strtolower($page->info->model);		
 		}
+		
+		if(isset($_GET['path'])){
+			$page = GW_ADM_Page::singleton()->find(['path=?', $_GET['path']]);
+
+			if(isset($page->info->model))
+				$this->filters['parent'] = strtolower($page->info->model);		
+		}		
+		
+		$this->app->carry_params['path']=1;
 	}
 	
 	

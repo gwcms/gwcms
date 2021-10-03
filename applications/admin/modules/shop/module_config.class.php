@@ -35,8 +35,7 @@ class Module_Config extends GW_Common_Module
 		foreach($vals as $key => $val)
 			if(is_array($val))
 				$vals[$key] = json_encode($val);
-			
-			
+
 		$this->fireEvent("BEFORE_SAVE", $vals);
 		
 		$this->model->setValues($vals);

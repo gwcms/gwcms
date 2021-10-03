@@ -53,6 +53,7 @@ inbound_flight_details
 {if $item->parent_id}
 	{$mod_fields=[modif_title=>[type=>text, colspan=>1]]}
 	{$fields_config.fields = $mod_fields + $fields_config.fields}
+	{gw_unassign var=$fields_config.fields.title}
 {/if}
 
 
@@ -63,8 +64,7 @@ inbound_flight_details
 ]}
 
 {if $item->type}
-	{$dynfields = array_flip($item->typeObj->fields)}
-	
+	{$dynfields = array_flip((array)$item->typeObj->fields)}
 {/if}
 
 

@@ -64,10 +64,13 @@
 	{/if}
 {/function}
 {function dl_cell_orders}
-	{$url=$app->buildUri("payments/orderitems",[obj_type=>$m->model->table,obj_id=>$item->id,orderflds=>1,clean=>2])}
+	{$url=$app->buildUri("payments/orderitems",[
+		obj_type=>$m->model->table,
+		obj_id=>$item->id,orderflds=>1,
+		flds=>"group_id,user_title,pay_time,payment_status,qty,unit_price",ord=>'payment_status DESC',noactions=>1,clean=>2])}
 	{*iconclass="fa fa-globe"*}
 
-	{if isset({$count_orders[$item->id]})}
+	{if isset($count_orders[$item->id])}
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Orders({$count_orders[$item->id]})"}
 	{/if}
 	

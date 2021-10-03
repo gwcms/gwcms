@@ -37,6 +37,7 @@
 
 {if $smarty.get.shift_key}
 	{$fields_config.fields.payment_status=[type=>number]}
+	{$fields_config.fields.pay_time=[type=>text]}
 {/if}
 
 {include "tools/form_components.tpl"}

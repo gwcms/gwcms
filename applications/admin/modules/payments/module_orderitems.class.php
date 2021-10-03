@@ -35,8 +35,10 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['clean'] = 1;
 		$this->app->carry_params['obj_type'] = 1;
 		$this->app->carry_params['obj_id'] = 1;	
-		$this->app->carry_params['orderflds'] = 1;	
-		
+		$this->app->carry_params['orderflds'] = 1;
+		$this->app->carry_params['flds'] = 1;
+		$this->app->carry_params['ord'] = 1;
+		$this->app->carry_params['noactions'] = 1;
 		
 	}
 	
@@ -65,6 +67,7 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['user_id'] = "Lof";
 			$cfg['fields']['user_title'] = 'Lf';	
 			$cfg['fields']['payment_status'] = 'Lof';	
+			$cfg['fields']['pay_time'] = 'Lof';	
 			
 		}
 		
@@ -82,16 +85,25 @@ class Module_OrderItems  extends GW_Common_Module
 		if(isset($_GET['orderflds']))
 		{
 			
-			$order_fields = "aa.user_id, aa.payment_status";
+			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time";
 			$params['select']='a.*, '.$order_fields;
 			$params['joins']=[
 			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
 			];	
 		}
+		
+
 			
 		if($this->view_name=='email')
 			$params['limit']=9999999;
 		
+	}
+	
+	function __eventAfterListParams(&$params){
+		if(isset($_GET['ord']))
+		{
+			$params['order'] = $_GET['ord'];
+		}		
 	}
 	
 	function overrideFilterUser_title($value, $compare_type)
@@ -111,6 +123,20 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		
 		//$pieces0 = IPMC_Competition_Pieces::singleton();
+		if(isset($_GET['flds'])){
+			$flds = explode(',',$_GET['flds']);
+			
+			$this->list_config['display_fields'] = array_fill_keys(array_keys($this->list_config['display_fields']), 0);
+			
+			foreach($flds as $fld)
+				$this->list_config['display_fields'][$fld]=1;
+			
+			$this->list_config['dl_fields']=$flds;
+			
+			$this->tpl_vars['dl_fields'] = $flds;
+			
+			//d::dumpas($this->list_config);
+		}
 	
 		foreach($list as $item)
 			$this->initType($item);		

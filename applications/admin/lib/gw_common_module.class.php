@@ -2694,10 +2694,4 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	
-	function doManageFields()
-	{
-		$this->app->carry_params['clean']=1;
-		$this->app->jump("system/managefields", ['path'=>$this->app->path]);
-	}	
-	
 }

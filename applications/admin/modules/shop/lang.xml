@@ -46,6 +46,14 @@
     </i>
     <i id="fields">Laukeliai</i>
     <i id="oldprice">Priešnuolaidinė kaina</i>
+    <i id="site_itemspp">Prekių per puslapį</i>
+    <i id="site_list_types">
+      <lt>Sąrašo atvaizdavimas</lt>
+    </i>
+    <i id="modification_display">Produkto variacijų sąrašo atvaizdavimas</i>
+    <i id="features">
+      <lt>Įgalinti funkcionalumai</lt>
+    </i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="language_id">
@@ -213,5 +221,17 @@
   </i>
   <i id="UPDATE_AFTER_CHANGE_HIDD">
     <lt>Priklausomai nuo produkto tipo rodomi skirtingi laukeliai, pakeitę tipą spauskite [išsaugoti liekant] kad pasimatytų naujai pasirinkto tipo laukeliai</lt>
+  </i>
+  <i id="OPTIONS">
+	  <i id="features">
+		<i id="doublef">doublef</i>
+		<i id="modifications">Produktų variacijos</i>
+		<i id="site_add2cart_from_list"></i>
+		<i id="delivery">Pristatymas</i>
+		<i id="cart_item_qty1">Išjungti kiekio pasirinkimą</i>
+		<i id="site_add2cart_from_list">Pridėti į krepšelį iš sąrašo</i>
+		<i id="wishlist">Wishlist - įsiminti pamėgtas prekes</i>
+          </i>
+	  
   </i>
 </xml>

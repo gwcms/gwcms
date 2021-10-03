@@ -49,6 +49,9 @@ class Module_Products extends GW_Common_Module
 	{
 		GW_Composite_Data_Object::prepareLinkedObjects($list, 'typeObj');
 		
+		$sources=[];
+		$dynfieldsopts = [];
+		
 		foreach($this->mod_fields as $field){
 			if($field->inp_type=="select_ajax"){
 				$sources[$field->modpath][] = $field->fieldname;

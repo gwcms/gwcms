@@ -31,6 +31,13 @@
 		{/if}
 	{/if}
 	
+	{if $sorting && $options && $value && $maximumSelectionLength>1}
+		{foreach array_reverse($value) as $id}
+			{$options=[$id=>$options[$id]]+$options}
+		{/foreach}
+	{/if}
+		
+	
 	
 	<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control GWselectAjax" name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
 		 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
@@ -50,7 +57,7 @@
 		 >
 		{html_options options=$options selected=$value}
 	</select>
-
+	
 
 	{if !$gwcms_input_select2_loaded}
 		{$m->addIncludes("bs/select2css", 'css', "`$app_root`static/vendor/select2/css.css")}

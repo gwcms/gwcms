@@ -91,6 +91,11 @@ class Shop_Products extends GW_Composite_Data_Object
 	function __get($key)
 	{
 		
+		//jei nenurodyta modifikacijos title
+		if($key=='title' && $this->parent_id){
+			return $this->get('parent')->title." - ".$this->modif_title;
+		}		
+		
 		if((GW::$context->app->app_name != 'SITE' || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
 			
 			return parent::__get($key);
@@ -99,11 +104,7 @@ class Shop_Products extends GW_Composite_Data_Object
 		$tmp =& $this->content_base[$key];
 		
 
-		//jei nenurodyta modifikacijos title
-		if($key=='title' && !$tmp){
-			$tmp = $this->get('parent')->title." - ".$this->modif_title;
-		}
-		
+	
 		
 		if($tmp || $key=='qty'){
 			
