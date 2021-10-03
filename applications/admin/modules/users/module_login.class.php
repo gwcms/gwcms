@@ -99,7 +99,6 @@ class Module_Login extends GW_Module
 		session_commit();
 		session_write_close();
 		$auth_gw_url = "https://auth.gw.lt/fblogin.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
-		d::dumpas($auth_gw_url);
 		header('Location: '.$auth_gw_url);		
 		exit;			
 	}
