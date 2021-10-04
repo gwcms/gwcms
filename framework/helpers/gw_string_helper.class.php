@@ -19,15 +19,18 @@ class GW_String_Helper
 		return $first_letter . $str_end;
 	}
 
+	static $simple = "ABCDEFGHJKLMNPQRSTUWVXYZ123456789";
 	static $chars = "ABCDEFGHIJKLMNOPQRSTUWVXYZabcdefghijklmnopqrstuwxyz0123456789";
 
-	static function getRandString($length)
+	static function getRandString($length, $chars=false)
 	{
 		$str = "";
-		$cmax = strlen(self::$chars);
+		$chars = $chars ?: self::$chars;
+		
+		$cmax = strlen($chars);
 
 		for ($i = 0; $i < $length; $i++) {
-			$str.= self::$chars[rand(0, $cmax - 1)];
+			$str.= $chars[rand(0, $cmax - 1)];
 		}
 
 		return $str;

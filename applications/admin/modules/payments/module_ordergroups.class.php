@@ -23,7 +23,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->list_params['paging_enabled']=0;	
 		}
 		
-		
+		$this->config =  new GW_Config($this->module_path[0].'/');	
 	}
 	
 
@@ -129,7 +129,10 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$v =& $this->tpl_vars;
 		
-		
+		if(!$item->secret){
+			$item->secret = GW_String_Helper::getRandString(8,GW_String_Helper::$simple);
+			$item->updateChanged();
+		}
 		
 		
 		$attachuservars = function(&$v, $user){
@@ -155,6 +158,9 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['DATE'] = explode(' ',$item->insert_time)[0];
 		$v['EMAIL'] = $payconfirm->p_email ?: $item->email;
 		$v['ITEMS'] = [];
+		$v['ORDERID'] = $item->id;
+		$v['SECRET'] = $item->secret;
+		$v['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
 			//$pdf=GW_html2pdf_Helper::convert($html, false);			
 			
 		
@@ -379,7 +385,74 @@ class Module_OrderGroups extends GW_Common_Module
 	}
 	
 	
+	function doOrderPaydNotifyUser()
+	{		
+		$template_id = $this->config->confirm_email_tpl;
+		
+		
+		$order = $this->getDataObjectById();
+		
+		
+		list($invtpl, $vars) = $this->initInvoiceVars($order);
+		
+		
+		//2kartus kad nesiusti laisko
+		if($order->mail_accept){
+			$this->setError("Already sent");
+			return false;
+		}else{
 
+			$order->set('mail_accept',1);
+			$order->updateChanged();
+		}
+		
+		//$response = [];
+		
+		//$orderlink = 'https://natos.lt/lt/direct/products/orders/list?id='.$order->id;
+			
+		//if(!$order->user_id){
+		//	$orderlink .= '&uid='.$order->secret;
+		//}
+		
+
+		
+		
+			
+		//$filename = "NATOS_ORDER_".$vars['ORDERID'].'.pdf';
+		//$pdf =  $this->getOrderedItems($order, ['returnoutput'=>1]);
+		
+		$email = $order->email;
+		if(!$email && $order->user && $order->user->email)
+			$email = $order->user->email;
+		
+		
+		
+		$opts = [
+		    'to'=>$email,
+		    'tpl'=>GW_Mail_Template::singleton()->find($template_id),
+		    'vars'=>$vars,
+		    //'attachments'=>[$filename=>$pdf]
+		];
+		
+		
+		
+		if($email!='vidmantas.work@gmail.com')
+			$opts['bcc'] = GW_Mail_Helper::getAdminAddr();
+		
+		$msg = GW::ln('/m/MESSAGE_SENT_TO',['v'=>['email'=>$email]]);
+		//$this->setMessage();
+		
+		GW_Mail_Helper::sendMail($opts);
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode(['resp'=>$msg]);
+			exit;
+		}else{
+			$this->setMessage($msg);
+			$this->jump();
+		}
+	}
+	
 	
 	
 }
