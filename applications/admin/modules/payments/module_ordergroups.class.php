@@ -274,6 +274,8 @@ class Module_OrderGroups extends GW_Common_Module
 		if($query != $item->amount_total)
 		{
 			$this->setError(GW::l('/m/RECEIVED_AMOUNT_DOES_NOT_MATCH'));
+			$this->app->jump();
+			return false;
 		}
 		
 		
@@ -332,9 +334,15 @@ class Module_OrderGroups extends GW_Common_Module
 		$order->pay_time = date('Y-m-d H:i:s');
 
 		$order->updateChanged();
+		
+		
+		file_put_contents(GW::s('DIR/TEMP').'doMarkAsPaydSystem_test2', json_encode($order->toArray()));
 			
 			
 		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
+		
+		if($this->config->confirm_email_tpl)
+			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doOrderPaydNotifyUser&cron=1');		
 		
 		return false;
 	}
