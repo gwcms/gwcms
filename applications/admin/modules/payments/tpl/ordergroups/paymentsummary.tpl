@@ -21,11 +21,20 @@
 			<td>
 				<input type="submit" class="btn btn-primary">
 			</td>
+			
+			{if $smarty.get.date_to}
+			<td>
+				
+	{$url=$app->buildUri("payments/orderitems",[
+		pay_interval=>"{$smarty.get.date_from},{$smarty.get.date_to}",orderflds=>1,pay_test=>0,
+		flds=>"group_id,user_title,pay_time,type,invoice_line,qty,unit_price,total",ord=>'payment_status DESC,pay_time DESC',noactions=>1])}
+	{*iconclass="fa fa-globe"*}
+				<a href="{$url}" class="btn btn-primary">Nesugrupuotas</a>
+			</td>
+			{/if}
 		</tr>
 	</table>
 </form>
-
-
 
 	<table class="gwTable gwActiveTable">
 

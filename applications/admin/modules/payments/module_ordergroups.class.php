@@ -374,8 +374,8 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$conds = ['payment_status=7 AND pay_test=0'];
 				
-		$conds[] = GW_DB::prepare_query(['insert_time >= ?', $date_from]);
-		$conds[] = GW_DB::prepare_query(['insert_time <= ?', $date_to." 23:59"]);		
+		$conds[] = GW_DB::prepare_query(['pay_time >= ?', $date_from]);
+		$conds[] = GW_DB::prepare_query(['pay_time <= ?', $date_to." 23:59"]);		
 	
 		
 		

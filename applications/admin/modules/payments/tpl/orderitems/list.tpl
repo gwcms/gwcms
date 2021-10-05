@@ -28,8 +28,7 @@
 		{$dl_actions=[delete,edit]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title]}		
-	{$dl_output_filters=[catalog_type=>options,tonality=>options]}
+	{$dl_smart_fields=[obj_id,group_id,user_title]}
 
 
 	{function dl_cell_obj_id}
@@ -48,7 +47,8 @@
 	{function dl_cell_user_title}
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>
 	{/function}		
-
+	
+	
 
 
 	
@@ -60,11 +60,11 @@
 	
 	{/capture}
 	
-	
-	{$dl_checklist_enabled=1}
-	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
-	{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri('dialoggroupduplicates')}', $(this).find(':selected').text())">{GW::l('/A/VIEWS/dialoggroupduplicates')}</option>{/capture}	
-			
+	{if !$smarty.get.noactions}
+		{$dl_checklist_enabled=1}
+		{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
+		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri('dialoggroupduplicates')}', $(this).find(':selected').text())">{GW::l('/A/VIEWS/dialoggroupduplicates')}</option>{/capture}	
+	{/if}		
 	
 {/block}
 

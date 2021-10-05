@@ -30,6 +30,7 @@ class Module_OrderItems  extends GW_Common_Module
 		if(isset($_GET['obj_id']))
 			$this->filters['obj_id']=$_GET['obj_id'];		
 		
+	
 		
 		
 		$this->app->carry_params['clean'] = 1;
@@ -39,7 +40,8 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['flds'] = 1;
 		$this->app->carry_params['ord'] = 1;
 		$this->app->carry_params['noactions'] = 1;
-		
+		$this->app->carry_params['pay_interval'] = 1;
+		$this->app->carry_params['pay_test'] = 1;
 	}
 	
 
@@ -58,7 +60,8 @@ class Module_OrderItems  extends GW_Common_Module
 			'unit_price' => 'Lof',
 			'qty' => 'Lof',
 			'insert_time'=>'lof',
-			'update_time'=>'lof',		    
+			'update_time'=>'lof',	
+			'type'=>'lo'
 			]
 		);
 		
@@ -91,9 +94,25 @@ class Module_OrderItems  extends GW_Common_Module
 			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
 			];	
 		}
+		$params['conditions'] = $params['conditions'] ?? '';
 		
-
+		//d::dumpas($params);
+		if($_GET['pay_interval'] ?? false){
+			$params['conditions'] = $params['conditions'] ? '('. $params['conditions'] .') AND ' :'1=1 AND ';
 			
+			list($date_from,$date_to) = explode(',', $_GET['pay_interval']);
+			
+			$params['conditions'].=GW_DB::prepare_query(['pay_time >= ? AND pay_time <= ?', $date_from, $date_to." 23:59"]);
+		}
+		
+		if($_GET['pay_test'] ?? false){
+			$params['conditions'] = $params['conditions'] ? '('. $params['conditions'] .') AND ' :'1=1 AND ';
+			
+			$params['conditions'].="pay_test=".(int)$params['pay_test'];
+		}
+				
+		
+		
 		if($this->view_name=='email')
 			$params['limit']=9999999;
 		
