@@ -5,12 +5,14 @@
 
 
 
+
+
+
 {$fields_config=[
 	cols=>1,
 	fields=>[
 		pay_type=>[type=>text],
 		user_id=>[type=>select_ajax,modpath=>"users/usr", preload=>1,options=>[],default=>$app->user->id],
-		pay_confirm_id=>[type=>select_ajax, modpath=>"payments/payments_paysera",preload=>1,options=>[], after_input_f=>editadd],
 		amount_total=>[type=>number,step=>0.01],
 		amount_items=>[type=>text],
 		adm_processed=>[type=>bool],
@@ -29,9 +31,14 @@
 ]}
 
 
+
 {if $item->pay_type=='banktransfer'}
 	{$fields_config.fields.pay_user_msg=[type=>text]}
 	{$fields_config.fields.banktransfer_confirm=[type=>image]}
+{/if}
+
+{if $item->pay_type}
+	{$fields_config.fields.pay_confirm_id = [type=>select_ajax, modpath=>"payments/payments_{$item->pay_type}",preload=>1,options=>[], after_input_f=>editadd]}
 {/if}
 
 

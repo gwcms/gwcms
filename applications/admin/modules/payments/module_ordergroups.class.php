@@ -305,11 +305,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$rcv_amount = $_GET['rcv_amount'] ?? false;
 		
 		if($log_entry_id){
-			
-			$log_entry = GW_Paysera_Log::singleton()->find(['id=?', $log_entry_id]);
-			$order->pay_type = 'paysera';
-		}else{
-			$log_entry = false;
+			$order->pay_type = $_GET['pay_type'];
 		}
 			
 			
@@ -323,7 +319,7 @@ class Module_OrderGroups extends GW_Common_Module
 		foreach($order->items as $item){
 			$obj = $item->obj;
 			if($obj){
-				$obj->orderItemPayd($item->unit_price, $item->qty, $log_entry);
+				$obj->orderItemPayd($item->unit_price, $item->qty, $order);
 			}
 		}
 
@@ -338,8 +334,8 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		file_put_contents(GW::s('DIR/TEMP').'doMarkAsPaydSystem_test2', json_encode($order->toArray()));
 			
-			
-		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
+		
+		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		
 		if($this->config->confirm_email_tpl)
 			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doOrderPaydNotifyUser&cron=1');		

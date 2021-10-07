@@ -5,17 +5,19 @@
 
 {block name="init"}
 
-	
-	{*
-	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}		
-	*}
-	
+
 	{if $list}
 		{$do_toolbar_buttons=[]}
 	{else}
 		{$do_toolbar_buttons=[addnew]}
 	{/if}
+	
+	{if !$smarty.get.clean}
+		{$do_toolbar_buttons=[addnew]}
+		{$do_toolbar_buttons[] = hidden}
+		{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}		
+	{/if}	
+	
 	
 	
 	{$dl_inline_edit=1}

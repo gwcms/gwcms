@@ -25,8 +25,12 @@
 
 
 
-{call e field="confirm_email_tpl" type=select_ajax modpath="emails/email_templates" preload=1 options=[]  source_args=[byid=>1] }
+{call e field="confirm_email_tpl" type=select_ajax modpath="emails/email_templates"  options=[]  source_args=[byid=>1] }
 {call e field="default_currency_code"}
+
+
+
+{call e field="pay_types" type=multiselect_ajax sorting=1 options=GW::l('/m/OPTIONS/pay_type') value_format=json1}
 
 
 {include "default_form_close.tpl"}

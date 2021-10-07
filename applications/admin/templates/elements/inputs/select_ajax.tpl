@@ -31,7 +31,7 @@
 		{/if}
 	{/if}
 	
-	{if $sorting && $options && $value && $maximumSelectionLength>1}
+	{if $sorting && $options && $value && is_array($value) && $maximumSelectionLength>1}
 		{foreach array_reverse($value) as $id}
 			{$options=[$id=>$options[$id]]+$options}
 		{/foreach}

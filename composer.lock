@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "155ad9326b228e97fde537ece55da62d",
+    "content-hash": "0f2b9003d9a92473c1610f524b95479b",
     "packages": [
         {
             "name": "dompdf/dompdf",
@@ -132,6 +132,43 @@
             ],
             "abandoned": "facebook/graph-sdk",
             "time": "2018-12-11T22:56:31+00:00"
+        },
+        {
+            "name": "getkevin/kevin-php",
+            "version": "0.14.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getkevin/kevin-php.git",
+                "reference": "2da751a9f6e55b85c5250d1a474df438616438ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getkevin/kevin-php/zipball/2da751a9f6e55b85c5250d1a474df438616438ab",
+                "reference": "2da751a9f6e55b85c5250d1a474df438616438ab",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kevin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "kevin.",
+                    "email": "help@kevin.eu"
+                }
+            ],
+            "description": "PHP client for kevin. platform.",
+            "time": "2021-07-12T18:14:43+00:00"
         },
         {
             "name": "phenx/php-font-lib",

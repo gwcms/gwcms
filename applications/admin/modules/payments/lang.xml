@@ -21,6 +21,10 @@
     </i>
     <i id="amount_items">Pirkinių kaina</i>
     <i id="amount_total">Viso kaina</i>
+    <i id="unit_price">Vieneto kaina</i>
+    <i id="qty">Kiekis</i>
+    <i id="total">Suma</i>
+    <i id="invoice_line">Pavadinimas</i>
   </i>
   <i id="FIELDS_SHORT">
 	  
@@ -60,6 +64,9 @@
 	<![CDATA[<i class="fa fa-credit-card"></i>?]]>
     </i>    
     <i id="adm_processed"><![CDATA[Buhal. <i class="fa fa-check"></i>]]></i>
+     <i id="unit_price">Vnt kaina</i>
+     <i id="qty">Kiek</i>
+     <i id="total">Sum</i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
@@ -83,6 +90,24 @@
     <i id="checkin">
       <i id="0">No checkin (0)</i>
     </i>
+    
+    <i id="pay_type">
+      <i id="banktransfer">
+        <lt>Bankiniu pavedimu</lt>
+        <en>Bank transfer</en>
+        <ru>Банковским переводом</ru>
+      </i>
+      <i id="paysera">Payera</i>
+      <i id="creditcard">
+        <lt>Kreditine kortele</lt>
+        <en>Credit card</en>
+        <ru>Кредитная карта</ru>
+      </i>
+      <i id="paypal">Paypal</i>
+      <i id="kevin">Kevin</i>
+      <i id="montonio">Montonio</i>
+    </i>    
+    
   </i>
   <i id="MAP">
     <i id="title">Mokėjimai</i>
@@ -118,6 +143,18 @@
           <i id="iconclass">fa fa-money</i>
         </i>
       </i>
+       <i id="payments_kevin">
+        <i id="title">
+          <en>Payments Kevin</en>
+          <lt>Mokėjimai Kevin</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_paykevin_log</i>
+          <i id="iconclass">fa fa-money</i>
+        </i>
+      </i>
+     
+      
       <i id="payments_paypal">
         <i id="title">
           <en>Payments PP</en>

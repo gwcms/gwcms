@@ -2,6 +2,7 @@
 	"require": {
 		"facebook/php-sdk-v4": "~5.0",
 		"symfony/expression-language": "^5.3",
-		"dompdf/dompdf": "^1.0"
+		"dompdf/dompdf": "^1.0",
+		"getkevin/kevin-php": "^0.14.2"
 	}
 }

@@ -54,14 +54,16 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$cfg = array('fields' => [
 			'id' => 'Lof', 
-			'obj_type'=> 'Lof',
-			'obj_id'=> 'Lof',
-			'modpath' => 'L',
+			'type'=>'Lo',
+			'invoice_line'=>'L',
+			'obj_type'=> 'lof',
+			'obj_id'=> 'lof',
+			'modpath' => 'lof',
 			'unit_price' => 'Lof',
 			'qty' => 'Lof',
+			'total'=>'L',	    
 			'insert_time'=>'lof',
 			'update_time'=>'lof',	
-			'type'=>'lo'
 			]
 		);
 		

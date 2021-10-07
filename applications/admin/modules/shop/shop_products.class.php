@@ -80,7 +80,7 @@ class Shop_Products extends GW_Composite_Data_Object
 		
 		return $this->price;
 	}
-	function orderItemPayd($unit_price, $qty, $log_entry)
+	function orderItemPayd($unit_price, $qty, $order)
 	{
 		$this->qty = $this->qty - $qty;
 		$this->updateChanged();

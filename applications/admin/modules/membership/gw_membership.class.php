@@ -22,10 +22,10 @@ class GW_Membership extends GW_Composite_Data_Object
 	}
 
 	
-	function orderItemPayd($amount, $qty, $log_entry)
+	function orderItemPayd($amount, $qty, $order)
 	{
 		$this->fireEvent('BEFORE_CHANGES');
-		$this->pay_id = $log_entry->id;
+		$this->pay_id = $order->id;
 		$this->payd_amount += $amount;
 		$this->active = 1;
 		//$this->status = 80;

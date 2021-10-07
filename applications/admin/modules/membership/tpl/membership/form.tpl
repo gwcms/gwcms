@@ -6,7 +6,16 @@
 {call e field=expires type=datetime}
 
 
-{call e field=pay_id type=select_ajax modpath="payments/payments_paysera"  preload=1 options=[] after_input_f=editadd}
+{if $item->insert_time >= "2021-10-07"}
+	{$tmp = "payments/ordergroups"}
+{else}
+	{$tmp = "payments/payments_paysera"}
+{/if}	
+			
+{call e field=pay_id type=select_ajax modpath=$tmp  preload=1 options=[] after_input_f=editadd}
+
+
+
 {call e field=test type=bool}
 {call e field=notes type=text}
 
