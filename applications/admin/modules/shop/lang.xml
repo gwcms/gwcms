@@ -54,6 +54,8 @@
     <i id="features">
       <lt>Įgalinti funkcionalumai</lt>
     </i>
+    <i id="group_id">Užsakymo id</i>
+    <i id="pay_time">Apmokėjimo laikas</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="language_id">
@@ -129,8 +131,9 @@
       </lt>
     </i>
     <i id="oldprice">
-<![CDATA[<s>Kaina<s></s></s>]]>
+<![CDATA[<s>Kaina</s>]]>
     </i>
+    <i id="group_id">Užs. #</i>
   </i>
   <i id="FIELDS_HELP">
     <i id="invoice">

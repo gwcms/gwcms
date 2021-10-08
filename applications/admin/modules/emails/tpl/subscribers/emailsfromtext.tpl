@@ -13,10 +13,11 @@
 	
 	
 {call e field=lang type=select options=GW::l('/m/OPT/lang') empty_option=1}
-{call e field=groups type=multiselect options=$options.groups}	
+{call e field=groups type=select_ajax modpath="emails/groups" preload=1 options=[] after_input_f="editadd"}	
 {call e field=active type=bool}	
 
 
+{*
 {if $result}
 	<tr>
 		<td style="width: 150px">Rezultatas importavimui</td>
@@ -24,7 +25,7 @@
 		</td>
 	</tr>	
 {/if}
-
+*}
 
 {function name=df_submit_button_send}
 	<button class="btn btn-primary"><i class="fa fa-save"></i> {GW::l('/m/SEND')}</button>

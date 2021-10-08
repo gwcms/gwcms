@@ -4,6 +4,9 @@
 class Module_Subscribers extends GW_Common_Module
 {	
 	
+
+	use Module_Import_Export_Trait;		
+	
 	function init()
 	{	
 		parent::init();
@@ -381,15 +384,26 @@ class Module_Subscribers extends GW_Common_Module
 		
 		//d::dumpas($_POST['item']);
 		
-		foreach($emails as $i => $item)
-		{
-			$emails[$i] = $item + $_POST['item'];			
-			$emails[$i] = (object)$emails[$i];
+
+		$sett = $_POST['item'];
+		
+		foreach($emails as $email){
+	
+			
+			$sub = GW_NL_Subscriber::singleton()->createNewObject();
+			$sub->email = $email['email'];
+			$sub->lang = $sett['lang'];
+			$sub->active = $sett['active'];
+			if(!$sub->validate()){
+				$this->setError($email['email'].": ".array_values($sub->errors)[0]);
+			}else{
+				$sub->insert();
+				$this->setMessage(GW::l('/m/ADD_SUCCESS').' '.$email['email']);
+			}
+			
 		}
-				
-		$data = $this->__list2Str($emails);
-				
-		$this->tpl_vars['result'] = addslashes($data);
+		$this->app->jump();	
+		//$this->tpl_vars['result'] = addslashes($data);
 	}
 	
 	function viewEmailsFromText()
