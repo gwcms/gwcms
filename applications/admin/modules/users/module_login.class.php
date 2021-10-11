@@ -110,6 +110,8 @@ class Module_Login extends GW_Module
 		$dat = file_get_contents('https://auth.gw.lt/fblogin.php?get_response='.$req_id);
 		$dat = json_decode($dat);
 		
+		
+		d::dumpas($dat);
 
 		
 		if(!isset($dat->id)){
