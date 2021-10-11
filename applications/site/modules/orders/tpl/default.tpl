@@ -88,7 +88,7 @@
 								<a href="{$m->buildUri(false, [act=>doCartItemRemove,id=>$citem->id])}"><i class="fa fa-times"></i></a>
 								{/if}
 
-							{if $citem->expirable}
+							{if $citem->expirable  && $order->payment_status!=7}
 								{if $citem->expires_secs > 0}
 									<span class="countdown" data-expires="{$citem->expires_secs}">{GW_Math_Helper::uptime($citem->expires_secs)}</span>
 								{else}
