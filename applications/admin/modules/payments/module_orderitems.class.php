@@ -68,9 +68,10 @@ class Module_OrderItems  extends GW_Common_Module
 		);
 		
 		
-		if(isset($_GET['orderflds'])){
+		if(!$this->cartgroup_id){
 			$cfg['fields']['user_id'] = "Lof";
 			$cfg['fields']['user_title'] = 'Lf';	
+			$cfg['fields']['user_email'] = 'Lf';	
 			$cfg['fields']['payment_status'] = 'Lof';	
 			$cfg['fields']['pay_time'] = 'Lof';	
 			
@@ -87,7 +88,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		
 		
-		if(isset($_GET['orderflds']))
+		if(!$this->cartgroup_id)
 		{
 			
 			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time";

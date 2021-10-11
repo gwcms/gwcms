@@ -1435,6 +1435,13 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 				iframe_content.resize();
 				setTimeout(function(){
 						iframe_content.resize()
+						
+						if(window.frameElement){ // iframe in iframe
+							console.log("ifram in iframe, update upper iframe height to "+($('body').height()+20));
+							$(window.frameElement).height($('body').height()+20)
+						}
+						
+						parent.window.$('body').resize(); 
 				},1000);
 
 			//$('.iframe_auto_sz').attr('data-ifrm_auto_sz_init'))

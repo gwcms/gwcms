@@ -10,7 +10,8 @@
 	fields=>[
 		obj_type=>[type=>text],
 		unit_price=>[type=>number,step=>"0.01"],
-		qty=>[type=>number]
+		qty=>[type=>number],
+		link=>[type=>text]
 	]
 
 ]}

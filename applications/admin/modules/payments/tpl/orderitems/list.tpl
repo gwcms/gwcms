@@ -22,7 +22,9 @@
 	
 	{$dl_inline_edit=1}
 
-	{$dl_filters=[]}
+	{if $m->cartgroup_id}
+		{$dl_filters=[]}
+	{/if}
 
 	{if $smarty.get.noactions}
 		{$dl_actions=[]}
@@ -30,7 +32,7 @@
 		{$dl_actions=[delete,edit]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email]}
 
 
 	{function dl_cell_obj_id}
@@ -50,7 +52,10 @@
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>
 	{/function}		
 	
-	
+	{function dl_cell_user_email}
+		{$options.user_id[$item->user_id]->email}
+	{/function}		
+		
 
 
 	

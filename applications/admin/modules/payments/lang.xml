@@ -25,6 +25,9 @@
     <i id="qty">Kiekis</i>
     <i id="total">Suma</i>
     <i id="invoice_line">Pavadinimas</i>
+    <i id="user_title">Kliento vardas pav.</i>   
+    <i id="user_email">Kliento el. paštas</i>   
+    <i id="open">Užsakymas pildomas</i>   
   </i>
   <i id="FIELDS_SHORT">
 	  
@@ -67,6 +70,9 @@
      <i id="unit_price">Vnt kaina</i>
      <i id="qty">Kiek</i>
      <i id="total">Sum</i>
+     <i id="user_title">Klientas</i>   
+     <i id="user_email">Kliento @</i>  
+     <i id="open">Pild.</i>    
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
@@ -80,6 +86,7 @@
     <i id="invoice">Sąskaita faktūra</i>
     <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
        <i id="paymentsummary">Mokėjimų suvestinė</i>
+       <i id="doRefund">!!!! Įmokos gražinimas</i>
   </i>
   <i id="PAYMENT_APPROVED">Mokėjimas įskaitytas</i>
   <i id="ENTER_EXACT_RECEIVED_AMOUNT">Įveskite tikslią gautą sumą</i>
@@ -125,12 +132,12 @@
         </i>
       </i>
       <i id="orderitems">
-        <i id="title">Užsakymo sudedamosios</i>
+        <i id="title">Užsakytos prekės / paslaugos</i>
         <i id="info">
           <i id="model">GW_Order_Item</i>
           <i id="iconclass">fa fa-shopping-cart</i>
         </i>
-        <i id="in_menu">0</i>
+        <i id="in_menu">1</i>
       </i>
       
       <i id="payments_paysera">
