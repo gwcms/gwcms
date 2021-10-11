@@ -111,7 +111,6 @@ class Module_Login extends GW_Module
 		$dat = json_decode($dat);
 		
 		
-		d::dumpas($dat);
 
 		
 		if(!isset($dat->id)){
