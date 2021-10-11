@@ -24,7 +24,7 @@ class gw_paysera_service
 
 	function process()
 	{
-		$cfg = new GW_Config('datasources__payments_paysera/');
+		$cfg = new GW_Config('payments__payments_paysera/');
 		$cfg->preload('');
 				
 		try {
@@ -33,10 +33,24 @@ class gw_paysera_service
 				header('Location: '.$_GET['redirect_url']);
 				exit;
 			}else{
-				$response = WebToPay::checkResponse($_GET, array(
+				try {
+					$response = WebToPay::checkResponse($_GET, array(
 					    'projectid' => $cfg->paysera_project_id,
 					    'sign_password' => $cfg->paysera_sign_password,
-				));
+					    'log' => GW::s('DIR/LOGS') . 'paysera.log'
+					));
+
+				} catch (Exception $e) {
+				    
+					if($_GET['action']=='callback'){
+						$data = ['uri'=>$_SERVER['REQUEST_URI'], 'error'=>$e->getMessage(), '_POST'=>$_POST ?? []];
+						$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+						mail('vidmantas.work@gmail.com', 'paysera err', $data, "From: info@ltf.lt\r\n");
+					}
+					header('Location: '.$_GET['redirect_url']);
+					exit;
+				}
+				
 			}
 			
 			if(GW_Paysera_Log::singleton()->find(['orderid=? AND `action`=? AND handler=?', $response['orderid'],$_GET['action'],$_GET['handler']]))
@@ -74,58 +88,12 @@ class gw_paysera_service
 	}
 	
 	
-	function handlerMembership($data, $action, $log_entry)
-	{
-		$p = explode('-',$data['orderid']);
-		$id = $p[count($p)-1];
-		$customer = GW_Customer::singleton()->find(['id=?', $id]);
-		
 
-		if ($data['type'] !== 'macro') {
-			$this->error="Only macro payment callbacks are accepted";
-			return -6;
-		}			
-		
-		if(!$customer){
-			$this->error = "Customer not found";
-			return -1;
-		}
-		
-		//$action=='accept' || 
-		if($action=='callback')
-		{
-			$ms = GW_Membership::singleton()->createNewObject();
-			$ms->user_id = $customer->id;
-			$ms->validfrom = date('Y-m-d H:i:s');
-			$ms->expires = date('Y-m-d H:i:s', strtotime('+1 year'));
-			$ms->active = 1;
-			$ms->pay_id = $log_entry->id;
-			
-			$customer->setLicId();
-			
-			if($data['test'] != '0')
-				$ms->test =1;			
-			
-			
-			
-			$ms->insert();
-		}else{
-			//nothing
-		}
-				
-		if(isset($_GET['redirect_url']))
-			$this->redirect_url = $_GET['redirect_url'];
-		
-		
-		return 1;
-	}
 	
-	function handlerEvents($data, $action, $log_entry)
+	function handlerOrders($data, $action, $log_entry)
 	{
 		$p = explode('-',$data['orderid']);
-		$id = $p[count($p)-1];
-		$p = LTF_Participants::singleton()->find(['id=?', $id]);
-		
+		$id = $p[1];
 		
 
 		if ($data['type'] !== 'macro') {
@@ -133,25 +101,26 @@ class gw_paysera_service
 			return -6;
 		}			
 		
-		if(!$p){
-			$this->error = "Participant not found";
-			return -1;
-		}
 		
 		//
-		if($action=='accept' ||  $action=='callback')
-		{
-			$p->payment_status = 1;
-			$p->pay_confirm_id = $log_entry->id;
+		if($action=='callback')
+		{	
+			$args = [
+			    'id'=>$id,
+			    'rcv_amount'=>$log_entry->amount / 100,
+			    'log_entry_id'=>$log_entry->id,
+			    'pay_type'=>'paysera'
+			];
 			
-			if($data['test'] != '0')
-				$p->payment_test =1;
-
+			if($data['test'] != '0'){
+				$args['paytest'] = 1;
+			}
 			
-			$p->active = 1;
-			$p->status = 80;
-			$p->addsteps('payment');
-			$p->updateChanged();
+			
+			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+			
+			file_put_contents(GW::s('DIR/TEMP').'lastpayment_approve_link', $url);
+		
 		}else{
 			//nothing
 		}
@@ -164,40 +133,5 @@ class gw_paysera_service
 	}	
 	
 	
-	function handlerPayments($data, $action)
-	{
-		$order = GW_Payments::singleton()->find(['id=?', $data['orderid']]);
-		
-
-		if ($data['type'] !== 'macro') {
-			$this->error="Only macro payment callbacks are accepted";
-			return -6;
-		}			
-		
-		if(!$order){
-			$this->error = "Order not found";
-			return -1;
-		}
-		
-		if($action=='accept' || $action=='callback')
-		{
-			$order->pay_type = 1;
-			$order->status = 7;
-			$order->paytime = date('Y-m-d H:i:s');
-			$result = Navigator::sysRequest('admin/lt/payments/items',['act'=>'doPaymentAccepted','id'=>$order->id]);
-		}else{
-			$order->pay_status = 0;
-		}
-		
-		if($data['test'] != '0')
-			$order->pay_test =1;
-		
-		if(isset($_GET['redirect_url']))
-			$this->redirect_url = $_GET['redirect_url'];
-		
-		$order->updateChanged();
-		
-		return 1;
-	}	
 
 }
