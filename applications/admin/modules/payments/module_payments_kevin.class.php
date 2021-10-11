@@ -50,16 +50,17 @@ class Module_Payments_Kevin extends GW_Common_Module
 	function doRefund()
 	{
 		
-		$item =  $this->getDataObjectById();
+		$paylog =  $this->getDataObjectById();
+		$paymentId = $paylog->kevin_id;
+		$kevinClient = $this->initKevin();
 		
-		d::dumpas($item);
-		
-		$paymentId = 'your-payment-id';
 		$attr = [
-		    'amount' => '1.00',
-		    'Webhook-URL' => 'https://yourapp.com/notify'
+		    'amount' => $paylog->amount,
+		    //'Webhook-URL' => 'https://yourapp.com/notify'
 		];
 		$response = $kevinClient->payment()->initiatePaymentRefund($paymentId, $attr);
+		
+		d::dumpas($response);
 	}
 	
 	function doUpdate()
