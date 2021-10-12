@@ -67,7 +67,7 @@
 	{$url=$app->buildUri("payments/orderitems",[
 		obj_type=>$m->model->table,
 		obj_id=>$item->id,orderflds=>1,
-		flds=>"group_id,user_title,pay_time,payment_status,qty,unit_price",ord=>'payment_status DESC',noactions=>1,clean=>2])}
+		flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",ord=>'payment_status DESC',noactions=>1,clean=>2])}
 	{*iconclass="fa fa-globe"*}
 
 	{if isset($count_orders[$item->id])}
@@ -100,6 +100,8 @@
 {$dl_output_filters=[
 	insert_time=>short_time, 
 	update_time=>short_time]}	
+	
+{$dl_output_filters.changetrack=changetrack}
 		
 {foreach $dynfieldopts as $field => $class}
 	{$dl_output_filters[$field]=dynfieldoptions}

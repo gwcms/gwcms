@@ -267,6 +267,11 @@ class Module_OrderGroups extends GW_Common_Module
 	{		
 		$item = $this->getDataObjectById();
 		
+		if($item->payment_status==7){
+			$this->setError(GW::l('/m/PAYMENT_ALREADY_ACCEPTED'));
+			$this->app->jump();
+		}
+		
 	
 		$query = $_GET['rcv_amount'] ?? false;
 		
@@ -294,12 +299,18 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	
 	function doMarkAsPaydSystem($order=false)
-	{
-		
-		file_put_contents(GW::s('DIR/TEMP').'doMarkAsPaydSystem_test', json_encode($_GET));
-		
+	{		
 		if(!$order)
 			$order = $this->getDataObjectById();
+		
+		
+		if($order->payment_status==7){
+			$this->setError(GW::l('/m/PAYMENT_ALREADY_ACCEPTED'));
+			$this->app->jump();
+		}	
+		
+		
+		$order->fireEvent('BEFORE_CHANGES');
 		
 		$log_entry_id = $_GET['log_entry_id'] ?? false;
 		$rcv_amount = $_GET['rcv_amount'] ?? false;
@@ -331,9 +342,7 @@ class Module_OrderGroups extends GW_Common_Module
 
 		$order->updateChanged();
 		
-		
-		file_put_contents(GW::s('DIR/TEMP').'doMarkAsPaydSystem_test2', json_encode($order->toArray()));
-			
+					
 		
 		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		

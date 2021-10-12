@@ -15,7 +15,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	];	
 	
 	public $calculate_fields = [
-	    'banktransfer_allow'=>1
+	    'banktransfer_allow'=>1,
+	    'title'=>1
 	];
 	
 	
@@ -95,6 +96,12 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			
 			return $ret;
 		}
+		
+		
+		if($name=='title'){
+			return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
+		}		
+		
 		
 		return parent::calculateField($name);
 	}

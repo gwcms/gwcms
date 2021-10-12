@@ -74,6 +74,7 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['user_email'] = 'Lf';	
 			$cfg['fields']['payment_status'] = 'Lof';	
 			$cfg['fields']['pay_time'] = 'Lof';	
+			$cfg['fields']['pay_test'] = 'Lof';	
 			
 		}
 		
@@ -91,7 +92,7 @@ class Module_OrderItems  extends GW_Common_Module
 		if(!$this->cartgroup_id)
 		{
 			
-			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time";
+			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test";
 			$params['select']='a.*, '.$order_fields;
 			$params['joins']=[
 			    ['left','gw_order_group AS aa','a.group_id = aa.id'],

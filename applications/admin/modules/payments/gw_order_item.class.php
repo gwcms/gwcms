@@ -40,7 +40,8 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;
 
 			case 'title':
-				return $item->id ? $this->type. ' - '.$this->obj->title: "";
+				//d::ldump($this->obj->toArray());
+				return $this->id ? $this->type. ' - '.$this->obj->title: "";
 			break;
 			case 'type':
 				return GW::ln("/g/CART_ITM_{$this->obj_type}");

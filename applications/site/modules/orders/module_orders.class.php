@@ -483,9 +483,16 @@ Array
 			$paylog->updateChanged();
 		}
 
-		
-		
-		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		if($order->amount_total == $paylog->amount || $paylog->test){
+			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		}else{
+			$debugdata = ['response'=>$response,'paylog'=>$paylog->toArray()];
+			$mail=[
+				'subject'=>'Payment error amount_total in cart does not match kevin response',
+				'body'=>"<pre>".json_encode($debugdata, JSON_PRETTY_PRINT)."</pre>"
+			    ];
+			GW_Mail_Helper::sendMailDeveloper($mail);
+		}
 		
 		sleep(2);
 		

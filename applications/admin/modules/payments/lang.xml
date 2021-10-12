@@ -28,6 +28,8 @@
     <i id="user_title">Kliento vardas pav.</i>   
     <i id="user_email">Kliento el. paštas</i>   
     <i id="open">Užsakymas pildomas</i>   
+    <i id="pay_time">Apmokėjimo laikas</i>  
+    <i id="group_id">Užsakymo id</i>
   </i>
   <i id="FIELDS_SHORT">
 	  
@@ -65,7 +67,10 @@
     </i>
     <i id="payment_status">
 	<![CDATA[<i class="fa fa-credit-card"></i>?]]>
-    </i>    
+    </i>   
+    <i id="pay_time">
+	<![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-clock-o"></i>]]>
+    </i>       
     <i id="adm_processed"><![CDATA[Buhal. <i class="fa fa-check"></i>]]></i>
      <i id="unit_price">Vnt kaina</i>
      <i id="qty">Kiek</i>
@@ -73,6 +78,7 @@
      <i id="user_title">Klientas</i>   
      <i id="user_email">Kliento @</i>  
      <i id="open">Pild.</i>    
+     <i id="group_id">Užs.id</i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
@@ -91,6 +97,7 @@
   <i id="PAYMENT_APPROVED">Mokėjimas įskaitytas</i>
   <i id="ENTER_EXACT_RECEIVED_AMOUNT">Įveskite tikslią gautą sumą</i>
   <i id="RECEIVED_AMOUNT_DOES_NOT_MATCH">Gauta suma ir užsakymo suma nesutampa</i>
+  <i id="PAYMENT_ALREADY_ACCEPTED">Mokėjimas jau įskaitytas</i>
   
   
   <i id="OPTIONS">

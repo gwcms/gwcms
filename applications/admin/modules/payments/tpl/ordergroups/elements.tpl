@@ -1,4 +1,4 @@
-{*assign var=form_width value="100%" scope=global*}
+{assign var=form_width value="800px" scope=global}
 
 {assign var=width_title value="140px" scope=global}
 {assign var=labelright value=1 scope=global}
@@ -46,11 +46,43 @@
 	{$fields_config.fields.payment_status=[type=>number]}
 	{$fields_config.fields.pay_time=[type=>text]}
 	{$fields_config.fields.mail_accept=[type=>bool]}
+{else}
+	{$fields_config.fields.pay_time=[type=>read]}
+	{$fields_config.fields.mail_accept=[type=>read]}
+	{$fields_config.fields.payment_status=[type=>read]}
 {/if}
+
+{capture assign=tmp}
+
+		<table class="gwTable">
+			<tr>
+				<th>Type</th>
+				<th>Title</th>
+				<th>Qty</th>
+				<th>Unit price</th>
+				<th>Total</th>
+			</tr>
+					
+	{foreach $item->items as $oitem}
+		<tr>
+			<td>{$oitem->type}</td>
+			<td>{$oitem->title}</td>
+			<td>{$oitem->qty}</td>
+			<td>{$oitem->unit_price}</td>
+			<td>{$oitem->total}</td>
+		</tr>
+	{/foreach}
+		</table>
+{/capture}
+	{$fields_config.fields.items=[type=>read, value=>$tmp,layout=>wide,title=>false]}
+
+
 
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}
 {assign var="item" value=$item scope=global}
+
+
 
 
 

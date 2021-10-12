@@ -18,7 +18,14 @@ class Shop_Products extends GW_Composite_Data_Object
 
 	
 	public $ownerkey = 'shop/products';
-	public $extensions = ['keyval'=>1, 'attachments'=>1];
+	
+	public $extensions = [
+	    'keyval'=>1, 
+	    'attachments'=>1,
+	    'changetrack'=>1
+	];
+	
+		
 	
 	
 	function calculateField($key)
@@ -82,6 +89,7 @@ class Shop_Products extends GW_Composite_Data_Object
 	}
 	function orderItemPayd($unit_price, $qty, $order)
 	{
+		$this->fireEvent('BEFORE_CHANGES');
 		$this->qty = $this->qty - $qty;
 		$this->updateChanged();
 	}
@@ -90,11 +98,10 @@ class Shop_Products extends GW_Composite_Data_Object
 	
 	function __get($key)
 	{
-		
 		//jei nenurodyta modifikacijos title
 		if($key=='title' && $this->parent_id){
 			return $this->get('parent')->title." - ".$this->modif_title;
-		}		
+		}	
 		
 		if((GW::$context->app->app_name != 'SITE' || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
 			

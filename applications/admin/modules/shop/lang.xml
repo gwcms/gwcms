@@ -134,6 +134,9 @@
 <![CDATA[<s>Kaina</s>]]>
     </i>
     <i id="group_id">Užs. #</i>
+        <i id="changetrack">
+<![CDATA[<i class="fa fa-pencil"></i>]]>
+    </i>
   </i>
   <i id="FIELDS_HELP">
     <i id="invoice">

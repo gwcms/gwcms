@@ -103,8 +103,28 @@ class Module_Products extends GW_Common_Module
 			$rez = GW::db()->fetch_assoc($sql);
 			$this->tpl_vars['count_orders'] = $rez;
 		}
-	}	
+		
+		if(isset($item) && $item){	
+			if($item->extensions['changetrack'])
+				$item->extensions['changetrack']->prepareList($list);
+		}
+	
 
+		
+		
+		
+		
+		
+		//$pieces0 = IPMC_Competition_Pieces::singleton();
+		if(isset($_GET['parent_id'])){
+			//$this->list_config['display_fields']['title']=0;
+			$fields = array_flip($this->list_config['dl_fields']);
+			unset($fields['title']);
+			$this->list_config['dl_fields'] = array_keys($fields);
+			$this->tpl_vars['dl_fields'] = $this->list_config['dl_fields'];
+		}
+	}
+		
 	function getListConfig()
 	{
 		$cfg = parent::getListConfig();
@@ -121,7 +141,10 @@ class Module_Products extends GW_Common_Module
 			$cfg['fields']["modif_title"] = "L";
 		}
 		
+		
+		$cfg['fields']["changetrack"] = "L";
 		$cfg['fields']["orders"] = "L";
+		
 		
 		return $cfg;
 	}		
