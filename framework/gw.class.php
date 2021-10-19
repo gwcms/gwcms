@@ -249,6 +249,13 @@ class GW
 		return forward_static_call_array(array('GW_Lang', 'ln'), func_get_args());
 	}
 	
+	
+	static function cfg($key)
+	{
+		return GW_Config::singleton()->get($key);
+	}	
+	
+	
 	function multiSiteSolve($cfg)
 	{
 		if(!isset($_SERVER['HTTP_HOST']))

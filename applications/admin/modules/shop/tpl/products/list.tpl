@@ -64,11 +64,22 @@
 	{/if}
 {/function}
 {function dl_cell_orders}
-	{$url=$app->buildUri("payments/orderitems",[
-		obj_type=>$m->model->table,
-		obj_id=>$item->id,orderflds=>1,
-		flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",ord=>'payment_status DESC',noactions=>1,clean=>2])}
+
 	{*iconclass="fa fa-globe"*}
+	
+	{if $item->mod_count==0}
+		{$url=$app->buildUri("payments/orderitems",[
+			processed=>0,
+			obj_type=>$m->model->table,
+			obj_id=>$item->id,orderflds=>1,
+			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",ord=>'payment_status DESC',clean=>2])}		
+	{else}
+		{$url=$app->buildUri("payments/orderitems",[
+			processed=>0,
+			context_obj_type=>$m->model->table,
+			context_obj_id=>$item->id,orderflds=>1,
+			flds=>"group_id,user_title,title,pay_time,payment_status,pay_test,qty,unit_price",ord=>'payment_status DESC',clean=>2])}		
+	{/if}
 
 	{if isset($count_orders[$item->id])}
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Orders({$count_orders[$item->id]})"}

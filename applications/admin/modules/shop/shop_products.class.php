@@ -95,7 +95,8 @@ class Shop_Products extends GW_Composite_Data_Object
 	}
 	
 
-	
+	//ideja kad jei modifikacija tada paziurima ar uzpildytas laukas
+	//jei neuzpildytas imamas aprasymas is tevinio produkto	
 	function __get($key)
 	{
 		//jei nenurodyta modifikacijos title

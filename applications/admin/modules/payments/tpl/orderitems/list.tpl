@@ -29,7 +29,7 @@
 	{if $smarty.get.noactions}
 		{$dl_actions=[]}
 	{else}
-		{$dl_actions=[delete,editshift]}
+		{$dl_actions=[editshift]}
 	{/if}
 	
 	{$dl_smart_fields=[obj_id,group_id,user_title,user_email]}
@@ -70,7 +70,7 @@
 	{if !$smarty.get.noactions}
 		{$dl_checklist_enabled=1}
 		{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
-		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri('dialoggroupduplicates')}', $(this).find(':selected').text())">{GW::l('/A/VIEWS/dialoggroupduplicates')}</option>{/capture}	
+		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doMarkAsProcessed])}', 1)">{GW::l('/A/VIEWS/doMarkAsProcessed')}</option>{/capture}	
 	{/if}		
 	
 {/block}

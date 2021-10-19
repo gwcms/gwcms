@@ -503,7 +503,7 @@ class Module_Shop extends GW_Public_Module
 		$url = $this->app->buildUri('direct/shop/shop/p',['id'=>$item->id]);
 		
 		
-		$cartitem->setValues([
+		$vals = [
 			'obj_type'=>'shop_products',
 			'obj_id'=>$item->id,
 			'qty' => min($cartitem->qty + ($cartvals['qty'] ?? 1), $item->qty),
@@ -513,7 +513,15 @@ class Module_Shop extends GW_Public_Module
 			'qty_range'=>$this->feat('cart_item_qty1') ? "" :  "1;$item->qty",
 			'deliverable'=>$this->feat('delivery') ? 10 : 0, //real item
 			'link' =>$url
-		]);
+		];
+		
+		//modifikacijoms
+		if($item->parent_id){
+			$vals['context_obj_type'] = 'shop_products';
+			$vals['context_obj_id'] = $item->parent_id;
+		}
+		
+		$cartitem->setValues($vals);
 		
 		$cart->addItem($cartitem);
 		

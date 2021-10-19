@@ -84,6 +84,7 @@
 	
 	{$dl_output_filters.insert_time=short_time}
 	{$dl_output_filters.update_time=short_time}	
+	{$dl_output_filters.pay_time=short_time}	
 	{$dl_output_filters.changetrack=changetrack}
 	
 {/block}

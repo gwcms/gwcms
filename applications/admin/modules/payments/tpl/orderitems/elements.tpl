@@ -11,7 +11,8 @@
 		obj_type=>[type=>text],
 		unit_price=>[type=>number,step=>"0.01"],
 		qty=>[type=>number],
-		link=>[type=>text]
+		link=>[type=>text],
+		processed=>[type=>bool]
 	]
 
 ]}

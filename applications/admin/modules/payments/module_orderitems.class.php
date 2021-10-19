@@ -28,11 +28,21 @@ class Module_OrderItems  extends GW_Common_Module
 			$this->filters['obj_type']=$_GET['obj_type'];
 		
 		if(isset($_GET['obj_id']))
-			$this->filters['obj_id']=$_GET['obj_id'];		
-		
-	
+			$this->filters['obj_id']=$_GET['obj_id'];	
 		
 		
+		
+		if(isset($_GET['context_obj_type']))
+			$this->filters['context_obj_type']=$_GET['context_obj_type'];
+		
+		if(isset($_GET['context_obj_id']))
+			$this->filters['context_obj_id']=$_GET['context_obj_id'];
+		
+		if(isset($_GET['processed']))
+			$this->filters['processed']=$_GET['processed'];
+
+		
+
 		$this->app->carry_params['clean'] = 1;
 		$this->app->carry_params['obj_type'] = 1;
 		$this->app->carry_params['obj_id'] = 1;	
@@ -42,6 +52,10 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['noactions'] = 1;
 		$this->app->carry_params['pay_interval'] = 1;
 		$this->app->carry_params['pay_test'] = 1;
+		$this->app->carry_params['processed'] = 1;
+		$this->app->carry_params['context_obj_type'] = 1;
+		$this->app->carry_params['context_obj_id'] = 1;
+		
 	}
 	
 
@@ -200,15 +214,29 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->initType($vars['item']);
 		
 		//pridedamas naujas itemsas
-		if(!$vars['item']->obj_type){
+		
+		if(isset($_GET['shift_key'])){
 			$this->options['obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
 			$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
 		}
 		
-		
+
 		return $vars;
 	}
 
+	
+	//seriesAct - supported
+	function doMarkAsProcessed($item=false)
+	{
+		if(!$item)
+			$item = $this->getDataObjectById();
+		
+		$item->set('processed', 1);
+		$item->updateChanged();
+		
+		if(!$this->sys_call)
+			$this->jump();			
+	}
 
 	
 	

@@ -261,5 +261,20 @@ class Module_Products extends GW_Common_Module
 
 		
 	}
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+		    //$item->get('title') // blogai - nes hackas su modifikacijom per __get eina, paliekam $item->title workaroundas
+		    'title_func'=>function($item){ return $item->title;  },
+		    'search_fields'=>['title,modif_title']
+		];	
+		    
+		if(isset($_GET['parent_id'])){
+			$opts['condition_add'] = "parent_id=".(int)$_GET['parent_id'];
+		}
+
+		return $opts;	
+	}	
 }
 

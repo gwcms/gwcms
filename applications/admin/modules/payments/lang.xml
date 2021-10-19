@@ -108,6 +108,8 @@
     <i id="monthlystats">Pardavimų statistika</i>
     <i id="invoice">Sąskaita faktūra</i>
     <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
+    <i id="doMarkAsProcessed">Pažymėti kaip įvykdytus</i>
+ 
        <i id="paymentsummary">Mokėjimų suvestinė</i>
        <i id="doRefund">!!!! Įmokos gražinimas</i>
   </i>
