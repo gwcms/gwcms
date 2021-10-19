@@ -199,6 +199,13 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$this->initType($vars['item']);
 		
+		//pridedamas naujas itemsas
+		if(!$vars['item']->obj_type){
+			$this->options['obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
+			$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
+		}
+		
+		
 		return $vars;
 	}
 

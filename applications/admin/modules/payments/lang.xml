@@ -30,6 +30,21 @@
     <i id="open">Užsakymas pildomas</i>   
     <i id="pay_time">Apmokėjimo laikas</i>  
     <i id="group_id">Užsakymo id</i>
+    <i id="company">Įmonės pavadinimas</i>
+    <i id="company_addr">Įmonės adresas</i>
+    <i id="company_code">Įmonės registracijos nr</i>
+    <i id="vat_code">Įmonės mokesčio mok. kodas</i>    
+    <i id="name">Vardas</i>
+    <i id="surname">Pavardė</i>
+    <i id="city">Miestas</i>
+    <i id="email">El. pašto adresas</i>
+    <i id="pay_test">Testinis mokėjimas</i>
+    <i id="mail_accept">Patvirtinimo laiškas išsiųstas</i>
+    <i id="payment_status">Mokėjimo būklė</i>
+    <i id="secret">Identifikavimo kodas</i>
+    <i id="pay_user_msg">Kliento mokėjimo žinutė</i>
+    <i id="adm_message">Admin. pastaba klientui</i>
+    <i id="features">Įgalinti funkcionalumai</i>
   </i>
   <i id="FIELDS_SHORT">
 	  
@@ -57,6 +72,7 @@
     <i id="paytime">
 <![CDATA[Mokėj. <i class="fa fa-clock-o"></i>]]>
     </i>
+
     <i id="expires">Mok. term.</i>
     <i id="user_id"><![CDATA[<i class="fa fa-user"></i>]]></i>
     <i id="pay_confirm_id">
@@ -79,6 +95,7 @@
      <i id="user_email">Kliento @</i>  
      <i id="open">Pild.</i>    
      <i id="group_id">Užs.id</i>
+     <i id="adm_message">Adm. pastaba</i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
@@ -121,6 +138,12 @@
       <i id="kevin">Kevin</i>
       <i id="montonio">Montonio</i>
     </i>    
+	
+	<i id="features">
+	      <i id="otherpayee">Siųsti mokėjimo informaciją</i>
+	</i>
+
+  
     
   </i>
   <i id="MAP">
@@ -199,6 +222,9 @@
       </i>
 	<i id="config">
 		<i id="title">Nustatymai</i>
+		<i id="info">
+		  <i id="iconclass">fa fa-cog</i>
+		</i>		
 	</i>     
 		          
     </i>

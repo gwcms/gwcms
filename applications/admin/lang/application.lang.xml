@@ -383,6 +383,8 @@
     <i id="doWriteLock">Write Lock</i>
     <i id="doWriteUnLock">Write UnLock</i>
     <i id="doAutoTranslate">doAutoTranslate</i>
+    <i id="addcomment">Pridėti komentarą</i>
+    <i id="comments">Komentarai</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>

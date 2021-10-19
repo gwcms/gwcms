@@ -1,15 +1,26 @@
 {include "default_open.tpl"}
 
 <br/>
-<h2>{GW::ln('/m/YOUR_ORDERS')}</h2>
+<h2>{GW::ln('/m/YOUR_ORDERS')} {if $smarty.get.canceled}<small>{GW::ln('/m/CANCELED')}</small>{/if}</h2> 
 <br/>
 
 {function orderactions}
-	{if $order->payment_status!=7 && $order->amount_total}
-		<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id])}" class="btn u-btn-brown btn-{$version} rounded-0">
+	{if $order->payment_status!=7 && $order->amount_total && $order->active}
+		<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id])}" class="btn u-btn-brown btn-md rounded-0">
 						<i class="fa fa-credit-card g-mr-2"></i>
 						{GW::ln('/g/PROCEED_PAYMENT')}
 					</a>
+					
+					
+					
+		{if $m->feat('otherpayee')}		
+			<a href="{$m->buildUri('otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0">
+				<i class="fa fa-credit-card g-mr-2"></i>
+				{GW::ln('/g/OTHERPAYEE')}
+				
+			</a>	
+		{/if}
+					
 		{if $order->banktransfer_allow}
 			<a href="{$m->buildUri('paybanktransfer', [id=>$order->id])}" class="btn u-btn-orange btn-{$version} rounded-0">
 				<i class="fa fa-credit-card g-mr-2"></i>
@@ -36,7 +47,7 @@
 
 	<table class="orderlist">
 
-		<tr><th>#</th><th>{GW::ln('/g/CREATE_DATE')}</th><td>{GW::ln('/m/PARTS')}</td><th>{{GW::ln('/g/CART_TOTAL')}}</th></tr>
+		<tr><th>#</th><th>{GW::ln('/g/CREATE_DATE')}</th><th>{GW::ln('/m/PARTS')}</th><th>{{GW::ln('/g/CART_TOTAL')}}</th></tr>
 	{foreach $list as $order}
 			{if $smarty.get.orderid && $order->id!=$smarty.get.orderid}{continue}{/if}
 
@@ -49,28 +60,26 @@
 
 	{if !$items_cnt}{continue}{/if}
 
-	<tr class="{if $smarty.get.id==$order->id}alert-warning{/if}{if $citems}rowwitms{else}rownoitms{/if}">
+	<tr class="orderinfo {if $smarty.get.id==$order->id}alert-warning{/if}{if $citems}rowwitms{else}rownoitms{/if}">
 		<td>{$order->id}</td>
-		<td>{$order->insert_time}</td>
+		<td>{date('Y-m-d H:i',strtotime($order->insert_time))}</td>
 		<td>{$items_cnt}</td>
 		<td>
 			{$order->amount_total} Eur
-			
-			{if !$smarty.get.orderid}
-				{call orderactions version=xs}
-			{/if}
-				
-			
 		</td>
 		<td>
-			
-			{if $order->payment_status==7}
-				{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id])}
-			{else}
-				{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
+			{if $order->active}
+				{if $order->payment_status==7}
+					{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id])}
+				{else}
+					{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
+				{/if}
+				<a href="{$link}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> {GW::ln('/m/INVOICE')}</a>
 			{/if}
-			<a href="{$link}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> {GW::ln('/m/INVOICE')}</a>
-
+			
+			{if $admin_enabled}
+				<a target="_blank" href='/admin/{$ln}/payments/ordergroups/{$order->id}/form'><i class='fa fa-pencil-square-o text-warning'></i></a>
+			{/if}
 		</td>
 
 	</tr>
@@ -102,10 +111,18 @@
 					{/foreach}
 				</ul> 
 				
-				{if $smarty.get.orderid}
+				{if !$smarty.get.orderid}
+					{call orderactions version=xs}
+				{else}
 					{call orderactions version=md}
-				{/if}						
-
+				{/if}
+					
+									
+				{if $order->adm_message}
+					<div style='margin-top:5px'>
+					<i class="fa fa-info-circle"></i> {$order->adm_message}
+					</div>
+				{/if}
 			</td>
 		</tr>
 		
@@ -113,12 +130,34 @@
 	{else}
 
 	{/if}
+	<tr><td colspan="5" style="border-left:0;border-righ:0;height:5px">&nbsp;</td></tr>
 {/foreach}
 </table>
 
 {else}
 	<p>{GW::ln('/g/EMPTY_LIST')}</p>
 {/if}
+
+
+
+
+
+{if !$smarty.get.canceled && $canceled_count}
+	<hr>
+	
+	{if $smarty.get.orderid}
+		<a href="{$app->buildUri(false,$args)}"> {GW::ln('/m/YOUR_ORDERS')} {GW::ln('/m/ALL_ORDERS')} <b>{count($list)}</b></a><br>
+	{/if}	
+	<a href="{$app->buildUri(false,$smarty.get+[canceled=>1])}"> {GW::ln('/m/YOUR_ORDERS')} {GW::ln('/m/CANCELED')} <b>{$canceled_count}</b></a>
+{/if}
+
+{if $smarty.get.canceled}
+	{$args=$smarty.get}
+	{gw_unassign var=$args.canceled}
+	<hr>
+	<a href="{$app->buildUri(false,$args)}"> &laquo; {GW::ln('/m/YOUR_ORDERS')}</a>
+{/if}
+
 
 <br/><br/><br/>
 
@@ -129,5 +168,10 @@
 	.rowwitms td{ border: 1px solid silver; border-bottom:0; }
 	.rownoitms td{ border: 1px solid silver; }
 	.itmsrow td{ border: 1px solid silver; border-top:0; }
+	.orderinfo td { background-color: #eee }
 </style>
+
+
+
+
 {include "default_close.tpl"}

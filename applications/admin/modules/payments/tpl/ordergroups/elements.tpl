@@ -16,7 +16,7 @@
 		amount_total=>[type=>number,step=>0.01],
 		amount_items=>[type=>text],
 		adm_processed=>[type=>bool],
-		extra=>[type=>text],
+		extra=>[type=>read],
 		active=>[type=>bool],
 		company=>[type=>text],
 		company_code=>[type=>text],
@@ -26,7 +26,10 @@
 		surname=>[type=>text],
 		city=>[type=>text],
 		email=>[type=>text],
-		pay_test=>[type=>bool]
+		pay_test=>[type=>bool],
+		active=>[type=>bool],
+		secret=>[type=>read],
+		adm_message=>[type=>text]
 	]
 ]}
 
@@ -66,7 +69,7 @@
 	{foreach $item->items as $oitem}
 		<tr>
 			<td>{$oitem->type}</td>
-			<td>{$oitem->title}</td>
+			<td>{$oitem->invoice_line}</td>
 			<td>{$oitem->qty}</td>
 			<td>{$oitem->unit_price}</td>
 			<td>{$oitem->total}</td>
@@ -88,7 +91,7 @@
 
 
 
-
+{assign var="comments" value=1 scope=global}
 
 
 <style>

@@ -25,10 +25,17 @@ class Module_Orders extends GW_Public_Module
 		    'url' => $this->app->buildUri('direct/orders/orders')
 		];		
 		
+		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
+		
 		
 	}	
 	
-	function getOrder()
+	function feat($id)
+	{
+		return isset($this->features[$id]);
+	}	
+	
+	function getOrder($allowwithsecret=false)
 	{
 		$id = $_GET['id'] ?? false;
 		
@@ -36,21 +43,28 @@ class Module_Orders extends GW_Public_Module
 			$id = $_GET['orderid'] ?? false;
 		
 		
-		$order = GW_Order_Group::singleton()->createNewObject($id, true);
-		
-		if($order->user_id != $this->app->user->id){
+		if($allowwithsecret && $_GET['key']){
+			$order = GW_Order_Group::singleton()->find(['id=? AND secret=?', $id, $_GET['key']]);
+		}else{
+			$order = GW_Order_Group::singleton()->createNewObject($id, true);
+		}
+				
+		if(!$allowwithsecret && $order->user_id != $this->app->user->id){
 			$this->setError("/m/ORDER_OWNER_ERROR");
 			$this->app->jump("direct/orders/orders");
-		}		
+		}
+		
 		return $order;
 	}
 	
 	function doOrderPay()
 	{
-		$this->viewDefault();
-		$this->userRequired();
+		//$this->viewDefault();
 		
-		$order = $this->getOrder();
+		
+		//$this->userRequired();
+		
+		$order = $this->getOrder(true);
 		$this->prepareOrderForPay($order);
 		$citems = $order->items;
 			
@@ -58,7 +72,7 @@ class Module_Orders extends GW_Public_Module
 		$type = $_GET['type'] ?? $pay_methods[0];
 		
 		$args = (object)[
-		    'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id])),
+		    'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret])),
 		    'cancel_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCancelPay','id'=>$order->id])),
 		    'base'=> Navigator::getBase(true),
 		    'orderid'=>'order-'.$order->id,
@@ -74,16 +88,15 @@ class Module_Orders extends GW_Public_Module
 		}elseif($type=='kevin'){
 			$this->doPayKevin($args);
 		}
-	
 	}
 	
-	
-	
-	
-	
+
 	function prepareOrderForPay($order)
 	{
 		$order->updateTotal();
+		
+		$order->setSecretIfNotSet();
+		
 		$citems = $order->items;
 		
 
@@ -110,6 +123,9 @@ class Module_Orders extends GW_Public_Module
 			$citem->obj->fireEvent('PAY_START');
 		}	
 		
+		//jei mokejima perdave kitam
+		if(!$this->app->user)
+			return true;
 		
 		//unset current user cart
 		if($this->app->user->get('ext/cart_id') == $order->id){
@@ -118,6 +134,13 @@ class Module_Orders extends GW_Public_Module
 			$this->setMessage(GW::ln('/m/CART_CLOSED_YOU_CAN_FIND_IT_IN_MY_ORDERS'));
 			$this->app->user->set('ext/cart_id', '');	
 		}
+	}
+	
+	
+	function doSendPaymentInfo()
+	{
+		$email = $_POST['item']['email'];
+		
 	}
 	
 	function doOpenOrder()
@@ -143,7 +166,7 @@ class Module_Orders extends GW_Public_Module
 	
 	function doCompletePay()
 	{
-		$order = $this->getOrder();
+		$order = $this->getOrder(true);
 		
 		if($order->payment_status==7){
 			$this->setMessage(GW::ln('/g/PAYMENT_COMPLETE'));
@@ -151,8 +174,14 @@ class Module_Orders extends GW_Public_Module
 			$this->setMessage(GW::ln('/g/PAYMENT_PROCESSING'));
 		}
 	
-		$this->app->jump('direct/orders/orders',['orderid'=>$order->id,'id'=>$order->id]);
+		if(!$app->user){
+			$this->app->jump('/');
+		}else{
+			$this->app->jump('direct/orders/orders',['orderid'=>$order->id,'id'=>$order->id]);
+		}
 	}
+	
+	
 	
 	function doCancelPay()
 	{
@@ -185,6 +214,84 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		$this->tpl_vars['item'] = $order;
+	}
+	
+	function viewOtherPayee()
+	{
+		$order = $this->getOrder();
+		
+		$this->prepareOrderForPay($order);
+		
+		
+		$this->tpl_vars['item'] = $order;
+		
+		
+	}
+
+	function doSendToOtherPayee()
+	{
+		$order = $this->getOrder();
+		
+		$vals = $_POST['item'];
+
+		$permitfields =  array_flip(['keyval/otherpayee_email','keyval/otherpayee_msg']);
+		$this->filterPermitFields($vals,$permitfields);
+		
+		foreach($vals as $key => $val)
+			$order->set($key, $val);
+		
+		
+		$order->setSecretIfNotSet();
+		$order->updateChanged();
+		
+		$mailvars['view_invoice_link'] = $this->app->buildURI('direct/orders/orders/invoice', ['id'=>$order->id,'key'=>$order->secret,'download'=>1,'preinvoice'=>1],['absolute' => 1]);
+		$mailvars['pay_link'] = $this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$order->id,'key'=>$order->secret],['absolute' => 1]);
+		$mailvars['usertitle'] = $this->app->user->title;
+		$mailvars['sitedomain'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
+		$mailvars['sitetitle'] = GW::ln('/g/CONTACTS_COMPANY_NAME');
+		$mailvars['order'] =$order;
+		
+		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID]);	
+	
+		$tpl = file_get_contents(__DIR__.'/tpl/invoice_items.tpl');
+		$orderinfo = GW_Mail_Helper::prepareSmartyCode($tpl, $response['vars']);
+		
+		$tpl=file_get_contents(__DIR__.'/tpl/otherpayee_mail.tpl');
+		$mailvars['orderinfo']=$orderinfo;
+		
+		$html = GW_Mail_Helper::prepareSmartyCode($tpl, $mailvars);
+
+		$response['vars']['preinvoice']=1;
+		$invoice_html = GW_Mail_Helper::prepareSmartyCode($response['tpl'], $response['vars']);		
+		$pdf=GW_html2pdf_Helper::convert($invoice_html, false);		
+		$subject = GW::ln('/g/OTHER_PAYEE_SUBJECT',['v'=>['orderid'=>$order->id, 'usertitle'=>$mailvars['usertitle']]]);
+		
+		$opts=[
+		    'to'=>$order->get('keyval/otherpayee_email'),
+		    'subject'=>$subject,
+		    'body'=>$html,
+		    'attachments'=>['invoice_'.$mailvars['sitedomain'].'_'.$order->id.'.pdf'=>$pdf]
+		];
+			
+		
+		
+		
+		$status = GW_Mail_Helper::sendMail($opts);
+		
+		if(!$status){
+			$this->setError(GW::ln('/m/ERROR_SENDING_PAYEE_MAIL'));
+			$this->app->jump();
+		}
+		
+		$order->set('adm_message', GW::ln('/m/PAYEE_MAIL_SENT_TO').' '.$order->get('keyval/otherpayee_email'));
+		$order->updateChanged();
+		
+		$args  =$_GET;
+		unset($args['act']);
+		
+		$this->app->jump('direct/orders/orders', ['orderid'=>$order->id]);
+		
+		exit;
 	}
 	
 	function doSaveBankTransferDetails()
@@ -248,8 +355,22 @@ class Module_Orders extends GW_Public_Module
 	{
 		$this->userRequired();
 		
-		$list = GW_Order_Group::singleton()->findAll(['user_id=? AND active=1', $this->app->user->id],['order'=>'id DESC']);
+		$active = 1;
+		
+		if(isset($_GET['canceled'])){
+			$active = 0;
+		}else{
+			$this->tpl_vars['canceled_count'] =  GW_Order_Group::singleton()->count(['user_id=? AND active=0', $this->app->user->id]);
+		}
+		
+		$list = GW_Order_Group::singleton()->findAll(['user_id=? AND active=?', $this->app->user->id,$active],['order'=>'id DESC']);
+		
+		
+		
 		$this->tpl_vars['list'] = $list;
+		
+		
+		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false;
 	}
 	
 	function doPayPaysera($args) 
@@ -496,7 +617,7 @@ Array
 		
 		sleep(2);
 		
-		header('Location:'.$this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id]));
+		header('Location:'.$this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret]));
 
 	}
 
@@ -532,8 +653,7 @@ Array
 	
 	function viewInvoice()
 	{
-		$order = $this->getOrder();
-		
+		$order = $this->getOrder(true);
 		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID]);	
 		
 		

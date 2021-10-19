@@ -31,6 +31,7 @@
 
 
 {call e field="pay_types" type=multiselect_ajax sorting=1 options=GW::l('/m/OPTIONS/pay_type') value_format=json1}
+{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
 
 
 {include "default_form_close.tpl"}

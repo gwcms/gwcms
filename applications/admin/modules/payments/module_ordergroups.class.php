@@ -129,10 +129,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$v =& $this->tpl_vars;
 		
-		if(!$item->secret){
-			$item->secret = GW_String_Helper::getRandString(8,GW_String_Helper::$simple);
-			$item->updateChanged();
-		}
+		$item->setSecretIfNotSet();
 		
 		
 		$attachuservars = function(&$v, $user){
@@ -161,6 +158,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['ORDERID'] = $item->id;
 		$v['SECRET'] = $item->secret;
 		$v['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
+		$v['PAY_LINK'] = $this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$item->id,'key'=>$item->secret],['absolute' => 1,'app'=>"site"]);
 			//$pdf=GW_html2pdf_Helper::convert($html, false);			
 			
 		
@@ -288,8 +286,9 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$item->fireEvent('BEFORE_CHANGES');
 		
-		$item->payment_status=7;
-		$item->updateChanged();		
+		//ta jau padaro doMarkAsPaydSystem
+		//$item->payment_status=7;
+		//$item->updateChanged();		
 		
 		$this->doMarkAsPaydSystem($item);
 		

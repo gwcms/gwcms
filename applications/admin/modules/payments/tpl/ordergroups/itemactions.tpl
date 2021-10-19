@@ -23,3 +23,9 @@
 	
 	{list_item_action_m url=[false,[act=>doOrderPaydNotifyUser,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Send confirmation email (root)"}
 {/if}
+
+
+{list_item_action_m 
+	url=["`$item->id`/orderitems/0/form",[clean=>2]] 
+	iconclass="fa fa-plus" action_addclass="iframe-under-tr"  
+	caption="Add item"}

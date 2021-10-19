@@ -192,7 +192,15 @@
           <i id="model">GW_Config_Item</i>
 	  <i id="iconclass">fa fa-list</i>
         </i>
-      </i>       
+      </i>      
+      <i id="comments">
+        <i id="title">Komentarai</i>
+        <i id="info">
+          <i id="model">GW_Comments</i>
+	  <i id="iconclass">fa fa-weixin</i>
+        </i>
+	<i id="in_menu">1</i>
+      </i>          
       <i id="itax">
         <i id="title">Itax</i>
         <i id="info">

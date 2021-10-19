@@ -29,7 +29,7 @@
 	{if $smarty.get.noactions}
 		{$dl_actions=[]}
 	{else}
-		{$dl_actions=[delete,edit]}
+		{$dl_actions=[delete,editshift]}
 	{/if}
 	
 	{$dl_smart_fields=[obj_id,group_id,user_title,user_email]}

@@ -15,15 +15,22 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	];	
 	
 	public $calculate_fields = [
-	    'banktransfer_allow'=>1,
-	    'title'=>1
+	    'title'=>1,
+	    'keyval'=>1
 	];
 	
 	
 	public $ownerkey = 'payments/ordergroups';
 	public $extensions = [
-	    'changetrack'=>1
-	];			
+	    'changetrack'=>1,
+	    'keyval'=>1
+	];				
+	public $keyval_use_generic_table = 1;	
+	
+	public $ignore_fields = [
+		'keyval' => 1
+	];	
+	
 	
 	function updateTotal()
 	{
@@ -79,28 +86,29 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	}
 	
 	
-	function calculateField($name) 
+	function setSecretIfNotSet()
+	{
+		if(!$this->secret){
+			$this->secret = GW_String_Helper::getRandString(8,GW_String_Helper::$simple);
+			$this->updateChanged();
+		}		
+	}
+	
+	
+	function calculateField($key) 
 	{
 		
-		if($name=='banktransfer_allow'){
-			
-			
-			$ret = true;
-			
-			foreach($this->items as $item){
-				//d::ldump($item);
-				if(!$item->banktransfer_allow){	$ret = false; break; }
-			}
-				
-			
-			
-			return $ret;
+
+		switch ($key) {
+			case 'keyval':
+				return $this->extensions['keyval'];
+			break;	
+			case 'title':
+				return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
+			break;
 		}
 		
-		
-		if($name=='title'){
-			return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
-		}		
+			
 		
 		
 		return parent::calculateField($name);
