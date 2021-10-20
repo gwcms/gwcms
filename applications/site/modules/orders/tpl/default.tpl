@@ -92,15 +92,7 @@
 					{foreach $citems as $citem}
 						{$obj=$citem->obj}
 
-						
-						<li>
-							
-								{GW::ln("/g/CART_ITM_{$citem->obj_type}")} - 
-								{if $citem->link}<a href="{$citem->link}">{/if}
-									{if $obj->context_short}<i>{$obj->context_short}</i> - {/if} {$obj->title}
-								{if $citem->link}</a>{/if}
-							
-							{$citem->qty}x{$citem->unit_price} Eur 
+						<li>{GW::ln("/g/CART_ITM_{$citem->obj_type}")} - {if $obj->context_short}<i>{$obj->context_short}</i> - {/if} {$obj->title} {$citem->qty}x{$citem->unit_price} Eur 
 							{if !$order->payment_status!=7 && $item->can_remove}
 								<a href="{$m->buildUri(false, [act=>doCartItemRemove,id=>$citem->id])}"><i class="fa fa-times"></i></a>
 								{/if}
@@ -112,8 +104,6 @@
 									{GW::ln('/m/EXPIRED')}
 								{/if}
 							{/if}
-							
-							
 						</li>
 						{* 
 						<li>{$pteam->partic1->title} + {$pteam->partic2->title} - {$pteam->payment_amount} Eur</li>
