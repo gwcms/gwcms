@@ -43,7 +43,7 @@ class Module_Orders extends GW_Public_Module
 			$id = $_GET['orderid'] ?? false;
 		
 		
-		if($allowwithsecret && $_GET['key']){
+		if($allowwithsecret && isset($_GET['key'])){
 			$order = GW_Order_Group::singleton()->find(['id=? AND secret=?', $id, $_GET['key']]);
 		}else{
 			$order = GW_Order_Group::singleton()->createNewObject($id, true);
