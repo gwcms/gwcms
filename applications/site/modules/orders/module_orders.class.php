@@ -25,15 +25,11 @@ class Module_Orders extends GW_Public_Module
 		    'url' => $this->app->buildUri('direct/orders/orders')
 		];		
 		
-		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
 		
-		
+		$this->initFeatures();
 	}	
 	
-	function feat($id)
-	{
-		return isset($this->features[$id]);
-	}	
+	
 	
 	function getOrder($allowwithsecret=false)
 	{

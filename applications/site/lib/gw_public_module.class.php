@@ -749,4 +749,14 @@ class GW_Public_Module {
 		$vals = array_intersect_key($vals, $permit_fields);		
 	}		
 	
+	function initFeatures()
+	{
+		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);		
+	}
+	
+	function feat($id)
+	{
+		return isset($this->features[$id]);
+	}	
+	
 }
