@@ -117,6 +117,13 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		if (!$this->isCompositeField($realfieldname))
 			return parent::get($field);
 		
+		
+		if (isset($this->calculate_fields[$field])) {
+			$func = $this->calculate_fields[$field];
+			$func = $func == 1 ? 'calculateFieldCache' : $func;
+			return $this->$func($field);
+		}
+		
 		if(strpos($field, '/')!==false)
 		{
 			list($obj,$key) = explode('/', $field, 2);
