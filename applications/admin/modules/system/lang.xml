@@ -194,6 +194,9 @@
       <i id="translations">
         <i id="title">Translations</i>
       </i>
+      <i id="ttlock">
+        <i id="title">TTlock</i>
+      </i>
     </i>
   </i>
 </xml>

@@ -18,7 +18,7 @@ class Module_Products extends GW_Common_Module
 		
 		parent::init();
 		$this->model = Shop_Products::singleton();
-		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table]);
+		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
 		
 		
 	
@@ -57,8 +57,10 @@ class Module_Products extends GW_Common_Module
 				$sources[$field->modpath][] = $field->fieldname;
 			}
 		}
+		
 		foreach($sources as $modpath => $fields){
-			$model = $field->modelFromModpath();
+			
+			$model = $this->mod_fields[ $fields[0] ]->modelFromModpath();
 			
 			foreach($fields as $field)
 				$dynfieldsopts[$field] = $model;
@@ -276,5 +278,96 @@ class Module_Products extends GW_Common_Module
 
 		return $opts;	
 	}	
+	
+	
+	
+	
+	
+	
+	function generatePasscode($item, $product)
+	{		
+		//not ttlock api config present
+		if(!ttlock_api::singleton()->init()->cfg->client_id)
+			return false;
+		
+
+		
+		$code = rand(10000,99999);
+		
+		$start = strtotime($product->date.' '.$product->start_time.' -20 minutes');
+		$end = strtotime($product->date.' '.$product->end_time);
+		
+		$resp = ttlock_api::singleton()->init()->addPasscode(false,$code,$start,$end);
+		
+		$item->set('keyval/door_code', $code);
+		$item->set('keyval/door_code_id', $resp->keyboardPwdId);
+		$item->updateChanged();		
+		
+		if($code)
+			return true;
+	}
+	
+	
+	
+	function doAfterBuyEmail()
+	{		
+		
+		$item = GW_Order_Item::singleton()->find(['id=?', $_GET['id']]);
+		
+		$product = $item->obj;
+		
+		$template_id = $product->modval("after_buy_email_tpl");
+		
+		if(!$template_id)
+			return false;
+		
+		
+		$to = $item->order->user->email;
+		$vars['item'] = $item;
+		$vars['product'] = $product;
+				
+		
+		if($this->feat('ttlock') && $product->date && $product->start_time && $product->end_time){
+			if(!$this->generatePasscode($item, $product)){
+				GW_Mail_Helper::sendMailDeveloper([
+				    'subject'=>GW::s('PROJECT_NAME').' nepavyko sugeneruoti kodo',
+				    'body'=>"order: {$item->order->id}, recipient:$to order_item_id: {$item->id} product: {$product->title}"]
+				);
+				return false; // nepavyko sugeneruot kodo
+			}
+			
+			$vars['access_code'] = $item->get('keyval/door_code');
+		}
+	
+				
+		
+		$opts = [
+		    'to'=>$to,
+		    'tpl'=>GW_Mail_Template::singleton()->find($template_id),
+		    'vars'=>$vars,
+		    //'attachments'=>[$filename=>$pdf]
+		];
+		
+		
+		
+		
+		$msg = GW::ln('/g/MESSAGE_SENT_TO',['v'=>['email'=>$to]]);
+		//$this->setMessage();
+		
+		$status = GW_Mail_Helper::sendMail($opts);
+		
+		$item->set('keyval/email',$status);
+		
+			
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode(['resp'=>$msg]);
+			exit;
+		}else{
+			$this->setMessage($msg);
+			$this->jump();
+		}
+	}	
+	
 }
 

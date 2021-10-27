@@ -55,6 +55,7 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['processed'] = 1;
 		$this->app->carry_params['context_obj_type'] = 1;
 		$this->app->carry_params['context_obj_id'] = 1;
+		$this->app->carry_params['groupby'] = 1;
 		
 	}
 	

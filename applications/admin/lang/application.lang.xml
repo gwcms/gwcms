@@ -294,6 +294,7 @@
       <lt>Aprašymas</lt>
       <ru>Описание</ru>
     </i>
+    <i id="features"><en>Enabled features</en><lt>Įgalinti funkcionalumai</lt></i>
     <i id="field"><en>Field</en><lt>Laukelis</lt></i>
    <i id="fromln">From lang</i>
    <i id="toln">To lang</i>

@@ -87,11 +87,16 @@ class Shop_Products extends GW_Composite_Data_Object
 		
 		return $this->price;
 	}
-	function orderItemPayd($unit_price, $qty, $order)
+	function orderItemPayd($unit_price, $qty, $order, $orderitem)
 	{
 		$this->fireEvent('BEFORE_CHANGES');
 		$this->qty = $this->qty - $qty;
 		$this->updateChanged();
+		
+		if($this->modval("after_buy_email_tpl")){
+			$url=Navigator::backgroundRequest('admin/lt/shop/products?act=doAfterBuyEmail&id='.$orderitem->id);
+		}
+		
 	}
 	
 
@@ -120,6 +125,12 @@ class Shop_Products extends GW_Composite_Data_Object
 		}
 		
 		return $this->get('parent')->get($key);
+	}
+	
+	
+	function modval($key)
+	{	
+		return $this->$key || !$this->parent_id ? $this->$key : $this->get('parent')->$key;
 	}
 	
 	

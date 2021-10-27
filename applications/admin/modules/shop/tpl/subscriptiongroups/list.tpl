@@ -78,7 +78,7 @@
 			processed=>0,
 			context_obj_type=>$m->model->table,
 			context_obj_id=>$item->id,orderflds=>1,
-			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",groupby=>title,ord=>'obj_id,payment_status DESC',clean=>2])}		
+			flds=>"group_id,user_title,title,pay_time,payment_status,pay_test,qty,unit_price",ord=>'payment_status DESC',clean=>2])}		
 	{/if}
 
 	{if isset($count_orders[$item->id])}

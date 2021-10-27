@@ -329,7 +329,7 @@ class Module_OrderGroups extends GW_Common_Module
 		foreach($order->items as $item){
 			$obj = $item->obj;
 			if($obj){
-				$obj->orderItemPayd($item->unit_price, $item->qty, $order);
+				$obj->orderItemPayd($item->unit_price, $item->qty, $order, $item);
 			}
 		}
 

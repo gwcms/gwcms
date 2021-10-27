@@ -170,7 +170,7 @@ class Module_Orders extends GW_Public_Module
 			$this->setMessage(GW::ln('/g/PAYMENT_PROCESSING'));
 		}
 	
-		if(!$app->user){
+		if(!$this->app->user){
 			$this->app->jump('/');
 		}else{
 			$this->app->jump('direct/orders/orders',['orderid'=>$order->id,'id'=>$order->id]);
@@ -491,6 +491,9 @@ Array
 	function doAcceptKevin()
 	{
 		$paymentId = $_GET['paymentId'];
+		
+		$entry = json_encode(['date'=>date('Y-m-d H:i:s'),'get'=>$_GET,'post'=>$_POST,'server'=>$_SERVER], JSON_PRETTY_PRINT);
+		file_put_contents(GW::s('DIR/LOGS').'kevin.log', $entry, FILE_APPEND);
 		
 		$cfg = new GW_Config("payments__payments_kevin/");	
 		$cfg->preload('');		

@@ -5,6 +5,11 @@
 
 {block name="init"}
 
+	{if $smarty.get.groupby}
+		{$dl_group_list_by=[$smarty.get.groupby]}
+	{/if}
+		
+	
 
 	{if $list}
 		{$do_toolbar_buttons=[]}
@@ -73,6 +78,9 @@
 		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doMarkAsProcessed])}', 1)">{GW::l('/A/VIEWS/doMarkAsProcessed')}</option>{/capture}	
 	{/if}		
 	
+	{$dl_output_filters.insert_time=short_time}
+	{$dl_output_filters.update_time=short_time}	
+	{$dl_output_filters.pay_time=short_time}		
 {/block}
 
 

@@ -8,8 +8,12 @@
 				
 				
 			
+					{$pay_methods=json_decode($m->config->pay_types, 1)}
 				
-					{if $m->config->enabled_methods}
+					
+				
+				
+					{if count($pay_methods) > 1}
 						{include "`$m->tpl_dir`payselect.tpl"}
 						<p>
 							{GW::ln('/m/PAY_METHOD_SELECT')}:
@@ -22,7 +26,7 @@
 					{else}
 						<center>
 							{$order=$GLOBALS.site_cart}
-					    <a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id])}" class="btn btn-primary">
+					    <a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>$pay_methods.0])}" class="btn btn-primary">
 						<i class="fa fa-credit-card g-mr-2"></i>
 						{GW::ln('/g/PROCEED_PAYMENT')} {$order->amount_total} &euro;
 					      </a>

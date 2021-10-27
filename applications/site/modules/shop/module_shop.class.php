@@ -76,7 +76,7 @@ class Module_Shop extends GW_Public_Module
 	{
 		
 		$this->model = Shop_Products::singleton();
-		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table]);
+		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=? AND active=1', $this->model->table]);
 		
 		$types = Shop_ProdTypes::singleton()->findAll('count>0 AND active=1',['key_field'=>'id']);
 		$class_types = Shop_Classificator_Types::singleton()->findAll(false, ['key_field'=>'id']);

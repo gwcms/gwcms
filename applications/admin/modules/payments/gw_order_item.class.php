@@ -11,12 +11,21 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	    'is_expired'=>1,
 	    'title'=>1,
 		'type'=>1,
-		'invoice_line'=>1
+		'invoice_line'=>1,
+		'keyval'=>1
 	];
 	
 	public $composite_map = [
 		'order' => ['gw_composite_linked', ['object'=>'GW_Order_Group','relation_field'=>'group_id']],
-	];		
+	];	
+
+	
+	public $ownerkey = 'payments/orderitems';
+	public $extensions = [
+	    'keyval'=>1
+	];				
+	public $keyval_use_generic_table = 1;
+		
 	
 	
 	function calculateField($name) {
@@ -56,6 +65,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			case 'is_expired':
 				return  $this->expires_enabled  && $this->expires_secs < 0;
 			break;
+			case 'keyval':
+				return  $this->extensions['keyval'];
+			break;		
 		
 		}
 		

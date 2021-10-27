@@ -51,9 +51,6 @@
       <lt>Sąrašo atvaizdavimas</lt>
     </i>
     <i id="modification_display">Produkto variacijų sąrašo atvaizdavimas</i>
-    <i id="features">
-      <lt>Įgalinti funkcionalumai</lt>
-    </i>
     <i id="group_id">Užsakymo id</i>
     <i id="pay_time">Apmokėjimo laikas</i>
   </i>
@@ -220,6 +217,20 @@
         </i>
         <i id="in_menu">0</i>
       </i>
+      <i id="subscriptiongroups">
+        <i id="title">Abonentai</i>
+        <i id="info">
+          <i id="model">Shop_SubscriptionGroups</i>
+        </i>
+        <i id="in_menu">1</i>
+      </i>
+      <i id="subscribergroups">
+        <i id="title">Užsakovai</i>
+        <i id="info">
+          <i id="model">Shop_Subscribers</i>
+        </i>
+        <i id="in_menu">0</i>
+      </i>
     </i>
   </i>
   <i id="UPDATE_AFTER_CHANGE">
@@ -238,6 +249,7 @@
 		<i id="site_add2cart_from_list">Pridėti į krepšelį iš sąrašo</i>
 		<i id="wishlist">Wishlist - įsiminti pamėgtas prekes</i>
 		<i id="selectqty">Kiekio pasirinkimas</i>
+		<i id="ttlock">Bilietams turintiems laiką siųsti durų kodą</i>
           </i>
 	  
   </i>

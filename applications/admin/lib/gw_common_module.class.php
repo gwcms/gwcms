@@ -2693,5 +2693,16 @@ class GW_Common_Module extends GW_Module
 		$this->jump();
 	}
 	
+	function initFeatures($modcfg=false)
+	{
+		$cfg = $modcfg ? $this->modconfig : $this->config;
+					
+		$this->features = array_fill_keys((array)json_decode($cfg->features), 1);		
+	}
+	
+	function feat($id)
+	{
+		return isset($this->features[$id]);
+	}	
 	
 }
