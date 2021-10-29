@@ -57,4 +57,6 @@ class Shop_SubscriptionGroups extends GW_Composite_Data_Object
 	}
 
 	
+
+	
 }

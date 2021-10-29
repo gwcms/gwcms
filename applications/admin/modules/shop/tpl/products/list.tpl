@@ -81,8 +81,8 @@
 			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",groupby=>title,ord=>'obj_id,payment_status DESC',clean=>2])}		
 	{/if}
 
-	{if isset($count_orders[$item->id])}
-		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Orders({$count_orders[$item->id]})"}
+	{if isset($counts.orders[$item->id])}
+		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Orders({$counts.orders[$item->id]})"}
 	{/if}
 	
 {/function}

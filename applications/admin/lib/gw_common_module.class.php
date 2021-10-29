@@ -1148,12 +1148,48 @@ class GW_Common_Module extends GW_Module
 
 		if ($this->list_params['page_by'])
 			$this->tpl_vars['query_info'] = $this->model->lastRequestInfo();
+		
+		
+		
+		$this->prepareCounts($list);
 
 		
 		$this->fireEvent('AFTER_LIST', $list);	
 		
 		return ['list' => $list];
 	}
+	
+	
+	function isListEnabledField($field)
+	{
+		return ($this->list_config['display_fields'][$field] ?? 0) ==1;
+	}
+	
+	function prepareCounts($list)
+	{
+		
+		if($this->isListEnabledField("changetrack")){	
+			//get first item
+			foreach($list as $item)
+				break;
+			
+			if( isset($item) && $item && $item->extensions['changetrack'])
+				$item->extensions['changetrack']->prepareList($list);
+		}	
+		
+		if($this->isListEnabledField("orders")){
+			
+			$t = GW_Order_Item::singleton()->table;
+			$t1 = $this->model->table;
+			$sql = "SELECT obj_id, count(*) FROM `$t` WHERE obj_type='$t1' GROUP BY obj_id";
+			$rez = GW::db()->fetch_assoc($sql);
+			$this->tpl_vars['counts']['orders'] = $rez;
+			//d::dumpas($this->tpl_vars['counts']);
+			
+		}		
+		
+	}
+	
 
 	function common_doMove($params = false)
 	{

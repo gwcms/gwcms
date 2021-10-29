@@ -97,24 +97,7 @@ class Module_Products extends GW_Common_Module
 		
 
 		
-		
-		if($this->list_config['display_fields']['orders']==1){
-			$t = GW_Order_Item::singleton()->table;
-			$t1 = $this->model->table;
-			$sql = "SELECT obj_id, count(*) FROM `$t` WHERE obj_type='$t1' GROUP BY obj_id";
-			$rez = GW::db()->fetch_assoc($sql);
-			$this->tpl_vars['count_orders'] = $rez;
-		}
-		
-		if(isset($item) && $item){	
-			if($item->extensions['changetrack'])
-				$item->extensions['changetrack']->prepareList($list);
-		}
-	
-
-		
-		
-		
+				
 		
 		
 		//$pieces0 = IPMC_Competition_Pieces::singleton();
@@ -297,7 +280,8 @@ class Module_Products extends GW_Common_Module
 		$start = strtotime($product->date.' '.$product->start_time.' -20 minutes');
 		$end = strtotime($product->date.' '.$product->end_time);
 		
-		$resp = ttlock_api::singleton()->init()->addPasscode(false,$code,$start,$end);
+		//po to kai gautu errora pasitikrintu ir dar karta sugeneruotu atsitiktini, pasikeitimas perduodamas per $code argumenta
+		$resp = ttlock_api::singleton()->init()->addPasscodeRandom(false,$code,$start,$end);
 		
 		$item->set('keyval/door_code', $code);
 		$item->set('keyval/door_code_id', $resp->keyboardPwdId);

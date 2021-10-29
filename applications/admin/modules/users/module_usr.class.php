@@ -55,7 +55,7 @@ class Module_Usr extends GW_Common_Module
 		//parent::canBeAccessed($item);
 		$item->load_if_not_loaded();
 		
-		$result = ($this->rootadmin) || $item->id==0 || ($item->parent_user_id == $this->app->user->id);
+		$result = ($this->rootadmin) || $item->id==0 || $this->isSuperAdmin || ($item->parent_user_id == $this->app->user->id);
 		
 		if(!isset($opts['die']) || $result)
 			return $result;

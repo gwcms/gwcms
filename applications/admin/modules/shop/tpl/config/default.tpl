@@ -69,5 +69,8 @@
 
 
 
+{call e field=shop_orders_viewers_group type=select_ajax modpath="users/groups" preload=1 options=[]}
+
+
 
 {include "default_form_close.tpl"}

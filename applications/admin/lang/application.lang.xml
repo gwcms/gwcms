@@ -859,4 +859,8 @@
     <lt>Pasirinkite laukelį, šaltinio ir paskirties kalbas</lt>
     <ru>[A] Выбираем языки поля, источника и назначения</ru>
   </i>
+  <i id="ACTION_REQUESTS_ADDITIONAL_INPUT">
+	  <en>Action asks for additional input</en>
+	  <lt>Veiksmui atlikti reikia papildomos informacijos</lt>
+  </i>
 </xml>

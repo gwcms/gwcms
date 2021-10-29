@@ -30,21 +30,67 @@ class ttlock_api
 		
 		
 		
-		$date = round(microtime(true) * 1000);
-		
 		$resp = $this->request("v3/keyboardPwd/add",[
 		    "lockId"=> $lockid,
 			"keyboardPwd"=>$passcode,
 			"startDate"=> $startdate*1000,
 			"endDate"=> $enddate*1000,
-			"addType"=> "2",
-			"date"=> $date
-		]);
+			"addType"=> "2"
+		],['date'=>1]);
 		
 
 		return $resp;			
-		
 	}
+	
+	function addPasscodeRandom($lockid, &$passcode,$startdate,$enddate)
+	{
+		$passcode = (string)$passcode;
+		$repeat=0;
+		
+		while(1){
+			$resp = $this->addPasscode($lockid, $passcode,$startdate,$enddate);
+			
+			$repeat++;
+			
+			
+			if(isset($resp->errcode) && $resp->errcode==-3007){
+				//The same passcode already exists. Please use another one.
+				$passcode = GW_String_Helper::getRandString(strlen($passcode), $chars='0123456789');
+			}else{
+				$resp->repeat = 1;
+				return $resp;
+			}
+		}
+	}
+	
+	
+	function deletePasscode($lockid, $keyboardPwdId)
+	{
+		if($lockid===false)
+			$lockid = $this->cfg->default_lock_id;
+		
+		$resp = $this->request("v3/keyboardPwd/delete",[
+		    "lockId"=> $lockid,
+			"keyboardPwdId"=>$passcode,
+			"deleteType"=> "2"
+		],['date'=>1]);	
+		
+		return $resp;	
+	}
+	
+	
+	/*neveikia*/
+	function listPasscode($lockid=false)
+	{
+		if($lockid===false)
+			$lockid = $this->cfg->default_lock_id;
+		
+		$resp = $this->request("v3/keyboardPwd/list",[
+		    "lockId"=> $lockid
+		],['date'=>1]);	
+		
+		return $resp;	
+	}	
 	
 	
 	function getAccessToken($clientsecret, $username, $pass)
@@ -101,7 +147,7 @@ password	Y		Password(32 chars, low case, md5 encrypted)
 		return $resp;		
 	}
 	
-	function request($path,$addargs)
+	function request($path,$addargs,$opts=[])
 	{
 		$r=GW_Http_Agent::singleton();
 		$url="https://api.ttlock.com/$path";
@@ -110,6 +156,11 @@ password	Y		Password(32 chars, low case, md5 encrypted)
 		    'clientId'=>$this->clientid,
 		    'accessToken'=>$this->accesstoken
 		]+$addargs;
+		
+		if(isset($opts['date'])){
+			$date = round(microtime(true) * 1000);
+			$args["date"] = $date;
+		}
 		    
 		$resp = $r->postRequest($url, $args);	
 		//$resp = file_get_contents($url.'?'. http_build_query($args));

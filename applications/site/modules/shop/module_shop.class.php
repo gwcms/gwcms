@@ -551,4 +551,32 @@ class Module_Shop extends GW_Public_Module
 	}
 		
 	
+	function canSeeOrders()
+	{
+		if($this->app->user)
+			return in_array($this->config->shop_orders_viewers_group, $this->app->user->group_ids);		
+	}
+	
+	function getOrders($item)
+	{
+		/*
+			'obj_type'=>'shop_products',
+			'obj_id'=>$item->id,
+		 * 		 */
+		
+			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test";
+			$params['select']='a.*, '.$order_fields;
+			$params['joins']=[
+			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
+			];			
+			$params['order']="payment_status DESC, pay_time DESC";
+		
+		$list = GW_Order_Item::singleton()->findAll(
+			['obj_type="shop_products" AND obj_id=? AND processed=0', $item->id], $params
+		);
+		
+		
+		return $list;
+	}
+	
 }

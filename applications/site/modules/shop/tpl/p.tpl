@@ -91,7 +91,7 @@
 									   {$addclass[]="modification_selected"}
 								   {/if}
 									 
-								   {if $mod->qty > 0}
+								   {if $mod->qty > 0 || $m->canSeeOrders()}
 									    href="#" 
 									onclick="gw_navigator.jump(false,{ modid:{$mod->id} });return false"
 								   {else}
@@ -347,6 +347,43 @@
         <!-- End Products -->
 </div>
 <!-- End Products -->
+
+
+{if $m->canSeeOrders()}
+	
+	{$list = $m->getOrders($item)}
+	{if $list}
+		<h2>
+			Neapdoroti užsakymai <small class="text-muted">(matote nes esate priskirti į užsakymų grupę)</small>
+		</h2>
+	<table class="ordertbl">
+		<tr>
+			<th>Vardas pavarde</th>
+			<th>Kiekis</th>
+			<th>Kaina</th>
+			<th>Mokėjimo statusas</th>
+			<th>Apmokėjimo laikas</th>
+		</tr>
+	{foreach $list as $item}
+		<tr>
+			<td>{$item->order->user->title}</td>
+			<td>{$item->qty}</td>
+			<td>{$item->unit_price} &euro;</td>
+			<td>{if $item->payment_status==7}TAIP{else}Ne{/if} {if $item->pay_test}TEST{/if}</td>
+			<td>{$item->pay_time}</td>
+		</tr>
+	{/foreach}
+	</table>
+	<br><br>
+	{/if}
+	
+	<style>
+		.ordertbl th, .ordertbl td{ padding: 2px }
+		.ordertbl th{ color: silver }
+	</style>
+{/if}
+
+
 
 
 <p class="text-muted">{GW::ln('/m/BOTTOM_INFO_TEXT')}</p>

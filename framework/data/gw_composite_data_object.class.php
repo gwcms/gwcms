@@ -333,4 +333,28 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	}
 	
 	
+	function getRelationField($class)
+	{
+		$class = strtolower($class);
+		
+		
+		
+		foreach($this->composite_map as $entry)
+		{			
+			if($entry[0]=='gw_composite_linked' && strtolower($entry[1]['object'])==$class)
+				return $entry[1]['relation_field'];
+		}
+	}
+	
+	function getChildCounts($childClass, $ids, $extracond=false)
+	{
+		
+		$relationfield = $childClass::singleton()->getRelationField(get_class($this));
+		$table = $childClass::singleton()->table;
+		
+		
+		$q= " SELECT `$relationfield`, count(*) AS cnt FROM `$table` WHERE ".GW_DB::inCondition($relationfield, $ids)." GROUP BY `$relationfield`";
+		return GW::db()->fetch_assoc($q);
+	}		
+	
 }

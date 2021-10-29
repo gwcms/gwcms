@@ -88,7 +88,7 @@
 	{*iconclass="fa fa-globe"*}
 	
 
-		{$url=$app->buildUri("shop/subscriptionperiod",[group_id=>$item->id,clean=>2])}		
+		{$url=$app->buildUri("shop/subscriptionperiod",[clean=>2])}		
 
 	{if isset($counts.period[$item->id])}
 		{list_item_action_m href=$url action_addclass="iframe-under-tr"  caption="Periodai({$counts.period[$item->id]})"}
@@ -115,7 +115,7 @@
 {$dl_toolbar_buttons[] = hidden}
 {$dl_toolbar_buttons_hidden=[import,export,dialogconf,fail_img]}
 
-{$dl_actions=[edit,ext_actions]} 
+{$dl_actions=[edit,invert_active_ajax,ext_actions]} 
 
 {$dl_output_filters=[
 	insert_time=>short_time, 
