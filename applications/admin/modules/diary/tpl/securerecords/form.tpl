@@ -18,5 +18,6 @@
 {call e field="encryped" type=read}
 
 
+{assign var="comments" value=1 scope=global}
 
 {include file="default_form_close.tpl"}
