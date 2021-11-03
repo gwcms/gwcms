@@ -17,7 +17,7 @@
 		pass=>encrypteddisp,
 		comments=>encrypteddisp
 	]}
-	{$dl_actions=[show]}
+	{$dl_actions=[show,edit]}
 	
 	
 	{$dl_smart_fields=[encrypted]}	
