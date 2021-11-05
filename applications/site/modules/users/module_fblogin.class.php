@@ -23,7 +23,7 @@ class Module_FBLogin extends GW_Public_Module
 		
 		$comebackurl = $this->app->buildURI('direct/users/fblogin/login',[],['absolute'=>1]);
 		
-		
+	
 		
 		if($this->user_cfg->use_auth_gw_lt){
 			
@@ -34,17 +34,17 @@ class Module_FBLogin extends GW_Public_Module
 			
 			session_commit();
 			session_write_close();
-			$auth_gw_url = "https://auth.gw.lt/index.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+			$auth_gw_url = GW::s('GW_FB_SERVICE')."?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
 			
 			
 			header('Location: '.$auth_gw_url);	
 			exit;
 		}
 		
-		
+		list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
 		$fb = new Facebook\Facebook([
-		    'app_id' => $this->user_cfg->fb_app_id,
-		    'app_secret' => $this->user_cfg->fb_app_secret,
+		    'app_id' => $app_id,
+		    'app_secret' => $app_secret,
 		    'default_graph_version' => 'v2.4',
 		]);
 
@@ -67,10 +67,11 @@ class Module_FBLogin extends GW_Public_Module
 
 	function viewLogin() 
 	{
+		list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
 		
 		$fb = new Facebook\Facebook($test = [
-		    'app_id' => $this->user_cfg->fb_app_id,
-		    'app_secret' => $this->user_cfg->fb_app_secret,
+		    'app_id' => $app_id,
+		    'app_secret' => $app_secret,
 			'default_graph_version' => 'v2.4',
 		]);
 
@@ -183,7 +184,7 @@ class Module_FBLogin extends GW_Public_Module
 	function viewLoginAuthGwLt()
 	{
 		$req_id = $_SESSION['auth_gw_lt_req_id'];
-		$dat = file_get_contents('https://auth.gw.lt/index.php?get_response='.$req_id);
+		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
 		$_SESSION['fb_user'] = json_decode($dat);
 		
 		$this->app->jump('direct/users/fblogin/signInOrRegister');
