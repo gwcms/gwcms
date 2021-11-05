@@ -246,7 +246,7 @@ var gw_adm_sys = {
 			if($(this).data('dialog-minheight'))
 				opts.minHeight=$(this).data('dialog-minheight');
 			
-			gwcms.open_dialog2(opts)
+			rootgwcms().open_dialog2(opts)
 			event.stopPropagation();
 			return false;
 		}).attr('data-initdone',1);

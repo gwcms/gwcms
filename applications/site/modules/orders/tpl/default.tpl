@@ -11,6 +11,14 @@
 						{GW::ln('/g/PROCEED_PAYMENT')}
 					</a>
 					
+		{if $app->user->isRoot()}
+		<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPayRoot,id=>$order->id])}" class="btn u-btn-orange btn-xs rounded-0">
+			<i class="fa fa-credit-card g-mr-2"></i>
+			TEST pay (root user)
+		</a>
+		{/if}
+					
+					
 					
 					
 		{if $m->feat('otherpayee')}		

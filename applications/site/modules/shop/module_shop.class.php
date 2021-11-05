@@ -367,11 +367,14 @@ class Module_Shop extends GW_Public_Module
 	{
 
 	}
+	
+	
+	public $wishlist_type=1;
 		
 	function initWishlist()
 	{
 		if($this->app->user){
-			$list0 = GW::db()->fetch_one_column(["SELECT product_id FROM shop_user_wishlist WHERE user_id=?", $this->app->user->id]);
+			$list0 = GW::db()->fetch_one_column(["SELECT product_id FROM shop_user_wishlist WHERE user_id=? AND type=?", $this->app->user->id, $this->wishlist_type]);
 			$list = [];
 
 			foreach($list0 as $id)
@@ -396,13 +399,13 @@ class Module_Shop extends GW_Public_Module
 		if(isset($GLOBALS['GW_SHOP_wishlist'][$item->id]))
 		{
 			unset($GLOBALS['GW_SHOP_wishlist'][$item->id]);
-			GW::db()->delete("shop_user_wishlist", ["user_id=? AND product_id=?", $this->app->user->id, $item->id]);
+			GW::db()->delete("shop_user_wishlist", ["user_id=? AND product_id=? AND type=?", $this->app->user->id, $item->id, $this->wishlist_type]);
 			
 			$action = "REMOVED_FROM";
 			$linksnis="kil";
 		}else{
 			$GLOBALS['GW_SHOP_wishlist'][$item->id] = $item->id;
-			GW::db()->insert("shop_user_wishlist", ["user_id"=>$this->app->user->id, 'product_id'=>$item->id, 'insert_time'=>date('Y-m-d H:i:s')]);
+			GW::db()->insert("shop_user_wishlist", ["user_id"=>$this->app->user->id, 'product_id'=>$item->id, 'type'=>$this->wishlist_type, 'insert_time'=>date('Y-m-d H:i:s')]);
 			
 			$action = "ADDED_TO";
 			$linksnis="gal";

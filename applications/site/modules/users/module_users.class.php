@@ -61,7 +61,9 @@ class Module_Users extends GW_Public_Module
 	
 	function initOptions()
 	{
-		if($this->app->user){
+		
+		
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt' && $this->app->user){
 			$this->options['club'] = LTF_Clubs::singleton()->getOptions(["approved=1 OR user_id=?", $this->app->user->id]) +
 					['-1'=>GW::ln('/g/CANT_FIND_IN_LIST')];
 

@@ -86,6 +86,32 @@ class Module_Orders extends GW_Public_Module
 		}
 	}
 	
+	function doOrderPayRoot()
+	{
+		$this->userRequired();
+		
+		if(!$this->app->user->isRoot())
+			die('not root');
+		
+		
+		$order = $this->getOrder(true);
+		
+		//test case
+
+		$args = ['id'=>$order->id];		
+		$args['paytest']=1;
+		$args['rcv_amount'] = $order->amount_total;
+
+
+		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		$this->setMessage($url);
+		session_write_close();
+		
+		sleep(1);
+		
+		header('Location:'.$this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret]));		
+	}
+	
 
 	function prepareOrderForPay($order)
 	{
