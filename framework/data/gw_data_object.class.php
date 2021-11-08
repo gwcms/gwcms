@@ -1381,7 +1381,13 @@ class GW_Data_Object
 		}
 		
 		return $data;
-	}	
+	}
+
+	function extensionget($id){
+		return $this->extensions[$id];
+	}
+	
+	
 	
 }
 

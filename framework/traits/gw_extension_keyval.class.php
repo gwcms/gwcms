@@ -12,6 +12,7 @@ class GW_Extension_KeyVal
 		$parent->registerObserver(['extension', $name]);
 		
 		
+		
 		//$this->constructExt();
 	}
 	
@@ -33,6 +34,9 @@ class GW_Extension_KeyVal
 
 			case "AFTER_CONSTRUCT":
 				$this->constructExt();
+			
+				$this->parent->ignore_fields['keyval'] = 1;
+				$this->parent->calculate_fields['keyval'] =  'extensionget';	
 			break;
 			
 			case 'AFTER_INSERT':
@@ -45,6 +49,7 @@ class GW_Extension_KeyVal
 					$this->obj->storeAll($this->cacheNotSaved);
 					$this->cacheNotSaved = [];	
 				}
+
 
 				
 			break;
