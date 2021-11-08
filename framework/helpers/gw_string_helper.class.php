@@ -72,5 +72,10 @@ class GW_String_Helper
 			return $variables[$match[1]];
 		}, ' ' . $template . ' ');
 	}
+	
+	static function zero($number, $zerocnt=2)
+	{
+		return sprintf('%0'.$zerocnt.'d', $number);
+	}
 
 }

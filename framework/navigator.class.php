@@ -146,6 +146,14 @@ class Navigator
 
 		if (!$params && !$opts)
 			return $url;
+		
+		
+		//one dirback directive allowed
+		if(strpos($url,'/../')!==false){
+			$url = explode('/../', $url,2);
+			$url = dirname($url[0]).'/'.$url[1];
+		}
+		
 
 		$url = self::explodeURI($url);
 		if(isset($opts['path']))

@@ -257,6 +257,11 @@ class GW_Application
 		if (isset($params['carry_params']))
 			$getparams = (is_array($getparams) ? $getparams : []) + $this->carryParams();
 		
+		if(strpos($path,'/../')!==false){
+			$path = explode('/../', $path,2);
+			$path = dirname($path[0]).'/'.$path[1];
+		}
+		
 		if ($path === false){
 			$path = $this->path;
 			
@@ -286,7 +291,7 @@ class GW_Application
 	{		
 		if (!is_array($params))
 			backtrace();
-
+		
 		Navigator::jump(self::buildUri($path, $params, ['carry_params' => 1]));
 	}
 
