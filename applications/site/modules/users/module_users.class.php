@@ -5,8 +5,14 @@ class Module_Users extends GW_Public_Module
 
 	function init()
 	{
-		$this->addRedirRule('/^viewOptions/i',['options','Module_public_options']);	
-		$this->addRedirRule('/^ltf_/i',['options','ltf_common_module']);	
+		$this->addRedirRule('/^viewOptions/i',['options','Module_public_options']);
+		
+		
+		
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
+			$this->addRedirRule('/^ltf_/i',['options','ltf_common_module']);
+		}
+		
 		parent::init();
 		
 		$this->model = new GW_Customer;
@@ -508,9 +514,10 @@ class Module_Users extends GW_Public_Module
 		$vals = $_POST['item'];
 
 		
-		
-		$vals = $this->ltf_SaveClub($vals);
-		$vals = $this->ltf_SaveCoach($vals);
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
+			$vals = $this->ltf_SaveClub($vals);
+			$vals = $this->ltf_SaveCoach($vals);
+		}
 		
 				
 	
@@ -661,5 +668,14 @@ class Module_Users extends GW_Public_Module
 		return $this->app->user;
 	}	
 	
+	function canBeAccessed($item, $opts=[])
+	{
+		if($item->id != $this->app->user->id){
 
+			$this->setError('/G/GENERAL/ACTION_RESTRICTED');
+			$this->jump();
+		}else{
+			return parent::canBeAccessed($item);
+		}
+	}	
 }

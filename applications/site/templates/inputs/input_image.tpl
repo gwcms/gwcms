@@ -11,7 +11,6 @@
 	<script src="../js/fileinput_locale_fr.js" type="text/javascript"></script>
 	<script src="../js/fileinput_locale_es.js" type="text/javascript"></script>			
 	*}	
-	<script src="{$app->sys_base}vendor/bootstrap-fileinput//js/fileinput_locale_{$ln}.js" type="text/javascript"></script>	
 	{assign scope=global var=input_image_loaded value=1}
 {/if}
 
@@ -38,6 +37,7 @@
 	<img style='height:{$thumbsize.0}px' src='{$app_base}tools/img/%s?size={$thumbsize.0}x{$thumbsize.1}'>
 {/capture}
 {$extra_params.image_replace_key_html=$tmp}
+{$extra_params.field=$field}
 
 {*
 {if !$imresize}
@@ -58,13 +58,10 @@
 		display:none;
 	}	
 	.hide{ display:none }
-	
-
 </style>
 
 <script>
 	{if !$endpoint}{$endpoint=implode('/',$m->module_path)}{/if}
-	{$endpoint = $m->buildDirectUri($endpoint,[],[level=>0])}
 		
 	
 	
@@ -91,11 +88,10 @@ function initImageInput{$id}(initialPreview)
 			{/if}
 			{if $imresize}resizeImage: true,{/if}
 
-			uploadExtraData : {json_encode($extra_params)},
-			uploadUrl: '{$endpoint}/uploadfile?id={$item->id}',
+			{*uploadExtraData : {json_encode($extra_params)},*}
+			uploadUrl: '{$m->buildDirectUri("{$endpoint}/uploadfile",$extra_params,[level=>0])}',
 			progress: '',
-			dropZoneEnabled: false,
-			language: "{$ln}"
+			dropZoneEnabled: false
 		}, initialPreview)			
 	).on('fileerror', function (event, data) {
 
@@ -120,8 +116,6 @@ function initImageInput{$id}(initialPreview)
 }
 	
 $(function () {
-	$.get('{$endpoint}/inputFilePreview', { field: '{$field}', id:{$item->id}  }, function(data){  initImageInput{$id}(JSON.parse(data)) });
-	
-
+	$.get('{$m->buildDirectUri("{$endpoint}/inputFilePreview",$extra_params,[level=>0])}', function(data){  initImageInput{$id}(JSON.parse(data)) });
 });
 </script>	
