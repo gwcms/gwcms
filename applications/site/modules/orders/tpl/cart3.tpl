@@ -7,19 +7,13 @@
 			<div class="g-brd-bottom g-brd-gray-light-v3 g-pb-30 g-mb-30">
 				
 				
-			
-					{$pay_methods=json_decode($m->config->pay_types, 1)}
-				
-					
-				
-				
+
 					{if count($pay_methods) > 1}
 						{include "`$m->tpl_dir`payselect.tpl"}
 						<p>
 							{GW::ln('/m/PAY_METHOD_SELECT')}:
 						</p>
 						<div class="row">
-					
 							{call "pay_select_cart"}
 						</div>
 						

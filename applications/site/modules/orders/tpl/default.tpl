@@ -6,7 +6,14 @@
 
 {function orderactions}
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
-		<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id])}" class="btn u-btn-brown btn-md rounded-0">
+		
+		{if count($pay_methods) > 1}
+			{$args=[id=>$order->id,orderid=>$order->id,payselect=>1]}
+		{else}
+			{$args=[act=>doOrderPay,id=>$order->id]}
+		{/if}
+		
+		<a href="{$m->buildDirectUri('', $args)}" class="btn u-btn-brown btn-md rounded-0">
 						<i class="fa fa-credit-card g-mr-2"></i>
 						{GW::ln('/g/PROCEED_PAYMENT')}
 					</a>
@@ -129,10 +136,25 @@
 					{/foreach}
 				</ul> 
 				
-				{if !$smarty.get.orderid}
-					{call orderactions version=xs}
+
+				
+				{if $smarty.get.id && $smarty.get.payselect}
+					
+					{include "`$m->tpl_dir`payselect.tpl"}
+					<p>
+						{GW::ln('/m/PAY_METHOD_SELECT')}:
+					</p>
+					<center>
+						{call "pay_select_cart"}
+					</center>
+				{elseif $smarty.get.paymentselected}
+					{include file="`$smarty.current_dir`/methods/`$smarty.get.paymentselected`.tpl"}
 				{else}
-					{call orderactions version=md}
+					{if !$smarty.get.orderid}
+						{call orderactions version=xs}
+					{else}
+						{call orderactions version=md}
+					{/if}					
 				{/if}
 					
 									

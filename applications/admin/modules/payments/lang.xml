@@ -139,6 +139,8 @@
       <i id="paypal">Paypal</i>
       <i id="kevin">Kevin</i>
       <i id="montonio">Montonio</i>
+      <i id="revolut">Revolut</i>
+      <i id="revolut_cc">Revolut credit card</i>
     </i>    
 	
 	<i id="features">
@@ -192,7 +194,16 @@
           <i id="iconclass">fa fa-money</i>
         </i>
       </i>
-     
+       <i id="payments_revolut">
+        <i id="title">
+          <en>Payments Revolut</en>
+          <lt>Mokėjimai Revolut</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_payrevolut_log</i>
+          <i id="iconclass">fa fa-money</i>
+        </i>
+      </i>     
       
       <i id="payments_paypal">
         <i id="title">
