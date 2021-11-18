@@ -11,6 +11,7 @@ class Module_Orders extends GW_Public_Module
 		
 		$this->addRedirRule('/^doRevolut|^viewRevolut/i',['options','pay_revolut_module_ext']);	
 		$this->addRedirRule('/^doKevin/i',['options','pay_kevin_module_ext']);	
+		$this->addRedirRule('/^doPaypal/i',['options','pay_paypal_module_ext']);	
 		
 		$this->config = new GW_Config('payments/');
 		$this->config->preload('');
@@ -92,6 +93,8 @@ class Module_Orders extends GW_Public_Module
 		
 		if($type=='paysera'){
 			$this->doPayPaysera($args);		
+		}elseif($type=='paypal'){			
+			$this->doPayPal($args);
 		}elseif($type=='kevin'){
 			$this->doPayKevin($args);
 		}elseif($type=='revolut' || $type=='revolut_cc'){
@@ -100,6 +103,9 @@ class Module_Orders extends GW_Public_Module
 			d::dumpas("Unknown method $type");
 		}
 	}
+	
+	
+
 	
 	function redirectAfterPaymentAccept($order)
 	{

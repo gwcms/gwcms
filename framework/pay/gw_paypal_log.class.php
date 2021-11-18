@@ -1,8 +1,13 @@
 <?php
 
-class GW_PayPal_Log extends GW_Data_Object
+class GW_PayPal_Log extends GW_Composite_Data_Object
 {
 
+	public $composite_map = [
+		'order' => ['gw_composite_linked', ['object'=>'GW_Order_Group','relation_field'=>'orderid']],
+	];	
+
+	
 	public $table = 'gw_paypal_log';
 	public $encode_fields = ['extra' => 'json'];
 
