@@ -762,7 +762,7 @@ class GW_Public_Module {
 	function askConfirm($str)
 	{
 		$confirmurl = $this->app->buildUri(false, $_GET+['confirm'=>1]);
-		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
+		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::ln('/g/CONFIRM')."</a>";
 		
 		if($this->app->user && $this->app->user->isRoot()){
 			$reloadurl =  $this->app->buildUri(false);

@@ -3,7 +3,7 @@
 class pay_kevin_module_ext extends GW_Module_Extension
 {
 	
-	function doPayKevin($args) 
+	function doKevinPay($args) 
 	{
 		//$this->userRequired();
 
@@ -34,7 +34,10 @@ class pay_kevin_module_ext extends GW_Module_Extension
 			$args->payprice= 0.01;
 
 		$attr = [
-		    'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayKevinAccept",
+			'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAccept",
+			//testavau webhooka
+			//'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?id={$args->order->id}&orderid={$args->order->id}",
+		    'Webhook-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAcceptByOrder&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
 		    'description' => $args->orderid,
 		    'currencyCode' => 'EUR',
 		    'amount' => $args->payprice,
@@ -68,19 +71,15 @@ Array
 
 	}
 	
-	function doPayKevinAccept()
+	function kevinUpdate($paylog, $wait=true)
 	{
-		$paymentId = $_GET['paymentId'];
-		
-		$entry = json_encode(['date'=>date('Y-m-d H:i:s'),'get'=>$_GET,'post'=>$_POST,'server'=>$_SERVER], JSON_PRETTY_PRINT);
-		file_put_contents(GW::s('DIR/LOGS').'kevin.log', $entry, FILE_APPEND);
-		
 		$cfg = new GW_Config("payments__payments_kevin/");	
 		$cfg->preload('');		
 		$options = ['error' => 'array', 'version' => '0.3'];
 		$kevinClient = new Kevin\Client($cfg->clientId, $cfg->clientSecret, $options);
 		
-/*
+
+		/*
  Array
 (
     [id] => e1bbc2f3385c5d0b7af659d4357918f9b16a7180
@@ -117,17 +116,17 @@ Array
 		$cnt=0;
 		
 		while($cnt<30){
-			$response = $kevinClient->payment()->getPayment($paymentId);
+			$response = $kevinClient->payment()->getPayment($paylog->kevin_id);
+			
+			$this->log(json_encode(['date'=>date('Y-m-d H:i:s'),'response'=>$response], JSON_PRETTY_PRINT));
 			
 			if($response['statusGroup'] == 'completed'){
 				break;
 			}
 			
-			if($response['statusGroup'] == 'failed'){
-				$this->setError(GW::ln('/m/PAYMENT_FAILED'));
-				header('Location:'.$this->buildURI('', ['id'=>$order->id]));
-				exit;
-			}	
+
+			if(!$wait)
+				break;
 			
 			sleep(1);
 			$cnt++;
@@ -135,15 +134,11 @@ Array
 		}
 		
 		
-		$paylog = GW_PayKevin_Log::singleton()->find(['kevin_id=?', $paymentId]);
+		
 		$paylog->wait = $cnt;
 		
 		
-		if(!$paylog){
-			$this->setError(GW::ln('/m/INVALID_KEVIN_ARGS'));
-			
-			$this->app->jump('direct/orders/orders');
-		}
+
 		
 		$paylog->bankStatus = $response['bankStatus'];
 		$paylog->statusGroup = $response['statusGroup'];
@@ -156,48 +151,113 @@ Array
 		$paylog->pm_creditorAccount_iban = $response['bankPaymentMethod']['creditorAccount']['iban'];
 		$paylog->pm_creditorAccount_currencyCode = $response['bankPaymentMethod']['creditorAccount']['currencyCode'];
 		
-		$paylog->pm_debtorAccount_iban = $response['bankPaymentMethod']['debtorAccount']['iban'];
-		$paylog->pm_debtorAccount_currencyCode = $response['bankPaymentMethod']['debtorAccount']['currencyCode'];
+		$paylog->pm_debtorAccount_iban = $response['bankPaymentMethod']['debtorAccount']['iban'] ?? '';
+		$paylog->pm_debtorAccount_currencyCode = $response['bankPaymentMethod']['debtorAccount']['currencyCode'] ?? '';
 		
 		$paylog->pm_bankId = $response['bankPaymentMethod']['bankId'];
 		$paylog->pm_paymentProduct = $response['bankPaymentMethod']['paymentProduct'];
 		$paylog->pm_requestedExecutionDate = $response['bankPaymentMethod']['requestedExecutionDate'];
 		$paylog->updateChanged();
 		
-		$order = GW_Order_Group::singleton()->find($paylog->order_id);
-		
-		$args = [
-		    'id'=>$paylog->order_id,
-		    'rcv_amount'=>$paylog->amount,
-		    'pay_type'=>'kevin',
-		    'log_entry_id'=>$paylog->id
-		];
 		
 		
-		//test case
-		if($paylog->amount=='0.01'){
-			$args['paytest']=1;
-			$args['rcv_amount'] = $order->amount_total;
+		if($response['statusGroup'] == 'completed')
+		{
 			
-			$paylog->test = 1;
-			$paylog->updateChanged();
-		}
+			$order = $paylog->order;
+		
+			$args = [
+			    'id'=>$paylog->order_id,
+			    'rcv_amount'=>$paylog->amount,
+			    'pay_type'=>'kevin',
+			    'log_entry_id'=>$paylog->id
+			];
 
-		if($order->amount_total == $paylog->amount || $paylog->test){
-			$this->markAsPaydSystem($args);
-		}else{
-			$debugdata = ['response'=>$response,'paylog'=>$paylog->toArray()];
-			$mail=[
-				'subject'=>'Payment error amount_total in cart does not match kevin response',
-				'body'=>"<pre>".json_encode($debugdata, JSON_PRETTY_PRINT)."</pre>"
-			    ];
-			GW_Mail_Helper::sendMailDeveloper($mail);
+
+			//test case
+			if($paylog->amount=='0.01'){
+				$args['paytest']=1;
+				$args['rcv_amount'] = $order->amount_total;
+
+				$paylog->test = 1;
+				$paylog->updateChanged();
+			}
+		
+			if($order->amount_total == $paylog->amount || $paylog->test ){
+				$this->markAsPaydSystem($args);
+			}else{
+				$debugdata = ['response'=>$response,'paylog'=>$paylog->toArray()];
+				$mail=[
+					'subject'=>'Payment error amount_total in cart does not match kevin response',
+					'body'=>"<pre>".json_encode($debugdata, JSON_PRETTY_PRINT)."</pre>"
+				    ];
+				GW_Mail_Helper::sendMailDeveloper($mail);
+			}
+			
+			$paylog->processed = 1;
+			$paylog->updateChanged();			
 		}
 		
-		sleep(2);
+	
 		
-		$this->redirectAfterPaymentAccept($order);
+		return $response;
+	}
+	
+	function doKevinAccept()
+	{
+		$paymentId = $_GET['paymentId'];
+		
+		$this->logRequest();
+		
+		$paylog = GW_PayKevin_Log::singleton()->find(['kevin_id=?', $paymentId]);
+		
+		if(!$paylog){
+			$this->setError(GW::ln('/m/INVALID_KEVIN_ARGS'));	
+			$this->app->jump('direct/orders/orders');
+		}
+		
+		$response = $this->kevinUpdate($paylog);
+		
+		if($response['statusGroup'] == 'failed'){
+			$this->setError(GW::ln('/m/PAYMENT_FAILED'));
+		}elseif($response['statusGroup'] == 'completed'){
+			sleep(2);
+		}
+		
+		$this->redirectAfterPaymentAccept($paylog->order);
 
+	}
+	
+	function logRequest()
+	{
+		$entry = json_encode(['date'=>date('Y-m-d H:i:s'),'get'=>$_GET,'post'=>$_POST,'server'=>$_SERVER], JSON_PRETTY_PRINT);
+		$this->log($entry);
+	}
+	
+	function log($msg)
+	{
+		file_put_contents(GW::s('DIR/LOGS').'kevin.log', $msg, FILE_APPEND);
+	}
+	
+	function doKevinAcceptByOrder()
+	{
+		$order = $this->getOrder(true);
+		
+		$this->logRequest();
+		
+		if(!$order)
+		{
+			$this->log('ORDER not found');
+		}
+		
+		$list = GW_PayKevin_Log::singleton()->findAll(['order_id=? AND processed=0', $order->id]);
+		
+		if(isset($_GET['debug']))
+			d::dumpas($list);
+		
+		foreach($list as $paylog){
+			$this->kevinUpdate($paylog, $wait=false);
+		}
 	}
 	
 }

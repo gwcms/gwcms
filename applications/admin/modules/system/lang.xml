@@ -197,6 +197,9 @@
       <i id="ttlock">
         <i id="title">TTlock</i>
       </i>
+      <i id="relays">
+        <i id="title">Relays</i>
+      </i>      
     </i>
   </i>
 </xml>

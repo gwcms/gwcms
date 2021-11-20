@@ -96,7 +96,7 @@ class Module_Orders extends GW_Public_Module
 		}elseif($type=='paypal'){			
 			$this->doPayPal($args);
 		}elseif($type=='kevin'){
-			$this->doPayKevin($args);
+			$this->doKevinPay($args);
 		}elseif($type=='revolut' || $type=='revolut_cc'){
 			header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'orderid'=>$order->id,'paymentselected'=>$type,'act'=>'doRevolut']));
 		}else{

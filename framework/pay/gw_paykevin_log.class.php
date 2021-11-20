@@ -1,8 +1,11 @@
 <?php
 
-class GW_PayKevin_Log extends GW_Data_Object
-{
-
+class GW_PayKevin_Log extends GW_Composite_Data_Object
+{	
+	public $composite_map = [
+		'order' => ['gw_composite_linked', ['object'=>'GW_Order_Group','relation_field'=>'order_id']],
+	];	
+	
 	public $calculate_fields = ['title'=>1];
 	public $table = 'gw_paykevin_log';
 	
@@ -17,7 +20,6 @@ class GW_PayKevin_Log extends GW_Data_Object
 		
 		
 	}
-
 }
 
 /*
