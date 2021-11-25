@@ -50,6 +50,25 @@ class pay_kevin_module_ext extends GW_Module_Extension
 		    ],
 		];
 		$response = $kevinClient->payment()->initPayment($attr);
+		
+		if(isset($response['error'])){
+			$errordetails = ['resp'=>$response, 'request'=>$attr];
+			if($this->app->user && $this->app->user->isRoot()){
+				d::dumpas($errordetails);
+			}else{
+				$opts=[
+				    'subject'=>GW::s('PROJECT_NAME').' kevin create payment error',
+				    'body'=>
+				    '<pre>'.json_encode($errordetails, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)];
+				
+				GW_Mail_Helper::sendMailDeveloper($opts);
+				$this->setError(GW::ln('/g/PAYMENT_GATEWAY_ERROR'));
+				$this->jump();
+			}
+			
+			
+		}
+		
 
 		$log=GW_PayKevin_Log::singleton()->createNewObject();
 		$log->order_id =  $args->order->id;

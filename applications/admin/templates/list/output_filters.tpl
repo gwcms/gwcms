@@ -52,6 +52,15 @@
 	{/foreach}
 {/function}	
 
+{function name=dl_output_filters_linked_obj}
+	
+	{if $item->get($field)}
+		{$item->get($field)->title}
+	{else}
+		<span title="{$id|escape}">-</span>
+	{/if}
+{/function}	
+
 {function name=dl_output_filters_array}
 	{call "dl_output_filters_expand_truncate" val=json_encode($val)}
 {/function}	
