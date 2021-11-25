@@ -355,7 +355,13 @@ class Module_Users extends GW_Public_Module
 			$this->app->sess('navigate_after_auth', null);
 			header("Location: ".$tmp);
 			exit;
-		}		
+		}	
+		
+		if($tmp = $this->app->sess('after_auth_nav')){
+			$this->app->sess('after_auth_nav', null);
+			header("Location: ".$tmp);
+			exit;			
+		}
 	}	
 	
 	function viewLogout()
