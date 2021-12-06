@@ -10,6 +10,7 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		$this->addRedirRule('/^doRevolut|^viewRevolut/i',['options','pay_revolut_module_ext']);	
+		$this->addRedirRule('/^doMontonio/i',['options','pay_montonio_module_ext']);	
 		$this->addRedirRule('/^doKevin/i',['options','pay_kevin_module_ext']);	
 		$this->addRedirRule('/^doPaypal/i',['options','pay_paypal_module_ext']);	
 		
@@ -80,14 +81,15 @@ class Module_Orders extends GW_Public_Module
 		$type = $_GET['type'] ?? $pay_methods[0];
 		
 		$args = (object)[
-		    'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret])),
-		    'cancel_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCancelPay','id'=>$order->id])),
-		    'base'=> Navigator::getBase(true),
-		    'orderid'=>'order-'.$order->id,
-		    'paytext'=> GW::ln('/g/CART_PAY',['v'=>['id'=>$order->id]]),
-		    'payprice'=>$order->amount_total,
-		    'items_number'=>count($citems),
-		    'order'=>$order
+			'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret])),
+			'cancel_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCancelPay','id'=>$order->id])),
+			'base'=> Navigator::getBase(true),
+			'orderid'=>'order-'.$order->id,
+			'paytext'=> GW::ln('/g/CART_PAY',['v'=>['id'=>$order->id]]),
+			'payprice'=>$order->amount_total,
+			'items_number'=>count($citems),
+			'order'=>$order,
+			'paytype'=>$type
 		];			
 			
 		
@@ -99,6 +101,8 @@ class Module_Orders extends GW_Public_Module
 			$this->doKevinPay($args);
 		}elseif($type=='revolut' || $type=='revolut_cc'){
 			header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'orderid'=>$order->id,'paymentselected'=>$type,'act'=>'doRevolut']));
+		}elseif($type=='montonio' || $type=='montonio_cc'){
+			$this->doMontonioPay($args);
 		}else{
 			d::dumpas("Unknown method $type");
 		}
@@ -793,6 +797,14 @@ class Module_Orders extends GW_Public_Module
 		$this->setMessage(GW::ln('/m/MESSAGE_SENT_YOUR_PAYMENT_WILL_BE_VERIFIED_SOON'));
 		
 		$this->app->jump(false, $_GET);
+	}
+	
+	function doTestAccept()
+	{
+		$data = json_encode(['get'=>$_GET, 'post'=>$_POST, 'server'=>$_SERVER,'date'=>date('Y-m-d H:i:s')], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		file_put_contents(GW::s('DIR/TEMP').'test_pay_accept', $data);
+		
+		d::dumpas($data);
 	}
 	
 }

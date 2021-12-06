@@ -139,6 +139,7 @@
       <i id="paypal">Paypal</i>
       <i id="kevin">Kevin</i>
       <i id="montonio">Montonio</i>
+      <i id="montonio_cc">Montonio credit card</i>
       <i id="revolut">Revolut</i>
       <i id="revolut_cc">Revolut credit card</i>
     </i>    
@@ -226,6 +227,16 @@
 	  <i id="itemactions">1</i>
         </i>
       </i>  
+      <i id="payments_montonio">
+        <i id="title">
+          <en>Payments Montonio</en>
+          <lt>Mokėjimai Montonio</lt>
+        </i>
+        <i id="info">
+          <i id="model">gw_payuniversal_log</i>
+          <i id="iconclass">fa fa-money</i>
+        </i>
+      </i>      
       <i id="requests">
         <i id="title">Mokėjimo užklausimai</i>
         <i id="info">
