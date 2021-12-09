@@ -1,4 +1,4 @@
-{include "elements/input_func.tpl"}
+{include "{$smarty.current_dir}/../elements/input_func.tpl"}
 
 {function build_input}
 

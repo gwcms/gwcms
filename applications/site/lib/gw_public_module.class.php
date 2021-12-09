@@ -781,4 +781,82 @@ class GW_Public_Module {
 		$this->app->jump();
 	}	
 	
+	function prompt($form, $title, $opts=[])
+	{
+		$answers = true;
+		
+		if(isset($opts['rememberlast'])){
+			$lastasnwers = json_decode($this->modconfig->prompt_lastanswers, true);
+		}
+		
+		$src =& $_GET;
+		$this->tpl_vars['method'] = 'get';
+		
+		foreach($form['fields'] as $fieldname => $el){
+			if(($el['type'] ?? false)=='file'){
+				$src =& $_POST;
+				$this->tpl_vars['method'] = 'post';	
+				
+			}	
+		}
+		
+		//if already have answers ?
+		foreach($form['fields'] as $fieldname => $el){
+			
+			if(isset($lastasnwers[$fieldname])){
+				$form['fields'][$fieldname]['default'] = $lastasnwers[$fieldname];
+			}
+			
+			
+			
+			if( ($el['type'] ?? false)=='file' && isset($el['required']) && isset($_FILES[$fieldname])){
+				continue;
+			}
+			
+			if(isset($el['required']) && !isset($src['item'][$fieldname])){
+				$answers=false;
+			}
+		}
+				
+		
+		if($answers){
+			if(isset($opts['rememberlast'])){
+				$this->modconfig->prompt_lastanswers = json_encode($src['item']);
+			}			
+			
+			
+			return array_merge($src['item'] ?? [], $_FILES);
+		}
+		
+		$this->tpl_vars['getargs'] = $_GET;
+		unset($this->tpl_vars['getargs']['url']);
+		
+		$this->tpl_vars['item'] = (object)($src['item'] ?? []);
+		$this->tpl_vars['prompt_fields'] = $form;
+		$this->tpl_vars['prompt_title'] = $title;
+		$this->smarty->assign('m', $this);
+		$this->smarty->assign($this->tpl_vars);
+				
+	
+		$tpl_name = GW::s("DIR/".$this->app->app_name."/TEMPLATES").'common_module/tools/prompt.tpl';
+			
+		$str =  $this->smarty->fetch($tpl_name);
+		
+		$this->setMessage($str);
+	}
+	
+	function rootConfirmJson($array)
+	{
+		$payload = json_encode($array, JSON_PRETTY_PRINT);
+
+		$form = ['fields'=>[
+			'data'=>['type'=>'code_json', 'required'=>1, 'default'=>$payload],
+		    ],'cols'=>4];
+
+		if(!($answers=$this->prompt($form, "Confirm redirect data")))
+			return false;
+
+		return json_decode($answers['data'], true);	
+	}
+	
 }

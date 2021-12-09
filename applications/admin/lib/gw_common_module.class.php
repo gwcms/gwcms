@@ -2741,4 +2741,35 @@ class GW_Common_Module extends GW_Module
 		return isset($this->features[$id]);
 	}	
 	
+	
+	function doSavePositions()
+	{
+		$positions = json_decode($_POST['positions'], true);
+		
+		foreach($positions as $itm)
+			if($itm['id'] ?? false)
+				$ids[] = $itm['id'];
+		
+		$positions = array_flip($ids);
+
+			
+		
+		$items = $this->model->findAll(GW_DB::inCondition('id', $ids), ['key_field'=>'id']);
+		
+		$updated = 0;
+				
+		foreach($items as $item){
+			$item->priority = $positions[$item->id];
+			if($item->changed_fields){
+				$updated++;
+				$item->updateChanged();
+			}
+		}
+		
+		
+		
+		echo "Updated: $updated";
+		exit;
+	}	
+	
 }

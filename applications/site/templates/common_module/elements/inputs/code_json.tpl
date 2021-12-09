@@ -9,4 +9,4 @@
 	{/if}
 {/if}
 
-{include file="elements/inputs/code.tpl" codelang=json}
+{include file="{$smarty.current_dir}/code.tpl" codelang=json}

@@ -18,6 +18,35 @@
 {/function}
 
 {function "pay_select_cart"}
+	{if $m->feat('mergepaymethods')}
+		{$mergedmethods = $m->prepareMergedPay($order->amount_total)}
+
+		
+		<table class='paytbl'>
+		{foreach $mergedmethods as $method}
+			<tr >
+				<td style='padding-right:25px;'>	
+					<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method->gateway}", "method":"{$method->key}", "id": "{$order->id}" }'>	   
+						<img src="{$method->logo}" alt="{$method->title|escape}" title="{$method->title|escape}" 
+					     style="width:200px"> 
+
+				      </a>
+				</td>
+				<td>
+					<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method->gateway}", "method":"{$method->key}", "id": "{$order->id}" }'>
+					{$method->title|escape}
+					{*
+					{$method->priority|escape}
+					{$method->gateway|escape}
+					{$method->group|escape}*}
+					</a>
+				</td>
+			</tr>
+		{/foreach}		
+		</table>
+	{else}
+	
+	
 	{$methods=json_decode($m->config->pay_types)}
 	
 	{*<div class="text-right">*}
@@ -35,16 +64,20 @@
 			<td>
 				<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method}", "id": "{$order->id}" }'>	
 				{GW::ln("/G/paymethods/description/{$method}")}
+				
 				</a>
 			</td>
 		</tr>
 	{/foreach}
 	</table>
 
+
+
+	{*</div>*}
+	{/if}
+	
 	<style>
 		.paytbl td{ padding-bottom: 25px;  }
 	</style>
-
-	{*</div>*}
-
 {/function}
+

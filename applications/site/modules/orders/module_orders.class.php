@@ -13,6 +13,7 @@ class Module_Orders extends GW_Public_Module
 		$this->addRedirRule('/^doMontonio/i',['options','pay_montonio_module_ext']);	
 		$this->addRedirRule('/^doKevin/i',['options','pay_kevin_module_ext']);	
 		$this->addRedirRule('/^doPaypal/i',['options','pay_paypal_module_ext']);	
+		$this->addRedirRule('/^doPaysera/i',['options','pay_paysera_module_ext']);	
 		
 		$this->config = new GW_Config('payments/');
 		$this->config->preload('');
@@ -91,10 +92,13 @@ class Module_Orders extends GW_Public_Module
 			'order'=>$order,
 			'paytype'=>$type
 		];			
+		
+		if(isset($_GET['method']))
+			$args->method = $_GET['method'];
 			
 		
 		if($type=='paysera'){
-			$this->doPayPaysera($args);		
+			$this->doPayseraPay($args);		
 		}elseif($type=='paypal'){			
 			$this->doPayPal($args);
 		}elseif($type=='kevin'){
@@ -430,59 +434,6 @@ class Module_Orders extends GW_Public_Module
 		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false;
 	}
 	
-	function doPayPaysera($args) 
-	{
-		//$this->userRequired();
-
-		$cfg = new GW_Config("payments__payments_paysera/");	
-		$cfg->preload('');
-		
-		
-		if(isset($args->user)){
-			$user = $args->user;
-		}else{
-			$user = $this->app->user;
-		}
-		
-		
-		$handler = $args->handler ?? "orders";
-		
-		//if($user->id == 9)
-		//	$args->payprice= 0.01;		
-		
-		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->city == 'paytest' || $user->city=="paytest";
-				
-		$data = array(
-		    'projectid' => $cfg->paysera_project_id,
-		    'sign_password' => $cfg->paysera_sign_password,
-		    'orderid' => $args->orderid.($test?'-TEST'.date('His'):"-".date('His')), //ausrinei kad veiktu "-".rand(0,9) 2021-01-12
-		    'paytext' => $args->paytext,
-		    'p_firstname' => $user->name,
-		    'p_lastname' => $user->surname,
-		    'p_email' => $user->email,
-		    'amount' => $args->payprice * 100,
-		    'currency' => $cfg->default_currency_code,
-		    'country' => 'LT',
-		    'accepturl' => "{$args->base}service/paysera?action=accept&handler=$handler&{$args->succ_url}",
-		    'cancelurl' => "{$args->base}service/paysera?action=cancel&handler=$handler&{$args->cancel_url}",
-		    'callbackurl' => "{$args->base}service/paysera?action=callback&handler=$handler",
-		    'test' => $test,
-		);
-
-		//d::dumpas($data);
-				    
-		if($this->app->ln == 'ru')
-			$data['lang'] = 'rus';
-		
-		if($this->app->ln == 'en')
-			$data['lang'] = 'eng';
-		
-		
-		///d::dumpas($data);
-
-		WebToPay::redirectToPayment($data);
-		exit;
-	}
 
 
 
@@ -648,10 +599,13 @@ class Module_Orders extends GW_Public_Module
 		$this->app->jump(false, ['step'=>3]);
 	}	
 	
+	
 	function viewCart()
 	{		
 		$order = $this->doInitCart();
 		
+		
+	
 		
 		
 		if(!$order->items && $step!=3){
@@ -807,4 +761,114 @@ class Module_Orders extends GW_Public_Module
 		d::dumpas($data);
 	}
 	
+	
+	function sortByField($field, $list, $prioritized_field_vals)
+	{
+			$grouped_by_field = [];
+			
+			foreach($list as $item){
+				$grouped_by_field[$item->$field][] = $item;
+			}
+			
+			$sorted_by_field =  [];
+			
+			foreach($prioritized_field_vals as $fieldval)	
+				if(isset($grouped_by_field[$fieldval])){
+					$sorted_by_field[$fieldval] = $grouped_by_field[$fieldval];
+					unset($grouped_by_field[$fieldval]);
+				}
+				
+			$list1 = [];
+			
+			foreach($sorted_by_field as $key => $sublist)
+				foreach($sublist as $item)
+					$list1[]=$item;
+			
+			foreach($grouped_by_field as $key => $sublist)
+				foreach($sublist as $item)
+					$list1[]=$item;
+			
+			return $list1;
+	}
+	
+	function prepareMergedPay($amount)
+	{
+		
+		$cfg = new GW_Config('payments__mergedpaymethods/');
+		$cfg->preload('');
+		$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'lt';
+		$country = $_GET['paycountry'] ?? $default_country;
+			
+	
+			
+		$list0 = GW_Pay_Methods::singleton()->findAll(
+			['active=1 AND country=? AND (min_amount=0 OR min_amount <= ?) AND (max_amount=0 OR max_amount>?)', $country, $amount, $amount],
+			['priority ASC']
+		);
+		$list = [];
+
+			
+			
+		
+		
+		$disabled_group = array_flip(json_decode($cfg->get('disabled_group'), true));
+		if($disabled_group){
+			foreach($list0 as $idx => $item)
+				if(isset($disabled_group[$item->group]))
+					unset($list0[$idx]);
+		}		
+		
+		return $list0;
+	}
+	
+	
 }
+
+
+
+/*
+ * per daug sudetinga manau
+//priority gateway
+			$priority_gateway = json_decode($cfg->get('priority_gateway'), true);
+			$priority_group = json_decode($cfg->get('priority_group'), true);
+			$disabled_group = array_flip(json_decode($cfg->get('disabled_group'), true));
+			
+			$list1 =  $this->sortByField('gateway', $list0, $priority_gateway);
+			$list2 = [];
+			
+			foreach($list1 as $item){
+				$list2[$item->aliaskey ?: $item->key] = $item;
+			}			
+			
+			
+			
+			$list3=  $this->sortByField('group', $list2, $priority_group);
+			
+
+			if($disabled_group){
+				foreach($list3 as $idx => $item)
+					if(isset($disabled_group[$item->group]))
+						unset($list3[$idx]);
+			}
+			
+			
+			$list4 = [];
+			foreach($list3 as $item)
+				$list4[$item->gateway][$item->group][] = $item;
+	
+			
+			//d::dumpas($list4);
+			
+			$list5 = [];
+			foreach($list4 as $gatewaylist){
+				foreach($gatewaylist as $grouplist){
+					
+					GW_Array_Helper::objSortByField('priority', $grouplist);
+					//d::dumpas($grouplist);
+					$list5 = array_merge($list5, $grouplist);
+				}
+			}
+
+			
+			return $list5;
+ */

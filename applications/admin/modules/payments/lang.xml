@@ -146,6 +146,7 @@
 	
 	<i id="features">
 	      <i id="otherpayee">Siųsti mokėjimo informaciją</i>
+	      <i id="mergepaymethods">Mokėjimo metodų apjungimas iš skirtingų pay-gateway</i>
 	</i>
 
   
@@ -244,6 +245,13 @@
           <i id="iconclass">fa fa-level-down</i>
         </i>
       </i>
+       <i id="mergedpaymethods">
+        <i id="title">Apjungti mokėjimo metodai</i>
+        <i id="info">
+          <i id="model">GW_Pay_Methods</i>
+          <i id="iconclass">fa fa-connectdevelop</i>
+        </i>
+      </i>     
 	<i id="config">
 		<i id="title">Nustatymai</i>
 		<i id="info">

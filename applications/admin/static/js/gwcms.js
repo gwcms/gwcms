@@ -1060,6 +1060,10 @@ var gwcms = {
 			$.niftyNoty(data);			
 		}
 	},
+	showMessage: function(msg)
+	{
+		gwcms.showMessages([{text: msg}]);
+	},	
 	
 	beforeFormSubmit: function(obj)
 	{

@@ -16,6 +16,10 @@
 	{$dl_smart_fields.mark=1}
 {/if}
 
+{if $dl_dragdropmove}
+	{include file="list/dragdropmove.tpl"}
+{/if}
+
 {include file="list/actions.tpl"}
 
 

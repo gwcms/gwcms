@@ -31,13 +31,19 @@ class pay_montonio_module_ext extends GW_Module_Extension
 
 		$cfg = $this->montonioCfg();
 		$api = new GW_PayMontonio_Api($cfg);
+		
+		$return_args="&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}";
+		
+		if($cfg->sanbox)
+			$return_args.="&sandbox=1";
+		
 		$payment_data = [
 			'amount'                           => $args->payprice,
 			'currency'                         => 'EUR',
 			'access_key'                       => $api->access_key,
 			'merchant_reference'               => $args->order->id,
-			'merchant_return_url'              => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=return&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
-			'merchant_notification_url'        => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=notify&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
+			'merchant_return_url'              => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=return".$return_args,
+			'merchant_notification_url'        => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=notify".$return_args,
 			'payment_information_unstructured' => $args->paytext,
 			//'preselected_aspsp'                => 'LHVBEE22',
 			'preselected_locale'               => 'lt',
@@ -49,12 +55,20 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		if($args->paytype=='montonio_cc'){
 			$payment_data['preselected_aspsp'] = "CARD";
 		}
+		
+		if($args->method ?? false){
+			$payment_data['preselected_aspsp'] = $args->method;
+		}
+		
 
 
 		
 		if($this->app->user && $this->app->user->isRoot()){
-					
-			$this->confirm("<pre>".json_encode($payment_data, JSON_PRETTY_PRINT).'</pre>');
+			
+			$payment_data = $this->rootConfirmJson($payment_data);
+			if(!$payment_data)
+				return false;
+			
 		}
 		
 		
@@ -111,10 +125,11 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			
 			
 			
-			if($log_entry->test_ipn || $order->amount_total != $received_amount)
+			if($log->test_ipn || (float)$log->amount_total != (float)$received_amount)
 				$args['paytest']=1;
 
 			
+			d::ldump(['received'=>$received_amount,'payload'=>$pay]);
 			d::ldump($args);
 			d::dumpas('mark as payd');
 			

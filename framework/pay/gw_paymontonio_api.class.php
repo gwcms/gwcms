@@ -79,9 +79,9 @@ class GW_PayMontonio_Api
 	
 	function getBanks()
 	{
-	    $resp = $this->request('https://api.payments.montonio.com/pis/v2/merchants/aspsps', $this->getAccess());
+		$resp = $this->request('https://api.payments.montonio.com/pis/v2/merchants/aspsps');
 
-	    echo "<pre>"; print_r(json_decode($resp)); echo "</pre>";
+		return json_decode($resp);
 
 	}
 	

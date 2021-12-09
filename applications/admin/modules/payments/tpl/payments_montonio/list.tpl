@@ -4,11 +4,20 @@
 {block name="init"}
 
 	
+	{$do_toolbar_buttons[] = hidden}	
 
-	{$do_toolbar_buttons[] = dialogconf}	
+	
+	{function name=do_toolbar_buttons_modactions} 
+		{toolbar_button title="Sync payment methods" iconclass='fa fa-refresh' href=$m->buildUri(false,[act=>doSyncPayMethods])}	
+	{/function}		
+	
+	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2,dialogconf,modactions]}		
+	
+
 	{$dlgCfg2MWdth=300}
-	{$do_toolbar_buttons[] = dialogconf2}		
-	{$do_toolbar_buttons[] = search}		
+	
+	{$do_toolbar_buttons[] = search}
+	
 	
 	{$dl_actions=[edit,delete,ext_actions]}
 	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}		

@@ -1,5 +1,5 @@
 
-{include file="elements/input_func.tpl"} 
+{include file="common_module/elements/input_func.tpl"} 
 
 {*
 {if isset($smarty.get.act)}
@@ -18,7 +18,7 @@
 	
 	
 
-{include "tools/form_components.tpl"}
+{include "common_module/tools/form_components.tpl"}
 
 <table >
 	{call "build_form" fields_config=$prompt_fields}
