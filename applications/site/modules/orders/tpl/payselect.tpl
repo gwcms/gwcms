@@ -19,11 +19,15 @@
 
 {function "pay_select_cart"}
 	{if $m->feat('mergepaymethods')}
-		{$mergedmethods = $m->prepareMergedPay($order->amount_total)}
+		{$mergepay = $m->prepareMergedPay($order->amount_total)}
+		
+		<select onchange="gw_navigator.jump(location.href,{ paycountry: this.value })">
+			{html_options options=$mergepay.country_opt selected=$mergepay.country}
+		</select>
 
 		
 		<table class='paytbl'>
-		{foreach $mergedmethods as $method}
+		{foreach $mergepay.methods as $method}
 			<tr >
 				<td style='padding-right:25px;'>	
 					<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method->gateway}", "method":"{$method->key}", "id": "{$order->id}" }'>	   

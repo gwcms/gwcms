@@ -9,16 +9,28 @@
 	
 	
 
-	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = hidden}	
+
+	
+	{function name=do_toolbar_buttons_modactions} 
+		{toolbar_button title="Manage one country, drag drop move" iconclass='fa fa-cog' href=$m->buildUri(false,[act=>doManageCountry])}	
+	{/function}		
+	
+	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2,dialogconf,modactions]}	
+
 	{$dlgCfg2MWdth=300}
-	{$do_toolbar_buttons[] = dialogconf2}		
-	{$do_toolbar_buttons[] = search}		
+	
+	{$do_toolbar_buttons[] = search}	
+	
 	
 	{$dl_actions=[edit,invert_active_ajax]} {*ext_actions*}
 	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}		
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[invertactive,dialogremove]}	
-	{$dl_dragdropmove=1}
+	
+	{if $smarty.get.country}
+		{$dl_dragdropmove=1}
+	{/if}
 
 
 	{$dl_inline_edit=1}	

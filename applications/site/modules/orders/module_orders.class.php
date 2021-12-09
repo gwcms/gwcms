@@ -107,6 +107,8 @@ class Module_Orders extends GW_Public_Module
 			header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'orderid'=>$order->id,'paymentselected'=>$type,'act'=>'doRevolut']));
 		}elseif($type=='montonio' || $type=='montonio_cc'){
 			$this->doMontonioPay($args);
+		}elseif($type=='banktransfer'){
+			$this->app->jump('direct/orders/orders/paybanktransfer',['id'=>$order->id,'orderid'=>$order->id]);
 		}else{
 			d::dumpas("Unknown method $type");
 		}
@@ -794,15 +796,18 @@ class Module_Orders extends GW_Public_Module
 	function prepareMergedPay($amount)
 	{
 		
+		
+		
+		
 		$cfg = new GW_Config('payments__mergedpaymethods/');
 		$cfg->preload('');
-		$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'lt';
+		$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'LT';
 		$country = $_GET['paycountry'] ?? $default_country;
 			
 	
 			
 		$list0 = GW_Pay_Methods::singleton()->findAll(
-			['active=1 AND country=? AND (min_amount=0 OR min_amount <= ?) AND (max_amount=0 OR max_amount>?)', $country, $amount, $amount],
+			['active=1 AND (country=? OR country="") AND (min_amount=0 OR min_amount <= ?) AND (max_amount=0 OR max_amount>?)', $country, $amount, $amount],
 			['priority ASC']
 		);
 		$list = [];
@@ -818,7 +823,17 @@ class Module_Orders extends GW_Public_Module
 					unset($list0[$idx]);
 		}		
 		
-		return $list0;
+		
+		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');	
+
+		$countries = [];
+		$active_country = GW_Pay_Methods::singleton()->getDistinctVals('country');
+		foreach($active_country as $cc)
+			$countries[strtoupper($cc)] = $countries0[strtoupper($cc)] ?? $cc;
+		
+	
+		
+		return ['methods'=>$list0,'country_opt'=>$countries,'country'=>$country];
 	}
 	
 	

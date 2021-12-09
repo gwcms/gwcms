@@ -1,26 +1,37 @@
 {include file="default_form_open.tpl"}
 
 
-	
 
 {$fields=[
-	["gateway"]=>[readonly=>1],
-	["country"]=>[readonly=>1],
-	["key"]=>[readonly=>1],
-	["group"]=>[readonly=>1],
-	["title"]=>[readonly=>1],
-	["logo"]=>[readonly=>1],
-	["min_amount"]=>[readonly=>1],
-	["max_amount"]=>[readonly=>1],
-	["insert_time"]=>[readonly=>1],
-	["update_time"]=>[readonly=>1]
+	gateway=>[],
+	country=>[],
+	key=>[],
+	group=>[],
+	title=>[],
+	logo=>[],
+	min_amount=>[],
+	max_amount=>[],
+	priority=>[],
+	insert_time=>[],
+	update_time=>[]
 ]
 }
 
+{if $item->gateway==montonio || $item->gateway==paysera}	
+	{$fields.gateway.readonly=1}	
+	{$fields.country.readonly=1}	
+	{$fields.key.readonly=1}	
+	{$fields.group.readonly=1}	
+	{$fields.title.readonly=1}	
+	{$fields.logo.readonly=1}	
+	{$fields.min_amount.readonly=1}	
+	{$fields.max_amount.readonly=1}	
+{/if}
+
 {if $item->gateway=='montonio'}
-	{$fields.group.readonly=1}
-	{$fields.min_amount.readonly=1}
-	{$fields.max_amount.readonly=1}
+	{$fields.group.readonly=0}
+	{$fields.min_amount.readonly=0}
+	{$fields.max_amount.readonly=0}
 {/if}
 
 

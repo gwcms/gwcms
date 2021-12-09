@@ -1,16 +1,8 @@
 <?php
 
-class gw_payuniversal_log extends GW_Composite_Data_Object
+class gw_paymontonio_log extends gw_payuniversal_log
 {	
 	
-	public $table = 'gw_payuniversal_log';
-	
-	public $composite_map = [
-		'order' => ['gw_composite_linked', ['object'=>'GW_Order_Group','relation_field'=>'order_id']],
-	];	
-
-
-	public $calculate_fields = ['title'=>1,'data_array'=>1];
 	
 	
 	public function calculateField($name) 
@@ -18,13 +10,13 @@ class gw_payuniversal_log extends GW_Composite_Data_Object
 				
 		switch($name){
 			case 'title':
-				return  $this->id;
-			break;
-			case 'data_array':
-				return json_decode($this->get('data'), true);
+				$pay_inf = $this->data_array;
+				return  $pay_inf['payment_method_name'].' | '.$pay_inf['status'].' | '.$pay_inf['amount'].' | '.$pay_inf['customer_iban'];
+				
 			break;
 		}
 		
+		return parent::calculateField($name);
 		
 	}
 

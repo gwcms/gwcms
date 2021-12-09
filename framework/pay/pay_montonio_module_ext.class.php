@@ -129,9 +129,13 @@ class pay_montonio_module_ext extends GW_Module_Extension
 				$args['paytest']=1;
 
 			
-			d::ldump(['received'=>$received_amount,'payload'=>$pay]);
-			d::ldump($args);
-			d::dumpas('mark as payd');
+			
+			if($this->app->user && $this->app->user->isRoot()){
+				
+				if(!$this->confirm(json_encode(['received'=>$received_amount,'payload'=>$pay], JSON_PRETTY_PRINT)))
+					return false;
+
+			}
 			
 			$this->markAsPaydSystem($args);	
 			

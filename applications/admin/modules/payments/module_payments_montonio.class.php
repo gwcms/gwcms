@@ -8,7 +8,7 @@ class Module_Payments_Montonio extends GW_Common_Module
 	
 	function init()
 	{	
-		$this->model = gw_payuniversal_log::singleton();
+		$this->model = gw_paymontonio_log::singleton();
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;	
@@ -36,6 +36,7 @@ class Module_Payments_Montonio extends GW_Common_Module
 	{
 		$opts = [
 			'search_fields'=>['order_id','data'],
+			'title_func' =>function($itm){ return $itm->title; }
 		];	
 		
 		

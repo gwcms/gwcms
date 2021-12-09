@@ -234,7 +234,7 @@
           <lt>Mokėjimai Montonio</lt>
         </i>
         <i id="info">
-          <i id="model">gw_payuniversal_log</i>
+          <i id="model">gw_paymontonio_log</i>
           <i id="iconclass">fa fa-money</i>
         </i>
       </i>      

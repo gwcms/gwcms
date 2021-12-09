@@ -11,8 +11,20 @@ class Module_mergedpaymethods extends GW_Common_Module
 		$this->model = GW_Pay_Methods::singleton();
 		parent::init();
 		
-		$this->list_params['paging_enabled']=1;	
+		
+		if(!isset($_GET['country'])){
+			$this->list_params['paging_enabled']=1;	
+		}else{
+			$this->filters['country']=$_GET['country'];
+			$backurl = $this->buildUri(false);
+			$otherulr = $this->buildUri(false, ['act'=>'doManageCountry']);
+			$countryname = GW_Country::singleton()->getCountryByCode($_GET['country'],$this->app->ln);
+		
+			$this->setMessage("Managing <b>$countryname</b> use drag drop rows to change order. <a href='{$backurl}' class='btn btn-sm btn-default'>Back</a> <a  class='btn btn-sm btn-primary' href='$otherulr'>Other country</a>");
+			
+		}
 
+		
 
 
 		$this->addRedirRule('/^doRevolut|^viewRevolut|^revolut/i',['options','pay_revolut_module_ext']);	
@@ -81,7 +93,34 @@ class Module_mergedpaymethods extends GW_Common_Module
 		//$tmp['group']=$item->get('group');
 		
 		return GW_SQL_Helper::condition_str($tmp);
-	}	
+	}
+
+	
+	function getCountryOpt()
+	{
+		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');	
+
+		$countries = [];
+		$active_country = GW_Pay_Methods::singleton()->getDistinctVals('country');
+		foreach($active_country as $cc)
+			$countries[strtoupper($cc)] = $countries0[strtoupper($cc)] ?? $cc;
+		
+		return $countries;
+	}
+	
+	function doManageCountry()
+	{
+		
+		$form = ['fields'=>['country'=>['type'=>'select', 'options'=>$this->getCountryOpt(), 'required'=>1]],'cols'=>1];
+
+		
+		if(!($answers=$this->prompt($form, $form)))	
+			return false;
+		
+
+		
+		$this->jump(false, ['country'=>$answers['country']]);
+	}
 	
 	
 	
