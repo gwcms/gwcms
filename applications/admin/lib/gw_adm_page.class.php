@@ -53,7 +53,14 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		$nosep = isset($params['return_first_only']) ? ' AND path!="separator"' : '';
 		$inmenu = ($menu?' AND active AND in_menu':'');
-		$cond = ['parent_id=?'.$inmenu.$nosep, $pid];
+		
+		if(isset($params['parent_ids'])){
+			$parent_cond = GW_DB::inCondition('parent_id', $params['parent_ids']);
+		}else{
+			$parent_cond = GW_DB::prepare_query(['parent_id=?', $pid]);
+		}
+		
+		$cond = $parent_cond.$inmenu.$nosep;
 		
 		
 		if(isset($params['test']))
@@ -75,9 +82,24 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 				if(isset($params['return_first_only']) && $params['return_first_only']) 
 					return $item;
 				
-						
-				$list[] = $item; 
+				if(isset($params['parent_ids'])){
+					$list[$item->parent_id][$item->id] = $item; 
+				}else{
+					$list[$item->id] = $item; 
+				}
+				
+				
 			}
+		}
+		
+		if(isset($params['childs'])){
+			$params['parent_ids'] = array_keys($list);
+			unset($params['childs']);
+			$childs = $this->getChilds($params,$max_level-1);
+			
+			
+			foreach($list as $id => $item)
+				$item->childs = $childs[$id] ?? [];
 		}
 			
 		return $list;

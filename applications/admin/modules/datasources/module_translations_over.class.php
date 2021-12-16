@@ -105,4 +105,52 @@ class Module_Translations_Over extends GW_Common_Module
 		//d::dumpas(count($vars['list']));
 		
 	}
+	
+	function doSaveTrans()
+	{
+		list($module, $key) = GW_Translation::fullkeyToModAndKey($_REQUEST['key']);
+		
+		$i0 = GW_Translation_Over::singleton();
+		$lang = str_replace('/[^a-z]/','',$_REQUEST['ln']);
+		
+		
+		list($ctx_group, $ctx_id) = explode("/", $_REQUEST['context']);
+		
+		$trans = $i0->find(["`key`=? AND `module`=? AND context_group=? AND context_id=?", $key, $module, $ctx_group, $ctx_id]);
+		
+		if(!$trans){
+			$t = $i0->createNewObject([
+			    'key'=>$key,
+			    'module'=>$module, 
+			    "value_$lang"=>$_REQUEST['new_val'], 
+			    'context_group'=>$ctx_group,
+			    'context_id'=>$ctx_id
+			]);
+			
+			$t->insert();
+			$method = "insert";
+		}else{
+			$trans->saveValues(["value_$lang"=>$_REQUEST['new_val']]);
+			$method = "update";
+		}
+		
+		$replace_what = GW::s("SITE_URL");
+		
+		$resp = ['status'=>"ok", 'method'=>$method];
+		
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
+		{
+			initEnviroment(GW_ENV_PROD);
+			$url = GW::s("SITE_URL").$_SERVER['REQUEST_URI'].'?'. http_build_query($_POST);			
+			$resp['prod_request'] = $url;
+		}
+			
+		
+		
+		
+		
+		
+		die(json_encode($resp));
+	}	
+	
 }

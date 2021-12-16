@@ -127,4 +127,12 @@ class GW_Math_Helper
 
 		return $time;
 	}
+	
+	function calcAgeInYears($date)
+	{
+		$date = new DateTime($date);
+		$now = new DateTime();
+		$interval = $now->diff($date);
+		return $interval->y;		
+	}
 }

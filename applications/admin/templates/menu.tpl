@@ -23,10 +23,10 @@
 						{/function}
 
 
-						{foreach from=$app->getPages() item=item key=key}
+						{foreach from=$app->getPages(['childs'=>1]) item=item key=key}
 
 							{$active=($app->path_arr.0.path_clean == $item->pathname)}
-							{$childs=$app->getPages([parent_id=>$item->id])}
+							{$childs=$item->childs}
 
 							{if $item->path=='separator'}
 								<li class="list-divider"></li>
