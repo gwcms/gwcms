@@ -444,17 +444,8 @@ class GW_Common_Module extends GW_Module
 			echo "<script type='text/javascript'>parent.location.reload()</script>";
 			exit;
 		}
-		if(isset($_GET['dialog']) && ($_REQUEST['submit_type']??false) != 1) {
-			
-			//reik tiketis kad dvigubos apsaugos atveju neuzeis cia
-			$contextdata = json_encode(['item'=>['id'=>$item->id,'title'=>$item->title]]);
-			
-			$messages=$this->app->acceptMessages(1);
-			foreach($messages as $msg)
-				echo "<script type='text/javascript'>window.parent.gw_adm_sys.notification(".json_encode($msg).")</script>";
-						
-			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
-			exit;
+		if(isset($_GET['dialog']) && ($_REQUEST['submit_type']??false) != 1) {			
+			$this->dialogJump(['item'=>['id'=>$item->id,'title'=>$item->title]]);
 		}elseif(!isset($_POST['ajax'])) {
 
 			$this->jumpAfterSave($item ?? false);
@@ -475,6 +466,17 @@ class GW_Common_Module extends GW_Module
 			
 		}
 	}
+	
+	function dialogJump($contextdata=[])
+	{
+		$contextdata = json_encode($contextdata);
+		$messages=$this->app->acceptMessages(1);
+		foreach($messages as $msg)
+			echo "<script type='text/javascript'>window.parent.gw_adm_sys.notification(".json_encode($msg).")</script>";
+
+		echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
+		exit;		
+	}
 
 	function jumpAfterSave($item = false)
 	{
@@ -489,7 +491,10 @@ class GW_Common_Module extends GW_Module
 		
 			$options = $item ? ['id' => $item->get('id')] : [];
 			$this->jump(false, $options + $_GET);
-		} else { //save
+		} else {
+			if(isset($_GET['dialog']))
+				$this->dialogJump();
+			//save
 			$this->jump(dirname($this->app->path));
 		}
 	}
