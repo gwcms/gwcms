@@ -108,7 +108,7 @@ class GW_Math_Helper
 		return self::uptime(time() - strtotime($datetimestr), $precision);
 	}
 
-	function uptimeReverse($str)
+	static function uptimeReverse($str)
 	{
 		$time = 0;
 
@@ -128,7 +128,7 @@ class GW_Math_Helper
 		return $time;
 	}
 	
-	function calcAgeInYears($date)
+	static function calcAgeInYears($date)
 	{
 		$date = new DateTime($date);
 		$now = new DateTime();
