@@ -34,10 +34,10 @@ class pay_kevin_module_ext extends GW_Module_Extension
 			$args->payprice= 0.01;
 
 		$attr = [
-			'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAccept",
+			'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAccept&action=R",
 			//testavau webhooka
 			//'Redirect-URL' => $args->base.$this->app->ln."/direct/orders/orders?id={$args->order->id}&orderid={$args->order->id}",
-		    'Webhook-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAcceptByOrder&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
+		    'Webhook-URL' => $args->base.$this->app->ln."/direct/orders/orders?act=doKevinAcceptByOrder&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}&action=N",
 		    'description' => $args->orderid,
 		    'currencyCode' => 'EUR',
 		    'amount' => $args->payprice,
@@ -176,11 +176,16 @@ Array
 		$paylog->pm_bankId = $response['bankPaymentMethod']['bankId'];
 		$paylog->pm_paymentProduct = $response['bankPaymentMethod']['paymentProduct'];
 		$paylog->pm_requestedExecutionDate = $response['bankPaymentMethod']['requestedExecutionDate'];
+		
+		
+		
+		$paylog->info = ($paylog->info ? $paylog->info.';':''). $_GET['action'].'_'.date('H:i:s');
+		
 		$paylog->updateChanged();
 		
 		
 		
-		if($response['statusGroup'] == 'completed')
+		if($response['statusGroup'] == 'completed' && $paylog->processed !=1) // isskaityti tik pilnai priimta mokejima ir tik viena karta
 		{
 			
 			$order = $paylog->order;
@@ -235,7 +240,9 @@ Array
 			$this->app->jump('direct/orders/orders');
 		}
 		
-		$response = $this->kevinUpdate($paylog);
+		//penkis kartus kad back pagalba neuzsoktu
+		if($paylog->statusGroup!='completed' || $paylog->processed!=1)
+			$response = $this->kevinUpdate($paylog);
 		
 		if($response['statusGroup'] == 'failed'){
 			$this->setError(GW::ln('/m/PAYMENT_FAILED'));

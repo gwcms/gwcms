@@ -134,4 +134,34 @@ class Shop_Products extends GW_Composite_Data_Object
 	}
 	
 	
+	function calcPriceRange()
+	{
+		$modifications = $this->findAll(['active=1 AND parent_id=?',$this->id],['key_field'=>'id','order'=>'priority DESC']);
+
+		$minprice = 99999;
+		$maxprice = 0;
+		foreach($modifications as $mod){
+			$minprice = min($mod->price, $minprice);
+			$maxprice = max($mod->price, $maxprice);
+		}
+		
+		$this->min_price = $minprice;
+		$this->max_price = $maxprice;
+		$this->mod_count = count($modifications);
+		$this->updateChanged();
+		
+	}
+	
+	function eventHandler($event, &$context_data = array()) {
+		
+		switch ($event){
+			case 'AFTER_SAVE':
+				if($this->parent_id){
+					$this->parent->calcPriceRange();
+				}
+			break;
+		}
+		
+		parent::eventHandler($event, $context_data);
+	}
 }

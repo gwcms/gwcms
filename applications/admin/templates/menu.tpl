@@ -22,8 +22,9 @@
 							{$item->getIcon()}
 						{/function}
 
-
-						{foreach from=$app->getPages(['childs'=>1]) item=item key=key}
+						{$listpages=$app->getPages(['childs'=>1])}
+						
+						{foreach $listpages as $key => $item}
 
 							{$active=($app->path_arr.0.path_clean == $item->pathname)}
 							{$childs=$item->childs}

@@ -23,39 +23,41 @@ class GW_PayKevin_Log extends GW_Composite_Data_Object
 }
 
 /*
-CREATE TABLE IF NOT EXISTS `gw_paysera_log` (
-  `id` int(11) NOT NULL,
-  `orderid` int(11) NOT NULL,
-  `handler` varchar(15) NOT NULL,
-  `action` varchar(15) NOT NULL,
-  `paytext` varchar(255) NOT NULL,
-  `p_firstname` varchar(100) NOT NULL,
-  `p_lastname` varchar(100) NOT NULL,
-  `p_email` varchar(255) NOT NULL,
-  `amount` int(11) NOT NULL,
-  `currency` varchar(10) NOT NULL,
-  `country` varchar(10) NOT NULL,
-  `test` tinyint(4) NOT NULL,
-  `payment` varchar(10) NOT NULL,
-  `m_pay_restored` varchar(15) NOT NULL,
-  `status` int(11) NOT NULL,
-  `requestid` varchar(15) NOT NULL,
-  `payamount` int(11) NOT NULL,
-  `paycurrency` varchar(10) NOT NULL,
-  `type` varchar(10) NOT NULL,
-  `handler_state` int(11) NOT NULL,
+
+CREATE TABLE `gw_paykevin_log` (
+  `id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `kevin_id` char(40) NOT NULL,
+  `bankStatus` varchar(10) NOT NULL,
+  `statusGroup` varchar(20) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `currencyCode` char(3) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  `pm_creditorName` varchar(50) NOT NULL,
+  `pm_endToEndId` int NOT NULL,
+  `pm_creditorAccount_iban` char(20) NOT NULL,
+  `pm_creditorAccount_currencyCode` char(3) NOT NULL,
+  `pm_debtorAccount_iban` char(20) NOT NULL,
+  `pm_debtorAccount_currencyCode` char(3) NOT NULL,
+  `pm_bankId` varchar(15) NOT NULL,
+  `pm_paymentProduct` varchar(20) NOT NULL,
+  `pm_requestedExecutionDate` datetime NOT NULL,
+  `test` tinyint NOT NULL,
+  `wait` smallint NOT NULL,
+  `info` varchar(255) NOT NULL,
+  `processed` tinyint NOT NULL,
   `insert_time` datetime NOT NULL,
   `update_time` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `gw_paysera_log`
+-- Indexes for table `gw_paykevin_log`
 --
-ALTER TABLE `gw_paysera_log`
+ALTER TABLE `gw_paykevin_log`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -63,8 +65,10 @@ ALTER TABLE `gw_paysera_log`
 --
 
 --
--- AUTO_INCREMENT for table `gw_paysera_log`
+-- AUTO_INCREMENT for table `gw_paykevin_log`
 --
-ALTER TABLE `gw_paysera_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+ALTER TABLE `gw_paykevin_log`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+COMMIT;
+
  */

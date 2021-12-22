@@ -134,26 +134,38 @@
 		<h2 class="g-color-gray-dark-v5 g-font-weight-400 g-font-size-12 text-uppercase mb-2">{GW::ln('/M/SHOP/PRICE')}</h2>
 
 		
-		{if $item->oldprice}
-			<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-16">{$item->oldprice} &euro;</s>
+		{if $item->mod_count && !$active_mod}
+
+				<span class="g-color-black">
+				{if $item->min_price != $item->max_price} 
+					{$item->min_price} &#8212; {$item->max_price} &euro;
+				{else}
+					{$item->min_price}  &euro;
+				{/if}				
+				</span>
+		{else}
+		
+			{if $item->oldprice}
+				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-16">{$item->oldprice} &euro;</s>
+			{/if}
+			<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
+
+
+
+
+
+			{if $item->price_scheme}
+				{$scheme=$item->getPriceScheme()}
+				<div style="background-color:#eee">
+					<ul>
+					{foreach $scheme as $qty => $price}
+
+					<li>Buy {$qty} times, unit price: {$price}&euro; <small>(savings from: {($item->price-$price)*$qty}&euro;)</small></li>
+					{/foreach}
+					</ul>
+				</div>
+			{/if}	
 		{/if}
-		<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
-	
-		
-		
-		
-		
-		{if $item->price_scheme}
-			{$scheme=$item->getPriceScheme()}
-			<div style="background-color:#eee">
-				<ul>
-				{foreach $scheme as $qty => $price}
-	
-				<li>Buy {$qty} times, unit price: {$price}&euro; <small>(savings from: {($item->price-$price)*$qty}&euro;)</small></li>
-				{/foreach}
-				</ul>
-			</div>
-		{/if}		
 	</div>
 	<!-- End Price -->			
 	<div style="clear:both"></div>

@@ -2129,10 +2129,13 @@ class GW_Common_Module extends GW_Module
 		$params['offset'] = $page_by * $page;
 		$params['limit'] = $page_by;
 	
+		if($opts['order'] ?? false)		
+			$params['order'] = $opts['order'];
 		
 		$list0 = $i0->findAll($cond ?? '', $params);
 	
-				
+		
+		
 		if(isset($opts['list_process'])){
 			$opts['list_process']($list0);
 		}

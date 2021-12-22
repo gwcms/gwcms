@@ -72,16 +72,18 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		
 		foreach($list_0 as $i => $item)
 		{		
-			$can_access = isset($params['can_access']) ? call_user_func($params['can_access'], $item) : true;
+			if(isset($params['return_first_only']))
+				return $item;
 			
 			if($max_level<0)
 				continue;
 			
-			if(!$check_perm || $can_access || $item->getChilds(['parent_id'=>$item->id]+$params, $max_level-1))
-			{
-				if(isset($params['return_first_only']) && $params['return_first_only']) 
-					return $item;
-				
+			$can_access = isset($params['can_access']) ? call_user_func($params['can_access'], $item) : true;
+			
+			
+			//kai 
+			if(!$check_perm || $can_access )
+			{		
 				if(isset($params['parent_ids'])){
 					$list[$item->parent_id][$item->id] = $item; 
 				}else{
@@ -92,8 +94,10 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			}
 		}
 		
-		if(isset($params['childs'])){
+		if(isset($params['childs']) && $max_level>0 ){
 			$params['parent_ids'] = array_keys($list);
+			
+			
 			unset($params['childs']);
 			$childs = $this->getChilds($params,$max_level-1);
 			
@@ -101,6 +105,8 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 			foreach($list as $id => $item)
 				$item->childs = $childs[$id] ?? [];
 		}
+		
+		
 			
 		return $list;
 	}

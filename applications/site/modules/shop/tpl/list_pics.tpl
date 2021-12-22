@@ -17,7 +17,7 @@
 	    <figure class="g-pos-rel g-mb-20">
 		    {call name="product_image" product=$item size=$imsize crop=1}
 	      
-	      {if $item->price==0}
+	      {if $item->price==0 && $item->mod_count==0}
 	<figcaption class="w-100 g-bg-lightred text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5">
 		<span class="g-color-white g-font-size-11 text-uppercase g-letter-spacing-1">{GW::ln('/M/SHOP/SOLD_OUT')}</a>
 	      </figcaption>
@@ -54,10 +54,20 @@
 		
 		
 		<span class="d-block g-color-black g-font-size-17">
+			{if $item->mod_count}
+				<span class="g-color-black">
+				{if $item->min_price != $item->max_price} 
+					{$item->min_price} &#8212; {$item->max_price} &euro;
+				{else}
+					{$item->min_price}  &euro;
+				{/if}				
+				</span>
+			{else}
 			{if $item->oldprice}
 				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-15">{$item->oldprice} &euro;</s>
 			{/if}
 			<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if}">{$item->price} &euro;</span>
+			{/if}
 		</span>
 	      </div>
 	      <!-- End Product Info -->

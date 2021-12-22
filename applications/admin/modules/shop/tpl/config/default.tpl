@@ -41,18 +41,6 @@
 
 {call e field="default_currency_code"}
 
-{$opts=[vars_hint=>'/M/PRODUCTS/FIELDS_HELP/invoice',format_texts_ro=>1,vals=>[format_texts=>2]]}
-{$owner=['owner_type'=>'shop/config','owner_field'=>'invoice']}
-{include file="elements/input_select_mailtemplate.tpl" field=order_accept_mail default_vals=[admin_title=>GW::l('/m/FIELDS/order_accept_mail'),idname=>order_accept_mail]}
-
-
-
-{$opts=[vars_hint=>'/M/COMPETITIONS/FIELDS_HELP/invoice',format_texts_ro=>1,vals=>[format_texts=>2]]}
-{$owner=['owner_type'=>'competitions/config','owner_field'=>'invoice']}
-
-{include file="elements/input_select_mailtemplate.tpl" field=proforma_invoice_default}
-{include file="elements/input_select_mailtemplate.tpl" field=post_pay_invoice_default}
-{include file="elements/input_select_mailtemplate.tpl" field=post_pay_mail_default default_vals=[admin_title=>GW::l('/m/FIELDS/post_pay_mail_default'),idname=>post_pay_mail_default]}
 
 
 {call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}

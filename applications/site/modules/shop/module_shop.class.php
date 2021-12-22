@@ -263,19 +263,24 @@ class Module_Shop extends GW_Public_Module
 
 		
 		if($this->feat('modifications')){
+			
+			
+			
 			$modifications = $item->findAll(['active=1 AND parent_id=?',$item->id],['key_field'=>'id','order'=>'priority DESC']);
 
-			$minprice = 99999;
+			$minprice = 99999999;
 			$maxprice = 0;
 			foreach($modifications as $mod){
 				$minprice = min($mod->price, $minprice);
 				$maxprice = max($mod->price, $maxprice);
 			}
 			
+			if($minprice==99999999){
+				$minprice = 0;
+			}
 			
 			
-			if($minprice != $maxprice)
-				$this->tpl_vars['modifications_pricerange'] = [$minprice, $maxprice];
+			$this->tpl_vars['modifications_pricerange'] = [$minprice, $maxprice];
 			
 			$this->tpl_vars['modifications'] = $modifications;
 
