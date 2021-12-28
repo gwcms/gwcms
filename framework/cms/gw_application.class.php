@@ -714,6 +714,7 @@ class GW_Application
 	/*
 	 * grazins masyva su notificationais, nekeisti i objektus paskiau susimixuoja
 	 */
+	//analogas: $result = Navigator::sysRequest('admin/lt/products/orders',['act'=>'doSendOrderAccepted','id'=>$order->id]);
 	function innerRequest($path, $get_args, $post_args=[], $reqopts=[])
 	{	
 		$get_args['GWSESSID']=session_id();

@@ -1,4 +1,3 @@
-
 <?php
 
 class Module_Orders extends GW_Public_Module
@@ -80,6 +79,16 @@ class Module_Orders extends GW_Public_Module
 	
 		$pay_methods=json_decode($this->config->pay_types, 1);
 		$type = $_GET['type'] ?? $pay_methods[0];
+		
+		
+		
+		//nurasyti suma nuo kupono jei jau pereina prie mokejimo
+		if($order->amount_coupon)
+		{
+			$order->setCoupon(false, true);
+		}		
+		
+		
 		
 		$args = (object)[
 			'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret])),
@@ -426,7 +435,9 @@ class Module_Orders extends GW_Public_Module
 			$this->tpl_vars['canceled_count'] =  GW_Order_Group::singleton()->count(['user_id=? AND active=0', $this->app->user->id]);
 		}
 		
-		$list = GW_Order_Group::singleton()->findAll(['user_id=? AND active=?', $this->app->user->id,$active],['order'=>'id DESC']);
+		
+		
+		$list = GW_Order_Group::singleton()->findAll(['user_id=? AND active=?', $this->app->user->id,$active],['order'=>'update_time DESC']);
 		
 		
 		
@@ -565,16 +576,21 @@ class Module_Orders extends GW_Public_Module
 		unset($vals['secret']);
 		unset($vals['admin_note']);
 		
+		
+	
+		
 		$order->setValues($vals);
 		
-			
-		/*iskelti deliverio apskaiciavimo funkcija i konfiga ? */
-		if($order->delivery_opt==1){
-			$order->amount_shipping = $this->config->delivery_lt;
-		}else{
-			$order->amount_shipping = $this->config->delivery_no;
-		}		
+		$order->validate();
+		$order->updateChanged();
 		
+		
+		$this->doCalcDelivery($order);
+		
+		
+		
+			
+
 		
 		$order->placed_time = date('Y-m-d H:i:s');
 		$order->need_invoice = $_POST['order']['need_invoice'] ? 1 : 0;
@@ -595,7 +611,13 @@ class Module_Orders extends GW_Public_Module
 			$this->app->jump(false, ['step'=>2]);
 		}		
 		
+		
+		if($this->order->amount_coupon){
+			$this->order->setCoupon(); // update coupon use its maximum
+		}
+		
 		$order->updateTotal();
+		
 
 		///d::dumpas($this);
 		$this->app->jump(false, ['step'=>3]);
@@ -614,7 +636,9 @@ class Module_Orders extends GW_Public_Module
 			$this->app->jump('direct/orders/orders');
 		}
 		
-		//$this->expandDeliveryOpts();
+		if($order->deliverable)
+			$this->expandDeliveryOpts();
+		
 		$this->tpl_vars['page_title'] = GW::ln("/m/SHOPPING_CART");
 	
 		$step = ($_GET['step'] ?? false);
@@ -633,16 +657,19 @@ class Module_Orders extends GW_Public_Module
 			}else{
 
 
-
+				if(!$order->name || !$order->email)
 				if($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id])){
 
 					$fields = 'email,name,surname,company,phone,country,region,city,address_l1,postcode,company_code,vat_code,company_addr';
 					$fields = explode(',',$fields);
 
 					foreach($fields as $field)
+						
 						$order->set($field,$last->$field);	
 
 				}
+				
+				
 				
 			}
 
@@ -661,15 +688,93 @@ class Module_Orders extends GW_Public_Module
 	}	
 	
 	
+	
+	function applyDiscountCode($order)
+	{
+		if($discode = $_POST['discountcode'] ?? false){
+			
+			//nuolaidu kuponai
+			$dc = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND user_id=0 AND used=0 AND products!=""', $discode]);
+			
+			if($dc){
+				$discount_productids = array_flip($dc->product_ids);
+				
+				//gauti produktu sarasa
+				foreach($order->items as $oi)
+					if(isset($discount_productids[$oi->obj_id]))
+						$applicatable_prods[]=$oi->id;
+				
+
+				
+				
+				if(!$applicatable_prods){
+					$this->setError(GW::ln('/m/DISCOUNT_CODE_IS_CORRECT_BUT_NO_PRODS_APPLICATABLE'));
+				}else{
+					$order->discount_id = $dc->id;
+					$order->updateChanged();
+					$dc->used  = 1;
+					$dc->user_id = $this->app->user ? $this->app->user->id : -1;
+					$dc->update();
+					
+					//$this->setOrderedItemPrices();
+				}				
+			}
+			
+			
+			//dovanu kuponai 
+			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0', $discode]);
+
+
+			if($coupon){
+				$order->setCoupon($coupon);
+			}
+								
+			if(!$coupon && !$dc)
+				$this->setError(GW::ln('/m/INVALID_DISCOUNT_CODE'));
+				
+						
+		}		
+	}
+	
+	function doUnsetDiscount()
+	{
+		$order = $this->doInitCart();
+		
+		if(!$order->discount_id){
+			
+			$this->setError("Discount not set");
+			$this->app->jump();
+		}elseif(!$order->open){
+			$this->setError("Cant unset discount order is closed");
+			$this->app->jump();
+		}else{
+			$dc = $order->discountcode;
+			$order->discount_id = 0;
+			$order->amount_coupon = 0;
+			$this->updateChanged();
+			$order->updateTotal();
+			
+			$dc->user_id = 0;
+			$dc->used = 0;
+			$dc->updateChanged();
+
+			
+			
+			$this->setMessage(GW::ln('/m/DISCOUNT_CODE_UNSET_SUCCESS'));
+			$this->app->jump();
+		}
+	}	
+	
+	
 	function doSaveCart()
 	{
 		
-		$cart = $this->doInitCart();
+		$order = $this->doInitCart();
 		
 		$vals = $_POST['cart'] ?? false;
 				
 		
-		foreach($cart->items as $citem)
+		foreach($order->items as $citem)
 		{
 			if(!isset($vals[$citem->id])){
 				$citem->delete();
@@ -680,8 +785,11 @@ class Module_Orders extends GW_Public_Module
 				}
 			}
 		}
-		$cart->updateTotal();
+		$order->updateTotal();
 		
+		
+		if(isset($_POST['discountcode']) && $this->feat('discountcode'))
+			$this->applyDiscountCode($order);
 		
 		
 		$this->app->jump(false, ['step'=>$_POST['step']]);
@@ -816,7 +924,7 @@ class Module_Orders extends GW_Public_Module
 			
 		
 		
-		$disabled_group = array_flip(json_decode($cfg->get('disabled_group'), true));
+		$disabled_group = array_flip((array)json_decode($cfg->get('disabled_group'), true));
 		if($disabled_group){
 			foreach($list0 as $idx => $item)
 				if(isset($disabled_group[$item->group]))
@@ -836,6 +944,244 @@ class Module_Orders extends GW_Public_Module
 		return ['methods'=>$list0,'country_opt'=>$countries,'country'=>$country];
 	}
 	
+	
+	function expandDeliveryOpts()
+	{
+		$opts = [];
+		
+		
+		
+		$this->tpl_vars['delivery_opts'] = $opts;
+	}
+	
+	
+
+	function doCalcDelivery($order)
+	{
+		$data = $this->app->innerRequest("payments/delivery",
+			['format'=>'json','act'=>'doCalculateDelivery','order_id'=>$order->id],[],
+			['app'=>'admin', 'user'=> GW_USER_SYSTEM_ID]
+		);
+		
+		if($data['response_format_error'])
+			d::dumpas($data);
+		
+		$order->amount_shipping = $data['amount_shipping'];
+	}
+	
+	function setOrUpdateDelivery()
+	{
+		//2020-11-29
+		$this->order->user_id = $this->app->user->id;
+		
+			
+		
+		if($this->order->delivery_opt==1){
+			$this->doCalcDelivery();
+		}else{
+			$this->order->amount_shipping = 0;
+		}		
+		
+		$this->order->placed_time = date('Y-m-d H:i:s');
+		
+		$this->order->need_invoice = ($_POST['order']['need_invoice'] ?? false) ? 1 : 0;
+		
+		
+		
+		
+		if($this->order->amount_coupon){
+			$this->order->setCoupon(); // update coupon use its maximum
+		}
+		
+		$this->order->calcAmountTotal();
+		$this->setOrderedItemPrices();		
+		$this->order->updateChanged();
+	}
+	
+	function doSaveDelivery2()
+	{
+		//$this->cartSave2LongStorage();
+		$this->doInitCart();
+		
+				
+		$this->order->setValues($_POST['order']);
+		
+		$this->setOrUpdateDedoSalivery();
+		
+		
+		if($this->order->validate()){
+			$this->order->status = 2;
+			
+			$this->order->updateChanged();
+		}else{
+	
+			$this->setErrorItem($_POST['order'], 'delivery');
+			
+			foreach($this->order->errors as $error)
+				$this->setError($error);			
+			
+			$this->order->save();
+			$this->app->jump(false, ['step'=>2]);
+		}		
+		
+		
+		
+
+		
+
+		///d::dumpas($this);
+		$this->app->jump(false, ['step'=>3]);
+	}
+
+
+
+
+	
+	function processGiftCoupons($products, $oitems, $order)
+	{
+		
+		$config = new GW_Config('products/');
+	
+		
+		$giftcoupontype=$config->giftcoupon_prodtype;
+		$dc0 = Shop_DiscountCode::singleton();
+		$codesall = [];
+		
+		foreach($products as $p){
+			if($p->prodtype_id == $giftcoupontype){
+				
+				
+				if($codes = $order->get("keyval/codes_{$p->id}")){
+					$codesall[$p->id] = explode(',',$codes);
+					//d::ldump("{$p->id} skip $codes");
+					continue; //important
+				}
+				//$order->set('keyval/test','fa32da1fa6sd51');
+				$oitem = $oitems[$p->id];
+				$codes = [];
+				
+				for($i=0;$i<$oitem['qty'];$i++){
+					$code =  $dc0->getUniqueCode(8);
+					$coupon = $dc0->createNewObject();
+					$coupon->code = $code;
+					$coupon->limit_amount = $oitem['price'];
+					$coupon->used_amount = 0;
+					$coupon->percent = 100;
+					$coupon->active = 1;
+					$coupon->user_id = $this->app->user ? $this->app->user->id : 0;
+					$coupon->insert();
+					$codes[] = $code;
+					
+				}
+				
+				$codesall[$p->id] = $codes;
+				$order->set("keyval/codes_{$p->id}", implode(',', $codes));			
+			}
+		}
+		return $codesall;
+	}
+	
+	function doDownload()
+	{
+		
+		$order = $this->getOrder(true);
+
+		if($order->payment_status!=7){
+			$this->setError("Cant download pdf scores, payment is still in waiting state");
+			$this->jump(false);
+		}
+		
+		$oitems = $order->items;
+		$ids = [];
+		foreach($oitems as $oi)
+			$ids[]=$oi->obj_id;
+		
+		
+					
+		if(!$ids){
+			$this->setError("Cant download pdf scores, no scores found");
+			$this->jump(false);			
+		}
+		
+		$enatos = Nat_Products::singleton()->findAll(GW::db()->inCondition('id', $ids). " AND enatos=1" , ['key_field'=>'id']);
+		
+		$giftcoupons = $this->processGiftCoupons($enatos, $oitems, $order);
+		
+
+		
+		if(!$enatos){
+			$this->setError("Cant download pdf scores, no e-scores found");
+			$this->jump(false);			
+		}
+		
+		$ids = array_keys($enatos);
+		
+		
+		$result = Navigator::sysRequest('admin/lt/products/items',[
+		    'act'=>'doBuildDownload',
+		    'ids'=>implode(',', $ids), 
+		    'name'=>($order->company ? $order->company.' ' :'').$order->name.' '.$order->surname,
+		    'giftcoupons' => json_encode($giftcoupons),
+		    'email'=>$order->email,
+		    'order_id'=>$order->id
+		]);
+		
+		
+	
+		if(!$result->filepath){
+			$this->setError("Cant download pdf scores, system failure, please contact admin info@natos.lt");
+			
+			
+			if($this->app->user && $this->app->user->isRoot()){
+				d::dumpas($result,['hidden'=>'root user debug reply']);
+			}
+			
+			
+			$this->jump(false);
+		}
+		ob_clean();
+		header('Content-type:  application/zip');
+		header('Content-disposition: attachment; filename="'.basename($result->filepath).'"');
+		echo file_get_contents($result->filepath);
+		exit;
+		//d::dumpas($result);			
+	}	
+	
+	
+	function getOrderedItems($order, $args)
+	{
+		$reqargs = ['export'=>'json','id'=>$order->id];
+		if(isset($args['req_args']))
+			$reqargs = array_merge($reqargs, $args['req_args']);
+			
+		$result = Navigator::sysRequest('admin/lt/payments/ordergroups/oitems',$reqargs);
+		$html = $result->html ?? $result->raw_response;
+		
+		if(isset($args['debug']))
+			die(htmlspecialchars ($html));
+
+		if(isset($args['justhtml']))
+			return $html;
+
+		if(isset($args['returnoutput'])){
+			return GW_html2pdf_Helper::convert($html, false);
+
+		}elseif($args['viewable']){
+			Header('Content-type: application/pdf');
+			echo GW_html2pdf_Helper::convert($html, false);
+			exit;
+		}else{
+			GW_html2pdf_Helper::convert($html);
+			exit;
+		}		
+	}
+	
+	function doOrderSummary()
+	{
+		$order = $this->getDataObjectById();	
+		$this->getOrderedItems($order, $_GET);
+		//d::dumpas($html);		
+	}	
 	
 }
 

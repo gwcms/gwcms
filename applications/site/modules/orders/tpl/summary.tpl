@@ -22,37 +22,53 @@
 		
 		{*call input field="delivery_type" options=$delivery_opts type=select empty_option=1 value=$order->delivery_type}*}
 		
-		<ul>
-		{foreach $delivery_opts as $delopt}
-			<li>{$delopt}</li>
-		{/foreach}
-		</ul>
+		{GW::ln('/m/DELIVERY_PRICES_SHORT')}
 	</div>
       </div>
     </div>
     <!-- End Accordion -->
     {/if}
 
-    {if $m->order->deliverable}
+    {if $order->amount_total != $order->amount_items}
 	<div class="d-flex justify-content-between mb-2">
 	  <span class="g-color-black">{GW::ln('/m/SUBTOTAL')}</span>
 	  <span class="g-color-black g-font-weight-300">{$order->amount_items} &euro;</span>
 	</div>
     {/if}
     
-    {if $step > 2 && $m->order->deliverable}
+    {if $m->order->deliverable}
 	<div class="d-flex justify-content-between">
 	  <span class="g-color-black">{GW::ln('/m/SHIPPING')}</span>
-	  <span class="g-color-black g-font-weight-300">{$order->amount_shipping} &euro;</span>
+	  <span class="g-color-black g-font-weight-300">{if $step > 2}{$order->amount_shipping} &euro;{else}?{/if}</span>
 	</div>	
     {/if}
     
-    {if $step > 2 || !$m->order->deliverable}
-	    <div class="d-flex justify-content-between">
-	      <span class="g-color-black">{GW::ln('/m/ORDER_TOTAL')}</span>
-	      <span class="g-color-black g-font-weight-300">{$order->amount_total} &euro;</span>
-	     </div>
-	{/if}
+    
+    {if $order->amount_discount}
+    <div class="d-flex justify-content-between mb-2">
+      <span class="g-color-black">{GW::ln('/m/DISCOUNT')}</span>
+      <span class="g-color-black g-font-weight-300">-{$order->amount_discount} &euro;</span>
+    </div>
+    {/if} 
+    
+    {if $order->amount_coupon}
+    <div class="d-flex justify-content-between mb-2">
+      <span class="g-color-black">{GW::ln('/m/COUPON')}</span>
+      <span class="g-color-black g-font-weight-300">-{$order->amount_coupon} &euro;</span>
+    </div>
+    {/if}      
+    
+    
+  
+	<div class="d-flex justify-content-between">
+	  <span class="g-color-black">{GW::ln('/m/ORDER_TOTAL')}</span>
+	  <span class="g-color-black g-font-weight-300">{$order->amount_total} &euro;</span>
+	 </div>
+
+	
+	
+
+    
   </div>
   <!-- End Summary -->
 
@@ -184,7 +200,7 @@
 						<li class="g-my-3">{$order->city|escape}</li>
 						<li class="g-my-3">{$order->postcode}</li>
 						{if $m->config->international_delivery}
-							<li class="g-my-3">{$order->getCountryTitle($ln)|escape}</li>
+							<li class="g-my-3">{GW_Country::singleton()->getCountryByCode($order->country, $ln)|escape}</li>
 						{/if}
 						<li class="g-my-3">{$order->phone|escape}</li>
 					</ul>
@@ -194,5 +210,61 @@
 			{/if}
 		
 		{/if}
+		
+		{if $step < 2 && $m->feat(discountcode)}
+
+			{if $order->discount_id}
+				<div>
+					{GW::ln('/m/DISCOUNT_CODE')}: {$order->discountcode->code} <a class="gwUrlMod" data-args='{ "act": "doUnsetDiscount" }'><i class="fa fa-times"></i></a>
+				</div>
+			{else}
+                  <!-- Accordion -->
+                  <div id="accordion-02" role="tablist" aria-multiselectable="true">
+                    <div id="accordion-02-heading-02" role="tab">
+                      <h5 class="g-font-weight-400 g-font-size-default mb-0">
+                        <a class="g-color-black g-text-underline--none--hover" href="#accordion-02-body-02" data-toggle="collapse" data-parent="#accordion-02" aria-expanded="false" aria-controls="accordion-02-body-02">{GW::ln('/m/APPLY_DISCOUNT_CODE')}
+                          <span class="ml-3 fa fa-angle-down"></span></a>
+                      </h5>
+                    </div>
+                    <div id="accordion-02-body-02" {if !$smarty.get.discountcode}class="collapse"{/if} role="tabpanel" aria-labelledby="accordion-02-heading-02">
+                      <div class="input-group rounded g-pt-15">
+                        <input id="discountCode" name="discountcode" 
+			       class="form-control g-brd-gray-light-v1 g-brd-right-none g-color-gray-dark-v3 g-placeholder-gray-dark-v3" 
+			       type="text" placeholder="{GW::ln('/m/ENTER_DISCOUNT_CODE')}" value="{$smarty.get.discountcode}">
+                        <span class="input-group-append g-brd-gray-light-v1 g-bg-white">
+				<button class="btn u-btn-primary" id="applyDiscount" disabled="disabled">{GW::ln('/m/APPLY')}</button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+			
+	<script>
+
+			$(function(){
+
+				$('#applyDiscount').click(function(){
+					$('#step').val(1);
+					$('#cartList').submit()
+				})
+
+				$('#discountCode').keydown(function(){
+					console.log('value:'+$(this).val());
+					if(this.value){
+						console.log('not disabled');
+						$('#applyDiscount').attr('disabled',false);
+					}else{
+						$('#applyDiscount').attr('disabled','disabled');
+					}
+				})
+				.change(function(){  $(this).keydown();  })
+				.on('paste', function(){ console.log('paste event detected'); setTimeout(function(){ $('#discountCode').keydown(); },100)  })
+			})
+	</script>			
+			
+			
+			
+                  <!-- End Accordion -->
+			{/if}
+		{/if}		
 
 </div>

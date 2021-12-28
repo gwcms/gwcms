@@ -21,10 +21,11 @@
 	{if $m->feat('mergepaymethods')}
 		{$mergepay = $m->prepareMergedPay($order->amount_total)}
 		
+		<div class="col-md-12">
 		<select onchange="gw_navigator.jump(location.href,{ paycountry: this.value })">
 			{html_options options=$mergepay.country_opt selected=$mergepay.country}
 		</select>
-
+		</div>
 		
 		<table class='paytbl'>
 		{foreach $mergepay.methods as $method}

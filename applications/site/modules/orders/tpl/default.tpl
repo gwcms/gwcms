@@ -4,6 +4,9 @@
 <h2>{GW::ln('/m/YOUR_ORDERS')} {if $smarty.get.canceled}<small>{GW::ln('/m/CANCELED')}</small>{/if}</h2> 
 <br/>
 
+
+
+
 {function orderactions}
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
 		
@@ -13,16 +16,12 @@
 			{$args=[act=>doOrderPay,id=>$order->id]}
 		{/if}
 		
-		<a href="{$m->buildDirectUri('', $args)}" class="btn u-btn-brown btn-md rounded-0">
+		<a href="{if $order->open}{$ln}/direct/orders/orders/cart{else}{$m->buildDirectUri('', $args)}{/if}" class="btn u-btn-brown btn-md rounded-0">
 						<i class="fa fa-credit-card g-mr-2"></i>
-						{GW::ln('/g/PROCEED_PAYMENT')}
+						{GW::ln('/m/PROCEED_PAYMENT')}
 					</a>
 					
-		{if $app->user->isRoot()}
-		<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPayRoot,id=>$order->id])}" class="btn u-btn-orange btn-xs rounded-0">
-			<i class="fa fa-credit-card g-mr-2"></i>
-			TEST pay (root user)
-		</a>
+
 		{/if}
 					
 					
@@ -31,29 +30,58 @@
 		{if $m->feat('otherpayee')}		
 			<a href="{$m->buildUri('otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0">
 				<i class="fa fa-credit-card g-mr-2"></i>
-				{GW::ln('/g/OTHERPAYEE')}
+				{GW::ln('/m/OTHERPAYEE')}
 				
 			</a>	
 		{/if}
-					
+				
+		{*
 		{if $order->banktransfer_allow}
 			<a href="{$m->buildUri('paybanktransfer', [id=>$order->id])}" class="btn u-btn-orange btn-{$version} rounded-0">
 				<i class="fa fa-credit-card g-mr-2"></i>
 				{GW::ln('/g/PROCEED_PAYMENT_BANKTRANSFER')}
 			</a>					
 		{/if}
+		*}
 
 
-		<a href="{$m->buildUri(false, [act=>doCancelOrder,id=>$order->id])} " class="btn u-btn-brown btn-{$version} rounded-0">
-			<i class="fa fa-times"></i> {GW::ln('/g/CANCEL')}
-		</a>
+
 		
-		{if $app->user->get('ext/cart_id') != $order->id && $order->get('extra/bt_confirm_cnt') < 1}
-			<a href="{$m->buildUri(false, [act=>doOpenOrder,id=>$order->id])} " class="btn u-btn-primary btn-{$version} rounded-0" title="{GW::ln('/m/VIEWS/doOpenOrder')}">
-				<i class="fa fa-shopping-cart"></i> {GW::ln('/m/VIEWS/doOpenOrder_short')}
-			</a>			
-		{/if}
+
+
+	{if $order->downloadable && $order->payment_status==7}
+		<a class="gwUrlMod btn u-btn-primary btn-md rounded-0" href="#!" data-args='{ "act":"doDownload", "id":"{$order->id}" }'><i class="fa fa-download"></i> {GW::ln('/m/DOWNLOAD')}</a>
 	{/if}
+	
+	<div class="btn-group g-mr-10 g-mb-15">
+		<button type="button" class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-12 g-px-25 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		  {GW::ln("/m/MENU")}
+		</button>
+		<div class="dropdown-menu">
+
+
+		  
+			<a class="dropdown-item" href="{$app->buildUri('direct/orders/orders',[act=>doOrderSummary,id=>$order->id,viewable=>1])}">
+				<i class="fa fa-print"></i> {GW::ln('/m/ORDER_SUMMARY')}
+			</a>
+		
+			{if $app->user->get('ext/cart_id') != $order->id && $order->get('extra/bt_confirm_cnt') < 1}
+				<a href="{$m->buildUri(false, [act=>doOpenOrder,id=>$order->id])} " class="dropdown-item" title="{GW::ln('/m/VIEWS/doOpenOrder')}">
+					<i class="fa fa-shopping-cart"></i> {GW::ln('/m/VIEWS/doOpenOrder_short')}
+				</a>			
+			{/if}
+			<div class="dropdown-divider"></div>
+			{if $app->user->isRoot()}
+			<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPayRoot,id=>$order->id])}" class="dropdown-item">
+				<i class="fa fa-credit-card g-mr-2"></i>
+				TEST pay (root user)
+			</a>
+			{/if}
+			<a href="{$m->buildUri(false, [act=>doCancelOrder,id=>$order->id])} " class="dropdown-item">
+				<i class="fa fa-times"></i> {GW::ln('/g/CANCEL')}
+			</a>				
+		</div>
+	</div>
 	
 {/function}
 
@@ -98,11 +126,28 @@
 		</td>
 
 	</tr>
+	
 
 	{if $citems}
+
 		<tr class="itmsrow {if $smarty.get.id==$order->id}alert-warning{/if}">
 			<td colspan="5">
 
+				{foreach $citems as $citem}
+					{$obj=$citem->obj}
+					{$imurl=""}
+					{if $obj->composite_map.image && $obj->image}
+						{$img = $obj->image}
+						{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
+				        {elseif $obj->image_url}
+						{$imurl="{$obj->image_url}&size=100x100"}
+					{/if}
+					{if $imurl}
+						<a href="{$citem->link}"><img src="{$obj->image_url}&size=100x100"></a>
+					{/if}
+				{/foreach}
+				
+				
 				<ul class="u-alert-list g-mt-10">
 					{foreach $citems as $citem}
 						{$obj=$citem->obj}
@@ -188,7 +233,7 @@
 	{if $smarty.get.orderid}
 		<a href="{$app->buildUri(false,$args)}"> {GW::ln('/m/YOUR_ORDERS')} {GW::ln('/m/ALL_ORDERS')} <b>{count($list)}</b></a><br>
 	{/if}	
-	<a href="{$app->buildUri(false,$smarty.get+[canceled=>1])}"> {GW::ln('/m/YOUR_ORDERS')} {GW::ln('/m/CANCELED')} <b>{$canceled_count}</b></a>
+	<a href="{$app->buildUri(false,$smarty.get + [canceled=>1])}"> {GW::ln('/m/YOUR_ORDERS')} {GW::ln('/m/CANCELED')} <b>{$canceled_count}</b></a>
 {/if}
 
 {if $smarty.get.canceled}

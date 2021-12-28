@@ -94,8 +94,10 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			if(isset($_GET['debug'])){
 				d::dumpas([
 				    'src'=>$source, 
+				    'info'=>shell_exec('ls -l '.$fp),
 				    'fp'=>$fp, 
-				    'exists'=>file_exists($fp)?'yes':'no'
+				    'exists'=>file_exists($fp)?'yes':'no',
+				    'cachedir'=>$cachedir
 				]);
 			}
 			
@@ -134,7 +136,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			die('Failed to locate file: '.$file);
 
 
-		$resized = $cachedir.str_replace('/','__',$file).'.'.md5(serialize($_GET));
+		$resized = $cachedir.md5($file).'.'.md5(serialize($_GET)).'.'.(filesize($file));
 
 		//check if is cached
 

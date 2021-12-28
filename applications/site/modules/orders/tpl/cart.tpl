@@ -8,6 +8,9 @@
 	{if $obj->composite_map.image && $obj->image}
 		{$img = $obj->image}
 		<img class="{$class}" src="{$app_base}tools/img/{$img->key}&v={$img->v}&size={$imsize}&method=crop">
+			
+	{elseif $obj->image_url}
+	 	  <img src="{$obj->image_url}&size={$imsize}&method=crop">		
 	{else}
 	   <center>{GW::ln("/g/CART_ITM_{$item->obj_type}")}</center>
 	{/if}

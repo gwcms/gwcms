@@ -2268,7 +2268,7 @@ class GW_Common_Module extends GW_Module
 		}
 		
 		$src =& $_GET;
-		$this->tpl_vars['method'] = 'get';
+		$this->tpl_vars['method'] = $opts['method'] ?? 'get';
 		
 		foreach($form['fields'] as $fieldname => $el){
 			if(($el['type'] ?? false)=='file'){

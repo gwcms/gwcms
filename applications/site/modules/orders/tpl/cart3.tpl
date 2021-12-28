@@ -27,7 +27,7 @@
 						{$order=$GLOBALS.site_cart}
 				    <a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>$pay_methods.0])}" class="btn btn-primary">
 					<i class="fa fa-credit-card g-mr-2"></i>
-					{GW::ln('/g/PROCEED_PAYMENT')} {$order->amount_total} &euro;
+					{GW::ln('/m/PROCEED_PAYMENT')} {$order->amount_total} &euro;
 				      </a>
 				      </center>
 				{/if}

@@ -520,6 +520,53 @@ class Module_Translations extends GW_Common_Module
 			$this->notifyRowUpdated($item->id, false);
 		}
 	}
+	
+	
+	function exportAll()
+	{
+		$list = $this->model->findAll();
+		
+		$rows=[];
+		foreach($list as $item){
+			$row = $item->toArray();
+			unset($row['id']);
+			$rows[] = $row;
+		}
+		return json_encode($rows, JSON_PRETTY_PRINT);
+	}
+	
+	function doImportAll()
+	{
+		if(!$this->app->user->isRoot())
+			return $this->setError("No permission");
+		
+		if(!isset($_POST['answers']['codejson']))
+			die("<script>location.href='{$_GET['camefrom']}'</script>");
+		
+		$array = json_decode($_POST['answers']['codejson'], true);
+		
+		if(!$array)
+			d::dumpas($array);
+			
+		$t = new GW_Timer;
+		$tr = new GW_Translation;
+		$tr->multiInsert($array);
+		
+		$this->setMessage("Import done, cnt: ".count($array).", speed: {$t->stop()}");
+		$this->jump();
+	}
+	
+	function doSendToDev()
+	{
+		initEnviroment(GW_ENV_DEV);
+		$formaction=GW::s("SITE_URL").'admin/lt/datasources/translations?act=doImportAll&camefrom='. urlencode($_SERVER['REQUEST_URI']);
+		echo "<form id='jsoncodeform' action='$formaction' method='post'>";
+		echo "<textarea name='answers[codejson]'>".$this->exportAll().'</textarea>';
+		
+		echo "</form>";
+		echo "<script>require(['gwcms'], function(){ $('#jsoncodeform').submit(); })</script>";
+		
+	}
 
 	
 	

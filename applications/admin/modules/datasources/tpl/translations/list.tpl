@@ -7,6 +7,11 @@
 	{function name=do_toolbar_buttons_synchronizefromxml} 
 		{toolbar_button title=GW::l('/A/VIEWS/synchronizefromxml') iconclass='gwico-Refresh' href=$m->buildUri(synchronizefromxml)}	
 		{toolbar_button title=GW::l('/A/VIEWS/doSeriesTranslate') iconclass='gwico-Refresh' href=$m->buildUri(false,[act=>doSeriesTranslate])}	
+		
+		
+		{if $app->user->isRoot() && GW::s('PROJECT_ENVIRONMENT') != $smarty.const.GW_ENV_DEV}
+			{toolbar_button title=doSendToDev iconclass='gwico-Export' href=$m->buildUri(false,[act=>doSendToDev])}	
+		{/if}
 	{/function}	
 	
 	{$do_toolbar_buttons[] = hidden}

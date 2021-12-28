@@ -1,7 +1,7 @@
 <?php
 
 
-if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && $this->user->isRoot())
+if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && $this->user && $this->user->isRoot())
 {
 	$t = new GW_Timer;
 	$msgs = GW_ADM_Sitemap_Helper::updateSitemap();

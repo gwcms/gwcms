@@ -35,11 +35,12 @@
 			<input name="act" type="hidden" value="doSaveBankTransferConfirm"/>
 			<div class='row'>
 				<div class="col-md-6">
+					{input field="banktransfer_confirm" type="image" endpoint="orders/orders"}
+				</div>				
+				<div class="col-md-6">
 					{call input field="pay_user_msg" required=1}
 				</div>
-				<div class="col-md-6">
-					{input field="banktransfer_confirm" type="image" endpoint="orders/orders"}
-				</div>
+
 			</div>
 				
 			<button class="btn btn-primary"><i class='fa fa-envelope-o'></i> {GW::ln('/g/SAVE_BANK_TRANSFER_CONFIRM')}</button>	

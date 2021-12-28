@@ -9,9 +9,8 @@
 	{/function}	
 	
 	
-	{$do_toolbar_buttons_hidden=[]}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}
 	
-	{$do_toolbar_buttons[]=dialogconf}
 	{$do_toolbar_buttons[]=hidden}
 	{$do_toolbar_buttons[]=search}
 
