@@ -63,7 +63,7 @@
 {elseif $smarty.get.preinvoice}
 	{include file="`$smarty.current_dir`/prepareinvoice_0.tpl" preinvoice=1}
 {else}
-	<a class="btn btn-warning" href='{$app->buildUri(false, $smarty.get+[preinvoice=>1])}'>{GW::ln('/g/NEED_PREINVOICE')}</a>
+	<a class="btn btn-warning" href='{$app->buildUri(false, $smarty.get+[preinvoice=>1])}'>{GW::ln('/M/orders/NEED_PREINVOICE')}</a>
 {/if}
 
 

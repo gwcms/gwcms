@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl" form_width="1000px"}
+{include file="default_form_open.tpl" form_width="100%"}
 
 <style>
 	.input_label_td{ width: 150px; }
@@ -54,7 +54,7 @@
 	
 {/if}
 
-{call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote height=$item->body_editor_height|default:"200px"}	
+{call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote layout=wide height=$item->body_editor_height|default:"200px"}	
 
 
 

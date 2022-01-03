@@ -429,6 +429,8 @@ class GW_Lang
 				$vr = mb_strtolower($vr);
 			}elseif($opts['c']==2){
 				$vr = GW_String_Helper::ucfirst($vr);
+			}elseif($opts['c']==3){
+				$vr = mb_strtoupper($vr);
 			}
 		}
 		
