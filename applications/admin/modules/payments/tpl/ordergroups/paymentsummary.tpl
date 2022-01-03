@@ -36,6 +36,8 @@
 	</table>
 </form>
 
+
+
 	<table class="gwTable gwActiveTable">
 
 	{foreach $list as $item}

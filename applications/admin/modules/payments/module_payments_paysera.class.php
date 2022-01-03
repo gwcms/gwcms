@@ -33,7 +33,7 @@ class Module_Payments_Paysera extends GW_Common_Module
 		
 		
 		return $opts;	
-	}
+	}	
 
 
 	function doSyncPayMethods()
@@ -70,13 +70,4 @@ class Module_Payments_Paysera extends GW_Common_Module
 					$pm->insert_time = date('Y-m-d H:i:s');
 					$rows[] = (array)$pm;
 					$cnt++;
-				}
-			}
-		}
-		
-		GW_Pay_Methods::singleton()->multiInsert($rows);
-		//d::dumpas(GW::db()->last_query);
-
-		$this->setMessage("time {$t->stop()} count: $cnt");
-	}
 }

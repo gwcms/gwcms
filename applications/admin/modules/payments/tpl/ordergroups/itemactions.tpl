@@ -3,6 +3,7 @@
 	{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 caption=GW::l('/g/REMOVE')}
 
 	{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id]] iconclass="fa fa-file-o" caption=GW::l('/m/VIEWS/invoice')}
+	{list_item_action_m url=["`$item->id`/preinvoice", [id=>$item->id]] iconclass="fa fa-file-o" caption=GW::l('/m/VIEWS/preinvoice')}
 
 	
 	
@@ -29,3 +30,19 @@
 	url=["`$item->id`/orderitems/0/form",[clean=>2]] 
 	iconclass="fa fa-plus" action_addclass="iframe-under-tr"  
 	caption="Add item"}
+
+	
+{list_item_action_m url=["`$item->id`/mailS1"] iconclass="fa fa-envelope-o" caption="Siųsti klientui laišką ..."}
+
+
+
+
+
+{if $m->feat(itax)}
+	<li class="divider"></li>
+	{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" confirm=1 caption="Suvesti į Itax [D]"  shift_button=1}
+	
+	{if $item->get('itax_status_ex/purchase')==7}
+		{list_item_action_m url=[false,[act=>doItaxCancel,id=>$item->id]] iconclass="fa fa-window-close text-danger" confirm=1 caption="Šalinti iš itax(Pirkimo sąsk.)"}
+	{/if}
+{/if}

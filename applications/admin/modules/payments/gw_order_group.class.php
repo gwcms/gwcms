@@ -8,6 +8,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'pay_confirm' => ['gw_composite_linked', ['object'=>'GW_Paysera_Log','relation_field'=>'pay_confirm_id']],
 		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id']],
 		'banktransfer_confirm'=>['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '100x100']],
+		'discountcode' => ['gw_composite_linked', ['object'=>'Shop_DiscountCode','relation_field'=>'discount_id']]
 	];		
 	
 	public $encode_fields = [
@@ -15,8 +16,9 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	];	
 	
 	public $calculate_fields = [
-	    'title'=>1,
-	    'keyval'=>1
+		'title'=>1,
+		'keyval'=>1,
+		'recipient'=>1	    
 	];
 	
 	
@@ -36,6 +38,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	{
 		$amount = 0;
 		$deliverable = 0;
+		$downloadable = 0;
 		
 		if($relobj = $this->getCompositeObject('items'))
 			$relobj->cleanCache();
@@ -45,12 +48,19 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		foreach($this->items as $item){
 			$amount+= $item->unit_price*$item->qty;
 			$deliverable = max($item->deliverable, $deliverable);
+			$downloadable = max($item->downloadable, $deliverable);
 		}
 		
 		
 		$this->deliverable = $deliverable;
+		
+		if(GW::s('ECOMMERCE_DOWNLOADABLE'))
+			$this->downloadable = $downloadable;
+		
 		$this->amount_items = $amount;
-		$this->amount_total = $this->amount_items + $this->amount_shipping;
+		//$this->amount_total = $this->amount_items + $this->amount_shipping;
+		$this->amount_total = $this->amount_shipping + $this->amount_items - $this->amount_coupon;
+
 		$this->updateChanged();
 	}
 	
@@ -59,7 +69,6 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		$item->save();
 		
 		$this->updateTotal();
-		
 	}
 	
 	function eventHandler($event, &$context_data=[]) {
@@ -106,6 +115,11 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			case 'title':
 				return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
 			break;
+
+			case 'recipient':
+				return $this->user->title.' <'.$this->user->email.'>';
+			break;
+				
 		}
 		
 			
@@ -114,4 +128,53 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		return parent::calculateField($name);
 	}
 	
+	
+
+	
+	function setCoupon($coupon = false, $markAsUsed=false)
+	{
+		if(!$coupon)
+			$coupon = $this->discountcode;
+		
+
+		
+		
+		$this->discount_id = $coupon->id;
+		$this->amount_coupon = $coupon->limit_amount - $coupon->used_amount;
+		
+		
+		
+		
+		
+		if($this->amount_coupon < 0){
+			$this->amount_coupon = 0;
+			//reiktu pranest adminui, tokia situacija neturetu nutikt
+		}
+		
+		
+		
+		if(!$this->amount_coupon)
+			return false;
+		
+		
+		$amount_total = $this->amount_shipping + $this->amount_items;
+		
+		//panaudot ne daugiau negu krepselio suma
+		if($amount_total < $this->amount_coupon)
+			$this->amount_coupon = $amount_total;
+		
+		
+		
+		
+		$this->updateTotal();
+
+		
+		if($markAsUsed)
+		{
+			$coupon->used_amount = $coupon->used_amount + $this->amount_coupon;
+			$coupon->updateChanged();
+		}
+	}	
+	
+			
 }

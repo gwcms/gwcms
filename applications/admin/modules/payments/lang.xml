@@ -45,9 +45,27 @@
     <i id="pay_user_msg">Kliento mokėjimo žinutė</i>
     <i id="adm_message">Admin. pastaba klientui</i>
     <i id="features">Įgalinti funkcionalumai</i>
+    <i id="limit_amount">Maksimali suma</i>
+    <i id="percent">Nuolaidos procentas</i>
+    <i id="code">Kodas</i>
+    <i id="used">Panaudotas</i>    
+    <i id="amount_coupon">Kupono suma</i>
+    <i id="pay_confirm_id">Mokėjimo patvirtinimas</i>
+    <i id="amount_discount">Nuolaidos suma</i> 
+    <i id="amount_shipping">Pristatymo kaina</i>
+    <i id="region">Regionas</i>
+    <i id="country">Šalis</i>
+    <i id="delivery_type">Pristatymo tipas</i>
+    <i id="discount_id">Nuolaidos kodas</i>
+    <i id="digital_items">Skaitmeninės prekės</i> 
+    <i id="placed_time">Pildymo užbaigimo laikas</i>
+    <i id="phone">Tel. numeris</i>
+    <i id="delivery_opt">Pristatymo pasirinkimas</i>        
+    <i id="deliverable">Fizinis pristatymas</i>
   </i>
   <i id="FIELDS_SHORT">
-	  
+    <i id="itax_status_ex">Itax</i>
+    <i id="need_invoice">Sąsk.F</i>	  
     <i id="admin_id">Admin</i>
     <i id="seller_id">Pard.</i>
     <i id="update_time">
@@ -87,6 +105,8 @@
     <i id="pay_time">
 	<![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-clock-o"></i>]]>
     </i>       
+    <i id="use_lang"><![CDATA[<i class="fa fa-language"></i>]]></i>
+    <i id="placed_time"><![CDATA[<i class="fa fa-shopping-basket"></i><i class="fa fa-flag-checkered"></i><i class="fa fa-clock-o"></i>]]></i>    
     <i id="adm_processed"><![CDATA[Buhal. <i class="fa fa-check"></i>]]></i>
      <i id="unit_price">Vnt kaina</i>
      <i id="qty">Kiek</i>
@@ -96,6 +116,14 @@
      <i id="open">Pild.</i>    
      <i id="group_id">Užs.id</i>
      <i id="adm_message">Adm. pastaba</i>
+     <i id="delivery_opt"><![CDATA[ <i class="fa fa-truck"></i>]]></i>   
+     <i id="deliverable"><![CDATA[ <i class="fa fa-truck"></i>]]></i>
+     <i id="amount_discount"><![CDATA[ % <i class="fa fa-money"></i>  ]]></i> 
+    <i id="amount_shipping"><![CDATA[ <i class="fa fa-truck"></i><i class="fa fa-money"></i>  ]]></i>
+    
+    <i id="adm_message"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye" aria-hidden="true"></i>  ]]></i>
+       <i id="admin_note"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>  ]]></i>
+    
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
@@ -107,6 +135,7 @@
     <i id="doFill">Pakartoti duomenų analizę</i>
     <i id="monthlystats">Pardavimų statistika</i>
     <i id="invoice">Sąskaita faktūra</i>
+    <i id="preinvoice">Išankstinė sąskaita faktūra</i>
     <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
     <i id="doMarkAsProcessed">Pažymėti kaip įvykdytus</i>
  
@@ -147,13 +176,19 @@
 	<i id="features">
 	      <i id="otherpayee">Siųsti mokėjimo informaciją</i>
 	      <i id="mergepaymethods">Mokėjimo metodų apjungimas iš skirtingų pay-gateway</i>
+	      <i id="itax">Itax - buhalterinė apskaita</i>
+	      <i id="discountcode">Nuolaidos kodai</i>
+	      <i id="multitype">Multitype - Daugiau nei vienas prekės paslaugos tipas</i>
 	</i>
-
+	<i id="delivery_algo">
+	      <i id="">Išjungta</i>
+	      <i id="natos">Natos</i>	   
+	</i>
   
     
   </i>
   <i id="MAP">
-    <i id="title">Mokėjimai</i>
+    <i id="title">El. komercija</i>
     <i id="info">
       <i id="iconclass">fa fa-money</i>
     </i>
@@ -258,7 +293,12 @@
 		  <i id="iconclass">fa fa-cog</i>
 		</i>		
 	</i>     
-		          
+	<i id="delivery">
+		<i id="title">Pristatymas</i>
+		<i id="info">
+		  <i id="iconclass">fa fa-truck</i>
+		</i>		
+	</i>   		          
     </i>
   </i>
   

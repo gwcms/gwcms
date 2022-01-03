@@ -13,7 +13,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		parent::init();
 		
-		$this->list_params['paging_enabled']=false;	
+		$this->list_params['paging_enabled']=1;	
 		
 
 		$this->cartgroup_id = $this->app->path_arr['1']['data_object_id'] ?? false;

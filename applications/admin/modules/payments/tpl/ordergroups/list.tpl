@@ -2,9 +2,11 @@
 
 
 
-
 {block name="init"}
 
+{if $m->feat(itax)}
+	{include "`$smarty.current_dir`/itax_stat.tpl"}	
+{/if}
 	
 	{$dl_inline_edit=1}
 	{$do_toolbar_buttons[] = hidden}
@@ -28,10 +30,10 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,instruments]}	
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,itax_status_ex,delivery_opt]}
 
 	
-	{$dl_actions=[items,invoice,editshift,ext_actions]}
+	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
 	{$dl_group_list_by=['tour_part_id']}
 	
 	
@@ -66,7 +68,10 @@
 				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
 			}
 		{/if}
-	{/function}		
+	{/function}
+	{function name=dl_actions_preview}
+		<a class='iframe-under-tr' href="{$m->buildUri("oitems",[id=>$item->id,clean=>2])}"><i class="fa fa-search"></i></a>
+	{/function}
 	
 	
 
@@ -80,11 +85,25 @@
 	{capture append="dl_checklist_actions"}<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>{/capture}	
 	
 	
-	
+	{function dl_cell_itax_status_ex}
+		{if $m->feat(itax)}
+			{call "itax_status"}
+		{/if}
+	{/function}
+	{function dl_cell_delivery_opt}
+		{if $item->delivery_opt==1}
+			<i class="fa fa-truck" style="color:darkgreen" title="{GW::ln('/m/DELIVERY_1')}"></i>
+		{elseif $item->delivery_opt==2}
+			<i class="fa fa-truck" style="color:silver" title="{GW::ln('/m/DELIVERY_2')}"></i>
+		{elseif $item->delivery_opt==3}
+			<span title="{GW::ln('/m/DELIVERY_3')}">@</span>
+		{/if}
+	{/function}		
 	
 	{$dl_output_filters.insert_time=short_time}
 	{$dl_output_filters.update_time=short_time}	
 	{$dl_output_filters.pay_time=short_time}	
+	{$dl_output_filters.placed_time=short_time}	
 	{$dl_output_filters.changetrack=changetrack}
 	
 {/block}

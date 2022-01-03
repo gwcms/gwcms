@@ -24,6 +24,13 @@ class Module_OrderGroups extends GW_Common_Module
 		}
 		
 		$this->config =  new GW_Config($this->module_path[0].'/');	
+		
+		$this->addRedirRule('/^doMail|^viewMail/i',['mails','Module_Ordergroups_Mails']);	
+		$this->initFeatures();
+		
+
+		if($this->feat('itax'))
+			$this->addRedirRule('/^doItax|^viewItax/i','itax');		
 	}
 	
 
@@ -38,29 +45,30 @@ class Module_OrderGroups extends GW_Common_Module
 		$cfg['fields']['user_title'] = 'Lf';
 		$cfg['fields']['changetrack'] = 'L';
 		
+		if($this->feat('itax')){
+			$cfg["fields"]['itax_status_ex'] = 'Lof';
+		}
 		//d::dumpas($cfg);
 					
 		return $cfg;
 	}
 	
+	
+	function prepareCounts($list)
+	{
+		$ids = array_keys($list);
+		$counts = GW_Order_Item::singleton()->countGrouped('group_id', GW_DB::inCondition('group_id', $ids));
+		
+		foreach($counts as $id => $item)
+			$list[$id]->items_count = $counts[$id];
+		
+		parent::prepareCounts($list);
+	}	
+	
+	
 	function __eventAfterList(&$list)
 	{		
-		$this->attachFieldOptions($list, 'user_id', 'GW_User');
-
-		foreach($list as $item)
-		{
-			$item->items_count = GW_Order_Item::singleton()->count(['group_id=?', $item->id]);
-		}	
-		
-		if($list)
-		foreach($list as $item)
-			break;		
-		
-		if(isset($item) && $item){
-			
-			if($item->extensions['changetrack'])
-				$item->extensions['changetrack']->prepareList($list);
-		}		
+		$this->attachFieldOptions($list, 'user_id', 'GW_User');		
 	}
 	
 	
@@ -160,8 +168,12 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
 		$v['PAY_LINK'] = $this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$item->id,'key'=>$item->secret],['absolute' => 1,'app'=>"site"]);
 			//$pdf=GW_html2pdf_Helper::convert($html, false);			
-			
+		$v['DISCOUNT_ID'] = $item->discount_id;
 		
+		$v['AMOUNT_SHIPPING'] = $item->amount_shipping;
+		$v['AMOUNT_DISCOUNT'] = $item->amount_discount;
+		$v['AMOUNT_COUPON'] = $item->amount_coupon;			
+		$v['AMOUNT_ITEMS'] = $item->amount_items;
 		
 			
 		foreach($item->items as $oitem){
@@ -192,18 +204,20 @@ class Module_OrderGroups extends GW_Common_Module
 	{
 		$item = $this->getDataObjectById();
 		list($tpl_code, $v) = $this->initInvoiceVars($item);
-		
+			
 		
 		die(json_encode(['tpl'=>$tpl_code, 'vars'=>$v], JSON_PRETTY_PRINT));
 	}
+	
 	
 	function viewInvoice()
 	{
 		$item = $this->getDataObjectById();
 		list($tpl_code, $v) = $this->initInvoiceVars($item);
-			
-			
-			
+		
+		if(isset($_GET['preinvoice']))
+			$v['preinvoice']=1;				
+		
 		$html = GW_Mail_Helper::prepareSmartyCode($tpl_code, $v);
 		
 		
@@ -220,7 +234,12 @@ class Module_OrderGroups extends GW_Common_Module
 		echo $pdf;
 		exit;		
 	}
-
+	
+	function viewPreinvoice()
+	{
+		$_GET['preinvoice']=1;
+		$this->viewInvoice();
+	}
 
 	function doSaveInvoice($item=false)
 	{
@@ -466,5 +485,39 @@ class Module_OrderGroups extends GW_Common_Module
 	}
 	
 	
+	function getOrderItems($order, $export)
+	{
+		$this->initOrderedItems($order);
+		
+		$this->tpl_vars['order'] = $order; 
+			
+		if($export){
+			$this->tpl_vars['export'] = 1;
+			
+			$this->tpl_file_name = $this->tpl_dir.'oitems';
+			
+			if(isset($_GET['tpl'])){
+				$tplname = preg_replace('/[^a-z0-9_]/','', $_GET['tpl']);
+				$this->tpl_file_name = $this->tpl_dir.$tplname;
+			}			
+			
+			$html = $this->processTemplate(false, true);
+			
+
+								
+			if($export==='json'){
+				echo json_encode(['html'=>$html]);
+				exit;
+			}else{
+				return $html;
+			}			
+		}	
+	}
+	
+	function viewOitems()
+	{
+		$item = $this->getDataObjectById();
+		$this->getOrderItems($item, $_GET['export']??false);		
+	}	
 	
 }

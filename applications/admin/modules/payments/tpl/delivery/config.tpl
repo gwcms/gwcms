@@ -25,17 +25,37 @@
 
 
 
-{call e field="confirm_email_tpl" type=select_ajax modpath="emails/email_templates" preload=1  options=[]  source_args=[byid=>1] }
-{call e field="default_currency_code"}
+
+{call e field="international_delivery" type=bool}
+
+
+{if $m->algo==natos}
+	{capture assign=tmp}
+		<table>
+	{call e field="delivery_no"}
+	{call e field="delivery_lt"}
+	{call e field="delivery_eu"}
+	{call e field="delivery_in"}
+		</table>
+	{/capture}
+
+	{call e field=standart type=read value=$tmp}
 
 
 
-{call e field="pay_types" type=multiselect_ajax sorting=1 options=GW::l('/m/OPTIONS/pay_type') value_format=json1}
-{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
+	{capture assign=tmp}
+		<table>
+	{call e field="lo_delivery_exceptions" type="multiselect_ajax" modpath="products/items"	options=[] preload=1 value_format=json1}
+	{call e field="lo_delivery_no"}
+	{call e field="lo_delivery_lt"}
+	{call e field="lo_delivery_eu"}
+	{call e field="lo_delivery_in"}
 
+		</table>
+	{/capture}
 
-{call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo')}
-
+	{call e field=lowerprice type=read value=$tmp}
+{/if}
 
 
 {include "default_form_close.tpl"}

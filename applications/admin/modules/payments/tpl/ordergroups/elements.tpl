@@ -33,6 +33,11 @@
 	]
 ]}
 
+{if $m->feat(discountcode)}
+	{$fields_config.fields.discount_id=[type=>select_ajax,modpath=>"products/discountcode",preload=>1,options=>[], after_input_f=>editadd]}
+	{$fields_config.fields.amount_discount=[type=>text]}
+	{$fields_config.fields.amount_coupon=[type=>text]}
+{/if}
 
 
 {if $item->pay_type=='banktransfer'}
@@ -98,3 +103,4 @@
 	.input_label_td{ width: 120px !important; }
 	.input_td{ width: 300px; }
 </style>
+
