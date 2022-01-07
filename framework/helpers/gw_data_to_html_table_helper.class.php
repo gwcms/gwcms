@@ -3,7 +3,7 @@
 class GW_Data_to_Html_Table_Helper
 {
 
-	static function doTable($data, $font_size = 10)
+	static function doTable($data, $font_size = 10, $escape=1)
 	{
 		if (!is_array($data))
 			return;
@@ -17,8 +17,14 @@ class GW_Data_to_Html_Table_Helper
 
 		foreach ($data as $i => $row) {
 			$str.="<tr><td>" . $i . "</td>";
-			foreach ($row as $field => $val)
-				$str.="<td>" . str_replace("\n", "<br />", htmlspecialchars(is_array($val) ? implode(", \n", $val) :  $val)) . "</td>";
+			foreach ($row as $field => $val){
+				$val = is_array($val) ? implode(", \n", $val) :  $val;
+				
+				if($escape)
+					$val =  htmlspecialchars($val);
+				
+				$str.="<td>" . str_replace("\n", "<br />",  $val).'</td>';
+			}
 			$str.="</tr>\n";
 		}
 		$str.="</table>";

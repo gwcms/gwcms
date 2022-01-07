@@ -17,13 +17,12 @@
 		}
 	{/if}
 
+	{list_item_action_m url=[false,[act=>doOrderPaydNotifyUser,id=>$item->id,preview=>1]] iconclass="fa fa-cog"  caption="Preview/Send confirmation email"}
 
-{if $app->user->isRoot()}
-		{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id,html=>1]] iconclass="fa fa-file-o" caption="{GW::l('/m/VIEWS/invoice')} - html (root)"}
-	{list_item_action_m url=[false,[act=>doSaveInvoice,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Gen. invoice vars(root)"}
-	
-	{list_item_action_m url=[false,[act=>doOrderPaydNotifyUser,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Send confirmation email (root)"}
-{/if}
+	{if $app->user->isRoot()}
+		{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id,html=>1]] iconclass="fa fa-file-o text-danger" caption="{GW::l('/m/VIEWS/invoice')} - html (root)"}
+		{list_item_action_m url=[false,[act=>doSaveInvoice,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Gen. invoice vars(root)"}
+	{/if}
 
 
 {list_item_action_m 

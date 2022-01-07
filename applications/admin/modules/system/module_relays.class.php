@@ -100,7 +100,9 @@ class Module_Relays extends GW_Common_Module
 		$schedule = file_get_contents($this->cfg->schedule_source);
 		Navigator::getUri();
 		
-		$resp = GW_Http_Agent::singleton()->postRequest($this->cfg->endpoint.'set.php', ['schedule'=>$schedule]);
+		$resp = GW_Http_Agent::singleton()->postRequest($this->cfg->endpoint.'set.php?run=1', ['schedule'=>$schedule]);
+		
+		
 		d::ldump($resp);
 	}
 	

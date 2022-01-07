@@ -30,7 +30,7 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,itax_status_ex,delivery_opt]}
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt]}
 
 	
 	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
@@ -38,9 +38,11 @@
 	
 	
 	{function dl_actions_items}
-		{$url=$m->buildUri("`$item->id`/orderitems",[clean=>2])}
-
-		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Cart items" caption="Items({$item->items_count})"}
+		
+		<a title="Cart items {$item->items_count}" class='gwcmsAction iframe-under-tr' href="{$m->buildUri("`$item->id`/orderitems", [clean=>2])}">
+			<i class="fa fa-shopping-basket"></i> <span style='color:red;position:relative;left:-6px'>{$item->items_count}</span>
+		</a>	
+		
 	{/function}	
 
 	{function dl_prepare_item}
@@ -90,13 +92,30 @@
 			{call "itax_status"}
 		{/if}
 	{/function}
+	
+	{function dl_cell_status}
+		{if $item->status}
+			{GW::ln("/M/orders/status/`$item->status`")}
+		{else}
+			-
+		{/if}
+	{/function}
+	
+	{function dl_cell_pay_type}
+		{if $item->pay_type}
+			{GW::ln("/M/orders/PAY_METHOD_{$item->pay_type}")} {if $item->pay_subtype}/ {$item->pay_subtype_human}{/if}
+		{else}
+			-
+		{/if}
+	{/function}	
+	
 	{function dl_cell_delivery_opt}
 		{if $item->delivery_opt==1}
-			<i class="fa fa-truck" style="color:darkgreen" title="{GW::ln('/m/DELIVERY_1')}"></i>
+			<i class="fa fa-truck" style="color:darkgreen" title="{GW::ln('/M/orders/DELIVERY_1')}"></i>
 		{elseif $item->delivery_opt==2}
-			<i class="fa fa-truck" style="color:silver" title="{GW::ln('/m/DELIVERY_2')}"></i>
+			<i class="fa fa-truck" style="color:silver" title="{GW::ln('/M/orders/DELIVERY_2')}"></i>
 		{elseif $item->delivery_opt==3}
-			<span title="{GW::ln('/m/DELIVERY_3')}">@</span>
+			<span title="{GW::ln('/M/orders/DELIVERY_3')}">@</span>
 		{/if}
 	{/function}		
 	

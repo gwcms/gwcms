@@ -9,5 +9,6 @@
 			{include "`$m->tpl_dir`/orders.tpl"}
 		</div>
 	</div>
+</div>
 
 {include "default_close.tpl"}

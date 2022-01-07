@@ -30,19 +30,30 @@
 		{$imurl="{$obj->image_url}&size=100x100"}
 	{/if}
 	{if $imurl}
-		<a href="{$citem->link}"><img src="{$obj->image_url}&size=100x100"></a>
+		{if strpos($imurl,'http')===false}
+			{$imurl="{GW::s("SITE_URL")}{$imurl}"}
+		{/if}
+		<a href="{$citem->link}"><img src="{$imurl}"></a>
 	{/if}
 {/function}
 
 <div class="row">
 	<div class="col-md-6">
-		<table>
+		<table class='details'>
 			<tr><th>{GW::ln('/M/orders/ORDER_PLACED')}</th><td>{$order->placed_time}</td></tr>
 			<tr><th>{GW::ln('/M/orders/FIELDS/pay_time')}</th><td>{$order->pay_time}</td></tr>
+			
+			{if $oder->deliverable}
 			<tr><th>{GW::ln('/M/orders/SHIPPING_TO')}</th><td>{$order->name} {$order->surname}</td></tr>
 			
 			<tr><th>{GW::ln('/M/orders/FIELDS/email')}</th><td>{$order->email}</td></tr>
 			<tr><th>{GW::ln('/M/orders/FIELDS/phone')}</th><td>{$order->phone}</td></tr>
+			{else}
+				<tr><th>{GW::ln('/M/orders/FIELDS/ordered_by')}</th><td>{$order->user->name} {$order->user->surname}</td></tr>
+
+				<tr><th>{GW::ln('/M/orders/FIELDS/email')}</th><td>{$order->user->email}</td></tr>
+				<tr><th>{GW::ln('/M/orders/FIELDS/phone')}</th><td>{$order->user->phone}</td></tr>			
+			{/if}
 			
 			{if $order->delivery_opt==1}
 				<tr><th>{GW::ln('/M/orders/FIELDS/city')}</th><td>{$order->city}</td></tr>
@@ -62,11 +73,20 @@
 			{/if}
 			
 			<tr><th>{GW::ln('/M/orders/ORDER_TOTAL')}</th><td>{$order->amount_total} &euro;</td></tr>
-			<tr><th>{GW::ln('/M/orders/FIELDS/delivery_type')}</th><td>{GW::ln("/M/orders/DELIVERY_{$order->delivery_opt}")}</td></tr>
+			
+			{if $oder->deliverable}
+				<tr><th>{GW::ln('/M/orders/FIELDS/delivery_type')}</th><td>{GW::ln("/M/orders/DELIVERY_{$order->delivery_opt}")}</td></tr>
+			{/if}
 			
 			
 			{if $order->pay_type}
-				<tr><th>{GW::ln('/M/orders/PAY_METHOD')}</th><td>{GW::ln("/M/orders/PAY_METHOD_{$order->pay_type}")}
+				<tr><th>{GW::ln('/M/orders/PAY_METHOD')}</th><td>
+					{if $order->pay_subtype}
+						{$order->pay_subtype_human}
+					{else}
+						{GW::ln("/M/orders/PAY_METHOD_{$order->pay_type}")}
+					{/if}
+						
 								{if $order->pay_details}
 									{if $order->pay_type==3}
 										<i class="fa fa-credit-card"></i> {$order->pay_details->number_start}...
@@ -91,7 +111,7 @@
 	</tr>
 	<tr><td></td><td>{$item->invoice_line}</td></tr>
 	<tr><td></td><td>{$item->qty} x {$item->unit_price} &euro;</td></tr>
-	<tr><td></td><td><a target="_blank" href="{$item->link}">{$item->obj->remote_id}</a></td></tr>
+	<tr><td></td><td><a target="_blank" href="{GW::s('SITE_URL')}{$item->link}">{$item->obj->remote_id}</a></td></tr>
 	
 	
 	{capture assign=alt}{$item->title}{/capture}
@@ -105,6 +125,7 @@
 <style>
 	#container { background-color: white }
 	table td { padding: 2px; color: black}
+	.details th{ text-align:right;padding-right:5px }
 </style>
 {if $export}
 	</body>

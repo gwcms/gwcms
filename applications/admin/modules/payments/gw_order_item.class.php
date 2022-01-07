@@ -6,7 +6,6 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	public $calculate_fields = [
 	    'obj'=>1,
 	    'total'=>1,
-	    'order'=>1,
 	    'expirable'=>1,
 	    'expires_secs'=>1,
 	    'is_expired'=>1,

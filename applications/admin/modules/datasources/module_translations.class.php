@@ -532,7 +532,7 @@ class Module_Translations extends GW_Common_Module
 			unset($row['id']);
 			$rows[] = $row;
 		}
-		return json_encode($rows, JSON_PRETTY_PRINT);
+		return [json_encode($rows, JSON_PRETTY_PRINT), count($rows)];
 	}
 	
 	function doImportAll()
@@ -559,10 +559,13 @@ class Module_Translations extends GW_Common_Module
 	function doSendToDev()
 	{
 		initEnviroment(GW_ENV_DEV);
+		
+		list($rows,$cnt) = $this->exportAll();
 		$formaction=GW::s("SITE_URL").'admin/lt/datasources/translations?act=doImportAll&camefrom='. urlencode($_SERVER['REQUEST_URI']);
 		echo "<form id='jsoncodeform' action='$formaction' method='post'>";
-		echo "<textarea name='answers[codejson]'>".$this->exportAll().'</textarea>';
+		echo "<textarea name='answers[codejson]'>".$rows.'</textarea>';
 		
+		echo "<input name='answers[count]' value='".$cnt."'>";		
 		echo "</form>";
 		echo "<script>require(['gwcms'], function(){ $('#jsoncodeform').submit(); })</script>";
 		

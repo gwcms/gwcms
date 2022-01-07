@@ -199,6 +199,9 @@ class GW_Mail_Helper
 		if(isset($opts['debug']))
 			d::dumpas($mailer);
 		
+		if(isset($opts['preview']))
+			return $opts;
+		
 		try {
 			$mailer->send();	
 			

@@ -71,7 +71,7 @@ class Module_Orders extends GW_Public_Module
 		//$this->userRequired();
 		
 		$order = $this->getOrder(true);
-
+		
 		$this->prepareOrderForPay($order);
 		
 		
@@ -102,9 +102,14 @@ class Module_Orders extends GW_Public_Module
 			'paytype'=>$type
 		];			
 		
-		if(isset($_GET['method']))
+		$order->pay_subtype = '';
+		
+		if(isset($_GET['method']) && $_GET['method']){
 			$args->method = $_GET['method'];
+			$order->pay_subtype = $args->method;
+		}
 			
+		$order->updateChanged();
 		
 		if($type=='paysera'){
 			$this->doPayseraPay($args);		
@@ -165,6 +170,9 @@ class Module_Orders extends GW_Public_Module
 
 	function prepareOrderForPay($order)
 	{
+		if(!$order->deliverable)
+			$order->placed_time = date('Y-m-d H:i:s');
+		
 		$order->updateTotal();
 		
 		$order->setSecretIfNotSet();
@@ -239,17 +247,18 @@ class Module_Orders extends GW_Public_Module
 	function doCompletePay()
 	{
 		$order = $this->getOrder(true);
+		$jumpargs = ['orderid'=>$order->id,'id'=>$order->id];
 		
 		if($order->payment_status==7){
-			$this->setMessage(GW::ln('/g/PAYMENT_COMPLETE'));
+			$this->setMessage(GW::ln('/m/PAYMENT_COMPLETE'));
 		}else{
-			$this->setMessage(GW::ln('/g/PAYMENT_PROCESSING'));
+			$jumpargs['paywait'] = 1;
 		}
 	
 		if(!$this->app->user){
 			$this->app->jump('/');
 		}else{
-			$this->app->jump('direct/orders/orders',['orderid'=>$order->id,'id'=>$order->id]);
+			$this->app->jump('direct/orders/orders',$jumpargs);
 		}
 	}
 	
@@ -444,7 +453,7 @@ class Module_Orders extends GW_Public_Module
 		$this->tpl_vars['list'] = $list;
 		
 		
-		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false;
+		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false || ($this->app->user && $this->app->user->isRoot());
 	}
 	
 
@@ -585,7 +594,12 @@ class Module_Orders extends GW_Public_Module
 		$order->updateChanged();
 		
 		
-		$this->doCalcDelivery($order);
+		if($order->delivery_opt==1){
+			$this->doCalcDelivery($order);
+		}else{
+			$order->amount_shipping = 0;
+		}	
+		
 		
 		
 		
@@ -854,7 +868,8 @@ class Module_Orders extends GW_Public_Module
 		
 		GW_Mail_Helper::sendMailAdmin($mail);			
 		//GW_Mail_Helper::sendMailDeveloper($mail);
-		
+		$item->status = 3; //	Waiting wire transfer confirm
+		$item->updateChanged();
 		
 			
 		
@@ -975,6 +990,8 @@ class Module_Orders extends GW_Public_Module
 		$this->order->user_id = $this->app->user->id;
 		
 			
+		d::dumpas();
+		
 		
 		if($this->order->delivery_opt==1){
 			$this->doCalcDelivery();
@@ -1047,6 +1064,12 @@ class Module_Orders extends GW_Public_Module
 		$dc0 = Shop_DiscountCode::singleton();
 		$codesall = [];
 		
+		$oitemsbyprod = [];
+		foreach($oitems as $oi)
+			if($oi->obj_type=='nat_products')
+				$oitemsbyprod[$oi->obj_id] = $oi;
+		
+		
 		foreach($products as $p){
 			if($p->prodtype_id == $giftcoupontype){
 				
@@ -1057,14 +1080,14 @@ class Module_Orders extends GW_Public_Module
 					continue; //important
 				}
 				//$order->set('keyval/test','fa32da1fa6sd51');
-				$oitem = $oitems[$p->id];
+				$oitem = $oitemsbyprod[$p->id];
 				$codes = [];
 				
-				for($i=0;$i<$oitem['qty'];$i++){
+				for($i=0;$i<$oitem->qty;$i++){
 					$code =  $dc0->getUniqueCode(8);
 					$coupon = $dc0->createNewObject();
 					$coupon->code = $code;
-					$coupon->limit_amount = $oitem['price'];
+					$coupon->limit_amount = $oitem->unit_price;
 					$coupon->used_amount = 0;
 					$coupon->percent = 100;
 					$coupon->active = 1;
@@ -1116,13 +1139,16 @@ class Module_Orders extends GW_Public_Module
 		
 		$ids = array_keys($enatos);
 		
+		$name = ($order->company ? $order->company.' ' :''). ($order->name ? $order->name.' '.$order->surname : $order->user->title);
+		
+		//d::dumpas($name);
 		
 		$result = Navigator::sysRequest('admin/lt/products/items',[
 		    'act'=>'doBuildDownload',
 		    'ids'=>implode(',', $ids), 
-		    'name'=>($order->company ? $order->company.' ' :'').$order->name.' '.$order->surname,
+		    'name'=>$name,
 		    'giftcoupons' => json_encode($giftcoupons),
-		    'email'=>$order->email,
+		    'email'=>$order->email ?: $order->user->email,
 		    'order_id'=>$order->id
 		]);
 		

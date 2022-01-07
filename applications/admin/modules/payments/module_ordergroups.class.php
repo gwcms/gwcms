@@ -107,7 +107,7 @@ class Module_OrderGroups extends GW_Common_Module
  
  */	
 	
-	function initInvoiceVars($item)
+	function initInvoiceVars($item, $opts=[])
 	{
 		
 		$user =  $item->user;
@@ -166,7 +166,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['ORDERID'] = $item->id;
 		$v['SECRET'] = $item->secret;
 		$v['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
-		$v['PAY_LINK'] = $this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$item->id,'key'=>$item->secret],['absolute' => 1,'app'=>"site"]);
+		$v['PAY_LINK'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
 			//$pdf=GW_html2pdf_Helper::convert($html, false);			
 		$v['DISCOUNT_ID'] = $item->discount_id;
 		
@@ -175,6 +175,12 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['AMOUNT_COUPON'] = $item->amount_coupon;			
 		$v['AMOUNT_ITEMS'] = $item->amount_items;
 		
+		$orderlink = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['orderid'=>$item->id,'id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
+		$v['ORDER_LINK'] = "<a href='$orderlink'>".GW_String_Helper::truncate($orderlink,50)."</a>";
+		
+		if($opts['ORDER_DETAILS_HTML'] ?? false){
+			$v['ORDER_DETAILS_HTML'] = $this->getOrderItems($item,true);
+		}
 			
 		foreach($item->items as $oitem){
 			
@@ -343,6 +349,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$order->payment_status = 8;
 		}else{
 			$order->payment_status = 7;
+			$order->status = 4;// status for delivery tracking 4 - is accepted and processing
 		}
 
 		foreach($order->items as $item){
@@ -364,8 +371,10 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		
-		if($this->config->confirm_email_tpl)
-			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doOrderPaydNotifyUser&cron=1');		
+		if($this->config->confirm_email_tpl){
+			$lang = $order->user->use_lang ?: 'lt';
+			$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderPaydNotifyUser&cron=1");	
+		}
 		
 		return false;
 	}
@@ -424,17 +433,25 @@ class Module_OrderGroups extends GW_Common_Module
 		$order = $this->getDataObjectById();
 		
 		
-		list($invtpl, $vars) = $this->initInvoiceVars($order);
 		
+		list($invtpl, $vars) = $this->initInvoiceVars($order,['ORDER_DETAILS_HTML'=>1]);
 		
-		//2kartus kad nesiusti laisko
-		if($order->mail_accept){
-			$this->setError("Already sent");
-			return false;
-		}else{
+		if(isset($_GET['confirm']))
+			unset($_GET['preview']);		
+		
+		if(!isset($_GET['preview'])){
+		
+			//2kartus kad nesiusti laisko
+			if($order->mail_accept && !isset($_GET['confirm']) ){	
 
-			$order->set('mail_accept',1);
-			$order->updateChanged();
+				$this->setError("Already sent");
+				$this->jump();
+
+			}else{
+
+				$order->set('mail_accept',1);
+				$order->updateChanged();
+			}
 		}
 		
 		//$response = [];
@@ -457,6 +474,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$email = $order->user->email;
 		
 		
+	
 		
 		$opts = [
 		    'to'=>$email,
@@ -472,8 +490,22 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$msg = GW::ln('/m/MESSAGE_SENT_TO',['v'=>['email'=>$email]]);
 		//$this->setMessage();
+			
+		if(isset($_GET['preview']))
+			$opts['preview'] = 1;
 		
-		GW_Mail_Helper::sendMail($opts);
+		$ret = GW_Mail_Helper::sendMail($opts);
+		
+		if(isset($_GET['preview'])){
+			$str= '<div style="padding:20px;border:1px solid silver;background-color:white">'.
+				implode(',',$ret['to']).'<hr>'.$ret['subject'].'<hr>'.$ret['body'].
+			'</div>';
+			
+			$alreadysent= ($order->mail_accept?'yes':'no');
+			$this->confirm("Confirm send, already sent? {$alreadysent} <hr>{$str}");
+		}
+		
+		
 		
 		if(isset($_GET['sys_call'])){
 			echo json_encode(['resp'=>$msg]);
@@ -487,7 +519,7 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function getOrderItems($order, $export)
 	{
-		$this->initOrderedItems($order);
+		//$this->initOrderedItems($order);
 		
 		$this->tpl_vars['order'] = $order; 
 			

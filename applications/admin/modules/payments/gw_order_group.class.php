@@ -18,7 +18,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	public $calculate_fields = [
 		'title'=>1,
 		'keyval'=>1,
-		'recipient'=>1	    
+		'recipient'=>1,
+		'pay_subtype_human'=>1
 	];
 	
 	
@@ -48,7 +49,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		foreach($this->items as $item){
 			$amount+= $item->unit_price*$item->qty;
 			$deliverable = max($item->deliverable, $deliverable);
-			$downloadable = max($item->downloadable, $deliverable);
+			$downloadable = max($item->downloadable, $downloadable);
 		}
 		
 		
@@ -118,6 +119,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 
 			case 'recipient':
 				return $this->user->title.' <'.$this->user->email.'>';
+			break;
+			case 'pay_subtype_human':
+				$pm = GW_Pay_Methods::singleton()->find(['gateway=? AND `key`=?', $this->pay_type, $this->pay_subtype]);
+				return $pm ? $pm->title : $this->pay_subtype;
 			break;
 				
 		}

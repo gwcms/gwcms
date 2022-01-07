@@ -26,8 +26,7 @@
 	<br/>	
 {/if}
 {function "product_list"}
-	{foreach $item->getOrderedItems() as $oitem}
-		{$product = $products_list[$oitem.prod_id]}
+	{foreach $item->getOrderedItems() as $product}
 
 		<div class="col-md-2 mb-2">
 			{capture assign=alt}{$product->title}{/capture}
@@ -51,7 +50,13 @@
 		
 			<a href="{if $order->open}{$ln}/direct/orders/orders/cart{else}{$m->buildDirectUri('', $args)}{/if}" class="btn u-btn-brown btn-md rounded-0">
 				<i class="fa fa-credit-card g-mr-2"></i>
-				{GW::ln('/m/PROCEED_PAYMENT')}
+
+				{if $item->status==3} {*bank transfer confirm sent*}
+					{GW::ln('/m/PROCEED_PAYMENT')}
+				{else}
+					{GW::ln('/m/PROCEED_DIFFERENT_PAYMENT')}
+				{/if}				
+				
 			</a>
 					
 
@@ -90,7 +95,7 @@
 {function "display_order_items"}
 		{foreach $citems as $citem}
 			{$obj=$citem->obj}
-			{$imurl=""}
+
 			{if $obj->composite_map.image && $obj->image}
 				{$img = $obj->image}
 				{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
@@ -98,7 +103,7 @@
 				{$imurl="{$obj->image_url}&size=100x100"}
 			{/if}
 			{if $imurl}
-				<a href="{$citem->link}"><img src="{$obj->image_url}&size=100x100"></a>
+				<a href="{$citem->link}"><img src="{$imurl}&size=100x100"></a>
 			{/if}
 		{/foreach}
 
@@ -145,10 +150,17 @@
 			<i class="fa fa-info-circle"></i> {$order->adm_message}
 			</div>
 		{/if}		
+		
+		{if $order->payment_status!=7 && $smarty.get.paywait}
+			<div style='margin-top:5px'>
+				<i class="fa fa-info-circle"></i> {GW::ln('/m/PAYMENT_PROCESSING')} <i class="fa fa-spinner fa-pulse fa-fw"></i>
+			</div>		
+			<script>setTimeout(function(){ location.href=location.href }, 8000)</script>
+		{/if}
 {/function}
 
 {function "display_order"}
-<div class="g-brd-around rounded g-mb-30 {if $item->id==$smarty.get.id}g-brd-blue{else}g-brd-gray-light-v4{/if}">
+<div class="g-brd-around rounded g-mb-30 {if $order->id==$smarty.get.id}g-brd-blue{else}g-brd-gray-light-v4{/if}">
 	<header class="g-bg-gray-light-v5 g-pa-20">
 		<div class="row">
 			<div class="col-sm-3 col-md-2 g-mb-20 g-mb-0--sm">
@@ -198,8 +210,12 @@
 					 {GW::ln('/m/PAY_METHOD')}
 				</h4>
 				<span class="g-color-black g-font-weight-300 g-font-size-13">
-					{GW::ln("/m/PAY_METHOD_{$order->pay_type}")}
 					
+					{if $order->pay_subtype}
+						{$order->pay_subtype_human}
+					{else}
+						{GW::ln("/m/PAY_METHOD_{$order->pay_type}")}
+					{/if}
 				</span>
 			</div>			
 			{/if}
@@ -207,7 +223,7 @@
 
 
 
-			<div class="col-sm-3 col-md-2 ml-auto text-sm-right">
+			<div class="col-sm-3 col-md-3 ml-auto text-sm-right">
 				<div style="float:left">
 					<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/ORDER')}<br/> # {$order->id}</h4>
 				</div>
@@ -254,7 +270,8 @@
 						</a>
 						{/if}
 						{if $admin_enabled}
-							<a class="dropdown-item" target="_blank" href='/admin/{$ln}/payments/ordergroups/{$order->id}/form'><i class='fa fa-pencil-square-o text-warning'></i></a>
+							<a class="dropdown-item" target="_blank" href='/admin/{$ln}/payments/ordergroups/{$order->id}/form'>
+								 <i class='fa fa-pencil-square-o text-warning'></i> Go to admin </a>
 						{/if}						
 						
 						
@@ -282,11 +299,18 @@
 			<div class="row">
 
 				{$citems=$order->items}
-				<div class="col-md-8">
+				
+				
+				{if !$smarty.get.paywait}
+					{$buttons = !$smarty.get.payselect && ($order->payment_status!=7 || $order->downloadable)}
+				{/if}
+				
+				<div class="{if $buttons}col-md-8{else}col-md-12{/if}">
 					
 					{call display_order_items}
 				</div>
 				
+				{if $buttons}
 				<div class="col-md-4">
 					{if !$smarty.get.payselect}
 
@@ -294,6 +318,7 @@
 
 					{/if}					
 				</div>
+				{/if}
 				
 			</div>
 				
@@ -362,29 +387,17 @@
 
 
 {if $list}
-
-	
-
-		
 	{foreach $list as $order}
 		{$citems = $order->items}
 		
-			{if $smarty.get.orderid && $order->id!=$smarty.get.orderid}
-			
-			{else}
-				{if $citems}
-					{call "display_order"}
-				{/if}
+		{if $smarty.get.orderid && $order->id!=$smarty.get.orderid}
+
+		{else}
+			{if $citems}
+				{call "display_order"}
 			{/if}
-
-			
-			
-		
-		
-		
+		{/if}
 	{/foreach}
-
-
 {else}
 	<p>{GW::ln('/g/EMPTY_LIST')}</p>
 {/if}

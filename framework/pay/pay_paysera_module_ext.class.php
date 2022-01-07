@@ -30,7 +30,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		//if($user->id == 9)
 		//	$args->payprice= 0.01;		
 		
-		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->city == 'paytest' || $user->city=="paytest";
+		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->city == 'paytest' || $user->city=="paytest" || $user->id==9;
 				
 		$data = array(
 		    'projectid' => $cfg->paysera_project_id,

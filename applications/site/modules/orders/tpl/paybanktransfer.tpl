@@ -15,7 +15,14 @@
 		<tr><th>{GW::ln('/M/orders/PAYMENT_RECEIVER')}</th><td>{GW::ln('/g/CONTACTS_COMPANY_NAME')}</td></tr>
 		<tr><th>{GW::ln('/M/orders/COMPANY_ID')}</th><td> {GW::ln('/g/CONTACTS_COMPANY_ID')}</td></tr>
 		{*<tr><th>{GW::ln('/M/orders/COMPANY_ADDRESS')}</th><td> {GW::ln('/g/CONTACTS_ADDRESS')}</td></tr>*}
-		<tr><th>{GW::ln('/M/orders/IBAN')}</th><td> {GW::ln('/g/CONTACTS_IBAN')} </td></tr>
+		{if GW::ln('/g/CONTACTS_IBAN') !='&nbsp;'}<tr><th>{GW::ln('/M/orders/IBAN')}</th><td> 
+					{GW::ln('/g/CONTACTS_IBAN')} 
+				</td></tr>
+		{else}
+			<tr><td colspan="2">
+				{GW::ln("/G/paymethods/banktransfer")}		
+			</td></tr>
+		{/if}
 		<tr><th>{GW::ln('/m/PAYMENT_BANKTRANSFER_DETAILS')}</th><td> {GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')}{$item->id} </td></tr>
 		<tr><th>{GW::ln('/m/PAYMENT_PAY_PRICE')}</th><td> {$item->amount_total} Eur </td></tr>
 		</table>
@@ -38,7 +45,7 @@
 					{input field="banktransfer_confirm" type="image" endpoint="orders/orders"}
 				</div>				
 				<div class="col-md-6">
-					{call input field="pay_user_msg" required=1}
+					{call input type=textarea field="pay_user_msg" required=1}
 				</div>
 
 			</div>

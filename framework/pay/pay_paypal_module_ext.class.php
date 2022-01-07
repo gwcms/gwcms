@@ -3,13 +3,12 @@
 class pay_paypal_module_ext extends GW_Module_Extension
 {
 	
-	function revolutApi()
+	function initCfg()
 	{
-		$cfg = new GW_Config("payments__payments_revolut/");	
+		$cfg = new GW_Config("payments__payments_paypal/");	
 		$cfg->preload('');
 
-		$api = new GW_PayRevolut_Api($cfg->api_key, $cfg->sandbox);	
-		return [$cfg, $api];
+		return $cfg;
 	}
 	
 	
@@ -18,13 +17,14 @@ class pay_paypal_module_ext extends GW_Module_Extension
 
 		$order= $args->order;
 		
-		$cfg = new GW_Config("payments__payments_paypal/");	
-		$cfg->preload('');		
+		$cfg = $this->initCfg();		
 		
 		$test = $cfg->pay_test || $order->name == 'paytest' ;
 		
-		if($this->app->user && in_array($cfg->test_user_group, $this->app->user->group_ids))
+		if($this->app->user && $cfg->test_user_group && in_array($cfg->test_user_group, $this->app->user->group_ids))
 			$test = true;
+		
+		$test = false;
 		
 		$paypal_email = $test ? $cfg->paypal_test_email : $cfg->paypal_email;
 		//$paypal_email = $cfg->paypal_email;
@@ -45,7 +45,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 		    'notify_url' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayPalAccept&orderid={$order->id}&id={$order->id}&action=callback",
 		    'return' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayPalAccept&orderid={$order->id}&id={$order->id}&action=accept",
 		    'cancel_return' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$order->id}&id={$order->id}",
-		    'charset' => 'utf-8',
+		    'charset' => 'utf-8', //kazkodel neveikia, ir json neissaugo pareina windows-1252
 		    //'cpp_header_image' => "{$args->base}application/site/assets/img/site_trans_400.png",
 		    'item_name' => $args->paytext,
 		);
@@ -55,7 +55,9 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			if($test)
 				$this->setMessage('TEST REQUEST use user: sb-7j7yz6892417@personal.example.com pass: f-5TTe0m  5000eur balance 2021-11 created with lais...oriu@gmail.com https://developer.paypal.com/developer/accounts/');
 			
-			$this->confirm("<pre>".json_encode($vars, JSON_PRETTY_PRINT).'</pre>');
+			$vars = $this->rootConfirmJson($vars);
+			if(!$vars)
+				return false;
 		}
 
 		
@@ -135,8 +137,15 @@ class pay_paypal_module_ext extends GW_Module_Extension
 	function doPaypalAccept()
 	{
 
-		$cfg = new GW_Config('datasources__payments_paypal/');
-		$cfg->preload('');
+		$cfg = $this->initCfg();
+		
+
+		$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>$_SERVER['REMOTE_ADDR'], 'time'=>date('Y-m-d H:i:s')];
+		file_put_contents(GW::s('DIR/LOGS').'paypal2.log', date('H:i:s').':::'.json_encode($debug, JSON_PRETTY_PRINT), FILE_APPEND);		
+		
+		file_put_contents(GW::s('DIR/LOGS').'paypaltest_json.log', json_encode($_POST));
+		file_put_contents(GW::s('DIR/LOGS').'paypaltest_serialize.log', serialize($_POST));		
+		
 		
 		
 		if(isset($_GET['testcase'])){
@@ -159,13 +168,14 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			
 			sleep(2);
 			//kad redirektas ivyktu
-			$order = $this->getOrder(true);
+			$order = $this->getOrder(true);			
 			
 			//tiesiog nieko nedarom pereis prie redirect
-		}else{
+		}elseif($action=='callback'){
 			
 			$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>$_SERVER['REMOTE_ADDR'], 'time'=>date('Y-m-d H:i:s')];
-			file_put_contents(GW::s('DIR/LOGS').'paypal.log', json_encode($debug, JSON_PRETTY_PRINT), FILE_APPEND);
+			$this->log(json_encode($debug, JSON_PRETTY_PRINT));
+
 		
 			$logvals = array_intersect_key($response, GW_Paypal_Log::singleton()->getColumns());
 			
@@ -187,14 +197,15 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			
 			
 			if ($_POST['payment_status'] != 'Completed'){
-				file_put_contents(GW::s('DIR/LOGS').'paypal.log', "KILLED - Payment status accept only completed\n", FILE_APPEND);
+				$this->log("KILLED - Payment status accept only completed");
+				
 				die('Payment status accept only completed');
 			}
 				
 			if(!$this->verifyMessage()){
 				$details = json_encode(['verify_url'=>$_GET['REQ_DOMAIN'], 'response'=>$_GET['VERIFIED_STR']]);
+				$this->log("KILLED - Payment verify failed details:($details)");
 				
-				file_put_contents(GW::s('DIR/LOGS').'paypal.log', "KILLED - Payment verify failed details:($details)\n", FILE_APPEND);
 				die('Payment verify failed');
 			}			
 			
@@ -219,6 +230,9 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			    'log_entry_id'=>$log_entry->id
 			];	
 			
+						
+			
+			
 			if($log_entry->test_ipn || $order->amount_total != $received_amount)
 				$args['paytest']=1;
 
@@ -227,5 +241,10 @@ class pay_paypal_module_ext extends GW_Module_Extension
 		}
 				
 		$this->redirectAfterPaymentAccept($order);
+	}
+	
+	function log($message)
+	{
+		file_put_contents(GW::s('DIR/LOGS').'paypal.log', '['.date('Y-m-d H:i:s').'] '.$message."\n", FILE_APPEND);
 	}
 }
