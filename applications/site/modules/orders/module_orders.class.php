@@ -102,11 +102,15 @@ class Module_Orders extends GW_Public_Module
 			'paytype'=>$type
 		];			
 		
-		$order->pay_subtype = '';
 		
-		if(isset($_GET['method']) && $_GET['method']){
-			$args->method = $_GET['method'];
-			$order->pay_subtype = $args->method;
+		
+		if($this->feat('mergepaymethods')){
+			$order->pay_subtype = '';
+
+			if(isset($_GET['method']) && $_GET['method']){
+				$args->method = $_GET['method'];
+				$order->pay_subtype = $args->method;
+			}
 		}
 			
 		$order->updateChanged();
