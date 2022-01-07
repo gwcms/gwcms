@@ -583,6 +583,7 @@ class Module_Shop extends GW_Public_Module
 			['obj_type="shop_products" AND obj_id=? AND processed=0', $item->id], $params
 		);
 		
+
 		
 		return $list;
 	}
