@@ -63,6 +63,7 @@ class GW_Data_Object
 				
 		$this->fireEvent('AFTER_CONSTRUCT');
 		$this->constructcomplete = true;
+		$this->calculate_fields['classname'] = 1;
 	}
 	
 	function initExtensions()
@@ -1140,7 +1141,11 @@ class GW_Data_Object
 
 	function calculateField($name)
 	{
-		die('overide this');
+		switch($name){
+			case "classname":
+				return get_class($this);
+			break;
+		}
 	}
 
 	function calculateFieldCache($key)

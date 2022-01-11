@@ -67,7 +67,7 @@
 			}
 		{/if}	 		
 	})	
-	
+		
 </script>
 
 <style>

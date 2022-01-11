@@ -18,7 +18,7 @@ class Module_Users extends GW_Public_Module
 		$this->model = new GW_Customer;
 		
 		//tol kol dirbu su siuo moduliu - reikia kad lang failus importuotu i db
-		GW::$devel_debug = true;	
+		//GW::$devel_debug = true;	
 		$this->cfg = new GW_Config('customers/');
 		
 		//d::ldump($this->app->page);

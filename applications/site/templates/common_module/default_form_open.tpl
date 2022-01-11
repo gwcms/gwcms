@@ -37,7 +37,15 @@
 				    
 		    
               <header class="text-center mb-4">
-                <h1 class="h4 g-color-black g-font-weight-400">{if $item->id}{GW::ln('/g/EDIT')}{/if}{GW::ln('/g/CREATE')} {GW::ln('/m/ITEM_TYPE_TITLE',[l=>gal])}</h1>
+                <h1 class="h4 g-color-black g-font-weight-400">
+			{if $item->id}{GW::ln('/g/EDIT')}{else}{GW::ln('/g/CREATE')}{/if} 
+			{GW::ln("/m/ITEM_TYPE_{$item->classname}_TITLE",[l=>gal,c=>1])} <span class="g-color-primary">{$item->title}
+				
+			{if $smarty.get.dialog && $app->user && $app->user->isRoot()}
+				<a href="{Navigator::buildURI(false,[clean=>null,dialog=>null])}" target="_blank" style="color:orange"><i class="fa fa-link"></i></a>
+			{/if}
+			</span>
+		</h1>
 		{if !$item->id}<p>{GW::ln('/m/CREATE_NOTES')}</p>{/if}
               </header>
 
