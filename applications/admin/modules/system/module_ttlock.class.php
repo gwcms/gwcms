@@ -3,18 +3,17 @@
 
 class Module_TTlock extends GW_Common_Module
 {	
-	public $default_view = 'default';
 		
 	function init()
 	{
-		$this->model = new stdClass();
+		$this->model = new gw_ttlock_codes();
 		
 		
 		parent::init();
 	}
 
 	
-	function viewDefault()
+	function viewTESTs()
 	{
 	
 		$test_actions = [];
@@ -84,5 +83,22 @@ class Module_TTlock extends GW_Common_Module
 		
 	}
 	
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+			'title_func'=>function($item){ 
+				$start = date('Y-m-d H:i',strtotime($item->start));
+				$end = date('Y-m-d H:i',strtotime($item->end));
+				return $item->get("code")." ($start - $end)";  
+			
+			},
+			'search_fields'=>['code']			
+		];	
+		
+
+		
+		return $opts;	
+	}		
 	
 }

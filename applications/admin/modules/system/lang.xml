@@ -196,6 +196,9 @@
       </i>
       <i id="ttlock">
         <i id="title">TTlock</i>
+        <i id="info">
+          <i id="model">gw_ttlock_codes</i>
+        </i>	
       </i>
       <i id="relays">
         <i id="title">Relays</i>

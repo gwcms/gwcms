@@ -37,7 +37,7 @@
 		{$dl_actions=[editshift]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code]}
 
 
 	{function dl_cell_obj_id}
@@ -52,6 +52,10 @@
 		<a target='_blank' href="{$app->buildUri("payments/ordergroups/{$item->group_id}/form")}">{$item->group_id}</a>
 	{/function}	
 	
+	{function dl_cell_door_code}
+		{*add flds=',door_code'*}
+		<a target='_blank' href="{$app->buildUri("system/ttlock/{$item->get('keyval/door_code_id')}/form")}">{$item->get('keyval/door_code_id')}</a>
+	{/function}		
 	
 	{function dl_cell_user_title}
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>

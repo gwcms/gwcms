@@ -151,7 +151,7 @@
 			</div>
 		{/if}		
 		
-		{if $order->payment_status!=7 && $smarty.get.paywait}
+		{if $order->payment_status!=7 && $smarty.get.paywait && $smarty.get.id}
 			<div style='margin-top:5px'>
 				<i class="fa fa-info-circle"></i> {GW::ln('/m/PAYMENT_PROCESSING')} <i class="fa fa-spinner fa-pulse fa-fw"></i>
 			</div>		

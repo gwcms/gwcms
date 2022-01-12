@@ -280,12 +280,9 @@ class Module_Products extends GW_Common_Module
 		$start = strtotime($product->date.' '.$product->start_time.' -20 minutes');
 		$end = strtotime($product->date.' '.$product->end_time);
 		
-		//po to kai gautu errora pasitikrintu ir dar karta sugeneruotu atsitiktini, pasikeitimas perduodamas per $code argumenta
-		$resp = ttlock_api::singleton()->init()->addPasscodeRandom(false,$code,$start,$end);
+		$code=ttlock_api::singleton()->init()->addRandomPasscodeStore($start,$end,'order/'.$item->id);
+		$item->set('keyval/door_code_id', $code->id);
 		
-		$item->set('keyval/door_code', $code);
-		$item->set('keyval/door_code_id', $resp->keyboardPwdId);
-		$item->updateChanged();		
 		
 		if($code)
 			return true;
@@ -313,17 +310,17 @@ class Module_Products extends GW_Common_Module
 		
 		if($this->feat('ttlock') && $product->date && $product->start_time && $product->end_time){
 			if(!$this->generatePasscode($item, $product)){
-				GW_Mail_Helper::sendMailDeveloper([
+				$opt=[
 				    'subject'=>GW::s('PROJECT_NAME').' nepavyko sugeneruoti kodo',
-				    'body'=>"order: {$item->order->id}, recipient:$to order_item_id: {$item->id} product: {$product->title}"]
-				);
+				    'body'=>"order: {$item->order->id}, recipient:$to order_item_id: {$item->id} product: {$product->title}"
+				];
+				    
+				GW_Mail_Helper::sendMailDeveloper($opt);
 				return false; // nepavyko sugeneruot kodo
 			}
 			
-			$vars['access_code'] = $item->get('keyval/door_code');
-		}
-	
-				
+			$vars['access_code'] = $item->get('door_code');
+		}				
 		
 		$opts = [
 		    'to'=>$to,

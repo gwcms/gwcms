@@ -11,7 +11,8 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	    'is_expired'=>1,
 	    'title'=>1,
 		'type'=>1,
-		'invoice_line'=>1
+		'invoice_line'=>1,
+	    	'door_code'=>1
 	];
 	
 	public $composite_map = [
@@ -63,6 +64,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			case 'is_expired':
 				return  $this->expires_enabled  && $this->expires_secs < 0;
 			break;
+			case 'door_code';
+				return gw_ttlock_codes::singleton()->createNewObject($this->get('keyval/door_code_id'), true)->code;
+			break;		
 		
 		}
 		

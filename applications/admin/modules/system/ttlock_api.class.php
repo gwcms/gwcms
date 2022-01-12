@@ -63,6 +63,25 @@ class ttlock_api
 		}
 	}
 	
+	function addRandomPasscodeStore($start,$end,$ref){
+		
+		$code = rand(10000,99999);
+		//po to kai gautu errora pasitikrintu ir dar karta sugeneruotu atsitiktini, pasikeitimas perduodamas per $code argumenta
+		$resp = ttlock_api::singleton()->init()->addPasscodeRandom(false,$code,$start,$end);
+		
+		
+		$code = gw_ttlock_codes::singleton()->createNewObject([
+		    'code'=>$code,
+		    'remote_id'=>$resp->keyboardPwdId,
+		    'start'=>date('Y-m-d H:i:s',$start), 
+		    'end'=>date('Y-m-d H:i:s',$end),
+		    'ref'=>$ref
+		]);
+		
+		$code->insert();
+		return $code;
+	}
+	
 	
 	function deletePasscode($lockid, $keyboardPwdId)
 	{

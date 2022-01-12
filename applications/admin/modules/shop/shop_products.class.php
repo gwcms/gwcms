@@ -5,7 +5,7 @@ class Shop_Products extends GW_Composite_Data_Object
 {
 	public $calculate_fields = [
 	    'keyval'=>1, //product extension
-	    'discount_display'=>1
+	    'discount_display'=>1,
 	];
 	public $ignore_fields = [
 	    'keyval' => 1
@@ -39,7 +39,6 @@ class Shop_Products extends GW_Composite_Data_Object
 				$dif = $this->oldprice - $this->price;
 				return $dif  ? round(($dif / $this->oldprice)*100).'%' : '';
 			break;
-
 		}
 		
 
