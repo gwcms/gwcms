@@ -1214,6 +1214,20 @@ class Module_Orders extends GW_Public_Module
 		//d::dumpas($html);		
 	}	
 	
+	
+	
+	
+	function viewPayEmbed()
+	{
+
+		$order = $this->doInitCart();
+		
+	
+
+		$this->tpl_vars['item'] = $order;
+		$this->tpl_vars['order'] = $order;		
+	}
+	
 }
 
 

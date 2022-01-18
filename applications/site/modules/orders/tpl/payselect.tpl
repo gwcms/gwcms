@@ -26,20 +26,21 @@
 			{html_options options=$mergepay.country_opt selected=$mergepay.country}
 		</select>
 		</div>
+		<br /><br />
 		
 		<table class='paytbl'>
 		{foreach $mergepay.methods as $method}
+			{$link=$app->buildUri('direct/orders/orders', [id=>$order->id,act=>doOrderPay,type=>$method->gateway,method=>$method->key])}
 			<tr >
-				<td style='padding-right:25px;'>	
-					<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method->gateway}", "method":"{$method->key}", "id": "{$order->id}" }'>	   
-						<img src="{$method->logo}" alt="{$method->title|escape}" title="{$method->title|escape}" 
-					     style="width:200px"> 
-
+				<td style='padding-right:25px;text-align:right'>	
+					<a  type="button" href="{$link}">	   
+						<img src="{$method->logo}" alt="{$method->title_tr|escape}" title="{$method->title_tr|escape}"  
+					  style="max-height: 45px">
 				      </a>
 				</td>
 				<td>
-					<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method->gateway}", "method":"{$method->key}", "id": "{$order->id}" }'>
-					{$method->title|escape}
+					<a type="button" href="{$link}">
+					{$method->title_tr|escape}
 					{*
 					{$method->priority|escape}
 					{$method->gateway|escape}
@@ -61,8 +62,9 @@
 		<tr >
 			<td style='padding-right:25px;'>	
 				<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method}", "id": "{$order->id}" }'>	   
-					<img src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln("/m/PAY_METHOD_{$method}")}" title="{GW::ln("/m/PAY_METHOD_{$method}")}" 
-				     style="width:200px"> 
+					<img  
+						src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln("/m/PAY_METHOD_{$method}")}" title="{GW::ln("/m/PAY_METHOD_{$method}")}" 
+				     style="width:200px;"> 
 				
 			      </a>
 			</td>

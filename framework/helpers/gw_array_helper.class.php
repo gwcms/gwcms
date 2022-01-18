@@ -365,7 +365,7 @@ class GW_Array_Helper
 	 * kad atiduot i JSON.parse nepakintanti indeksa, jei skaicius pakinta rikiavimo 
 	 */
 
-	function idValueArray(array $input) 
+	static function idValueArray(array $input) 
 	{
 		$return = array();
 		foreach ($input as $key => $value) {

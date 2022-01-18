@@ -50,7 +50,7 @@
 
 			</div>
 				
-			<button class="btn btn-primary"><i class='fa fa-envelope-o'></i> {GW::ln('/g/SAVE_BANK_TRANSFER_CONFIRM')}</button>	
+			<button class="btn btn-primary"><i class='fa fa-envelope-o'></i> {GW::ln('/m/SAVE_BANK_TRANSFER_CONFIRM')}</button>	
 		</form>
 	</div>
 </div>

@@ -20,7 +20,7 @@ class Module_Classificator_Types  extends GW_Common_Module
 	function __eventAfterList(&$list)
 	{
 		//foreach($list as $contest)
-		//	$contest->participants_count = IPMC_Competition_Participant::singleton()->count('competition_id='.(int)$contest->id);
+		//	$contest->participants_count = ADB_Participants::singleton()->count('competition_id='.(int)$contest->id);
 		
 		
 		$results = GW::db()->fetch_assoc("SELECT type,count(*) FROM `".GW_Classificators::singleton()->table."` GROUP BY type", 0);

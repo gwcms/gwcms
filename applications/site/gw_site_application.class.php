@@ -142,6 +142,7 @@ class GW_Site_Application extends GW_Application
 	{
 		$path = explode('?', $path);
 		
+		
 		if(isset($path[1])){
 			parse_str($path[1], $args);
 		}	
@@ -158,13 +159,25 @@ class GW_Site_Application extends GW_Application
 		if(!$this->moduleExists($dir, $name))
 			die("Failed locating module $dir/$name");
 		
+		
+		$restore_vars=$this->smarty->getTemplateVars(); 
+		$restore_mod = GW_Lang::$module;
+		
+		
 		$info=[];
 		$info['module_path']=[$dir, $name];		
 		$info['module_name']=$name;
 		
 		$fname = $this->moduleFileName($dir, $name);
 				
-		return $this->processSiteModule($fname, $path, $info, $args);
+		$result = $this->processSiteModule($fname, $path, $info, $args);
+		
+		
+		
+		$this->smarty->assign($restore_vars); 
+		GW_Lang::$module = $restore_mod;
+		
+		return $result;
 	}
 	
 	
