@@ -255,6 +255,10 @@ class Module_Orders extends GW_Public_Module
 		
 		if($order->payment_status==7){
 			$this->setMessage(GW::ln('/m/PAYMENT_COMPLETE'));
+			
+			if($order->get('extra/after_pay_nav')){
+				Navigator::jump($order->get('extra/after_pay_nav'));
+			}
 		}else{
 			$jumpargs['paywait'] = 1;
 		}
@@ -460,6 +464,24 @@ class Module_Orders extends GW_Public_Module
 		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false || ($this->app->user && $this->app->user->isRoot());
 	}
 	
+	
+	function viewOrder()
+	{
+		$this->userRequired();
+		
+		
+		
+		
+		$list = [GW_Order_Group::singleton()->find(['user_id=? AND id=?', $this->app->user->id, $this->args['id']])];
+		
+		$this->tpl_name = "orders";
+		
+		$this->tpl_vars['list'] = $list;
+		
+		
+		$this->tpl_vars['admin_enabled'] = $_SESSION['site_auth']['admin_user_id'] ?? false || ($this->app->user && $this->app->user->isRoot());	
+		
+	}
 
 
 
@@ -922,10 +944,6 @@ class Module_Orders extends GW_Public_Module
 	
 	function prepareMergedPay($amount)
 	{
-		
-		
-		
-		
 		$cfg = new GW_Config('payments__mergedpaymethods/');
 		$cfg->preload('');
 		$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'LT';
@@ -938,9 +956,6 @@ class Module_Orders extends GW_Public_Module
 			['priority ASC']
 		);
 		$list = [];
-
-			
-			
 		
 		
 		$disabled_group = array_flip((array)json_decode($cfg->get('disabled_group'), true));
@@ -1220,7 +1235,7 @@ class Module_Orders extends GW_Public_Module
 	function viewPayEmbed()
 	{
 
-		$order = $this->doInitCart();
+		$order = GW_Order_Group::singleton()->find(['id=?', $this->args['id']]);
 		
 	
 

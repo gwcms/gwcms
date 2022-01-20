@@ -11,7 +11,7 @@
 	<div class='g-brd-around g-brd-gray-light-v4 g-pa-30 g-mb-30'>
 
 		{if $preinvoice}{$tmp="_PRE"}{else}{$tmp=""}{/if}
-		<h2>{GW::ln("/g/PROVIDE_DETAILS_IF_NEEDED{$tmp}")}</h2>
+		<h2>{GW::ln("/m/PROVIDE_DETAILS_IF_NEEDED{$tmp}")}</h2>
 		
 		<br/>
 

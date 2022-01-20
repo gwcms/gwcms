@@ -55,9 +55,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 		
 		if($this->app->user && $this->app->user->isRoot()){
-			
-			d::ldump($args);
-			
+						
 			$data = $this->rootConfirmJson($data);
 			if(!$data)
 				return false;

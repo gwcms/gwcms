@@ -66,7 +66,7 @@
        	
        
 <div>
-	{GW::ln("/G/paymethods/banktransfer")}
+	{GW::ln("/M/paymethods/banktransfer")}
 </div>
 
 <br><br>
