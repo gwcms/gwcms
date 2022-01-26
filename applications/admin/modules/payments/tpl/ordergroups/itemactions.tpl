@@ -39,7 +39,7 @@
 
 {if $m->feat(itax)}
 	<li class="divider"></li>
-	{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" confirm=1 caption="Suvesti į Itax [D]"  shift_button=1}
+	{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" caption="Suvesti į Itax [D]"  shift_button=1}
 	
 	{if $item->get('itax_status_ex/purchase')==7}
 		{list_item_action_m url=[false,[act=>doItaxCancel,id=>$item->id]] iconclass="fa fa-window-close text-danger" confirm=1 caption="Šalinti iš itax(Pirkimo sąsk.)"}

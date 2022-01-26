@@ -127,7 +127,7 @@
 			<i class="fa fa-info-circle"></i> {$order->adm_message}
 			</div>
 		{/if}	
-		{if $order->pay_type==banktransfer && $order->get('extra/bt_confirm') && !$smarty.get.payselect}
+		{if $order->pay_type==banktransfer && $order->status==3 && $order->get('extra/bt_confirm') && !$smarty.get.payselect}
 			<hr>
 			<h6>{GW::ln('/m/BANK_TRANSFER_CONFIRM')} </h6>
 			{$msg = $order->pay_user_msg}
@@ -415,7 +415,7 @@
 	
 ul.no-bullets {
   list-style-type: none; /* Remove bullets */
-  ppadding: 0; /* Remove padding */
+  {if !GW::s('ECOMMERCE_ISOLATION')}padding: 0; /* Remove padding */{/if}
   margin: 0; /* Remove margins */
 }	
 </style>

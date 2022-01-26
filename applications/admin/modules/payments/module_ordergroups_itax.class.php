@@ -85,7 +85,7 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 				json_encode($itaxclient, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</pre>');
 			
 			$order->set('extra/itax_client_id', $itaxclient->id);
-			$order->set('itax_status_ex/client', 7);
+			$order->set('extra/itax_status_ex/client', 7);
 				
 			goto sFinish;
 		}
@@ -147,10 +147,10 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 			
 			//d::dumpas()
 			$order->set('extra/itax_client_id', $itaxclient->id);
-			$order->set('itax_status_ex/client', 7);
+			$order->set('extra/itax_status_ex/client', 7);
 		}else{
 			$this->setError('Create failed: '.json_encode(['url'=>$this->itax->last_url, $resp], JSON_UNESCAPED_SLASHES));
-			$order->set('itax_status_ex/client', 6);
+			$order->set('extra/itax_status_ex/client', 6);
 		}
 		
 		
@@ -167,22 +167,19 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 	
 	function getOrderDescription($order)
 	{
-		$this->initOrderedItems($order);
-		$ois = $this->tpl_vars['list'];
-		$prods = $this->tpl_vars['products_list'];
-		
+		//$this->initOrderedItems($order);
 		
 		$text = "";
 		$total_qty = 0;
 		
-		foreach($ois as $oi){
-			$prod = $prods[$oi['prod_id']];
+		foreach($order->items as $oi){
+
 			
-			$text.="$prod->title ($prod->remote_id) -  {$oi['qty']} x {$oi['price']} € \n";
-			$total_qty+=$oi['qty'];
+			$text.="{$oi->title} -  {$oi->qty} x {$oi->unit_price} € \n";
+			$total_qty+=$oi->qty;
 		}
 		
-		return ['ois'=>$ois, 'prods'=>$prods, 'text'=>$text, 'qty'=>$total_qty];
+		return ['text'=>$text, 'qty'=>$total_qty];
 	}
 
 
@@ -230,7 +227,7 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 		$il['product_id'] = $product_id;
 		$il['total_amount'] = $order->amount_total;
 
-		$il['price_incl_sales_tax'] = $order->amount_total /$qty;
+		$il['price_incl_sales_tax'] = $order->amount_total / $qty;
 
 		$il['vat_amount'] = $il['total_amount']/(100+$taxpercent)*$taxpercent;
 
@@ -275,7 +272,7 @@ total_amount = 3491.0
 				json_encode($res->response[0], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</pre>');
 			
 			$order->set('extra/itax_invoice_id', $res->response[0]->id);
-			$order->set('itax_status_ex/invoice', 7);			
+			$order->set('extra/itax_status_ex/invoice', 7);			
 
 			return $res->response[0];
 		}
@@ -307,12 +304,12 @@ total_amount = 3491.0
 		if(isset($resp->response->number) && $resp->response->number == $inv_number){
 			
 			$order->set('extra/itax_invoice_id', $resp->response->id);
-			$order->set('itax_status_ex/invoice', 7);
+			$order->set('extra/itax_status_ex/invoice', 7);
 			$this->setMessage('Create invoice success');
 			
 		}else{
 			$order->set('extra/itax_invoice_id', 0);
-			$order->set('itax_status_ex/invoice', 6);			
+			$order->set('extra/itax_status_ex/invoice', 6);			
 			
 			if(isset($_GET['debug'])){
 				d::dumpas(json_encode(['url'=>$this->itax->last_url, 'response'=>$resp], JSON_PRETTY_PRINT));
@@ -329,10 +326,10 @@ total_amount = 3491.0
 		$item->set('errors/itax', new stdClass());
 		
 		//jei jau bus toks invoice_num mes klaida kad uzimtas
-		$item->set('itax_status_ex/invoice', 0);
+		$item->set('extra/itax_status_ex/invoice', 0);
 		
 		
-		if($item->get('itax_status_ex/purchase')!=7)
+		if($item->get('extra/itax_status_ex/purchase')!=7)
 			$item->itax_insert_time = date('Y-m-d H:i:s');
 		
 		
@@ -415,10 +412,10 @@ total_amount = 3491.0
 			$item->set('errors/itax/purchase_create_fail', "Purchase create failed");
 			$item->set('errors/itax/purchase_details', json_encode(['request'=>$addPreq, 'response'=>$addPresp]));			
 			
-			$item->set('itax_status_ex/purchase', 6);
+			$item->set('extra/itax_status_ex/purchase', 6);
 			
 		}else{
-			$item->set('itax_status_ex/purchase', 7);
+			$item->set('extra/itax_status_ex/purchase', 7);
 			
 			if(!isset($addPresp->response->id))
 			{
@@ -446,14 +443,14 @@ total_amount = 3491.0
 			if(!$buyer->isItax())
 			{
 				$this->setError("Buyer push to itax failed");
-				$item->set('itax_status_ex/client', 6);
+				$item->set('extra/itax_status_ex/client', 6);
 				$item->set('extra/itax_client_id', 0);
 			}else{
-				$item->set('itax_status_ex/client', 7);
+				$item->set('extra/itax_status_ex/client', 7);
 				$item->set('extra/itax_client_id', $buyer->getItaxId());
 			}
 		}else{
-			$item->set('itax_status_ex/client', 5);
+			$item->set('extra/itax_status_ex/client', 5);
 			$item->set('extra/itax_client_id', 0);
 		}
 		
@@ -481,10 +478,10 @@ total_amount = 3491.0
 
 			if($addIresp->response->id)
 			{
-				$item->set('itax_status_ex/invoice', 7);
+				$item->set('extra/itax_status_ex/invoice', 7);
 				$item->set('extra/itax_invoice_id', $addIresp->response->id);
 			}else{
-				$item->set('itax_status_ex/invoice', 6);
+				$item->set('extra/itax_status_ex/invoice', 6);
 				
 				//jeigu updeitinant erroras tada irgi negerai
 				//$item->set('extra/itax_invoice_id', 0);
@@ -493,7 +490,7 @@ total_amount = 3491.0
 				$item->set('errors/itax/invoice_details', json_encode(['request'=>$addIreq, 'response'=>$addIresp, 'update'=>$update?'yes':'no'], JSON_PRETTY_PRINT));
 			}
 		}else{
-			$item->set('itax_status_ex/invoice', 5);
+			$item->set('extra/itax_status_ex/invoice', 5);
 			
 			//jeigu updeitinant erroras tada irgi negerai
 			//$item->set('extra/itax_invoice_id', 0);
@@ -587,11 +584,11 @@ total_amount = 3491.0
 			$response = $this->itax->delete('purchases', $item->get('extra/itax_purchase_id'), ['must_have_tag'=>'MTcrmAuto','bypass_posted'=>true]);
 			
 			if(isset($response->errcode) && $response->errcode == 601){
-				$item->set('itax_status_ex/purchase', 8);
+				$item->set('extra/itax_status_ex/purchase', 8);
 			}
 			
 			if($response->response->id == $item->get('extra/itax_purchase_id')){
-				$item->set('itax_status_ex/purchase', 8);
+				$item->set('extra/itax_status_ex/purchase', 8);
 				$this->setMessage("Pirkimo sąsk pašalinta");
 			}else{
 				$this->setError( json_encode($response) );

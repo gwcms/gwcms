@@ -84,6 +84,7 @@ class Module_Users extends GW_Public_Module
 	{
 		if(isset($_GET['after_auth_nav'])){
 			$this->app->sess('after_auth_nav', $_GET['after_auth_nav']);
+			$this->app->sess('navigate_after_auth', $_GET['after_auth_nav']);
 		}		
 		
 		
@@ -306,7 +307,7 @@ class Module_Users extends GW_Public_Module
 		list($username, $pass) = $login;
 		setcookie('login_0', $username, strtotime('+3 MONTH'), $this->app->sys_base);
 						
-		if($user = $this->app->auth->loginPass($username, $pass)) {
+		if(($user = $this->app->auth->loginPass($username, $pass))  || ($user = $this->otherSystemLogin($username, $pass))) {
 			
 			$this->app->user = $user;
 			
@@ -682,6 +683,83 @@ class Module_Users extends GW_Public_Module
 			$this->jump();
 		}else{
 			return parent::canBeAccessed($item);
+		}
+	}	
+	
+	
+	function otherSystemLogin($username, $pass)
+	{
+	
+		//vartotojas negali egzistuoti sioje sistemoje
+		if(GW_User::singleton()->count(['username=?', $username]))
+			return false;
+		
+		//$url = 'http://user:pass@adb/service/user';
+		$url = GW_Config::singleton()->get('gw_users/secondcms_userservice_endpoint');
+		
+		
+		$rpc = new GW_General_RPC($url);
+		$req = ['user'=>$username,'pass'=>$pass, 'ip'=>$_SERVER['REMOTE_ADDR'], 'user_agent'=>$_SERVER['HTTP_USER_AGENT']];
+
+		$rpc->debug=1;
+		//$rpc->basicAuthSetUserPass('aaa','bbb');
+		
+		$resp = $rpc->call('login', [], $req);
+		
+		if($resp->user && $resp->user->id){
+			$remote_user =  $resp->user;
+			
+			$cust = GW_Customer::singleton()->createNewObject();
+			$secondsys_name = parse_url($url);
+			$secondsys_name = $secondsys_name['host'];
+
+
+
+			$copyfields = $cust->getFieldTypes();
+			
+			foreach(['id','insert_time','update_time','login_count'] as $nocopy)
+				unset($copyfields[$nocopy]);
+
+			//$copyfields = array_keys($copyfields);
+			
+			$copy = array_intersect_key((array)$remote_user, $copyfields);
+			
+			$cust->setValues($copy);
+			$cust->description = "Copy from remote syst ($secondsys_name). original user id: {$remote_user->id}";
+			if($remote_user->description ?? false)
+				$cust->description.=" || Orig descript: ".$remote_user->description;
+			
+			$cust->pass = $pass;
+			$cust->cryptPassword();
+			
+			$cust->prepareSave();
+		
+			$cust->setValidators('import');
+			$cust->license = 1;
+			
+			if(!$cust->validate())
+			{
+				$this->setError("User found in remote system ($secondsys_name) but facing user validation problems");
+				$this->setItemErrors($cust);
+				$this->setError('Please sign up regular way. Cant import');
+				
+			
+				$info = ['orig_user'=>$remote_user,'copy_fields'=>$copy,'errors'=>$cust->errors];
+				$info = json_encode($info, JSON_PRETTY_PRINT || JSON_UNESCAPED_SLASHES || JSON_UNESCAPED_UNICODE);
+				$opts = ['subject'=>'User found in remote sys but cant create', 'body'=>$info];
+				GW_Mail_Helper::sendMailAdmin($opts);
+			}else{
+				
+				$cust->insert();
+				
+				
+				$this->setMessage("User was imported from other system - <b>$secondsys_name</b>. Keep in mind that data is duplicated so if you change password or other details on one system it wont change on other, if there is need please repeat update on second system in that case");
+				
+				
+				$user = $this->app->auth->loginPass($username, $pass);
+				
+				return $user;
+			}
 		}
 	}	
 }

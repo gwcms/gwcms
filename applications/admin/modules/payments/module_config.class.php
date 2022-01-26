@@ -5,20 +5,32 @@ class Module_Config extends GW_Common_Module
 {	
 	public $default_view = 'default';
 	
+	public $options=[];
+	
 	function init()
 	{
-		$this->model = new GW_Config($this->module_path[0].'/');
+		$this->model = $this->config = new GW_Config($this->module_path[0].'/');
 		$this->initLogger();
 		
+		
+		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
 		
 
 		
 		parent::init();
+		
+				
+		if($this->feat('itax')){
+			$this->addRedirRule('/^doItax|^viewItax/i','itax');
+			$this->addRedirRule('events','itax');
+		}		
 	}
 	
 	function viewDefault()
 	{
+				
 		return ['item'=>$this->model];
+		
 	}	
 	
 	function doSave()

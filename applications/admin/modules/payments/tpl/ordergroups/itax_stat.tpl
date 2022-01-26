@@ -36,7 +36,7 @@
 
 {function "itax_status"}
 <a class="iframeopen" href="{$m->buildUri('itaxnotes',['id'=>$item->id,'clean'=>2])}">
-		{$stat=json_decode($item->itax_status_ex, true)}
+		{$stat=$item->extra->itax_status_ex}
 		{foreach $stat as $longname => $status}
 				<a class="itax_stat_{$status} itaxbadge " {if $status==7}href="{$itax_links[$longname]}{$item->get("extra/itax_`$longname`_id")}" target='_blank'{elseif $status==6}href="{$m->buildUri(false,[act=>doItaxShowFailDetails,id=>$item->id,which=>$longname])}"{/if} 
 				   title='{$longname}: {$itax_status_title[$status]|default:$status}'

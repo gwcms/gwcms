@@ -1,22 +1,19 @@
 {include file="common.tpl"}
 		
-{*
-{function name=do_toolbar_buttons_configtabs}
-	{toolbar_button title=GW::l('/A/VIEWS/itax') iconclass='gwico-Create-New' href=$m->buildUri(itax)}
-{/function}
-*}
-{*
-{function name=do_toolbar_buttons_cronruns} 
-	{toolbar_button title="doCronRun&every=2" href=$m->buildUri(false,[act=>doCronRun,every=>2])}
-	{toolbar_button title="doCronRun&every=5" href=$m->buildUri(false,[act=>doCronRun,every=>5])}
-	{toolbar_button title="doCronRun&every=60" href=$m->buildUri(false,[act=>doCronRun,every=>60])}
-{/function}		
-*}
-{*
-{$do_toolbar_buttons_hidden=[cronruns,rtlog]}		
-{$do_toolbar_buttons[] = configtabs}
-{$do_toolbar_buttons[]=hidden}
-*}
+
+
+{if $m->feat(itax)}
+	{function name=do_toolbar_buttons_configtabs}
+		{toolbar_button title=GW::l('/A/VIEWS/itax') iconclass='gwico-Create-New' href=$m->buildUri(itax)}
+	{/function}
+	
+
+	{$do_toolbar_buttons[] = configtabs}
+	{*{$do_toolbar_buttons[]=hidden}*}
+{/if}
+
+
+
 
 
 {include "default_form_open.tpl" form_width="100%"} 

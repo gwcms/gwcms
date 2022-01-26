@@ -22,8 +22,13 @@ class GW_Module_Extension
 			
 			return $this->mod->$name;
 		}else {
-			d::ldump('this part might have probs');
+			//public $options=[]; pirmas variantas bus
+			//public $options; bus antras - not set
+			
+			d::ldump("trying access non existing $name this part might have probs");
 			$x = $this->mod->$name;;
+			
+			d::ldump($this->mod->$name);
 			return $x;
 		}
 	}
