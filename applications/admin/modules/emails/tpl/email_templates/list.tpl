@@ -14,7 +14,7 @@
 	{$do_toolbar_buttons[] = search}
 	
 	
-	{$dl_actions=[edit,deleteCheck,clone,ext_actions]}
+	{$dl_actions=[editshift,deleteCheck,clone,ext_actions]}
 	
 	{function name=do_toolbar_buttons_testpdfgen}
 		{toolbar_button title=GW::l('/A/VIEWS/testpdfgen') iconclass='fa fa-file-pdf-o' href=$m->buildUri(testpdfgen)}	

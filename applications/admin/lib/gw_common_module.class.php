@@ -2724,7 +2724,8 @@ class GW_Common_Module extends GW_Module
 	function askConfirm($str)
 	{
 		$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
-		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a>";
+		$refreshurl = $_SERVER['REQUEST_URI'];
+		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";
 		$this->setMessageEx(['text'=>$str, 'type'=>4]);			
 	}
 	

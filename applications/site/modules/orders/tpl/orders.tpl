@@ -1,6 +1,4 @@
-
-
-
+	
 {function "product_list"}
 	{foreach $item->getOrderedItems() as $product}
 
@@ -75,6 +73,9 @@
 			{if $obj->composite_map.image && $obj->image}
 				{$img = $obj->image}
 				{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
+			{elseif $obj->cart_item_image}
+				{$img = $obj->cart_item_image}
+				{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
 			{elseif $obj->image_url}
 				{$imurl="{$obj->image_url}&size=100x100"}
 			{/if}
@@ -97,7 +98,7 @@
 						{if $citem->link}<a href="{$citem->link}">{/if}
 
 							{if $obj->context_short}<i>{$obj->context_short}</i> - {/if} 
-							{$obj->title}
+							{$obj->invoice_line}
 						{if $citem->link}</a>{/if}
 
 					{$citem->qty}x{$citem->unit_price} Eur 
@@ -125,7 +126,20 @@
 			<div style='margin-top:5px'>
 			<i class="fa fa-info-circle"></i> {$order->adm_message}
 			</div>
-		{/if}		
+		{/if}	
+		{if $order->pay_type==banktransfer && $order->get('extra/bt_confirm') && !$smarty.get.payselect}
+			<hr>
+			<h6>{GW::ln('/m/BANK_TRANSFER_CONFIRM')} </h6>
+			{$msg = $order->pay_user_msg}
+			{$img = $order->banktransfer_confirm}
+			<p><b>{GW::ln('/m/FIELDS/pay_user_submit_time')}:</b> {$order->get('extra/bt_confirm')}</p>
+			{if $msg}
+				<p><b>{GW::ln('/m/FIELDS/pay_user_details')}:</b> {$msg|escape}</p>
+			{/if}				
+			{if $img}
+				<a href="{$app_base}tools/img/{$img->key}" target="_blank"><img alt="bank transfer confirm" src='{$app_base}tools/img/{$img->key}?size=150x150' style=''></a>
+			{/if}					
+		{/if}
 		
 		{if $order->payment_status!=7 && $smarty.get.paywait && $smarty.get.id}
 			<div style='margin-top:5px'>
@@ -190,7 +204,7 @@
 					{if $order->pay_subtype}
 						{$order->pay_subtype_human}
 					{else}
-						{GW::ln("/m/PAY_METHOD_{$order->pay_type}")}
+						{GW::ln("/m/PAY_METHOD_{$order->pay_type|strtoupper}")}
 					{/if}
 				</span>
 			</div>			
@@ -385,7 +399,6 @@
 
 
 
-<br/><br/><br/>
 
 
 <style>
@@ -396,11 +409,13 @@
 	.itmsrow td{ border: 1px solid silver; border-top:0; }
 	.orderinfo td { background-color: #eee }
 	
-	.dropdown-toggle::after{ content:""}
+	.dropdown-toggle::after{ content:"" !important}
+	
+	
 	
 ul.no-bullets {
   list-style-type: none; /* Remove bullets */
-  padding: 0; /* Remove padding */
+  ppadding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
 }	
 </style>

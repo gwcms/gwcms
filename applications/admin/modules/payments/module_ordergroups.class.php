@@ -151,6 +151,10 @@ class Module_OrderGroups extends GW_Common_Module
 			
 		$build = false;
 		$v = [];
+		
+		if($item->pay_test)
+			$v['PAY_TEST']=1;
+		
 		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], 'lt');
 

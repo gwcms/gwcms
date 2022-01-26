@@ -114,7 +114,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 				return $this->extensions['keyval'];
 			break;	
 			case 'title':
-				return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
+				if($this->id)
+					return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
 			break;
 
 			case 'recipient':

@@ -3,7 +3,7 @@
 {/if}
 
 
-<div class="container g-pt-70 g-pb-30">
+<div class="container {if !GW::s('ECOMMERCE_ISOLATION')} g-pt-70 g-pb-30{/if}">
         <div class="row">
 		{include "user_menu_incontainer.tpl"}
 		<div class="col-lg-9 g-mb-50">
@@ -29,15 +29,21 @@
 			<!-- End Links -->
 
 			{else}
+				{if !GW::s('ECOMMERCE_ISOLATION')}
 				<h2>{GW::ln('/m/YOUR_ORDERS')} {if $smarty.get.canceled}<small>{GW::ln('/m/CANCELED')}</small>{/if}</h2> 
 				<br/>	
+				{/if}
 			{/if}
 			
 			
 			{include "`$m->tpl_dir`/orders.tpl"}
+			
+			{if !GW::s('ECOMMERCE_ISOLATION')}<br/><br/><br/>{/if}
+			
+			</div>
 		</div>
-	</div>
 </div>
+
 
 			
 {if !$m->args.clean}

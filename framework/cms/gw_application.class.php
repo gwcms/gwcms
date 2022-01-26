@@ -59,8 +59,8 @@ class GW_Application
 			session_id($_GET['GWSESSID']);
 		}
 		
-		if(!isset($_SESSION))
-			session_start();
+		
+		session_start();
 		
 		$this->sess = & $_SESSION[$this->app_name]; //to avoid conflicts with site - admin apps
 		
@@ -131,7 +131,7 @@ class GW_Application
 		if(
 			!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && 
 			$_SERVER['REMOTE_ADDR']=='127.0.0.1' && 
-			strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false &&
+			strpos($_SERVER['HTTP_USER_AGENT'] ?? false,'Mozilla/5.0 (X11; Linux x86_64)')!==false &&
 			$this->app_name!='SERVICE'
 		){
 	
@@ -270,10 +270,11 @@ class GW_Application
 				$path = $GLOBALS['PATH_BEFORE_REDIRECT'];
 			}
 		}
-		
+			
+
 		return
 			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
-			(isset($params['app']) ? '/'.$params['app'] . '/' : $this->app_base) .
+			(isset($params['app']) ? ($params['app'] == strtolower(GW::s('DEFAULT_APPLICATION')) ? '/' : '/'.$params['app'].'/') : $this->app_base). 
 			$ln .
 			($path ? '/' : '') . $path .
 			($getparams ? '?' . http_build_query($getparams) : '');

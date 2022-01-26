@@ -35,8 +35,8 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		$this->initFeatures();
-		
-		
+		$this->tpl_vars['ecommerce_orders']=1;
+				
 	}	
 	
 	
@@ -78,7 +78,14 @@ class Module_Orders extends GW_Public_Module
 		$citems = $order->items;
 	
 		$pay_methods=json_decode($this->config->pay_types, 1);
+		
+		if(count($pay_methods) > 1 && !isset($_GET['type'])){
+			$this->app->jump('direct/orders/orders/payselect',['id'=>$order->id,'orderid'=>$order->id]);
+		}
+		
 		$type = $_GET['type'] ?? $pay_methods[0];
+		
+		
 		
 		
 		
@@ -256,8 +263,8 @@ class Module_Orders extends GW_Public_Module
 		if($order->payment_status==7){
 			$this->setMessage(GW::ln('/m/PAYMENT_COMPLETE'));
 			
-			if($order->get('extra/after_pay_nav')){
-				Navigator::jump($order->get('extra/after_pay_nav'));
+			if($tmp=$this->app->sess('after_order_'.$order->id)){
+				Navigator::jump($tmp['after_pay']);
 			}
 		}else{
 			$jumpargs['paywait'] = 1;
@@ -472,7 +479,7 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		
-		$list = [GW_Order_Group::singleton()->find(['user_id=? AND id=?', $this->app->user->id, $this->args['id']])];
+		$list = [GW_Order_Group::singleton()->find(['(user_id=? OR user_id=?) AND id=?', $this->app->user->id, $this->app->user->parent_user_id, $this->args['id']])];
 		
 		$this->tpl_name = "orders";
 		
@@ -900,6 +907,10 @@ class Module_Orders extends GW_Public_Module
 			
 		
 		$this->setMessage(GW::ln('/m/MESSAGE_SENT_YOUR_PAYMENT_WILL_BE_VERIFIED_SOON'));
+		
+		if($tmp=$this->app->sess('after_order_'.$item->id)){
+			Navigator::jump($tmp['after_bank_transfer_confirm']);
+		}
 		
 		$this->app->jump(false, $_GET);
 	}

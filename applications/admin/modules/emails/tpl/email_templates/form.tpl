@@ -71,7 +71,7 @@
 	{call e field=protected type=bool}
 {/if}
 
-{if $app->user->isRoot()}
+{if $app->user->isRoot() || $smarty.get.shift_key==1}
 	{$tmpreadonly=false}
 {else}
 	{$tmpreadonly=true}

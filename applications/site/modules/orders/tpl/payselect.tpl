@@ -8,7 +8,7 @@
 	
 	{foreach $methods as $method}
     <a class="gwUrlMod dropdown-item" href="#!" data-args='{ "act":"doOrderPay", "type":"{$method}", "id": "{$order->id}" }'>
-	   <img src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln('/m/PAY_METHOD_{$method}')}" title="{GW::ln("/m/PAY_METHOD_{$method}")}" style="height:60px"> 
+	   <img src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln('/m/PAY_METHOD_{$method|strtoupper}')}" title="{GW::ln("/m/PAY_METHOD_{$method|strtoupper}")}" style="height:60px"> 
 	   <br />
 	   <small style="word-wrap: break-word;max-width: 300px;word-break: break-all;  overflow-wrap: break-word; white-space: normal;">{GW::ln("/G/paymethods/description/{$method}")}</small>
     </a>		
@@ -63,7 +63,7 @@
 			<td style='padding-right:25px;'>	
 				<a class="gwUrlMod" type="button" data-args='{ "act":"doOrderPay", "type":"{$method}", "id": "{$order->id}" }'>	   
 					<img  
-						src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln("/m/PAY_METHOD_{$method}")}" title="{GW::ln("/m/PAY_METHOD_{$method}")}" 
+						src="/applications/site/assets/img/pay_{$method}.png" alt="{GW::ln("/m/PAY_METHOD_{$method|strtoupper}")}" title="{GW::ln("/m/PAY_METHOD_{$method|strtoupper}")}" 
 				     style="width:200px;"> 
 				
 			      </a>
