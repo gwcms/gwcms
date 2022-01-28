@@ -85,7 +85,7 @@ class GW_Common_Module extends GW_Module
 		if($this->allowed_ids = GW_Permissions::getTempReadAccess(implode('/',$this->module_path)) ){
 			$this->filters['id'] = $this->allowed_ids;
 		}
-		
+				
 	}
 
 	function initModCfgEx($modp)
@@ -846,6 +846,9 @@ class GW_Common_Module extends GW_Module
 			return $this->getDefaultPageView();
 		}
 		
+		if($this->list_params['pviews_and'] ?? false)
+			$this->list_config['pviews_and'] = GW_Adm_Page_View::singleton()->findAll(GW_DB::inCondition('id', $this->list_params['pviews_and']),['key_field'=>'id']);
+		
 		return $this->list_config['pview'] ?? false;
 	}
 	
@@ -867,6 +870,15 @@ class GW_Common_Module extends GW_Module
 		if ($pview && $pview->condition){
 			$cond .= ($cond ? ' AND ' : '') . $this->list_config['pview']->condition;
 		}
+		
+		
+		if($this->list_config['pviews_and'] ?? false){
+			foreach($this->list_config['pviews_and'] as $andview)
+				$cond .= ($cond ? ' AND ' : '') . $andview->condition;
+			
+		}
+		
+		
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
 		
@@ -1021,6 +1033,7 @@ class GW_Common_Module extends GW_Module
 		$this->list_config['pview'] = $pview;
 		//jump to first page
 		$this->list_params['page']=1;
+		
 
 		if ($pview instanceof GW_Adm_Page_View) {
 
@@ -1040,6 +1053,17 @@ class GW_Common_Module extends GW_Module
 		}		
 	}
 
+	function setPageViewAnd($pview)
+	{
+		if(isset($this->list_params['pviews_and'][$pview->id])){
+			unset($this->list_config['pviews_and'][$pview->id]);
+			unset($this->list_params['pviews_and'][$pview->id]);
+		}else{
+			$this->list_config['pviews_and'][$pview->id] = $pview;
+			$this->list_params['pviews_and'][$pview->id] = $pview->id;
+		}
+	}
+	
 	function doSetView()
 	{
 		//$this->initListParams(false, 'list');
@@ -1047,7 +1071,13 @@ class GW_Common_Module extends GW_Module
 		$this->loadViews();
 		
 		$pview = GW_Adm_Page_View::singleton()->selectById($this->tpl_vars['views'], $_REQUEST['view_id']);
-		$this->setPageView($pview);
+		
+		if(isset($_GET['shift_key'])){
+			$this->setPageViewAnd($pview);
+		}else{
+			$this->setPageView($pview);
+		}
+		
 
 		unset($_GET['view_id']);
 		//session_write_close();

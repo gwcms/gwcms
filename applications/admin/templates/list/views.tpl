@@ -4,7 +4,7 @@
 
 
 {function "page_view_a"}
-	<a class="btn {if $m->list_config.pview->id==$view->id}btn-primary{else}btn-default{/if}" 
+	<a class="btn {if $m->list_config.pview->id==$view->id}btn-primary{elseif $m->list_config.pviews_and[$view->id]}btn-info{else}btn-default{/if} shiftbtn" 
 		href="{$m->buildUri(false,[act=>doSetView,view_id=>$view->id])}"
 		title="{if $view->title_short}{$view->title}{else}{$view->condition}{/if} {if $view->fields}[Stulpeliai]{/if} {if $view->condition}[Filtrai]{/if} {if $view->order}[Rikiavimas]{/if}"
 		>
