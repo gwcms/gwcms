@@ -27,7 +27,7 @@ class Module_FBLogin extends GW_Public_Module
 		
 		if($this->user_cfg->use_auth_gw_lt){
 			
-			$comebackurlAuthgw = $this->app->buildURI('direct/users/fblogin/loginAuthGwLt',[],['absolute'=>1]);
+			$comebackurlAuthgw = $this->app->buildURI('direct/users/fblogin/loginAuthGw',[],['absolute'=>1]);
 			
 			$req_id = GW_String_Helper::getRandString(25);
 			$_SESSION['auth_gw_lt_req_id']=$req_id;
@@ -41,7 +41,16 @@ class Module_FBLogin extends GW_Public_Module
 			exit;
 		}
 		
-		list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
+		
+		if($this->user_cfg->fb_app_id){
+			$app_id = $this->user_cfg->fb_app_id;
+			$app_secret = $this->user_cfg->fb_app_secret;
+		}else{
+			list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
+		}
+		
+		
+		
 		$fb = new Facebook\Facebook([
 		    'app_id' => $app_id,
 		    'app_secret' => $app_secret,
@@ -67,7 +76,12 @@ class Module_FBLogin extends GW_Public_Module
 
 	function viewLogin() 
 	{
-		list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
+		if($this->user_cfg->fb_app_id){
+			$app_id = $this->user_cfg->fb_app_id;
+			$app_secret = $this->user_cfg->fb_app_secret;
+		}else{
+			list($app_id, $app_secret) = explode('|',GW::s('FB_LOGIN'));
+		}
 		
 		$fb = new Facebook\Facebook($test = [
 		    'app_id' => $app_id,
@@ -119,12 +133,17 @@ class Module_FBLogin extends GW_Public_Module
 
 		$fbusr = $response->getGraphUser();
 		
-		if(!$fbusr->getEmail())
-		{
-			$this->app->setMessage('Facebook did not gave email address so its not possible continue with facebook, please register regular way with email address');
-			$this->app->jump('direct/users/users/register');
-		}
-
+		
+		$_SESSION['3rdAuthUser'] = (object)[
+		    'id'=>$fbusr->getId(),
+		    'title'=>$fbusr->getName(),
+		    'email'=>$fbusr->getEmail(), 
+		    'name'=>$fbusr->getFirstName(),
+		    'surname'=>trim(str_ireplace($fbusr->getFirstName(), '', $fbusr->getName())),
+		    'gender'=>$fbusr->getgender(),
+		    'type'=>'facebook'
+		];		
+		
 
 
 	/*
@@ -167,109 +186,27 @@ class Module_FBLogin extends GW_Public_Module
 		 * 
 		 */
 
-		$_SESSION['fb_user'] = (object)[
-		    'id'=>$fbusr->getId(),
-		    'title'=>$fbusr->getName(),
-		    'email'=>$fbusr->getEmail(), 
-		    'name'=>$fbusr->getFirstName(),
-		    'surname'=>trim(str_ireplace($fbusr->getFirstName(), '', $fbusr->getName())),
-		    'gender'=>$fbusr->getgender()
-		];
+
 		
 		
 
-		$this->app->jump('direct/users/fblogin/signInOrRegister');
+		$this->app->jump('direct/users/users/signInOrRegister');
 	}
 	
-	function viewLoginAuthGwLt()
+	function viewLoginAuthGw()
 	{
 		$req_id = $_SESSION['auth_gw_lt_req_id'];
 		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
-		$_SESSION['fb_user'] = json_decode($dat);
+		$dat = json_decode($dat);
+		$dat->type='facebook';
+		$_SESSION['3rdAuthUser'] = $dat;
 		
-		$this->app->jump('direct/users/fblogin/signInOrRegister');
+		$this->app->jump('direct/users/users/signInOrRegister');
 	}
 
 
 
 
-	function viewSignInOrRegister() 
-	{
-
-		$fbusr = $_SESSION['fb_user'];
-
-		if(! $fbusr->id)
-		{
-			$this->setError("/M/USERS/LOGIN_FAIL");
-			$this->app->jump();
-		}
-
-		if($user=GW_Customer::singleton()->find(['(fbid=? OR email=? OR username=?) AND active=1', $fbusr->id, $fbusr->email, $fbusr->email])) 
-		{			
-			if(!$user->fbid)
-				$user->saveValues(['fbid'=>$fbusr->id]);
-
-				$this->app->user = $user;
-				$this->app->auth->login($user);
-
-				$name = $user->name;
-				if($this->app->ln=='lt')
-					$name = GW_Linksniai_Helper::getLinksnis($name);
-				
-				$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
-				
-				
-				$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
-				
-				
-				
-				if($this->app->sess('after_auth_nav')){
-					$uri = $this->app->sess('after_auth_nav');
-					$this->app->sess('after_auth_nav', "");
-					header("Location: ".$uri);
-					exit;				
-				}				
-				
-				$this->app->jump('/');
-				
-				
-				
-				
-		}
-				
-		$this->tpl_vars['fbuser'] = $fbusr;
-		
-	}
-				
-	function doSignupOrLink()
-	{
-		$fbusr = $_SESSION['fb_user'];
-		
-		if($_POST['action']=='link'){
 			
-			if($this->app->user->id && !$this->app->user->fbid)
-			{
-				$this->app->user->saveValues(['fbid'=>$fbusr->id]);
-
-				$this->app->setMessage( sprintf(GW::ln("/M/USERS/PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT"), $fbusr->getName()));
-
-				$this->app->jump('direct/users/users/login');
-			}else{			
-				$_SESSION['user_link_with_fb'] = $fbusr;
-				$this->app->jump('direct/users/users/login');
-			}
-			
-		}elseif($_POST['action']=='register'){
-			
-			$this->app->jump('direct/users/users/register',['act'=>'doRegisterFBacc']);
-			
-		}elseif($_POST['action']=='register_custom'){
-			$_SESSION['user_link_with_fb'] = $fbusr;
-			
-			$this->setErrorItem((array)$fbusr,'reguser');	
-			$this->app->jump('direct/users/users/register');
-		}
-		
-	}
 
 }

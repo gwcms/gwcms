@@ -100,7 +100,7 @@ class Module_Users extends GW_Public_Module
 		}
 		
 		if(isset($_REQUEST['success'])){
-			if(isset($_REQUEST['authgw']) && $_REQUEST['authgw']=='fb'){
+			if(isset($_REQUEST['authgw']) && ($_REQUEST['authgw']=='fb' || $_REQUEST['authgw']=='gg')){
 				$msg = GW::ln('/M/users/USER_REGISTER_SUCCESS');
 			}else{
 				$msg = GW::ln('/m/REGISTER_SUCCESS_CONFIRM_EMAIL');
@@ -171,24 +171,32 @@ class Module_Users extends GW_Public_Module
 	{
 		$vals = $ovals = $_POST['item'];
 		
-		$linkfb = $vals['link_with_fb'] ?? false;
-		unset($vals['link_with_fb']);
+
 		$doverifymail = true;
+		
+		$link3rdAuth = $vals['3rdAuthUserlink'] ?? false;
+		unset($vals['3rdAuthUserlink']);
 		
 		$item = $this->model->createNewObject($vals);
 		
 		$item->setValidators('register');
 		$item->username = $item->email;
 		
-		if($linkfb)
+		
+		if($link3rdAuth)
 		{
-			$fbusr = $_SESSION['fb_user'];
-			$item->fbid = $fbusr->id;
+			$remoteuser = $_SESSION['3rdAuthUser'];
+			$map = ['facebook'=>'fbid','google'=>'ggid'];
+			$field = $map[$remoteuser->type];	
+			$item->$field = $remoteuser->id;
 			
 			//jei toks pat kaip fb userio nereikia verifikacijos
-			if($item->email == $fbusr->email)
+			if($item->email == $remoteuser->email)
 				$doverifymail = false;
 		}
+		
+		
+		
 		
 		
 		$this->__doRegisterPrepareUser($item);
@@ -217,6 +225,7 @@ class Module_Users extends GW_Public_Module
 				$this->app->jump('/');
 								
 			}else{
+				unset($_SESSION['3rdAuthUser']);
 				$item->active=1;
 				$item->insert();
 				$this->notifyAdminNewUser($item);
@@ -251,21 +260,25 @@ class Module_Users extends GW_Public_Module
 	}	
 	
 	
-	function doRegisterFBacc()
+	function doRegister3rdPartyAcc()
 	{
 		$item = $this->model->createNewObject();
 		
+		$remoteuser = $_SESSION['3rdAuthUser'];
+		$map = ['facebook'=>'fbid','google'=>'ggid'];
+		$field = $map[$remoteuser->type];		
+		
 		$item->setValidators('register_fb');
 	
-		$fbusr = $_SESSION['fb_user'];
+		
 		$gendermap = ['male'=>'M','female'=>'F'];
 		
-		$item->username = $fbusr->email;
-		$item->email = $fbusr->email;
-		$item->name = $fbusr->name;
-		$item->surname = $fbusr->surname;
-		$item->gender = $gendermap[$fbusr->gender] ?? false;
-		$item->fbid = $fbusr->id;
+		$item->username = $remoteuser->email;
+		$item->email = $remoteuser->email;
+		$item->name = $remoteuser->name;
+		$item->surname = $remoteuser->surname;
+		$item->gender = $gendermap[$remoteuser->gender] ?? false;
+		$item->$field = $remoteuser->id;
 		$item->active=1;
 		
 		$this->__doRegisterPrepareUser($item);
@@ -311,16 +324,23 @@ class Module_Users extends GW_Public_Module
 			
 			$this->app->user = $user;
 			
-			if(isset($_POST['linkfb']) && $_POST['linkfb']=='on')
+			if(isset($_POST['link3rdAuthUser']) && $_POST['link3rdAuthUser']=='on')
 			{
-				$user->saveValues(['fbid'=>$_SESSION['user_link_with_fb']->id]);
+				$remoteuser = $_SESSION['3rdAuthUser'];
+				$map = ['facebook'=>'fbid','google'=>'ggid'];
+				$field = $map[$remoteuser->type];
 				
-				//d::dumpas($_SESSION['user_link_with_fb']);
+				$user->saveValues([$field=>$remoteuser->id]);
 				
-				unset($_SESSION['user_link_with_fb']);
+				
+				//d::dumpas($_SESSION['3rdAuthUser']);
+				
+				unset($_SESSION['3rdAuthUser']);
 								
-				$this->setMessage('/M/USERS/PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT');
+				$this->setMessage(GW::ln('/M/USERS/PROFILE_WAS_LINKED_WITH_X_ACCOOUNT',['v'=>['type'=> strtoupper($remoteuser->type)]]));
 			}
+			
+			
 			
 			if(isset($_REQUEST['login_auto']) && GW_Auth::isAutologinEnabled())
 			{
@@ -449,13 +469,13 @@ class Module_Users extends GW_Public_Module
 			$item->site_verif_key = '';
 			$item->updateChanged();
 						
-			unset($_SESSION['user_link_with_fb']);
+			unset($_SESSION['3rdAuthUser']);
 				
 		}else{
 			$this->app->setError("/M/USERS/INVALID_VERIFY_LINK");
 		}
 		
-		unset($_SESSION['user_link_with_fb']);
+		unset($_SESSION['3rdAuthUser']);
 		
 		//$this->setMessage('/M/users/ACCOUNT_REGISTRATION_FINISHED');
 		$this->app->jump('direct/users/users/login');
@@ -762,4 +782,108 @@ class Module_Users extends GW_Public_Module
 			}
 		}
 	}	
+	
+	
+	function viewSignInOrRegister() 
+	{
+
+		$remoteuser = $_SESSION['3rdAuthUser'];
+		
+		
+
+		if(! $remoteuser->id)
+		{
+			$this->setError("/M/USERS/LOGIN_FAIL");
+			$this->app->jump('/');
+		}
+		
+		
+		$map = ['facebook'=>'fbid','google'=>'ggid'];
+		$field = $map[$remoteuser->type];
+
+
+		if($user=GW_Customer::singleton()->find(["($field=? OR email=? OR username=?) AND active=1", $remoteuser->id, $remoteuser->email, $remoteuser->email])) 
+		{
+			//$user->fbid!=$fbusr->id dadejau salyga kad atnaujintu po to kai pasidare appso pasikeitimas
+			
+			if(!$user->$field || $user->$field!=$remoteuser->id)
+				$user->saveValues([$field=>$remoteuser->id]);
+
+				$this->app->user = $user;
+				$this->app->auth->login($user);
+
+				$name = $user->name;
+				if($this->app->ln=='lt')
+					$name = GW_Linksniai_Helper::getLinksnis($name);
+				
+				$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
+				
+				
+				$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
+				
+				//kad nesilinkintu paskiau
+				unset($_SESSION['3rdAuthUser']);
+				
+				
+				if($this->app->sess('after_auth_nav')){
+					$uri = $this->app->sess('after_auth_nav');
+					$this->app->sess('after_auth_nav', "");
+					header("Location: ".$uri);
+					exit;				
+				}				
+				
+				
+				$this->app->jump('/');
+				
+				
+				
+				
+		}
+		
+		if(!$remoteuser->email)
+		{
+			$authgw=strtoupper($remoteuser->type);
+			$this->app->setMessage("$authgw did not gave email address so, please register with email address, $authgw fast login will be enabled");
+			$this->setErrorItem((array)$remoteuser,'reguser');	
+			$this->app->jump('direct/users/users/register');
+		}		
+		
+	
+		$this->tpl_vars['remoteuser'] = $remoteuser;
+	}	
+	
+	function doSignupOrLink()
+	{
+		$remoteuser = $_SESSION['3rdAuthUser'];
+		$map = ['facebook'=>'fbid','google'=>'ggid'];
+		$field = $map[$remoteuser->type];	
+
+		
+		if($_POST['action']=='link'){
+			
+			if($this->app->user->id && !$this->app->user->fbid)
+			{
+				$this->app->user->saveValues([$field=>$fbusr->id]);
+
+				unset($_SESSION['3rdAuthUser']);
+				$this->setMessage(GW::ln('/M/USERS/PROFILE_WAS_LINKED_WITH_X_ACCOOUNT',['v'=>['type'=> strtoupper($remoteuser->type)]]));
+			
+
+				$this->app->jump('direct/users/users/login');
+			}else{			
+				$this->app->jump('direct/users/users/login');
+			}
+			
+		}elseif($_POST['action']=='register'){
+			
+			$this->app->jump('direct/users/users/register',['act'=>'doRegister3rdPartyAcc']);
+			
+		}elseif($_POST['action']=='register_custom'){
+			
+			$this->setErrorItem((array)$remoteuser,'reguser');	
+			$this->app->jump('direct/users/users/register');
+		}
+		
+	}	
+	
 }
