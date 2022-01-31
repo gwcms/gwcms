@@ -51,13 +51,17 @@ class Module_Login extends GW_Module
 			
 		}
 		
-		if(isset($_POST['link_with_fb']) && $this->app->sess('temp_link_withfb') && $this->app->user)
+		if(isset($_POST['link_with_3rd']) && $this->app->sess('temp_link_with3rd') && $this->app->user)
 		{
-			$fbid = $this->app->sess('temp_link_withfb');
-			$this->setMessage('Link success, now you can login using Facebook');
-			$this->app->user->ext->adminfbid = $fbid;
+			$map = ['fb'=>'adminfbid','gg'=>'adminggid'];
+			$map1 = ['fb'=>'Facebook','gg'=>'Google'];			
 			
-			 $this->app->sess('temp_link_withfb','');
+			list($gw,$remoteid) = explode('|',$this->app->sess('temp_link_with3rd'));
+			
+			$this->setMessage('Link success, now you can login using '.$map1[$gw]);
+			$this->app->user->ext->{"admin{$gw}id"} = $remoteid;
+			
+			 $this->app->sess('temp_link_with3rd','');
 		}	
 
 		
@@ -90,46 +94,51 @@ class Module_Login extends GW_Module
 
 	}
 	
-	function doAuthWithFb()
+	function doAuthWith3rd()
 	{
-		$comebackurlAuthgw = $this->app->buildURI(false,['act'=>'doAuthFinishWithFb'],['absolute'=>1]);
+		$comebackurlAuthgw = $this->app->buildURI(false,['act'=>'doAuthFinishWith3rd','gw'=>$_GET['gw']],['absolute'=>1]);
 		$req_id = GW_String_Helper::getRandString(25);
 		$_SESSION['adm_auth_gw_lt_req_id']=$req_id;
 			
 		session_commit();
 		session_write_close();
-		$auth_gw_url = GW::s('GW_FB_SERVICE')."?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		$auth_gw_url = GW::s('GW_'. strtoupper($_GET['gw']).'_SERVICE')."?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
 		header('Location: '.$auth_gw_url);		
 		exit;			
 	}
+
 	
 	
-	function doAuthFinishWithFb()
+	function doAuthFinishWith3rd()
 	{	
+		$gw = $_GET['gw'];
 		$req_id = $_SESSION['adm_auth_gw_lt_req_id'];
-		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
+		$dat = file_get_contents(GW::s('GW_'.strtoupper($gw).'_SERVICE').'?get_response='.$req_id);
 		$dat = json_decode($dat);
 		
 		
-
+		$map = ['fb'=>'adminfbid','gg'=>'adminggid'];
+		$map1 = ['fb'=>'Facebook','gg'=>'Google'];
+		$field = $map[$gw];
 		
 		if(!isset($dat->id)){
-			$this->setError('Fb auth failed');
+			$this->setError("{$map1[$gw]} auth failed");
 			$this->jump();
 		}
 			
 			
-		$fbid = $dat->id;
+		$remoteid = $dat->id;
 		
 		
-		$list = GW_User::singleton()->extensions['keyval']->findOwner(['`key`="adminfbid" AND value=?',$fbid]);
+		$list = GW_User::singleton()->extensions['keyval']->findOwner(['`key`=? AND value=?',$field,$remoteid]);
+		
 		if(count($list)>1){
-			$this->setError('This facebook user linked with more than one account please unlink others');
+			$this->setError("This {$map1[$gw]} user linked with more than one account please unlink others");
 			$this->jump();
 		}elseif(count($list)==0){
 			$link = $this->app->buildUri('users/profile');
 			$profpage="<a href='$link'>profile page</a>";
-			$this->app->sess('temp_link_withfb', $fbid);
+			$this->app->sess('temp_link_with3rd', $gw.'|'.$remoteid);
 			
 			$this->setPlainMessage("Please login now as usual", GW_MSG_INFO);
 			$this->jump();
@@ -141,16 +150,13 @@ class Module_Login extends GW_Module
 				$this->app->user = $user;
 				$this->app->auth->login($user);	
 
-				$this->setMessageEx(["text"=>'Auth using Facebook success', "type"=>GW_MSG_SUCC, 'float'=>1, 'time'=>1000]);				
+				$this->setMessageEx(["text"=>"Auth using {$map1[$gw]} ok", "type"=>GW_MSG_SUCC, 'float'=>1, 'time'=>1000]);				
 				
 				$this->app->jump('/');
 			}else{
 				$this->setError('Bad news: User might be either removed or deactivated');
 			}
-				
-
 		}
-		
 
 		$this->jump();
 	}	

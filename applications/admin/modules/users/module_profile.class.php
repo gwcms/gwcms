@@ -124,7 +124,7 @@ class Module_Profile extends GW_Module
 			
 		session_commit();
 		session_write_close();
-		$auth_gw_url = "https://auth.gw.lt/index.php?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
+		$auth_gw_url = GW::s('GW_FB_SERVICE')."?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
 		header('Location: '.$auth_gw_url);		
 		exit;			
 	}
@@ -139,7 +139,7 @@ class Module_Profile extends GW_Module
 	function doFinishLinkWithFb()
 	{	
 		$req_id = $_SESSION['adm_auth_gw_lt_req_id'];
-		$dat = file_get_contents('https://auth.gw.lt/index.php?get_response='.$req_id);
+		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
 		$dat = json_decode($dat);
 		
 		$this->setMessage('Link success, now you can login using Facebook');

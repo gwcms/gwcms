@@ -58,8 +58,6 @@
 		display:none;
 	}	
 	.hide{ display:none }
-	
-
 </style>
 
 <script>
