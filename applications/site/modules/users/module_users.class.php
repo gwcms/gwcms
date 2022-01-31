@@ -25,6 +25,22 @@ class Module_Users extends GW_Public_Module
 		
 		
 	}
+	
+	function getFieldsConfig()
+	{
+		$availfields = explode(',',$this->cfg->available_fields);
+		$required =  array_flip(json_decode($this->cfg->registration_fields_required));
+		$optional =  array_flip(json_decode($this->cfg->registration_fields_optional));
+		
+		foreach($required as $key => $x)
+			$required[$key]=1;
+		
+		foreach($optional as $key => $x)
+			$optional[$key]=1;
+
+		
+		return ['required'=>$required,'optional'=>$optional,'fields'=>array_merge($required,$optional)];
+	}	
 
 	
 	function viewDefault()

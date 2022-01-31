@@ -395,13 +395,13 @@ class GW_DB
 			//if(is_object($vert))
 			//	d::dumpas($vert);
 			
-			$values[] = "'" . addslashes($vert) . "'";
+			$values[] = self::sql_prepare_value($vert) ;
 		}
 		$query = "INSERT INTO $table (" . implode(',', $names) . ") VALUES (" . implode(',', $values) . ") ON DUPLICATE KEY UPDATE ";
 
 		foreach ($entry as $elemRak => $vert)
 			if (!is_numeric($elemRak))
-				$query.='`' . $elemRak . "`=\"" . addslashes($vert) . "\", ";
+				$query.='`' . $elemRak . "`=" .  self::sql_prepare_value($vert) . ", ";
 
 		$query = substr($query, 0, -2);
 		$this->query($query, $nodie);
