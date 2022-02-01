@@ -43,7 +43,7 @@
 		  *}
                 </div>
 		
-			<div class="d-flex justify-content-center text-center g-mt-20  g-mb-40">
+			<div class="d-flex justify-content-center text-center g-mt-40  g-mb-20">
 			  <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>
 			  <span class="align-self-center g-color-gray-dark-v5 mx-4">{GW::ln('/m/REGISTER_REGURAL')}</span>
 			  <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>

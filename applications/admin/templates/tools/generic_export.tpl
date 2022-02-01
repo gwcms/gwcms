@@ -4,10 +4,22 @@
 {if $debug_table}
 {GW_Data_to_Html_Table_Helper::doTable($debug_table)} {/if}
 
-{if $smarty.get.withid}
-	<a href="{$app->buildUri()}">-id</a>
-{else}
-	<a href="{$app->buildUri(false, [withid=>1])}">+id</a>
+
+{function gettoggler}
+	{if !$smarty.get[$id]}
+		<a href="{$app->buildUri(false, $smarty.get+[$id=>1])}">+{$id}</a>
+	{else}
+		<a href="{$app->buildUri(false, [$id=>null]+$smarty.get)}">-{$id}</a>
+	{/if}
+{/function}
+
+
+{gettoggler id=with_id}
+{gettoggler id=with_insert_time}
+{gettoggler id=with_update_time}
+
+{if $app->user->isRoot()}
+	{gettoggler id=sqlmode}
 {/if}
 
 <table id="gwTable" style="width: 100%">

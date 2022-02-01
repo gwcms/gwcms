@@ -9,8 +9,14 @@ trait Module_Import_Export_Trait
 	{
 		$cols = $this->model->getColumns();
 
-		if(!isset($_GET['withid']) || $_GET['withid']!=1)
+		if(!isset($_GET['with_id']))
 			unset($cols['id']);
+		
+		if(!isset($_GET['with_insert_time']))
+			unset($cols['insert_time']);
+		
+		if(!isset($_GET['with_update_time']))
+			unset($cols['update_time']);
 		
 		foreach ($cols as $col => $d)
 			$cols[$col] = $col;
@@ -35,7 +41,7 @@ trait Module_Import_Export_Trait
 
 		$cols = $this->__importExportGetCols();
 
-
+		
 
 		if ($this->export_translate_fields) {
 			$tmp = [];
@@ -50,7 +56,7 @@ trait Module_Import_Export_Trait
 
 		$data = implode("\t", array_keys($head)) . "\n";
 
-
+		
 		foreach ($list as $item) {
 
 
@@ -69,6 +75,22 @@ trait Module_Import_Export_Trait
 
 			$data .= implode("\t", $row) . "\n";
 		}
+		
+		if(isset($_GET['sqlmode'])){
+			GW::db()->sql_collect = true;
+			GW::db()->mi_odk_unset_insert = true;
+
+			
+			foreach($list as $item){
+			
+				$item->content_base = array_intersect_key($item->content_base,$cols);
+				$item->replaceInsert();
+			}
+			
+			GW::db()->sql_collect = false;
+			$data = implode(";\n",GW::db()->sql_collect_data).';';
+			return $data;
+		}		
 
 		return $data;
 	}
@@ -93,6 +115,9 @@ trait Module_Import_Export_Trait
 
 
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/generic_export';
+		
+		
+
 		$this->tpl_vars['data'] = $data;
 		$this->tpl_vars['fields'] = $this->__importExportGetCols();
 	}

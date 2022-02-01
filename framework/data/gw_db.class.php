@@ -30,6 +30,10 @@ class GW_DB
 	static $datetime_format = 'Y-m-d H:i:s';
 	public $error;
 	public $error_query;
+	
+	//if true - collect queries, no real execution
+	public $sql_collect=false;
+	public $sql_collect_data=[];
 
 	function parse_uphd($uphd)
 	{
@@ -139,8 +143,15 @@ class GW_DB
 		$this->error = false;
 
 		$start = microtime(true);
-					
+		
+		
+		if($this->sql_collect){
+			$this->sql_collect_data[] = $cmd;
+			return true;
+		}
+		
 		$this->result = $this->link->query($cmd);
+		
 		$this->last_query_time = microtime(true)-$start;
 		$this->last_query = $cmd;
 
