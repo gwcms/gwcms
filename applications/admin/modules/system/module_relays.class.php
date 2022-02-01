@@ -62,10 +62,17 @@ class Module_Relays extends GW_Common_Module
 	
 	function doTestStates()
 	{
-		
 		$statuses = file_get_contents($this->cfg->endpoint.'states.php');
 		d::ldump($statuses);
 	}
+	
+	public $doTestRealStates = ['info'=>'Test retrieve real states'];
+	
+	function doTestRealStates()
+	{
+		$statuses = file_get_contents($this->cfg->endpoint.'realstates.php');
+		d::ldump($statuses);
+	}	
 	
 	public $doTestSet = ['info'=>'Test state change'];
 	
@@ -107,6 +114,15 @@ class Module_Relays extends GW_Common_Module
 	}
 	
 	
+	public $doTestplay = ['info'=>'Play with lights for fun'];
+	
+	function doTestplay()
+	{
+		$t = new GW_Timer;
+		$statuses = file_get_contents($url=$this->cfg->endpoint.'play.php');
+		$this->setMessage("Time took {$t->stop(3)}");
+		$this->jump();
+	}
 	
 	
 }

@@ -1,10 +1,7 @@
 {include "default_open.tpl"}
 
-      <!-- Login -->
-      <section class="container g-pt-100 g-pb-20">
-        <div class="row justify-content-between">
-          <div class="col-md-6 col-lg-5 order-lg-2 g-mb-80">
-            <div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
+{function user_login_form}
+	<div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
               <header class="text-center mb-4">
                 <h1 class="h4 g-color-black g-font-weight-400">{GW::ln('/m/LOGIN_TO_YOUR_ACCOUNT')}</h1>
               </header>
@@ -108,62 +105,27 @@
               <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/DONT_HAVE_ACCOUNT')}
                 <a class="g-font-weight-600" href="{$ln}/direct/users/users/register">{GW::ln('/m/VIEWS/register')}</a></p>
             </div>
+{/function}
+
+
+{capture assign=infoblock}{strip}{include "user_login_infoblock.tpl"}{/strip}{/capture}
+
+{if $infoblock}
+      <!-- Login -->
+      <section class="container g-pt-100 g-pb-20">
+        <div class="row justify-content-between">
+          <div class="col-md-6 col-lg-5 order-lg-2 g-mb-80">
+            {call user_login_form}
           </div>
 
           <div class="col-md-6 order-lg-1 g-mb-80">
-            <div class="mb-5">
-              <h2 class="h1 g-font-weight-400 mb-3">{GW::ln('/m/SIGNIN_WELCOME_H1')}</h2>
-              <p class="g-color-gray-dark-v4">{GW::ln('/m/SIGNIN_WELCOME_TEXT1')}</p>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-9">
-                <!-- Icon Blocks -->
-                <div class="media mb-5">
-                  <div class="d-flex mr-3">
-                    <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-primary">
-                      <i class="icon-finance-168 u-line-icon-pro"></i>
-                    </span>
-                  </div>
-                  <div class="media-body align-self-center">
-                    <h3 class="h5 g-font-weight-400">{GW::ln('/m/SIGNIN_WELCOME_1_H')}</h3>
-                    <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/SIGNIN_WELCOME_1_TEXT')}</p>
-                  </div>
-                </div>
-                <!-- End Icon Blocks -->
-
-                <!-- Icon Blocks -->
-                <div class="media mb-5">
-                  <div class="d-flex mr-3">
-                    <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-primary">
-                      <i class="icon-finance-193 u-line-icon-pro"></i>
-                    </span>
-                  </div>
-                  <div class="media-body align-self-center">
-                    <h3 class="h5 g-font-weight-400">{GW::ln('/m/SIGNIN_WELCOME_2_H')}</h3>
-                    <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/SIGNIN_WELCOME_2_TEXT')}</p>
-                  </div>
-                </div>
-                <!-- End Icon Blocks -->
-
-                <!-- Icon Blocks -->
-                <div class="media">
-                  <div class="d-flex mr-3">
-                    <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-primary">
-                      <i class="icon-finance-122 u-line-icon-pro"></i>
-                    </span>
-                  </div>
-                  <div class="media-body align-self-center">
-                    <h3 class="h5 g-font-weight-400">{GW::ln('/m/SIGNIN_WELCOME_3_H')}</h3>
-                    <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/SIGNIN_WELCOME_3_TEXT')}</p>
-                  </div>
-                </div>
-                <!-- End Icon Blocks -->
-              </div>
-            </div>
+		{$infoblock}
           </div>
         </div>
       </section>
+{else}
+	{call user_login_form}
+{/if}
       <!-- End Login -->
 
 {*	
