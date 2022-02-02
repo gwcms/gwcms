@@ -40,7 +40,40 @@ class Module_Users extends GW_Public_Module
 
 		
 		return ['required'=>$required,'optional'=>$optional,'fields'=>array_merge($required,$optional)];
-	}	
+	}
+	
+	function testMissingInfo()
+	{
+		$fields = $this->getFieldsConfig();
+		
+		foreach($fields['required'] as $field => $x)
+		{
+			
+			if(!$this->app->user->get($field)){
+				if($this->app->path!='direct/users/users/profile')
+					$this->setMessage('<b>'.GW::ln("/m/FIELDS/$field").'</b> '.GW::ln('/m/IS_MISSING'));
+				
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	
+	function doCheckProfileMissingInfo()
+	{
+		//return false;
+		
+		//gali ivykti jei nera kazkokio failo tada redirectina i index
+		if($this->app->user && !in_array($this->app->path, ['direct/users/users/profile', 'direct/users/users/logout']) && !$this->testMissingInfo()){
+			
+			$this->setMessage(GW::ln('/m/PLEASE_COMPLETE_ACCOUNT_DETAILS'));
+			$this->app->jump('direct/users/users/profile');
+		}
+			
+	}
+	
 
 	
 	function viewDefault()
