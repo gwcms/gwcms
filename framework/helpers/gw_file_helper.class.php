@@ -160,7 +160,7 @@ class GW_File_Helper
 		}
 	}
 	
-	function fileUploadMaxSize() 
+	static function fileUploadMaxSize() 
 	{
 		static $max_size = -1;
 

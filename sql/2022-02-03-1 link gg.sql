@@ -1,0 +1,1 @@
+ALTER TABLE `gw_users` ADD `ggid` DECIMAL(25,0) NOT NULL AFTER `fbid`;

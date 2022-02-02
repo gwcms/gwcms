@@ -29,8 +29,8 @@ class Module_Users extends GW_Public_Module
 	function getFieldsConfig()
 	{
 		$availfields = explode(',',$this->cfg->available_fields);
-		$required =  array_flip(json_decode($this->cfg->registration_fields_required));
-		$optional =  array_flip(json_decode($this->cfg->registration_fields_optional));
+		$required =  array_flip((array)json_decode($this->cfg->registration_fields_required));
+		$optional =  array_flip((array)json_decode($this->cfg->registration_fields_optional));
 		
 		foreach($required as $key => $x)
 			$required[$key]=1;

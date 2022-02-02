@@ -1,0 +1,1 @@
+ALTER TABLE `gw_order_group` ADD `pay_subtype` VARCHAR(15) NOT NULL AFTER `pay_type`;

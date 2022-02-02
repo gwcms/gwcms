@@ -1,0 +1,2 @@
+ALTER TABLE `shop_products` ADD `min_price` FLOAT NOT NULL AFTER `price`, ADD `max_price` FLOAT NOT NULL AFTER `min_price`;
+ALTER TABLE `shop_products` ADD `mod_count` SMALLINT NOT NULL AFTER `max_price`;
