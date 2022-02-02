@@ -39,8 +39,9 @@
 					
 					
 					
-		{if $order->payment_status!=7 && $m->feat('otherpayee')}		
-			<a href="{$m->buildUri('otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0">
+		{if $order->payment_status!=7 && $m->feat('otherpayee')}	
+			
+			<a href="{$m->buildUri('otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0 g-mt-5">
 				<i class="fa fa-credit-card g-mr-2"></i>
 				{GW::ln('/m/OTHERPAYEE')}
 				

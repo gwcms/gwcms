@@ -66,7 +66,7 @@ class Module_Users extends GW_Public_Module
 		//return false;
 		
 		//gali ivykti jei nera kazkokio failo tada redirectina i index
-		if($this->app->user && !in_array($this->app->path, ['direct/users/users/profile', 'direct/users/users/logout']) && !$this->testMissingInfo()){
+		if($this->app->user && !in_array($this->app->path, ['direct/users/users/profile', 'direct/users/users/logout']) && !isset($_SESSION['3rdAuthUser']) && !$this->testMissingInfo()){
 			
 			$this->setMessage(GW::ln('/m/PLEASE_COMPLETE_ACCOUNT_DETAILS'));
 			$this->app->jump('direct/users/users/profile');
@@ -443,6 +443,9 @@ class Module_Users extends GW_Public_Module
 			$this->app->auth->logout();
 		}
 		
+		
+		unset($_SESSION['3rdAuthUser']);
+		session_write_close();
 		
 		setcookie('user_secret', false, time()+3600*24*365*10, Navigator::getBase());	
 		
@@ -872,6 +875,7 @@ class Module_Users extends GW_Public_Module
 				
 				//kad nesilinkintu paskiau
 				unset($_SESSION['3rdAuthUser']);
+				session_write_close();
 				
 				
 				if($this->app->sess('after_auth_nav')){
@@ -916,7 +920,7 @@ class Module_Users extends GW_Public_Module
 
 				unset($_SESSION['3rdAuthUser']);
 				$this->setMessage(GW::ln('/M/USERS/PROFILE_WAS_LINKED_WITH_X_ACCOOUNT',['v'=>['type'=> strtoupper($remoteuser->type)]]));
-			
+				session_write_close();
 
 				$this->app->jump('direct/users/users/login');
 			}else{			

@@ -44,7 +44,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		    'currency' => $cfg->default_currency_code,
 		    'country' => 'LT',
 		    'accepturl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=return&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
-		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$order->id}&id={$order->id}",
+		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$args->order->id}&id={$args->order->id}",
 		    'callbackurl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=notify&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
 		    'test' => $test,
 		);

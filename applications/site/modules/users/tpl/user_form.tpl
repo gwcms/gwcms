@@ -139,16 +139,33 @@
 		{/if}
 	</div>
 {/if}
+{if $fields.fields.passportscan &&  !$register}
+	<div class="col-md-6">
+		{input field="passportscan" type="image" 
+			required=1  endpoint="users/users" allowpdf=1 note=GW::ln('/m/FIELD_NOTES/passportscan')
+			help=GW::ln('/m/FIELD_NOTES/upload_image_or_pdf')
+		}
+	</div>
+{/if}
+{if $fields.fields.medicalpermit &&  !$register}			
+	<div class="col-md-6">
+		{input field="medicalpermit" type="image" required=1  
+			endpoint="users/users" allowpdf=1 note=GW::ln('/m/FIELD_NOTES/passportscan')
+			help=GW::ln('/m/FIELD_NOTES/upload_image_or_pdf')
+		}	
+	</div>
+{/if}
 
 
 
 {if $register && $smarty.session.3rdAuthUser}
+	<div class="col-md-6">
 	{capture assign="titletmp"}
 		{$tmptype=strtoupper($smarty.session.3rdAuthUser->type)}
 		  {GW::ln('/m/LINK_WITH_X',[v=>[type=>$tmptype]])} <b class="ml-1"> {$smarty.session.3rdAuthUser->title}</b>
 	{/capture}
 	{call "input" field=3rdAuthUserlink required=0 type=checkbox title=$titletmp value=1}
-
+	</div>
 {/if}
 
 </div>

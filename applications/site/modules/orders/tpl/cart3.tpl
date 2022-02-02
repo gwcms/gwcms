@@ -29,7 +29,18 @@
 					<i class="fa fa-credit-card g-mr-2"></i>
 					{GW::ln('/m/PROCEED_PAYMENT')} {$order->amount_total} &euro;
 				      </a>
-				      </center>
+				      
+				      
+				      
+					{if $m->feat('otherpayee')}
+						<br><br>
+						<a href="{$app->buildUri('direct/orders/orders/otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0">
+							<i class="fa fa-credit-card g-mr-2"></i>
+							{GW::ln('/m/OTHERPAYEE')}
+
+						</a>	
+					{/if}	
+					</center>					
 				{/if}
 
 				

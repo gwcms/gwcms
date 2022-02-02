@@ -44,9 +44,9 @@
 		{$total=0}
 		{$date=explode(' ',$item->insert_time)}
 		<tr>
-		
+		<th>{$item->id}</th>
 		<th>{$date[0]}</th>	
-		<th>{$item->user->title}</th>
+		<th>{if $item->company}{$item->company}{if $item->company_code} | {$item->company_code} <small>({$item->user->title})</small> {/if}{else}{$item->user->title}{/if}</th>
 		<th>
 			
 			{$item->pay_type}
@@ -54,7 +54,7 @@
 				{$item->pay_confirm->title}
 			{/if}
 		</th>
-		<th>{$item->amount_total} EUR</th>		
+		<th>{$item->amount_total}</th>		
 		
 		</tr>
 		<tr>
@@ -66,7 +66,7 @@
 						<td>{$oi->type}</td>
 						<td>{$oi->invoice_line}</td>
 						<td>{$oi->qty} x {$oi->unit_price} Eur</td>
-						<td>{$oi->total} Eur</td>
+						<td>{$oi->total}</td>
 						<td>
 							{foreach $app->pay_confirm_list as $payitm}
 								{$payitm->title}{if !$payitm@last},{/if}
