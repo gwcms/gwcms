@@ -59,8 +59,11 @@ class GW_Application
 			session_id($_GET['GWSESSID']);
 		}
 		
+	
 		
-		session_start();
+		if(!isset($_SESSION) || ($GLOBALS['SESSION_CLOSED'] ?? false))
+			session_start();
+			
 		
 		$this->sess = & $_SESSION[$this->app_name]; //to avoid conflicts with site - admin apps
 		
