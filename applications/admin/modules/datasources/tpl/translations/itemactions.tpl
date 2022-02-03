@@ -10,6 +10,9 @@
 
 
 
+{if $app->user->isRoot()}
+	{list_item_action_m url=[false,[act=>doTransShare,id=>$item->id]] iconclass="fa fa-cog" confirm=1 caption="Send to central translations DB"}
+{/if}
 
 
 

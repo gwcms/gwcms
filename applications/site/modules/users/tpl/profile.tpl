@@ -5,7 +5,8 @@
 
 {include "inputs/inputs.tpl"}
 
-<h3>{GW::ln('/m/PLEASE_FILL_REQUIRED_FIELDS')}</h3>
+<h1>{GW::ln('/m/VIEWS/profile')}</h1>
+<h6>{GW::ln('/m/PLEASE_FILL_REQUIRED_FIELDS')}</h6>
 
 <form id="usrForm" class="g-py-15" action="{$smarty.server.REQUEST_URI}" method="post">
 	<input type="hidden" name="act" value="do:saveProfile" />	

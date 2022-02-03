@@ -32,10 +32,16 @@ class GW_Cms_Api
 	var $lang;
 	var $base;
 
-	function __construct($user, $api_key, $lang = 'en')
+	function __construct($user_or_userandpi, $api_key=false, $lang = 'en')
 	{
-		$this->username = $user;
-		$this->api_key = $api_key;
+		if(!$api_key)
+		{
+			list($this->username, $this->api_key) = explode(':',$user_or_userandpi);
+		}else{
+			$this->username = $user;
+			$this->api_key = $api_key;			
+		}
+
 		$this->lang = $lang;
 
 		$this->http = new GW_Http_Agent();
@@ -62,7 +68,9 @@ class GW_Cms_Api
 	{
 		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
 		
-		$r = $this->http->getContents($url = $this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params), $headers, $post);
+		$base = $this->base . $this->lang;
+		
+		$r = $this->http->getContents($url =  ($this->base?"$base/":''). $path . '?' . http_build_query($get_params), $headers, $post);
 
 		//d::dumpas($url);
 		//dump($this->http->flushDebugInfo());

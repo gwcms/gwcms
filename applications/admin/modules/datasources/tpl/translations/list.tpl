@@ -17,7 +17,7 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
-	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons_hidden=[synchronizefromxml,exportdata,importdata,dialogconf,dialogconf2,print]}		
 
 	
 	
@@ -52,7 +52,9 @@
 	
 	
 	{$dl_checklist_enabled=1}
-	{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doSeriesTranslate,all=>1])}', 1)">{GW::l('/A/VIEWS/doSeriesTranslate')}</option>{/capture}		
+		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doSeriesTranslate,all=>1])}', 1)">{GW::l('/A/VIEWS/doSeriesTranslate')}</option>{/capture}			
+		{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doTransShare])}', 1)">{GW::l('/A/VIEWS/doMarkAsProcessed')}</option>{/capture}	
+
 	{$dl_cl_actions=[dialogremove]}	
 	
 {/block}
