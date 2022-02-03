@@ -537,8 +537,10 @@ class Module_Translations extends GW_Common_Module
 	
 	function doImportAll()
 	{
-		if(!$this->app->user->isRoot())
-			return $this->setError("No permission");
+		//die("u:".$this->app->user->username);
+			
+		if(!$this->app->user->isRoot() && $this->app->user->username!='vertimai')
+			return $this->setError("No translation permission");
 		
 		if(!isset($_POST['answers']['codejson']))
 			die("<script>location.href='{$_GET['camefrom']}'</script>");
@@ -552,7 +554,9 @@ class Module_Translations extends GW_Common_Module
 		$tr = new GW_Translation;
 		$tr->multiInsert($array);
 		
-		$this->setMessage("Import done, cnt: ".count($array).", speed: {$t->stop()}");
+		$this->setMessage($msg = "Import done, cnt: ".count($array).", speed: {$t->stop()}");
+		
+		
 		$this->jump();
 	}
 	
@@ -571,6 +575,31 @@ class Module_Translations extends GW_Common_Module
 		
 	}
 
+	
+	
+
+	function doTransShare(){
+		
+		
+		$item = $this->getDataobjectById();
+		$list = [$item];
+		
+		foreach($list as $item){
+			$row = $item->toArray();
+			unset($row['id']);
+			$rows[] = $row;
+		}
+		$data = json_encode($rows);
+		$cnt = count($rows);
+		$payload = ['answers'=>['codejson'=>$data,'count'=>$cnt]];
+
+	
+		$api = new GW_Cms_Api(GW_Config::singleton()->get('datasources__translations/trans_share_api_key'));
+		$resp = $api->request('https://voro.lt/admin/lt/datasources/translations', ['act'=>'doImportAll','json'=>1], [], $payload);		
+
+		d::dumpas($resp);
+	}
+	
 	
 	
 /*	

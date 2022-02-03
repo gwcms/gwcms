@@ -52,6 +52,8 @@ class GW_Auth
 		//$sameip = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']);
 		
 		$logedin =  ($user_id = intval($this->session["user_id"] ?? 0));
+		//d::dumpas($_GET);
+		
 
 		if (isset($_GET['temp_access'])) {
 			list($uid, $token) = explode(',', $_GET['temp_access']);
@@ -62,17 +64,24 @@ class GW_Auth
 			} else {
 				die(json_encode(['error' => 16532, 'error_message' => 'Invalid token']));
 			}
-		} elseif ($logedin) {
-			$user = $this->getUserByUserID($user_id);
-		} elseif ($autologin) {
-			$user = $this->loginAuto($cookieUsername, $cookiePass);
 		} elseif (isset($_GET['GW_CMS_API_AUTH']) && $_GET['GW_CMS_API_AUTH']) {
 			
 			$autologin = 1; //session expired kad neziuretu
 			$user = $this->loginApi($_GET['GW_CMS_API_AUTH']);
+			
+			if(!$user)
+				$this->setError('/G/GENERAL/API_AUTH_FAIL');
+			
+			//prikurs logu ir nereikalingu sesiju
+			if(isset($_GET['auth_init_session']))
+				$this->login($user);
 
 			unset($_GET['GW_CMS_API_AUTH']);
-		} elseif(isset($_GET['REMOTE_AUTH_USER'])) {
+		}elseif ($logedin) {
+			$user = $this->getUserByUserID($user_id);
+		} elseif ($autologin) {
+			$user = $this->loginAuto($cookieUsername, $cookiePass);
+		}elseif(isset($_GET['REMOTE_AUTH_USER'])) {
 			
 			//remote authentification, user has predefined url, which is endpoint where
 			//gwcms asks wheather authorise user or not

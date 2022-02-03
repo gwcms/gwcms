@@ -320,9 +320,8 @@ class GW_User extends GW_Composite_Data_Object
 	{
 		$user = $this->find(Array('username=?', $username));
 
-
-		if (!$user->api_key == $api_key)
-			die("BAD API KEY");
+		if (!$user || !$user->api_key == $api_key)
+			return false;
 
 
 		return $user;
