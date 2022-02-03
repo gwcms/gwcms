@@ -581,7 +581,10 @@ class Module_Translations extends GW_Common_Module
 	function doTransShare($item=false)
 	{
 		if(!$item)
-			$item = $this->getDataObjectById();		
+			$item = $this->getDataObjectById();
+		
+		$item->trshare = 1;
+		$item->updateChanged();
 
 		$list = [$item];
 		
