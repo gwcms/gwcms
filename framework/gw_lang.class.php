@@ -293,6 +293,12 @@ class GW_Lang
 		return self::$transcache[$cid];
 	}
 	
+	static function transCacheReset($module)
+	{
+		$cid = GW_Lang::$ln.'/'.$module;
+		unset(self::$transcache[$cid]);
+	}
+	
 	static function __highlightActive()
 	{
 		return (GW::$context->app->user && 
@@ -387,15 +393,27 @@ class GW_Lang
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
 			
-			$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.$fullkey);
-			if($resp = json_decode($resraw, true)){
-				if($resp['result']){
-					$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
-					$newtr->trshare = 1;
-					$newtr->insert();
-				}	
-			}else{
-				//trans share mechanism failed
+			if(!isset($opts['redirect'])){
+				$key=self::transKeyAnalise($fullkey);
+				
+				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.implode('/',$key));
+
+
+				if($resp = json_decode($resraw, true)){
+
+
+					if($resp['result']){
+						$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
+						$newtr->trshare = 1;
+						$newtr->replaceInsert();
+						$opts['redirect'] = 1;
+						self::transCacheReset($key[0]);;
+						
+						return GW::ln($fullkey, $opts);
+					}	
+				}else{
+					//trans share mechanism failed
+				}
 			}
 			
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
