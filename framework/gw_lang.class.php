@@ -386,6 +386,18 @@ class GW_Lang
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
 		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
+			
+			$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.$fullkey);
+			if($resp = json_decode($resraw, true)){
+				if($resp['result']){
+					$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
+					$newtr->trshare = 1;
+					$newtr->insert();
+				}	
+			}else{
+				//trans share mechanism failed
+			}
+			
 			//jei tokia pat kalba ir verte nerasta ikelti vertima i db
 			//if ($valueifnotfound && strpos($valueifnotfound, GW_Lang::$ln . ':') !== false) {
 			//	list($ln, $vr) = explode(':', $valueifnotfound, 2);

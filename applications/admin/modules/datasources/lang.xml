@@ -16,6 +16,7 @@
     <i id="insert_time">
 <![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]>
     </i>
+    <i id="trshare"><![CDATA[<i class="fa fa-link"></i>]]></i>    
     <i id="id">Id</i>
   </i>
   <i id="FIELDS">
@@ -35,6 +36,8 @@
       <en>Description</en>
       <lt>Aprašymas</lt>
     </i>
+    <i id="trshare">Shared between multiple systems</i>
+	    
   </i>
   <i id="FIELD_NOTE">
     <i id="time_have">Pvz 1h 30min - 1 valanda 30 minučių</i>

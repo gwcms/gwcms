@@ -225,6 +225,7 @@ class Module_Translations extends GW_Common_Module
 			
 		
 		$cfg["fields"]['update_time'] = 'lof';
+		$cfg["fields"]['trshare'] = 'Lof';
 		$cfg["fields"]['priority'] = 'lof';
 		
 		return $cfg;
