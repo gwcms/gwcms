@@ -1,0 +1,1 @@
+ALTER TABLE `gw_translations` ADD `trshare` TINYINT NOT NULL AFTER `priority`;
