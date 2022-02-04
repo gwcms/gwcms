@@ -602,22 +602,22 @@ class Module_Translations extends GW_Common_Module
 		$api = new GW_Cms_Api(GW_Config::singleton()->get('datasources__translations/trans_share_api_key'));
 		$resp_raw = $api->request('https://voro.lt/admin/lt/datasources/translations', ['act'=>'doImportAll','json'=>1,'sys_call'=>1], [], $payload);		
 		$resp = json_decode($resp_raw, true);
-		if(!$resp)
-			$this->setError('response error: <pre>'.$resp_raw.'<pre>');
-		
-		
-		foreach($resp as $msg){
-			$msg['footer']='Remote message';
-			$msg['float']=1;
-			unset($msg['sysmsg']);
-			$this->setMessageEx($msg);
+		if(!$resp){
+			$this->setError('response error: <pre>'.$resp_raw.'</pre>');
+		}else{
+			foreach($resp as $msg){
+				$msg['footer']='Remote message';
+				$msg['float']=1;
+				unset($msg['sysmsg']);
+				$this->setMessageEx($msg);
+			}
+
+			if(!$this->sys_call)
+				$this->jump();	
 		}
-		
-		if(!$this->sys_call)
-			$this->jump();	
+	
+	
 	}
-	
-	
 	
 /*	
 	function __eventAfterList(&$list)
