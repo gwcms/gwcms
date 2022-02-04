@@ -585,6 +585,12 @@ class Module_Users extends GW_Public_Module
 		
 	}
 	
+	
+	function filterPermitFields(&$vals, $permit_fields)
+	{
+		$vals = array_intersect_key($vals, $permit_fields);		
+	}	
+	
 	function doSaveProfile()
 	{
 		$this->userRequired();
@@ -598,15 +604,17 @@ class Module_Users extends GW_Public_Module
 			$vals = $this->ltf_SaveCoach($vals);
 		}
 		
+		$fields = $this->getFieldsConfig();
+		$permit_fields = $fields['fields'];
 				
+		$this->filterPermitFields($vals,$permit_fields+['id'=>1]);	
 	
+		
 		$item->setValues($vals);
 		
+		//d::dumpas($vals);
+		
 		$item->setValidators('profile');
-		
-		
-		
-		
 				
 		
 		if($item->validate()){
@@ -721,14 +729,7 @@ class Module_Users extends GW_Public_Module
 		}
 	}
 	
-	
 
-	
-	function doNoteIformCountry()
-	{
-		$this->setMessage(GW::ln('/g/PLEASE_PROVIDE_COUNTRY'));
-	}
-	
 
 	function getOptionsCfg()
 	{
