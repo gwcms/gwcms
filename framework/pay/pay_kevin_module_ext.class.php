@@ -137,21 +137,35 @@ Array
 		while($cnt<30){
 			$response = $kevinClient->payment()->getPayment($paylog->kevin_id);
 			
-			$this->log(json_encode(['date'=>date('Y-m-d H:i:s'),'response'=>$response], JSON_PRETTY_PRINT));
+			//$this->log(json_encode(['date'=>date('Y-m-d H:i:s'),'response'=>$response], JSON_PRETTY_PRINT));
+			if(!$wait || $response['statusGroup'] == 'completed')
+				$this->log(json_encode(['date'=>date('Y-m-d H:i:s'),'response'=>$response], JSON_PRETTY_PRINT));			
 			
 			if($response['statusGroup'] == 'completed'){
 				break;
 			}
 			
 
+
 			if(!$wait)
 				break;
 			
-			sleep(1);
+			$this->log("waiting for {$paylog->kevin_id} $cnt/30 response {$response['statusGroup']}");
+			
+			sleep(3);
 			$cnt++;
 			
 		}
 		
+		//uzkraukim loga patikrint ar dar nesuprocesintas
+		$paylog->load();
+		
+		
+		//jei cia atejo per narsykle ir yra jau laukimo procese
+		//ir taip pat foninis pranesimas atejo apie bukles pakeitima
+		//kad neivyktu dvigubas atnaujinimas
+		if($paylog->processed ==1 || $paylog->order->payment_status == 7)
+			return false;
 		
 		
 		$paylog->wait = $cnt;

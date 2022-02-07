@@ -33,6 +33,7 @@ class ttlock_api
 		$resp = $this->request("v3/keyboardPwd/add",[
 		    "lockId"=> $lockid,
 			"keyboardPwd"=>$passcode,
+			"keyboardPwdName"=>'voro-api',
 			"startDate"=> $startdate*1000,
 			"endDate"=> $enddate*1000,
 			"addType"=> "2"
@@ -90,25 +91,70 @@ class ttlock_api
 		
 		$resp = $this->request("v3/keyboardPwd/delete",[
 		    "lockId"=> $lockid,
-			"keyboardPwdId"=>$passcode,
+			"keyboardPwdId"=>$keyboardPwdId,
 			"deleteType"=> "2"
 		],['date'=>1]);	
 		
 		return $resp;	
 	}
 	
+	function unlock($lockid)
+	{
+		if($lockid===false)
+			$lockid = $this->cfg->default_lock_id;
 	
-	/*neveikia*/
-	function listPasscode($lockid=false)
+		$resp = $this->request("v3/lock/unlock",[
+		    "lockId"=> $lockid,
+		],['date'=>1]);	
+		
+		return $resp;	
+	}	
+
+	function lock($lockid)
 	{
 		if($lockid===false)
 			$lockid = $this->cfg->default_lock_id;
 		
-		$resp = $this->request("v3/keyboardPwd/list",[
-		    "lockId"=> $lockid
+		$resp = $this->request("v3/lock/lock",[
+		    "lockId"=> $lockid,
 		],['date'=>1]);	
 		
 		return $resp;	
+	}	
+	
+	function listPasscode($lockid=false, $page=1)
+	{
+		if($lockid===false)
+			$lockid = $this->cfg->default_lock_id;
+		
+		$resp = $this->request("v3/lock/listKeyboardPwd",[
+		    "lockId"=> $lockid,
+		    'pageSize'=>100,
+		    'pageNo'=>$page
+		],['date'=>1]);	
+		
+		return $resp;	
+	}
+
+	function listAllPasscode($lockid=false)
+	{
+		$resp = $this->listPasscode($lockid);
+		$list = $resp->list;
+		if($resp->pages > 1){
+			for($i=2;$i<=$resp->pages;$i++){
+				$resp = $this->listPasscode($lockid, $i);
+				$list = array_merge($list, $resp->list);
+			}
+		}
+		
+		foreach($list as $idx => $item){
+			$item->startDate = date('Y-m-d H:i',$item->startDate/1000);
+			$item->endDate = date('Y-m-d H:i',$item->endDate/1000);
+			$item->sendDate = date('Y-m-d H:i',$item->sendDate/1000);
+				
+		}		
+		
+		return $list;
 	}	
 	
 	
@@ -124,6 +170,7 @@ password	Y		Password(32 chars, low case, md5 encrypted)
  * 
  */		
 		$url = "https://api.ttlock.com/oauth2/token";
+		$url = "https://api.sciener.com/oauth2/token";
 		
 		
 		$r=GW_Http_Agent::singleton();
@@ -170,6 +217,8 @@ password	Y		Password(32 chars, low case, md5 encrypted)
 	{
 		$r=GW_Http_Agent::singleton();
 		$url="https://api.ttlock.com/$path";
+		$url = "https://api.sciener.com/$path";
+		
 		//$url = "http://requestlog/v3/lock/list";
 		$args=[
 		    'clientId'=>$this->clientid,
