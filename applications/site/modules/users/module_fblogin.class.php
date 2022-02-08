@@ -141,7 +141,8 @@ class Module_FBLogin extends GW_Public_Module
 		    'name'=>$fbusr->getFirstName(),
 		    'surname'=>trim(str_ireplace($fbusr->getFirstName(), '', $fbusr->getName())),
 		    'gender'=>$fbusr->getgender(),
-		    'type'=>'facebook'
+		    'type'=>'facebook',
+		    'picture'=>'https://graph.facebook.com/'.$fbusr->getId().'/picture?type=small'
 		];		
 		
 
@@ -199,6 +200,7 @@ class Module_FBLogin extends GW_Public_Module
 		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
 		$dat = json_decode($dat);
 		$dat->type='facebook';
+		$dat->picture='https://graph.facebook.com/'.$dat->id.'/picture?type=small';
 		$_SESSION['3rdAuthUser'] = $dat;
 		
 		$this->app->jump('direct/users/users/signInOrRegister');

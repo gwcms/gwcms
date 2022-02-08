@@ -45,6 +45,10 @@
                         <i class="fa" data-check-icon="&#xf00c"></i>
                       </span>
 		      {$tmptype=strtoupper($smarty.session.3rdAuthUser->type)}
+		      
+		     {if $smarty.session.3rdAuthUser->picture}
+			     <img src="{$smarty.session.3rdAuthUser->picture}" style="border-radius: 50%;height:30px;" class="mr-1" />
+		     {/if}
                      {GW::ln('/m/LINK_WITH_X',[v=>[type=>$tmptype]])} <b class="ml-1"> {$smarty.session.3rdAuthUser->title}</b>
                     </label>
                   </div>
