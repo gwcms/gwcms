@@ -95,6 +95,24 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			}
 	}
 	
+	function getClassItems($class)
+	{
+		$ids = [];
+		
+		if(!$this->items)
+			return [];
+		
+		
+		foreach($this->items as $citem)
+			if($citem->obj_type == $class){
+				$ids[$citem->obj_id] = $citem->obj_id;
+			}
+			
+		$list = $class::singleton()->findAll(GW_DB::inCondition('id', $ids), ['key_field'=>'id']);
+			
+		return $list;
+	}
+	
 	
 	function setSecretIfNotSet()
 	{

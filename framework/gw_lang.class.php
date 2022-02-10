@@ -394,9 +394,9 @@ class GW_Lang
 		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
 			
 			if(!isset($opts['redirect'])){
-				$key=self::transKeyAnalise($fullkey);
+				$keyx=self::transKeyAnalise($fullkey);
 				
-				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.implode('/',$key));
+				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.implode('/',$keyx));
 
 
 				if($resp = json_decode($resraw, true)){
@@ -407,7 +407,7 @@ class GW_Lang
 						$newtr->trshare = 1;
 						$newtr->replaceInsert();
 						$opts['redirect'] = 1;
-						self::transCacheReset($key[0]);;
+						self::transCacheReset($keyx[0]);;
 						
 						return GW::ln($fullkey, $opts);
 					}	

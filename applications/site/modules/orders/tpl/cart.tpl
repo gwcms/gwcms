@@ -5,7 +5,7 @@
 
 
 {function "cart_item_img_or_category"}
-	{if $obj->composite_map.image && $obj->image}
+	{if $obj->image}
 		{$img = $obj->image}
 		<img class="{$class}" src="{$app_base}tools/img/{$img->key}&v={$img->v}&size={$imsize}&method=crop">
 			

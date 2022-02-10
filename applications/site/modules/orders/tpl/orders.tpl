@@ -71,7 +71,7 @@
 		{foreach $citems as $citem}
 			{$obj=$citem->obj}
 
-			{if $obj->composite_map.image && $obj->image}
+			{if $obj->image}
 				{$img = $obj->image}
 				{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
 			{elseif $obj->cart_item_image}
