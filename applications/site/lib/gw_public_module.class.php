@@ -444,6 +444,7 @@ class GW_Public_Module {
 		$this->skipview = true;
 		
 		echo json_encode($array);
+		exit;// kad neuzdetu <!--err:22527--><!--process time 0.01618-->
 	}	
 	
 

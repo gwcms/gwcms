@@ -131,26 +131,38 @@ class GW_Application
 		    'test3' => strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false
 			]);*/
 		
+		$auto_auth=$_SESSION['dev_auto_auth_mode'] ?? true;
+
+		if(isset($_GET['dev_auto_auth_mode_toggle'])){
+			$_SESSION['dev_auto_auth_mode'] = !(bool)$auto_auth;
+			$this->setMessage('Dev auto auth changed');
+		}
+		
 		if(
 			!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && 
 			$_SERVER['REMOTE_ADDR']=='127.0.0.1' && 
 			strpos($_SERVER['HTTP_USER_AGENT'] ?? false,'Mozilla/5.0 (X11; Linux x86_64)')!==false &&
 			$this->app_name!='SERVICE'
 		){
-	
-			$programmer = GW_User::singleton()->createNewObject(9, true);
-			$this->auth->login($programmer);
-			$this->setMessage('Development auto authorise');
-					
-			if($this->sess('after_auth_nav')){
-				$uri = $this->sess('after_auth_nav');
-				$this->sess('after_auth_nav', "");
-				header("Location: ".$uri);
-				exit;				
+			if($auto_auth){
+
+				$programmer = GW_User::singleton()->createNewObject(9, true);
+				$this->auth->login($programmer);
+
+				$this->setMessage("Development auto authorise on <a href='{$this->buildUri(false,['dev_auto_auth_mode_toggle'=>1])}'>Toggle</a>");
+
+				if($this->sess('after_auth_nav')){
+					$uri = $this->sess('after_auth_nav');
+					$this->sess('after_auth_nav', "");
+					header("Location: ".$uri);
+					exit;				
+				}
+
+				header("Location: ".$_SERVER["REQUEST_URI"]);
+				exit;
+			}else{
+				$this->setMessage("Development auto authorise off <a href='{$this->buildUri(false,['dev_auto_auth_mode_toggle'=>1])}'>Toggle</a>");
 			}
-			
-			header("Location: ".$_SERVER["REQUEST_URI"]);
-			exit;
 		}		
 		
 		if($this->auth->error)

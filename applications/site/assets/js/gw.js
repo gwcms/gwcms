@@ -64,9 +64,8 @@ var GW = {
 	
 	open_dialog2: function (conf)
 	{
-		
 		if (!$('#modalDialogDrop').length) {
-			$('body').append(`<div id="modal-type-aftersometime" style="z-index:999999" class="js-autonomous-popup text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;" data-modal-type="aftersometime" data-effect="fadein">
+			$('body').append(`<div style="display:none" id="modal-type-aftersometime" style="z-index:999999" class="js-autonomous-popup text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;" data-modal-type="aftersometime" data-effect="fadein">
 			  <button type="button" class="close" onclick="Custombox.modal.close();">
 			    <i class="hs-icon hs-icon-close"></i>
 			  </button>
@@ -88,7 +87,14 @@ var GW = {
 			if(conf.close_callback)
 				GW.close_callback = conf.close_callback;
 
-			$('#modalDialogDrop').html("<iframe style='width:" + conf.width + ";height:" + conf.height + ";border:0;' src='" + conf.url + "'></iframe>")
+			if(conf.html){
+				$('#modalDialogDrop').html(conf.html)
+			}else if(conf.elementid){
+				var element = $(conf.elementid).detach();
+				$('#modalDialogDrop').append(element);
+			}else{
+				$('#modalDialogDrop').html("<iframe style='width:" + conf.width + ";height:" + conf.height + ";border:0;' src='" + conf.url + "'></iframe>")
+			}
 
 
 			$.HSCore.components.HSModalWindow.init('.js-autonomous-popup', {
@@ -434,6 +440,7 @@ function startCoundDown(elm){
 	}, 1000);		
 
 }
+
 
 
 $(function () {
