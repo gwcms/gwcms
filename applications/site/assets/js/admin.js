@@ -92,3 +92,8 @@ $(function () {
 	$('body').append('<style>@media print{  .no-print, .no-print *{ display: none !important;}}</style>');
 
 })
+
+
+//aabb
+//kad si faila susinchronizuot su core reikia kad butu ant projekto pridetas i isimtis
+//config/project_specific_files.php $include_paths gal si faila perkelt i admin/assets/site_helper.js
