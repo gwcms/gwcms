@@ -19,7 +19,7 @@
 
 {if $views_visible || $views_drop || $orders_visible || $orders_drop}
 
-<div class="pad-ver mar-btm bord-top dl_page_view_container">
+<div class="pad-ver mar-btm dl_page_view_container">
 					
 {if $views_visible || $views_drop}
 <div class="btn-group">

@@ -202,6 +202,14 @@ class GW_Mail_Helper
 		if(isset($opts['preview']))
 			return $opts;
 		
+		
+		if($opts['scheduled'] && !$m_queue_item)
+		{
+			self::add2db($opts);
+			return true;
+		}
+			
+		
 		try {
 			$mailer->send();	
 			
@@ -223,20 +231,18 @@ class GW_Mail_Helper
 		//arba jei neeroras bet sukonfiguruota adminkej kad saugoti visus
 		//nesaugoti jei paduodamas parametras nostoredb
 		if(((!$status && self::$insert_to_queue_if_fail) || $cfg->mail_insert_succ==1) && !isset($opts['noStoreDB'])){
-			$vals=[];
-			GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error']);
 			
-			
-			if(isset($m_queue_item)){
-				$m_queue_item->setValues($vals);
-				$m_queue_item->update();
-				$opts=$m_queue_item;
-			}else{
-				GW_Mail_Queue::singleton()->createNewObject($vals)->insert();
-			}
+			self::add2db($opts, $m_queue_item ?? false);
 			
 			//because &$opts not $opts
 		}
+		
+		/*
+		 * tai jau atliekama emails/email_queue modulyje
+		if($m_queue_item ?? false){
+			$m_queue_item->setValues(['status'=> $opts['status']]);
+		}
+		*/
 		
 		//d::dumpas($mailer);
 		
@@ -245,6 +251,21 @@ class GW_Mail_Helper
 		
 		
 		return $status;
+	}
+	
+	static function add2db($opts, $m_queue_item=false)
+	{
+		$vals=[];
+		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status']);
+
+
+		if($m_queue_item){
+			$m_queue_item->setValues($vals);
+			$m_queue_item->update();
+			$opts=$m_queue_item;
+		}else{
+			GW_Mail_Queue::singleton()->createNewObject($vals)->insert();
+		}		
 	}
 	
 	

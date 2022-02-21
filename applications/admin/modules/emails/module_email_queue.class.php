@@ -27,7 +27,7 @@ class Module_Email_Queue extends GW_Common_Module
 			if(!$functiononly)
 				$this->setError("Mail id:{$item->id} FAILED ({$item->error})");
 				
-			$item->status = $item->error;
+			$item->status = "ERR";
 		}
 		
 		$item->updateChanged();
@@ -50,6 +50,9 @@ class Module_Email_Queue extends GW_Common_Module
 	
 	function doSendQueue()
 	{
+		GW_Mail_Queue::singleton()->updateMultiple(['scheduled > ?', date('Y-m-d H:i')], ['status'=>'ready']);
+		
+		
 		$list = $this->getReady();
 		
 		foreach($list as $item){

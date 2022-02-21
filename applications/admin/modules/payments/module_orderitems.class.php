@@ -15,6 +15,14 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$this->list_params['paging_enabled']=1;	
 		
+		if(isset($_GET['pageby']))
+			if($_GET['pageby']==-1){
+				$this->list_params['paging_enabled']=false;	
+			}else{
+				$this->list_params['page_by'] = $_GET['pageby'];
+			}
+			
+		
 
 		$this->cartgroup_id = $this->app->path_arr['1']['data_object_id'] ?? false;
 		$this->cartgroup = GW_Order_Group::singleton()->find(['id=?', $this->cartgroup_id]);
@@ -56,6 +64,8 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['context_obj_type'] = 1;
 		$this->app->carry_params['context_obj_id'] = 1;
 		$this->app->carry_params['groupby'] = 1;
+		$this->app->carry_params['pageby'] = 1;
+		
 		
 	}
 	
