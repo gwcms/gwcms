@@ -56,11 +56,15 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function prepareCounts($list)
 	{
+		/*
 		$ids = array_keys($list);
 		$counts = GW_Order_Item::singleton()->countGrouped('group_id', GW_DB::inCondition('group_id', $ids));
 		
 		foreach($counts as $id => $item)
 			$list[$id]->items_count = $counts[$id];
+		 * 
+		 */
+		//new version with sql UPDATE gw_order_group AS g SET itmcnt = (SELECT count(*) FROM gw_order_item AS i WHERE i.group_id=g.id);
 		
 		parent::prepareCounts($list);
 	}	
