@@ -33,7 +33,11 @@
 	{/function}
 	{function dl_cell_icon}
 		{if $item->icon}
-		<img style="height:16px;background-color:silver" src="{$item->icon}" align="absmiddle" vspace="2" />	
+			{if strpos($item->icon,'/')!==false}
+				<img style="height:16px;background-color:silver" src="{$item->icon}" align="absmiddle" vspace="2" />	
+			{elseif strpos($item->icon,' ')!==false} {*sumatchins jei bus pvz: fa fa-kazkas*} 
+				<i class='{$item->icon}'></i>
+			{/if}		
 		{/if}
 	{/function}	
 	{function dl_cell_title}

@@ -12,7 +12,18 @@
 {$do_toolbar_buttons[]=preview}
 *}
 
+{$input_tabs=[
+	[base,brown,1],
+	[templatevars,green,1]
+]}	
+
+{if $additfields}
+	{$input_tabs[]=[extended,darkviolet,0]}
+{/if}
+
 {include file="default_form_open.tpl" form_width="100%"}
+
+
 
 
 <script>
@@ -47,44 +58,50 @@
 
 
 
-{call e field=type type=select options=GW::l('/m/TYPE_OPT')}
+{call e field=type type=select options=GW::l('/m/TYPE_OPT')  tabs=[base]}
 
 
-{call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid}
-{call e field=pathname}
+{call e field=parent_id type=select options=$m->getParentOpt($item->id) default=$smarty.get.pid tabs=[base]}
+{call e field=pathname tabs=[base]}
 
 
 
-{call e field=title i18n=3 i18n_expand=1}
-{call e field=meta_description }
+{call e field=title i18n=3 i18n_expand=1 tabs=[base]}
+{call e field=meta_description tabs=[base]}
 
 
-{call e field=template_id options=GW::l('/g/EMPTY_OPTION')+$m->getTemplateList() type=select}
-{call e field=link}
+{call e field=template_id options=GW::l('/g/EMPTY_OPTION')+$m->getTemplateList() type=select tabs=[base]}
+{call e field=link tabs=[base]}
 
 {*
 {call e field=gallery_id type=gallery_folder title=GW::l('/g/GALLERY_FOLDER')}
 *}
 
 
-{call e field=active type=bool}
+{call e field=active type=bool tabs=[base]}
 
 
 {foreach $additfields as $field}
 	{if $field=="icon"}
-		{call e type=text}
+		{call e type=text tabs=[extended]}
 	{/if}
+	{if $field=="display_cond"}
+		{call e type=text tabs=[extended]}
+	{/if}
+	{if $field=="display_badge"}
+		{call e type=text tabs=[extended]}
+	{/if}	
 {/foreach}
 
 
 {if GW::s('MULTISITE') && !$smarty.get.site_id && $app->site->id==1}
-	{call e field=multisite type=bool}	 
+	{call e field=multisite type=bool  tabs=[extended]}	 
 {/if}
 
 {$tpl = $item->getTemplate()}
 
 {if $update}
-	{call e field=in_menu type=bool  i18n=3 i18n_expand=1}
+	{call e field=in_menu type=bool  i18n=3 i18n_expand=1  tabs=[base]}
 	
 	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
@@ -128,7 +145,9 @@
 			title=$input->get(title) 
 			params_expand=$opts
 			valget_func=$valgetf
-			i18n=$if18n}
+			i18n=$if18n
+			tabs=[templatevars]
+		}
 	{/foreach}
 {/if}
 

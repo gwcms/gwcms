@@ -128,9 +128,13 @@
       <lt>Nuoroda į žemesnį lygį</lt>
     </i>
     <i id="2">
-      <en>Link</en>
-      <lt>Nuoroda</lt>
+      <en>Link (stay)</en>
+      <lt>Nuoroda (lieka)</lt>
     </i>
+    <i id="3">
+      <en>Link (jump)</en>
+      <lt>Nuoroda (peršokimas)</lt>
+    </i>    
     <i id="4">
       <en>External link</en>
       <lt>Išorinė nuoroda</lt>
@@ -143,6 +147,10 @@
     <i id="template_name">
       <en>Unique name, lowercase without spaces [a-z0-9_]</en>
     </i>
+    <i id="template_name">
+      <en>Unique name, lowercase without spaces [a-z0-9_]</en>
+    </i>    
+    <i id="display_cond"><![CDATA[ https://symfony.com/doc/current/components/expression_language/syntax.html variables user,date,other params from $app ]]></i>
   </i>
   <i id="VAR_TYPE_OPT">
     <i id="text">
@@ -185,6 +193,9 @@
       <lt>Data,laikas</lt>
       <en>Date, time</en>
     </i>
+		<i id="icon">Ikonėlė</i>
+		<i id="display_cond">Rodymo sąlyga</i>
+		<i id="display_badge">Skaitliukas / ženklelis</i>
   </i>
   <i id="OPTIONS">
 	  
@@ -234,6 +245,8 @@
     </i>
 	<i id="additfields">
 		<i id="icon">Ikonėlė</i>
+		<i id="display_cond">Rodymo sąlyga</i>
+		<i id="display_badge">Skaitliukas / ženklelis</i>
 	</i>    
   </i>
   <i id="ADD_HOST">
@@ -382,6 +395,13 @@
       </i>
     </i>
   </i>
+  
+  <i id="INPUT_TABS">
+    <i id="base">Pagrindiniai laukai</i>
+    <i id="templatevars">Šablono laukai</i>  
+    <i id="extended">Išplėstiniai laukai</i>  
+  </i>
+    
   <i id="i18n_EXT_ADD_LN">Additional language setup: input language copy from in_menu presence. !Warning in "to" field specify only new language.</i>
   <i id="EMPTY_IMAGE_DIMENSION_NOTE">Galima nenurodyti (ištrinti) auščio ir pločio nustatymą - tada bus naudojama originalus pav. dydis (turėkite omenyje kad itin dideli paveikslėliai sulėtina svetainę)</i>
 </xml>

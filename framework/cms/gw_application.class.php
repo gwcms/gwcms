@@ -145,24 +145,25 @@ class GW_Application
 			$this->app_name!='SERVICE'
 		){
 			if($auto_auth){
-
-				$programmer = GW_User::singleton()->createNewObject(9, true);
-				$this->auth->login($programmer);
-
+	
+			$programmer = GW_User::singleton()->createNewObject(9, true);
+			$this->auth->login($programmer);
+			$this->setMessage('Development auto authorise');
+					
 				$this->setMessage("Development auto authorise on <a href='{$this->buildUri(false,['dev_auto_auth_mode_toggle'=>1])}'>Toggle</a>");
 
-				if($this->sess('after_auth_nav')){
-					$uri = $this->sess('after_auth_nav');
-					$this->sess('after_auth_nav', "");
-					header("Location: ".$uri);
-					exit;				
-				}
-
-				header("Location: ".$_SERVER["REQUEST_URI"]);
-				exit;
+			if($this->sess('after_auth_nav')){
+				$uri = $this->sess('after_auth_nav');
+				$this->sess('after_auth_nav', "");
+				header("Location: ".$uri);
+				exit;				
+			}
+			
+			header("Location: ".$_SERVER["REQUEST_URI"]);
+			exit;
 			}else{
 				$this->setMessage("Development auto authorise off <a href='{$this->buildUri(false,['dev_auto_auth_mode_toggle'=>1])}'>Toggle</a>");
-			}
+		}		
 		}		
 		
 		if($this->auth->error)
@@ -228,6 +229,8 @@ class GW_Application
 
 	function __construct($context)
 	{
+		$this->date = date('Y-m-d H:i:s');
+		
 		foreach ($context as $key => $value)
 			$this->$key = $value;
 	}
@@ -814,4 +817,10 @@ class GW_Application
 		
 		return $this->i18next_schema[$type][$str];
 	}	
+	
+	
+	function expression($expr)
+	{
+		return GW_Expression_Helper::singleton()->evaluate($expr, ['user'=>$this->user,'page'=>$this->page,'path'=>$this->path,'date'=>$this->date]);
+	}
 }
