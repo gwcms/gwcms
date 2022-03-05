@@ -102,8 +102,6 @@ class GW_User extends GW_Composite_Data_Object
 		$this->onRequest();
 
 		$this->update(Array('login_time', 'login_count', 'last_ip', 'last_request_time', 'last_user_agent'));
-		
-		
 	}
 
 	function onRequest($db_update = true)
@@ -201,7 +199,6 @@ class GW_User extends GW_Composite_Data_Object
 			return true;
 
 
-
 		/*
 		 * Su šiuo kodu be admin juzerio kiti negali turėti priėjimo prie users modulio
 		 * taip pat vienas adminas gali redaguoti ir pereiti prie kito admino paskyros
@@ -270,19 +267,6 @@ class GW_User extends GW_Composite_Data_Object
 		}
 	}
 
-	/**
-	 * 
-	 * @return GW_User_Extended
-	 */
-	function getExt()
-	{
-		$cache = & $this->cache['gw_user_extended'];
-
-		if (!$cache)
-			$cache = new GW_User_Extended($this->id);
-
-		return $cache;
-	}
 
 	/**
 	 * Delete expired keys
@@ -290,14 +274,14 @@ class GW_User extends GW_Composite_Data_Object
 	function __autologinExpired()
 	{
 		$how_old = str_replace('+', '-', GW::s('GW_AUTOLOGIN_EXPIRATION'));
-		$this->getExt()->deleteOld('autologin', $how_old);
+		$this->get('ext')->deleteOld('autologin', $how_old);
 	}
 
 	function getAutologinPass()
 	{
 		$pass = md5(rand(1, 99999999)) . md5($this->get('username'));
 
-		$this->getExt()->insert("autologin", $pass);
+		$this->get('ext')->insert("autologin", $pass);
 		$this->__autologinExpired();
 
 		return $pass;
@@ -310,8 +294,8 @@ class GW_User extends GW_Composite_Data_Object
 			return false;
 
 
-		if ($item->getExt()->exists("autologin", $pass)) {
-			$item->getExt()->touch("autologin", $pass);
+		if ($item->get('ext')->exists("autologin", $pass)) {
+			$item->get('ext')->touch("autologin", $pass);
 			return $item;
 		}
 	}
