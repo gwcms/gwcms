@@ -820,6 +820,12 @@ class GW_Application
 	
 	function expression($expr)
 	{
-		return GW_Expression_Helper::singleton()->evaluate($expr, ['user'=>$this->user,'page'=>$this->page,'path'=>$this->path,'date'=>$this->date]);
+		return GW_Expression_Helper::singleton()->evaluate($expr, [
+		    'user'=>$this->user,
+		    'page'=>$this->page,
+		    'path'=>$this->path,
+		    'date'=>$this->date,
+			'host'=> $_SERVER['HTTP_HOST'],
+		]);
 	}
 }

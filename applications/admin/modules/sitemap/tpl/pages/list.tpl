@@ -85,4 +85,11 @@
 	
 	{$dl_filters=$display_fields}
 	{$dl_order_enabled_fields = []}
+	
+	
+	
+	{$dl_checklist_enabled=1}
+	{function "dl_cl_actions_changeparent"}<option value="checked_action_postids('{$m->buildUri(false,[act=>doChangeParent])}', true)">Perkelti</option>{/function}
+	{$dl_cl_actions=[invertactive,dialogremove,changeparent]}
+	
 {/block}

@@ -41,7 +41,7 @@ class GW_Site_Application extends GW_Application
 	
 	
 	
-	function getPage()
+	function getPageByPathArr()
 	{
 		$this->page = new GW_Page();
 		
@@ -64,8 +64,26 @@ class GW_Site_Application extends GW_Application
 			
 			$this->path_arr[$i]['isarg']=1;
 		}
+		
+		
 
-		return false;
+		return false;		
+	}
+	
+	
+	function getPage()
+	{
+		$this->getPageByPathArr();
+		
+		if($this->page)
+		{
+			$pages = $this->page->getParents();
+			$pages[] = $this->page;
+			
+			foreach($pages as $page){
+				$this->page_arr[$page->level]=$page;
+			}
+		}
 	}
 	
 	//no data objects catching

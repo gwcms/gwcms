@@ -78,4 +78,25 @@ class GW_String_Helper
 		return sprintf('%0'.$zerocnt.'d', $number);
 	}
 
+	
+	
+	static function split2($string, $center = 0.4) {
+		
+		$string = str_replace('  ',' ', $string);
+		$string = str_replace('  ',' ', $string);
+		
+		$length2 = strlen($string) * $center;
+		$tmp = explode(' ', $string);
+		
+		if(count($tmp)==2)
+			return $tmp;
+		
+		$index = 0; 
+		$result = Array('', '');
+		foreach($tmp as $word) {
+		    if(!$index && strlen($result[0]) > $length2) $index++;
+		    $result[$index] .= $word.' ';
+		}
+		return $result;
+	}
 }

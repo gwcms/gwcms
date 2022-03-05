@@ -70,12 +70,12 @@ class GW_Extension_KeyVal
 	
 	function __get($name) 
 	{		
-		return $this->obj->get($name);
+		return $this->get($name);
 	}
 	
-	function get($name)
+	function get($name, $all=false)
 	{
-		return $this->__get($name);
+		return $this->obj->get($name, $all);
 	}
 	
 	function __set($name, $value) 

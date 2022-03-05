@@ -36,7 +36,7 @@ class GW_WebSocket_Helper
 	static function getFrontConfig(GW_User $user, $updateTempPass=false)
 	{
 		$username = GW::s('WSS/USER_PREFIX').$user->username;
-		$pass_info = $user->getExt()->get('wss_pass', false, true);
+		$pass_info = $user->get('ext')->get('wss_pass', false, true);
 		
 		$pass = $pass_info ? $pass_info['value'] : false;
 		$time = $pass_info ? time()-strtotime($pass_info['update_time']) : false;
@@ -80,7 +80,7 @@ class GW_WebSocket_Helper
 			if($client){
 				$client->setTempPass($pass=GW_String_Helper::getRandString(50), '2 hour', $username);
 
-				$user->getExt()->replace('wss_pass', $pass);
+				$user->get('ext')->replace('wss_pass', $pass);
 			}else{
 				// 'nera rysioooo!!'
 			}

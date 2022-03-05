@@ -6,6 +6,9 @@
  * 
  * 2016 GW CMS
  */
+
+die('GW_User_Extended pakeitimas i GW_Generic_Extended, paprastumo labui atsiskaoma 2022-03-03');
+
 class GW_User_Extended
 {
 

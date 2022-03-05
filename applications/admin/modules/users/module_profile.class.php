@@ -88,7 +88,7 @@ class Module_Profile extends GW_Module
 	function doStoreSubscription()
 	{
 		$subscription = GW_Android_Push_Notif::getRegistrationId($_GET["subscription"]);
-		$new = $this->app->user->getExt()->insertIfNotExists('android_subscription', $subscription);
+		$new = $this->app->user->get('ext')->insertIfNotExists('android_subscription', $subscription);
 
 		echo "New: $new";
 		echo $subscription;

@@ -450,4 +450,41 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		return $cfg;
 	}	
 	
+	
+
+	
+	function doChangeParent()
+	{
+		$ids = $this->acceptIds(__FUNCTION__);
+		
+		$form = ['fields'=>[
+		    'parent_id'=>['type'=>'select','options'=>$this->getParentOpt($ids[0]),'default'=>$_GET['pid'],'required'=>1,'size'=>10]
+		    ],'cols'=>1];
+
+		
+		$opt = ['v'=>['cnt'=>count($ids)]];
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/MOVE_X_ITEMS_TO',$opt))))
+			return false;
+		
+		
+		$list = GW_Page::singleton()->findAll(GW_DB::inCondition('id', $ids));
+		$succ = 0;
+		
+		
+		
+		foreach($list as $item){
+			if($this->canBeAccessed($item)){
+				$item->parent_id = $answers['parent_id'];
+				$item->updateChanged();
+				$succ++;
+			}else{
+				$this->setError("{$item->title} cant access");
+			}
+		}
+		$this->doFixPaths();
+		$this->setMessage("Action performed on $succ items");
+		$this->jump();
+		
+	}
 }

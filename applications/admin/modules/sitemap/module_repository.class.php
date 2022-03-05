@@ -283,7 +283,10 @@ class Module_Repository extends GW_Common_Module
 		{
 			$this->app->sess($store, explode(',', $_POST['ids']));
 			exit;
-		}		
+		}else{
+			return $this->getSelectedFileList($store);
+		}
+		
 	}
 	
 	function viewDialogMoveItems()

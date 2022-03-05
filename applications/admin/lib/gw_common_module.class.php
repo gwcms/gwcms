@@ -2811,4 +2811,24 @@ class GW_Common_Module extends GW_Module
 		exit;
 	}	
 	
+	/*
+	{$dl_checklist_enabled=1}
+	{capture append="dl_checklist_actions"}<option value="checked_action_postids('{$m->buildUri(false,[act=>doChangeParent])}', true)">Perkelti</option>{/capture}
+	 */
+	
+	function acceptIds($store, $clean=false)
+	{
+		if(isset($_POST['ids']))
+		{
+			$this->app->sess($store, explode(',', $_POST['ids']));
+			exit;
+		}else{
+			if($clean)
+				$this->app->sess($store, false);
+			
+			
+			return $this->app->sess($store);
+		}
+		
+	}		
 }

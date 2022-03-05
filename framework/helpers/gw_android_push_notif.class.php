@@ -34,7 +34,7 @@ class GW_Android_Push_Notif
 
 		//var_dump($user);
 
-		$regids = $user->getExt()->get('android_subscription');
+		$regids = $user->get('ext')->get('android_subscription');
 
 		foreach ($regids as $idx => $regid)
 			if (strpos($regid, 'mozilla.com') !== false) {
@@ -91,7 +91,7 @@ class GW_Android_Push_Notif
 		if (isset($data['failure']) && $data['failure'] > 0 && isset($data['results'])) {
 			foreach ($data['results'] as $idx => $info) {
 				if (isset($info['error']) && $info['error'] == 'NotRegistered') {
-					$user->getExt()->deleteKeyVal('android_subscription', $regids[$idx]);
+					$user->get('ext')->deleteKeyVal('android_subscription', $regids[$idx]);
 					GW::$lgr->msg("PUSH_MSGS $user->id removing: " . $regids[$idx]);
 				}
 			}

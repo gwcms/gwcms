@@ -1168,14 +1168,19 @@ function checked_action_postids(actionOrUrl, redirect)
 
 }
 
-function checked_action2(action, title) {
+function checked_action2(actionOrUrl, title) {
 
 	var selected = [];
 	$.each($('.checklist_item:checked'), function () {
 		selected.push($(this).val());
 	});
 
-	gwcms.open_dialog2({url: GW.app_base + GW.ln + '/' + GW.path + '/' + action + '?ids=' + selected.join(','), title: title});
+
+	var url = actionOrUrl.indexOf('/')==-1 ? GW.app_base + GW.ln + '/' + GW.path + '/' + actionOrUrl : actionOrUrl
+	
+	url= gw_navigator.url(url, {ids: selected.join(',')})
+
+	gwcms.open_dialog2({url: url, title: title});
 }
 
 function animateChangedRow(id,speed)

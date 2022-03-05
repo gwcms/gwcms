@@ -401,6 +401,8 @@
     <i id="templatevars">Šablono laukai</i>  
     <i id="extended">Išplėstiniai laukai</i>  
   </i>
+  
+  <i id="MOVE_X_ITEMS_TO">Perkelti $cnt įrašų</i>
     
   <i id="i18n_EXT_ADD_LN">Additional language setup: input language copy from in_menu presence. !Warning in "to" field specify only new language.</i>
   <i id="EMPTY_IMAGE_DIMENSION_NOTE">Galima nenurodyti (ištrinti) auščio ir pločio nustatymą - tada bus naudojama originalus pav. dydis (turėkite omenyje kad itin dideli paveikslėliai sulėtina svetainę)</i>
