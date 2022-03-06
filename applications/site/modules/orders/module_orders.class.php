@@ -179,6 +179,29 @@ class Module_Orders extends GW_Public_Module
 	}
 	
 
+	function expirityChecks($order)
+	{
+		foreach($order->items as $citem){
+			if(($citem->obj->expirity_check_before_buy ?? false) && !$citem->obj->expirityCheck($citem)){
+				
+				
+				$this->setError($citem->obj->title." - ".GW::ln('/m/EXPIRED').' #'.$citem->obj->id);
+				
+				
+				$this->initLogger();
+				$this->lgr->msg('EXPIRED CARTITEM: '. json_encode($citem->toArray()));
+				
+				$citem->delete();
+				
+				
+				
+				return false;
+			}	
+		}
+		
+		return true;
+	}
+	
 	function prepareOrderForPay($order)
 	{
 		if(!$order->deliverable)
@@ -202,11 +225,11 @@ class Module_Orders extends GW_Public_Module
 
 		//extend expirity time // etc
 		
+		if(!$this->expirityChecks($order))
+			$this->jump(''); // permes i pirma puslapi
+		
 		foreach($order->items as $citem){
-			if(($citem->obj->expirity_check_before_buy ?? false) && !$citem->obj->expirityCheck()){
-				$this->setError($citem->obj->title." - ".GW::ln('/m/EXPIRED'));
-				$this->jump('');
-			}
+
 			
 			//d::ldump($citem);
 			//d::dumpas($citem->obj);
@@ -676,6 +699,8 @@ class Module_Orders extends GW_Public_Module
 		$order = $this->doInitCart();
 		
 		
+		if(!$this->expirityChecks($order))
+			$this->app->jump();//should return back
 	
 		
 		

@@ -163,4 +163,14 @@ class Shop_Products extends GW_Composite_Data_Object
 		
 		parent::eventHandler($event, $context_data);
 	}
+	
+	
+	public $expirity_check_before_buy = true;
+	// for orders subsystem
+	function expirityCheck($orderitem)
+	{
+		//d::dumpas(['have_amount'=>$this->qty, 'want_buy_amount'=>$orderitem->qty]);
+		
+		return $this->qty - $orderitem->qty >= 0;
+	}		
 }

@@ -28,6 +28,7 @@ class GW_Public_Module {
 	public $skipview = false;
 	public $action_name;
 	public $default_view = 'default';
+	public $lgr =false;
 	
 	function __construct($variables = Array()) {
 
@@ -859,5 +860,13 @@ class GW_Public_Module {
 
 		return json_decode($answers['data'], true);	
 	}
+	
+	function initLogger()
+	{
+		if(!$this->lgr){
+			$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . implode('_',$this->module_path) . '.log');
+			$this->lgr->collect_messages = true;
+		}
+	}	
 	
 }
