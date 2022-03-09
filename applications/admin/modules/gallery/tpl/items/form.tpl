@@ -19,6 +19,16 @@
 	{call e field=author}
 {/if}
 
+{if $item->type==$smarty.const.GW_GALLERY_ITEM_FOLDER}
+
+	{call e field="site_id"
+		type="select_ajax"
+		modpath="sitemap/sites"
+		options=[]
+		preload=1
+	}
+{/if}
+
 
 {call e field=active type=bool}
 

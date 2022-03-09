@@ -9,8 +9,27 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		parent::init();
 		
 		$this->config = $this->model->config();	
+		
+		if($this->app->site->id == 1){
+			$this->options['site_id'] = GW_Site::singleton()->getOptions();
+		}
+		
+
 	}
 
+	function __eventAfterListParams(&$params)
+	{		
+		//
+	
+		if($this->app->site->id != 1){
+			$params['conditions'] = ($params['conditions'] ? '('.$params['conditions'].') AND':'').' (site_id='.(int)$this->app->site->id.' OR `type`='.GW_GALLERY_ITEM_IMAGE.')';
+		}
+		
+					
+
+		
+	}	
+	
 	
 	function viewDefault()
 	{

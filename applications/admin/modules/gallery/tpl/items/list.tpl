@@ -26,6 +26,9 @@
 	<th>{$app->fh()->fieldTitle(title)}</th>
 	<th>{$app->fh()->fieldTitle(insert_time)}</th>
 	<th>{$app->fh()->fieldTitle(update_time)}</th>
+	{if $app->site->id==1}
+		<th>{$app->fh()->fieldTitle(site_id)}</th>
+	{/if}
 	<th>{GW::l('/g/ACTIONS')}</th>
 </tr>
 
@@ -59,8 +62,11 @@
 			({$item->child_count})
 		{/if}
 	</td>
-	<td>{$item->get('insert_time')}</td>
-	<td>{$item->get('update_time')}</td>
+	<td>{$app->fh()->shortTime($item->get('insert_time'))}</td>
+	<td>{$app->fh()->shortTime($item->get('update_time'))}</td>
+	{if $app->site->id==1}
+		<td>{$options.site_id[$item->get('site_id')]}</td>
+	{/if}
 
 	<td nowrap >
 		{call dl_display_actions}

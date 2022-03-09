@@ -75,7 +75,12 @@ class GW_Gallery_Item extends GW_i18n_Data_Object
 			$cond = "parent_id = ".(int)$id;
 		}
 		
-		$cond = $cond.(isset($params['type'])?' AND type='.(int)$params['type']:'').(isset($params['active'])?' AND active':'');
+		
+		
+		$cond = $cond.
+			(isset($params['type'])?' AND type='.(int)$params['type']:'').
+			(isset($params['site_id'])?' AND site_id='.(int)$params['site_id']:'').
+			(isset($params['active'])?' AND active':'');
 
 		$p=[];
 		
