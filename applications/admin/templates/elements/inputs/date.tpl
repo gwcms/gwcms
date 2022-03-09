@@ -23,11 +23,19 @@
 					
 <script>
 	require(['vendor/bootstrap-datepicker/js'], function(){
-		$('#inp-date-{$suffix} .date').datepicker({ autoclose:true, format: 'yyyy-mm-dd', language:'{$ln}', todayHighlight: true });
+		$('#inp-date-{$suffix} .date').datepicker({ 
+			autoclose:true, 
+			format: 'yyyy-mm-dd', 
+			language:'{$ln}', 
+			todayHighlight: true,
+			//firstDay: 1, // Start with Monday
+			weekStart: 1
+		});
 	});
 	   
-</script>					
-{*{$m->addIncludes("bs/datepicker", 'js', "`$app_root`static/vendor/bootstrap-datepicker/js.js")}*}
-
+</script>		
+{*
+{$m->addIncludes("bs/datepicker", 'js', "`$app_root`static/vendor/bootstrap-datepicker/js.js")}
+*}
 {$m->addIncludes("bs/datepickercss", 'css', "`$app_root`static/vendor/bootstrap-datepicker/css.css")}
 

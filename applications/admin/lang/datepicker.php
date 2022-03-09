@@ -12,6 +12,7 @@ switch($_GET['ln'])
 		
 date_picker_locale = 
 {
+	firstDay: 1,
 	days: ['sekmadienis','pirmadienis','antradienis','trečiadienis',
 	       			'ketvirtadienis','penktadienis','šeštadienis'],
 	daysShort: ['sek','pir','ant','tre','ket','pen','šeš'],
