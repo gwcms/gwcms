@@ -73,15 +73,20 @@
 					
 					
 					<div class="col-xs-3">
+						
 						{if $app->sess('temp_link_withfb')}
 							<img src="https://graph.facebook.com/{$app->sess('temp_link_withfb')}/picture?type=small" style="border-radius: 50%;height:42px;" class="mx-1">
 						{else}
+							{if $m->config->login_with_fb}
 							<a class="btn btn-primary btn-sm" href="{$m->buildUri(false,[act=>doAuthWith3rd,gw=>fb])}" style="color:white;background-color:#3b5998">
 								 <i class="fa fa-facebook" aria-hidden="true"></i>
 							</a>
+							{/if}
+							{if $m->config->login_with_gg}
 							<a class="btn btn-primary btn-sm" href="{$m->buildUri(false,[act=>doAuthWith3rd,gw=>gg])}" style="color:white;background-color:#DB4437">
 								 <i class="fa fa-google" aria-hidden="true"></i>
-							</a>							
+							</a>				
+							{/if}
 						{/if}
 
 					</div>

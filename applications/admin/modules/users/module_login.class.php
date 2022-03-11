@@ -9,6 +9,7 @@ class Module_Login extends GW_Module
 	function init()
 	{
 		parent::init();
+		$this->config = new GW_Config('gw_'.$this->module_path[0].'/');		
 	}
 
 	function viewLogin()
