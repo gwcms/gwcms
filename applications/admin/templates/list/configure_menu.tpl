@@ -27,6 +27,8 @@
 	{list_item_action_m url=[false, [act=>doCopyFieldData]] iconclass="fa fa-cog" caption="doCopyFieldData" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doAutoTranslate]] iconclass="fa fa-cog" caption="doAutoTranslate" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doMultiSetValue]] iconclass="fa fa-cog" caption="doMultiSetValue" action_addclass="rootactions"}
+	{list_item_action_m url=[false, [act=>doImportJSON]] iconclass="fa fa-cog" caption="doImportJSON" action_addclass="rootactions"}
+	
 	
 	{list_item_action_m href=$app->buildUri("system/module_fields", ['path'=>$app->page->path]) iconclass="fa fa-pencil-square-o" 
 		caption="Manage fields"

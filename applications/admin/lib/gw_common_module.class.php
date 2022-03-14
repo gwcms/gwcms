@@ -2297,8 +2297,15 @@ class GW_Common_Module extends GW_Module
 			$lastasnwers = json_decode($this->modconfig->prompt_lastanswers, true);
 		}
 		
-		$src =& $_GET;
-		$this->tpl_vars['method'] = $opts['method'] ?? 'get';
+		
+		$this->tpl_vars['method'] = $method =  $opts['method'] ?? 'get';
+		
+		if($method=='get'){
+			$src =& $_GET;
+		}else{
+			$src =& $_POST;
+		}
+		
 		
 		foreach($form['fields'] as $fieldname => $el){
 			if(($el['type'] ?? false)=='file'){
@@ -2322,10 +2329,16 @@ class GW_Common_Module extends GW_Module
 			}
 			
 			if(isset($el['required']) && !isset($src['item'][$fieldname])){
+				
+				if(isset($src['item']))
+					$this->setError("$fieldname not satisfied");
+				
 				$answers=false;
 			}
 		}
 				
+		
+		//d::dumpas($answers);
 		
 		if($answers){
 			if(isset($opts['rememberlast'])){
@@ -2755,7 +2768,15 @@ class GW_Common_Module extends GW_Module
 	{
 		$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
 		$refreshurl = $_SERVER['REQUEST_URI'];
-		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";
+		
+		
+		if(isset($_POST)){
+			$str.="<br>".Navigator::postLink($confirmurl, GW::l('/g/CONFIRM'), $_POST,['aclass'=>'btn btn-primary']);
+		}else{
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";
+		}
+
+		
 		$this->setMessageEx(['text'=>$str, 'type'=>4]);			
 	}
 	
@@ -2830,5 +2851,52 @@ class GW_Common_Module extends GW_Module
 			return $this->app->sess($store);
 		}
 		
-	}		
+	}
+	
+	
+	function doImportJSON()
+	{
+		//die("u:".$this->app->user->username);
+			
+		if(!$this->app->user->isRoot())
+			return $this->setError("No translation permission");
+		
+		$form = ['fields'=>[
+		    'codejson'=>['type'=>'code_json','height'=>'200px','width_input'=>'600px', 'required'=>1],
+		    'multiple'=>['type'=>'bool', 'required'=>1],
+		],'cols'=>3];
+		
+	
+		
+		
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/PASTE_MULTIPLE_OR_SINGLE_JSON_DUMP'),['method'=>'post'])))		
+			return false;		
+		
+
+
+		
+		$entries = json_decode($answers['codejson'], true);
+		
+		if(!$answers['multiple'])
+			$entries = [$entries];
+		
+		
+		//d::dumpas($entries);
+		
+		if(!$this->confirm(GW_Data_to_Html_Table_Helper::doTable($entries)))
+			return false;
+		
+		
+				
+		$t = new GW_Timer;
+		$item0 = $this->model;
+		$item0->multiInsert($entries);
+		
+		$this->setMessage($msg = "Import done, cnt: ".count($entries).", speed: {$t->stop()}");
+		
+		
+		$this->jump();
+	}	
 }

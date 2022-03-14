@@ -277,7 +277,7 @@ class Navigator
 		setcookie($name, $val, time()+3600*24*365*10, Navigator::getBase());	
 	}	
 	
-	function postLink($url, $title, $args)
+	function postLink($url, $title, $args,$opts=[])
 	{
 		$GLOBALS['postlinkformidx'] = ($GLOBALS['postlinkform'] ?? 0) +1;
 		
@@ -306,7 +306,8 @@ class Navigator
 			$str.='<input type="hidden" name="'.htmlspecialchars($key).'" value="'.htmlspecialchars($value).'">';
 		}
 		
-		$str.='</form><a href="'.$url.'" onclick="document.querySelector(\'#postlinkform'.$GLOBALS['postlinkformidx'].'\').submit();return false;">'.$title.'</a>';
+		
+		$str.='</form><a class="'.($opts['aclass']??'').'" href="'.$url.'" onclick="document.querySelector(\'#postlinkform'.$GLOBALS['postlinkformidx'].'\').submit();return false;">'.$title.'</a>';
 		return $str;
 	}
 }

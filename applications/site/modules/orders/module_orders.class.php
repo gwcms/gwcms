@@ -703,7 +703,6 @@ class Module_Orders extends GW_Public_Module
 		$order = $this->doInitCart();
 		
 		
-		
 		if(!$this->expirityChecks($order))
 			$this->app->jump();//should return back
 	
