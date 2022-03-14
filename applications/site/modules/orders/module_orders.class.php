@@ -204,6 +204,10 @@ class Module_Orders extends GW_Public_Module
 	
 	function prepareOrderForPay($order)
 	{
+		if($order->payment_status==7)
+			return false;
+			
+		
 		if(!$order->deliverable)
 			$order->placed_time = date('Y-m-d H:i:s');
 		
@@ -697,6 +701,7 @@ class Module_Orders extends GW_Public_Module
 	function viewCart()
 	{		
 		$order = $this->doInitCart();
+		
 		
 		
 		if(!$this->expirityChecks($order))
