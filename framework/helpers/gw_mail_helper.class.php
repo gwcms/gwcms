@@ -203,7 +203,7 @@ class GW_Mail_Helper
 			return $opts;
 		
 		
-		if($opts['scheduled'] && !$m_queue_item)
+		if(isset($opts['scheduled']) && !$m_queue_item)
 		{
 			self::add2db($opts);
 			return true;

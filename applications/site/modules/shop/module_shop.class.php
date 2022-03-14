@@ -395,6 +395,8 @@ class Module_Shop extends GW_Public_Module
 	
 	function doAdd2Wishlist()
 	{
+		$this->userRequired();
+		
 		$item=$this->getDataObjectById();
 		
 		if(!isset($GLOBALS['GW_SHOP_wishlist']))
