@@ -166,6 +166,7 @@ class GW_FSFile extends GW_Data_Object
 	    'subfilescount'=>1,
 	    'url'=>1,
 	    'files'=>1,
+	    'resize_url'=>1
 	];
 
 
@@ -196,6 +197,11 @@ class GW_FSFile extends GW_Data_Object
 
 			case 'files':
 				return glob($this->path.'/*');
+			break;
+		
+			case 'resize_url':
+				//size=widthxheight&method=crop
+				return "/tools/img_resize?file=".urlencode($this->relpath)."&dirid=repository";
 			break;
 			//case 'ext':
 			//	return new IPMC_Competition_Extended($this->id);

@@ -8,6 +8,16 @@
 	<img class="file" data-file="{$file}" 
 	     src="{$app->sys_base}tools/img_resize?file={urlencode($item->relpath)}&dirid=repository&size=1000x600" 
 	     title="{$item->filename}" alt="{$item->filename}" />
+	
+	{$url="{GW::s("SITE_URL")}/tools/img_resize?file={$item->relurl}&size=300x300"}
+	
+	
+	<br><br>
+	resize tool examples:<br>
+	<a href="{$item->resize_url}&size=300x300" target="_blank">resized 300x300</a><br>
+	<a href="{$item->resize_url}&size=300x300&method=crop" target="_blank">resize,crop</a><br>
+	<a href="{$item->resize_url}&size=300x300&method=crop&filters=tint:ff000;brightness:50" target="_blank">resize,crop,tint,brighten</a><br>
+		
 {elseif $item->extension==pdf}
 	<div style="height: 100vh;">
 	<object class="fullsize" type="application/pdf" data="/repository/{$item->relpath}" style="width:100%;height:100%"></object>
