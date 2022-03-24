@@ -863,4 +863,18 @@
 	  <en>Action asks for additional input</en>
 	  <lt>Veiksmui atlikti reikia papildomos informacijos</lt>
   </i>
+<i id="QUOTE_START">
+	<lt>„</lt>
+	<en><![CDATA["]]></en>
+	<ru>«</ru>
+	<ua>«</ua>
+</i>
+
+<i id="QUOTE_END">
+	<lt>“</lt>
+	<en><![CDATA["]]></en>
+	<ru>»</ru>
+	<ua>»</ua>
+</i>  
+  
 </xml>

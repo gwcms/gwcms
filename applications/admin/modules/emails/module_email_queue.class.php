@@ -30,7 +30,8 @@ class Module_Email_Queue extends GW_Common_Module
 			$item->status = "ERR";
 		}
 		
-		$item->updateChanged();
+		//pasikeicia i masyva po GW_Mail_Helper::sendMail vykdymo ir pats sendmail updatechaned padaro
+		//$item->updateChanged();
 		
 		if($functiononly)
 			return true;
