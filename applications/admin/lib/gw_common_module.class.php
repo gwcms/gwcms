@@ -939,8 +939,12 @@ class GW_Common_Module extends GW_Module
 			$params['select'] = ($params['select'] ? $params['select'].', ':'').$pview->select;
 		}
 
-		if (isset($this->list_params['order']) && $ord = $this->list_params['order'])
+		
+		if(isset($_GET['pview'])){
+			$params['order'] = $pview->order;
+		}else if (isset($this->list_params['order']) && $ord = $this->list_params['order']){
 			$params['order'] = $ord;
+		}
 		
 		
 		//perrasoma is modulio konfig. views
@@ -953,7 +957,9 @@ class GW_Common_Module extends GW_Module
 
 		$params['conditions'] = $cond;
 				
-		$this->fireEvent('AFTER_LIST_PARAMS', $params);		
+		$this->fireEvent('AFTER_LIST_PARAMS', $params);	
+		
+		//d::dumpas($params);
 	}
 
 	function setDefaultOrder()
@@ -1250,8 +1256,11 @@ class GW_Common_Module extends GW_Module
 		//d::dumpas($this->tpl_vars['views']);
 		//d::dumpas("test");
 
-		
-		if(isset($this->list_params['fields']))
+		if(isset($_GET['pview'])){
+			$pview = $this->getPageView4use();
+			$saved = json_decode($pview->fields, true);
+		}
+		elseif(isset($this->list_params['fields']))
 		{
 			$saved = $this->list_params['fields'];
 		}
