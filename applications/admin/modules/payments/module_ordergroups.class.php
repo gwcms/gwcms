@@ -31,6 +31,9 @@ class Module_OrderGroups extends GW_Common_Module
 
 		if($this->feat('itax'))
 			$this->addRedirRule('/^doItax|^viewItax/i','itax');		
+		
+		if($this->feat('rivile'))
+			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');			
 	}
 	
 

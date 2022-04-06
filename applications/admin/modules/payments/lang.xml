@@ -177,6 +177,7 @@
 	      <i id="otherpayee">Siųsti mokėjimo informaciją</i>
 	      <i id="mergepaymethods">Mokėjimo metodų apjungimas iš skirtingų pay-gateway</i>
 	      <i id="itax">Itax - buhalterinė apskaita</i>
+	      <i id="rivile">Rivile - buhalterinė apskaita</i>
 	      <i id="discountcode">Nuolaidos kodai</i>
 	      <i id="multitype">Multitype - Daugiau nei vienas prekės paslaugos tipas</i>
 	</i>

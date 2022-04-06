@@ -21,7 +21,14 @@
 		*}
 		{toolbar_button iconclass="fa fa-money"
 				title=GW::l('/m/VIEWS/paymentsummary')
-				href=$m->buildUri(paymentsummary)}		
+				href=$m->buildUri(paymentsummary)}
+				
+				
+		{if $m->feat(rivile)}
+			{toolbar_button iconclass="fa fa-money"
+				title="Eksportas į 'Rivilė' sistemą"
+				href=$m->buildUri(false,[act=>doRivileExport])}
+		{/if}				
 	{/function}
 	
 
