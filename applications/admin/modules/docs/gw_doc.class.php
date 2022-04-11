@@ -6,10 +6,9 @@ class GW_Doc extends GW_i18n_Data_Object
 	public $table = 'gw_docs';
 	
 	public $calculate_fields = [
-	    'title'=>1,
-	    'doc_forms'=>1,
-	    'doc_ext_fields'=>1,
-	    'keyval'=>1
+		'title'=>1,
+		'doc_forms'=>1,
+		'doc_ext_fields'=>1
 	];
 	
 	public $validators = [
@@ -75,11 +74,7 @@ class GW_Doc extends GW_i18n_Data_Object
 			case 'doc_ext_fields':
 				$ids = $this->doc_adm_fields;
 				return GW_Forms::singleton()->findAll(GW_DB::inCondition('id', $ids), ['key_field'=>'idname']);				
-			break;
-		
-			case 'keyval':
-				return $this->extensions['keyval'];
-			break;		
+			break;			
 		}
 		
 		
@@ -162,6 +157,6 @@ class GW_Doc extends GW_i18n_Data_Object
 		$initial = ['doc_id'=>$this->id];		
 		return GW_Form_Answers::singleton()->count(GW_DB::buidConditions($initial));
 	}
-
 	
+		
 }			

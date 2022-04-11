@@ -17,13 +17,7 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 		return $this->extensions['attachments']->findAll();
 	}
 	*/
-	
-	public $calculate_fields = [
-	    'keyval' => 1
-	];
-	public $ignore_fields = [
-	    'keyval' => 1
-	];	
+
 	
 	/*
 	public $composite_map = [
@@ -32,13 +26,22 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 		'image' => ['gw_image', ['dimensions_resize'=>'800x600', 'dimensions_min'=> '100x100']],
 	];	
 	*/
-	
+	public $calculate_fields = [
+		'obj'=>1, //susijes objektas pvz užsakymo dalis obj=gw_order_item~2734
+	];	
 
 	function calculateField($key)
 	{
 		switch ($key) {
-			case 'keyval':
-				return $this->extensions['keyval'];
+			case "obj":
+				$class = $this->obj_type;
+				
+				if(!$class)
+					return false;
+				
+				if($class)				
+					return $class::singleton()->createNewObject($this->obj_id, true);
+			break;
 						
 		}
 		
