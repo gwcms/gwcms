@@ -78,6 +78,11 @@ class GW_Extension_KeyVal
 		return $this->obj->get($name, $all);
 	}
 	
+	function search($phrase)
+	{
+		return $this->obj->findOwner(GW_DB::prepare_query(['value LIKE ?', '%'.$phrase.'%']));
+	}
+	
 	function __set($name, $value) 
 	{
 		if($this->parent->id){			

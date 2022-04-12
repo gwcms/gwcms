@@ -912,8 +912,20 @@ class GW_Common_Module extends GW_Module
 				$this->buildConds(['field' => $key, 'value' => $this->list_params['search'], 'ct' => 'LIKE'], $subcond, 'OR');
 			}
 			
+			if(isset($this->model->extensions['keyval'])){
+				$ids = $this->model->extensionget('keyval')->search($this->list_params['search']);
+				if($ids){
+					
+					$this->buildConds(['field' => 'id', 'value' => $ids, 'ct' => 'IN'], $subcond, 'OR');
+				}
+			}			
+			
 			$cond.=($cond ? ' AND ':'')."($subcond)";
+			
+	
+			
 		}
+		
 	
 			
 		foreach ($search as $filter) {
@@ -921,6 +933,8 @@ class GW_Common_Module extends GW_Module
 			$this->buildConds($filter, $cond);
 		}
 		
+		
+		//d::dumpas($cond);
 		
 		
 			
