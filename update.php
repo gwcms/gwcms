@@ -36,10 +36,26 @@ class GW_CMS_Sync
 		passthru($this->enterWorkDir().$cmd);
 	}
 	
+	
 	function exec($cmd)
 	{
-		$this->out("$cmd ..");
-		return shell_exec($this->enterWorkDir().$cmd);
+		
+		if(strpos($cmd,'git ')===0){
+			$cmd ="sudo -S -u wdm ".$cmd;
+		}
+		
+		$r = shell_exec($cmd=$this->enterWorkDir().$cmd." 2> /tmp/sync_errors");
+		
+		$this->out("$cmd");
+		//$this->out("$cmd\n-$r=\n\n");
+		
+		if($tmp=file_get_contents("/tmp/sync_errors")){
+			$this->out("ERROR: ".$tmp);	
+		}
+		
+		unlink("/tmp/sync_errors");
+		
+		return $r;
 	}	
 
 	function getLastCommitWhenVersionsWereSynced($bydate=false){
@@ -99,6 +115,8 @@ class GW_CMS_Sync
 		
 		$commits = explode("\n", trim($this->exec('git log -n 1 --reverse  --until="'.$date.'" --pretty=format:"%H %s %ai"')));
 		
+		//d::dumpas($commits);
+		
 		if(!isset($commits[0]))
 			return false;
 		
@@ -112,6 +130,8 @@ class GW_CMS_Sync
 
 		list($commitid,$whatever) = explode(' ', $commits[0],2);
 
+		$this->out("getOneCommitBefore(".date('Y-m-d H:i:s',$date)."): $commitid");
+		
 		return $commitid;
 	}
 
@@ -119,6 +139,7 @@ class GW_CMS_Sync
 
 	function getNewCommitsFromDate($lastcommit_date)
 	{
+		
 		$format='--pretty=format:"%H %s %ai"';	
 
 		$newcommits = explode("\n", trim($this->exec('git log  --since="' . $lastcommit_date . '" '.$format)));
@@ -129,12 +150,16 @@ class GW_CMS_Sync
 			$first_commit = explode("\n", trim($this->exec('git rev-list --max-parents=0 HEAD')))[0];
 			$updates_from_commit_com = $first_commit;
 		}
-			
-
-		return [
+		
+		$result = [
 			'newcommits'=>$newcommits,
 			'updates_from_commit'=>$updates_from_commit_com,
 		];
+		
+		$this->out("getNewCommitsFromDate(".date('Y-m-d H:i:s',$lastcommit_date)."): ".json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n\n\n");
+	
+
+		return $result;
 	}
 
 	function filterProjectSpecific(&$filesarr, $direction=true)
@@ -198,6 +223,7 @@ class GW_CMS_Sync
 	function getChangedFiles($commit_id)
 	{
 		$files = explode("\n", trim($this->exec("git diff --stat $commit_id..HEAD --name-only")));	
+		
 
 		$files = $files==[''] ? [] : $files;
 
@@ -312,7 +338,7 @@ class GW_CMS_Sync
 	
 	function cmdGitshow()
 	{
-		$this->execute('git show '.$this->params['date'].' --name-only');
+		$this->execute('git show '.$this->params['date'].' --name-only ');
 	}
 
 	function cmdGitLog()
@@ -388,6 +414,7 @@ class GW_CMS_Sync
 		
 		$this->out("Source: $this->sourceDir");
 		$this->out("Destination: $this->destDir");
+		
 	}
 	
 	function cmdImp()

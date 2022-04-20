@@ -9,6 +9,7 @@
 
 
 {call e field=mail_insert_succ type=bool}
+{call e field=mail_queue_portion_size type=number default=10}
 
 {call e field=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
 

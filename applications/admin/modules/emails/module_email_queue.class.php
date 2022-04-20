@@ -8,6 +8,7 @@ class Module_Email_Queue extends GW_Common_Module
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;	
+		$this->config = new GW_Config($this->module_path[0].'/');
 	}
 	
 	function doSend($item=false, $functiononly=false)
@@ -15,7 +16,8 @@ class Module_Email_Queue extends GW_Common_Module
 		if(!$item)
 			$item = $this->getDataObjectById();
 		
-		$status = GW_Mail_Helper::sendMail($item);
+		$itemcopy = $item;
+		$status = GW_Mail_Helper::sendMail($itemcopy);
 		
 		if($status){
 			if(!$functiononly)
@@ -46,24 +48,35 @@ class Module_Email_Queue extends GW_Common_Module
 	
 	function getReady()
 	{
-		return $this->model->findAll('status="ready"', ['limit'=>50]);		
+		$limit = $this->config->mail_queue_portion_size ?: 5;
+		
+		return $this->model->findAll('status="ready"', ['limit'=>$limit]);		
 	}
 	
 	function doSendQueue()
 	{
-		GW_Mail_Queue::singleton()->updateMultiple(['scheduled > ?', date('Y-m-d H:i')], ['status'=>'ready']);
+		GW_Mail_Queue::singleton()->updateMultiple(['scheduled > ? AND `status`="scheduled" ', date('Y-m-d H:i')], ['status'=>'ready']);
 		
 		
 		$list = $this->getReady();
-		
+				
 		foreach($list as $item){
+			$ids[] = $item->id;
 			$this->doSend($item, true);
+			sleep(1);
 		}
 		
+		$next = count($this->getReady());
+		//ids processed: ".implode(',',$ids).".
+		$this->setMessage("Next portion size: $next");
+		
+		/*
 		if($this->getReady()){
 			sleep(1);
 			Navigator::backgroundRequest('admin/lt/emails/email_queue?act=doSendQueue');
 		}
+		 * 
+		 */
 	}
 	
 	

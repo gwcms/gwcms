@@ -7,7 +7,11 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,sendqueue]}	
+
+	{function name=do_toolbar_buttons_sendqueue}
+		{toolbar_button title='Send queue' iconclass='fa fa-cog' href=$m->buildUri(false,[act=>doSendQueue])}	
+	{/function}	
 		
 	{$dl_inline_edit=1}		
 	
