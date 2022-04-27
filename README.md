@@ -19,3 +19,13 @@ usermod -aG sudo www-data
 TODO:
  2016-08-29 add small documentation
  2016-08-29 add info about code writing agreements
+
+
+
+play_playoff_algo =>  play_offs_algo
+play_number_of_groups => play_rr_number_of_groups
+play_teams_per_group => play_rr_teams_per_group
+play_number_of_teams_exits => play_offs_team_count
+play_fight_positions =>play_offs_fight_positions
+play_limit_lose => play_offs_limit_lose
+play_match_point => play_offs_match_point

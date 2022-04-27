@@ -135,4 +135,9 @@ class GW_Math_Helper
 		$interval = $now->diff($date);
 		return $interval->y;		
 	}
+	
+	static function zero($number, $long=2)
+	{
+		return sprintf("%0{$long}d", $number);
+	}
 }

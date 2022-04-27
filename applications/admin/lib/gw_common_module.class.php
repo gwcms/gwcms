@@ -2793,7 +2793,7 @@ class GW_Common_Module extends GW_Module
 		$refreshurl = $_SERVER['REQUEST_URI'];
 		
 		
-		if(isset($_POST)){
+		if(isset($_POST) && $_POST){
 			$str.="<br>".Navigator::postLink($confirmurl, GW::l('/g/CONFIRM'), $_POST,['aclass'=>'btn btn-primary']);
 		}else{
 			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";

@@ -277,7 +277,7 @@ class Module_Repository extends GW_Common_Module
 	
 	
 	
-	function acceptIds($store)
+	function filesAcceptIds($store)
 	{
 		if(isset($_POST['ids']))
 		{
@@ -291,7 +291,7 @@ class Module_Repository extends GW_Common_Module
 	
 	function viewDialogMoveItems()
 	{
-		$this->acceptIds('moveitems');
+		$this->filesAcceptIds('moveitems');
 		
 		$this->tpl_vars['ids'] = $this->app->sess("moveitems");
 		$list = $this->getFoldersList($this->model->base_dir);
@@ -398,7 +398,7 @@ class Module_Repository extends GW_Common_Module
 	function viewDownloadMultiple()
 	{
 		
-		$this->acceptIds('downloaditems');
+		$this->filesAcceptIds('downloaditems');
 		
 		$base = $this->model->base_dir;
 		$list = $this->getSelectedFileList('downloaditems');		
@@ -462,7 +462,7 @@ class Module_Repository extends GW_Common_Module
 	
 	function doRemoveMultiple()
 	{
-		$this->acceptIds('removeitems');
+		$this->filesAcceptIds('removeitems');
 		
 		$base = $this->model->base_dir;
 		$list = $this->getSelectedFileList('removeitems');	

@@ -134,14 +134,27 @@ class GW_Extension_ChangeTrack
 				$new[$field] = $change['new'];
 				$old[$field] = $change['old'];
 			}
-			
-			$itm = GW_Change_Track::singleton()->createNewObject();
-			$itm->setValues([
+			$keyfields = [
 				'owner_type'=>$this->parent->ownerkey,
 				'owner_id'=>$this->parent->id,
-				'user_id'=>GW::$context->app->user->id ?? -1,
+				'user_id'=>GW::$context->app->user->id ?? -1,			    
+			];
+			
+			$itm = GW_Change_Track::singleton()->createNewObject();
+			
+			if($last = $itm->find(GW_DB::buidConditions($keyfields+['last'=>1,'undone'=>0]))){
+				
+				$last->last=false;
+				$last->updateChanged();
+			}
+			//pasalinti po undo likusius veiksmus
+			
+			
+			
+			$itm->setValues($keyfields+[
 				'new'=>$new,
-				'old'=>$old
+				'old'=>$old,
+				'last'=>1
 			]);
 			
 			$itm->insert();
@@ -149,6 +162,83 @@ class GW_Extension_ChangeTrack
 		
 		//resetchanges
 		$this->trackChangesStart();
+	}
+	
+	
+	function canUndo()
+	{
+		$keyfields = [
+			'owner_type'=>$this->parent->ownerkey,
+			'owner_id'=>$this->parent->id,
+			'user_id'=>GW::$context->app->user->id ?? -1,			    
+		];
+			
+		return GW_Change_Track::singleton()->createNewObject()->count(GW_DB::buidConditions($keyfields+['undone'=>0]),['order'=>'id DESC']);
+	}
+	
+	function canRedo()
+	{
+		$keyfields = [
+			'owner_type'=>$this->parent->ownerkey,
+			'owner_id'=>$this->parent->id,
+			'user_id'=>GW::$context->app->user->id ?? -1,			    
+		];
+			
+		$lastchange = GW_Change_Track::singleton()->createNewObject()->find(GW_DB::buidConditions($keyfields),['order'=>'id DESC']);
+		return $lastchange ? $lastchange->undone : false;
+		
+	}
+	
+	function undo()
+	{
+		$keyfields = [
+			'owner_type'=>$this->parent->ownerkey,
+			'owner_id'=>$this->parent->id,
+			'user_id'=>GW::$context->app->user->id ?? -1,			    
+		];
+			
+		$itm = GW_Change_Track::singleton()->createNewObject();
+			
+		$list = $itm->findAll(GW_DB::buidConditions($keyfields),['order'=>'id DESC']);
+		
+		$last = false;
+		
+		foreach($list as $idx => $change){
+			if(!$last && $change->last){
+				$last=$change;
+			}elseif($last){
+				$nextafterlast = $change;
+				break;
+			}
+		}
+		
+		if(!$last)
+			return false;
+		
+		$currentval = $last->new;
+		$prevval = $last->old;
+		
+		//todo patikrint ar current val sutampa su $this->parent vertemis
+		//d::dumpas($last);
+		
+		
+		$this->parent->setValues($prevval);
+		$this->parent->updateChanged();
+		
+		
+		if($nextafterlast){
+			$nextafterlast->last = 1;
+			$nextafterlast->updateChanged();
+		}
+		
+		$last->undone = 1;
+		$last->last = 0;
+		$last->updateChanged();
+	}
+	
+	function redo()
+	{
+		
 	}
 
 }

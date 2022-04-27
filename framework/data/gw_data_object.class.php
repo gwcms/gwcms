@@ -1394,6 +1394,19 @@ class GW_Data_Object
 	
 	
 	
+	function encodeDate($field, $value, $revert)
+	{
+		if ($revert) {
+			if($value == '0000-00-00 00:00:00' || $value == '0000-00-00'){
+				return false;
+			}else{
+				return $value;
+			}
+		}else {
+			return $value;
+		}
+	}	
+	
 }
 
 
