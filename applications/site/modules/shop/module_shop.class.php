@@ -25,7 +25,8 @@ class Module_Shop extends GW_Public_Module
 		parent::init();
 		$this->config = new GW_Config($this->module_path[0] . '/');
 		$this->config->preload('');		
-		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
+		//$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
+		$this->initFeatures();
 		
 		
 		

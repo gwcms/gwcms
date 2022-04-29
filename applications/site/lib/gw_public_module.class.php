@@ -731,7 +731,12 @@ class GW_Public_Module {
 	function initModCfg()
 	{
 		$this->modconfig = $this->initModCfgEx($this->module_path);
-	}	
+	}
+
+	function initConfig()
+	{
+		$this->config = new GW_Config($this->module_path[0] . '/');		
+	}
 
 	function fieldTitle($field)
 	{

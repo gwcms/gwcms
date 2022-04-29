@@ -5,6 +5,7 @@
 {else}
 	
 {$tmpopt=[]}
+{$options=(array)$options}
 {foreach $value as $id}	
 	{if isset($options[$id])}
 		{$tmpopt[$id]=$options[$id]}

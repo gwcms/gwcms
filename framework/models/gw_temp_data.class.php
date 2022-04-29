@@ -44,6 +44,10 @@ class GW_Temp_Data extends GW_Data_Object
 		return $item ? $item->value : false;
 	}
 	
+	
+	//required every_5_minute add
+	//GW_Temp_Data::singleton()->cleanup();
+	
 	function rwCallback($opts=[], $callback){
 		$user_id = $opts['user_id'] ?? GW_USER_SYSTEM_ID;
 		$group = $opts['group'] ?? 'SYS';

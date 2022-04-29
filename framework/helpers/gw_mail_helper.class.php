@@ -90,7 +90,7 @@ class GW_Mail_Helper
 	
 	
 	static function prepareSmartyCode($tpl_code, &$vars)
-	{
+	{		
 		GW::$context->app->smarty->assign($vars);
 		return GW::$context->app->smarty->fetch('string:' . $tpl_code);
 	}
@@ -111,6 +111,11 @@ class GW_Mail_Helper
 		}		
 	}
 	
+	function initGenericVars(&$vars)
+	{
+		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);		
+	}
+	
 	static function processTpl(&$opts)
 	{
 		$tpl = $opts['tpl'];
@@ -123,6 +128,8 @@ class GW_Mail_Helper
 			
 		
 		$vars =& $opts['vars'] ?? [];
+		self::initGenericVars($vars);
+		
 		$ln = $opts['ln'] ?? GW::$context->app->ln;
 		
 		self::__fSubjBody(true, $opts, $tpl, $ln, $vars);
