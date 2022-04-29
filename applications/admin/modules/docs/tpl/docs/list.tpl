@@ -10,7 +10,7 @@
 	
 	{$do_toolbar_buttons[] = hidden}
 	
-	{$do_toolbar_buttons_hidden=[dialogconf,print,testpdfgen,exportdata,importdata]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2,print,testpdfgen,exportdata,importdata]}	
 	{$do_toolbar_buttons[] = search}
 	
 	

@@ -310,7 +310,11 @@ class GW_Application
 		if (!is_array($params))
 			backtrace();
 		
-		Navigator::jump(self::buildUri($path, $params, ['carry_params' => 1]));
+		$url=self::buildUri($path, $params, ['carry_params' => 1]);
+		
+		//d::dumpas($url);
+		
+		Navigator::jump($url);
 	}
 
 	function moduleExists($dirname, $name = '')
