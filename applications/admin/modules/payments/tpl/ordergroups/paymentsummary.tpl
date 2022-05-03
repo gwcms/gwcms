@@ -1,5 +1,6 @@
 
 {include "default_open.tpl"}
+{$totaltotal=0}
 
 <form action="{$smarty.server.REQUEST_URI}">
 	<table class="gwTable">
@@ -54,7 +55,7 @@
 				{$item->pay_confirm->title}
 			{/if}
 		</th>
-		<th>{$item->amount_total}</th>		
+		<th>{$item->amount_total} {$totaltotal=$totaltotal+$item->amount_total}</th>		
 		
 		</tr>
 		<tr>
@@ -84,4 +85,7 @@
 	{/foreach}
 	</table>
 
+	<hr>
+	<b>{GW::l('/m/FIELDS/amount_total')}</b>: {$totaltotal} EUR
+	
 {include "default_close.tpl"}

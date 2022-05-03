@@ -79,6 +79,8 @@ class pay_paysera_module_ext extends GW_Module_Extension
 
 	function doPayseraAccept()
 	{
+		ob_start();
+		
 		$cfg = $this->getPayseraCfg();	
 		
 		try {
@@ -93,7 +95,12 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			if($_GET['action']=='callback'){
 				$data = ['uri'=>$_SERVER['REQUEST_URI'], 'error'=>$e->getMessage(), '_POST'=>$_POST ?? []];
 				$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-				mail('vidmantas.work@gmail.com', 'paysera err', $data, "From: info@ltf.lt\r\n");
+
+				$opt=[
+				    'subject'=>GW::s('PROJECT_NAME').' paysera error',
+				    'body'=>$data
+				];
+				GW_Mail_Helper::sendMailDeveloper($opts);				
 			}
 			header('Location: '.$_GET['redirect_url']);
 			exit;
@@ -148,14 +155,31 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			
 			$log_entry->handler_state = 7;
-			$log_entry->update();				
+			$log_entry->update();	
+
+			
 		
 		}else{
 			//nothing
 		}
 				
-		if($_GET['action']=='notify')
-			exit;
+		if($_GET['action']=='notify'){
+			
+			
+			
+			$out = ob_get_contents();
+			ob_end_clean();
+			if($out){
+				$opt=[
+				    'subject'=>GW::s('PROJECT_NAME').' paysera error 2',
+				    'body'=>$data
+				];
+				GW_Mail_Helper::sendMailDeveloper($opts);
+			}
+			
+			die('OK');//atsakas payserai kad viskas ok
+		}
+			
 		
 
 		$this->redirectAfterPaymentAccept($order);

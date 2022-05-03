@@ -323,7 +323,10 @@ class Module_Orders extends GW_Public_Module
 		
 		$order->fireEvent('BEFORE_CHANGES');
 		
-		$order->active = false;
+		
+		$order->active = $_GET['state']==1 ? 0 : 1;
+	
+		
 		$order->updateChanged();
 		$this->app->jump('direct/orders/orders');
 	}

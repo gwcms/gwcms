@@ -68,11 +68,12 @@
 	{*iconclass="fa fa-globe"*}
 	
 	{if $item->mod_count==0}
+		{if $m->features.ttlock}{$extra=",door_code"}{else}{$extra=""}{/if}
 		{$url=$app->buildUri("payments/orderitems",[
 			processed=>0,
 			obj_type=>$m->model->table,
 			obj_id=>$item->id,orderflds=>1,
-			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price,door_code",ord=>'payment_status DESC',clean=>2])}		
+			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price{$extra}",ord=>'payment_status DESC',clean=>2])}		
 	{else}
 		{$url=$app->buildUri("payments/orderitems",[
 			processed=>0,

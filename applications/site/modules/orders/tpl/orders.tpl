@@ -266,8 +266,8 @@
 						{/if}						
 						
 						
-						<a href="{$m->buildUri(false, [act=>doCancelOrder,id=>$order->id])} " class="dropdown-item">
-							<i class="fa fa-times"></i> {GW::ln('/g/CANCEL')}
+						<a href="{$m->buildUri(false, [act=>doCancelOrder,id=>$order->id,state=>$order->active])} " class="dropdown-item">
+							<i class="fa fa-times"></i> {if $order->active}{GW::ln('/g/CANCEL')}{else}{GW::ln('/g/UNDO_CANCEL')}{/if}
 						</a>				
 					</div>
 				</div>				
