@@ -62,6 +62,7 @@
     <i id="phone">Tel. numeris</i>
     <i id="delivery_opt">Pristatymo pasirinkimas</i>        
     <i id="deliverable">Fizinis pristatymas</i>
+    <i id="status">Užsakymo būklė</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>

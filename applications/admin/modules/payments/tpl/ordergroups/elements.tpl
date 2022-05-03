@@ -50,6 +50,22 @@
 {/if}
 
 
+
+
+{$status_opts=[
+	1=>GW::ln("/M/orders/status/1"),
+	2=>GW::ln("/M/orders/status/2"),
+	3=>GW::ln("/M/orders/status/3"),
+	4=>GW::ln("/M/orders/status/4"),
+	5=>GW::ln("/M/orders/status/5"),
+	6=>GW::ln("/M/orders/status/6"),
+	7=>GW::ln("/M/orders/status/7"),
+	8=>GW::ln("/M/orders/status/8")
+]}
+
+
+{call e field=status type=select options=$status_opts empty_option=1}
+
 {if $smarty.get.shift_key}
 	{$fields_config.fields.payment_status=[type=>number]}
 	{$fields_config.fields.pay_time=[type=>text]}
