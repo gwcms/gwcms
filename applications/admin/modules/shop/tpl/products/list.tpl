@@ -68,7 +68,10 @@
 	{*iconclass="fa fa-globe"*}
 	
 	{if $item->mod_count==0}
-		{if $m->features.ttlock}{$extra=",door_code"}{else}{$extra=""}{/if}
+		{$extra=""}
+		{if $m->features.ttlock}{$extra="{$extra},door_code"}{/if}
+		{if $m->parent->contracts}{$extra="{$extra},contracts"}{/if}
+		
 		{$url=$app->buildUri("payments/orderitems",[
 			processed=>0,
 			obj_type=>$m->model->table,

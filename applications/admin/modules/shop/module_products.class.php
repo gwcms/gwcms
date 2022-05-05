@@ -30,8 +30,10 @@ class Module_Products extends GW_Common_Module
 		//is import in progress
 		
 		
-		if(isset($_GET['parent_id']))
+		if(isset($_GET['parent_id'])){
 			$this->filters['parent_id']=$_GET['parent_id'];
+			$this->parent = Shop_Products::singleton()->find(['id=?', $this->filters['parent_id']]);
+		}
 		
 		
 		if($this->filters['parent_id'] ?? false){

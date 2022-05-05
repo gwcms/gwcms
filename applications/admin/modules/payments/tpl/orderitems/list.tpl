@@ -37,7 +37,7 @@
 		{$dl_actions=[editshift]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,contracts]}
 
 
 	{function dl_cell_obj_id}
@@ -65,11 +65,13 @@
 		{$options.user_id[$item->user_id]->email}
 	{/function}		
 		
-
-
-	
-	
-
+	{function dl_cell_contracts}
+		{if $contract_counts[$item->id]}
+			<a class="badge bg-info iframe-under-tr" href="{$app->buildUri("forms/answers",[obj_type=>$m->model->table,obj_id=>$item->id,clean=>2])}">{$contract_counts[$item->id]}</a>
+		{else}
+			-
+		{/if}
+	{/function}
 
 	{capture append=footer_hidden}	
 		

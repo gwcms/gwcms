@@ -88,7 +88,8 @@ class Module_OrderItems  extends GW_Common_Module
 			'qty' => 'Lof',
 			'total'=>'L',	    
 			'insert_time'=>'lof',
-			'update_time'=>'lof',	
+			'update_time'=>'lof',
+		    
 			]
 		);
 		
@@ -139,6 +140,7 @@ class Module_OrderItems  extends GW_Common_Module
 			
 			$params['conditions'].="pay_test=".(int)$params['pay_test'];
 		}
+		
 				
 		
 		
@@ -151,7 +153,7 @@ class Module_OrderItems  extends GW_Common_Module
 		if(isset($_GET['ord']))
 		{
 			$params['order'] = $_GET['ord'];
-		}		
+		}
 	}
 	
 	function overrideFilterUser_title($value, $compare_type)
@@ -187,7 +189,15 @@ class Module_OrderItems  extends GW_Common_Module
 		}
 	
 		foreach($list as $item)
-			$this->initType($item);		
+			$this->initType($item);
+		
+		if($this->list_config['display_fields']['contracts'] ?? false){
+			$ids = array_keys($list);
+			$cond = GW_DB::prepare_query(['obj_type=?', $this->model->table])." AND ".GW_DB::inCondition('obj_id', $ids);
+			$counts = GW_Form_Answers::singleton()->countGrouped('obj_id',$cond);
+			
+			$this->tpl_vars['contract_counts'] = $counts;
+		}
 	}
 
 	

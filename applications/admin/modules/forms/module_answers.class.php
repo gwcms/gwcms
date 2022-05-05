@@ -16,12 +16,16 @@ class Module_Answers extends GW_Common_Module
 		
 		$this->owner_id=$this->app->path_arr[1]['data_object_id'] ?? false;	
 		$this->app->carry_params['doc_id']=1;
+		$this->app->carry_params['obj_type']=1;
+		$this->app->carry_params['obj_id']=1;
+		
 		
 		
 		
 		
 		//$this->filters['user_id']=$_GET['user_id'];
-		$this->filters['owner_id']=$this->owner_id;
+		if($this->owner_id)
+			$this->filters['owner_id']=$this->owner_id;
 		
 		parent::init();
 		
@@ -32,7 +36,19 @@ class Module_Answers extends GW_Common_Module
 		if(isset($_GET['owner_id']))
 		{
 			$this->owner_id = $this->filters['owner_id'] = $_GET['owner_id'];
-		}		
+		}	
+		
+		if(isset($_GET['obj_type']))
+		{
+			$this->obj_type = $this->filters['obj_type'] = $_GET['obj_type'];
+		}
+		
+		if(isset($_GET['obj_id']))
+		{
+			$this->obj_id = $this->filters['obj_id'] = $_GET['obj_id'];
+		}
+		
+		//d::dumpas($this->filters);
 	}
 	
 	
@@ -82,6 +98,8 @@ class Module_Answers extends GW_Common_Module
 		foreach($elms as $e){	
 			$cfg['fields'][$e->fieldname]="Lof";
 		}	
+		
+		
 		
 		return $cfg;
 	}

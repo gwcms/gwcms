@@ -16,7 +16,7 @@
 	{$dl_smart_fields=[value,user_id]}
 	
 	
-	{$dl_actions=[invert_active_ajax,edit,delete,ext_actions]}
+	{$dl_actions=[preview,invert_active_ajax,edit,delete,ext_actions]}
 	{$dl_output_filters=[
 		signature=>expand_truncate
 	]}	
@@ -36,5 +36,14 @@
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$item->user->title}</a>
 	{/function}
 
+	{function dl_actions_preview}
+		{if $item->doc_id}
+			{list_item_action_m 
+				href="/lt/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}" iconclass="fa fa-eye" action_addclass="iframe-under-tr"
+				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
+			}
+		{/if}
+	{/function}		
+	
 {/block}
 

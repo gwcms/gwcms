@@ -13,6 +13,9 @@
 {/if}
 
 
+{if $item->doc_id}
+	{list_item_action_m href="/lt/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}" iconclass="fa fa-globe text-mint" caption="Suformuotas dokumentas"}
+{/if}
 
 	
 		
