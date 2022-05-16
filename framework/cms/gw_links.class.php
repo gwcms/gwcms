@@ -3,14 +3,15 @@
 class GW_Links implements GW_Composite_Slave
 {
 
-	var $owner_obj;
-	var $values;
-	var $params;
-	var $table;
-	var $owner_obj_id;
-	var $id1 = "id"; //owner_object_id
-	var $id2 = "id1"; //dest_object_id
-	var $idxfield=false;
+	public $owner_obj;
+	public $owner_type=false;
+	public $values;
+	public $params;
+	public $table;
+	public $owner_obj_id;
+	public $id1 = "id"; //owner_object_id
+	public $id2 = "id1"; //dest_object_id
+	public $idxfield=false;
 
 	/**
 	 * @return DB
@@ -29,12 +30,20 @@ class GW_Links implements GW_Composite_Slave
 
 	public function setOwnerObject($master, $fieldname)
 	{
+		
 		$this->owner_obj = $master;
 		$this->owner_obj_id = $master->get($master->primary_fields[0]);
+		
+		
+		if($this->params['table'] == 'gw_generic_binds')
+			$this->owner_type = $master->table;
+		
+		//d::ldump($master);
 	}
 
 	public function save()
 	{
+		
 		if (!is_null($this->values))
 			$this->updateBinds($this->values);
 	}
@@ -48,8 +57,14 @@ class GW_Links implements GW_Composite_Slave
 	{
 		$this->params = $params;
 
-		if (!isset($this->params['table']))
-			trigger_error('GW_Links: not specified table param', E_USER_ERROR);
+		if (!isset($this->params['table'])){
+			$this->params['table'] = 'gw_generic_binds';
+
+			
+			
+			
+			//trigger_error('GW_Links: not specified table param', E_USER_ERROR);
+		}
 
 		$this->table = $this->params['table'];
 
@@ -82,7 +97,13 @@ class GW_Links implements GW_Composite_Slave
 		
 		$ord = $this->idxfield ? " ORDER BY idx ASC":'';
 		
-		$list = $db->fetch_rows([$q="SELECT {$this->id2} FROM $this->table WHERE $this->id1=? $ord", $this->owner_obj_id], false);
+		$cond = GW_DB::prepare_query(["$this->id1=?", $this->owner_obj_id]);
+		
+		if($this->owner_type){
+			$cond.=" AND ".GW_DB::prepare_query(['owner=?',$this->owner_type]);
+		}
+		
+		$list = $db->fetch_rows("SELECT {$this->id2} FROM $this->table WHERE ".$cond.$ord, false);
 
 		$list1 = [];
 
@@ -101,13 +122,18 @@ class GW_Links implements GW_Composite_Slave
 
 		$db = $this->getDB();
 
-		$cond = "{$this->id1}=? AND (";
+		$cond = "{$this->id1}=?";
+		
+		if($this->owner_type)
+			$cond.=" AND ".GW_DB::prepare_query (['owner=?', $this->owner_type]);
+		
+		$cond.="  AND (";
 
 		foreach ($binds as $i => $id1)
 			$cond.="{$this->id2}=? OR ";
 
 		$cond = substr($cond, 0, -4) . ')';
-
+		
 		$filter = array_merge((array) $cond, (array) $this->owner_obj_id, $binds);
 
 		$db->delete($this->table, $filter);
@@ -121,9 +147,15 @@ class GW_Links implements GW_Composite_Slave
 		$db = $this->getDB();
 
 		$list = Array();
+		
+		if($this->owner_type)
+			$db->testExistEnumOption($this->table, 'owner', $this->owner_type);
 
 		foreach ($binds as $idx => $id1){
 			$vals = Array($this->id1 => $this->owner_obj_id, $this->id2 => $id1);
+			
+			if($this->owner_type)
+				$vals['owner'] = $this->owner_type;
 			
 			if($this->idxfield)
 				$vals['idx'] = $idx;
@@ -145,9 +177,14 @@ class GW_Links implements GW_Composite_Slave
 
 			$add = array_diff($newbinds, $oldbinds);
 			$remove = array_diff($oldbinds, $newbinds);
+			
+			//d::dumpas([$add,$remove]);
 
 			$this->removeBinds($remove);
 			$this->addBinds($add);
+			
+			
+			
 		}
 	}
 }

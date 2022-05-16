@@ -747,10 +747,60 @@ class GW_DB
 		$type = $row['Type'];
 		preg_match('/enum\((.*)\)$/', $type, $matches);
 		
-		$opts = explode("','", trim($matches[1],"'"));
+		$string = $matches[1];
+		if ($string[0] == "'") $string = substr($string,1);
+		if ($string[strlen($string)-1] == "'") $string = substr($string,0,strlen($string)-1);
+		
+		$opts = explode("','", $string);
 				
 		return $opts;
 	}
+	
+	static $colOptsCache=[];
+	
+	function getColumnOptionsCached($table, $column)
+	{
+		if(!isset(self::$colOptsCache[$table][$column])){
+			$arr = $this->getColumnOptions($table, $column);
+			$arrmod = [];
+			foreach($arr as $e)
+				$arrmod[$e]=$e;
+			
+			self::$colOptsCache[$table][$column] = $arrmod;
+		}else{
+			return self::$colOptsCache[$table][$column];
+		}
+	}
+	
+	
+	function writeColumnOptions($table, $column, $opts)
+	{
+		foreach($opts as $idx => $o)
+			$opts[$idx] = self::escape($o);
+		
+		$cmd="ALTER TABLE `$table` MODIFY COLUMN `$column` enum('".implode("','", $opts)."') NOT NULL;";
+		
+		
+		
+		$this->query($cmd);
+		
+		unset(self::$colOptsCache[$table][$column][$opt]);
+	}
+	
+	function testExistEnumOption($table, $column, $val){
+		
+		$this->getColumnOptionsCached($table, $column);
+		
+		//d::dumpas(self::$colOptsCache[$table][$column]);
+		
+		if(!isset(self::$colOptsCache[$table][$column][$val])){
+			$opts = self::$colOptsCache[$table][$column];
+			$opts[$val]=$val;
+			$this->writeColumnOptions($table, $column, $opts);
+		}
+		
+	}
+	
 	
 	/**
 	 * rows must be indexed array - and index is id
