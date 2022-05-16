@@ -784,7 +784,7 @@ class GW_DB
 		
 		$this->query($cmd);
 		
-		unset(self::$colOptsCache[$table][$column][$opt]);
+		unset(self::$colOptsCache[$table][$column]);
 	}
 	
 	function testExistEnumOption($table, $column, $val){
