@@ -4,7 +4,7 @@ class GW_Links implements GW_Composite_Slave
 {
 
 	public $owner_obj;
-	public $owner_type=false;
+	public $ownercat=false;
 	public $values;
 	public $params;
 	public $table;
@@ -36,7 +36,7 @@ class GW_Links implements GW_Composite_Slave
 		
 		
 		if($this->params['table'] == 'gw_generic_binds')
-			$this->owner_type = $master->table;
+			$this->ownercat = $master->table.'/'.$fieldname;
 		
 		//d::ldump($master);
 	}
@@ -60,7 +60,8 @@ class GW_Links implements GW_Composite_Slave
 		if (!isset($this->params['table'])){
 			$this->params['table'] = 'gw_generic_binds';
 
-			
+			if($this->params['ownercat'] ?? false)
+				$this->ownercat = $this->params['ownercat'];
 			
 			
 			//trigger_error('GW_Links: not specified table param', E_USER_ERROR);
@@ -99,8 +100,8 @@ class GW_Links implements GW_Composite_Slave
 		
 		$cond = GW_DB::prepare_query(["$this->id1=?", $this->owner_obj_id]);
 		
-		if($this->owner_type){
-			$cond.=" AND ".GW_DB::prepare_query(['owner=?',$this->owner_type]);
+		if($this->ownercat){
+			$cond.=" AND ".GW_DB::prepare_query(['owner=?',$this->ownercat]);
 		}
 		
 		$list = $db->fetch_rows("SELECT {$this->id2} FROM $this->table WHERE ".$cond.$ord, false);
@@ -124,8 +125,8 @@ class GW_Links implements GW_Composite_Slave
 
 		$cond = "{$this->id1}=?";
 		
-		if($this->owner_type)
-			$cond.=" AND ".GW_DB::prepare_query (['owner=?', $this->owner_type]);
+		if($this->ownercat)
+			$cond.=" AND ".GW_DB::prepare_query (['owner=?', $this->ownercat]);
 		
 		$cond.="  AND (";
 
@@ -148,14 +149,14 @@ class GW_Links implements GW_Composite_Slave
 
 		$list = Array();
 		
-		if($this->owner_type)
-			$db->testExistEnumOption($this->table, 'owner', $this->owner_type);
+		if($this->ownercat)
+			$db->testExistEnumOption($this->table, 'owner', $this->ownercat);
 
 		foreach ($binds as $idx => $id1){
 			$vals = Array($this->id1 => $this->owner_obj_id, $this->id2 => $id1);
 			
-			if($this->owner_type)
-				$vals['owner'] = $this->owner_type;
+			if($this->ownercat)
+				$vals['owner'] = $this->ownercat;
 			
 			if($this->idxfield)
 				$vals['idx'] = $idx;
