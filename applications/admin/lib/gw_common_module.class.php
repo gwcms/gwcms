@@ -592,6 +592,16 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'list/configure_menu';
 	}
 	
+	function viewColumnMenu()
+	{
+		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'list/column_menu';		
+	}
+	
+	function doColumnMenu()
+	{
+		$this->processView('columnmenu');
+	}
+	
 	function common_viewDialogConfig2()
 	{
 		$this->fireEvent("BEFORE_CONFIG", $this->modconfig);
@@ -2665,11 +2675,23 @@ class GW_Common_Module extends GW_Module
 	{
 		$fields = $this->__getListFields();
 		
-		$selfield=['type'=>'select','options'=>$fields, 'empty_option'=>1, 'required'=>1];
-		$form = ['fields'=>['field'=>$selfield,'value'=>['type'=>'text']],'cols'=>4];
 		
-		if(!($answers=$this->prompt($form, GW::l('/g/SELECT_FIELD_AND_SET_VALUE'))))
-			return false;		
+		$cfg = $this->getListConfig();
+
+		$field = $_GET['field'];
+		
+		if(!isset($fields[$field]))
+			return $this->setError(GW::l('/g/NOT_EDITABLE')." ".$field);
+		
+		
+		$form['fields']=[];
+		$form['fields']['value'] = $cfg['inputs'][ $field ] ?? ['type'=>'text'];
+		$form['fields']['value']['required']=1;
+			
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/COLUMN_SET_VALUE').' '.$this->fieldTitle($field))))
+			return false;			
 		
 				
 		$vars = $this->viewList();
@@ -2684,11 +2706,11 @@ class GW_Common_Module extends GW_Module
 			$inf = [];
 			$inf['id'] = $item->id;
 			$inf['title'] = $item->title;
-			$inf['before'] = $item->get($answers['field']);
+			$inf['before'] = $item->get($field);
 			$inf['after'] = $answers['value'];
 			$changeinf[] = $inf;
 		
-			$item->set($answers['field'], $answers['value']);
+			$item->set($field, $answers['value']);
 			
 			if(isset($_GET['confirm'])){
 				$item->updateChanged();
@@ -2703,10 +2725,12 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage("action performed on ".count($vars['list'])." items");
 			
 			
+
+			unset($_GET['item']['value']);
 			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
 			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doMultiSetValue')."</a> <small>(Add filter to show non empty rows)</small>";
 			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);
-			$this->jump();
+			$this->jump(false, ['field'=>$field]);
 		}
 		
 	}

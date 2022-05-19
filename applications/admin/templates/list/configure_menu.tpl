@@ -15,7 +15,7 @@
 
 
 {list_item_action_m onclick="gwSearchReplace();return false" caption=GW::l('/G/common_module/SEARCH_REPLACE') iconclass='fa fa-search'}
-
+{list_item_action_m url=[false, [act=>doMultiSetValue]] iconclass="fa fa-pencil-square" caption=GW::l('/A/VIEWS/doMultiSetValue')}
 
 {if $app->user->isRoot()}
 	{*Paslėptieji veiksmai*}
@@ -26,7 +26,7 @@
 	{list_item_action_m url=[false, [act=>doresetListVars]] iconclass="fa fa-cog" caption="doResetListVars" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doCopyFieldData]] iconclass="fa fa-cog" caption="doCopyFieldData" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doAutoTranslate]] iconclass="fa fa-cog" caption="doAutoTranslate" action_addclass="rootactions"}
-	{list_item_action_m url=[false, [act=>doMultiSetValue]] iconclass="fa fa-cog" caption="doMultiSetValue" action_addclass="rootactions"}
+	
 	{list_item_action_m url=[false, [act=>doImportJSON]] iconclass="fa fa-cog" caption="doImportJSON" action_addclass="rootactions"}
 	
 	

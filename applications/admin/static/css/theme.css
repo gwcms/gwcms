@@ -7957,3 +7957,40 @@ a.badge:hover{
 
 .genderma{ color:navy }
 .genderfe{ color:pink }
+
+
+.dropdown-menu2
+{
+	border: 0;
+	border-radius: 0;
+	box-shadow: 0 5px 12px 2px rgba(0,0,0,0.25);
+	font-size: 13px;
+	margin: 0;
+	position:absolute;
+	background-color: white;
+	z-index: 999;
+	
+}
+
+.dropdown-menu2 ul{
+	list-style: none;
+	margin:0;
+
+	padding:5px;
+}
+
+.dropdown-menu2 li a:hover
+{
+	background-color: #42a5f5;
+	color: #fff;
+	
+}
+.dropdown-menu2 a{
+	padding: 5px;
+}
+.dropdown-menu2 li{
+	margin:0;
+}
+.labelForContextMenu *:not(.dropdown-menu2 *){
+	color: #42a5f5; background-color:white;
+}

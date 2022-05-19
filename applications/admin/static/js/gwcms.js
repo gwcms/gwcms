@@ -288,9 +288,48 @@ var gw_adm_sys = {
 			}
 
 
+		});
+		
+		$('.gwColumn').mousedown(function(e) {
+			switch (e.which) {
+			    case 3:
+				
+				console.log($(this).position());
+				e.preventDefault();
+				gw_adm_sys.contextMenu($(this),  gw_navigator.url(this.href, { act:'doColumnMenu', field:$(this).data('field') }))
+			break;
+			    case 2:
+				alert('Middle Mouse button pressed.');
+			break;
+			
+			}
+		}).contextmenu(function() {
+			return false;
+		});
+		
+		$('body').click(function(){
+			if(gw_adm_sys.contextMenuPresent){
+				gw_adm_sys.clearContextMenu();
+			}
 		})
 		
 		initSearchReplace();
+	},
+	
+	contextMenu: function(el,url){
+		gw_adm_sys.clearContextMenu();
+		
+		$.get(url, function(data){
+			gw_adm_sys.contextMenuPresent=true;
+			el.addClass('labelForContextMenu');
+			el.append('<div class="contextMenu dropdown-menu2"><ul>'+data+'</ul></div>')
+		})
+	},
+	clearContextMenu: function()
+	{
+		$('.contextMenu').remove();
+		gw_adm_sys.contextMenuPresent=true;
+		$('.labelForContextMenu').removeClass('labelForContextMenu');
 	},
 	
 	gwws: false,

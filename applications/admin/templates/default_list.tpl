@@ -212,7 +212,7 @@
 			<table class="table-condensed table-hover table-vcenter table-bordered gwListTable">
 				
 			{foreach $equal_fields as $field => $tmp}
-				<tr><th data-field="{$field}">{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
+				<tr><th data-field="{$field}" class='gwColumn'>{dl_proc_th_cell}</th><td>{dl_proc_row_cell item=$item field=$field}</td></tr>
 			{/foreach}	
 				
 			</table>
@@ -237,7 +237,7 @@
 					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable" data-context="{get_class(current($list))}">
 						<tr>	
 							{foreach $dl_fields as $field}
-								<th>{dl_proc_th_cell}</th>
+								<th class='gwColumn' data-field="{$field}">{dl_proc_th_cell}</th>
 							{/foreach}	
 							{* {if count($dl_actions) && !$smarty.get.print_view} show if actions present*}
 							{if !$smarty.get.print_view} {* show even no actions present*}
@@ -300,6 +300,9 @@
 				gw_adm_sys.list_items_count = {intval($query_info.item_count)};
 				gw_adm_sys.init_list(); 
 			}) </script>				
+		{if $smarty.get.field}
+			<style>.dl_cell_{$smarty.get.field} { background-color: pink }</style>
+		{/if}
 	{/capture}		
 		
 		

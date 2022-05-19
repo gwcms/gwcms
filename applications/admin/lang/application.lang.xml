@@ -298,7 +298,7 @@
     <i id="field"><en>Field</en><lt>Laukelis</lt></i>
    <i id="fromln">From lang</i>
    <i id="toln">To lang</i>
-	 
+	<i id="value">Vertė</i>
   </i>
   <i id="VIEWS">
     <i id="form">
@@ -386,6 +386,7 @@
     <i id="doAutoTranslate">doAutoTranslate</i>
     <i id="addcomment">Pridėti komentarą</i>
     <i id="comments">Komentarai</i>
+    <i id="doMultiSetValue">Grupinis vertės keitimas</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>
@@ -876,5 +877,7 @@
 	<ru>»</ru>
 	<ua>»</ua>
 </i>  
+
+<i id="COLUMN_SET_VALUE">Nustatyti pažymėtam vertę:</i>
   
 </xml>
