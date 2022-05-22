@@ -7994,3 +7994,24 @@ a.badge:hover{
 .labelForContextMenu *:not(.dropdown-menu2 *){
 	color: #42a5f5; background-color:white;
 }
+
+
+.triframeclose{
+	float:right;position:relative;backgrond-color:white;border:1px solid silver; padding:2px;
+	color:#999;
+}
+.triframeclose:hover{
+	color:red;
+	border:1px solid red;
+}
+
+.triframecontain{
+	text-align:center;
+	
+}
+.triframecontain:hover{
+	background-color: white !important;
+}
+.triframetitle{
+	color: silver;
+}

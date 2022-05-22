@@ -1404,6 +1404,11 @@ function triggerExpanded(obj, state)
 		}
 }
 
+function closeIframeUnderTr(iframe)
+{
+	$(iframe).parent().find('.triframeclose').click()
+}
+
 function openIframeUnderThisTr(trig, url, afterclose, opts)
 {
 	if(event.ctrlKey)
@@ -1431,7 +1436,11 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	var css ='';
 	for(key in style){
 		css += key+':'+style[key]+';'
+		
+		
 	}
+	
+	url = gw_navigator.url(url, {"iframe-under-tr":1})
 
 	if($(trig).hasClass('expanded'))
 	{
@@ -1447,8 +1456,25 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	triggerExpanded(trig, 1);
 	triggerLoading(trig, 1);
 	
+	
+	loadRowAfter(rowobj, `<td colspan='100' class="triframecontain">
+		<span class="triframetitle">`+$(trig).attr('title')+`</span>
+		<i class="fa fa-times triframeclose" aria-hidden="true"></i>
+		<iframe class='iframeunderrow iframe_auto_sz' src='`+url+`' style='`+css+`'></td></iframe>
+	`, 'iframeunderrowcont');
+	
 
-	loadRowAfter(rowobj, "<td colspan='100'><iframe class='iframeunderrow iframe_auto_sz' src='"+url+"' style='"+css+"'></td></iframe>", 'iframeunderrowcont');
+	
+		$(".triframeclose:not([data-initdone='1'])").click(function(event){
+			
+			$('#'+rowaftername).remove();
+			triggerExpanded(trig, 0);
+			
+			if(afterclose)
+				typeof afterclose === "function" ? afterclose() : eval(afterclose);			
+			
+			
+		}).attr('data-initdone',1);	
 
 	$('#'+rowaftername+' .iframeunderrow').load(function(){
 			triggerLoading(trig, 0);

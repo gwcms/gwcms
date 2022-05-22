@@ -162,9 +162,16 @@ class GW_Data_Object
 
 	function __objAccessRead($o, $keys)
 	{		
-		$tmp = $keys;
-			
+		$tmp = $keys;	
+		
+		//allow keyval extension to read key containing "/" characters
+		if($o instanceof GW_Extension_KeyVal){
+			return $o->get(implode('/', $keys));
+		}
+				
+		
 		$key = array_shift($keys);
+		
 		
 		//d::ldump( ['isset key'=>$key, 'class'=>get_class($o), 'result'=>isset($o->{$key})] );
 		if(!isset($o->{$key}) )
@@ -178,6 +185,12 @@ class GW_Data_Object
 	
 	function __objAccessWrite(&$o, $keys, $val)
 	{
+		//allow keyval extension to write key containing "/" characters
+		if($o instanceof GW_Extension_KeyVal){
+			$o->set(implode('/', $keys), $val);
+			return true;
+		}
+		
 		$key= array_shift($keys);
 		
 		if(!is_object($o))

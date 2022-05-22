@@ -82,6 +82,10 @@ class GW_Extension_KeyVal
 	{
 		return $this->obj->findOwner(GW_DB::prepare_query(['value LIKE ?', '%'.$phrase.'%']));
 	}
+	function searchKey($phrase)
+	{
+		return $this->obj->findOwner(GW_DB::prepare_query(['key LIKE ?', '%'.$phrase.'%']));
+	}	
 	
 	function __set($name, $value) 
 	{
