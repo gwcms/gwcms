@@ -4,7 +4,9 @@
 
 
 {call e field=project_url type=text title="Project url"}
-{call e field=autostart_system_process type=bool title="Autostart system.php daemon"}
+
+{call e field=autostart_system_process_env1 type=bool title="Autostart system.php daemon dev"}
+{call e field=autostart_system_process_env3 type=bool title="Autostart system.php daemon prod"}
 
 {call e field=max_tasks_history_length type=number}
 

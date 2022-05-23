@@ -179,7 +179,7 @@ class GW_Admin_Application extends GW_Application
 		GW::getInstance('GW_Config')->set('sys/project_url', Navigator::getBase(true));		
 		
 		//start system process
-		if(GW::getInstance('GW_Config')->get('sys/autostart_system_process') && GW_App_System::startIfNotStarted())
+		if(GW::getInstance('GW_Config')->get('sys/autostart_system_process_env'.GW::s('PROJECT_ENVIRONMENT')) && GW_App_System::startIfNotStarted())
 		{
 			$this->setMessage('System process was just started');
 		}
