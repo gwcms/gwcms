@@ -576,6 +576,7 @@ for (var i = 0; i < arrFrames.length; i++) {
 		
 		$this->prepareListConfig();
 		
+		
 		if(! $this->canBeAccessed($item, ['access'=>GW_PERM_WRITE, 'nodie'=>1])){
 			$this->tpl_vars['readonly'] = true;
 		}
@@ -1748,7 +1749,7 @@ for (var i = 0; i < arrFrames.length; i++) {
 		
 		$this->list_config['dl_fields'] = $this->getDisplayFields($display_fields);
 		$this->list_config['display_fields'] = $display_fields;
-		
+		$this->list_config['inputs'] =& $conf['inputs'];
 		
 		$this->list_config['dl_order_enabled_fields'] = $order_enabled;		
 		$this->list_config['dl_filters'] = $filters;

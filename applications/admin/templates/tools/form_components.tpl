@@ -66,12 +66,21 @@
 {/function}
 
 
+
+
 {function "cust_inputs"}
+
+	
 	{if $fields_config.fields[$field]}
 		{$params_expand=$fields_config.fields[$field]}
-
-
 		{call "build_input"}
+	{elseif $m->list_config.inputs[$field]}
+		{$params_expand=$m->list_config.inputs[$field]}
+		{call "build_input"}
+	{elseif isset($m->smarty->tplFunctions["gw_input_{$field}"])}
+		{call name="gw_input_{$field}"}
+	{elseif isset($GLOBALS.input_function[$field])}
+		{call name="gw_input_{$GLOBALS.input_function[$field]}"}		
 	{else}
 		<td>{$item->$field}</td>
 	{/if}
