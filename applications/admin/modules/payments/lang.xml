@@ -91,6 +91,7 @@
     <i id="paytime">
 <![CDATA[Mokėj. <i class="fa fa-clock-o"></i>]]>
     </i>
+    <i id="coupon_codes">%#</i>
 
     <i id="expires">Mok. term.</i>
     <i id="user_id"><![CDATA[<i class="fa fa-user"></i>]]></i>

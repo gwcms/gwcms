@@ -1128,41 +1128,43 @@ class Module_Orders extends GW_Public_Module
 		
 		$oitemsbyprod = [];
 		foreach($oitems as $oi)
-			if($oi->obj_type=='nat_products')
-				$oitemsbyprod[$oi->obj_id] = $oi;
-		
-		
-		foreach($products as $p){
-			if($p->prodtype_id == $giftcoupontype){
+			if($oi->obj_type=='nat_products' && $oi->obj->prodtype_id == $giftcoupontype){
+				$p = $oi->obj;
 				
-				
+				//jei jau issaugoti kodukai tai pasiims is duombazes, 
+				//jei sita praleist tai susigeneruos kas kart vis nauji kodai, dideli nuostoliai butu...
 				if($codes = $order->get("keyval/codes_{$p->id}")){
 					$codesall[$p->id] = explode(',',$codes);
 					//d::ldump("{$p->id} skip $codes");
 					continue; //important
 				}
 				//$order->set('keyval/test','fa32da1fa6sd51');
-				$oitem = $oitemsbyprod[$p->id];
+	
 				$codes = [];
+				$cids = [];
 				
-				for($i=0;$i<$oitem->qty;$i++){
+				for($i=0;$i<$oi->qty;$i++){
 					$code =  $dc0->getUniqueCode(8);
 					$coupon = $dc0->createNewObject();
 					$coupon->code = $code;
-					$coupon->limit_amount = $oitem->unit_price;
+					$coupon->limit_amount = $oi->unit_price;
 					$coupon->used_amount = 0;
 					$coupon->percent = 100;
 					$coupon->active = 1;
 					$coupon->user_id = $this->app->user ? $this->app->user->id : 0;
 					$coupon->insert();
 					$codes[] = $code;
+					$cids[] = $coupon->id;
 					
 				}
 				
-				$codesall[$p->id] = $codes;
-				$order->set("keyval/codes_{$p->id}", implode(',', $codes));			
+				$codesall[$p->id] = $codes;				
+				
+				$order->set("keyval/codes_{$p->id}", implode(',', $codes));	
+				$oi->keyval->coupon_codes = implode(',',$cids);
 			}
-		}
+		
+		
 		return $codesall;
 	}
 	

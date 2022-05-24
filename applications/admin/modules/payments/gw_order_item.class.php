@@ -12,7 +12,8 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	    'title'=>1,
 		'type'=>1,
 		'invoice_line'=>1,
-	    	'door_code'=>1
+	    	'door_code'=>1,
+	    'coupon_codes'=>1
 	];
 	
 	public $composite_map = [
@@ -67,6 +68,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			case 'door_code';
 				return gw_ttlock_codes::singleton()->createNewObject($this->get('keyval/door_code_id'), true)->code;
 			break;		
+			case 'coupon_codes':
+				return explode(',',$this->keyval->coupon_codes);
+			break;
 		
 		}
 		

@@ -8,7 +8,6 @@ class Module_OrderItems  extends GW_Common_Module
 	function init()
 	{	
 		
-		
 		$this->model = GW_Order_Item::singleton();
 		
 		parent::init();
@@ -66,7 +65,8 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->app->carry_params['groupby'] = 1;
 		$this->app->carry_params['pageby'] = 1;
 		
-		
+		$this->config =  new GW_Config($this->module_path[0].'/');
+		$this->initFeatures();
 	}
 	
 
@@ -88,8 +88,7 @@ class Module_OrderItems  extends GW_Common_Module
 			'qty' => 'Lof',
 			'total'=>'L',	    
 			'insert_time'=>'lof',
-			'update_time'=>'lof',
-		    
+			'update_time'=>'lof',	
 			]
 		);
 		
@@ -102,6 +101,11 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['pay_time'] = 'Lof';	
 			$cfg['fields']['pay_test'] = 'Lof';	
 			
+		}
+		
+		
+		if($this->feat('discountcode')){
+			$cfg['fields']['coupon_codes'] = 'L';
 		}
 		
 		return $cfg;
@@ -140,7 +144,6 @@ class Module_OrderItems  extends GW_Common_Module
 			
 			$params['conditions'].="pay_test=".(int)$params['pay_test'];
 		}
-		
 				
 		
 		
@@ -153,7 +156,7 @@ class Module_OrderItems  extends GW_Common_Module
 		if(isset($_GET['ord']))
 		{
 			$params['order'] = $_GET['ord'];
-		}
+		}		
 	}
 	
 	function overrideFilterUser_title($value, $compare_type)
@@ -189,7 +192,7 @@ class Module_OrderItems  extends GW_Common_Module
 		}
 	
 		foreach($list as $item)
-			$this->initType($item);
+			$this->initType($item);		
 		
 		if($this->list_config['display_fields']['contracts'] ?? false){
 			$ids = array_keys($list);
