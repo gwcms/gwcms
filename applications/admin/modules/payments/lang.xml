@@ -57,6 +57,7 @@
     <i id="country">Šalis</i>
     <i id="delivery_type">Pristatymo tipas</i>
     <i id="discount_id">Nuolaidos kodas</i>
+    <i id="amount_discount">Nuolaidos suma</i>
     <i id="digital_items">Skaitmeninės prekės</i> 
     <i id="placed_time">Pildymo užbaigimo laikas</i>
     <i id="phone">Tel. numeris</i>
@@ -122,7 +123,7 @@
      <i id="deliverable"><![CDATA[ <i class="fa fa-truck"></i>]]></i>
      <i id="amount_discount"><![CDATA[ % <i class="fa fa-money"></i>  ]]></i> 
     <i id="amount_shipping"><![CDATA[ <i class="fa fa-truck"></i><i class="fa fa-money"></i>  ]]></i>
-    
+    <i id="discount_id">Nuol.k.</i>
     <i id="adm_message"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye" aria-hidden="true"></i>  ]]></i>
        <i id="admin_note"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>  ]]></i>
     
@@ -301,7 +302,13 @@
 		<i id="info">
 		  <i id="iconclass">fa fa-truck</i>
 		</i>		
-	</i>   		          
+	</i>  
+      <i id="discountcode">
+        <i id="title">Nuolaidos kodai</i>
+        <i id="info">
+          <i id="model">shop_discountcode</i>
+        </i>
+      </i>	 		          
     </i>
   </i>
   

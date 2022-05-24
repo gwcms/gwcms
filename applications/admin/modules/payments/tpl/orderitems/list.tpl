@@ -67,7 +67,7 @@
 		
 	{function dl_cell_coupon_codes}
 		{foreach $item->coupon_codes as $id}
-			<a href="{$app->buildUri("products/discountcode/{$id}/form")}">{$id}</a>
+			<a href="{$app->buildUri("payments/discountcode/{$id}/form")}">{$id}</a>
 		{/foreach}
 	{/function}		
 
