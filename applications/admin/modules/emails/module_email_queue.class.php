@@ -55,8 +55,11 @@ class Module_Email_Queue extends GW_Common_Module
 	
 	function doSendQueue()
 	{
-		GW_Mail_Queue::singleton()->updateMultiple(['scheduled > ? AND `status`="scheduled" ', date('Y-m-d H:i')], ['status'=>'ready']);
+		$limit = $this->config->mail_queue_portion_size ?: 5;
+		$affected = GW_Mail_Queue::singleton()->updateMultiple(['scheduled < ? AND `status`="scheduled" ', date('Y-m-d H:i')], ['status'=>'ready'], $limit);
 		
+		if($affected)
+			$this->setMessage("Scheduled switched to ready: $affected");
 		
 		$list = $this->getReady();
 				

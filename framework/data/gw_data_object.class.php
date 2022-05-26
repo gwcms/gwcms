@@ -1225,9 +1225,9 @@ class GW_Data_Object
 		return $this->getDB()->multi_insert($this->table, $list, $replace);
 	}
 	
-	function updateMultiple($conditions, $update_vals)
+	function updateMultiple($conditions, $update_vals, $limit=false)
 	{
-		return $this->getDB()->update($this->table, $conditions, $update_vals);
+		return $this->getDB()->update($this->table, $conditions, $update_vals, $limit);
 	}
 	
 	function deleteMultiple($cond)
