@@ -444,10 +444,8 @@ class GW_Common_Module extends GW_Module
 			echo "<script type='text/javascript'>parent.location.reload()</script>";
 			exit;
 		}
-		if(isset($_GET['dialog']) && ($_REQUEST['submit_type']??false) != 1) {			
+		if((isset($_GET['dialog']) || isset($_GET['iframe-under-tr']) ) && ($_REQUEST['submit_type']??false) != 1) {			
 			$this->dialogJump(['item'=>['id'=>$item->id,'title'=>$item->title]]);
-		}elseif(isset($_GET['iframe-under-tr'])  && ($_REQUEST['submit_type']??false) != 1){
-			$this->dialogJump(['item'=>['id'=>$item->id,'title'=>$item->title]], true);
 		}elseif(!isset($_POST['ajax'])) {
 
 			$this->jumpAfterSave($item ?? false);
@@ -476,15 +474,8 @@ class GW_Common_Module extends GW_Module
 		foreach($messages as $msg)
 			echo "<script type='text/javascript'>window.parent.gw_adm_sys.notification(".json_encode($msg).")</script>";
 
-		if($iframe){
-			echo '<script>
-var arrFrames = parent.document.getElementsByTagName("IFRAME");
-for (var i = 0; i < arrFrames.length; i++) {
-  if (arrFrames[i].contentWindow === window) parent.window.closeIframeUnderTr(arrFrames[i])
-}				
-			
-			</script>';
-	
+		if(isset($_GET['iframe-under-tr'])){
+			echo '<script>parent.window.closeIframeUnderTr1(window)</script>';
 		}else{
 			echo "<script type='text/javascript'>window.parent.gwcms.close_dialog2($contextdata)</script>";
 		}

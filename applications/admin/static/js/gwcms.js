@@ -1404,6 +1404,15 @@ function triggerExpanded(obj, state)
 		}
 }
 
+
+function closeIframeUnderTr1(wind)
+{
+	var arrFrames = document.getElementsByTagName("IFRAME");
+	for (var i = 0; i < arrFrames.length; i++) {
+	  if (arrFrames[i].contentWindow === wind) closeIframeUnderTr(arrFrames[i])
+	}		
+}
+
 function closeIframeUnderTr(iframe)
 {
 	$(iframe).parent().find('.triframeclose').click()
@@ -1459,22 +1468,31 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	
 	loadRowAfter(rowobj, `<td colspan='100' class="triframecontain">
 		<span class="triframetitle">`+$(trig).attr('title')+`</span>
-		<i class="fa fa-times triframeclose" aria-hidden="true"></i>
+		<i class="fa fa-times triframeclose"></i>
+		<i class="fa fa-refresh triframerefresh"></i>
 		<iframe class='iframeunderrow iframe_auto_sz' src='`+url+`' style='`+css+`'></td></iframe>
 	`, 'iframeunderrowcont');
 	
 
 	
 		$(".triframeclose:not([data-initdone='1'])").click(function(event){
-			
 			$('#'+rowaftername).remove();
 			triggerExpanded(trig, 0);
 			
 			if(afterclose)
 				typeof afterclose === "function" ? afterclose() : eval(afterclose);			
-			
-			
-		}).attr('data-initdone',1);	
+		}).attr('data-initdone',1);
+		
+		$(".triframerefresh:not([data-initdone='1'])").click(function(event){
+			var f = $('#'+rowaftername).find('iframe');
+						
+			if(event.shiftKey){
+				f.attr( 'src', f.attr( 'src' ))
+			}else{
+				f.get(0).contentDocument.location.reload(true);
+			}
+		}).attr('data-initdone',1);		
+		
 
 	$('#'+rowaftername+' .iframeunderrow').load(function(){
 			triggerLoading(trig, 0);

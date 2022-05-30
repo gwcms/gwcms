@@ -16,6 +16,7 @@ class GW_Generic_Extended
 	public $own_table = false;
 	public $db;
 	private $_cache = [];
+	public $prefix;
 
 	function __construct($owner_id = 0, $table=false, $generic=false)
 	{
@@ -115,6 +116,8 @@ class GW_Generic_Extended
 		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
 		
 
+		$key = $this->prefix . $key;
+		
 		$vals = ['owner_id' => $this->owner_id, 'key' => $key, 'value' => $value];
 		if($this->own_table)
 			$vals['own_table'] = $this->own_table;		
@@ -130,6 +133,8 @@ class GW_Generic_Extended
 	function get($key, $all = false)
 	{
 		$db = $this->getDB();
+		
+		$key = $this->prefix . $key;
 
 		if (isset($this->_cache[$key])) {
 			return $this->_cache[$key];
@@ -184,6 +189,8 @@ class GW_Generic_Extended
 	function preload($key, &$time = 0)
 	{
 		$db = & $this->getDB();
+		
+		$key = $this->prefix . $key;
 		
 		$rows = $this->getAll("`key` LIKE '$key%'");
 

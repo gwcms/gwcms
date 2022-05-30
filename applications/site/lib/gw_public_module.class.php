@@ -626,6 +626,10 @@ class GW_Public_Module {
 		{
 			$this->extensions[$name] = new $ext_name;
 			$this->extensions[$name]->mod = $this;
+			
+			if(method_exists($this->extensions[$name], 'initExt'))
+				$this->extensions[$name]->initExt();
+			
 		}
 				
 		return $this->extensions[$name];
@@ -662,6 +666,7 @@ class GW_Public_Module {
 		$name = strtolower($name);
 		
 		if($ext = $this->scanRedirRules($name)){	
+			
 			return call_user_func_array([$this->ext($ext), $name], $arguments);
 		}else{
 			trigger_error('method "' . $name . '" not exists', E_USER_NOTICE);
