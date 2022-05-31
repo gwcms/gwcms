@@ -1428,7 +1428,7 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 	
 	var rowobj = $(trig).closest('tr');
 	var id = $(rowobj).attr('data-id');
-	var rowaftername = 'list_row_'+id+'_after';
+	var rowaftername = 'list_row_'+id+'_after'; url
 
 	if(!opts)
 		opts = {}
@@ -1473,10 +1473,11 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 		<iframe class='iframeunderrow iframe_auto_sz' src='`+url+`' style='`+css+`'></td></iframe>
 	`, 'iframeunderrowcont');
 	
-
+	var container = $('#'+rowaftername)
+	var iframe = container.find('iframe');
 	
 		$(".triframeclose:not([data-initdone='1'])").click(function(event){
-			$('#'+rowaftername).remove();
+			container.remove();
 			triggerExpanded(trig, 0);
 			
 			if(afterclose)
@@ -1484,14 +1485,44 @@ function openIframeUnderThisTr(trig, url, afterclose, opts)
 		}).attr('data-initdone',1);
 		
 		$(".triframerefresh:not([data-initdone='1'])").click(function(event){
-			var f = $('#'+rowaftername).find('iframe');
+			
 						
 			if(event.shiftKey){
-				f.attr( 'src', f.attr( 'src' ))
+				iframe.attr( 'src', f.attr( 'src' ))
 			}else{
-				f.get(0).contentDocument.location.reload(true);
+				iframe.get(0).contentDocument.location.reload(true);
 			}
 		}).attr('data-initdone',1);		
+		
+		$(".triframetitle:not([data-initdone='1'])").click(function(event){						
+			if(event.shiftKey){
+				var url =  iframe.attr( 'src' );
+			}else{
+				var url = iframe.get(0).contentDocument.location.href
+			}
+			url = gw_navigator.url(url, {"iframe-under-tr":false, "clean": false})
+			window.open(url);
+			
+		}).attr('data-initdone',1);	
+		
+		
+		if($(trig).attr('title')==undefined){
+			iframe.on('load', function(){
+				container.find('.triframetitle').text(this.contentDocument.title);
+				
+			})
+		}
+			/*
+			$(.contentDocument.document ).ready(function() {
+				console.log("test");
+				console.log(this.title);
+			});
+			*/
+		
+		/*
+		
+		*/
+		
 		
 
 	$('#'+rowaftername+' .iframeunderrow').load(function(){

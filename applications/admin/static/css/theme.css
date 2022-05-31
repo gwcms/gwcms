@@ -8000,14 +8000,12 @@ a.badge:hover{
 	float:right;position:relative;backgrond-color:white;border:1px solid silver; padding:2px;
 	color:#999;
 }
-.triframeclose:hover{
+.triframetitle:hover{ cursor: pointer; color:#42a5f5; }
+.triframeclose:hover,, .triframerefresh:hover{
 	color:#42a5f5;
 	border:1px solid #42a5f5;
 }
-.triframerefresh:hover{
-	color: #42a5f5;
-	border:1px solid #42a5f5;
-}
+
 
 
 .triframecontain{
