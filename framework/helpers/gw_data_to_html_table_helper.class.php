@@ -3,18 +3,42 @@
 class GW_Data_to_Html_Table_Helper
 {
 
-	static function doTable($data, $font_size = 10, $escape=1)
+	static function doTable($data, array $opts=[])
 	{
+		$escape = $opts['escape'] ?? 1;
+		$mergegroup = $opts['mergegroup'] ?? 0;
+		
 		if (!is_array($data))
 			return;
 
+		$keys = array_keys((array) current($data));
+		
 		$str = "";
 		$str.= "<table class='gwTable'>";
 		$str.="<tr><th>no</th>";
-		foreach (array_keys((array) current($data)) as $key)
+		foreach ($keys as $key)
 			$str.="<th>" . htmlspecialchars($key) . "</th>";
 		$str.="</tr>\n";
+		
+		$merge = [];
+		
+		if($mergegroup){
+			$lastval = null;
+			
+			foreach($keys as $field)
+				foreach($data as $idx => $row){
+					if($row[$field]!=$lastval){
+						$startidx = $idx;
+						$lastval = $row[$field];
+					}else{
+						@$merge[$field][$startidx]++;
+					}
+				}
+			//d::dumpas($merge);
+		}
 
+		$rowspanskip = [];
+		
 		foreach ($data as $i => $row) {
 			$str.="<tr><td>" . $i . "</td>";
 			foreach ($row as $field => $val){
@@ -23,7 +47,20 @@ class GW_Data_to_Html_Table_Helper
 				if($escape)
 					$val =  htmlspecialchars($val);
 				
-				$str.="<td>" . str_replace("\n", "<br />",  $val).'</td>';
+				if(isset($merge[$field][$i])){
+					$rowspan="rowspan='".($merge[$field][$i]+1)."'";
+					$rowspanskip[$field]=$merge[$field][$i];
+				}elseif($rowspanskip[$field] ?? false > 0){
+					$rowspanskip[$field]--;
+					continue;;
+				}else{
+					$rowspan="";
+				}
+				
+					
+		
+				
+				$str.="<td $rowspan>" . str_replace("\n", "<br />",  $val).'</td>';
 			}
 			$str.="</tr>\n";
 		}

@@ -71,7 +71,7 @@ class GW_Debug_Helper
 				
 		for($i=$line_start; $i< $line_start+$lines; $i++)
 			if(isset($code[$i]))
-				$res[]="/*line $i*/ ".$code[$i];
+				$res[]="/*line ".($i+1)."*/ ".$code[$i];
 			
 		$code = implode("\n",$res);
 		
