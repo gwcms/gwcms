@@ -2826,7 +2826,7 @@ class GW_Common_Module extends GW_Module
 	
 	function askConfirm($str)
 	{
-		$confirmurl = $this->buildUri(false, $_GET+['confirm'=>1]);
+		$confirmurl = $this->buildUri($this->view_name, $_GET+['confirm'=>1]);
 		$refreshurl = $_SERVER['REQUEST_URI'];
 		
 		
