@@ -2328,8 +2328,15 @@ class GW_Common_Module extends GW_Module
 		$this->runPeriodicTasks("tasks_".$_GET['every'].'min');
 	}
 	
-	function prompt($form, $title, $opts=[])
+	function prompt($form, $title=false, $opts=[])
 	{
+		
+		
+		if($title===false){
+			$caller = '<b>'.debug_backtrace(!DEBUG_BACKTRACE_PROVIDE_OBJECT|DEBUG_BACKTRACE_IGNORE_ARGS,2)[1]['function'].'()</b>';
+			$title = GW::l('/g/DEFAULT_PROMPT',['v'=>['caller'=>$caller]]);
+		}
+		
 		$answers = true;
 		
 		if(isset($opts['rememberlast'])){

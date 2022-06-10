@@ -15,7 +15,7 @@
 
 
 
-{if !$orderinitdone}
+{if !$GLOBALS.smarty_orderinitdone}
 	
 	{capture append=footer_hidden}
 		<script>
@@ -44,5 +44,5 @@
 		</script>	
 	{/capture}
 	
-	{assign var=orderinitdone value=1 scope=global}	
+	{$GLOBALS.smarty_orderinitdone=1}
 {/if}

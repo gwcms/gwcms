@@ -879,5 +879,5 @@
 </i>  
 
 <i id="COLUMN_SET_VALUE">Nustatyti pažymėtam vertę:</i>
-  
+<i id="DEFAULT_PROMPT">$caller is requesting user input</i>
 </xml>
