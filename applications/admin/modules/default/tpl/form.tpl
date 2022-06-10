@@ -3,6 +3,7 @@
 {/capture}
 
 {include file="default_form_open.tpl"}
+{include "tools/form_components.tpl"}
 
 {$tmpformhtml}
 
