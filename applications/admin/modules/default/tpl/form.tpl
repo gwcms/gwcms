@@ -14,7 +14,7 @@
 {else}
 
 	{foreach $m->list_config.dl_fields as $field}
-		{call "cust_inputs"}
+		<tr>{call "cust_inputs"}</tr>
 	{/foreach}
 {/if}
 

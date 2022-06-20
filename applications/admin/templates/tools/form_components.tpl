@@ -82,7 +82,7 @@
 	{elseif isset($GLOBALS.input_function[$field])}
 		{call name="gw_input_{$GLOBALS.input_function[$field]}"}		
 	{else}
-		<td>{$item->$field}</td>
+		{call e type=read}
 	{/if}
 {/function}
 
