@@ -272,7 +272,7 @@ class GW_Public_Module {
 	}
 	
 	function setUpPaging($last_query_info) {
-		$current = (int) $this->list_params['page'] ? (int) $this->list_params['page'] : 1;
+		$current = $this->list_params['page'] ?? 1;
 		$length = ceil($last_query_info['item_count'] / $this->list_params['page_by']);
 
 		$this->smarty->assign('paging_tpl_page_count', $length);
