@@ -68,4 +68,7 @@
 		<lt>Rinkmenų skaičius ribojamas iki $number</lt>
 		<en>Files limit reached: $number</en>
 	</i>
+	<i id="DATE">
+		<i id="INVALID_DATE">Patikrinkite datos įvestį</i>
+	</i>
 </xml>
