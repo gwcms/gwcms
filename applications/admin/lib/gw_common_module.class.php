@@ -1199,7 +1199,7 @@ class GW_Common_Module extends GW_Module
 			$last_querty=$this->model->getDB()->last_query;
 		}
 		
-		if(isset($this->app->sess['debug']) && $this->app->sess['debug'] && $this->app->user->isRoot())
+		if(isset($this->app->sess['debug']) && $this->app->sess['debug'] )
 		{
 			echo SQL_Format_Helper::format($last_querty);
 		}

@@ -18,8 +18,11 @@
 
 	{call e field=login_with_fb type=bool}
 	{call e field=login_with_gg type=bool}
+	
+	
+	{call e field="superadmin_group" type=select_ajax modpath="users/groups" preload=1 options=[]}
+	
 {/if}
 
-{call e field="superadmin_group" type=select_ajax modpath="users/groups" preload=1 options=[]}
 
 {include file="default_form_close.tpl" submit_buttons=[save]}
