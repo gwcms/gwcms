@@ -18,8 +18,8 @@
 	</style>
 	{/capture}
 	
-	{function name=do_toolbar_buttons_rearange} 
-		{toolbar_button title="Rearange structure" iconclass='gwico-Sorting-Arrows-Filled' href=$m->buildUri(rearange)}
+	{function name=do_toolbar_buttons_rearrange} 
+		{toolbar_button title="Rearrange structure" iconclass='gwico-Sorting-Arrows-Filled' href=$m->buildUri(rearrange)}
 	{/function}		
 	
 	{function name=do_toolbar_buttons_synchronizefromxml} 
@@ -70,7 +70,7 @@
 		
 	{$dl_fields=[title,path]}
 	{$dl_smart_fields=[title,path]}
-	{$do_toolbar_buttons=[info,rearange,synchronizefromxml,expand]}
+	{$do_toolbar_buttons=[info,rearrange,synchronizefromxml,expand]}
 	{$do_toolbar_buttons[] = search}	
 	{$dl_actions=[invert_active,ext_actions,expand]}
 	

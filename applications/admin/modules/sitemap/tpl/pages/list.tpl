@@ -15,10 +15,14 @@
 			{toolbar_button title="<span class='text-muted'>{GW::l('/m/VIEWS/doAddExtLn')}</span>" iconclass='gwico-Upload-SVG' href=$m->buildUri(false,[act=>doAddExtLn])}	
 		{/if}
 	{/function}	
+	{function name=do_toolbar_buttons_tree} 
+		{toolbar_button title="Rearrange structure" iconclass='fa fa-sitemap' href=$m->buildUri(tree)}
+	{/function}		
+	
 	
 	
 	{$do_toolbar_buttons[] = hidden}	
-	{$do_toolbar_buttons_hidden=[dialogconf,importexport,print,fixpaths]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,importexport,tree,print,fixpaths]}	
 	
 
 	{function dl_cell_ico}

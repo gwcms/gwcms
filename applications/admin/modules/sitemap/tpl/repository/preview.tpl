@@ -24,6 +24,11 @@
 	</div>
 {elseif in_array($item->extension,['mp3'])}
 	<audio id='audio' controls ><source src='/repository/{$item->relpath}' type='audio/mpeg'>Your browser does not support the audio element.</audio>
+{elseif in_array($item->extension,['mp4'])}
+	<video controls autostart  style="width:100%;height:100%">
+		<source src="/repository/{$item->relpath}" type="video/mp4">
+		Your browser does not support the video tag.
+	      </video>
 {else}
 	Unsupported type, contact vidmantas.norkus@gw.lt to implement
 	{d::ldump([

@@ -36,17 +36,59 @@ class Module_Blocks extends GW_Common_Module
 		
 	}
 	
+
 	
-	
-	
-	function getListConfig()
+	function getListConfig($item=false)
 	{
 		
 		$cfg = parent::getListConfig();
 
 		
+		if(GW::s('MULTISITE')){
+			$cfg['inputs']['site_id']=['type'=>'select', 'options'=>$this->options['site_id']];
+		}
+		
+
+		
+		$cfg['inputs']['name']=['type'=>'text'];	
+		$cfg['inputs']['admnote']=['type'=>'text'];
+		$cfg['inputs']['path_filter']=['type'=>'text'];
+		
+		$cfg['inputs']['contents_type']=['type'=>'select', 'options'=>GW::l('/m/OPTIONS/block_types')];
+		
+		$typemap = [1=>'text',2=>'textarea',3=>'htmlarea',4=>'code_smarty',5=>'text',6=>'color',7=>'text'];
+		
+		if($item){
+			$cfg['inputs']['contents']=['type'=>$typemap[$item->contents_type]];
+		}
+		
+
+		
+		if($item && $item->contents_type==4){
+			$cfg['inputs']['contents'] += isset($_GET['form_ajax']) ? 
+				['height'=>"400px","width"=>'400px'] : 
+				['height'=>"400px",'layout'=>'wide'];
+		}
+		
+		
+		
+		$cfg['inputs']['preload']=['type'=>'select', 'options'=>GW::l('/m/OPTIONS/preload')];
+		$cfg['inputs']['active']=['type'=>'bool'];
+		$cfg['inputs']['ln']=['type'=>'select', 'options'=>array_merge(['*'=>GW::l('/m/ALL_LANGS')],GW::s("LANGS"))];
+		
+		
+		$cfg['filters']['site_id'] = ['type'=>'multiselect','options'=>$this->options['site_id']];
+
+		//d::dumpas($cfg['inputs']);
+
+		
 		return $cfg;
 	}	
+	
+
+		
+			
+	
 	
 	function __eventAfterForm()
 	{

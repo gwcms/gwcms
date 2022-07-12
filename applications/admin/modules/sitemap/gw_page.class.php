@@ -15,7 +15,8 @@ class GW_Page extends GW_i18n_Data_Object
 	public $default_order = 'priority ASC';
 	public $calculate_fields = ['child_count'=>1, 'input_cfg'=>1];
 	public $level=0;
-
+	public $order_limit_fields = ['parent_id'];
+		
 	function getChilds($params=Array())
 	{		
 		$id = $this->id ? (int)$this->id : -1;

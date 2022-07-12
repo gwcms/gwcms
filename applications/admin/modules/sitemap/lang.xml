@@ -290,6 +290,10 @@
       <lt>Pataisyti url stulpelį</lt>
       <en>[A] Correct the url column</en>
     </i>
+    <i id="tree">
+	    <lt>Svetainės medis+</lt>
+	    <en>Site tree</en>
+    </i>
   </i>
   <i id="PREVIEW_SHIFTKEY">
     <lt>Press using shift or ctrl key for headless version</lt>

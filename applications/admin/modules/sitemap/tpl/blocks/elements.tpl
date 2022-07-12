@@ -1,4 +1,6 @@
 
+{*module_blocks.class getListConfig (inputs) *}
+
 {function name="cust_inputs"}
 	
 	{$i="elements/input.tpl"}	

@@ -37,7 +37,7 @@ class Module_Modules extends GW_Common_Module
 	}	
 	
 	
-	function viewRearange()
+	function viewRearrange()
 	{
 		$list = $this->model->getChilds(Array('menu'=>false));
 		

@@ -37,6 +37,8 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		
 		$this->app->carry_params['clean']=1;
+		
+		$this->options['site_id'] = GW_Site::singleton()->getOptions($this->app->ln);
 	}
 	
 	
@@ -487,4 +489,168 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$this->jump();
 		
 	}
+	
+	
+	function viewTree()
+	{
+		
+		$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
+		$this->tpl_vars['siteid'] = $site_id;
+				
+	}
+	
+	
+	function doGetTree()
+	{
+		//$list = $this->model->getFullTree();
+		$ln = $this->app->ln;
+		
+		
+		
+		$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
+		$this->tpl_vars['siteid'] = $site_id;
+		
+
+		
+		$list0 = $this->model->findAll(GW_DB::inCondition('site_id', $site_id), ['select'=>"id, site_id, pathname, title_{$ln}, active, parent_id, type, priority", 'key_field'=>'id', 'order'=>'priority']);
+		
+		$lostfound=0;
+		
+		
+		foreach($list0 as $item){
+			
+			
+			$sites[$item->site_id]=1;
+			$parent =  $item->parent_id==-1 ? 's'.$item->site_id : $item->parent_id;
+			
+			if($item->parent_id != -1 && !isset($list0[$item->parent_id]))
+			{
+				$lostfound=1;
+				$parent="lost";;
+			}
+			
+			$vals=[
+			    "text"=>
+			    '<span class="  '.($item->active?'text-success':'text-muted').' ">'.GW_String_Helper::truncate($item->pathname,25).'</span> '. GW_String_Helper::truncate(htmlspecialchars($item->title), 40)///.' '.$item->priority
+			    , //. " ($item->id) ($item->priority)",debug
+			    "parent"=>$parent,
+			    "id"=>$item->id,
+			    //"state" => ["opened" => true, "selected" => true],
+			    "type" => 't'.$item->type
+			];
+			
+			//if(!$item->active)
+			//	$vals['a_attr'] = ['style'=>"opacity:0.5"];
+			
+				
+			$list[] = $vals;
+		}
+		
+
+		
+		foreach($sites as $id => $x){
+			
+			$list[]=[
+			    "text"=>$this->options['site_id'][$id], //. " ($item->id) ($item->priority)",debug
+			    "parent"=>'#',
+			    "id"=>"s{$id}",
+			    //"state" => ["opened" => true, "selected" => true],
+			    "type" => 'tsite'
+			];
+			
+		}
+		
+		if($lostfound)
+			$list[]=['text'=>'Lost & found', "id"=>'lost','type'=>'t4','parent'=>'#'];
+		
+
+		header('content-type: text/plain');
+		echo json_encode($list, JSON_PRETTY_PRINT);
+		exit;
+	}
+	
+	function doMoveNode()
+	{
+		if (!$item = $this->getDataObjectById())
+			return false;
+
+		$oldparent = $item->parent_id;
+		$newparent = (string)($_GET['parent']=='#' ? -1 : $_GET['parent']); // string nes jei tipai nesutaps bus nustatytas pokytis
+		
+		
+		
+		
+		if($newparent[0]=='s'){
+			$site_id = substr($newparent,1,999999);
+			$item->site_id = $site_id;
+			$newparent = '-1';
+			
+		}
+		
+		
+		$prevparent = $item->get('parent_id');
+		$item->set('parent_id', $newparent);
+		
+		
+		
+			
+		if($item->isChanged() || $_GET['old_priority']!=$_GET['priority'] ){
+			
+			if(isset($item->changed_fields['parent_id'])){
+				$root = (object)['title'=>$this->options['site_id'][$item->site_id]." ROOT"];
+				$prevparento = $prevparent == -1 ? $root  :  $this->model->find(['id=?',$prevparent]);
+				$newparento = $newparent == -1 ? $root :   $this->model->find(['id=?',$newparent]);
+				
+				$this->afterParentIdChanges($item);
+				
+				$item->priority = $_GET['priority'];
+				$item->updateChanged();
+				$item->fixOrder();
+				$this->setMessage(["text"=>"Moved to new parent $oldparent|{$prevparento->title}  -> {$item->parent_id}|{$newparento->title}", "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+				
+			}else{
+				
+				$inf = $item->updatePositions($_GET['old_priority'], $_GET['priority']);
+				$this->setMessage(["text"=>'Positions updated', "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+			}
+		}else{
+			$this->setMessage(["text"=>GW::l("/g/NO_CHANGES"), "type"=>GW_MSG_INFO, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+		}
+
+		
+
+		//if($this->isPacketRequest())	
+		//	$this->app->addPacket(['action'=>'delete_row','id'=>$item->id, 'context'=>get_class($this->model)]);
+	
+		if(!$this->sys_call)
+			$this->jump();
+	}
+	
+	
+	function doCreateNode()
+	{
+		$item = $this->model->createNewObject();
+		
+		
+		$newparent = $_GET['parent'];
+		
+		if($newparent[0]=='s'){
+			$site_id = substr($newparent,1,999999);
+			$item->site_id = $site_id;
+			$item->parent_id = '-1';
+			
+		}else{
+			$newparento = $newparent == -1 ? $root :   $this->model->find(['id=?',$newparent]);
+			$item->site_id = $newparento->site_id;
+			$item->parent_id = $newparent;
+		}		
+		
+		
+		$item->title = "Unnamed";
+		$item->priority = 9999999;
+		$item->insert();
+		$item->fixOrder();
+		
+		die(json_encode($item->toArray()));
+	}	
 }

@@ -565,7 +565,7 @@ class GW_Common_Module extends GW_Module
 			$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/form";
 		}
 		
-		$this->prepareListConfig();
+		$this->prepareListConfig($item);
 		
 		
 		if(! $this->canBeAccessed($item, ['access'=>GW_PERM_WRITE, 'nodie'=>1])){
@@ -1710,16 +1710,18 @@ class GW_Common_Module extends GW_Module
 	 * filtrai, ir rikiuotinų stulpelių sąrašas
 	 * 
 	 * paimamas laukelių konfigas
+	 * $item paduodama tuo atveju jei paruosiama formos inputai
+	 * 
 	 * 
 	 * @return boolean
 	 */
-	function prepareListConfig()
+	function prepareListConfig($item=false)
 	{
 		//neuzkraut jei jau uzkrautas
 		if(isset($this->list_config['dl_fields']))
 			return false;
 		
-		$conf = $this->getListConfig();
+		$conf = $this->getListConfig($item);
 		
 		$display_fields = [];
 		$order_enabled = [];

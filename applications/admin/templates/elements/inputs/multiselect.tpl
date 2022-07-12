@@ -15,6 +15,7 @@
 <select multiple="multiple" class="form-control gwselect2 " id="{$id}" name="{$input_name}" 
 		{if $sorting}data-sorting="1"{/if}
 		style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
+		 {*data-onchangeFunc="{$onchangeFunc}" just use multiselect_ajax*}
 		>
 	{html_options options=$tmpopt+$options selected=$value}
 </select>
