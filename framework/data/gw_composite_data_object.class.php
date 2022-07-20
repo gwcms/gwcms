@@ -135,6 +135,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return $this->{isset($this->composite_map[$field][1]['get_cached']) ? 'getCompositeCached' : 'getComposite'}($field);
 	}
 
+	protected  $composite_changed_fields=[];
+		
 	function set($field, $value)
 	{	
 				
@@ -182,6 +184,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		$item->setOwnerObject($this, $field);
 		
 		$item->setValues($value);
+		$this->composite_changed_fields[$field]=1;
 
 
 
@@ -192,7 +195,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	{
 		parent::updateChanged();
 		
-		$this->fireEvent('AFTER_SAVE');
+		if($this->composite_changed_fields)
+			$this->fireEvent('AFTER_SAVE');
 	}	
 	
 	

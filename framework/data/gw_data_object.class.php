@@ -651,12 +651,12 @@ class GW_Data_Object
 
 
 		$this->fireEvent(['BEFORE_UPDATE', 'BEFORE_SAVE'], $context);
-
+		
 		if(isset($params['onlychanged']))
 		{
 			$field_names = array_keys($this->changed_fields);
 			
-			if(! $field_names)
+			if(! $field_names || $field_names == ['update_time'])
 				return false;
 		}
 		
@@ -664,24 +664,32 @@ class GW_Data_Object
 		$idfield = $this->primary_fields[0];
 		$field_names = count($field_names) ? $field_names : array_keys($this->content_base);
 
-
+		
 		foreach ($field_names as $field)
 			if (!isset($this->ignore_fields[$field]))
 				$entry[$field] = $this->getStoreVal($field);
 
 		unset($entry[$idfield]);
-
+		
 		$db = & $this->getDB();
 		$rez = $db->update($this->table.' AS a', $this->getIdCondition(), $entry);
-
+		
 		$this->fireEvent(['AFTER_UPDATE', 'AFTER_SAVE'], $context);
-
+		
 		return $rez;
 	}
 
 	function updateChanged()
 	{
-		return $this->update([], ['onlychanged'=>1]);
+		$field_names = array_keys($this->changed_fields);
+		$x=null;
+
+			
+		if($field_names)
+			$x = $this->update($field_names, ['onlychanged'=>1]);
+		
+		
+		return $x;
 	}
 
 	function showChanged()
