@@ -148,10 +148,15 @@ class GW_Data_Object
 		if (!isset($this->content_base[$key]) || $this->content_base[$key] !== $val) {
 			//d::ldump('item:'.$this->id.' CHANGE '.$this->content_base[$key].' -> '.$val);
 
-			$this->content_base[$key] = $val;
+			if(!$this->constructcomplete || !isset($this->content_base[$key]) || $this->content_base[$key] != $val){
+				$this->content_base[$key] = $val;
+
+
 			
-			if($this->constructcomplete && !isset($this->ignore_fields[$key]))
-				$this->changed_fields[$key] = 1;
+				if($this->constructcomplete && !isset($this->ignore_fields[$key]))
+					$this->changed_fields[$key] = 1;
+			}
+			
 		}
 	}
 

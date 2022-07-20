@@ -1555,6 +1555,12 @@ class GW_Common_Module extends GW_Module
 		if($item->id)
 			$item->load_if_not_loaded();
 		
+		
+		
+		if(!$this->app->user->isRoot() && GW_Permissions::getTempReadAccessMod(implode('/',$this->module_path)) ){
+			return $this->readOnlyAccess($item, $opts);
+		}
+		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
 		if(isset($item->content_base['access']))
@@ -1577,7 +1583,7 @@ class GW_Common_Module extends GW_Module
 				$result = false;
 			}
 		}
-		
+				
 		//d::dumpas([$result, $this->allowed_ids, $item->id]);
 		
 		if (isset($opts['nodie']) || $result)
@@ -2960,5 +2966,25 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$this->jump();
+	}	
+	
+
+	function readOnlyAccess($item, $opts=[])
+	{
+				
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		
+		
+		$result =  $requestAccess == GW_PERM_READ;
+		
+		
+		if (isset($opts['nodie']) || $result)
+			return $result;
+
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
+		
+		
+		$this->jump('');			
 	}	
 }

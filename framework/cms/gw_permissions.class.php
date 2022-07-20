@@ -113,9 +113,23 @@ class GW_Permissions
 		GW::$context->app->sess('temp_read_access', $x);
 	}
 	
+	static function setTempReadAccessMod($path, $set=1)
+	{
+		$x = GW::$context->app->sess('temp_read_access_mod');
+		$x[$path] = $set;
+		GW::$context->app->sess('temp_read_access_mod', $x);
+	}	
+	
 	static function getTempReadAccess($path)
 	{
 		$x = GW::$context->app->sess('temp_read_access');
+		return $x[$path] ?? false;
+	}		
+	
+	static function getTempReadAccessMod($path)
+	{
+		$x = GW::$context->app->sess('temp_read_access_mod');
+		
 		return $x[$path] ?? false;
 	}	
 

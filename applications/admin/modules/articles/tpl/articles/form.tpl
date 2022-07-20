@@ -1,14 +1,7 @@
 {include file="default_form_open.tpl" form_width="1000px"}
 
 
-
-{include 
-	file="elements/input_select_edit.tpl" 
-	name=group_id type=select 
-	empty_option=1
-	datasource=$app->buildUri('articles/groups')
-	options=[]
-}
+{call e field="group_id" type="select_ajax" modpath="articles/groups"  options=[] after_input_f="editadd" preload=1}
 
 {call e field=image  type=image title=GW::l('/g/IMAGE')}
 {call e field=title}

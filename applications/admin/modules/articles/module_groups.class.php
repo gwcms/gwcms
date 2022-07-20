@@ -18,7 +18,7 @@ class Module_Groups extends GW_Common_Module
  */
 	
 	
-	function viewOptions()
+	function viewOptionsOLD()
 	{
 		$opts = $this->model->getOptions(false);
 		

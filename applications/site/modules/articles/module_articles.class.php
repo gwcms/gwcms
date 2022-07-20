@@ -13,6 +13,8 @@ class Module_Articles extends GW_Public_Module
 		
 		
 		$this->tpl_vars['list_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/list');		
+		
+		
 		$this->tpl_vars['item_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/item');		
 	}
 
@@ -26,8 +28,13 @@ class Module_Articles extends GW_Public_Module
 		
 		$cond = 'active=1';
 		
-		if(isset($_GET['group']))
+		if($groupids = $this->app->page->getContent('group_id')){
+			$groupids = json_decode($groupids, true);
+			$cond = GW_DB::mergeConditions($cond, GW_DB::inCondition('group_id', $groupids));
+			
+		}elseif(isset($_GET['group'])){
 			$cond = GW_DB::mergeConditions($cond, GW_DB::prepare_query(['group_id=?', $_GET['group']]));
+		}
 		
 		
 
@@ -69,12 +76,21 @@ class Module_Articles extends GW_Public_Module
 	function viewIndex()
 	{
 		
-		
-		$list=$this->model->findAll(Array('active=1'));
+
+		$list=$this->model->findAll('group_id=21 AND active=1', ['limit'=>4,'order'=>'insert_time DESC']);
 		
 		$this->tpl_vars['list'] = $list;
 	}
-
+	
+	
+	function viewClubs()
+	{
+		//AND active=1
+		$list=$this->model->findAll('group_id=22 ', ['select'=>'id, title, short','limit'=>8,'order'=>'insert_time DESC']);
+		
+		
+		$this->tpl_vars['list'] = $list;
+	}
 
 
 }

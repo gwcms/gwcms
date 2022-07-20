@@ -144,6 +144,11 @@ class GW_DB
 
 		$start = microtime(true);
 		
+		if(GW::s('LOG_INSERT_QUERIES'))
+			if(stripos($cmd, 'insert into')!==false || stripos($cmd, 'replace into')!==false){
+				$this->logint("$cmd  || ".$_SERVER['REMOTE_ADDR'].' || '.$_SERVER['REQUEST_URI']);
+			}
+		
 		
 		if($this->sql_collect){
 			$this->sql_collect_data[] = $cmd;

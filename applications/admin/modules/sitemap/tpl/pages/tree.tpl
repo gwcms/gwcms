@@ -10,18 +10,22 @@ function updateSite(id){
 
 <table class="gwTable" style='position:relative;top:-5px;'>
 	<tr>
+	{if GW::s('MULTISITE')}
 		<th>
 			Site
 		</th>
 
+
+		<td style='width:250px'>
+			{call e0 type=multiselect_ajax options=$options.site_id value=$siteid onchangeFunc=updateSite} 
+		</td>
 	
-	<td style='width:250px'>
-		{call e0 type=multiselect_ajax options=$options.site_id value=$siteid onchangeFunc=updateSite} 
-	</td>
 	
-	<td>
-		&nbsp;
-	</td>
+		<td>
+			&nbsp;
+		</td>
+	{/if}
+	
 	<td>
 		<button class="btn btn-sm btn-primary" onclick='$("#gwtree").jstree("open_all");'>Expand</button>
 	</td>

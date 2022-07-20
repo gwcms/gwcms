@@ -248,7 +248,7 @@ class FH
 		if($ln=$opts['ln'] ?? false)
 			$trln=$ln ? "/LN/$ln":"";
 		
-		$replace .= GW::ln("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
+		$replace .= GW::l("$trln/G/DATE/MONTH_KILMININKAS/".(int)$m[2]).' ';
 		//$replace .= (int)$m[3].' '. GW::ln("/G/DATE/DAYSHORT");
 		$replace .= (int)$m[3];
 		

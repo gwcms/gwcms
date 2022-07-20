@@ -493,10 +493,10 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	
 	function viewTree()
 	{
-		
-		$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
-		$this->tpl_vars['siteid'] = $site_id;
-				
+		if(GW::s('MULTISITE')){
+			$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
+			$this->tpl_vars['siteid'] = $site_id;
+		}
 	}
 	
 	
@@ -505,14 +505,17 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		//$list = $this->model->getFullTree();
 		$ln = $this->app->ln;
 		
+		$cond = null;
 		
-		
-		$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
-		$this->tpl_vars['siteid'] = $site_id;
-		
+		if(GW::s('MULTISITE')){
+			$site_id = isset($_GET['site_id']) ? explode(',',$_GET['site_id']) : [(int)$this->app->site->id];
+			$this->tpl_vars['siteid'] = $site_id;
+			
+			$cond = GW_DB::inCondition('site_id', $site_id);
+		}
 
 		
-		$list0 = $this->model->findAll(GW_DB::inCondition('site_id', $site_id), ['select'=>"id, site_id, pathname, title_{$ln}, active, parent_id, type, priority", 'key_field'=>'id', 'order'=>'priority']);
+		$list0 = $this->model->findAll($cond, ['select'=>"id, site_id, pathname, title_{$ln}, active, parent_id, type, priority", 'key_field'=>'id', 'order'=>'priority']);
 		
 		$lostfound=0;
 		
@@ -523,7 +526,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$sites[$item->site_id]=1;
 			$parent =  $item->parent_id==-1 ? 's'.$item->site_id : $item->parent_id;
 			
-			if($item->parent_id != -1 && !isset($list0[$item->parent_id]))
+			if($item->parent_id != -1 && !isset($list0[$item->parent_id]) || (!GW::s('MULTISITE') && $item->site_id))
 			{
 				$lostfound=1;
 				$parent="lost";;
@@ -547,18 +550,28 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		}
 		
 
-		
-		foreach($sites as $id => $x){
-			
-			$list[]=[
-			    "text"=>$this->options['site_id'][$id], //. " ($item->id) ($item->priority)",debug
-			    "parent"=>'#',
-			    "id"=>"s{$id}",
-			    //"state" => ["opened" => true, "selected" => true],
-			    "type" => 'tsite'
-			];
-			
+		if(GW::s('MULTISITE')){
+			foreach($sites as $id => $x){
+
+				$list[]=[
+				    "text"=>$this->options['site_id'][$id], //. " ($item->id) ($item->priority)",debug
+				    "parent"=>'#',
+				    "id"=>"s{$id}",
+				    //"state" => ["opened" => true, "selected" => true],
+				    "type" => 'tsite'
+				];
+
+			}			
+		}else{
+				$list[]=[
+				    "text"=>"Website", //. " ($item->id) ($item->priority)",debug
+				    "parent"=>'#',
+				    "id"=>"s0",
+				    //"state" => ["opened" => true, "selected" => true],
+				    "type" => 'tsite'
+				];			
 		}
+
 		
 		if($lostfound)
 			$list[]=['text'=>'Lost & found', "id"=>'lost','type'=>'t4','parent'=>'#'];
@@ -581,8 +594,10 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		
 		if($newparent[0]=='s'){
-			$site_id = substr($newparent,1,999999);
-			$item->site_id = $site_id;
+			if(GW::s('MULTISITE')){
+				$site_id = substr($newparent,1,999999);
+				$item->site_id = $site_id;
+			}
 			$newparent = '-1';
 			
 		}
