@@ -60,3 +60,4 @@ ALTER TABLE `shop_discountcode`
 ALTER TABLE `shop_discountcode`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 COMMIT;
+

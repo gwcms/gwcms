@@ -88,7 +88,7 @@
 									 {$addclass=[]}
 									 
 							           {if $smarty.get.modid==$mod->id}
-									   {$addclass[]="modification_selected"}
+									   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
 								   {/if}
 									 
 								   {if $mod->qty > 0 || $m->canSeeOrders()}

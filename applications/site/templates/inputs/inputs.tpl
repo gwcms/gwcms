@@ -61,7 +61,7 @@
 			    name="{$input_name}" 
 			    type="checkbox"  
 			    	id="{$id}" 
-			    value="1" {if $required}required="required"{/if} {if $value}checked="checked"{/if}
+			    value="1" {if $required}required="1"{/if} {if $value}checked="checked"{/if}
 			    {if $disabled}disabled="disabled"{/if}
 			    />
 		    
@@ -94,7 +94,11 @@
 			{foreach $options as $key => $opttitle}
 				<div class="form-check form-check-inline mb-0">
 				<label class="form-check-label mr-2">
-					<input type="radio" name="{$input_name}" value="{$key|escape}" {if $value==$key}checked="checked"{/if} class="form-check-input mr-1">{$opttitle}
+					<input type="radio" name="{$input_name}" value="{$key|escape}" 
+					       {if $value==$key}checked="checked"{/if} 
+					       {if $required}required="1"{/if} 
+					       class="form-check-input mr-1"
+					       >{$opttitle}
 				</label>
 				</div>
 				{if $newline}<br>{/if}
@@ -120,9 +124,10 @@
 			
 			<div class="row">
 			{foreach $options as $key => $opttitle}
-				<div class="col-md-4">
+				<div class="{if $newline}col-md-12{else}col-md-4{/if}">
 				 <label class="checkbox-inline"><input style="opacity:1" type="checkbox" name="{$input_name}" value="{$key|escape}" {if isset($selected[$key])}checked="checked"{/if}>{$opttitle}</label>
 				</div>
+				
 			{/foreach}
 			</div>			
 					

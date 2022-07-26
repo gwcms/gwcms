@@ -87,6 +87,7 @@ inbound_flight_details
 	{if $input->get(inp_type)=='select_ajax'}
 		{$opts.preload=1}
 		{$opts.modpath=$input->get('modpath')}
+		{$opts.after_input_f=editadd}
 	{/if}	
 	{if is_array($opts)}
 		{$field = array_merge($field, $opts)}
