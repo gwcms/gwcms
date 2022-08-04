@@ -47,7 +47,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			'payment_information_unstructured' => $args->paytext,
 			//'preselected_aspsp'                => 'LHVBEE22',
 			'preselected_locale'               => 'lt',
-			'checkout_email'                   => 'vidmantas.work@gmail.com',
+			//'checkout_email'                   => 'vidmantas.work@gmail.com',
 			'exp'                              => time() + (60 * 10), 
 		];
 			

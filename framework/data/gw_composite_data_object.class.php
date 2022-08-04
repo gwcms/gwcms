@@ -26,6 +26,13 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	{
 		$saved = 0;
 		foreach ($this->composite_content_base as $field => $item) {
+			
+			$opts = $this->composite_map[$field][1] ?? [];
+			
+			if($opts['readonly'] ?? false)
+				continue;
+
+			
 			//if it is requested to update only some fields not all
 			if (isset($update_context['update_only']))
 				if (!isset($update_context['update_only'][$field]))

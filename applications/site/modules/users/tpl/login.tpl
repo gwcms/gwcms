@@ -1,6 +1,11 @@
 {include "default_open.tpl"}
 
 {function user_login_form}
+            <div class="text-center">
+              <p class="g-color-gray-dark-v5 mb-10">{GW::ln('/m/DONT_HAVE_ACCOUNT')}
+                <a class="g-font-weight-600" href="{$ln}/direct/users/users/register">{GW::ln('/m/VIEWS/register')}</a></p>
+            </div>	
+	
 	<div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
               <header class="text-center mb-4">
                 <h1 class="h4 g-color-black g-font-weight-400">{GW::ln('/m/LOGIN_TO_YOUR_ACCOUNT')}</h1>

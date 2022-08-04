@@ -231,6 +231,6 @@ class Module_Usr extends GW_Common_Module
 		];	
 		
 		return $opts;	
-	}	
+	}
 
 }

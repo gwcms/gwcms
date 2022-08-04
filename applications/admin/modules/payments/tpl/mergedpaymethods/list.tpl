@@ -44,8 +44,8 @@
 	{$dl_smart_fields=[logo]}
 	
 	
-	
-	{$disabled_groups=array_flip(json_decode($m->modconfig->disabled_group,true))}
+	{$x=json_decode($m->modconfig->disabled_group,true)}
+	{$disabled_groups=array_flip($x|default:[])}
 	{function name=dl_prepare_item}
 		{if !$item->active || isset($disabled_groups[$item->group])}
 			{$item->set('row_class', 'gw_notactive')}

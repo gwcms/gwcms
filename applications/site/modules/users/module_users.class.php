@@ -9,8 +9,8 @@ class Module_Users extends GW_Public_Module
 		
 		
 		
-		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
-			$this->addRedirRule('/^ltf_/i',['options','ltf_common_module']);
+		if(GW::s('SPORT')){
+			$this->addRedirRule('/^ts_/i',['sportosistemos','ts_common_module']);
 		}
 		
 		parent::init();
@@ -68,7 +68,7 @@ class Module_Users extends GW_Public_Module
 		//gali ivykti jei nera kazkokio failo tada redirectina i index
 		if($this->app->user && !in_array($this->app->path, ['direct/users/users/profile', 'direct/users/users/logout']) && !isset($_SESSION['3rdAuthUser']) && !$this->testMissingInfo()){
 			
-			$this->setMessage(GW::ln('/m/PLEASE_COMPLETE_ACCOUNT_DETAILS'));
+			$this->setMessage(["text"=>GW::ln('/m/PLEASE_COMPLETE_ACCOUNT_DETAILS'),"type"=>GW_MSG_WARN]);
 			$this->app->jump('direct/users/users/profile');
 		}
 			
@@ -118,12 +118,9 @@ class Module_Users extends GW_Public_Module
 	{
 		
 		
-		if(GW::s('PROJECT_NAME') == 'events_ltf_lt' && $this->app->user){
-			$this->options['club'] = LTF_Clubs::singleton()->getOptions(["approved=1 OR user_id=?", $this->app->user->id]) +
-					['-1'=>GW::ln('/g/CANT_FIND_IN_LIST')];
-
-			$this->options['coach'] = LTF_Coaches::singleton()->getOptions(["approved=1 OR user_id=?", $this->app->user->id]) +
-					['-1'=>GW::ln('/g/CANT_FIND_IN_LIST')];
+		if(GW::s('SPORT') && $this->app->user){
+			$this->ts_initClubOptions();
+			$this->ts_initCoachOptions();
 		}
 		
 		$this->initCountryOpt();
@@ -215,6 +212,10 @@ class Module_Users extends GW_Public_Module
 	}
 	
 
+	
+	
+	
+	
 	
 	function doRegister()
 	{
@@ -591,6 +592,138 @@ class Module_Users extends GW_Public_Module
 		$vals = array_intersect_key($vals, $permit_fields);		
 	}	
 	
+	
+	function notifyAdminUserTransfer($user, $olduser)
+	{
+		$user_short = 
+						
+			"Name: ".$user->title."\n".
+			"Email: ".$user->email."\n".
+			"Phone: ".$user->phone."\n".
+			"Birthdate: ".$user->birthdate."\n".
+			
+			"----------old user------------\n".
+			"Name: ".$olduser->title."\n".
+			"Email: ".$olduser->email."\n".
+			"Phone: ".$olduser->phone."\n".
+			"Birthdate: ".$olduser->birthdate."\n".
+			
+			"----------meta info------------\n".
+			"Ip: ".$user->reg_ip."\n".
+			"country: ".$user->reg_country."\n".
+			"lang: ".$user->use_lang."\n".
+			"browser: ".$_SERVER['HTTP_USER_AGENT']."\n".
+			"";
+		
+		$link = GW::s('SITE_URL')."admin/lt/customers/users/".$user->id."/form";
+		
+		$opts=Array(
+			'subject'=>"Perkelti istoriniai duomenys",
+			'body'=>$user_short."Redagavimo forma admin sistemoje: ".$link,
+			'plain'=>1
+		);
+					
+		GW_Mail_Helper::sendMailAdmin($opts);
+	}	
+	
+	
+	function transferHistory($destination,$source)
+	{
+		$destination->fireEvent('BEFORE_CHANGES');
+		
+		if($source->lic_id2 > $destination->lic_id2){
+			$destination->lic_id2 = $source->lic_id2;
+		}
+		
+		if(!$destination->club){
+			$destination->club = $source->club;
+		}
+		
+		$fields = ['points_sngl','points_dbl','points_mx', 'rank_mx','rank_sngl','rank_dbl'];
+		
+		foreach($fields as $field)
+			$destination->$field = $source->$field;
+		
+		
+		
+		
+		//if($answers['remove_source']){
+			$source->fireEvent('BEFORE_CHANGES');
+			$source->active=1;
+			$source->removed=1;
+			$source->description .= ($source->description ? "\n" :'').date('Y-m-d H:i').' export to #'.$destination->id.' - '.$destination->title;
+			
+		//}
+		
+		$destination->description .= ($destination->description ? "\n" :'').date('Y-m-d H:i').' import from #'.$source->id.' - '.$source->title;
+		$destination->old_id = $source->id;
+		
+		
+		$source->updateChanged();
+		$destination->updateChanged();
+		
+		
+		$new_id = $destination->id;
+		$old_id = $source->id;
+		
+		$parttbl= TS_Participants::singleton()->table;
+		$eventstbl = TS_Events::singleton()->table;
+		$q=[];
+		$q[]="UPDATE `$parttbl` SET participant1=".(int)$new_id." WHERE participant1=".(int)$old_id;
+		$q[]="UPDATE `$parttbl` SET participant2=".(int)$new_id." WHERE participant2=".(int)$old_id;
+		$q[]="UPDATE `$parttbl` SET user_id=".(int)$new_id." WHERE user_id=".(int)$old_id;
+		$q[]="UPDATE `$parttbl` SET payeer_id=".(int)$new_id." WHERE payeer_id=".(int)$old_id;
+		
+		//$q[]="UPDATE `$parttbl` SET user_id=".(int)$new_id." WHERE user_id=".(int)$old_id;
+		$affected = 0;
+		foreach($q as $sql){
+			GW::db()->query($sql);
+			$affected += GW::db()->affected();
+		}		
+		
+		
+		
+		if($affected)
+			$this->setMessage("Participations count: ".$affected);
+			
+	
+	}
+	
+	function searchOldUser($user)
+	{
+		$found_historical = GW_Customer::singleton()->findAll(
+			['name=? AND surname=? AND birthdate=? AND id < 12745 AND removed=0', 
+			    $user->name, $user->surname, $user->birthdate]);
+		
+		
+		if(count($found_historical)==1){
+			
+			$this->transferHistory($user, $found_historical[0]);
+			$this->notifyAdminUserTransfer($user, $found_historical[0]);
+			$this->setMessage(GW::ln('/m/HISTORICAL_DATA_ATTACHED'));
+			
+		}elseif(count($found_historical)>1){
+			$found_historical = GW_Customer::singleton()->findAll(
+			['name=? AND surname=? AND birthdate=? AND id < 12745 AND removed=0', 
+			    $user->name, $user->surname, $user->birthdate], ['key_field'=>'id']);
+			
+			
+			$opts=Array(
+				'subject'=>"Perkelti istoriniu duomenu nepavyko yra rasta daugiau nei vienas atitikmuo",
+				'body'=>"naujas vartotojas: #{$user->id} $user->title\nRasti atitikmenys ids: ".implode(',', array_keys($found_historical)),
+				'plain'=>1
+			);
+
+			GW_Mail_Helper::sendMailAdmin($opts);	
+			$this->setPlainMessage("/m/AMBIGUOUS_DATA_OR_CALL_ADMIN", GW_MSG_WARN);
+		}else{
+			$this->setPlainMessage("/m/HISTORY_NO_DATA_OR_CALL_ADMIN", GW_MSG_INFO);
+			$user->old_id = $user->old_id-1;
+			
+		}
+		
+	}
+	
 	function doSaveProfile()
 	{
 		$this->userRequired();
@@ -599,9 +732,9 @@ class Module_Users extends GW_Public_Module
 		$vals = $_POST['item'];
 
 		
-		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
-			$vals = $this->ltf_SaveClub($vals);
-			$vals = $this->ltf_SaveCoach($vals);
+		if(GW::s('SPORT')){
+			$vals = $this->ts_SaveClub($vals);
+			$vals = $this->ts_SaveCoach($vals);
 		}
 		
 		$fields = $this->getFieldsConfig();
@@ -609,9 +742,18 @@ class Module_Users extends GW_Public_Module
 				
 		$this->filterPermitFields($vals,$permit_fields+['id'=>1]);	
 	
+		$item->fireEvent('BEFORE_CHANGES');
 		
 		$item->setValues($vals);
 		
+		
+		
+		if(
+			$item->birthdate && $item->name && $item->surname &&
+			(isset($item->changed_fields['birthdate']) || isset($item->changed_fields['surname']))  && $item->old_id < 1
+		){
+			$this->searchOldUser($item);
+		}
 		//d::dumpas($vals);
 		
 		$item->setValidators('profile');

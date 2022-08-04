@@ -63,7 +63,22 @@
 {if $fields.fields.birthdate &&  !$register}
 	{if $item->birthdate && $item->birthdate!='0000-00-00' && !isset($item->changed_fields.birthdate)}{$tmpreadonly=1}{else}{$tmpreadonly=0}{/if}
 	<div class="col-md-6">
-	{input field="birthdate" required=1 type=birthdate readonly=$tmpreadonly note=GW::ln('/M/USERS/ENTER_BIRTHDATE_NOTE') help=GW::ln('/M/USERS/RENTER_BIRTHDATE_HELP')}				
+		
+	{capture assign=tmp}
+		{GW::ln('/M/USERS/ENTER_BIRTHDATE_NOTE')}
+		
+		
+		{if $item->birthdate && $item->birthdate!='0000-00-00'}
+			<a title="{GW::ln('/g/REQUEST_TO_ADMIN')}" href="{$app->buildUri('direct/support/support',['message'=>"{GW::ln('/g/REQUEST_TO_ADMIN')} '{GW::ln("/M/users/FIELDS/birthdate")}'. {GW::ln("/g/PLEASE_CHANGE_MY_INF")}"])}">
+						<i class="fa fa-exclamation-triangle"></i>
+			</a>
+		{/if}		
+	{/capture}
+		
+	{input field="birthdate" required=1 type=birthdate readonly=$tmpreadonly note_raw=$tmp help=GW::ln('/M/USERS/RENTER_BIRTHDATE_HELP')}	
+	
+
+				
 	</div>
 {/if}
 
@@ -116,9 +131,9 @@
 	</div>
 {/if}
 {*sports*}
-{if $fields.fields.fivb_number &&  !$register}	
+{if $fields.fields.ts1_number &&  !$register}	
 	<div class="col-md-6">	
-	{input field="fivb_number" type=number help=GW::ln('/M/USERS/FIELD_HELP/fivb_number')}
+	{input field="ts1_number" type=number help=GW::ln('/M/USERS/FIELD_HELP/ts1_number')}
 	</div>
 {/if}
 {*sports*}

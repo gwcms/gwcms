@@ -265,7 +265,10 @@ function initSelect2Inputs1()
 				obj.val(prevval)
 			}else{
 				$(that).append(new Option(prevval, "not found: "+prevval, true, true));
-				alert(obj.data('objecttitle')+" id("+prevval+') Not available');
+				var msg = obj.data('objecttitle')+" id("+prevval+') Not available'
+				console.log("Select ajax error: "+msg);
+				gw_adm_sys.notification({ text: msg, type:2, time: 1000000  });
+				
 			}
 		}
 

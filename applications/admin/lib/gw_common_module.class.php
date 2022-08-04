@@ -215,6 +215,7 @@ class GW_Common_Module extends GW_Module
 	function getDataObjectById($load = true, $class = false, $access=GW_PERM_WRITE)
 	{
 		$id = $this->getCurrentItemId();
+		
 
 		if (!$id)
 			return $this->setError('/g/GENERAL/BAD_ARGUMENTS');
@@ -229,11 +230,14 @@ class GW_Common_Module extends GW_Module
 			if($load)
 				$item->load();
 		}
-
-		if ($load && !$item->loaded)
+		
+		if ($load && !$item->loaded){
 			return $this->setError('/g/GENERAL/ITEM_NOT_EXISTS');
+		}
 
 		$this->canBeAccessed($item, ['access'=>$access]);
+		
+		
 
 		return $item;
 	}

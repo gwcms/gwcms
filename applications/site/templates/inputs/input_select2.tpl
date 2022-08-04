@@ -1,10 +1,14 @@
 {* bootrap-multiselect https://select2.github.io/examples.html *}
-
-		<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={$GLOBALS.version_short}"></script>
-		<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>
-		
-
-
+{*if !$gwcmssite_input_select2_loaded2*}	
+	{*kazkas buvo isjunges*}
+	<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={$GLOBALS.version_short}"></script>
+	<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>
+	{assign var=$gwcmssite_input_select2_loaded2 value=1 scope=global}	
+{*/if*}	
+	{if $unify2}
+	{*notcompatible with select_ajax*}
+	  <link rel="stylesheet" href="{$assets}css/unify-components2_select2.css">
+	  {/if}
 
 <div>
 	
@@ -30,7 +34,7 @@
 	*}
 
 	
-{if !$gwcmssite_input_select2_loaded}	
+{if !$gwcmssite_input_select2_loaded1}	
 	<script type="text/javascript">
 		{*-1 to select other*}
 		function matchCustom(params, data) {
@@ -64,7 +68,7 @@
 		
 		$(document).ready(function() {	
 			
-			
+		
 			$(".gwselect2").select2({
 				matcher: matchCustom				
 			 });
@@ -72,7 +76,7 @@
 		});
 	</script>
 	
-	{assign var=gwcmssite_input_select2_loaded value=1 scope=global}	
+	{assign var=gwcmssite_input_select2_loaded1 value=1 scope=global}	
 {/if}
 
 	
@@ -82,7 +86,8 @@
 
 
 <style>
-	.select2-container{ z-index: 99999; width: 100% !important }
+	
+	.select2-container{ z-index: 999; width: 100% !important }
 	.select2-selection__arrow{ top: 20px !important; }
 	.select2-container--default .select2-selection--single .select2-selection__arrow b::before {
 		content: "" !important;
