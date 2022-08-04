@@ -749,6 +749,7 @@ class Module_Users extends GW_Public_Module
 		
 		
 		if(
+			GW::s('OLD_USER_DB') &&
 			$item->birthdate && $item->name && $item->surname &&
 			(isset($item->changed_fields['birthdate']) || isset($item->changed_fields['surname']))  && $item->old_id < 1
 		){
