@@ -351,6 +351,9 @@ function initSelect2Inputs1()
 
 	});
 
+	if(obj.data('disabled'))
+		opts.disabled = true;
+
 	if(obj.data('btnselectall'))
 	{
 		initSelectAll(obj, opts);
@@ -360,6 +363,9 @@ function initSelect2Inputs1()
 	}			
 
 	});
+	
+	
+
 
 }
 	
