@@ -1,10 +1,7 @@
-{if $readonly}
-	{foreach $value as $selected}
-		{$options[$selected]}{if !$selected@last},{/if}
-	{/foreach}
-{else}
 
-	
+	{if $empty_option}
+		{$options=[GW::ln('/g/EMPTY_OPTION')]+$options}
+	{/if}	
 	
 
 	{if $preload && $value}
@@ -31,6 +28,7 @@
 		 {if $value}data-value="{json_encode($value)|escape}"{/if}
 		 {if $datasource}data-source="{$datasource}"{/if}
 		 {if $sorting}data-sorting="1"{/if}
+		 {if $readonly}data-disabled="1"{/if}
 		 data-maximumselectionlength="{$maximumSelectionLength|default:1}"
 		 data-objecttitle="{$object_title}"
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
@@ -39,8 +37,11 @@
 		{if $empty_option}data-emptyoption="1" data-placeholder="{GW::ln('/g/EMPTY_OPTION')}"{/if}
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		 {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
+		 data-empty-option="{GW::ln('/g/EMPTY_OPTION_TITLE')}"
 		 >
 		{html_options options=$options selected=$value}
+		
+		
 	</select>
 	</div>
 
@@ -94,4 +95,3 @@
 	
 
 	
-{/if}

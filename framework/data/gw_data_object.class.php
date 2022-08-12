@@ -486,6 +486,24 @@ class GW_Data_Object
 			$item->loaded = true;
 			$item->fireEvent('AFTER_LOAD');
 		}
+		
+		if(isset($options['grouped'])){
+			$fields = $options['grouped'];
+			//d::dumpas($opts['grouped']);
+			
+			$entries1 = [];
+			
+			if(is_array($fields) && count($fields)==2){
+				foreach($entries as $idx => $itm)
+					$entries1[$itm->get($fields[0])][$itm->get($fields[1])][$idx] = $itm;
+			}elseif(is_array($fields) && count($fields)==3){
+				$entries1[$itm->get($fields[0])][$itm->get($fields[1])][$itm->get($fields[2])][$idx] = $itm;
+			}else{
+				$entries1[$itm->get($fields)][$idx] = $itm;
+			}
+			
+			$entries = $entries1;
+		}
 
 		return $entries;
 	}
