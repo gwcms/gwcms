@@ -2703,21 +2703,33 @@ class GW_Common_Module extends GW_Module
 		
 		$cfg = $this->getListConfig();
 
-		$field = $_GET['field'];
+		$field = $_GET['field'] ?? false;
 		
-		if(!isset($fields[$field]))
-			return $this->setError(GW::l('/g/NOT_EDITABLE')." ".$field);
-		
+
 		
 		$form['fields']=[];
+		
+		$fields = $this->__getListFields();
+		
+		if(!isset($fields[$field])){
+			$form['fields']['field']=['type'=>'select','options'=>$fields, 'empty_option'=>1, 'required'=>1];	
+		}
+		
 		$form['fields']['value'] = $cfg['inputs'][ $field ] ?? ['type'=>'text'];
 		$form['fields']['value']['required']=1;
 			
 		
 		
-		if(!($answers=$this->prompt($form, GW::l('/g/COLUMN_SET_VALUE').' '.$this->fieldTitle($field))))
+		if(!($answers=$this->prompt($form, GW::l('/g/COLUMN_SET_VALUE').' '.($field ? $this->fieldTitle($field) :'') )))
 			return false;			
 		
+		
+		if(!$field)
+			$field = $answers['field'];
+		
+		if(!isset($fields[$field])){
+			return $this->setError("{$field} not permited");
+		}
 				
 		$vars = $this->viewList();
 		
@@ -2758,6 +2770,34 @@ class GW_Common_Module extends GW_Module
 			$this->jump(false, ['field'=>$field]);
 		}
 		
+	}
+	
+	function doDragMoveSorting()
+	{
+		$fields = $this->__getListFields();
+		$field = $_GET['field'] ?? false;
+				
+		if(!isset($fields[$field])){
+			return $this->setError("{$field} not permited");
+		}		
+		
+		if(!$this->list_params['order']!="{$field} ASC"){
+			$this->list_params['order'] = "{$field} ASC";
+			//Navigator::jump($_SERVER['REQUEST_URI']);
+		}
+		
+		
+		$ftitle = ($field ? $this->fieldTitle($field) :'');
+		
+		$this->tpl_vars['dl_dragdropmove'] = 1;
+		$this->tpl_vars['dl_dragdropmove_field'] = $field;
+			
+		
+		if(isset($_GET['confirm'])){
+			$this->jump();
+		}
+		
+		$this->askConfirm("Drag & drop sorting is active press confirm to exit");
 	}
 	
 	function doAutoTranslate()
@@ -2878,6 +2918,9 @@ class GW_Common_Module extends GW_Module
 	{
 		$positions = json_decode($_POST['positions'], true);
 		
+		$workfield = $_POST['rearragefield'] ?: 'priority';
+		$offset = $_POST['offset'] ?: 0;
+		
 		foreach($positions as $itm)
 			if($itm['id'] ?? false)
 				$ids[] = $itm['id'];
@@ -2891,7 +2934,7 @@ class GW_Common_Module extends GW_Module
 		$updated = 0;
 				
 		foreach($items as $item){
-			$item->priority = $positions[$item->id];
+			$item->$workfield = $positions[$item->id]+$offset;
 			if($item->changed_fields){
 				$updated++;
 				$item->updateChanged();

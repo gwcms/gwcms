@@ -46,13 +46,14 @@
 		</style>
 		<script>
 			var action_url = "{$m->buildUri(false,['act'=>'doSavePositions'])}";
+			var rearragefield = "{$dl_dragdropmove_field}";
 			var sortabledata;
 			
 			function saveSortings()
 			{
 				var tmp = JSON.stringify(sortabledata[0], null, ' ');
 				
-				$.post(action_url, { 'positions':tmp }, function(data){ 
+				$.post(action_url, { 'positions':tmp, 'rearragefield': rearragefield, offset:1 }, function(data){ 
 
 					gwcms.showMessage(data, 0, 500);
 					setTimeout("$('#updated_box').fadeOut();",3000);

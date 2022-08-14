@@ -387,6 +387,7 @@
     <i id="addcomment">Pridėti komentarą</i>
     <i id="comments">Komentarai</i>
     <i id="doMultiSetValue">Grupinis vertės keitimas</i>
+    <i id="doDragMoveSorting">Drag &amp; drop vertės rikiavimas</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>
