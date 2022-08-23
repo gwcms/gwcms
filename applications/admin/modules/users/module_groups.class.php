@@ -58,6 +58,8 @@ class Module_Groups extends GW_Common_Module
 		}
 					
 		$selected = GW_Permissions::getByGroupId($item->id);
+		
+		//d::dumpas($selected);
 
 		return compact(['item','list', 'selected']);
 	}
@@ -86,6 +88,14 @@ class Module_Groups extends GW_Common_Module
 			
 		$item->load();
 		
+		$tmp = [];
+		foreach($vals['paths'] as $key =>  $val)
+			if($val['enabled'] ?? false)
+				$tmp[$key] = $val['access_level'];
+		
+		$vals['paths'] = $tmp;
+					
+			
 		GW_Permissions::save($vals['id'], $vals['paths']);
 		
 		$this->setPlainMessage('/g/SAVE_SUCCESS');

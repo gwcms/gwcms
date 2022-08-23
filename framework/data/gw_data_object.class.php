@@ -553,7 +553,10 @@ class GW_Data_Object
 		if(is_numeric($conditions))
 			$conditions="a.id = $conditions";
 
-		return count($r = $this->findAll($conditions, $options)) ? $r[0] : false;
+		$r = $this->findAll($conditions, $options);
+		
+		// jei key butu ne 0,1,2 $r[0] nesuveiks
+		return count($r) ? reset($r) : false;
 	}
 	
 	function loadVals($fields = "a.*")

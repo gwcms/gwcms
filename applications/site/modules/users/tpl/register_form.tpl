@@ -4,6 +4,9 @@
                 <h1 class="h4 g-color-black g-font-weight-400">{GW::ln('/m/REGISTER_FORM_HEADING')}</h1>
               </header>
 
+	      
+	      {GW::ln('/m/REGISTER_NOTES')}
+	      
               <!-- Form -->
               <form id="regForm" class="g-py-15" action="{$smarty.server.REQUEST_URI}" method="post">
 		<input type="hidden" name="act" value="do:register" />		      

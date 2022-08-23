@@ -45,6 +45,12 @@ class GW_Permissions
 		return self::getDB()->fetch_assoc("SELECT path,access_level FROM `" . self::$table . "` WHERE group_id=" . (int) $group_id);
 	}
 
+	
+	static function testPermission($access_level, $requestAccess)
+	{
+		return $access_level & $requestAccess;
+	}
+	
 	static function &__getPrmByMltGrpIds($gids, $path = false)
 	{
 
@@ -54,7 +60,7 @@ class GW_Permissions
 			return $empty;
 		}
 
-		$sql = "SELECT DISTINCT path, access_level FROM `" . self::$table . "` WHERE (";
+		$sql = "SELECT path, max(access_level )FROM `" . self::$table . "` WHERE (";
 		foreach ((array)$gids as $gid)
 			$sql.= ' group_id=' . (int) $gid . ' OR ';
 
@@ -64,9 +70,8 @@ class GW_Permissions
 		if ($path)
 			$sql.=" AND path = '" . GW_DB::escape($path) . "'";
 
-		$data = self::getDB()->fetch_assoc($sql);
-		;
-
+		$data = self::getDB()->fetch_assoc($sql. " GROUP BY path");
+		
 		return $data;
 	}
 
@@ -80,6 +85,10 @@ class GW_Permissions
 		return $cache_var;
 	}
 
+	
+	/**
+	 * Perdaryt kad grazintu access leveli
+	 */
 	static function canAccess($path, $gids, $load_once = true, $rootcheck=true)
 	{
 		if (self::isRoot($gids)){
@@ -96,14 +105,14 @@ class GW_Permissions
 			$paths = self::__getPrmByMltGrpIds($gids, $path);
 		
 		if(isset($paths[$path]))
-			return true;
+			return $paths[$path];
+		
+		//jei per permissionus uzdeta daugiau teisiu tai is permissionu ims
 		
 		$tmpacc = GW::$context->app->sess('temp_read_access');
 		
-		
-		if(is_array($tmpacc) && $tmpacc[$path]){
-			return true;
-		}
+		if(is_array($tmpacc) && ($tmpacc[$path] ?? false))
+			return GW_PERM_READ;
 	}
 	
 	static function setTempReadAccess($path, $ids)
@@ -113,12 +122,7 @@ class GW_Permissions
 		GW::$context->app->sess('temp_read_access', $x);
 	}
 	
-	static function setTempReadAccessMod($path, $set=1)
-	{
-		$x = GW::$context->app->sess('temp_read_access_mod');
-		$x[$path] = $set;
-		GW::$context->app->sess('temp_read_access_mod', $x);
-	}	
+
 	
 	static function getTempReadAccess($path)
 	{

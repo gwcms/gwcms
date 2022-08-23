@@ -100,6 +100,7 @@
 {*sports*}
 {if $fields.fields.club &&  !$register}
 	<div class="col-md-6">
+		{$options.club=$options.club_long}
 		{include "inputs/select2other.tpl" field=club}
 	</div>
 {/if}

@@ -247,7 +247,7 @@ class GW_Common_Module extends GW_Module
 	 */
 	function common_doDelete()
 	{
-		if (!$item = $this->getDataObjectById(true, false, GW_PERM_WRITE))
+		if (!$item = $this->getDataObjectById(true, false, GW_PERM_REMOVE))
 			return false;
 
 		$this->fireEvent('BEFORE_DELETE', $item);
@@ -1559,13 +1559,17 @@ class GW_Common_Module extends GW_Module
 		if($item->id)
 			$item->load_if_not_loaded();
 		
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		if($this->access_level & $requestAccess){
+			return true;
+		}
+
 		
 		
 		if(!$this->app->user->isRoot() && GW_Permissions::getTempReadAccessMod(implode('/',$this->module_path)) ){
 			return $this->readOnlyAccess($item, $opts);
 		}
-		
-		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
 		if(isset($item->content_base['access']))
 		{
@@ -1576,9 +1580,8 @@ class GW_Common_Module extends GW_Module
 			}
 				
 		}else{
-			$result = true; //$item->canBeAccessedByUser($this->app->user);
-		}
-		
+			$result = $this->access_level & $requestAccess; //$item->canBeAccessedByUser($this->app->user);
+		}	
 		
 		if($this->allowed_ids){
 			if(isset($this->allowed_ids[$item->id])){
@@ -3034,4 +3037,10 @@ class GW_Common_Module extends GW_Module
 		
 		$this->jump('');			
 	}	
+	
+	function offerFollowingAction($action, $args=[])
+	{
+		$this->setMessage('<a class="btn btn-primary" href="'.$this->buildUri('', $args+['act'=>$action]).'">'.GW::l('/m/VIEWS/'.$action).'</a>');		
+	}
+	
 }

@@ -199,7 +199,7 @@ class GW_Site_Application extends GW_Application
 	}
 	
 	
-	function processModule($path_info, $request_params)
+	function processModule($path_info, $request_params, $access_level=false)
 	{
 		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
 			$this->jumpToFirstChild();

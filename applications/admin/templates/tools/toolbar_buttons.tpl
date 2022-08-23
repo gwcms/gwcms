@@ -1,6 +1,7 @@
 {function name=do_toolbar_buttons_addnew}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
 	{toolbar_button title=GW::l('/g/CREATE_NEW') iconclass='gwico-Plus' href=$m->buildUri('form',[id=>0])}
-	
+	{/if}
 {/function}
 
 {function name=do_toolbar_buttons_filters}

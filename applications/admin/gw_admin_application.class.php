@@ -34,7 +34,10 @@ class GW_Admin_Application extends GW_Application
 		if($this->user->isRoot())
 			return true;
 		
-		return $page->get('active') && GW_Permissions::canAccess($page->get('path'), $this->user->group_ids_cached) ;
+		if(!$page->get('active'))
+			return false;
+		
+		return  GW_Permissions::canAccess($page->get('path'), $this->user->group_ids_cached) ;
 	}
 	
 	function jumpToFirstChild()
@@ -210,8 +213,10 @@ class GW_Admin_Application extends GW_Application
 		$this->getAdmPage($path_info['dirname'], $path_info['module'] ?? $path_info['dirname']);
 		$this->preRun();
 		
+		$access_level = $this->canAccess($this->page);
 		
-		if (!$this->canAccess($this->page)){			
+		
+		if (!$access_level){			
 			if ($this->user)
 				$this->jumpToFirstChild();
 			else{
@@ -221,7 +226,7 @@ class GW_Admin_Application extends GW_Application
 		}
 		
 		
-		$this->processModule($path_info, $_REQUEST);
+		$this->processModule($path_info, $_REQUEST, $access_level);
 	}	
 	
 	function idInPath($id)

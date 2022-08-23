@@ -72,7 +72,11 @@
 {/function}
 
 {function name=dl_actions_delete}
-	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_REMOVE,nodie=>1])}
+		{if $itemactions}
+			{$caption=GW::l('/g/REMOVE')}
+			{$addlitag=1}
+		{/if}		
 		{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 shift_button=1}
 	{/if}
 {/function}
@@ -121,7 +125,13 @@
 
 
 {function name=dl_actions_clone}
-	{list_item_action_m url=["`$item->id`/form", [act=>doClone, id=>$item->id]] iconclass="fa fa-files-o text-mint"}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{if $itemactions}
+			{$caption=GW::l('/g/VIEWS/doClone')}
+			{$addlitag=1}
+		{/if}
+		{list_item_action_m url=["`$item->id`/form", [act=>doClone, id=>$item->id]] iconclass="fa fa-files-o text-mint"}
+	{/if}
 {/function}
 
 {function name=dl_actions_ext_actions}
@@ -157,10 +167,14 @@
 
 
 {function dl_cl_actions_invertactive}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
 	<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doInvertActive])}', 1)">{GW::l('/A/VIEWS/doInvertActive')}</option>
+	{/if}
 {/function}
 
 {function dl_cl_actions_dialogremove}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_REMOVE,nodie=>1])}
 	<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>
+	{/if}
 {/function}
 

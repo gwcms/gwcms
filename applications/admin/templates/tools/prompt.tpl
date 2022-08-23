@@ -13,6 +13,7 @@
 	
 	{foreach $smarty.get as $key =>$val}
 		{if $key=='url'}{continue}{/if}
+		{if is_array($val) || is_object($val)}{$val=json_encode($val, true)}{/if}
 		<input type="hidden" name="{$key|escape}" value="{$val|escape}">
 	{/foreach}
 	

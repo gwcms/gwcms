@@ -23,6 +23,22 @@
         <en>Female</en>
       </i>
     </i>
+    
+    
+    <i id="access_level_c">
+	<i id="15">1 | 2 | 4 | 8</i>
+	<i id="4">4</i>
+	<i id="5">1 | 4</i>
+	<i id="7">1 | 2 | 4</i>
+	
+    </i>    
+    <i id="access_level">
+	<i id="15">read+write+delete</i>
+	<i id="4">options</i>
+	<i id="5">read+options</i>
+	<i id="7">read+write+options</i>
+	
+    </i>
   </i>
   <i id="FIELDS">
     <i id="email">

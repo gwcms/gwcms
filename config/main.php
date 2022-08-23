@@ -51,7 +51,7 @@ define('GW_GENERIC_ERROR', 100);
 GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
-GW::s('GW_CMS_VERSION', '3.5');
+GW::s('GW_CMS_VERSION', '3.7');
 GW::s('GW_LANG_SEL_BY_GEOIP',0);
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
@@ -70,6 +70,9 @@ GW::s('PHP_CLI_LOCATION', '/usr/bin/php');
 //https://stackoverflow.com/questions/27560361/how-to-test-php-bitwise-function-input-parameters
 define('GW_PERM_READ',1);
 define('GW_PERM_WRITE',2);
+define('GW_PERM_OPTIONS',4);
+define('GW_PERM_REMOVE',8);
+
 
 
 

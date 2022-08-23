@@ -507,7 +507,7 @@ class GW_Application
 		return $module;
 	}
 
-	function processModule($path_info, $request_params)
+	function processModule($path_info, $request_params, $access_level=false)
 	{
 		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
 			$this->jumpToFirstChild();
@@ -522,6 +522,7 @@ class GW_Application
 		//d::dumpas($path_info);
 		
 		$module->_args = ['params' => $path_info['params'], 'request_params' => $request_params];
+		$module->access_level = $access_level;
 		$module->init();
 
 		//if(GW::$app->inner_request)

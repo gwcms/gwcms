@@ -33,7 +33,14 @@
 	<td>{$item->get(title)}</td>
 
 	<td nowrap>
-		<input type="checkbox" name="item[paths][{$path|escape}]" value="1" {if $selected.$path}CHECKED{/if} />
+		<input class='permcheck' type="checkbox" name="item[paths][{$path|escape}][enabled]" value="1" {if $selected.$path}CHECKED{/if} />
+	</td>
+	<td>
+		{* perdaryt kad cia butu hidden inputas ir checkboxai  pakeitus perskaiciuotu su or operatorium*}
+		
+		<select class='access_level' name='item[paths][{$path|escape}][access_level]'>
+			{html_options options=GW::l('/m/OPTIONS/access_level') selected=$selected.$path}
+		</select>
 	</td>
 </tr>
 
@@ -50,5 +57,26 @@
 </form>
 
 </div>
+
+
+
+{capture append=footer_hidden}
+	<script>
+require(["gwcms"], function(){	
+	$('.permcheck').on('change',function(){
+		if ($(this).is(':checked')) {
+			$(this).parents('tr').find('.access_level').fadeIn();
+		}else{
+			$(this).parents('tr').find('.access_level').fadeOut();
+		}		
+	}).click(function(){ $(this).trigger('change') }).trigger('change')
+})
+
+	</script>
+	<style>
+		.access_level{ display:none }
+	</style>
+{/capture}
+
 
 {include file="default_close.tpl"}
