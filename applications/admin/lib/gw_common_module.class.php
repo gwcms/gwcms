@@ -2162,6 +2162,15 @@ class GW_Common_Module extends GW_Module
 		$i0 = $this->model;
 		
 		
+		if(
+			!GW_Permissions::testPermission($this->access_level, GW_PERM_OPTIONS) &&
+			!GW_Permissions::testPermission($this->access_level, GW_PERM_READ)
+		){
+			return $this->setMessage('No options / no read permission');
+		}
+
+			
+		
 		$opts = method_exists($this, 'getOptionsCfg') ? $this->getOptionsCfg() : [];
 		
 		$idx_field = $opts['idx_field'] ?? 'id';
