@@ -53,7 +53,8 @@ class Module_Usr extends GW_Common_Module
 	function canBeAccessed($item, $opts=[])
 	{	
 		//parent::canBeAccessed($item);
-		$item->load_if_not_loaded();
+		if($item->id)
+			$item->load_if_not_loaded();
 		
 		$result = ($this->rootadmin) || $item->id==0 || $this->isSuperAdmin || ($item->parent_user_id == $this->app->user->id);
 		

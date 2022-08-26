@@ -66,7 +66,7 @@ class GW_DB
 			$this->link->select_db($database) or $this->trigger_error();
 
 		//comment next line if mysql v < 4.1
-		$this->link->query('SET names "UTF8"');
+		$this->link->query('SET names "utf8mb4"');
 
 		if (isset($this->conf['INIT_SQLS'])) {
 			$list = explode(',', $this->conf['INIT_SQLS']);
@@ -143,11 +143,6 @@ class GW_DB
 		$this->error = false;
 
 		$start = microtime(true);
-		
-		if(GW::s('LOG_INSERT_QUERIES'))
-			if(stripos($cmd, 'insert into')!==false || stripos($cmd, 'replace into')!==false){
-				$this->logint("$cmd  || ".$_SERVER['REMOTE_ADDR'].' || '.$_SERVER['REQUEST_URI']);
-			}
 		
 		
 		if($this->sql_collect){

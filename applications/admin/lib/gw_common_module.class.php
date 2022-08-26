@@ -1556,12 +1556,13 @@ class GW_Common_Module extends GW_Module
 	{
 		$result = false;
 		
-		if($item->id)
+		if($item->id){
 			$item->load_if_not_loaded();
+		}
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
-		if($this->access_level & $requestAccess){
+		if(($this->access_level & $requestAccess) || $this->app->user->isRoot()){
 			return true;
 		}
 
