@@ -76,13 +76,13 @@
 			processed=>0,
 			obj_type=>$m->model->table,
 			obj_id=>$item->id,orderflds=>1,
-			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price{$extra}",ord=>'payment_status DESC',clean=>2])}		
+			flds=>"group_id,user_title,user_email,pay_time,payment_status,pay_test,qty,unit_price{$extra}",ord=>'payment_status DESC',clean=>2])}		
 	{else}
 		{$url=$app->buildUri("payments/orderitems",[
 			processed=>0,
 			context_obj_type=>$m->model->table,
 			context_obj_id=>$item->id,orderflds=>1,
-			flds=>"group_id,user_title,pay_time,payment_status,pay_test,qty,unit_price",groupby=>title,ord=>'obj_id,payment_status DESC',clean=>2])}		
+			flds=>"group_id,user_title,user_email,pay_time,payment_status,pay_test,qty,unit_price",groupby=>title,ord=>'obj_id,payment_status DESC',clean=>2])}		
 	{/if}
 
 	{if isset($counts.orders[$item->id])}

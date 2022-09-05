@@ -387,18 +387,28 @@ class Module_Docs extends GW_Public_Module
 	}
 	
 	function viewDocument()
-	{
-	
-		if(!$this->app->user || !GW_Permissions::canAccess('form/answers', $this->app->user->group_ids))
+	{		
+		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
+		//d::dumpas($adm=GW_User::singleton()->find(['id=?', $adminid]));
+		/*
+		d::dumpas([
+		  $adminid,
+		    $adm=GW_User::singleton()->find(['id=?', $adminid]), 
+		    GW_Permissions::canAccess('form/answers', $adm->group_ids),
+		    $adminid && $adm=GW_User::singleton()->find(['id=?', $adminid]) && GW_Permissions::canAccess('form/answers', $adm->group_ids)
+		]);
+		*/
+		
+		if($adminid && ($adm=GW_User::singleton()->find(['id=?', $adminid])) && GW_Permissions::canAccess('forms/forms', $adm->group_ids)){
+			//d::dumpas("hello {$adm->title}");
+			$this->app->user = $adm;
+		}elseif(!$this->app->user || !GW_Permissions::canAccess('forms/forms', $this->app->user->group_ids))
 		{
 			$this->userRequired();
 			return $this->setError("Admin only");
-			
 		}
 		
 		$this->admin_access = true;
-		
-		
 		$this->viewItem();
 	}
 }

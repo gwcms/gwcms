@@ -142,8 +142,8 @@ class Module_Repository extends GW_Common_Module
 		
 		$cfg = parent::getListConfig();
 		
-		
-		
+		$cfg['inputs']['filename']=['type'=>'text'];
+	
 						
 		$cfg["fields"]['ico'] = 'L';
 		
