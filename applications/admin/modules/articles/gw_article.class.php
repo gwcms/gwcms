@@ -10,5 +10,13 @@ class GW_Article extends GW_Composite_Data_Object
 		'image' => Array('gw_image', Array('dimensions_resize'=>'800x600', 'dimensions_min'=> '100x100')),
 	);
 	
-	
+	public $ownerkey = 'articles/articles';
+	public $extensions = ['attachments'=>1];
+
+
+
+	function getAttachments($ln)
+	{
+		return $this->extensions['attachments']->findAll(["field=?", "attachments_{$ln}"]);		
+	}	
 }

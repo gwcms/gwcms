@@ -22,7 +22,7 @@
 	
 	
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete,clone]}
 
 	{$dl_output_filters=[
 		value=>truncate,

@@ -58,8 +58,10 @@ class Module_Attachments extends GW_Common_Module
 	
 	
 	function canBeAccessed($item, $opts=[]) 
-	{
-		$item->load_if_not_loaded();
+	{		
+		if($item){$item->load_if_not_loaded();}
+		
+		
 		$result = $this->checkOwnerPermission($item->owner_type);
 
 		if (!isset($opts['die']) || $result)
@@ -239,6 +241,8 @@ class Module_Attachments extends GW_Common_Module
 		$cfg = parent::getListConfig();
 				
 		$cfg['fields']['filename'] = 'L';	
+		$cfg['fields']['file'] = 'L';	
+		$cfg['fields']['image'] = 'L';	
 						
 		return $cfg;
 	}	

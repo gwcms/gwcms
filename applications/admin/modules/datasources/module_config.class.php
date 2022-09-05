@@ -70,6 +70,19 @@ class Module_Config  extends GW_Common_Module
 		echo "</form>";
 		echo "<script>require(['gwcms'], function(){ $('#jsoncodeform').submit(); })</script>";
 		
-	}	
+	}
+
+
+	function getListConfig($item=false)
+	{
+		
+		$cfg = parent::getListConfig();
+
+		
+		$cfg['inputs']['value']=['type'=>'text'];	
+		$cfg['inputs']['key']=['type'=>'text'];	
+		
+		return $cfg;
+	}
 
 }

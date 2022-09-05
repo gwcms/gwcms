@@ -15,6 +15,10 @@
 			<en>Title</en>
 			<lt>Pavadinimas</lt>
 		</i>
+		<i id="short">
+			<en>Short desciprtion</en>
+			<lt>Trumpai</lt>
+		</i>		
 		<i id="desc">
 			<en>Description</en>
 			<lt>Aprašymas</lt>
@@ -23,7 +27,12 @@
 		<i id="group_id">
 			<en>Group</en>
 			<lt>Grupė</lt>
-		</i>		
+		</i>	
+		<i id="attachments">	
+			<en>Images / files</en>
+			<lt>Paveisliukai / bylos</lt>			
+		</i>
+		
 	</i>
 	
 	
