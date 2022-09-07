@@ -1,5 +1,10 @@
 <?php
 
+
+///ideja kad isstatyt komentaru submoduliui readonly teise
+//canBeAccessed funkcija patikrina ar norimas redaguoti irasas yra to paties vartotojo kurtas
+//sis submodulis yra legacy reiktu pajungt kaip ant payments/ordergroups
+
 include __DIR__.'/module_items.class.php';
 
 class Module_Comments extends Module_Items
@@ -122,5 +127,27 @@ class Module_Comments extends Module_Items
 		]];
 		
 	}
+	
+	function canBeAccessed($item, $opts=[])
+	{
+		$result = false;
+		
+		if($item->id){
+			$item->load_if_not_loaded();
+		}
+		
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		//leisti komentara sukurti
+		if(!$item->id)
+			return true;
+		
+		
+		if( ($requestAccess & GW_PERM_WRITE) && $item->id && $this->app->user->id == $item->user_create){
+			return true;
+		}else{
+			return parent::canBeAccessed($item, $opts);
+		}
+	}	
 	
 }
