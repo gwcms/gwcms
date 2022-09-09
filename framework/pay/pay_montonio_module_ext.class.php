@@ -50,6 +50,9 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			//'checkout_email'                   => 'vidmantas.work@gmail.com',
 			'exp'                              => time() + (60 * 10), 
 		];
+		
+		if($user->email)
+			$payment_data['checkout_email'] = $user->email;
 			
 		
 		if($args->paytype=='montonio_cc'){

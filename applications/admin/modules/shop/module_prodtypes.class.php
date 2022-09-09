@@ -62,4 +62,35 @@ class Module_prodtypes extends Module_GenericClassificator
 		}
 		$this->jump();		
 	}	
+	
+	
+	
+	
+	function getListConfig($item=false)
+	{
+		
+		$cfg = parent::getListConfig();
+
+		
+
+
+		
+		$cfg['inputs']['title']=['type'=>'text'];	
+		$cfg['inputs']['aka']=['type'=>'text'];	
+		$cfg['inputs']['fields']=['type'=>'multiselect', 'options'=>$this->options['fields']];	
+		
+		
+		
+		
+
+		//d::dumpas($cfg['inputs']);
+
+		
+		return $cfg;
+	}	
+	
 }
+
+
+
+

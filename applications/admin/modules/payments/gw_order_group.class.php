@@ -4,11 +4,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 {
 	
 	public $composite_map = [
-		'items' => ['gw_related_objecs', ['object'=>'GW_Order_Item','relation_field'=>'group_id']],
-		'pay_confirm' => ['gw_composite_linked', ['object'=>'GW_Paysera_Log','relation_field'=>'pay_confirm_id']],
-		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id']],
+		'items' => ['gw_related_objecs', ['object'=>'GW_Order_Item','relation_field'=>'group_id','readonly'=>1]],
+		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id','readonly'=>1]],
 		'banktransfer_confirm'=>['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '100x100']],
-		'discountcode' => ['gw_composite_linked', ['object'=>'Shop_DiscountCode','relation_field'=>'discount_id']]
+		'discountcode' => ['gw_composite_linked', ['object'=>'Shop_DiscountCode','relation_field'=>'discount_id','readonly'=>1]]
 	];		
 	
 	public $encode_fields = [
@@ -34,7 +33,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'keyval' => 1
 	];	
 	
-	
+		
 	function updateTotal()
 	{
 		$amount = 0;
@@ -80,6 +79,19 @@ class GW_Order_Group extends GW_Composite_Data_Object
 				foreach($this->items as $item)
 					$item->delete();
 			break;
+			
+			case 'AFTER_LOAD':
+
+				if($this->pay_type)
+					$this->composite_map['pay_confirm'] = ['gw_composite_linked', ['object'=>'','relation_field'=>'pay_confirm_id','readonly'=>1]];
+				
+				if($this->pay_type=='paysera')
+					$this->composite_map['pay_confirm'][1]['object'] = 'GW_Paysera_Log';
+				
+				if($this->pay_type=='montonio')
+					$this->composite_map['pay_confirm'][1]['object'] = 'GW_PayUniversal_Log';
+				
+			break;			
 		}
 		
 		return parent::eventHandler($event, $context);
@@ -199,7 +211,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			$coupon->used_amount = $coupon->used_amount + $this->amount_coupon;
 			$coupon->updateChanged();
 		}
-	}	
+	}
 	
 			
 }

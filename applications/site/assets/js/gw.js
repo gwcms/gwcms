@@ -99,7 +99,12 @@ var GW = {
 
 			$.HSCore.components.HSModalWindow.init('.js-autonomous-popup', {
 				autonomous: true,
-				onClose: conf.hasOwnProperty('onClose') ? conf.onClose : false
+				onClose: function(){  
+					GW.afterclose_dialog2(); 
+					
+					if(conf.hasOwnProperty('onClose'))
+						conf.onClose() 
+				}
 			});			
 		})
 		GW.loadCss([
@@ -110,14 +115,22 @@ var GW = {
 	
 	},
 	
+	afterclose_dialog2: function(){
+		console.log('closing..'); 
+		$('#modalDialogDrop').html(""); 
+	},
+	
 	close_dialog2: function(context)
 	{
+		
 		if(GW.close_callback)
 		{
 			GW.close_callback(context)
 			GW.close_callback = false;
 		}
+		
 		Custombox.modal.close();
+		GW.afterclose_dialog2();
 	},	
 
 	loaded_assets: {},

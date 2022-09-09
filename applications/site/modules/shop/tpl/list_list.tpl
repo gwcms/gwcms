@@ -10,7 +10,12 @@
 	</tr>
 		
 	{foreach $list as $item}
-		{$link=$app->buildUri("direct/shop/shop/p/{FH::urlStr($item->title)}",[id=>$item->id])}
+		{if $item->exitlink}
+			{$link=$app->buildUri($item->exitlink,[from_product_id=>$item->id])}
+		{else}
+			{$link=$app->buildUri("direct/shop/shop/p/{FH::urlStr($item->title)}",[id=>$item->id])}
+		{/if}
+		
 	<tr>
 		<td>
 			<a href="{$link}" class="prodLink">{call name="product_image" product=$item size="20x20"}</a>
