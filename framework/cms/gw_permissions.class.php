@@ -103,7 +103,7 @@ class GW_Permissions
 			$paths = self::getPrmByMltGrpIds($gids);
 		else
 			$paths = self::__getPrmByMltGrpIds($gids, $path);
-		
+	
 		if(isset($paths[$path]))
 			return $paths[$path];
 		

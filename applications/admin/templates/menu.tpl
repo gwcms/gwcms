@@ -40,13 +40,20 @@
 								
 								<li class="{if $active} active-sub active{/if}">
 
-									<a href="{$app->buildUri($item->path)}">
+									{if count($childs)==1}
+										{$fitem=current($childs)}
+										{$link = $app->buildUri($fitem->path)}
+									{else}
+										{$link = $app->buildUri($item->path)}
+									{/if}
+									
+									<a href="{$link}">
 										{call "menudisplayicon"}
 										<span class="menu-title">{$item->get(title,$ln)}</span>
-										{if count($childs)}<i class="arrow"></i>{/if}
+										{if count($childs) >1 || $active}<i class="arrow"></i>{/if}
 									</a>
 
-									{if count($childs)}
+									{if count($childs) > 1 || $active}
 										{if $active}<!--active-->{/if}
 										<ul class="collapse {if $active}in{/if}">
 											{foreach from=$childs item=sitem}

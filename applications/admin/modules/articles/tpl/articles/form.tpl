@@ -12,7 +12,7 @@
 
 
 {call e field=attachments type=attachments 
-	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>99]
 	preview=[thumb=>'50x50']
 	i18n=4
 }

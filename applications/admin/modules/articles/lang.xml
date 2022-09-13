@@ -48,12 +48,20 @@
 			<en>Articles</en>
 			<lt>Straipsniai</lt>
 		</i>
-		<i id="info">
-			<i id="model">GW_Article</i>
-			<i id="iconclass">fa fa-newspaper-o</i>		
-		</i>
+
 		
 		<i id="childs">
+			<i id="articles">
+				<i id="title">
+					<en>Articles</en>
+					<lt>Straipsniai</lt>
+				</i>
+				<i id="info">
+					<i id="model">GW_Article</i>
+					<i id="in_menu">0</i>		
+				</i>
+			</i>
+								
 			<i id="groups">
 				<i id="title">
 					<en>Groups</en>

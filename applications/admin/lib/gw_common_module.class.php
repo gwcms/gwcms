@@ -42,6 +42,9 @@ class GW_Common_Module extends GW_Module
 	public $lgr;
 	public $auto_translate_enabled =  true;
 	public $readonly = false;
+	
+	//go with user_id col to identify owner of record
+	public $canCreateNew = null;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -98,6 +101,11 @@ class GW_Common_Module extends GW_Module
 	{
 		$this->modconfig = $this->initModCfgEx($this->module_path);
 	}
+	
+	function initConfig()
+	{
+		$this->config = new GW_Config($this->module_path[0] . '/');		
+	}	
 	
 	function initLogger()
 	{
@@ -1563,6 +1571,14 @@ class GW_Common_Module extends GW_Module
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
 		if(($this->access_level & $requestAccess) || $this->app->user->isRoot()){
+			return true;
+		}
+		
+		if(($opts['action'] ?? false)=='create_new' && $this->canCreateNew){
+			return true;
+		}
+		
+		if(!$item->id && $this->canCreateNew){
 			return true;
 		}
 
