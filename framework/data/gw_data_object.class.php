@@ -1356,7 +1356,7 @@ class GW_Data_Object
 		
 	}
 	
-	function createIfNotExists($vals)
+	function createIfNotExists($vals, $execinsert=false)
 	{			
 		if($obj = $this->find(GW_DB::buidConditions($vals)))
 		{
@@ -1364,6 +1364,9 @@ class GW_Data_Object
 		}else{
 			$obj = $this->createNewObject();
 			$obj->setValues($vals);
+			
+			if($execinsert)
+				$obj->insert();
 		}
 		return $obj;
 	}

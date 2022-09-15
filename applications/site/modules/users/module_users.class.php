@@ -639,7 +639,7 @@ class Module_Users extends GW_Public_Module
 			$destination->club = $source->club;
 		}
 		
-		$fields = ['points_sngl','points_dbl','points_mx', 'rank_mx','rank_sngl','rank_dbl'];
+		$fields = ['points_sngl','points_dbl','points_mx', 'rank_mx','rank_sngl','rank_dbl', 'int_points_sngl','int_points_dbl','int_points_mx'];
 		
 		foreach($fields as $field)
 			$destination->$field = $source->$field;
