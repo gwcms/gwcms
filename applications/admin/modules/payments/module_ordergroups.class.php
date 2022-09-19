@@ -120,11 +120,15 @@ class Module_OrderGroups extends GW_Common_Module
 		$user =  $item->user;
 		
 		$payconfirm = $item->pay_confirm;
+		
+		
+		//allow invoice vars even if no payconfirm presennt - for pre-invoice function
+		/*
 		if(!$payconfirm)
 		{
 			$this->setError("/m/NO_PAY_CONFIRM");
 			$this->jump();
-		}
+		}*/
 		
 		
 		//d::dumpas(count($list));
