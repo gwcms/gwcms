@@ -47,6 +47,7 @@
 
 	{/function}			
 	
+	{capture append="dl_checklist_actions"}<option value="checked_action('{$m->buildUri(false,[act=>doSeriesAct,action=>doNormaliseNameSurname])}', 1)">{GW::ln('/m/VIEWS/doNormaliseNameSurname')}</option>{/capture}
 	
 	
 	{$do_toolbar_buttons[] = dialogconf}	

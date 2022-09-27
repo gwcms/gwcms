@@ -204,6 +204,7 @@
     <i id="doSetI18nExtState">
 	    Switch additional language
     </i>
+    <i id="doNormaliseNameSurname">Name,surname fix: Uppercase fist letter, lowercase rest</i>
   </i>
   <i id="SEND">
     <lt>Siųsti</lt>

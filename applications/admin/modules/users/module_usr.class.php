@@ -233,5 +233,20 @@ class Module_Usr extends GW_Common_Module
 		
 		return $opts;	
 	}
-
+	
+	function doNormaliseNameSurname($item=false)
+	{
+		if(!$item)
+			if (!$item = $this->getDataObjectById())
+				return false;
+		
+		$item->name = mb_convert_case($item->name, MB_CASE_TITLE, "UTF-8");;
+		$item->surname = mb_convert_case($item->surname, MB_CASE_TITLE, "UTF-8");;		
+		$item->updateChanged();
+		
+		if(!$this->sys_call){
+			$this->setMessage('Updated');
+			$this->jump();
+		}
+	}
 }
