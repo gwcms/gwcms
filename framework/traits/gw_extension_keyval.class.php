@@ -75,7 +75,8 @@ class GW_Extension_KeyVal
 	
 	function get($name, $all=false)
 	{
-		return $this->obj->get($name, $all);
+		if($this->parent->id)
+			return $this->obj->get($name, $all);
 	}
 	
 	function search($phrase)
