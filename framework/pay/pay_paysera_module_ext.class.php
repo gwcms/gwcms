@@ -37,9 +37,9 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		    'sign_password' => $cfg->paysera_sign_password,
 		    'orderid' => $args->orderid.($test?'-TEST'.date('His'):"-".date('His')), //ausrinei kad veiktu "-".rand(0,9) 2021-01-12
 		    'paytext' => $args->paytext,
-		    //'p_firstname' => $user->name,
-		    //'p_lastname' => $user->surname,
-		    //'p_email' => $user->email,
+		    'p_firstname' => $user->name,
+		    'p_lastname' => $user->surname,
+		    'p_email' => $user->email,
 		    'amount' => $args->payprice * 100,
 		    'currency' => $cfg->default_currency_code,
 		    'country' => 'LT',

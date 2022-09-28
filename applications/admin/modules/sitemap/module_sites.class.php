@@ -49,6 +49,13 @@ class Module_Sites extends GW_Common_Module
 		$cfg["fields"]['langs'] = 'Lof';
 		$cfg["fields"]['priority'] = 'lof';
 		
+		
+		$cfg['inputs']['langs']=[
+		    'type'=>'multiselect', 
+		    'options'=>array_merge(GW::s('LANGS'),GW::s('i18nExt')),
+		    'sorting'=>1, 'options_fix'=>1
+		];
+		
 		return $cfg;
 	}
 	

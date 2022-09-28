@@ -64,12 +64,13 @@ class Module_Translations_Over extends GW_Common_Module
 		if($this->view_name == "form" && !isset($_GET['form_ajax']))
 		{
 			$cfg["fields"]["value"]="Lof";
-			
+			//$cfg['inputs']["value_".$lang]="Lof";
 			
 		}else{
-			
-			foreach(GW::s("LANGS") as $lang)
-				$cfg["fields"]["value_".$lang]="Lof";			
+			foreach(GW::s("LANGS") as $lang){
+				$cfg["fields"]["value_".$lang]="Lof";	
+				//$cfg['inputs']["value_".$lang]=['type'=>'textarea', 'i18n'=>3];	
+			}
 		}
 		
 
@@ -77,6 +78,14 @@ class Module_Translations_Over extends GW_Common_Module
 		
 		$cfg["fields"]['update_time'] = 'lof';
 		$cfg["fields"]['priority'] = 'lof';
+		
+
+		$cfg['inputs']["fullkey"]=['type'=>'select_ajax', 'options'=>1, 'preload'=>1, 'datasource'=>$this->app->buildUri('datasources/translations/keysearch')];
+		$cfg['inputs']["context_group"]=['type'=>'text'];
+		$cfg['inputs']["value"]=['type'=>'textarea', 'i18n'=>4, 'i18n_expand'=>1,'height'=>'50px'];
+		//$cfg['inputs']["module"]=['type'=>'select', 'options'=>$this->options['module']];
+		
+		
 		
 		return $cfg;
 	}
