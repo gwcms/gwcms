@@ -29,6 +29,8 @@
 		<source src="/repository/{$item->relpath}" type="video/mp4">
 		Your browser does not support the video tag.
 	      </video>
+{elseif in_array($item->extension,['txt'])}
+	<textarea style='width:100%;height:80vh'>{$item->getContents()|escape}</textarea>
 {else}
 	Unsupported type, contact vidmantas.norkus@gw.lt to implement
 	{d::ldump([

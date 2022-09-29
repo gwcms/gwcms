@@ -208,6 +208,12 @@ class GW_FSFile extends GW_Data_Object
 		}	
 	}
 	
+	function getContents()
+	{
+		return file_get_contents($this->path);
+	}	
+	
+	
 	
 	function updateChanged()
 	{

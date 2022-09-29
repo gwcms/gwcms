@@ -211,4 +211,9 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 	{
 		return str_replace(GW::s('DIR/REPOSITORY'), '', $this->getFilename());
 	}
+	
+	function getContents()
+	{
+		return file_get_contents($this->getFilename());
+	}
 }
