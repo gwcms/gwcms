@@ -55,6 +55,7 @@ class Module_Sites extends GW_Common_Module
 		    'options'=>array_merge(GW::s('LANGS'),GW::s('i18nExt')),
 		    'sorting'=>1, 'options_fix'=>1
 		];
+		$cfg['inputs']['key']=['type'=>'text'];		
 		
 		return $cfg;
 	}
