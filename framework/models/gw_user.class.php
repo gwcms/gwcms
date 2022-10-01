@@ -376,4 +376,8 @@ class GW_User extends GW_Composite_Data_Object
 		return GW_Outg_SMS::singleton()->count(['number=?', $this->phone]);
 	}	
 	
+	function __toString(){
+		return $this->title;
+	}
+	
 }

@@ -220,9 +220,9 @@
 		{/if}
 	{/if}
 
-
+	{if !$smarty.get.print_view}
 	<div class="row">
-
+	{/if}
 
 		{if $dl_filters && !$smarty.get.print_view && !$smarty.get.filterhide && (count($list) || $m->list_params.filters)}
 			<div class="col-xs-auto" id="gwFiltersContainer">
@@ -290,9 +290,9 @@
 		{block name="after_list"}		
 		{/block}
 
-
+	{if !$smarty.get.print_view}
 	</div>
-
+	{/if}
 		
 	{capture append=footer_hidden}	
 		<script> 

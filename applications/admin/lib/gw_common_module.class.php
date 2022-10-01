@@ -450,8 +450,10 @@ class GW_Common_Module extends GW_Module
 		
 		saveFinish:
 
+			
 		//jeigu saugome tai reiskia kad validacija praejo
-		if(isset($_GET['reloadparent']) && $_REQUEST['submit_type']??false != 1)
+
+		if(isset($_GET['reloadparent']) && ($_REQUEST['submit_type']??false) != 1)
 		{
 			echo "<script type='text/javascript'>parent.location.reload()</script>";
 			exit;
