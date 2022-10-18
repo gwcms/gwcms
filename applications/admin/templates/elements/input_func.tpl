@@ -220,7 +220,7 @@
 			{assign var=$k value=$v}
 		{/foreach}
 	{/if}
-
+	
 	{*copy to {function e}*}
 	{call calcElmName assign=input_name}
 	{call calcElmId assign=id}
@@ -267,7 +267,7 @@
 
 	{$inp_type=$type|default:'text'}
 	{include file="elements/inputs/`$inp_type`.tpl"}
-
+	
 
 	{if !in_array($type,["read",'image','attachments','file']) && $readonly != 1}
 		{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}

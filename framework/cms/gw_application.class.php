@@ -241,11 +241,12 @@ class GW_Application
 		$this->initSession(); // debug or not to debug?
 		$this->initDB();
 
+		$this->initSite();
 		$this->requestInfo();
 		$this->initAuth();
 
 		$this->initLang();
-		$this->initSite();
+		
 		
 
 		$this->getPage();
@@ -431,10 +432,16 @@ class GW_Application
 		$this->path_clean = $path_clean;
 
 
-		$this->ln = in_array($ln, GW::s('LANGS')) || in_array($ln, GW::s('i18nExt')) ? $ln : GW::$settings['LANGS'][0];
-
-
-
+		
+		if(GW::s('MULTISITE'))
+		{
+			$this->ln = in_array($ln, $this->site->langs) ? $ln : $this->site->langs[0];	
+		}else{
+			$this->ln = in_array($ln, GW::s('LANGS')) || in_array($ln, GW::s('i18nExt')) ? $ln : GW::$settings['LANGS'][0];
+		}
+		
+		
+		
 
 		$_SESSION['GW']['cms_ln'] = $this->ln;
 

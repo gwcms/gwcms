@@ -2,9 +2,9 @@
 
 class GW_Pay_Methods extends GW_Data_Object
 {
-	//`gateway` ASC,`group` ASC,
+	//`gateway` ASC,`group` ASC, `country` ASC,
 
-	public $default_order = "`country` ASC,`priority` ASC";
+	public $default_order = "`priority` ASC";
 	
 	
 	public $calculate_fields = [

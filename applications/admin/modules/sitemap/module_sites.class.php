@@ -55,7 +55,10 @@ class Module_Sites extends GW_Common_Module
 		    'options'=>array_merge(GW::s('LANGS'),GW::s('i18nExt')),
 		    'sorting'=>1, 'options_fix'=>1
 		];
-		$cfg['inputs']['key']=['type'=>'text'];		
+		$cfg['inputs']['key']=['type'=>'text'];
+		$cfg['inputs']['hosts']=['type'=>'tags', 'placeholder'=>GW::l('/m/ADD_HOST')];
+		$cfg['inputs']['title'] = ['type'=>'text', 'i18n'=>3, 'i18n_expand'=>1];
+
 		
 		return $cfg;
 	}

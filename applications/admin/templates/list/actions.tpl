@@ -173,7 +173,7 @@
 {/function}
 
 {function dl_cl_actions_dialogremove}
-	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_REMOVE,nodie=>1])}
+	{if $m->canBeAccessed(false, [access=>$smarty.const.GW_PERM_REMOVE,nodie=>1])}
 	<option value="checked_action('dialogremove')">{GW::l('/A/VIEWS/dialogremove')}</option>
 	{/if}
 {/function}

@@ -43,7 +43,7 @@
 			{$next=next($fields_config.fields)}
 			{if is_string($next)}{$next=next($fields_config.fields)}{/if}
 
-
+			
 			{call "build_input"}
 			
 			{if !$smarty.get.form_ajax && ($col >= $fields_config.cols || $col+$next.colspan-1 > $fields_config.cols)}
@@ -71,8 +71,7 @@
 
 	
 	{if $fields_config.fields[$field]}
-		{$params_expand=$fields_config.fields[$field]}
-		{call "build_input"}
+		{call "build_input" params_expand=$fields_config.fields[$field]}
 	{elseif $m->list_config.inputs[$field]}
 		{$tmp=$m->list_config.inputs[$field]}
 		{call "build_input" params_expand=$tmp}

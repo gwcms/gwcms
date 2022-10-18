@@ -40,8 +40,13 @@ class Module_ChangeTrack extends GW_Common_Module
 	
 	function canBeAccessed($item, $opts=[]) 
 	{
-		$item->load_if_not_loaded();
-		$result = $this->checkOwnerPermission($item->owner_type);
+		if($item){
+			$item->load_if_not_loaded();
+	
+			$result = $this->checkOwnerPermission($item->owner_type);
+		}else{
+			$result = $this->app->user->isRoot();
+		}
 
 		if (!isset($opts['die']) || $result)
 			return $result;

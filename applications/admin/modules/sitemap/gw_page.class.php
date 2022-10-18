@@ -288,7 +288,7 @@ class GW_Page extends GW_i18n_Data_Object
 
 		$inputs = $this->getInputs(['index'=>'name']);
 		
-		$langs = GW::s('LANGS');
+		$langs = GW::$context->app->langs;
 		$list_found = [];
 
 		

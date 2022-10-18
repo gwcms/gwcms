@@ -1,8 +1,12 @@
-{$tag_params['data-role']="tagsinput"}
-
+{if $type=='text'}
+	{*some fckin shit happens asked text type but sends here*}
+	{include "elements/inputs/text.tpl"}
+	{php}return false;{/php}
+{/if}
+	
 {if !isset($placeholder)}{$placeholder="Add tag"}{/if}
 
-{include file="elements/inputs/text.tpl" type="text"}
+{include "elements/inputs/text.tpl" type="text" tag_params = ['data-role'=>"tagsinput"]}
 					
 <script>
 	require(['gwcms'], function(){
