@@ -105,7 +105,7 @@ class GW_Admin_Application extends GW_Application
 	function initLang() {
 		parent::initLang();
 		
-		if($this->user->id==GW_USER_SYSTEM_ID){
+		if($this->user && $this->user->id==GW_USER_SYSTEM_ID){
 			
 			$this->i18next = array_flip(GW::s('i18nExt'));			
 			$this->initI18nSchema();
