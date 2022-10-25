@@ -10,7 +10,7 @@
 
 	
 	{if $empty_option}
-		{$options=[GW::ln('/g/EMPTY_OPTION')]+$options}
+		{$options=[{$empty_option_title|default:GW::ln('/g/EMPTY_OPTION')}]+$options}
 	{/if}	
 
 	{if $preload && $value}
@@ -54,7 +54,7 @@
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
 		 data-dontcloseonselect="{$dontCloseOnSelect}"
 		 data-onchangeFunc="{$onchangeFunc}"
-		 {if $empty_option}data-emptyoption="1" data-placeholder="{GW::ln('/g/EMPTY_OPTION')}"{/if}
+		 {if $empty_option}data-emptyoption="1" data-placeholder="{$empty_option_title|default:GW::ln('/g/EMPTY_OPTION')}"{/if}
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		 {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		 >
