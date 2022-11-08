@@ -2803,6 +2803,90 @@ class GW_Common_Module extends GW_Module
 		
 	}
 	
+	function doFillSeries()
+	{
+		$fields = $this->__getListFields();
+		
+		
+		$cfg = $this->getListConfig();
+
+		$field = $_GET['field'] ?? false;
+		
+
+		
+		$form['fields']=[];
+		
+		$fields = $this->__getListFields();
+		
+		if(!isset($fields[$field])){
+			$form['fields']['field']=['type'=>'select','options'=>$fields, 'empty_option'=>1, 'required'=>1];	
+		}
+		
+		$form['fields']['offset'] = ['type'=>'number','required'=>1,'default'=>1];
+		$form['fields']['increment'] = ['type'=>'number','required'=>1,'default'=>1];
+		
+			
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/VIEWS/doFillSeries').' <b style="color:blue">'.($field ? $this->fieldTitle($field) :'').'</b>' )))
+			return false;			
+		
+		
+		if(!$field)
+			$field = $answers['field'];
+		
+		if(!isset($fields[$field])){
+			return $this->setError("{$field} not permited");
+		}
+				
+		$vars = $this->viewList();
+		
+		$changeinf = [];
+		
+		$list = $vars['list'];		
+		
+		
+		$changeinf = [];
+		
+		$offset = (int)$answers['offset'];
+		$increment = (int)$answers['increment'];;
+		
+		foreach($list as $item){
+			$inf = [];
+			$inf['id'] = $item->id;
+			$inf['title'] = $item->title;
+			$inf['before'] = $item->get($field);
+			$inf['after'] = $offset;
+			$changeinf[] = $inf;
+		
+			$item->set($field, $offset);
+			$offset+=$increment;
+
+			
+			if(isset($_GET['confirm'])){
+				$item->updateChanged();
+			}			
+		}
+		
+		if(!isset($_GET['confirm'])){
+			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
+			
+			$this->askConfirm($str);
+		}else{	
+			$this->setMessage("action performed on ".count($vars['list'])." items");
+			
+			
+
+			unset($_GET['item']['value']);
+			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
+			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doMultiSetValue')."</a> <small>(Add filter to show non empty rows)</small>";
+			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);
+			$this->jump(false, ['field'=>$field]);
+		}
+		
+	}	
+	
+	
 	function doDragMoveSorting()
 	{
 		$fields = $this->__getListFields();

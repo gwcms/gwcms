@@ -12,5 +12,9 @@
 {list_item_action_m url=[false, [act=>doDragMoveSorting,field=>$smarty.get.field]] iconclass="fa fa-arrows" caption=GW::l('/A/VIEWS/doDragMoveSorting')}
 
 
+{list_item_action_m url=[false, [act=>doFillSeries,field=>$smarty.get.field]] iconclass="fa fa-arrows" caption=GW::l('/A/VIEWS/doFillSeries')}
+
+
+
 
 {*{include "`$m->tpl_dir`/addlistconfig.tpl"}*}

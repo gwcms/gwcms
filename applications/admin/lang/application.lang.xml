@@ -388,6 +388,7 @@
     <i id="comments">Komentarai</i>
     <i id="doMultiSetValue">Grupinis vertės keitimas</i>
     <i id="doDragMoveSorting">Drag &amp; drop vertės rikiavimas</i>
+    <i id="doFillSeries">Užpildyti serija</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>
