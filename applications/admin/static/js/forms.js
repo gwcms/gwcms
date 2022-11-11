@@ -71,7 +71,7 @@ gw_forms = {
 
 
 		window.onbeforeunload = function() {
-			if(gw_changetrack.isFormValuesChanged())
+			if(gw_changetrack.isFormValuesChanged() && gw_changetrack.user_change_lose_prevent)
 				return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
 		}
 		
@@ -98,6 +98,8 @@ gw_forms = {
 }
 
 var gw_changetrack = {
+	
+	user_change_lose_prevent:1,
 	
 	
 	readValue: function(selector)
