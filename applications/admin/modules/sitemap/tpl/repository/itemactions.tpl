@@ -5,7 +5,7 @@
 *}
 
 
-{list_item_action_m onclick="copyTextToClipboard('`$item->url`')" iconclass="fa fa-link" confirm=1 caption="Copy url to clipboard"}
+{list_item_action_m onclick="copyTextToClipboard('`$item->url`');return false"|escape iconclass="fa fa-link" confirm=1 caption="Copy url to clipboard"}
 
 
 {if $item->isdir}
