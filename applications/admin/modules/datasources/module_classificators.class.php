@@ -8,9 +8,18 @@ class Module_Classificators  extends GW_Common_Module
 	{
 		parent::init();
 		$this->options['classtypes'] = GW_Classificator_Types::singleton()->getOptions();
+		$this->options['classtypeskey'] = 
 		
 		$this->app->carry_params['clean']=1;
 		$this->app->carry_params['type']=1;
+		
+		
+		if(isset($_GET['type']) && !is_numeric($_GET['type'])){
+			if($classtype=GW_Classificator_Types::singleton()->find(['`key`=?', $_GET['type']])){
+				$_GET['type']=$classtype->id;
+			}
+		}
+		
 		
 		if( ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
 			$_GET['type'] = $tmp;
@@ -20,6 +29,7 @@ class Module_Classificators  extends GW_Common_Module
 			$this->filters['type'] = $_GET['type'];
 		}
 		
+			
 		
 		if(isset($_GET['group'])){
 			

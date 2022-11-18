@@ -4,12 +4,19 @@
 class Module_Classificator_Types  extends GW_Common_Module
 {	
 	
+	
+	
 	function getListConfig()
 	{
 
 		
 		
 		$cfg = parent::getListConfig();
+		
+		$cfg['inputs']['title']=['type'=>'text'];	
+		$cfg['inputs']['key']=['type'=>'text'];	
+		$cfg['inputs']['aka']=['type'=>'text'];	
+		
 
 		$cfg['fields']['count'] = 'L';	
 
@@ -49,3 +56,5 @@ class Module_Classificator_Types  extends GW_Common_Module
 		return $opts;	
 	}
 }
+
+

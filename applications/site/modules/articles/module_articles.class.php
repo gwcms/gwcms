@@ -15,7 +15,11 @@ class Module_Articles extends GW_Public_Module
 		$this->tpl_vars['list_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/list');		
 		
 		
-		$this->tpl_vars['item_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/item');		
+		$this->tpl_vars['item_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/item');	
+		
+		
+	
+				
 	}
 
 
@@ -52,6 +56,14 @@ class Module_Articles extends GW_Public_Module
 		{
 			$item = $this->model->createNewObject($_REQUEST['id'], 1);
 
+			
+			
+			$this->tpl_vars['breadcrumbs_attach'][] =  [
+			    'title' => GW_String_Helper::truncate($item->title, 40),
+			    'url' => $_SERVER['REQUEST_URI']
+			];			
+			
+			
 			$this->smarty->assign('item', $item);
 		}
 		
@@ -69,6 +81,8 @@ class Module_Articles extends GW_Public_Module
 
 	function viewItem()
 	{
+			
+		
 		$this->viewDefault();
 	}
 	

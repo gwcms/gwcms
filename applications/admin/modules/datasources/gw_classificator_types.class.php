@@ -16,4 +16,12 @@ class GW_Classificator_Types extends GW_Composite_Data_Object
 		return $this->getAssoc(['id','title'], $cond);
 	}	
 
+	
+	function getOptionsKey($active=true)
+	{
+		//$cond = $active ? 'active!=0' : '';
+		$cond="";
+		
+		return $this->getAssoc(['key','title'], $cond);
+	}		
 }
