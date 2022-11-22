@@ -15,6 +15,8 @@
 	{$do_toolbar_buttons[] = dialogconf}	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[exportdata,importdata]}	
+	{$do_toolbar_buttons[] = search}
+		
 	{*,ext_actions*}
 	{$dl_actions=[invert_active_ajax,delete,edit,clone]}
 	
