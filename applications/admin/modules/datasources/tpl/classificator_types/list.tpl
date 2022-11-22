@@ -17,7 +17,7 @@
 	
 	
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,ext_actions]}
 
 	
 		
