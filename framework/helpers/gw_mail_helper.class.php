@@ -185,6 +185,13 @@ class GW_Mail_Helper
 			$mailer->addCC($to, $toname);
 		}
 		
+		if(isset($opts['replyto'])){
+			$to = $opts['replyto'];
+			$splitAddr($to, $toname);
+			$mailer->addReplyTo($to, $toname);
+		}	
+		
+		
 		if(isset($opts['attachments']) && is_array($opts['attachments'])){
 			foreach($opts['attachments'] as $filename => $data)
 				$mailer->addStringAttachment($data, $filename);

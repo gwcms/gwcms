@@ -9,7 +9,10 @@ class Module_Users extends GW_Public_Module
 		
 		
 		
-		if(GW::s('SPORT')){
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
+			$this->addRedirRule('/^ltf_/i',['options','ltf_common_module']);	
+			
+		}elseif(GW::s('SPORT')){
 			$this->addRedirRule('/^ts_/i',['sportosistemos','ts_common_module']);
 		}
 		
@@ -116,9 +119,17 @@ class Module_Users extends GW_Public_Module
 	
 	function initOptions()
 	{
-		
-		
-		if(GW::s('SPORT') && $this->app->user){
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt' && $this->app->user){
+			$this->options['club_long'] = LTF_Clubs::singleton()->getOptions(["approved=1 OR user_id=?", $this->app->user->id]) +
+					['-1'=>GW::ln('/g/CANT_FIND_IN_LIST')];
+
+			$this->options['coach'] = LTF_Coaches::singleton()->getOptions(["approved=1 OR user_id=?", $this->app->user->id]) +
+					['-1'=>GW::ln('/g/CANT_FIND_IN_LIST')];
+			
+			//d::dumpas($this->options);
+			
+		}elseif(GW::s('SPORT') && $this->app->user){
+			
 			$this->ts_initClubOptions();
 			$this->ts_initCoachOptions();
 		}
