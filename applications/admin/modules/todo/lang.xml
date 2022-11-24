@@ -130,6 +130,24 @@
       <en>10 - Critical! blocker</en>
     </i>
   </i>
+<i id="OPTIONS">  
+		<i id="body_editor">
+			<i id="0"><lt>Formatuotas tekstas</lt><en>Formatted text</en></i>
+			<i id="1"><lt>Neformatuotas tekstas</lt><en>Raw - plain text</en></i>			
+			<i id="2"><lt>HTML / Smarty kodo redakt.</lt><en>HTML / Smarty code editor</en></i>			
+		</i>	
+		<i id="body_editor_height">
+			<i id="1">100px</i>
+			<i id="2">200px</i>
+			<i id="3">300px</i>
+			<i id="4">400px</i>
+			<i id="5">500px</i>
+			<i id="6">600px</i>
+			<i id="7">700px</i>
+			<i id="8">800px</i>
+			<i id="9">900px</i>
+		</i>		
+</i>
   <i id="STATE_OPT">
     <i id="5">
       <lt>

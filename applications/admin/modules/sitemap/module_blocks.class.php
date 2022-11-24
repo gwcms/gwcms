@@ -43,6 +43,11 @@ class Module_Blocks extends GW_Common_Module
 		
 		$cfg = parent::getListConfig();
 
+		$cfg['fields']['id'] = "lof";
+		$cfg['fields']['insert_time'] = "lof";
+		$cfg['fields']['update_time'] = "lof";		
+		$cfg['fields']['priority'] = "lof";
+		
 		
 		if(GW::s('MULTISITE')){
 			$cfg['inputs']['site_id']=['type'=>'select', 'options'=>$this->options['site_id']];

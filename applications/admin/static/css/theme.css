@@ -7935,6 +7935,7 @@ a.badge:hover{
 { padding: 2px !important; }
 
 
+
 .rotate-lbl {
 	transform: rotate(-90deg);
 	height: 0;
@@ -7942,7 +7943,8 @@ a.badge:hover{
 	white-space: nowrap;
 	width: 1.5em;	
 	position: relative;
-	left: -10px;
+	left: -8px;
+	width: 10px !important;
 }
 
 
@@ -7952,7 +7954,7 @@ a.badge:hover{
 .withrotatedlab{
 	float:left;
 	margin-left: 1.6em !important;
-	width: calc(100% - 1.6em);
+	width: calc(100% - 1.6em) !important;;
 }
 
 .genderma{ color:navy }

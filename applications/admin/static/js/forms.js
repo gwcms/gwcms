@@ -76,7 +76,9 @@ gw_forms = {
 		}
 		
 		//fix rotated label position
-		$('.rotate-lbl').parent().keypress(function(){
+		$('.rotate-lbl').parent().keydown(function(){
+			//idomius niuansas kai backspace spaudi tada neatsoka
+			console.log('abc');
 			if($(this).data('lastheight') != $(this).height())
 			{
 				$(this).find('.rotate-lbl').css('top', ($(this).height()-10)+'px')

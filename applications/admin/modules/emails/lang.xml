@@ -119,10 +119,6 @@
 			<en>Add bcc to all mails sending to users from system(single address!) - leave empty to disable</en>
 		</i>
 		
-		<i id="PUSH_APPLY_TO_TAKE_EFFECT">
-			<en>Push Apply after changes</en>
-			<lt>Spauskite Išsaugoti liekant po pakeitimo</lt>
-		</i>
 		<i id="recipients"><![CDATA[Formatas 1 gavėjas per eilutę: Vardas Pavardė;El pašto adresas<br>Pvz: <br/>Jonas Jonaitis;jonas.jonaitis@gmail.com<br/>Antanas Antanaitis;antanas@yahoo.com]]></i>
 		<i id="lang">Kad įvyktu pasikeitimai gali prireikti spustelti &quot;Išsaugoti liekant&quot; mygtuką po forma</i>
 		

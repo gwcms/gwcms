@@ -23,7 +23,7 @@
 {/if}
 <textarea  
 	id="{$id}" 
-	class="form-control{if $autoresize} ta_autoresize{/if} inp-textarea" 
+	class="form-control{if $autoresize} ta_autoresize{/if} inp-textarea {if $class}{$class}{/if}" 
 	name="{$input_name}" 
 	{if $tabs}onkeydown="return catchTab(this,event)"{/if} 
 	style="{foreach $style as $attr => $val}{$attr}:{$val};{/foreach} width: {$width|default:"100%"}; {if !$rows}height: {$height|default:"250px"};{/if}" 

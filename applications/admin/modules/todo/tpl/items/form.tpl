@@ -26,7 +26,34 @@
 {call e field=title}
 {call e field=time_have value=gw_math_helper::uptime($item->time_have)}
 
-{call e field=description type=textarea height="100px" autoresize=1}
+
+
+
+{$tmpheight="{if $item->body_editor_height}{$item->body_editor_height*100}px{else}300px{/if}"}
+
+
+{if $item->body_editor == 0}
+	{$ck_set='minimum'}
+	{$ck_options.height=$tmpheight}
+	{$bodyInpType=htmlarea}
+{elseif $item->body_editor == 1}
+	{$bodyInpType=textarea}
+	{$autoresize=1}
+{elseif $item->body_editor == 2}
+	{$bodyInpType=code_smarty}
+	
+{/if}
+
+{call e field=description type=$bodyInpType rowclass="bodyinputs" hidden_note=$tmpnote layout=wide notr=1 height=$tmpheight}	
+
+
+{if $app->user->isRoot()}
+	{capture assign=tmp}
+		<small class="text-muted">type</small> {call e0 title=false field=body_editor type=select options=GW::l('/m/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro)}
+		<small class="text-muted">height</small> {call e0 title=false field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro)}	
+	{/capture}
+	{call e field="descript_area_config" type=read value=$tmp hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+{/if}
 
 {*
 {call e field=file1 type=file}

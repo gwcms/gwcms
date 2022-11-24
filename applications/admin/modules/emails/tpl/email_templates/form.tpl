@@ -51,7 +51,6 @@
 	{$bodyInpType=textarea}
 {elseif $item->body_editor == 2}
 	{$bodyInpType=code_smarty}
-	
 {/if}
 
 {call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote layout=wide height=$item->body_editor_height|default:"200px"}	
@@ -59,8 +58,8 @@
 
 
 {call e field=format_texts type=select options=GW::l('/m/OPTIONS/format_texts') readonly=isset($custom_cfg.format_texts_ro)}
-{call e field=body_editor type=select options=GW::l('/m/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro) hidden_note=GW::l('/m/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
-{call e field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro) hidden_note=GW::l('/m/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+{call e field=body_editor type=select options=GW::l('/m/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro) hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+{call e field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro) hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 
 {call e0 field=config value=json_encode($custom_cfg) type=hidden}

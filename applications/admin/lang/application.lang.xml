@@ -300,6 +300,12 @@
    <i id="toln">To lang</i>
 	<i id="value">Vertė</i>
   </i>
+	<i id="FIELD_NOTE">		
+		<i id="PUSH_APPLY_TO_TAKE_EFFECT">
+			<en>Push Apply after changes</en>
+			<lt>Spauskite Išsaugoti liekant po pakeitimo</lt>
+		</i>
+	</i>  
   <i id="VIEWS">
     <i id="form">
       <en>Form</en>
