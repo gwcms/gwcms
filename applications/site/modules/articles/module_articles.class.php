@@ -40,7 +40,7 @@ class Module_Articles extends GW_Public_Module
 			$cond = GW_DB::mergeConditions($cond, GW_DB::prepare_query(['group_id=?', $_GET['group']]));
 		}
 		
-		
+		d::dumpas($cond);
 
 		
 		$list=$this->model->findAll($cond);

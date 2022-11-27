@@ -311,21 +311,42 @@ class GW_Common_Module extends GW_Module
 		$warnempty = [];
 		foreach($fields as $field => $x)
 		{
-			if($x=1 && !isset($vals[$field]) && !isset($_FILES[$field]))
-			{
-				$empty_fields[] = $field;
-				
-				if(isset($this->can_be_empty_fields[$field])){
-					$vals[$field] = "";
-				}else{
-					//2022-11-22
-					//ar tikrai cia reikia apsaugos
-					//idejau sita eilute kas pasalina apsauga tik suteikia perspejima
-					$vals[$field] = "";
-					$warnempty[] = $field;
-				}
+			//ant sitemap dvieju lygiu input_data/laukelio_codas
+			if(is_array($fields[$field])){
+				foreach($fields[$field] as $field2 => $y){
+					if($y=1 && !isset($vals[$field][$field2]) && !isset($_FILES[$field2]))
+					{
+						$empty_fields[] = $field2;
+
+						if(isset($this->can_be_empty_fields[$field][$field2])){
+							$vals[$field][$field2] = "";
+						}else{
+							//2022-11-22
+							//ar tikrai cia reikia apsaugos
+							//idejau sita eilute kas pasalina apsauga tik suteikia perspejima
+							$vals[$field][$field2] = "";
+							$warnempty[] = "$field/$field2";
+						}
+					}					
+				}				
+			}else{
+				if($x=1 && !isset($vals[$field]) && !isset($_FILES[$field]))
+				{
+					$empty_fields[] = $field;
+
+					if(isset($this->can_be_empty_fields[$field])){
+						$vals[$field] = "";
+					}else{
+						//2022-11-22
+						//ar tikrai cia reikia apsaugos
+						//idejau sita eilute kas pasalina apsauga tik suteikia perspejima
+						$vals[$field] = "";
+						$warnempty[] = $field;
+					}
+				}				
 			}
 		}
+		
 		if($warnempty)
 			$this->setMessage(["text"=>"Empty fields found: <b>".implode(", ", $warnempty).'</b>', "type"=>GW_MSG_WARN, 'footer'=>'add them to public $can_be_empty_fields=[field1=>1,field2=>1]', 'float'=>1]);
 	}
