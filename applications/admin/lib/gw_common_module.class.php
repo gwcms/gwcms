@@ -318,6 +318,10 @@ class GW_Common_Module extends GW_Module
 				if(isset($this->can_be_empty_fields[$field])){
 					$vals[$field] = "";
 				}else{
+					//2022-11-22
+					//ar tikrai cia reikia apsaugos
+					//idejau sita eilute kas pasalina apsauga tik suteikia perspejima
+					$vals[$field] = "";
 					$warnempty[] = $field;
 				}
 			}

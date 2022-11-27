@@ -4,7 +4,7 @@
 <div id="{$id}"  data-id="{$id}" class="jstree" {if $items}data-items='{json_encode($items)}'{/if} {if $datasource}data-url="{$datasource}"{/if}></div>
 
 	
-	{if !$gwcms_input_select_ajax_loaded}
+	{if !$gwcms_input_select_icon}
 		{$m->addIncludes("upload_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 		<script type="text/javascript">
 			translate_submit = "{GW::l('/g/SUBMIT')}";
@@ -60,5 +60,5 @@
 		</script>
 		
 		
-		{assign var=gwcms_input_select_ajax_loaded value=1 scope=global}
+		{assign var=gwcms_input_select_icon value=1 scope=global}
 	{/if}		
