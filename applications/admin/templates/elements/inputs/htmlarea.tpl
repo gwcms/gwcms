@@ -1,4 +1,4 @@
-<div id="{$id}_containerck">
+<div id="{$id}_containerck" class="{$class}">
 <textarea  
 	id="{$id}" 
 	name="{$input_name}" 
