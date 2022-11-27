@@ -47,14 +47,6 @@
 {call e field=description type=$bodyInpType rowclass="bodyinputs" hidden_note=$tmpnote layout=wide notr=1 height=$tmpheight}	
 
 
-{if $app->user->isRoot()}
-	{capture assign=tmp}
-		<small class="text-muted">type</small> {call e0 title=false field=body_editor type=select options=GW::l('/m/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro)}
-		<small class="text-muted">height</small> {call e0 title=false field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro)}	
-	{/capture}
-	{call e field="descript_area_config" type=read value=$tmp hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
-{/if}
-
 {*
 {call e field=file1 type=file}
 *}
@@ -77,6 +69,13 @@
 
 {call e field=user_exec type=select empty_option=1 options=$options.users default=$app->user->id data_type=numeric enable_search=1}
 
+
+
+{capture assign=tmp}
+	<small class="text-muted">type</small> {call e0 title=false field=body_editor type=select options=GW::l('/m/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro)}
+	<small class="text-muted">height</small> {call e0 title=false field=body_editor_height type=select options=GW::l('/m/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro)}	
+{/capture}
+{call e field="descript_area_config" type=read value=$tmp hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 </table>
 </div> {*-end of panel body-*}
@@ -118,6 +117,11 @@
 {/if}
 
 </table>
+
+
+
+
+
 
 
 
