@@ -45,16 +45,16 @@
     
     
     {if $order->amount_discount}
-    <div class="d-flex justify-content-between mb-2">
-      <span class="g-color-black">{GW::ln('/m/DISCOUNT')}</span>
-      <span class="g-color-black g-font-weight-300">-{$order->amount_discount} &euro;</span>
+    <div class="d-flex justify-content-between mb-2 ">
+      <span class="g-color-lightred">{GW::ln('/m/DISCOUNT')}</span>
+      <span class="g-color-lightred g-font-weight-300">-{$order->amount_discount} &euro;</span>
     </div>
     {/if} 
     
     {if $order->amount_coupon}
-    <div class="d-flex justify-content-between mb-2">
-      <span class="g-color-black">{GW::ln('/m/COUPON')}</span>
-      <span class="g-color-black g-font-weight-300">-{$order->amount_coupon} &euro;</span>
+    <div class="d-flex justify-content-between mb-2 g-color-lightred">
+      <span class="g-color-lightred">{GW::ln('/m/COUPON')}</span>
+      <span class="g-color-lightred g-font-weight-300">-{$order->amount_coupon} &euro;</span>
     </div>
     {/if}      
     
@@ -146,6 +146,10 @@
 										<li>{GW::ln('/m/QTY')}: {$item->qty}</li>
 									</ul>
 									<span class="d-block g-color-black g-font-weight-400">{if $item->qty}{$item->qty} x {/if}{$item->unit_price} &euro;</span>
+									
+									{if $item->discount}
+										<span class="d-block g-color-black g-font-weight-400 g-color-lightred"><small>{GW::ln('/m/DISCOUNT')}:</small> -{$item->discount*$item->qty} &euro;</span>
+									{/if}
 									{call cart_item_expirable_prop}
 								</div>
 							</li>

@@ -39,6 +39,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		$amount = 0;
 		$deliverable = 0;
 		$downloadable = 0;
+		$discount_total = 0;
 		
 		if($relobj = $this->getCompositeObject('items'))
 			$relobj->cleanCache();
@@ -46,9 +47,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	
 		
 		foreach($this->items as $item){
-			$amount+= $item->unit_price*$item->qty;
+			$amount+= ($item->unit_price-$item->discount)*$item->qty;
 			$deliverable = max($item->deliverable, $deliverable);
 			$downloadable = max($item->downloadable, $downloadable);
+			$discount_total+=$item->discount*$item->qty;
 		}
 		
 		
@@ -60,6 +62,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		$this->amount_items = $amount;
 		//$this->amount_total = $this->amount_items + $this->amount_shipping;
 		$this->amount_total = $this->amount_shipping + $this->amount_items - $this->amount_coupon;
+		$this->amount_discount = $discount_total;
 
 		$this->itmcnt = count($this->items);
 		$this->updateChanged();

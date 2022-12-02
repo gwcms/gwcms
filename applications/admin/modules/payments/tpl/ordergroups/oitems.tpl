@@ -18,14 +18,17 @@
 {/if}
 
 
-
+{$GLOBALS.product_modification_display_mode=1}
 
 {function "ordereditemimage"}
 	{$obj=$item->obj}
+	
+	
 	{$imurl=""}
-	{if $obj->composite_map.image && $obj->image}
+	
+	{if $obj->image}
 		{$img = $obj->image}
-		{$imurl="{$app_base}tools/img/{$img->key}&v={$img->v}&size=100x100"}
+		{$imurl="/tools/img/{$img->key}&v={$img->v}&size=100x100"}
 	{elseif $obj->image_url}
 		{$imurl="{$obj->image_url}&size=100x100"}
 	{/if}
@@ -67,6 +70,11 @@
 				<tr><th>{GW::ln('/M/orders/SHIPPING')}</th><td>{$order->amount_shipping} &euro;</td></tr>
 			{/if}
 			
+			{if $order->amount_discount}
+				<tr><th>{GW::ln('/M/orders/DISCOUNT')}</th><td>-{$order->amount_discount} &euro;</td></tr>
+				<tr><th>{GW::ln('/M/orders/DISCOUNT_CODE')}</th><td>{$order->discountcode->code} </td></tr>
+			{/if}
+			
 			{if $order->amount_coupon}
 				<tr><th>{GW::ln('/M/orders/COUPON')}</th><td>-{$order->amount_coupon} &euro;</td></tr>
 				<tr><th>{GW::ln('/M/orders/FIELDS/code')}</th><td>{$order->discountcode->code} </td></tr>
@@ -104,13 +112,14 @@
 <table>
 {foreach $order->items as $item}
 	<tr>
-		<td rowspan="4">
+		<td rowspan="5">
 			{call name="ordereditemimage" size="100x100" alt=$alt}
 		</td>
 		<td></td>
 	</tr>
 	<tr><td></td><td>{$item->invoice_line}</td></tr>
 	<tr><td></td><td>{$item->qty} x {$item->unit_price} &euro;</td></tr>
+	{if $item->discount}<tr><td></td><td><small>{GW::ln('/M/orders/DISCOUNT')}:</small> -{$item->discount*$item->qty} &euro;</td></tr>{/if}
 	<tr><td></td><td><a target="_blank" href="{GW::s('SITE_URL')}{$item->link}">{$item->obj->remote_id}</a></td></tr>
 	
 	

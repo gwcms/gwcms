@@ -103,6 +103,9 @@
 						{if $citem->link}</a>{/if}
 
 					{$citem->qty}x{$citem->unit_price} Eur 
+					{if $citem->discount}
+						<span class="g-color-lightred"><small>{GW::ln('/m/DISCOUNT')}:</small> -{$citem->discount*$citem->qty} &euro;</span>				
+					{/if}
 					{if !$order->payment_status!=7 && $item->can_remove}
 						<a href="{$m->buildUri(false, [act=>doCartItemRemove,id=>$citem->id])}"><i class="fa fa-times"></i></a>
 						{/if}
@@ -159,6 +162,13 @@
 				<span class="g-color-black g-font-weight-300 g-font-size-13">{date('Y-m-d', strtotime($order->insert_time))}</span>
 			</div>
 
+			{if $order->amount_discount}
+			<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
+				<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/DISCOUNT')}</h4>
+				<span class="g-color-lightred g-font-weight-300 g-font-size-13">-{$order->amount_discount} &euro;</span>
+			</div>
+			{/if}
+			
 			<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
 				<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/TOTAL')}</h4>
 				<span class="g-color-black g-font-weight-300 g-font-size-13">{$order->amount_total} &euro;</span>
@@ -296,10 +306,12 @@
 					{$buttons = !$smarty.get.payselect && ($order->payment_status!=7 || $order->downloadable)}
 				{/if}
 				
+				{if !$smarty.get.summary}
 				<div class="{if $buttons}col-md-8{else}col-md-12{/if}">
 					
 					{call display_order_items}
 				</div>
+				{/if}
 				
 				{if $buttons}
 				<div class="col-md-4">
@@ -312,6 +324,7 @@
 				{/if}
 				
 			</div>
+			
 				
 			<div class="row">
 				<div class="col-md-12">
@@ -334,7 +347,9 @@
 	
 
 		<!-- End Order Content -->
-</div></div>
+</div>
+
+</div>
 <!-- End Order Block -->
 {/function}
 

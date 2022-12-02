@@ -772,11 +772,16 @@ class Module_Orders extends GW_Public_Module
 	{
 		if($discode = $_POST['discountcode'] ?? false){
 			
+			$curdate = date('Y-m-d');
 			//nuolaidu kuponai
-			$dc = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND user_id=0 AND used=0 AND products!=""', $discode]);
+			$dc = Shop_DiscountCode::singleton()->find([
+			    'code=? AND active=1 AND user_id=0 AND used=0 AND products!="" AND valid_from>=? AND expires<=?', $discode, $curdate, $curdate
+			]);
 			
 			if($dc){
 				$discount_productids = array_flip($dc->product_ids);
+				
+				//d::dumpas($discount_productids);
 				
 				//gauti produktu sarasa
 				foreach($order->items as $oi)
@@ -791,17 +796,20 @@ class Module_Orders extends GW_Public_Module
 				}else{
 					$order->discount_id = $dc->id;
 					$order->updateChanged();
-					$dc->used  = 1;
-					$dc->user_id = $this->app->user ? $this->app->user->id : -1;
+					if($dc->singleuse){
+						$dc->used  = 1;
+						$dc->user_id = $this->app->user ? $this->app->user->id : -1;
+					}
+					$dc->use_count = $dc->use_count+1;
 					$dc->update();
 					
-					//$this->setOrderedItemPrices();
+					$this->setOrderedItemPrices($order);
 				}				
 			}
 			
 			
 			//dovanu kuponai 
-			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0', $discode]);
+			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0 AND ', $discode]);
 
 
 			if($coupon){
@@ -814,6 +822,69 @@ class Module_Orders extends GW_Public_Module
 						
 		}		
 	}
+	
+	
+	//is natos.lt
+	//panasu kad po kiekvieno veiksmo su krepseliu buna perskaiciuojamos kainos
+	//vietas kuriose perskaiciuojama paziuret natos.lt/applications/site/modules/products
+	function setOrderedItemPrices($order)
+	{
+		$applicatable_prods = [];
+		$discountcode = false;
+		$price_total = 0;
+		$discount_total = 0;
+		
+		if($order->discount_id){
+			$discountcode = $order->discountcode;
+			$applicatable_prods = array_flip($discountcode->product_ids);
+			//d::dumpas($dc);
+			
+			//d::dumpas(['applicatable'=>$applicatable_prods, 'cartitems'=>$order->items]);
+		}
+		
+		
+		
+		foreach($order->items as $order_itm){
+			
+			
+			
+			//galima butu salygini koda irasyt su expressions
+			/*
+				{if $elm->conditions}
+					{*$elm->conditions*}
+					{*var_dump(GW_Expression_Helper::singleton()->evaluate($elm->conditions, $answerarr))*}
+					
+					{if !GW_Expression_Helper::singleton()->evaluate($elm->conditions, $answerarr)}
+						{continue}
+					{/if}
+				{/if}						
+			*/
+							
+			
+			if(!isset($applicatable_prods[$order_itm->obj_id]) || $order_itm->obj_type!=$discountcode->obj_type){
+				
+				//reset discounts
+				$order_itm->discount = 0;
+				
+			}else{
+	
+				if($discountcode->percent){
+					$order_itm->discount = round($order_itm->unit_price * $discountcode->percent/100, 2);
+				}
+								
+				
+			}
+			
+			$order_itm->updateChanged();
+		}
+		
+		//d::dumpas($this->cart_data['cart']);
+		
+		
+		$order->updateTotal();
+		$order->updateChanged();
+	}	
+	
 	
 	function doUnsetDiscount()
 	{
@@ -830,7 +901,10 @@ class Module_Orders extends GW_Public_Module
 			$dc = $order->discountcode;
 			$order->discount_id = 0;
 			$order->amount_coupon = 0;
-			$this->updateChanged();
+			
+			
+			$this->setOrderedItemPrices($order);
+			
 			$order->updateTotal();
 			
 			$dc->user_id = 0;
@@ -1253,7 +1327,10 @@ class Module_Orders extends GW_Public_Module
 
 		if(isset($args['justhtml']))
 			return $html;
-
+		
+		if(isset($args['justhtml1']))
+			die($html);		
+		
 		if(isset($args['returnoutput'])){
 			return GW_html2pdf_Helper::convert($html, false);
 

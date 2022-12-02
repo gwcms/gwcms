@@ -15,7 +15,7 @@
 				{$passive="g-brd-bottom g-brd-2 g-brd-transparent g-color-main g-color-gray-dark-v4 g-color-primary--hover g-text-underline--none--hover g-px-10 g-pb-13"}
 
 				<li class="list-inline-item g-pb-10 g-pr-10 g-mb-20 g-mb-0--sm">
-					<a class="gwUrlMod {if !$smarty.get.canceled}{$active}{else}{$passive}{/if}"  href="#calnceledOrders" data-args='{json_encode([canceled=>null])}'>{GW::ln('/m/VIEWS/orders')}</a>
+					<a class="gwUrlMod {if !$smarty.get.canceled}{$active}{else}{$passive}{/if}"  href="#calnceledOrders" data-args='{json_encode([canceled=>null,summary=>null])}'>{GW::ln('/m/VIEWS/orders')}</a>
 				</li>
 				{*
 				<li class="list-inline-item g-pb-10 g-px-10 g-mb-20 g-mb-0--sm">
@@ -23,8 +23,15 @@
 				</li>
 				*}
 				<li class="list-inline-item g-pb-10 g-pl-10 g-mb-20 g-mb-0--sm">
-					<a class="gwUrlMod {if $smarty.get.canceled}{$active}{else}{$passive}{/if}" href="#calnceledOrders" data-args='{json_encode([canceled=>1])}'>{GW::ln('/m/CANCELED_ORDERS')} {if $canceled_count}({$canceled_count}){/if}</a>
+					<a class="gwUrlMod {if $smarty.get.canceled}{$active}{else}{$passive}{/if}" href="#calnceledOrders" data-args='{json_encode([canceled=>1,summary=>null])}'>{GW::ln('/m/CANCELED_ORDERS')} {if $canceled_count}({$canceled_count}){/if}</a>
 				</li>
+				
+				
+				{if $m->feat('ordersummary')}
+				<li class="list-inline-item g-pb-10 g-pr-10 g-mb-20 g-mb-0--sm">
+					<a class="gwUrlMod {if $smarty.get.summary}{$active}{else}{$passive}{/if}"  href="#summaryOrders" data-args='{json_encode([summary=>1,canceled=>null])}'>{GW::ln('/m/VIEWS/orderssummary')}</a>
+				</li>
+				{/if}
 			</ul>
 			<!-- End Links -->
 

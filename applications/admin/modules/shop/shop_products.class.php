@@ -25,6 +25,8 @@ class Shop_Products extends GW_Composite_Data_Object
 	    'changetrack'=>1
 	];
 	
+	public $modif_mode_display=false;
+	
 		
 	
 	
@@ -107,9 +109,9 @@ class Shop_Products extends GW_Composite_Data_Object
 		if($key=='title' && $this->parent_id){
 			return $this->get('parent')->title." - ".$this->modif_title;
 		}	
+				
+		if(( (GW::$context->app->app_name != 'SITE' && !isset($GLOBALS['product_modification_display_mode'])) || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
 		
-		if((GW::$context->app->app_name != 'SITE' || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
-			
 			return parent::__get($key);
 		}
 		
@@ -123,6 +125,7 @@ class Shop_Products extends GW_Composite_Data_Object
 			return $tmp;
 		}
 		
+		//d::ldump($key);
 		return $this->get('parent')->get($key);
 	}
 	

@@ -56,5 +56,10 @@ class Shop_DiscountCode extends GW_i18n_Data_Object
 		
 		parent::eventHandler($event, $context_data);
 	}
+	
+	function getTypes()
+	{
+		return  $this->getDB()->getColumnOptions($this->table, 'obj_type');
+	}	
 
 }

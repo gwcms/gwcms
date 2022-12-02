@@ -64,6 +64,10 @@
     <i id="delivery_opt">Pristatymo pasirinkimas</i>        
     <i id="deliverable">Fizinis pristatymas</i>
     <i id="status">Užsakymo būklė</i>
+    <i id="obj_type">Prekių grupė</i>
+    <i id="discount_expires">Galioja iki</i>
+    <i id="valid_from">Galioja nuo</i>
+    <i id="singleuse">Vienkartinis</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
@@ -183,6 +187,7 @@
 	      <i id="rivile">Rivile - buhalterinė apskaita</i>
 	      <i id="discountcode">Nuolaidos kodai</i>
 	      <i id="multitype">Multitype - Daugiau nei vienas prekės paslaugos tipas</i>
+	      <i id="ordersummary">Prie mano užsakymu punktas santrauka</i>
 	</i>
 	<i id="delivery_algo">
 	      <i id="">Išjungta</i>
@@ -307,6 +312,7 @@
         <i id="title">Nuolaidos kodai</i>
         <i id="info">
           <i id="model">shop_discountcode</i>
+	  <i id="iconclass">fa fa-percent</i>
         </i>
       </i>	 		          
     </i>
