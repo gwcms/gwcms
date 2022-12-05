@@ -8,7 +8,6 @@
  * 
  * @author vidmantas
  *
- *
  */
 class GW_Composite_Data_Object Extends GW_Data_Object
 {
@@ -155,13 +154,13 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 
 		if(strpos($field, '/')!==false)
 		{
-	
-			
 			list($obj,$key) = explode('/', $field, 2);
 			
+			if(isset($this->composite_map[$obj]))
+				$this->composite_changed_fields[$obj]=1;
+			
 			$obj = $this->$obj;
-			//d::dumpas([$obj,$key]);
-					
+				
 			return $obj->set($key, $value);
 		}	
 
@@ -176,8 +175,6 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			return true;
 		}*/	
 		
-		
-				
 
 		$descript = $this->composite_map[$field];
 		$classname = $descript[0];
@@ -192,9 +189,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		
 		$item->setValues($value);
 		$this->composite_changed_fields[$field]=1;
-
-
-
+		
 		$this->composite_content_base[$field] = $item;
 	}
 
