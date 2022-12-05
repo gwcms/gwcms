@@ -9,6 +9,16 @@ class Module_Email_Queue extends GW_Common_Module
 		
 		$this->list_params['paging_enabled']=1;	
 		$this->config = new GW_Config($this->module_path[0].'/');
+		
+		
+		
+		if(isset($_GET['to']))
+			$this->filters['to']=$_GET['to'];
+		
+		
+		$this->app->carry_params['clean'] = 1;
+		$this->app->carry_params['to'] = 1;		
+				
 	}
 	
 	function doSend($item=false, $functiononly=false)
