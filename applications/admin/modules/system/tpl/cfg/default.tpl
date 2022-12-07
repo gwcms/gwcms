@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="824px"}
 
 {*$nowrap=1*}
 
@@ -21,19 +21,19 @@ moved to emails module
 {call e field=mail_insert_succ type=bool}
 
 {call e field=mail_is_smtp type=bool stateToggleRows="smtpdetails"}
+*}
 
 
 {capture assign=tmp}
-	<table>
-{call e field=mail_smtp_host type=text}
-{call e field=mail_smtp_user type=text}
-{call e field=mail_smtp_pass type=text}
-{call e field=mail_smtp_port type=number}
+	<table >
+{call e field=html2pdf_type type=select options=[dompdf,remote,remotechrome] options_fix=1}
+{call e field=html2pdf_remote_url type=text default="http://1.voro.lt:2080/html/dompdf2022/convert.php"}
+{call e field=html2pdf_remotechrome_url type=text default="http://1.voro.lt:2080/apps/chromeheadless/html2pdf.php"}
 	</table>
 {/capture}
 
-{call e field=smtp_config type=read value=$tmp rowclass="smtpdetails"}
-*}
+{call e field=html2pdf_config type=read value=$tmp rowclass="html2pdf"}
+
 
 
 {include file="default_form_close.tpl" submit_buttons=[save]}
