@@ -210,6 +210,10 @@ class GW_Mail_Helper
 			$mailer->addBCC($cfg->mail_bcc_all);
 		}
 				
+		if(isset($opts['dryrun'])){
+			return false;
+		}
+		
 		if(isset($opts['debug']))
 			d::dumpas($mailer);
 		

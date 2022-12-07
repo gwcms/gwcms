@@ -21,6 +21,14 @@ class Module_Email_Queue extends GW_Common_Module
 				
 	}
 	
+	function __eventAfterListParams(&$params)
+	{		
+		if(isset($_GET['searchbycontent'])){
+			$search=$_GET['searchbycontent'];
+			$params['conditions'] = GW_DB::mergeConditions ($params['conditions'], "body LIKE '%$search%'");
+		}
+	}
+	
 	function doSend($item=false, $functiononly=false)
 	{
 		if(!$item)

@@ -91,8 +91,15 @@ class GW_i18n_Data_Object extends GW_Composite_Data_Object
 			
 			if($ln !='en'){
 				$tmp = parent::get($this->getI18NFieldName($name, 'en'));
+				
+				$LNINF = "";
+				if(GW::$context->app->user){
+					if(GW::$context->app->user->group_ids){
+						$LNINF = "EN: ";
+					}
+				}
 
-				return $tmp && is_string($tmp) && !is_numeric($tmp) ? "EN: ".$tmp: $tmpO;
+				return $tmp && is_string($tmp) && !is_numeric($tmp) ? $LNINF.$tmp: $tmpO;
 			}
 		}
 		

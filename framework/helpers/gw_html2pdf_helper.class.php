@@ -16,7 +16,7 @@ class GW_html2pdf_Helper
 	
 	function convert($html, $stream=true, $opts=[])
 	{
-
+		///return self::remoteconvert($html, $stream=true, $opts=[]);
 
 		// instantiate and use the dompdf class
 		$dompdf = new Dompdf();
@@ -56,6 +56,22 @@ class GW_html2pdf_Helper
 			$dompdf->stream();		
 		else
 			return $dompdf->output();
+	}
+	
+	function remoteconvert($html, $stream=true, $opts=[])
+	{
+		$http=GW_Http_Agent::singleton();
+		//you can play directly with last convert
+		//http://1.voro.lt:2080/html/dompdf2022/convert.php?idname=last
+		
+		$result = $http->postRequest("http://1.voro.lt:2080/html/dompdf2022/convert.php", ['html'=>$html, 'options'=>$opts]);
+		
+		header("Content-Type: application/pdf");
+		header('Content-Length: '.strlen( $result ));
+		header('Content-Fisposition: inline; filename="' . 'document.pdf' . '"');
+		
+		echo $result;
+		exit;
 	}
 }
 

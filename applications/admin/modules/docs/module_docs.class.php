@@ -259,4 +259,87 @@ class Module_Docs extends GW_Common_Module
 		
 		return parent::getTranslation($opts);
 	}
+	
+	function doSendInvitations()
+	{
+		$users = [
+		    'type'=>'multiselect_ajax', 
+		    'modpath'=>"customers/users", 
+		    'empty_option'=>1, 
+		    'options'=>[], 
+		    'preload'=>1, 'required'=>1, 'width'=>"500px"
+		];
+		
+		$emailtpl = [
+		    'type'=>'select_ajax', 
+		    'modpath'=>"emails/email_templates", 
+		    'empty_option'=>1, 
+		    'options'=>[], 
+		    'source_args'=>['byid'=>1,'owner_type'=>'customers/users'] , 
+		    'preload'=>1, 
+		    'required'=>1, 
+		    'width'=>"250px"
+		];
+
+		$form = ['fields'=>['users'=>$users,'tpl'=>$emailtpl],'cols'=>2];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_USERS_AND_TEMPLATE'))))
+			return false;		
+		
+				
+		$users = GW_Customer::singleton()->findAll(GW_DB::inCondition('id', $answers['users']));
+		$temmplateid = $answers['tpl'];
+		
+		
+		$item = $this->getDataObjectById();
+				
+		$link1=Navigator::__getAbsBase().'/';
+		$link2='/direct/docs/docs/item?id='.$item->key;
+		
+		if(!isset($_GET['confirm'])){
+			echo "<style>.bodytest{ max-height:300px;overflow:scroll;background-color:white; padding: 10px;color:black }</style>";
+			echo "</pre>";
+		}
+		
+		foreach($users as $user){
+			
+			$opts=[];
+			$opts['tpl']=$temmplateid;
+			$opts['to'] = $user->email;
+			$opts['ln'] = $user->use_lang ? $user->use_lang : 'lt';
+			$contractlink = $link1.$opts['ln'].$link2;
+			
+			
+			$opts['vars']=[
+			    'user'=>$user,
+			    'CONTRACT_LINK'=>$contractlink
+			];
+			
+			if(!isset($_GET['confirm'])){
+				$opts['dryrun']=1;
+			}
+			
+			GW_Mail_Helper::sendMail($opts);
+			
+			
+			if(!isset($_GET['confirm'])){
+				echo '<div class="bodytest">';
+				echo implode(' ',$opts['to']);
+				echo "<hr>";
+				echo $opts['subject'];
+				echo "<hr>";
+				echo $opts['body'];
+				echo '</div>';
+			}
+			
+		}
+		
+		if(isset($_GET['confirm'])){
+			$this->setMessage('SENT: '.count($users));
+			$this->jump();
+		}
+		
+		$this->askConfirm("Are you sure you want to send");
+	}
 }
