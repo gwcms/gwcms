@@ -58,10 +58,10 @@ class Module_Articles extends GW_Public_Module
 
 			
 			
-			$this->tpl_vars['breadcrumbs_attach'][] =  [
-			    'title' => GW_String_Helper::truncate($item->title, 40),
-			    'url' => $_SERVER['REQUEST_URI']
-			];			
+			//$this->tpl_vars['breadcrumbs_attach'][] =  [
+			//    'title' => GW_String_Helper::truncate($item->title, 40),
+			//    'url' => $_SERVER['REQUEST_URI']
+			//];			
 			
 			
 			$this->smarty->assign('item', $item);

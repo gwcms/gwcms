@@ -100,7 +100,11 @@
 {/capture}
 	{$fields_config.fields.items=[type=>read, value=>$tmp,layout=>wide,title=>false]}
 
+{if $smarty.get.insert_time}
+	{$fields_config.fields=[insert_time=>[type=>text]]+$fields_config.fields}
+{/if}
 
+	
 
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}

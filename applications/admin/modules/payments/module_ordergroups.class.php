@@ -52,6 +52,8 @@ class Module_OrderGroups extends GW_Common_Module
 			$cfg["fields"]['itax_status_ex'] = 'Lof';
 		}
 		//d::dumpas($cfg);
+		
+		$cfg['filters']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
 					
 		return $cfg;
 	}

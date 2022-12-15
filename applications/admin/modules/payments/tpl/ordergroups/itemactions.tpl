@@ -33,7 +33,7 @@
 	
 {list_item_action_m url=["`$item->id`/mailS1"] iconclass="fa fa-envelope-o" caption="Siųsti klientui laišką ..."}
 
-
+{list_item_action_m url=["`$item->id`/form", ['insert_time'=>1]] iconclass="fa fa-calendar" caption="Keisti sąskaitos datą"}
 
 
 
