@@ -4,6 +4,7 @@ ALTER TABLE `shop_discountcode` ADD `singleuse` TINYINT NOT NULL AFTER `create_o
 
 ALTER TABLE `gw_order_group` ADD `amount_coupon` FLOAT NOT NULL AFTER `amount_shipping`;
 ALTER TABLE `gw_order_group` ADD `amount_discount` FLOAT NOT NULL AFTER `amount_coupon`;
+ALTER TABLE `gw_order_group` ADD `amount_discount` FLOAT NOT NULL AFTER `amount_total`;
 
 ALTER TABLE `shop_discountcode` ADD `obj_type` ENUM('shop_products','gw_reservations','gw_membership','shop_subscription') NOT NULL AFTER `create_order_id`;
 

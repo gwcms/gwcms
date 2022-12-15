@@ -362,6 +362,87 @@ class Module_Tools extends GW_Common_Module
 		
 	}
 	
+	
+
+	function getDirContents($dir, &$results = array()) {
+	    $files = scandir($dir);
+
+	    foreach ($files as $key => $value) {
+		$path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+		if (!is_dir($path)) {
+		    $results[] = $path;
+		} else if ($value != "." && $value != "..") {
+		   self:: getDirContents($path, $results);
+		    $results[] = $path;
+		}
+	    }
+
+	    return $results;
+	}
+
+
+ 	public $doTestProjectLines = ["info"=>"calculate code size"];
+	
+	function doTestProjectLines()
+	{
+		
+		$excludes = ['/.git/', '/vendor/' ,'/repository/',  '/pack/','/test/'];
+		$fileslist = self::getDirContents(GW::s('DIR/ROOT'));
+		$extensions = ['php','tpl','xml','js','css'];
+		
+		$goodlinesize = 60;
+		
+		foreach($fileslist as $idx => $filename){
+			
+			$skip = false;
+			foreach($excludes as $excl){
+				if(strpos($filename, $excl)!==false){
+					unset($fileslist[$idx]);
+					
+					$skip=true;
+					break;;
+				}
+			}
+			
+			if($skip)
+				continue;
+			
+			
+			$extension = pathinfo($filename, PATHINFO_EXTENSION);
+			$fsize = filesize($filename);
+			@$num[$extension]++;
+			@$filesizes[$extension]+= $fsize;
+			
+			if(in_array($extension, $extensions))
+				$byextension[$extension][]  = [
+				    str_replace(GW::s('DIR/ROOT'), '', $filename),
+				    round($fsize / $goodlinesize),
+				    count(explode("\n", file_get_contents($filename)))
+				    ];
+		}
+		
+		foreach($extensions as $ext){
+			
+			
+			$info[$ext] = [
+				'file_count'=> $num[$ext],
+				'file_sumsize'=> GW_File_Helper::cFileSize($filesizes[$ext]),
+				'lines'=>round($filesizes[$ext] / $goodlinesize)
+			];
+			
+		}
+		
+		d::ldump('LINE SIZE: 60 chars');
+		d::ldump($info);
+		
+		foreach($extensions as $ext){
+			
+			
+			d::ldump($byextension[$ext]);
+			
+		}		
+	}   
+	
 	public $doTestUserError = ["info"=>"Test user error"];
 	
 	function doTestUserError()
