@@ -81,6 +81,7 @@ class GW
 	static $context;
 	//jeigu prisijunges vartotojas developeris
 	static $devel_debug;
+	static $globals = [];
 
 	/**
 	 *
@@ -256,7 +257,7 @@ class GW
 	}	
 	
 	
-	function multiSiteSolve($cfg)
+	static function multiSiteSolve($cfg)
 	{
 		if(!isset($_SERVER['HTTP_HOST']))
 			return false;

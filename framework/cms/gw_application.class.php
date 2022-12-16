@@ -192,7 +192,14 @@ class GW_Application
 		$s->_file_perms = 0666;
 		$s->_dir_perms = 0777;
 
-		$s->assignByRef('GLOBALS', $GLOBALS);
+		//
+		
+		if(phpversion()<'8.0'){
+			$s->assignByRef('GLOBALS', $GLOBALS);
+		}else{
+			$s->assignByRef('GLOBALS', GW::$globals);
+		}
+		
 		$s->assign('app', $this);
 
 		$s->assign('app_base', $this->app_base);
