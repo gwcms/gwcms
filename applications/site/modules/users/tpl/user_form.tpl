@@ -99,10 +99,36 @@
 
 {*sports*}
 {if $fields.fields.club &&  !$register}
-	<div class="col-md-6">
-		{$options.club=$options.club_long}
-		{include "inputs/select2other.tpl" field=club}
-	</div>
+	{if GW::s(SPORT)==badminton}
+		
+			{capture assign=tmp}
+				{GW::ln('/M/USERS/ENTER_CLUB_NOTE')}
+
+
+				{if $item->birthdate && $item->birthdate!='0000-00-00'}
+					<a title="{GW::ln('/g/REQUEST_TO_ADMIN_CHANGE_CLUB')}" href="{$app->buildUri('direct/support/support',['message'=>"{GW::ln('/g/REQUEST_TO_ADMIN_CHANGE_CLUB')}.\n{GW::ln("/g/PLEASE_CHANGE_MY_INF")}"])}">
+								<i class="fa fa-exclamation-triangle"></i>
+					</a>
+				{/if}		
+			{/capture}			
+					
+		
+		<div class="col-md-6">
+		{if $item->club}
+			
+
+			{input field="club" required=1 type=birthdate value=$item->clubObj->title readonly=$tmpreadonly note_raw=$tmp help=GW::ln('/M/USERS/RENTER_BIRTHDATE_HELP')}	
+		{else}
+			{$options.club=$options.club_long}
+			{include "inputs/select2other.tpl" field=club note_raw=$tmp}			
+		{/if}
+		</div>
+	{else}
+		<div class="col-md-6">
+			{$options.club=$options.club_long}
+			{include "inputs/select2other.tpl" field=club}
+		</div>	
+	{/if}
 {/if}
 {*sports*}
 {if $fields.fields.coach &&  !$register}
