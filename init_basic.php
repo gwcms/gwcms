@@ -15,7 +15,11 @@ include "config/main.php";
 GW_Autoload::init();
 
 register_shutdown_function(['GW_Debug_Helper','errorReport']);
-set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
+
+
+
+if(phpversion()<'8.0')
+	set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
 
 $proc_timer = new GW_Timer;
 

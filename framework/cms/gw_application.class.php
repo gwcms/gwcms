@@ -174,15 +174,37 @@ class GW_Application
 
 	function initSmarty()
 	{
-		require_once GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
-		$s = & $this->smarty;
+		//d::dumpas(GW::s('SMARTY_VERSION'));
+		
+		if(GW::s('SMARTY_VERSION')>=4){
+			require_once GW::s('DIR/VENDOR') . 'smarty4/Smarty.class.php';	
+			
+			$s = & $this->smarty;
 
-		$s = new SmartyBC;
+			$s = new Smarty;
+
+			error_reporting(0);
+			$s->setErrorReporting(0);
+			$s->muteUndefinedOrNullWarnings();		
+			$s->compile_check = false;
+			$s->error_reporting = 0;			
+		}else{
+			require_once GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
+			$s = & $this->smarty;
+
+			$s = new SmartyBC;
 
 
-		$s->compile_check = true;
+			$s->compile_check = true;
+			//$s->allow_php_tag=true;
+			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
+
+		}
+		
+		
+
 		//$s->allow_php_tag=true;
-		$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
+		//$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
 
 
 		$s->compile_dir = GW::s("DIR/TEMPLATES_C");

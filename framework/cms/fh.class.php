@@ -16,6 +16,10 @@ class FH
 	{
 		$res = Array();
 
+		if(GW::s('SMARTY_VERSION')>=4){
+			return $smarty->getTemplateVars();
+		}
+		
 		foreach ($vars_arr as $key)
 			$res[$key] = & $template_obj->getVariable($key)->value;
 
