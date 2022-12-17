@@ -14,11 +14,11 @@ include "config/main.php";
 
 GW_Autoload::init();
 
-register_shutdown_function(['GW_Debug_Helper','errorReport']);
+//EXPERIMENTAL php8.1 labai daug erroru meto is po smarcio reiktu protingesnio varianto
+if(phpversion()<'8.0'){
+	register_shutdown_function(['GW_Debug_Helper','errorReport']);
+}
 
-
-
-if(phpversion()<'8.0')
 	set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
 
 $proc_timer = new GW_Timer;

@@ -81,7 +81,7 @@ class GW
 	static $context;
 	//jeigu prisijunges vartotojas developeris
 	static $devel_debug;
-	static $globals = [];
+	static $globals = [];  //EXPERIMENTAL php 8.1 globalu kai nebeleidzia priskirti per linka
 
 	/**
 	 *
