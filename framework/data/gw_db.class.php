@@ -35,7 +35,7 @@ class GW_DB
 	public $sql_collect=false;
 	public $sql_collect_data=[];
 
-	function parse_uphd($uphd)
+	static function parse_uphd($uphd)
 	{
 		if(is_array($uphd))
 			return $uphd;

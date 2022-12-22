@@ -166,7 +166,7 @@ class GW_Debug_Helper
 				$nosend[]="not production environment";
 			
 			//is background request - isset($_GET['sys_call'])
-			if(!isset($_GET['sys_call']) && isset(GW::$context->app->user) && GW::$context->app->user->isRoot())
+			if(!isset($_GET['sys_call']) && isset(GW::$context->app->user->id) && GW::$context->app->user->isRoot())
 				$nosend[]="root user && frontend request";	
 			
 			//$nosend = false;

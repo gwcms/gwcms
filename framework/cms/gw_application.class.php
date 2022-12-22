@@ -212,6 +212,11 @@ class GW_Application
 			$s->compile_check = true;
 			//$s->allow_php_tag=true;
 			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
+			
+			if(phpversion()>'8.0'){
+				$s->error_reporting = 0;
+				$s->setErrorReporting(0);
+			}
 
 		}
 		
