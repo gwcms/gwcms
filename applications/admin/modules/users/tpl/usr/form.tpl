@@ -60,4 +60,4 @@
 {/if}
 
 
-{include file="default_form_close.tpl" extra_fields=[id,login_time,login_count,last_ip,insert_time,update_time,referer]}
+{include file="default_form_close.tpl" extra_fields=[id,login_time,login_count,last_ip,insert_time,update_time,referer,pass_change]}

@@ -138,18 +138,34 @@ class GW_User extends GW_Composite_Data_Object
 			return false;
 
 		$tmp = $this->get('pass');
+		
+		//d::dumpas([$tmp, $pass, $this->cryptPass($pass, null)]);
 
-		return $tmp == $this->cryptPass($pass, $tmp);
+		return $tmp == $this->cryptPass($pass, null);
 	}
 
 	function eventHandler($event, &$context_data = [])
 	{
 		switch ($event) {
 			case 'PREPARE_SAVE':
-				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new'])
-					$this->set('pass', $this->cryptPass($this->get('pass_new')));
-
-				break;
+				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new']){
+					$new = $this->get('pass_new');
+					$oldc = $this->get('pass');
+					
+					
+					
+					$this->set('pass', $newc=$this->cryptPass($new));
+					
+					//d::dumpas([$new, $newc, $oldc]);
+					//d::ldump($this->toArray());
+					
+					if($oldc!=$newc)
+						$this->pass_change = date('Y-m-d');
+					
+					//d::ldump($this->toArray());
+					//d::dumpas($this->changed_fields);
+				}
+			break;
 		}
 
 		parent::eventHandler($event, $context_data);

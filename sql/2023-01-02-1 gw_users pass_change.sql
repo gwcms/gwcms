@@ -1,0 +1,1 @@
+ALTER TABLE `gw_users` ADD `pass_change` DATE NOT NULL AFTER `pass`;

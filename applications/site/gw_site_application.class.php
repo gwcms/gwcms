@@ -122,9 +122,11 @@ class GW_Site_Application extends GW_Application
 	
 	function geoIpLang()
 	{
-		$country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
-		if($country!="LT"){
-			$this->ln = "en";
+		if(function_exists('geoip_country_code_by_name')){
+			$country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+			if($country!="LT"){
+				$this->ln = "en";
+			}
 		}
 	}
 
