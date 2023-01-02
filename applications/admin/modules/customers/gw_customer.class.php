@@ -152,7 +152,7 @@ class GW_Customer extends GW_User
 
 	function getByUsername($username) 
 	{
-		return $this->find(Array('email=?', $username));
+		return $this->find(['(username=? OR email=? OR person_id=?) AND active=1 AND removed=0', $username,$username,$username]);
 	}
 
 	function getForActivationById($id) 
