@@ -28,7 +28,7 @@ class GW_html2pdf_Helper
 	
 	
 	
-	function convert($html, $stream=true, $opts=[])
+	static function convert($html, $stream=true, $opts=[])
 	{
 		$cfg = self::loadCfg();
 		
@@ -43,7 +43,7 @@ class GW_html2pdf_Helper
 		}
 	}
 	
-	function convertDompdf($html, $stream=true, $opts=[])
+	static function convertDompdf($html, $stream=true, $opts=[])
 	{
 		// instantiate and use the dompdf class
 		$dompdf = new Dompdf();
@@ -89,7 +89,7 @@ class GW_html2pdf_Helper
 			return $dompdf->output();		
 	}
 	
-	function stream($pdfcontents)
+	static function stream($pdfcontents)
 	{
 		header("Content-Type: application/pdf");
 		header('Content-Length: '.strlen( $pdfcontents ));
@@ -97,7 +97,7 @@ class GW_html2pdf_Helper
 		die($pdfcontents);
 	}
 	
-	function remoteconvert($html, $stream=true, $opts=[])
+	static function remoteconvert($html, $stream=true, $opts=[])
 	{
 		$cfg = self::loadCfg();
 		$url = $cfg->html2pdf_remote_url;	
@@ -122,7 +122,7 @@ class GW_html2pdf_Helper
 		
 	}
 	
-	function testService($url)
+	static function testService($url)
 	{
 		$rand = date('ymdhis');
 		$testurl=$url.'?test='.$rand;
@@ -141,7 +141,7 @@ class GW_html2pdf_Helper
 		return true;
 	}
 	
-	function remoteConvertChromeHeadless($html, $stream=true, $opts=[])
+	static function remoteConvertChromeHeadless($html, $stream=true, $opts=[])
 	{
 		$cfg = self::loadCfg();
 		$url = $cfg->html2pdf_remotechrome_url;

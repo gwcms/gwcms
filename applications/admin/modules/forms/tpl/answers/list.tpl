@@ -39,7 +39,9 @@
 	{function dl_actions_preview}
 		{if $item->doc_id}
 			{list_item_action_m 
-				href="/lt/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}" iconclass="fa fa-eye" action_addclass="iframe-under-tr"
+				href="/lt/direct/docs/docs/item?id={$item->doc->key}&answerid={$item->id}&clean=2" iconclass="fa fa-eye" 
+				action_addclass="iframe-under-tr"
+				title='Atverti atskirame lange<br>'
 				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
 			}
 		{/if}

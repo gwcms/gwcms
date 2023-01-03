@@ -42,10 +42,10 @@ class GW_Extension_KeyVal
 			case 'AFTER_INSERT':
 				$this->constructExt();
 				
+				$this->obj->setOwnerId($this->parent->id);
 				
 				if($this->cacheNotSaved)
 				{
-					$this->obj->setOwnerId($this->parent->id);
 					$this->obj->storeAll($this->cacheNotSaved);
 					$this->cacheNotSaved = [];	
 				}
