@@ -134,6 +134,25 @@ class Module_Orders extends GW_Public_Module
 			$this->doMontonioPay($args);
 		}elseif($type=='banktransfer'){
 			$this->app->jump('direct/orders/orders/paybanktransfer',['id'=>$order->id,'orderid'=>$order->id]);
+			
+		}elseif($type=='zeroprice'){			
+			if($order->amount_total>0){
+				$this->setError(GW::ln('/m/ERROR_COUPON_AMOUNT_NOT_SUFFICIENT'));
+				header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'key'=>$order->secret]));
+				return true;
+			}
+			if($order->amount_coupon){
+				$args = ['id'=>$order->id];
+				$args['rcv_amount'] = $order->amount_total;
+				$args['pay_type'] = 'couponpay';
+						
+				$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+				d::dumpas($url);
+				$this->setMessage($url);		
+				header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'key'=>$order->secret]));
+			}
+			
+			
 		}else{
 			d::dumpas("Unknown method $type");
 		}
@@ -219,7 +238,7 @@ class Module_Orders extends GW_Public_Module
 		
 
 		//nebepridet pakartotinai
-		if(!$order->items || $order->amount_total <= 0)
+		if(!$order->items || ($order->amount_total <= 0 && !$order->amount_items))
 		{
 			$this->setMessage("/g/CART_EMPTY");
 			$this->app->jump();
@@ -809,7 +828,7 @@ class Module_Orders extends GW_Public_Module
 			
 			
 			//dovanu kuponai 
-			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0 AND ', $discode]);
+			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0 ', $discode]);
 
 
 			if($coupon){

@@ -20,6 +20,11 @@
 ]
 }
 
+{if $smarty.get.shift_key==1 && $app->user->isRoot()}
+	{$fields_config.fields.used_amount=[type=>text]}
+{/if}
+
+
 
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}

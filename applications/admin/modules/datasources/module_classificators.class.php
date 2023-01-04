@@ -8,7 +8,7 @@ class Module_Classificators  extends GW_Common_Module
 	{
 		parent::init();
 		$this->options['classtypes'] = GW_Classificator_Types::singleton()->getOptions();
-		$this->options['classtypeskey'] = 
+		//$this->options['classtypeskey'] = 
 		
 		$this->app->carry_params['clean']=1;
 		$this->app->carry_params['type']=1;

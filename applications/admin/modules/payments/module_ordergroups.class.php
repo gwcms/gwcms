@@ -344,8 +344,10 @@ class Module_OrderGroups extends GW_Common_Module
 		if(!$order)
 			$order = $this->getDataObjectById();
 		
+		//if( ($_GET['pay_type']??false) == 'couponpay')
+		//	d::dumpas([$order, $_GET]);
 		
-		if($order->payment_status==7){
+		if($order->payment_status==7 && !isset($_GET['debugrepeat'])){
 			$this->setError(GW::l('/m/PAYMENT_ALREADY_ACCEPTED'));
 			$this->app->jump();
 		}	
@@ -356,7 +358,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$log_entry_id = $_GET['log_entry_id'] ?? false;
 		$rcv_amount = $_GET['rcv_amount'] ?? false;
 		
-		if($log_entry_id){
+		if($log_entry_id || isset($_GET['pay_type'])){
 			$order->pay_type = $_GET['pay_type'];
 		}
 			
