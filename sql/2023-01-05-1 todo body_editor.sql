@@ -1,0 +1,1 @@
+ALTER TABLE `gw_todo` ADD `body_editor` TINYINT NOT NULL AFTER `time_have`, ADD `body_editor_height` TINYINT NOT NULL AFTER `body_editor`;
