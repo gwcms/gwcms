@@ -139,9 +139,13 @@ class GW_User extends GW_Composite_Data_Object
 
 		$tmp = $this->get('pass');
 		
-		//d::dumpas([$tmp, $pass, $this->cryptPass($pass, null)]);
-
-		return $tmp == $this->cryptPass($pass, null);
+		if($this->pass_change >'2023-01-05'){
+			//d::dumpas('a');
+			return $tmp == $this->cryptPass($pass, null);
+		}else{
+			//d::dumpas('b');
+			return $tmp == $this->cryptPass($pass, $tmp);
+		}
 	}
 
 	function eventHandler($event, &$context_data = [])
@@ -151,7 +155,7 @@ class GW_User extends GW_Composite_Data_Object
 				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new']){
 					$new = $this->get('pass_new');
 					$oldc = $this->get('pass');
-					
+
 					
 					
 					$this->set('pass', $newc=$this->cryptPass($new));
@@ -165,7 +169,7 @@ class GW_User extends GW_Composite_Data_Object
 					//d::ldump($this->toArray());
 					//d::dumpas($this->changed_fields);
 				}
-			break;
+				break;
 		}
 
 		parent::eventHandler($event, $context_data);
@@ -395,5 +399,4 @@ class GW_User extends GW_Composite_Data_Object
 	function __toString(){
 		return $this->title;
 	}
-	
 }
