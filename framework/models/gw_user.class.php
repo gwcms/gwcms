@@ -140,10 +140,10 @@ class GW_User extends GW_Composite_Data_Object
 		$tmp = $this->get('pass');
 		
 		if($this->pass_change >'2023-01-05'){
-			d::dumpas('a');
+			//d::dumpas('a');
 			return $tmp == $this->cryptPass($pass, null);
 		}else{
-			d::dumpas('b');
+			//d::dumpas('b');
 			return $tmp == $this->cryptPass($pass, $tmp);
 		}
 	}
