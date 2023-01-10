@@ -295,7 +295,7 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function doUpdateInvoices()
 	{
-		$list = $this->model->findAll();
+		$list = $this->model->findAll('payment_status=7');
 		
 		foreach($list as $item)
 			$this->doSaveInvoice($item);
