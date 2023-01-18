@@ -6,7 +6,7 @@
 
 
 {capture assign=code}{literal}{{/literal}GW::ln("/{$item->module}/{$item->key}"){literal}}{/literal}{/capture}
-{list_item_action_m onclick="copyTextToClipboard('`$code`');return false;"|escape:'quotes' iconclass="fa fa-link" caption="Copy url to clipboard code"}
+{list_item_action_m onclick="copyTextToClipboard('{$code|escape:'html'}');return false;" iconclass="fa fa-link" caption="Copy url to clipboard code"}
 
 
 

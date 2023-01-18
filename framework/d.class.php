@@ -177,7 +177,7 @@ class d
 			if (strlen($data) > 1000)
 				$data = substr($data, 0, 1000) . "...";
 
-			$backtracestr.="<li style='text-decoration:underline;padding:0;margin:0;' title='" . htmlspecialchars($data, ENT_QUOTES) . "'>" . @$point['file'] . " : " . @$point['line'] . " : " . @$point['class'] . @$point['type'] . @$point['function'] . "</li>";
+			$backtracestr.="<li class='openfile' style='text-decoration:underline;padding:0;margin:0;' title='" . htmlspecialchars($data, ENT_QUOTES) . "'>" . @$point['file'] . " : " . @$point['line'] . " : " . @$point['class'] . @$point['type'] . @$point['function'] . "</li>";
 		}
 
 		$GLOBALS['debug_block'] = isset($GLOBALS['debug_block']) ? $GLOBALS['debug_block'] + 1 : 1;
@@ -187,6 +187,18 @@ class d
 		}else{
 			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>
 			<div id='debug_bl_{$GLOBALS['debug_block']}' style='display:none'><ul>$backtracestr</ul></div>";
+			
+			//open in netbeans
+			$str.='<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>';
+			$str.="<style>.openfile{ cursor:pointer }</style><script>$('.openfile').click(function(e){ 
+				var arg=this.innerText; arg=arg.split(':'); 
+				console.log(arg)
+				\$.get(
+				'http://localhost/gw/tools/netbeanopen/nb_open.php', 
+				{file: arg[0].split(' ')[0], line: arg[1].split(' ')[1]},
+				function(data){ console.log(data) }
+				) });
+				</script>";
 		}
 		
 

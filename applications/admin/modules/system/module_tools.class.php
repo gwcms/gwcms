@@ -280,22 +280,43 @@ class Module_Tools extends GW_Common_Module
 		 */
 		$this->initModCfg();
 		
-		$url = Navigator::backgroundRequest($this->buildUri(false,[],['app'=>'admin']), ["act"=>'doATestBackgroundRequest','test_string'=>$test_string]);
+		$url = Navigator::backgroundRequest($path=$this->buildUri(false,[],['app'=>'admin']), $get_args=["act"=>'doATestBackgroundRequest','test_string'=>$test_string]);
 		
-		sleep(3);
+		//d::dumpas([$path, $get_args]);
+		$newtesturl=Navigator::tempAccessUrl(GW_USER_SYSTEM_ID, $path, $get_args);
 		
-		print_r([
-			'RequestedUrl'=>$url, 
+
+		if(isset($_GET['impuls_failsafe'])){
+			$response = file_get_contents($newtesturl);
+		}
+		
+
+		sleep(2);
+		
+		$failsafeurl=Navigator::buildURI($_SERVER['REQUEST_URI'], ['impuls_failsafe'=>isset($_GET['impuls_failsafe'])?null:1]+$_GET);
+		
+		
+		$info=[
+			'impuls RequestedUrl'=>$url, 
+			'failsafe_testurl'=>$newtesturl,
+			'failsafe_response'=>$response ?? 'N/A',
 			'$this->config->backgroundTestValue'=>$this->modconfig->backgroundTestValue,
 			'test_string'=>$test_string,
-			'passed'=> $test_string == $this->modconfig->backgroundTestValue ? 'yes' : 'no'
-		]);
+			'passed'=> $test_string == $this->modconfig->backgroundTestValue ? 'yes' : 'no',
+			'run_fail_safe'=>'<a class="btn btn-primary" href="'.$failsafeurl.'">'.(isset($_GET['impuls_failsafe'])?'on':'off').'</a>',
+		];		
+		
+		
+		print_r($info);
 		
 	}
 	
 	
 	function doATestBackgroundRequest()
 	{
+		
+	
+		
 		$this->initModCfg();
 		$this->modconfig->backgroundTestValue = $_GET['test_string'];
 		echo "your test string: ".$_GET['test_string'];
