@@ -19,7 +19,8 @@ if(phpversion()<'8.0'){
 	register_shutdown_function(['GW_Debug_Helper','errorReport']);
 }
 
-	set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
+set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
+set_error_handler(['GW_Debug_Helper','errrorHandler'], E_WARNING);
 
 $proc_timer = new GW_Timer;
 

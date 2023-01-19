@@ -1,0 +1,28 @@
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<style>.openfile, .openfile1{ cursor:pointer } .backtracerequest{ color: red }</style>
+<script>
+	function OpenInNetbeans(file, line)
+	{
+		$.get('http://localhost/gw/tools/netbeanopen/nb_open.php', 
+			{file: file, line: line},
+			function(data){ console.log(data) }
+		) 		
+	}
+	
+	$(function(){
+		$('.openfile1').click(function(){
+			OpenInNetbeans($(this).data('file'), $(this).data('line'));
+		});
+
+
+		$('.openfile').click(function(e){ 
+			var arg=this.innerText; arg=arg.split(':'); 
+			OpenInNetbeans(arg[0].split(' ')[0], arg[1].split(' ')[1]);
+		});
+		
+		
+	})
+	
+
+</script>";

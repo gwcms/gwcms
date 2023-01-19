@@ -115,6 +115,126 @@ class GW_Debug_Helper
 		}								
 	}
 	
+	static function FriendlyErrorType($type)
+	{
+	    switch($type)
+	    {
+		case E_ERROR: // 1 //
+		    return 'E_ERROR';
+
+		case E_WARNING: // 2 //
+		    return 'E_WARNING';
+
+		case E_PARSE: // 4 //
+		    return 'E_PARSE';
+
+		case E_NOTICE: // 8 //
+		    return 'E_NOTICE';
+
+		case E_CORE_ERROR: // 16 //
+		    return 'E_CORE_ERROR';
+
+		case E_CORE_WARNING: // 32 //
+		    return 'E_CORE_WARNING';
+
+		case E_COMPILE_ERROR: // 64 //
+		    return 'E_COMPILE_ERROR';
+
+		case E_COMPILE_WARNING: // 128 //
+		    return 'E_COMPILE_WARNING';
+
+		case E_USER_ERROR: // 256 //
+		    return 'E_USER_ERROR';
+
+		case E_USER_WARNING: // 512 //
+		    return 'E_USER_WARNING';
+
+		case E_USER_NOTICE: // 1024 //
+		    return 'E_USER_NOTICE';
+
+		case E_STRICT: // 2048 //
+		    return 'E_STRICT';
+
+		case E_RECOVERABLE_ERROR: // 4096 //
+		    return 'E_RECOVERABLE_ERROR';
+
+		case E_DEPRECATED: // 8192 //
+		    return 'E_DEPRECATED';
+
+		case E_USER_DEPRECATED: // 16384 //
+		    return 'E_USER_DEPRECATED';
+
+	    }
+
+	    return "";
+	}	
+	
+	static function errrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		static $erroridx;
+		
+		$erroridx++;
+		
+		self::openInNetBeans0();
+		
+		if (!(error_reporting() & $errno)) {
+			// This error code is not included in error_reporting, so let it fall
+			// through to the standard PHP error handler
+			return false;
+		}
+
+		$file_short= str_replace(GW::s('DIR/ROOT'), '', $errfile);
+
+		$backtrace_request = "";
+	
+		if(GW::$context->app->user && GW::$context->app->user->isRoot())
+		{
+			unset($_GET['url']);
+			
+			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
+				$url= Navigator::buildURI(false, ['backtrace_request'=>null]+$_GET);
+				$backtrace_request = "<a class='backtracerequest' href='$url'>BTclose</a>";
+			}else{
+				$url= Navigator::buildURI(false, ['backtrace_request'=>$erroridx]+$_GET);
+				$backtrace_request = "<a class='backtracerequest' href='$url'>BTopen</a>";				
+			}
+			
+
+		}
+				
+		$errstr = "<span class='openfile1' data-file='$errfile' data-line='$errline'><b>".self::FriendlyErrorType($errno)."</b> $file_short on line $errline: $errstr</span> $backtrace_request<br/>";
+					
+						
+		//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
+		echo $errstr;
+		
+		if(GW::$context->app->user && GW::$context->app->user->isRoot())
+		{			
+			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
+				echo d::fbacktrace(debug_backtrace()).'<br>';
+			}
+		}		
+		
+
+
+		/* Don't execute PHP internal error handler */
+		return true;
+	}
+
+	static function openInNetBeans0()
+	{
+		$GLOBALS['netbeansinitrequest']=1;
+	}
+	
+	static function openInNetBeans()
+	{
+		if(isset($GLOBALS['netbeansinitdone']))
+			return false;
+		
+		echo file_get_contents(GW::s('DIR/ADMIN/ROOT').'static/html/open_in_netbeans.html');		
+		$GLOBALS['netbeansinitdone'] = 1;
+	}
+	
 	static function processError($e)
 	{
 		$data = $e+[
