@@ -1,15 +1,25 @@
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-
 <style>.openfile, .openfile1{ cursor:pointer } .backtracerequest{ color: red }</style>
 <script>
-	function OpenInNetbeans(file, line)
-	{
-		$.get('http://localhost/gw/tools/netbeanopen/nb_open.php', 
-			{file: file, line: line},
-			function(data){ console.log(data) }
-		) 		
-	}
-	
+function runWithJQuery(jQueryCode){
+    if(window.jQuery)  jQueryCode();
+    else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js";
+        script.onload = jQueryCode;
+    }
+}
+
+function OpenInNetbeans(file, line)
+{
+	$.get('http://localhost/gw/tools/netbeanopen/nb_open.php', 
+		{file: file, line: line},
+		function(data){ console.log(data) }
+	) 		
+}
+
+runWithJQuery(function(){
 	$(function(){
 		$('.openfile1').click(function(){
 			OpenInNetbeans($(this).data('file'), $(this).data('line'));
@@ -24,5 +34,6 @@
 		
 	})
 	
+})
 
-</script>";
+</script>

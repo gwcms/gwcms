@@ -174,14 +174,14 @@ class GW_Debug_Helper
 		static $erroridx;
 		
 		$erroridx++;
-		
-		self::openInNetBeans0();
-		
+			
 		if (!(error_reporting() & $errno)) {
 			// This error code is not included in error_reporting, so let it fall
 			// through to the standard PHP error handler
 			return false;
 		}
+		
+		self::openInNetBeans();
 
 		$file_short= str_replace(GW::s('DIR/ROOT'), '', $errfile);
 
@@ -233,6 +233,7 @@ class GW_Debug_Helper
 		
 		echo file_get_contents(GW::s('DIR/ADMIN/ROOT').'static/html/open_in_netbeans.html');		
 		$GLOBALS['netbeansinitdone'] = 1;
+		
 	}
 	
 	static function processError($e)
