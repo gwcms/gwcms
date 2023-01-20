@@ -45,6 +45,7 @@ class GW_Common_Module extends GW_Module
 	
 	//go with user_id col to identify owner of record
 	public $canCreateNew = null;
+	public $canAccessIfOwner=true;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -116,7 +117,7 @@ class GW_Common_Module extends GW_Module
 	
 	function procError($errStr, $errMail)
 	{
-		if($this->app->user->isRoot()){
+		if($this->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV ){
 			$this->setError($errStr);
 		}else{
 			$subj = GW::s('PROJECT_NAME'). ' - Mod warning env: '.GW::s('PROJECT_ENVIRONMENT');
@@ -1587,11 +1588,12 @@ class GW_Common_Module extends GW_Module
 		return method_exists($this, $name) || isset($this->allow_auto_actions[$name]);
 	}
 
+
 	function canBeAccessed($item, $opts=[])
 	{
 		$result = false;
 		
-		if($item->id){
+		if($item && $item->id){
 			$item->load_if_not_loaded();
 		}
 		
@@ -1601,13 +1603,36 @@ class GW_Common_Module extends GW_Module
 			return true;
 		}
 		
+		
+		//permit new item creation
 		if(($opts['action'] ?? false)=='create_new' && $this->canCreateNew){
 			return true;
 		}
 		
-		if(!$item->id && $this->canCreateNew){
+		//without this line form will be disabled for new item
+		if($item && !$item->id && $this->canCreateNew){
 			return true;
 		}
+		
+	
+		//reiktu pertvarkyt kad butu atskiros teises kai owneris ir is tos pacios grupes, ir kai visiems irasams
+		//panasiai kaip failu sistemoje - permissionai katalgui
+		//prie kiekvieno iraso tada turetu turbut buti vartotoju grupes id arba funkcija kuri pagal kiekvieno atskirai modulio logika
+		//galetu patikrint ar yra susijes su tam tikra grupe		
+		
+		//grant - 1
+		//deny - 2
+		if($item && method_exists($this, "checkOwnerPermission") && ($tmp=$this->checkOwnerPermission($item, $opts)) > 0){
+			if($tmp == 1)
+				return true;
+			
+			if($tmp == 2)
+				return false;
+			
+		}
+			
+		if($this->canAccessIfOwner && $item && $item->user_id == $this->app->user->id)
+			return true;
 
 		
 		
@@ -1627,7 +1652,7 @@ class GW_Common_Module extends GW_Module
 			$result = $this->access_level & $requestAccess; //$item->canBeAccessedByUser($this->app->user);
 		}	
 		
-		if($this->allowed_ids){
+		if($this->allowed_ids ?? false){
 			if(isset($this->allowed_ids[$item->id])){
 				return $this->allowed_ids[$item->id] & $requestAccess;
 			}else{
@@ -1640,7 +1665,8 @@ class GW_Common_Module extends GW_Module
 		if (isset($opts['nodie']) || $result)
 			return $result;
 
-		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
+		
+		$this->setError(($item ? $item->id:'-').' '.GW::l('/G/GENERAL/ACTION_RESTRICTED'));
 		$this->jump();
 	}
 	

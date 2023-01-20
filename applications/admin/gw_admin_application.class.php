@@ -40,6 +40,16 @@ class GW_Admin_Application extends GW_Application
 		return  GW_Permissions::canAccess($page->get('path'), $this->user->group_ids_cached) ;
 	}
 	
+	function canAccessX($path_or_page, $permission)
+	{
+		if(is_string($path_or_page))
+			$p=GW_ADM_Page::singleton()->getByPath($path_or_page);
+		
+		$access_level = $this->canAccess($p);
+		
+		return GW_Permissions::testPermission($access_level, $permission);
+	}
+	
 	function jumpToFirstChild()
 	{
 		if(!$item = $this->getPages(['return_first_only'=>1,'parent_id'=>$this->page->id]))

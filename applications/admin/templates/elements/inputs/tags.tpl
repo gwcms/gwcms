@@ -6,7 +6,11 @@
 	
 {if !isset($placeholder)}{$placeholder="Add tag"}{/if}
 
-{include "elements/inputs/text.tpl" type="text" tag_params = ['data-role'=>"tagsinput"]}
+{$tmpopt=['data-role'=>"tagsinput"]}
+{if $readonly}
+	{$tmpopt["disabled"]="true"}
+{/if}
+{include "elements/inputs/text.tpl" type="text" tag_params = $tmpopt}
 					
 <script>
 	require(['gwcms'], function(){

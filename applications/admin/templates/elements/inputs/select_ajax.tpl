@@ -2,11 +2,7 @@
 	{$maximumSelectionLength=1}
 {/if}
 
-{if $readonly}
-	{foreach $value as $selected}
-		{$options[$selected]}{if !$selected@last},{/if}
-	{/foreach}
-{else}
+
 
 	
 	{if $empty_option}
@@ -50,6 +46,7 @@
 		 data-urlargsaddfunc="{$urlArgsAddFunc}"  {*pasirodo data variablai gali buti tik mazosiom raidem jei nori per $(obj).data() paimt*}
 		 data-dontcloseonselect="{$dontCloseOnSelect}"
 		 data-onchangeFunc="{$onchangeFunc}"
+		 {if $readonly}data-disabled="disabled"{/if}
 		 {if $empty_option}data-emptyoption="1" data-placeholder="{GW::l('/g/EMPTY_OPTION/0')}"{/if}
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		{if $required}required="required"{/if}
@@ -90,4 +87,3 @@
 	
 
 	
-{/if}
