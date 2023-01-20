@@ -37,7 +37,7 @@
 {/if}
 
 <!-- Product Description -->
-<div class="container g-pt-50 g-pb-100">
+<div class="container g-pt-20 g-pb-100">
         <div class="row">
 		<div class="col-md-4">
 			
