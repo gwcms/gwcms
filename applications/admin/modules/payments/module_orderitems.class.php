@@ -5,6 +5,8 @@ class Module_OrderItems  extends GW_Common_Module
 {	
 	use Module_Import_Export_Trait;
 	
+	public $cartgroup_id=false;
+		
 	function init()
 	{	
 		
@@ -22,11 +24,13 @@ class Module_OrderItems  extends GW_Common_Module
 			}
 			
 		
-
-		$this->cartgroup_id = $this->app->path_arr['1']['data_object_id'] ?? false;
-		$this->cartgroup = GW_Order_Group::singleton()->find(['id=?', $this->cartgroup_id]);
+	
+		if($this->app->path_arr['1']['path_clean'] == 'payments/ordergroups'){
+			$this->cartgroup_id = $this->app->path_arr['1']['data_object_id'] ?? false;
+			$this->cartgroup = GW_Order_Group::singleton()->find(['id=?', $this->cartgroup_id]);
+		}
 		
-		if($this->cartgroup)
+		if($this->cartgroup ?? false)
 		{
 			$this->filters['group_id']=$this->cartgroup_id;
 		}

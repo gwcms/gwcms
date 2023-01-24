@@ -141,32 +141,39 @@ class d
 		self::ldump($x, $opts);
 	}
 
-	static function fbacktrace($bt)
+	static function fbacktrace($bt, $shift=-1, $hidden=true)
 	{
 		//limit size, sometimes can kill memory
 		//$bt = array_slice($bt, 0, 4);
 
 
-		if (!isset($bt[0]['file'])) //tiesiai is dump funkcijos kviecia
+		if($shift==-1){
+			if (!isset($bt[0]['file'])) //tiesiai is dump funkcijos kviecia
+				array_shift($bt);
+
+
+			//nesitas mane domina	
+			if ($bt[0]['file'] == __FILE__ || strpos($bt[0]['file'], 'f.class.php') !== false) //jei kviesta is dumpas funkcijos pirma pointa nuimti
+				array_shift($bt);
+
+
+			//jei kviecia naudojant dump ar dumpas funkcija
+			if (!$bt[0]['file'] && $bt[0]['function'] == 'dumpas') //dar vienas zingsnis
+				array_shift($bt);
+
+			if ($bt[0]['file'] == __FILE__ || strpos($bt[0]['file'], 'f.class.php') !== false) //ir dar vienas
+				array_shift($bt);
+
+
+			$point1 = $bt[0];
 			array_shift($bt);
-
-
-		//nesitas mane domina	
-		if ($bt[0]['file'] == __FILE__ || strpos($bt[0]['file'], 'f.class.php') !== false) //jei kviesta is dumpas funkcijos pirma pointa nuimti
-			array_shift($bt);
-
-
-		//jei kviecia naudojant dump ar dumpas funkcija
-		if (!$bt[0]['file'] && $bt[0]['function'] == 'dumpas') //dar vienas zingsnis
-			array_shift($bt);
-
-		if ($bt[0]['file'] == __FILE__ || strpos($bt[0]['file'], 'f.class.php') !== false) //ir dar vienas
-			array_shift($bt);
-
-
-		$point1 = $bt[0];
-		array_shift($bt);
-
+		}else{
+			if($shift)
+				for($i=0;$i<$shift;$i++)
+					array_shift($bt);
+				
+			$point1 = $bt[0];
+		}
 
 
 		$backtracestr = "";
@@ -186,7 +193,7 @@ class d
 			$str = "Im in {$point1['file']} {$point1['line']}\n";
 		}else{
 			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>
-			<div id='debug_bl_{$GLOBALS['debug_block']}' style='display:none'><ul>$backtracestr</ul></div>";
+			<div id='debug_bl_{$GLOBALS['debug_block']}' ".($hidden?"style='display:none'":'')."><ul>$backtracestr</ul></div>";
 			
 			GW_Debug_Helper::openInNetBeans();
 		}

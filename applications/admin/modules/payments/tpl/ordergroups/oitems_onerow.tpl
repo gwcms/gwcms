@@ -17,6 +17,7 @@
 		<td>{$item.qty}</td>
 		<td>{$item.price} &euro;</td>
 		<td>{$item.qty * $item.price} &euro;</td>
+		
 	</tr>
 {/foreach}
 </table>

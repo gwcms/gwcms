@@ -189,6 +189,7 @@
 	      <i id="discountcode">Nuolaidos kodai</i>
 	      <i id="multitype">Multitype - Daugiau nei vienas prekės paslaugos tipas</i>
 	      <i id="ordersummary">Prie mano užsakymu punktas santrauka</i>
+	      <i id="vat">Pvm mokesčio skaičiavimai</i>
 	</i>
 	<i id="delivery_algo">
 	      <i id="">Išjungta</i>

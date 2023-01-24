@@ -33,7 +33,9 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->addRedirRule('/^doItax|^viewItax/i','itax');		
 		
 		if($this->feat('rivile'))
-			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');			
+			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');	
+
+		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
 	}
 	
 
@@ -199,16 +201,38 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['ORDER_DETAILS_HTML'] = $this->getOrderItems($item,true);
 		}
 			
+		if($this->feat('vat')){
+			GW_VATgroups::singleton()->getOptionsNote();
+		}
+		
 		foreach($item->items as $oitem){
 			
-			$v['ITEMS'][] = [
+			$itm=[
 			    'title'=> $oitem->invoice_line, 
 			    'type'=> $oitem->type, 
 			    'qty'=>$oitem->qty, 
 			    'unit_price'=>$oitem->unit_price, 
 			    'total'=>$oitem->total
 			];
+			
+			if($this->feat('vat') && $oitem->vat_group){
+				$itm["vat"]=$oitem->vat_title;
+				$itm["vat_part"]=$oitem->vat_part;
+				
+				$v['VAT_GIDS'][$oitem->vat_group]=1;
+			}
+			
+			$v['ITEMS'][] = $itm;
 		}
+		
+		
+		if($this->feat('vat') && isset($v['VAT_GIDS'])){
+			$notes = GW_VATgroups::singleton()->getOptionsNote();
+			
+			
+			$v['VAT_NOTES'] = array_intersect_key($notes, $v['VAT_GIDS']);
+		}
+		
 		
 		if($user->id){
 			$attachuservars($v, $user);

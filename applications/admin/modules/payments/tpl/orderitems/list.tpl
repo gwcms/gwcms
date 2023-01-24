@@ -83,7 +83,7 @@
 	
 	
 	{function dl_cell_vat_group}
-		{$options.vatgroups[$item->vat_group]}
+		{$item->vat_title}
 	{/function}	
 
 	{capture append=footer_hidden}	

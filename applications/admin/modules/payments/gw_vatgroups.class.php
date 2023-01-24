@@ -7,7 +7,7 @@ class GW_VATgroups extends GW_i18n_Data_Object
 
 	public $validators = [
 	    'title' => ['gw_string', [ 'required'=>1 ]],
-	    'key' => ['gw_string', [ 'required'=>1 ]]
+	    //'key' => ['gw_string', [ 'required'=>1 ]]
 	];	
 	
 	public $default_order = "`priority` ASC";	
@@ -32,7 +32,7 @@ class GW_VATgroups extends GW_i18n_Data_Object
 			
 		//$this->set('key', preg_replace('/[^a-zA-Z-_0-9]/','_', strtoupper($this->get('key')) ));
 		
-
+		/*
 		$cond=Array
 		(
 			'`key`=? AND id!=?',
@@ -42,7 +42,7 @@ class GW_VATgroups extends GW_i18n_Data_Object
 
 		if($duplicate = $this->find($cond))
 			$this->errors['key']='/G/VALIDATION/UNIQUE';
-
+		*/
 			
 		return !(bool)count($this->errors);
 	}
@@ -59,4 +59,14 @@ class GW_VATgroups extends GW_i18n_Data_Object
 		
 		//return $opts;
 	}
+	
+	function getOptionsPercent()
+	{
+		return $this->getAssoc(['id', 'percent']);
+	}
+	
+	function getOptionsNote()
+	{
+		return $this->getAssoc(['id', 'note']);
+	}	
 }

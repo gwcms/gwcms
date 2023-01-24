@@ -38,6 +38,9 @@
 		{/if}
 		<a href="{$citem->link}"><img src="{$imurl}"></a>
 	{/if}
+	{if !$imurl}
+		-
+	{/if}
 {/function}
 
 <div class="row">
@@ -112,15 +115,26 @@
 <table>
 {foreach $order->items as $item}
 	<tr>
-		<td rowspan="5">
+		<td>
+			
 			{call name="ordereditemimage" size="100x100" alt=$alt}
 		</td>
-		<td></td>
+		<td>
+			
+			{$item->invoice_line} <br>
+			{$item->qty} x {$item->unit_price} &euro;<br>
+			{if $item->discount}<small>{GW::ln('/M/orders/DISCOUNT')}:</small> -{$item->discount*$item->qty} &euro;<br>{/if}
+			{if $item->obj->remote_id}<a target="_blank" href="{GW::s('SITE_URL')}{$item->link}">{$item->obj->remote_id}</a><br>{*natos*}{/if}
+			{if $m->feat(vat) && $item->vat_group}
+				<small>{GW::ln('/M/orders/VAT_TARIFF')}</small>: {$item->vat_title},  <small>{GW::ln('/M/orders/VAT_PART')}</small>: {$item->vat_part} &euro; <br>
+			{/if}			
+		</td>
 	</tr>
-	<tr><td></td><td>{$item->invoice_line}</td></tr>
-	<tr><td></td><td>{$item->qty} x {$item->unit_price} &euro;</td></tr>
-	{if $item->discount}<tr><td></td><td><small>{GW::ln('/M/orders/DISCOUNT')}:</small> -{$item->discount*$item->qty} &euro;</td></tr>{/if}
-	<tr><td></td><td><a target="_blank" href="{GW::s('SITE_URL')}{$item->link}">{$item->obj->remote_id}</a></td></tr>
+
+	
+	
+	
+
 	
 	
 	{capture assign=alt}{$item->title}{/capture}

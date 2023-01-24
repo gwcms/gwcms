@@ -13,7 +13,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 		'type'=>1,
 		'invoice_line'=>1,
 	    	'door_code'=>1,
-	    'coupon_codes'=>1
+	    'coupon_codes'=>1,
+	    'vat_title'=>1,
+	    'vat_part'=>1
 	];
 	
 	public $composite_map = [
@@ -26,7 +28,28 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	    'keyval'=>1
 	];				
 	public $keyval_use_generic_table = 1;
+	
+	
 		
+	static function getVatGroupsPerc()
+	{
+		static $cache;
+		
+		if(!$cache)
+			$cache = GW_VATgroups::singleton()->getOptionsPercent();
+		
+		return $cache;
+	}
+	
+	static function getVatGroups()
+	{
+		static $cache;
+		
+		if(!$cache)
+			$cache = GW_VATgroups::singleton()->getOptions();
+		
+		return $cache;
+	}	
 	
 	
 	function calculateField($name) {
@@ -50,7 +73,7 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;
 
 			case 'title':
-				if($item->id)
+				if($this->id)
 					return $this->type. ' - '.$this->obj->title;
 			break;
 			case 'type':
@@ -71,6 +94,23 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;		
 			case 'coupon_codes':
 				return explode(',',$this->keyval->coupon_codes);
+			break;
+			
+			case 'vat_title':
+				$opt=$this->getVatGroups();
+				return $opt[$this->vat_group] ?? ''; 
+			break;
+			case 'vat_part':
+				if(!$this->vat_group)
+					return '-';
+				
+				$percents=$this->getVatGroupsPerc();
+				
+				if(isset($percents[$this->vat_group]) && $percents[$this->vat_group]);
+					return $this->total * $percents[$this->vat_group] / 100;
+					
+				return '-';
+				
 			break;
 		
 		}

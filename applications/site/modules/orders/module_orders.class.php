@@ -576,12 +576,18 @@ class Module_Orders extends GW_Public_Module
 		$order = $this->getOrder(true);
 		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID]);	
 		
-		
-		
+				
 		$vars = $response['vars'];
 		
 		if(isset($_GET['preinvoice']))
 			$vars['preinvoice']=1;
+		
+		
+		if($this->feat('vat'))
+			$vars['VAT']=1;
+		
+		if(isset($_GET['vars']))
+			d::dumpas($vars);		
 		
 		$html = GW_Mail_Helper::prepareSmartyCode($response['tpl'], $vars);
 		
@@ -591,6 +597,8 @@ class Module_Orders extends GW_Public_Module
 		
 		if(isset($_GET['html']))
 			die($html);
+		
+
 		
 		$pdf=GW_html2pdf_Helper::convert($html, false);
 		//$this->mute_errors=$tmp;

@@ -13,7 +13,7 @@
 		qty=>[type=>number],
 		link=>[type=>text],
 		processed=>[type=>bool],
-		vat_group=>[type=>select_ajax,options=>[],modpath=>'payments/vatgroups',empty_option=>1]
+		vat_group=>[type=>select_ajax,options=>[],modpath=>'payments/vatgroups',empty_option=>1,preload=>1]
 	]
 
 ]}
@@ -26,6 +26,11 @@
 	{$fields_config.fields.context_obj_id=[type=>text]}
 	
 	{$fields_config.fields.deliverable=[type=>bool]}
+	
+{/if}
+
+{if $smarty.get.shift_key && $app->user->isRoot()}
+	{$fields_config.fields.group_id=[type=>text]}
 {/if}
 
 
