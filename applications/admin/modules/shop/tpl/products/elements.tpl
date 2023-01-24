@@ -39,11 +39,16 @@ inbound_flight_details
 		price => [type=>number, colspan=>1,step=>0.01],
 		qty => [type=>number, colspan=>1],
 		weight => [type=>number,step=>0.001, colspan=>1],
-		priority => [type=>number, colspan=>1]	
+		priority => [type=>number, colspan=>1]
 	]
 ]
 }
 
+
+{if $m->feat(vatgroups) || $item->vat_group}
+
+	{$fields_config.fields.vat_group=[modpath=>'payments/vatgroups', colspan=>1, empty_option=>1, hidden_note=>"leave empty to use shop default",options=>[], preload=>1, type=>select_ajax]}
+{/if}
 
 
 

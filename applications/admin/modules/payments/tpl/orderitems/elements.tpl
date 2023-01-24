@@ -12,7 +12,8 @@
 		unit_price=>[type=>number,step=>"0.01"],
 		qty=>[type=>number],
 		link=>[type=>text],
-		processed=>[type=>bool]
+		processed=>[type=>bool],
+		vat_group=>[type=>select_ajax,options=>[],modpath=>'payments/vatgroups',empty_option=>1]
 	]
 
 ]}

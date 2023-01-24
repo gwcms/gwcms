@@ -67,6 +67,11 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$this->config =  new GW_Config($this->module_path[0].'/');
 		$this->initFeatures();
+		
+		
+		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
+		
+
 	}
 	
 
@@ -86,7 +91,8 @@ class Module_OrderItems  extends GW_Common_Module
 			'modpath' => 'lof',
 			'unit_price' => 'Lof',
 			'qty' => 'Lof',
-			'total'=>'L',	    
+			'total'=>'L',
+			'vat_group'=>'Lof',
 			'insert_time'=>'lof',
 			'update_time'=>'lof',	
 			]
@@ -104,6 +110,9 @@ class Module_OrderItems  extends GW_Common_Module
 		}
 		
 		
+		$cfg['filters']['vat_group'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/vatgroups'];
+		
+		
 		if($this->feat('discountcode')){
 			$cfg['fields']['coupon_codes'] = 'L';
 		}
@@ -115,13 +124,9 @@ class Module_OrderItems  extends GW_Common_Module
 
 	function __eventBeforeListParams(&$params)
 	{		
-		
-		
-		
-		
+
 		if(!$this->cartgroup_id)
 		{
-			
 			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test";
 			$params['select']='a.*, '.$order_fields;
 			$params['joins']=[

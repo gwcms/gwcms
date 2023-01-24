@@ -53,6 +53,7 @@
     <i id="modification_display">Produkto variacijų sąrašo atvaizdavimas</i>
     <i id="group_id">Užsakymo id</i>
     <i id="pay_time">Apmokėjimo laikas</i>
+    <i id="vat_group">PVM</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="language_id">
@@ -237,6 +238,7 @@
 		<i id="wishlist">Wishlist - įsiminti pamėgtas prekes</i>
 		<i id="selectqty">Kiekio pasirinkimas</i>
 		<i id="ttlock">Bilietams turintiems laiką siųsti durų kodą</i>
+		<i id="vatgroups">Pvm grupės kiekvienam produktui</i>
           </i>
 	  
   </i>

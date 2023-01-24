@@ -523,6 +523,7 @@ class Module_Shop extends GW_Public_Module
 			//'context_obj_type'=>'gw_customer'
 			'qty_range'=>$this->feat('cart_item_qty1') ? "" :  "1;$item->qty",
 			'deliverable'=>$this->feat('delivery') ? 10 : 0, //real item
+			'vat_group'=>$item->vat_group ? $item->vat_group : $this->config->vatgroup,
 			'link' =>$url
 		];
 		

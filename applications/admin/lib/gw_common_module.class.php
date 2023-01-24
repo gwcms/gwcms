@@ -1589,6 +1589,10 @@ class GW_Common_Module extends GW_Module
 	}
 
 
+	/// siame metode turetu buti apsaugomas irasas
+	// -  nuo redagavimo arba pasalinimo jei per sistema prie vartotojo grupes nera nustatyta write teise - ateis teisiu komplektacija per access_level
+	// - jei irasas turi access stulpeli ? norint rasyti i irasa turetu tenkinti ir access_level ir  access stulpelio leidimas
+	
 	function canBeAccessed($item, $opts=[])
 	{
 		$result = false;
@@ -1599,9 +1603,6 @@ class GW_Common_Module extends GW_Module
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
-		if(($this->access_level & $requestAccess) || $this->app->user->isRoot()){
-			return true;
-		}
 		
 		
 		//permit new item creation
@@ -1640,16 +1641,21 @@ class GW_Common_Module extends GW_Module
 			return $this->readOnlyAccess($item, $opts);
 		}
 		
+		$result0 = ($this->access_level & $requestAccess) || $this->app->user->isRoot();
+		
+
+		
 		if(isset($item->content_base['access']))
 		{
 			$availAccess = $item->content_base['access'];
 			//1-read, 2-write check //admin/config/main.php for permission list
-			if ($availAccess & $requestAccess) {
-				$result = true;
-			}
+			$result1 = $availAccess & $requestAccess;
+				
+			
+			$result =  $result0 &&  $result1; 
 				
 		}else{
-			$result = $this->access_level & $requestAccess; //$item->canBeAccessedByUser($this->app->user);
+			$result = $result0; //$item->canBeAccessedByUser($this->app->user);
 		}	
 		
 		if($this->allowed_ids ?? false){

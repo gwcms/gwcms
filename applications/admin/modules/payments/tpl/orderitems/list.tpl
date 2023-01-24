@@ -26,7 +26,8 @@
 	
 	
 	{$dl_inline_edit=1}
-
+	
+	
 	{if $m->cartgroup_id}
 		{$dl_filters=[]}
 	{/if}
@@ -37,7 +38,7 @@
 		{$dl_actions=[editshift]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group]}
 
 
 	{function dl_cell_obj_id}
@@ -79,7 +80,11 @@
 		{/if}
 	{/function}	
 	
-
+	
+	
+	{function dl_cell_vat_group}
+		{$options.vatgroups[$item->vat_group]}
+	{/function}	
 
 	{capture append=footer_hidden}	
 		
@@ -94,7 +99,8 @@
 	
 	{$dl_output_filters.insert_time=short_time}
 	{$dl_output_filters.update_time=short_time}	
-	{$dl_output_filters.pay_time=short_time}		
+	{$dl_output_filters.pay_time=short_time}
+	
 {/block}
 
 

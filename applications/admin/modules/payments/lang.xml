@@ -68,6 +68,7 @@
     <i id="discount_expires">Galioja iki</i>
     <i id="valid_from">Galioja nuo</i>
     <i id="singleuse">Vienkartinis</i>
+    <i id="vat_group">PVM</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
@@ -314,7 +315,14 @@
           <i id="model">shop_discountcode</i>
 	  <i id="iconclass">fa fa-percent</i>
         </i>
-      </i>	 		          
+      </i>	
+      <i id="vatgroups">
+        <i id="title">PVM grupės</i>
+        <i id="info">
+          <i id="model">gw_vatgroups</i>
+	  <i id="iconclass">fa fa-percent</i>
+        </i>
+      </i>       		          
     </i>
   </i>
   
