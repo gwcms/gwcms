@@ -36,9 +36,15 @@
 	{$ck_set='minimum'}
 	{$ck_options.height=$tmpheight}
 	{$bodyInpType=htmlarea}
+	
+	{$ck_options.autoParagraph=false}
+	{$ck_options.enterMode='CKEDITOR.ENTER_BR'}
+
+	
 {elseif $item->body_editor == 1}
 	{$bodyInpType=textarea}
 	{$autoresize=1}
+
 {elseif $item->body_editor == 2}
 	{$bodyInpType=code_smarty}
 	

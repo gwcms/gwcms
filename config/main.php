@@ -73,7 +73,7 @@ define('GW_PERM_WRITE',2);
 define('GW_PERM_OPTIONS',4);
 define('GW_PERM_REMOVE',8);
 
-
+GW::s('OFFICE_IP_ADDR', '84.15.236.87');
 
 
 //define('',4); /* then 8, 16, 32, etc... */

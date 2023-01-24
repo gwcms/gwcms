@@ -290,6 +290,9 @@ class GW_Debug_Helper
 			if(!isset($_GET['sys_call']) && isset(GW::$context->app->user->id) && GW::$context->app->user->isRoot())
 				$nosend[]="root user && frontend request";	
 			
+			
+			if(!isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']==GW::s('OFFICE_IP_ADDR'))
+				$nosend[]="root user && frontend request";
 			//$nosend = false;
 				
 			

@@ -63,13 +63,20 @@ class Module_Answers extends GW_Common_Module
 		$fields = [];
 		foreach($elms as $e){
 			//
+			$params_expand = json_decode($e->config, true);
+			
 			$fields["keyval/{$e->fieldname}"]=[
 			    'type'=>$e->type, 
 			    "title"=>$e->title, 
 			    "hidden_note"=>$e->hidden_note,
 			    //'required'=>$e->required,
+			    'params_expand'=>$params_expand,
 			    'note'=>$e->note
 			];
+						
+			if(isset($params_expand['options_ln'])){	
+				$fields["keyval/{$e->fieldname}"]['options'] = GW::ln($params_expand['options_ln']);
+			}
 		}
 		
 		$fields['admin_note'] = ['type'=>'text'];
