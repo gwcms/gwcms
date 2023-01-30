@@ -2503,7 +2503,7 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars['prompt_title'] = $title;
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
-				
+					
 	
 		$tpl_name = GW::s("DIR/".$this->app->app_name."/TEMPLATES").'tools/prompt.tpl';
 			

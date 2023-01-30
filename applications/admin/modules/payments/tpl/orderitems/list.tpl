@@ -17,10 +17,24 @@
 		{$do_toolbar_buttons=[addnew]}
 	{/if}
 	
+	
+	{function name=do_toolbar_buttons_rootact}
+		{toolbar_button title="doCaptureObjInvoiceLines (root)" iconclass='gwico-Export text-error' href=$m->buildUri(false,[act=>doCaptureObjInvoiceLines])}	
+	{/function}
+
+	
+	
 	{if !$smarty.get.clean}
 		{$do_toolbar_buttons=[addnew]}
 		{$do_toolbar_buttons[] = hidden}
-		{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}		
+		{$do_toolbar_buttons[] = search}
+		{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}	
+		
+		
+		{if $app->user->isRoot()}
+			{$do_toolbar_buttons_hidden[]=rootact}
+		{/if}			
+		
 	{/if}	
 	
 	
@@ -38,7 +52,7 @@
 		{$dl_actions=[editshift]}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type]}
 
 
 	{function dl_cell_obj_id}
@@ -52,6 +66,10 @@
 	{function dl_cell_group_id}
 		<a target='_blank' href="{$app->buildUri("payments/ordergroups/{$item->group_id}/form")}">{$item->group_id}</a>
 	{/function}	
+	
+	{function dl_cell_obj_type}
+		{$options.obj_type[$item->obj_type]}
+	{/function}		
 	
 	{function dl_cell_door_code}
 		{*add flds=',door_code'*}

@@ -74,7 +74,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		
 		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
-		
+		$this->initObjTypes();
 
 	}
 	
@@ -88,8 +88,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$cfg = array('fields' => [
 			'id' => 'Lof', 
-			'type'=>'Lo',
-			'invoice_line'=>'L',
+			'invoice_line2'=>'Lof',
 			'obj_type'=> 'lof',
 			'obj_id'=> 'lof',
 			'modpath' => 'lof',
@@ -111,15 +110,22 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['pay_time'] = 'Lof';	
 			$cfg['fields']['pay_test'] = 'Lof';	
 			
+			
 		}
 		
+
 		
 		$cfg['filters']['vat_group'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/vatgroups'];
+		$cfg['filters']['obj_type'] = ['type'=>'select','options'=>$this->options['obj_type']];
 		
 		
 		if($this->feat('discountcode')){
 			$cfg['fields']['coupon_codes'] = 'L';
 		}
+		
+		
+		
+		
 		
 		return $cfg;
 	}
@@ -240,6 +246,17 @@ class Module_OrderItems  extends GW_Common_Module
 				
 	}
 	
+	function initObjTypes()
+	{
+		$tmp = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");	
+		
+		foreach($tmp as $itm)
+			$this->options['obj_type'][$itm] = GW::ln('/g/CART_ITM_'.$itm);
+		
+		$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
+		
+	}
+	
 	function viewForm()
 	{
 		$vars = parent::viewForm();
@@ -247,11 +264,7 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->initType($vars['item']);
 		
 		//pridedamas naujas itemsas
-		
-		if(isset($_GET['shift_key'])){
-			$this->options['obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
-			$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
-		}
+		$this->initObjTypes();
 		
 
 		return $vars;
@@ -271,7 +284,26 @@ class Module_OrderItems  extends GW_Common_Module
 			$this->jump();			
 	}
 
-	
+	function doCaptureObjInvoiceLines()
+	{
+		$t = new GW_Timer;
+		$list = $this->model->findAll("invoice_line2=''",['limit'=>'3000']);
+		
+		$changed = 0;
+		
+		foreach($list as $item){
+			$item->invoice_line2 = $item->invoice_line;			
+			
+			if($item->changed_fields){
+				$changed++;
+				$item->updateChanged();
+			}
+		}
+		
+		$cnt = count($list);
+		$speed = $t->stop();
+		$this->setMessage("Updated {$changed}/{$cnt} speed: $speed");
+	}
 	
 /*	
 	function __eventAfterList(&$list)

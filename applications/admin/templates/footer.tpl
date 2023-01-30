@@ -1,4 +1,4 @@
-
+	
 
 
 
@@ -22,7 +22,7 @@
 <p class="pad-lft">
 	{GW::l('/g/SERVER_TIME')}: <span id="server_time">{'H:i:s'|date}</span> 
 	<br />
-	{GW::l('/g/YOUR_IP')}: {$smarty.server.REMOTE_ADDR}
+	{GW::l('/g/YOUR_IP')}: {$smarty.server.REMOTE_ADDR} | {if $GLOBALS.proc_timer}{$GLOBALS.proc_timer->stop()}{/if}
 	
 </p>
 

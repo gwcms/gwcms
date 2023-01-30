@@ -259,7 +259,7 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function viewInvoice()
 	{
-		$item = $this->getDataObjectById();
+		$item = $this->getDataObjectById(true, false, GW_PERM_READ);
 		list($tpl_code, $v) = $this->initInvoiceVars($item);
 		
 		if(isset($_GET['preinvoice']))

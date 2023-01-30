@@ -1,0 +1,1 @@
+ALTER TABLE `gw_order_item` ADD `invoice_line2` VARCHAR(255) NOT NULL AFTER `id`;

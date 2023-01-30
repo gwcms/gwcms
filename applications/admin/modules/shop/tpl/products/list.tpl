@@ -103,8 +103,12 @@
 {function dl_cell_type}
 	<span title="id: {$item->type}">{$item->typeObj->title}</span>
 {/function}
+{function dl_cell_vat_group}
+	{$options.vatgroups[$item->vat_group]}
+{/function}
 
-{$dl_smart_fields=[mod,orders,image,type]} 
+
+{$dl_smart_fields=[mod,orders,image,type,vat_group]} 
 
 
 {$dl_toolbar_buttons[] = hidden}

@@ -50,7 +50,20 @@ class GW_Order_Item extends GW_Composite_Data_Object
 		
 		return $cache;
 	}	
+
 	
+	function eventHandler($event, &$context_data = array()) {
+		
+		switch($event){
+			case 'BEFORE_INSERT':
+				$this->invoice_line2 = $this->invoice_line;
+			break;
+			
+
+		}
+		
+		parent::eventHandler($event, $context_data);
+	}	
 	
 	function calculateField($name) {
 		

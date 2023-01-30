@@ -69,6 +69,7 @@
     <i id="valid_from">Galioja nuo</i>
     <i id="singleuse">Vienkartinis</i>
     <i id="vat_group">PVM</i>
+    <i id="invoice_line2">Prekė / paslauga</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>

@@ -46,6 +46,10 @@ class Module_Products extends GW_Common_Module
 		$this->app->carry_params['clean'] = 1;
 		$this->app->carry_params['parent_id'] = 1;
 		$this->app->carry_params['mods'] = 1;
+		
+		
+		if($this->feat('vatgroups'))
+			$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
 
 	}
 

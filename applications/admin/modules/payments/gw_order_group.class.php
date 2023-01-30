@@ -70,6 +70,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	
 	function addItem(GW_Order_Item $item){
 		$item->group_id = $this->id;
+		
 		$item->save();
 		
 		$this->updateTotal();
