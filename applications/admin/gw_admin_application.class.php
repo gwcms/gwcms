@@ -25,7 +25,7 @@ class GW_Admin_Application extends GW_Application
 	
 	function canAccess($page)
 	{
-		if((bool)(int)$page->get('public'))
+		if(is_object($page) && $page->get('public'))
 			return true;
 		
 		if(!$this->user)
@@ -42,8 +42,11 @@ class GW_Admin_Application extends GW_Application
 	
 	function canAccessX($path_or_page, $permission)
 	{
-		if(is_string($path_or_page))
+		if(is_string($path_or_page)){
 			$p=GW_ADM_Page::singleton()->getByPath($path_or_page);
+		} else {
+			$p = $path_or_page;
+		}
 		
 		$access_level = $this->canAccess($p);
 		
