@@ -214,8 +214,9 @@ class GW_Application
 			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');
 			
 			if(phpversion()>'8.0'){
-				$s->error_reporting = 0;
-				$s->setErrorReporting(0);
+				
+				$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');
+				$s->setErrorReporting(GW::s('SMARTY_ERROR_LEVEL8'));
 			}
 
 		}
