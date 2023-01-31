@@ -56,7 +56,7 @@ class GW_Temp_Data extends GW_Data_Object
 		$format = $opts['format'] ?? 'json';
 		$renew = $opts['renew'] ?? false;
 		
-		if(!$renew && ($tmp = $this->read($user_id, $group, $name)))
+		if(!$renew && ($tmp = $this->read($user_id, $group, $name)) && $tmp->expires > date('Y-m-d H:i:s'))
 		{
 			$val = $tmp->value;
 						

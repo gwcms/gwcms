@@ -90,7 +90,7 @@
 				 
 				 
 				 
-				{if GW::s('PROJECT_NAME')=='natos.lt'}
+				{if GW::s('PROJECT_NAME')=='manonatos.eu' || GW::s('PROJECT_NAME')=='natos.lt'}
 					 <input name="cart[{$item->id}][qty]" 
 						class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="text" value="{$item->qty}" 
 						readonly onchange="cartChanged()">	
