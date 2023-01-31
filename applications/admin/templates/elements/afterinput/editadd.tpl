@@ -48,7 +48,7 @@
 	</div>	
 	{/if}	
 	
-	{if $app->canAccessX($modpath, $smarty.const.GW_PERM_WRITE)}
+	{if $modpath && $app->canAccessX($modpath, $smarty.const.GW_PERM_WRITE)}
 		<button class="btn btn-default addBtn" type="button" title="{$object_title} :: {GW::l('/g/ADD')}"  data-url="{Navigator::buildURI($form_url,[id=>0])}"><i class="fa fa-plus-circle"></i></button>
 	{/if}
 
