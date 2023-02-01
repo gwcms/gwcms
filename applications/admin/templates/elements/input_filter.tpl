@@ -47,9 +47,18 @@
 			{$compare_opt=$params.ct}
 		{/if}
 		
+		{if $params.addct}
+			{$compare_opt=array_merge($compare_opt, $params.addct)}
+		{/if}
+		
+		
 		<label class="gwselect">
 		
-		<select name="{$inputct_name}" class="form-control filtertype">
+			
+		<select name="{$inputct_name}" class="form-control filtertype" onchange="gwcms.filtersonchangeCT(this, '{$name}')" data-last="">
+			{if $smarty.get.selectedCT}
+				{$compare_type=$smarty.get.selectedCT}
+			{/if}
 			{html_options options=$compare_opt selected=$compare_type|default:'LIKE'}
 		</select>
 		</label>
@@ -64,6 +73,9 @@
 				{$options=GW::l('/g/FILTER_EMPTY_OPTION')+$options|default:[]}
 			{/if}
 
+			{if $smarty.get.type}
+				{$inp_type=$smarty.get.type}
+			{/if}
 
 			{include file="elements/inputs/`$inp_type`.tpl"}    
 		</div>

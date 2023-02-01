@@ -793,6 +793,10 @@ class GW_Common_Module extends GW_Module
 				break;
 			case 'INSTR':
 				$value = explode(",", $value);		
+				
+			case 'DATERANGE':
+				$value = explode(" - ", $value);	
+				return $cond." >= '{$value[0]}.' AND ".$cond." <= '{$value[1]}'";
 			case 'IN':
 				if(is_array($value))
 					$cond .= "IN ('" . implode("','", GW_DB::escape($value)) . "')";
@@ -908,8 +912,19 @@ class GW_Common_Module extends GW_Module
 		return $this->list_config['pview'] ?? false;
 	}
 	
+	
+	function initFieldTypes()
+	{
+		if($this->model){
+			$types = $this->model->getFieldTypes();
+			$this->list_config['field_types'] = $types;
+		}
+				
+	}
+	
 	function setListParams(&$params = [])
 	{
+		$this->initFieldTypes();
 		$this->fireEvent('BEFORE_LIST_PARAMS', $params);
 		
 		$this->prep_list_params =& $params;
@@ -917,7 +932,7 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars+=$this->list_config;
 		$pview = $this->getPageView4use();
 		
-		
+	
 		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
 		
@@ -1743,7 +1758,7 @@ class GW_Common_Module extends GW_Module
 	{
 		
 		$this->fireEvent("BEFORE_GET_FILTERS");
-		
+		$this->initFieldTypes();
 		$this->prepareListConfig();
 		
 		
@@ -1793,6 +1808,28 @@ class GW_Common_Module extends GW_Module
 	}	
 	
 	
+	
+	
+	function initFilterByType()
+	{
+		if($this->list_config['field_types'] ?? false){
+			
+			//galima butu pagerint 
+			//kad like operacija isimt tinyint variantams
+			//pagal data dadet rangetipa
+			//panaudoti fieds/inputs konfiguracija
+			
+			
+			foreach($this->list_config['dl_filters'] as $field => $filtercfg){
+				if(isset($this->list_config['field_types'][$field]) && in_array($this->list_config['field_types'][$field], ['datetime','date']) && $filtercfg==1){
+					$this->list_config['dl_filters'][$field]=[
+					    'addct'=>['DATERANGE'=>'RANGE']
+					];
+				}
+			}
+		}			
+	}
+	
 	/**
 	 * 
 	 * užkrauna $this->list_config kuriame yra rodomi stulpeliai ir jų eiliškumas
@@ -1837,6 +1874,7 @@ class GW_Common_Module extends GW_Module
 		$this->list_config['dl_filters'] = $filters;
 		
 
+		$this->initFilterByType();
 		
 		return true;
 	}
@@ -2621,7 +2659,6 @@ class GW_Common_Module extends GW_Module
 					$upd |= $this->getTranslation (['item'=>$item,'field'=>$field, 'src'=>'en','dest'=>$ln,'check'=>true]);
 			}
 		}		
-		
 	}
 	
 	function doClone3()

@@ -117,6 +117,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$cfg['filters']['vat_group'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/vatgroups'];
 		$cfg['filters']['obj_type'] = ['type'=>'select','options'=>$this->options['obj_type']];
+		$cfg['filters']['pay_time'] = ['type'=>'daterange', 'ct'=>['DATERANGE'=>'RANGE']];
 		
 		
 		if($this->feat('discountcode')){
@@ -130,7 +131,7 @@ class Module_OrderItems  extends GW_Common_Module
 		return $cfg;
 	}
 	
-	
+
 
 	function __eventBeforeListParams(&$params)
 	{		

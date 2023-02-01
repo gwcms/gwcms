@@ -150,7 +150,17 @@ class GW_DB
 			return true;
 		}
 		
-		$this->result = $this->link->query($cmd);
+		
+
+		try {
+			$this->result = $this->link->query($cmd);
+		} catch (Exception $e) {
+			
+			$this->trigger_error($cmd, null, $nodie);
+			$this->result=false;
+			return false;
+		}		
+		
 		
 		$this->last_query_time = microtime(true)-$start;
 		$this->last_query = $cmd;

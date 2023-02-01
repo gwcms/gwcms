@@ -45,11 +45,21 @@
 	{if $m->cartgroup_id}
 		{$dl_filters=[]}
 	{/if}
+	
+	{function dl_actions_invoice}
+		{if $item->isdir==0}
+			{list_item_action_m 
+				url=["../ordergroups/invoice",[id=>$item->group_id,clean=>1]] iconclass="fa fa-file-o" action_addclass="iframe-under-tr"
+				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
+			}
+		{/if}
+	{/function}	
+	
 
 	{if $smarty.get.noactions}
 		{$dl_actions=[]}
 	{else}
-		{$dl_actions=[editshift]}
+		{$dl_actions=[editshift,invoice]}
 	{/if}
 	
 	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type]}
@@ -103,6 +113,7 @@
 	{function dl_cell_vat_group}
 		{$item->vat_title}
 	{/function}	
+	
 
 	{capture append=footer_hidden}	
 		

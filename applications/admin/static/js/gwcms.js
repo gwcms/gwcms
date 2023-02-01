@@ -973,18 +973,33 @@ var gwcms = {
 	},
 	
 	loadedfilters: [],
-	addFilters: function (name, value) {
+	addFilters: function (name, value, type, selectedCT) {
 		$('#gwDropFiltersLoading').show();
-		data = {act: 'doGetFilters', fieldname: name}
+		var data = {act: 'doGetFilters', fieldname: name}
+		if(type)
+			data.type = type;
 		
 		if(value)
 			data.value = value;
+		
+		if(selectedCT)
+			data.selectedCT = selectedCT;
 		
 		$.get(location.href, data, function (rdata) {
 			$('#gwDropFilters').append(rdata);
 			gwcms.filtersChanged();
 			$('#filterSpecialsInfo').fadeIn();
 		});
+	},
+	changeFilterType: function(obj, name, value, type, selected){
+		$(obj).parents('.filterRow').remove();
+		gwcms.addFilters(name, value, type, selected);
+	},
+	filtersonchangeCT: function(obj, name){
+		
+		if(obj.value=='DATERANGE'){ 
+			gwcms.changeFilterType(obj, name, false, 'daterange', obj.value) 
+		}
 	},
 	addAllFilters: function () {
 

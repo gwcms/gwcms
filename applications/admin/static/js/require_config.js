@@ -26,7 +26,8 @@ var require_config = {
 		sortable: "js/jq/jquery-sortable",
 		browser: "js/jq/browser",
 		iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin",
-		ckeditor:'/vendor/ckeditor1/ckeditor'
+		ckeditor:'/vendor/ckeditor1/ckeditor',
+		moment: '/applications/admin/static/pack/daterange/moment.min'
 
 	}
 }

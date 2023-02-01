@@ -70,6 +70,8 @@
     <i id="singleuse">Vienkartinis</i>
     <i id="vat_group">PVM</i>
     <i id="invoice_line2">Prekė / paslauga</i>
+    <i id="obj_id">Prekės / paslaugos id</i>
+    <i id="modpath">Modulis</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
@@ -132,7 +134,7 @@
     <i id="discount_id">Nuol.k.</i>
     <i id="adm_message"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye" aria-hidden="true"></i>  ]]></i>
        <i id="admin_note"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>  ]]></i>
-    
+	<i id="obj_id">Prek. id</i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
