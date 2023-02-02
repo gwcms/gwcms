@@ -20,3 +20,8 @@
 {if $app->user->isRoot()}
 	{list_item_action_m onclick="copyTextToClipboard('`$item->api_key`');return false" iconclass="fa fa-user-secret" confirm=1 caption="Copy api_key to clipboard (root only)"}
 {/if}
+
+{list_item_action_m 
+	href=$app->buildUri("emails/email_queue",[to=>$item->email,clean=>2]) 
+	iconclass="fa fa-envelope-square" action_addclass="iframe-under-tr"  
+	caption="išsiųsti laiškai"}
