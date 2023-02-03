@@ -48,7 +48,11 @@
 		{if isset($dl_custom_head.$field)}
 			{call name="dl_custom_head_$field"}
 		{else}
-			{$coltitle=$app->fh()->shortFieldTitle($field)}
+			{if $smarty.get.act==doExportListAsSheet}
+				{$coltitle=$app->fh()->fieldTitle($field)}
+			{else}
+				{$coltitle=$app->fh()->shortFieldTitle($field)}
+			{/if}
 			{if isset($dl_order_enabled_fields.$field)}
 				{include file="list/order.tpl" name=$field title=$coltitle}
 			{else}
@@ -60,7 +64,7 @@
 
 {function dl_list_proc_rows}
 
-	{foreach from=$list item=item}		
+	{foreach $list as $rowidx => $item}		
 		{$id=$item->id}
 		{$list_row_id=$list_row_id+1}
 		
@@ -81,7 +85,13 @@
 			{block name="item_row"}
 				{foreach $dl_fields as $field}				
 					<td class="dl_cell_{$field}">
-						{call dl_proc_row_cell}
+						{capture assign=tmp}
+							{call dl_proc_row_cell}
+						{/capture}
+						{$tmp}
+						{if $smarty.get.act=doExportListAsSheet}
+							{$GLOBALS.capturelist[$rowidx][$field]=trim($tmp)}
+						{/if}
 					</td>
 				{/foreach}
 
@@ -237,7 +247,15 @@
 					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable" data-context="{get_class(current($list))}">
 						<tr>	
 							{foreach $dl_fields as $field}
-								<th class='gwColumn' data-field="{$field}">{dl_proc_th_cell}</th>
+								<th class='gwColumn' data-field="{$field}">
+									{capture assign=tmp}
+										{dl_proc_th_cell}
+									{/capture}
+									{$tmp}
+									{if $smarty.get.act==doExportListAsSheet}
+										{$GLOBALS.capturelist['head'][$field]=trim($tmp)}
+									{/if}
+								</th>
 							{/foreach}	
 							{* {if count($dl_actions) && !$smarty.get.print_view} show if actions present*}
 							{if !$smarty.get.print_view} {* show even no actions present*}
@@ -309,5 +327,5 @@
 	{block name="close_tpl"}
 		{include file="default_close.tpl"}
 	{/block}	
-	
+		
 {/if}

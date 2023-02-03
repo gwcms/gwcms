@@ -3284,4 +3284,42 @@ class GW_Common_Module extends GW_Module
 		$this->setMessage('<a class="btn btn-primary" href="'.$this->buildUri('', $args+['act'=>$action]).'">'.GW::l('/m/VIEWS/'.$action).'</a>');		
 	}
 	
+	
+	function doExportListAsSheet()
+	{
+		$this->processView('list',['return_as_string'=>1]);
+		
+		$table = GW::$globals['capturelist'];
+		
+		$rows = [];
+		$fields = [];
+		$cells=[];
+		foreach($table['head'] as $field => $th){
+			$cells[] = $th;
+			$fields[] = $field;
+		}
+		$rows[]=$cells;
+		
+
+		
+		unset($table['head']);
+		
+		foreach($table as $idx => $x){
+			$cells =[];
+			
+			foreach($fields as $field)
+				$cells[] = strip_tags(html_entity_decode($table[$idx][$field]));
+			
+			$rows[]=$cells;
+		}
+		
+		$bc = $this->app->getBreadcrumbs($this->tpl_vars['breadcrumbs_attach']);
+		
+		$file_name=[GW::s('PROJECT_NAME')];
+		foreach($bc as $b)
+			$file_name[]=$b['title'];
+		
+		//d::dumpas($rows);
+		Others\Shuchkin\SimpleXLSXGen::fromArray($rows)->downloadAs(FH::urlStr(implode("_",$file_name)).'.xlsx');
+	}
 }

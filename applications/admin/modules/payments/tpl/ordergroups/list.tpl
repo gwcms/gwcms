@@ -9,6 +9,7 @@
 {/if}
 	
 	{$dl_inline_edit=1}
+	{$dl_calc_totals.amount_total=1}
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 

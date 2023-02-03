@@ -22,6 +22,6 @@ if(phpversion()<'8.0'){
 set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
 set_error_handler(['GW_Debug_Helper','errrorHandler'], E_WARNING);
 
-$proc_timer = new GW_Timer;
+GW::$globals['proc_timer'] = new GW_Timer;
 
 GW::init();

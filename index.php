@@ -17,6 +17,6 @@ if(isset($GLOBALS['netbeansinitrequest']))
 	
 echo "<!--err:".error_reporting()."-->";
 if(!GW::s('NO_PROCESS_TIME'))
-	echo "<!--process time ".$proc_timer->stop(5)."-->";
+	echo "<!--process time ".GW::$globals['proc_timer']->stop(5)."-->";
 
 //aaa

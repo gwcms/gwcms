@@ -33,8 +33,9 @@
 		
 		{if $app->user->isRoot()}
 			{$do_toolbar_buttons_hidden[]=rootact}
-		{/if}			
+		{/if}		
 		
+		{$dl_calc_totals.total=1}
 	{/if}	
 	
 	
