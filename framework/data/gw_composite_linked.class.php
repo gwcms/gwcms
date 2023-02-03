@@ -16,7 +16,9 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 	//paruosimas slave domenu operacijos
 	public function setParams($params) {
 		
-		$this->linkedobject = new $params['object'];
+		if($params['object'])
+			$this->linkedobject = new $params['object'];
+		
 		$this->params = $params;
 		
 	}
@@ -41,7 +43,7 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 		}
 		
 		
-		if($tmp=$this->linkedobject->find(["id=?", $id]))
+		if($this->linkedobject && ($tmp=$this->linkedobject->find(["id=?", $id])))
 		{
 			//echo "--$class--$id--asked--";
 			GW_Composite_Data_Object::$linked_cache[$class][$id] = $tmp;

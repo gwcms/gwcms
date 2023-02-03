@@ -79,6 +79,9 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		$params = $this->composite_map[$field];
 		$classname = $params[0];
 
+		if(!$classname)
+			return false;
+		
 		$obj = new $classname;
 
 		if (isset($params[1]))
