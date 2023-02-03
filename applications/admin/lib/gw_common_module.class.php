@@ -46,6 +46,7 @@ class GW_Common_Module extends GW_Module
 	//go with user_id col to identify owner of record
 	public $canCreateNew = null;
 	public $canAccessIfOwner=true;
+	public $write_permission = false;
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -54,6 +55,7 @@ class GW_Common_Module extends GW_Module
 	{
 		parent::init();
 
+		$this->write_permission = $this->canBeAccessed(false, ['access'=>GW_PERM_WRITE,'nodie'=>1]);
 		$this->list_params['paging_enabled'] = false;
 
 		//d::dumpas($this->app->page);
@@ -117,7 +119,8 @@ class GW_Common_Module extends GW_Module
 	
 	function procError($errStr, $errMail)
 	{
-		if($this->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV ){
+		//jei kaip root useris ARBA darbineje versijoje ARBA yra prisijunges kaip aukstesnis vartotojas
+		if($this->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || ($this->app->auth->session['switchUser'] ??false) ){
 			$this->setError($errStr);
 		}else{
 			$subj = GW::s('PROJECT_NAME'). ' - Mod warning env: '.GW::s('PROJECT_ENVIRONMENT');
@@ -1608,6 +1611,11 @@ class GW_Common_Module extends GW_Module
 	// -  nuo redagavimo arba pasalinimo jei per sistema prie vartotojo grupes nera nustatyta write teise - ateis teisiu komplektacija per access_level
 	// - jei irasas turi access stulpeli ? norint rasyti i irasa turetu tenkinti ir access_level ir  access stulpelio leidimas
 	
+	function isOwner($item)
+	{
+		return ($item->user_id == $this->app->user->id) || ($item->admin_id == $this->app->user->id);
+	}
+	
 	function canBeAccessed($item, $opts=[])
 	{
 		$result = false;
@@ -1647,7 +1655,7 @@ class GW_Common_Module extends GW_Module
 			
 		}
 			
-		if($this->canAccessIfOwner && $item && $item->user_id == $this->app->user->id)
+		if($this->canAccessIfOwner && $item && $this->isOwner($item))
 			return true;
 
 		
@@ -2823,6 +2831,11 @@ class GW_Common_Module extends GW_Module
 
 	function doMultiSetValue()
 	{
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}
+		
 		$fields = $this->__getListFields();
 		
 		
@@ -2899,6 +2912,11 @@ class GW_Common_Module extends GW_Module
 	
 	function doFillSeries()
 	{
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}		
+		
 		$fields = $this->__getListFields();
 		
 		
@@ -2983,6 +3001,11 @@ class GW_Common_Module extends GW_Module
 	
 	function doDragMoveSorting()
 	{
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}		
+		
 		$fields = $this->__getListFields();
 		$field = $_GET['field'] ?? false;
 				
@@ -3011,6 +3034,12 @@ class GW_Common_Module extends GW_Module
 	
 	function doAutoTranslate()
 	{
+		
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}
+		
 		if(!$this->app->user->isRoot())
 		{
 			$this->setError("Need root access");
@@ -3125,6 +3154,12 @@ class GW_Common_Module extends GW_Module
 	
 	function doSavePositions()
 	{
+		
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}
+		
 		$positions = json_decode($_POST['positions'], true);
 		
 		$workfield = $_POST['rearragefield'] ?: 'priority';

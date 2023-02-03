@@ -11,7 +11,14 @@ class Module_Groups extends GW_Common_Module
 	
 	function canBeAccessed($item, $opts=[])
 	{
-		$result = $item->canBeAccessedByUser($this->app->user);
+		
+		
+		if($item){
+			$result = $item->canBeAccessedByUser($this->app->user);
+		}else{
+			return parent::canBeAccessed($item, $opts);
+		}
+		
 		
 		if (isset($opts['nodie']) || $result)
 			return $result;

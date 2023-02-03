@@ -21,7 +21,7 @@ class Module_Usr extends GW_Common_Module
 			$this->filters['parent_user_id'] = $this->app->user->id;
 		}
 		
-		$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);
+		//$this->options['parent_user_id'] = GW::getInstance('GW_User')->getOptions(false);
 		
 		
 		
@@ -50,24 +50,17 @@ class Module_Usr extends GW_Common_Module
 	}
 		
 
-	function canBeAccessed($item, $opts=[])
-	{	
-		//parent::canBeAccessed($item);
-		if($item->id)
-			$item->load_if_not_loaded();
-		
-		$result = ($this->rootadmin) || $item->id==0 || $this->isSuperAdmin || ($item->parent_user_id == $this->app->user->id);
-		
-		if(!isset($opts['die']) || $result)
-			return $result;
-
-		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
-		
-		
-		$this->jump($this->app->page->path);
-	}
+	//($item->parent_user_id == $this->app->user->id
 	
-	
+	function checkOwnerPermission($item, $ops=[])
+	{
+		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		if($item && !$this->isSuperAdmin && ($requestAccess & GW_PERM_WRITE))
+			if($item->parent_user_id == $this->app->user->id)
+				return 1; //grant
+		
+	}		
 	
 	
 	function __eventBeforeDelete($item)
@@ -201,6 +194,11 @@ class Module_Usr extends GW_Common_Module
 				unset($cfg['fields'][$field]);
 		
 		
+		foreach(["email",'phone','name', 'surname'] as $field)
+			$cfg['inputs'][$field]=['type'=>'text'];
+		
+		$cfg['inputs']["group_ids"] = ['type'=>'multiselect','options'=>$this->options['group_ids']];;
+		
 		$cfg['filters']['group_ids'] = ['type'=>'multiselect','options'=>$this->options['group_ids']];
 			
 		return $cfg;
@@ -227,7 +225,7 @@ class Module_Usr extends GW_Common_Module
 	function getOptionsCfg()
 	{
 		$opts = [
-		    'title_func'=>function($item){ return "(".$item->id.") ". $item->title; },
+		    'title_func'=>function($item){ return "(".$item->id.") ". $item->title. ($item->removed?' [REMOVED]':''); },
 		    'search_fields'=>['name','surname','email','username']
 		];	
 		
