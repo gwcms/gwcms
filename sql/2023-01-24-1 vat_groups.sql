@@ -1,8 +1,6 @@
 
-ALTER TABLE `shop_products` ADD `vat_group` TINYINT NOT NULL AFTER `priority`;
-ALTER TABLE `gw_order_item` ADD `vat_group` TINYINT NOT NULL AFTER `qty_range`;
 
-ALTER TABLE `gw_vatgroups` CHANGE `access` `access` TINYINT NOT NULL DEFAULT '3';
+ALTER TABLE `gw_order_item` ADD `vat_group` TINYINT NOT NULL AFTER `qty_range`;
 
 
 
@@ -51,6 +49,8 @@ INSERT INTO `gw_vatgroups` (`id`, `title`, `percent`, `key`, `note`, `active`, `
 (1, '0%', 0, '0', '', 1, 3, 0, '2023-01-23 15:55:25', '2023-01-23 15:55:28'),
 (2, '21%', 21, '21', '', 1, 3, 1, '2023-01-23 15:57:24', '2023-01-23 19:51:06');
 
+ALTER TABLE `gw_vatgroups` CHANGE `access` `access` TINYINT NOT NULL DEFAULT '3';
+
 --
 -- Indexes for dumped tables
 --
@@ -72,3 +72,5 @@ ALTER TABLE `gw_vatgroups`
 ALTER TABLE `gw_vatgroups`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
+
+ALTER TABLE `shop_products` ADD `vat_group` TINYINT NOT NULL AFTER `priority`;
