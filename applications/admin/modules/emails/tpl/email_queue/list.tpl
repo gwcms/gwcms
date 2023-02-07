@@ -10,7 +10,9 @@
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,sendqueue]}	
 
 	{function name=do_toolbar_buttons_sendqueue}
-		{toolbar_button title='Send queue' iconclass='fa fa-cog' href=$m->buildUri(false,[act=>doSendQueue])}	
+		{if $m->write_permission}	
+			{toolbar_button title='Send queue' iconclass='fa fa-cog' href=$m->buildUri(false,[act=>doSendQueue])}
+		{/if}
 	{/function}	
 		
 	{$dl_inline_edit=1}		
@@ -29,14 +31,18 @@
 	{$dl_actions=[edit,delete_ajax,send,preview]}	
 	
 	{function name=dl_actions_send}
-		{if $item->status=="SENT"}
-			{$tmp=1}{$color="text-warning"}
-			{$tmp2=['data-confirm_text'=>GW::l('/m/REPEAT_SEND_CONFIRM')]}
-		{else}
-			{$tmp=0}{$color=""}
-			{$tmp2=""}
+		{if $m->write_permission}
+
+			{if $item->status=="SENT"}
+				{$tmp=1}{$color="text-warning"}
+				{$tmp2=['data-confirm_text'=>GW::l('/m/REPEAT_SEND_CONFIRM')]}
+			{else}
+				{$tmp=0}{$color=""}
+				{$tmp2=""}
+			{/if}
+
+			{list_item_action_m url=[false,[act=>dosend,id=>$item->id]] iconclass="fa fa-send-o `$color`" confirm=$tmp tag_params=$tmp2 action_addclass="ajax-link"}
 		{/if}
-		{list_item_action_m url=[false,[act=>dosend,id=>$item->id]] iconclass="fa fa-send-o `$color`" confirm=$tmp tag_params=$tmp2 action_addclass="ajax-link"}
 	{/function}
 
 	{function dl_actions_preview}

@@ -15,6 +15,22 @@
 
 
 
+
+
+
+{if $item->get('itax_status_ex/purchase')==7}
+	{list_item_action_m url=[false,[act=>doItaxCancel,id=>$item->id]] iconclass="fa fa-window-close text-danger" confirm=1 caption="Šalinti iš itax(Pirkimo sąsk.)"}
+{/if}
+
+
+{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" confirm=1 caption="Suvesti į Itax"}
+
+
+{list_item_action_m url=[false,[act=>doSendInvitations,id=>$item->id]] iconclass="fa fa-envelope-o" caption="Siųsti kvietimus pasirašyti"}
+{list_item_action_m 
+	href=$app->buildUri("emails/email_queue",[searchbycontent=>$item->key,clean=>2]) 
+	iconclass="fa fa-envelope-square" action_addclass="iframe-under-tr"  
+	caption="išsiųsti laiškai"}
 {*
 <li class="divider"></li>
 

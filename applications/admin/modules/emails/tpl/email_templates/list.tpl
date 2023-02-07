@@ -21,10 +21,12 @@
 	{/function}
 
 	{function name=dl_actions_deleteCheck}
-		{if $item->protected}
-			<i class="fa fa-lock text-muted"></i>
-		{else}
-			{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}
+		{if $m->write_permission}	
+			{if $item->protected}
+				<i class="fa fa-lock text-muted"></i>
+			{else}
+				{list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1}
+			{/if}
 		{/if}
 	{/function}	
 	
