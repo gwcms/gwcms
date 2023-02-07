@@ -109,6 +109,7 @@
 
 
 {$dl_smart_fields=[mod,orders,image,type,vat_group]} 
+{$dl_inline_edit=1}
 
 
 {$dl_toolbar_buttons[] = hidden}

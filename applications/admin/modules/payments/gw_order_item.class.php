@@ -29,6 +29,10 @@ class GW_Order_Item extends GW_Composite_Data_Object
 	];				
 	public $keyval_use_generic_table = 1;
 	
+	//used in ordered items
+	public $ignore_fields = [
+		'modpath' => 1
+	];		
 	
 		
 	static function getVatGroupsPerc()

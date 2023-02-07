@@ -208,7 +208,7 @@ class Module_OrderGroups extends GW_Common_Module
 		foreach($item->items as $oitem){
 			
 			$itm=[
-			    'title'=> $oitem->invoice_line, 
+			    'title'=> $oitem->invoice_line2, 
 			    'type'=> $oitem->type, 
 			    'qty'=>$oitem->qty, 
 			    'unit_price'=>$oitem->unit_price, 

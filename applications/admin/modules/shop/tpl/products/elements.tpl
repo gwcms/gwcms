@@ -30,7 +30,7 @@ inbound_flight_details
 	cols=>2,
 	fields=>[
 		image=>[type=>image, colspan=>1],
-		"keyval/description"=>[type=>textarea,colspan=>1],
+		"keyval/description"=>[type=>htmlarea,colspan=>1],
 		title => [type=>text, colspan=>1], 
 		type => [modpath=>'shop/prodtypes', colspan=>1, 
 		note=>GW::l('/m/UPDATE_AFTER_CHANGE'), hidden_note=>GW::l('/m/UPDATE_AFTER_CHANGE_HIDD')]+$sel_ajax,

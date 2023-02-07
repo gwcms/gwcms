@@ -29,10 +29,6 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	];				
 	public $keyval_use_generic_table = 1;	
 	
-	public $ignore_fields = [
-		'keyval' => 1
-	];	
-	
 		
 	function updateTotal()
 	{
