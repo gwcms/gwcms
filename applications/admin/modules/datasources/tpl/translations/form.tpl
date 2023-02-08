@@ -1,32 +1,7 @@
 {include file="default_form_open.tpl"}
 
 
-{capture assign=modopts}
-	
-      <span class="input-group-btn">	
-
-		
-	<div class="btn-group">
-	    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-	     <span class="caret"></span></button>
-	    <ul class="dropdown-menu" role="menu">
-		    {foreach $options.module as $tmp}
-			<li><a href="javascript:setModule('{$tmp}')">{$tmp}</a></li>
-		{/foreach}
-	    </ul>
-	  </div>		
-		
-      </span>
-	<script>function setModule(val){ $('#itemform input[name="item[module]"]').val(val); }</script>
-	    
-<style>
-	
-	.input-group { height: 32px; }
-</style>		
-{/capture}
-
-
-{call e field=module after_input=$modopts}
+{call e field=module after_input_f=textopts options=$options.module options_fix=1}
 {call e field=key}
 
 

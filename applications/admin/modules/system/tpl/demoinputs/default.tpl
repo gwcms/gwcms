@@ -1,10 +1,12 @@
-{include file="default_form_open.tpl"}
+{include file="default_form_open.tpl" form_width="1000px"}
 
+{$demooptions=[1=>'option1', '2'=>"option2", '3'=>"option3", '4'=>"option4"]}
+{$demooptionsfix=['option1','option2','option3']}
 
 {call e field=demo_select type=select options=[1=>'Random option1', '2'=>"Random option2"] empty_option=1}
 {call e field=demo_multiselect 
 	type=multiselect 
-	options=[1=>'option1', '2'=>"option2", '3'=>"option3", '4'=>"option4"] 
+	options=$demooptions
 	empty_option=1 value=json_decode($item->demo_multiselect)
 	sorting=1
 }
@@ -14,6 +16,10 @@
 {call e field=demo_number type=number min=1 max=10}
 {call e field=demo_email type=email}
 {call e field=demo_date type=date}
+{call e field=demo_datetime type=datetime}
+
+{call e field=demo_daterage type=daterange}
+
 {call e field=demo_color type=color}
 
 {call e field=demo_text type=text}
@@ -120,8 +126,7 @@
 	<table>
 {call e field=mail_smtp_host type=text}
 {call e field=mail_smtp_user type=text}
-{call e field=mail_smtp_pass type=text}
-{call e field=mail_smtp_port type=number}
+
 	</table>
 {/capture}
 {call e field=smtp_config type=read value=$tmp rowclass="smtpdetails"}
@@ -131,8 +136,6 @@
 {call e_group_open label="Example of multiple inputs per row"}
 	{call e field=mail_smtp_host1 notr=1 type=text}
 	{call e field=mail_smtp_user1 notr=1 type=text}
-	{call e field=mail_smtp_pass1 notr=1 type=text}
-	{call e field=mail_smtp_port1 notr=1 type=number}
 {call e_group_close}	
 
 {call e field="country_code"
@@ -182,6 +185,16 @@
 		
 
 {call e field=class_ids type=multiselect_ajax modpath="datasources/classificators" source_args=[group=>demoinputs] after_input_f=editadd preload=1 options=[]}
+
+{call e field=demo_splittext type=splittext parts=3}
+
+
+{call e field=demo_inputmask type="inputmask" regex='^[0-9A-Za-z]{1,10}$' hidden_note="Unikalus raktas tik lotyniškos raidės ir skaičiai A-Z 0-9 1-10simboliu"}
+
+{call e field=demo_divedit hidden_note="Gerai kai ivestis gali buti ir daug ir mazai, kai daug apriboti aukscio prasipletima iki kazkokio limito" maxheight="200px" type="divedit"}
+
+{call e field=demo_after_input_textops after_input_f=textopts options=$demooptionsfix options_fix=1}
+
 
 
 {include file="default_form_close.tpl" submit_buttons=[save]}
