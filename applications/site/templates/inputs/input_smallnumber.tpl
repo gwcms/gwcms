@@ -24,7 +24,7 @@
 	
 	
 {if !isset(GW::$globals.smallnuminitdone)}
-	{GW::$globals.smallnuminitdone=1}
+	{$GLOBALS.smallnuminitdone=1}
 	<script>
 		$(function(){
 			$('.smallnuminc').click(function(){
