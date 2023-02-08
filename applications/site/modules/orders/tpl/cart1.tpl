@@ -54,7 +54,7 @@
 		   
 		  
 		   
-{foreach $GLOBALS.site_cart->items as $item}
+{foreach GW::$globals.site_cart->items as $item}
 
      {if $item}
 	     {$obj=$item->obj}
@@ -89,7 +89,7 @@
 			 {if $item->qty_range && $range.0!=$range.1}
 				 
 				 
-				 
+
 				{if GW::s('PROJECT_NAME')=='manonatos.eu' || GW::s('PROJECT_NAME')=='natos.lt'}
 					 <input name="cart[{$item->id}][qty]" 
 						class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="text" value="{$item->qty}" 
@@ -99,7 +99,7 @@
 					  <i class="js-minus g-color-gray g-color-primary--hover fa fa-angle-down" onclick="cartChanged()"></i>
 					</div>				 
 				{else}
-
+						aaa
 				 <input id="cart_itm_{$item->id}" name="cart[{$item->id}][qty]" class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="number" value="{$item->qty}" 
 					onchange="if(this.value!=$(this).data('initial'))cartChanged()" onkeyup="$(this).change()" data-initial="{$item->qty}"
 					min='{$range.0}' max='{$range.1}' 

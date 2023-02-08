@@ -63,7 +63,7 @@
 	
 	
 	
-	{if !$GLOBALS.gwcms_input_select_ajax_loaded || $smarty.get.act==doGetFilters}
+	{if !GW::$globals.gwcms_input_select_ajax_loaded || $smarty.get.act==doGetFilters}
 		<script type="text/javascript">
 			translate_submit = "{GW::l('/g/SUBMIT')}";
 			translate_selectall = "{GW::l('/g/SELECT_ALL')}";
@@ -82,7 +82,7 @@
 				 display:block !important; float:none !important; 
 			 }
 			 </style>
-		{$GLOBALS.gwcms_input_select_ajax_loaded=1}
+		{GW::$globals.gwcms_input_select_ajax_loaded=1}
 	{/if}	
 	
 

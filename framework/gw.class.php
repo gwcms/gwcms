@@ -131,6 +131,7 @@ class GW
 
 	static function init()
 	{
+		GW::$globals['proc_timer'] = new GW_Timer;
 		self::$context = new GW_Context;
 		self::$s = new GW_Tree_Data_Elm(self::$settings);
 		self::$l = new GW_l_Object_Call;

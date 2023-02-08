@@ -1,5 +1,5 @@
-{$GLOBALS._input_file_n=$GLOBALS._input_file_n+1}
-{$suffix=$GLOBALS._input_file_n}
+{GW::$globals._input_file_n=GW::$globals._input_file_n+1}
+{$suffix=GW::$globals._input_file_n}
 
 {$image=$value}
 {$inp_file_id="input_file_`$name`_`$suffix`"}

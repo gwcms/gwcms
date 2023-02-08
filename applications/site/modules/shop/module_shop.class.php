@@ -388,8 +388,7 @@ class Module_Shop extends GW_Public_Module
 		}else{
 			$list = [];
 		}
-		
-		$GLOBALS['GW_SHOP_wishlist'] = $list;
+		GW::$globals['GW_SHOP_wishlist'] = $list;
 				
 		return $list;		
 	}	
@@ -400,19 +399,19 @@ class Module_Shop extends GW_Public_Module
 		
 		$item=$this->getDataObjectById();
 		
-		if(!isset($GLOBALS['GW_SHOP_wishlist']))
+		if(!isset(GW::$globals['GW_SHOP_wishlist']))
 			$this->initWishlist();
 		
 		
-		if(isset($GLOBALS['GW_SHOP_wishlist'][$item->id]))
+		if(isset(GW::$globals['GW_SHOP_wishlist'][$item->id]))
 		{
-			unset($GLOBALS['GW_SHOP_wishlist'][$item->id]);
+			unset(GW::$globals['GW_SHOP_wishlist'][$item->id]);
 			GW::db()->delete("shop_user_wishlist", ["user_id=? AND product_id=? AND type=?", $this->app->user->id, $item->id, $this->wishlist_type]);
 			
 			$action = "REMOVED_FROM";
 			$linksnis="kil";
 		}else{
-			$GLOBALS['GW_SHOP_wishlist'][$item->id] = $item->id;
+			GW::$globals['GW_SHOP_wishlist'][$item->id] = $item->id;
 			GW::db()->insert("shop_user_wishlist", ["user_id"=>$this->app->user->id, 'product_id'=>$item->id, 'type'=>$this->wishlist_type, 'insert_time'=>date('Y-m-d H:i:s')]);
 			
 			$action = "ADDED_TO";
@@ -442,10 +441,10 @@ class Module_Shop extends GW_Public_Module
 			$this->app->jump('direct/users/users/login',['after_auth_nav' => $_SERVER['REQUEST_URI']]);
 		}
 		
-		if(!isset($GLOBALS['GW_SHOP_wishlist']))
+		if(!isset(GW::$globals['GW_SHOP_wishlist']))
 			$this->initWishlist();
 		
-		$ids = array_keys($GLOBALS['GW_SHOP_wishlist']);
+		$ids = array_keys(GW::$globals['GW_SHOP_wishlist']);
 		
 		if($ids)			
 			$this->prepareList(['cond'=>GW_DB::inCondition('id', $ids)]);
@@ -457,13 +456,13 @@ class Module_Shop extends GW_Public_Module
 	
 	function isItemInCart($item)
 	{
-		$cart = $GLOBALS['site_cart'];
+		$cart = GW::$globals['site_cart'];
 		return $cart && (bool)$cart->getItem($item);
 	}
 	
 	function isItemInWishlist($id)
 	{
-		return isset($GLOBALS['GW_SHOP_wishlist'][$id]);
+		return isset(GW::$globals['GW_SHOP_wishlist'][$id]);
 	}
 	
 	

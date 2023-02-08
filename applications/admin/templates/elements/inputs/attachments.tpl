@@ -29,8 +29,8 @@
 	
 </div>
 
-{if !isset($GLOBALS.html_inp_attachments)}
-	{$GLOBALS.html_inp_attachments=1}
+{if !isset(GW::$globals.html_inp_attachments)}
+	{GW::$globals.html_inp_attachments=1}
 	
 	{$m->addIncludes("upload_input/css", 'css', "`$app_root`static/pack/upload_input/css.css")}
 	

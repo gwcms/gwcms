@@ -48,8 +48,8 @@
 	
 	
 	{if !$gwcmssite_input_select2_loaded}
-		<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={$GLOBALS.version_short}"></script>
-		<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>
+		<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={GW::$globals.version_short}"></script>
+		<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={GW::$globals.version_short}" type="text/css"/>
 		
 		{if $bootstrap4}<link rel="stylesheet" href="{$app->sys_base}vendor/select2/select2-bootstrap4.min.css" crossorigin="anonymous" />{/if}
 		{if $ln=='lt'}<script src="{$app->sys_base}vendor/select2/lt.min.js"></script>{/if}
@@ -60,7 +60,7 @@
 	
 	
 	{if !$gwcms_input_select_ajax_loaded || $smarty.get.act==doGetFilters}
-		{*<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>*}
+		{*<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={GW::$globals.version_short}" type="text/css"/>*}
 	
 		<script type="text/javascript">
 			translate_submit = "{GW::l('/g/SUBMIT')}";

@@ -77,8 +77,8 @@
 		{call "build_input" params_expand=$tmp}
 	{elseif isset($m->smarty->tplFunctions["gw_input_{$field}"])}
 		{call name="gw_input_{$field}"}
-	{elseif isset($GLOBALS.input_function[$field])}
-		{call name="gw_input_{$GLOBALS.input_function[$field]}"}		
+	{elseif isset(GW::$globals.input_function[$field])}
+		{call name="gw_input_{GW::$globals.input_function[$field]}"}		
 	{else}
 		{call e type=read}
 	{/if}

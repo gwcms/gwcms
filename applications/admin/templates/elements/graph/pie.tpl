@@ -1,8 +1,8 @@
-{$GLOBALS._chart_pie=$GLOBALS._chart_pie+1}
-{$index=$GLOBALS._chart_pie}
-{$GLOBALS._highchart=$GLOBALS._highchart+1}
+{GW::$globals._chart_pie=GW::$globals._chart_pie+1}
+{$index=GW::$globals._chart_pie}
+{GW::$globals._highchart=GW::$globals._highchart+1}
 
-{if $GLOBALS._highchart == 1}
+{if GW::$globals._highchart == 1}
 <script src="https://code.highcharts.com/4.2.2/highcharts.js"></script>
 {/if}
 

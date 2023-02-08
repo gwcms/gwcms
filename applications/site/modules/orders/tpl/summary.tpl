@@ -117,7 +117,7 @@
 *}
 		{if $step>1}
 			
-			{$ordered_items = $GLOBALS.site_cart->items}
+			{$ordered_items = GW::$globals.site_cart->items}
 
 
 			<!-- Accordion -->

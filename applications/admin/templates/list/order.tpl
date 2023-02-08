@@ -15,7 +15,7 @@
 
 
 
-{if !$GLOBALS.smarty_orderinitdone}
+{if !GW::$globals.smarty_orderinitdone}
 	
 	{capture append=footer_hidden}
 		<script>
@@ -44,5 +44,5 @@
 		</script>	
 	{/capture}
 	
-	{$GLOBALS.smarty_orderinitdone=1}
+	{GW::$globals.smarty_orderinitdone=1}
 {/if}

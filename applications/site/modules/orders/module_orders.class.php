@@ -620,8 +620,8 @@ class Module_Orders extends GW_Public_Module
 	
 	function doInitCart()
 	{
-		if($GLOBALS['site_cart'] ?? FALSE)
-			return $GLOBALS['site_cart'];
+		if(GW::$globals['site_cart'] ?? FALSE)
+			return GW::$globals['site_cart'];
 		
 		
 		if(!$this->app->user)
@@ -651,7 +651,7 @@ class Module_Orders extends GW_Public_Module
 			}
 		}
 		
-		$GLOBALS['site_cart'] = $cart;
+		GW::$globals['site_cart'] = $cart;
 		$this->order = $cart;
 		
 		return $cart;

@@ -24,7 +24,7 @@ deprecated use this like
 		}	
 *}
 
-{$GLOBALS.input_edit_select=$GLOBALS.input_edit_select+1}
+{GW::$globals.input_edit_select=GW::$globals.input_edit_select+1}
 
 
 
@@ -171,8 +171,8 @@ deprecated use this like
 				
 			</script>
 		  
-		<button class="btn btn-default edSelPlus " data-input-index="{$GLOBALS.input_edit_select}" type="button" ><i class="fa fa-plus-circle"></i></button>
-		<button class="btn btn-default edSelForm edSelForm{$GLOBALS.input_edit_select}" data-input-index="{$GLOBALS.input_edit_select}" type="button" ><i class="fa fa-pencil-square-o"></i></button>		  
+		<button class="btn btn-default edSelPlus " data-input-index="{GW::$globals.input_edit_select}" type="button" ><i class="fa fa-plus-circle"></i></button>
+		<button class="btn btn-default edSelForm edSelForm{GW::$globals.input_edit_select}" data-input-index="{GW::$globals.input_edit_select}" type="button" ><i class="fa fa-pencil-square-o"></i></button>		  
       </span>
 	
 	
@@ -180,7 +180,7 @@ deprecated use this like
 
 
 
-{$tag_params=["data-input-index"=>$GLOBALS.input_edit_select,"data-url"=>$datasource]}
+{$tag_params=["data-input-index"=>GW::$globals.input_edit_select,"data-url"=>$datasource]}
 
 
 
@@ -204,7 +204,7 @@ deprecated use this like
 {call e field=$name
 	type="select"
 	after_input=$addnew
-	class="`$class` editSelect editSelect`$GLOBALS.input_edit_select`"
+	class="`$class` editSelect editSelect`GW::$globals.input_edit_select`"
 	btngroup_width="150px"
 }
 	

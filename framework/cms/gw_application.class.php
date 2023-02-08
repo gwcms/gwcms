@@ -235,7 +235,8 @@ class GW_Application
 		$s->_dir_perms = 0777;
 
 		//
-		$s->assignByRef('GLOBALS', GW::$globals);
+		//$s->assignByRef('GLOBALS', $GLOBALS);
+		//$s->assignByRef('GLOBALS', GW::$globals);
 		/*
 		if(phpversion()<'8.0'){
 			$s->assignByRef('GLOBALS', $GLOBALS);

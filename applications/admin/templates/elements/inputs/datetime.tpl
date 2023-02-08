@@ -1,5 +1,5 @@
-{$GLOBALS._input_datetime_n=$GLOBALS._input_datetime_n+1}
-{$suffix=$GLOBALS._input_datetime_n}
+{GW::$globals._input_datetime_n=GW::$globals._input_datetime_n+1}
+{$suffix=GW::$globals._input_datetime_n}
 
 
 {* su date pickeriu nelabai draugauja *}

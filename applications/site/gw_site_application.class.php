@@ -376,11 +376,11 @@ class GW_Site_Application extends GW_Application
 		$_GET['opid'] = $this->page->id;
 		
 		
-		$GLOBALS['OPAGE'] = $this->page;
-		$GLOBALS['REDIRECT'] = 1;
-		$GLOBALS['PAGE_BEFORE_REDIRECT'] = $this->page;
-		$GLOBALS['PATHARR_BEFORE_REDIRECT'] = $this->path_arr;
-		$GLOBALS['PATH_BEFORE_REDIRECT'] = $this->path;
+		GW::$globals['OPAGE'] = $this->page;
+		GW::$globals['REDIRECT'] = 1;
+		GW::$globals['PAGE_BEFORE_REDIRECT'] = $this->page;
+		GW::$globals['PATHARR_BEFORE_REDIRECT'] = $this->path_arr;
+		GW::$globals['PATH_BEFORE_REDIRECT'] = $this->path;
 		
 		$_REQUEST = array_merge($_REQUEST, $_GET);
 
@@ -396,7 +396,7 @@ class GW_Site_Application extends GW_Application
 			$_GET = $oldget;
 			$_REQUEST = $oldrequest;
 			
-			return (object)['content'=>$out, 'page'=>GW::$context->app->page, 'opage'=>$GLOBALS['PAGE_BEFORE_REDIRECT']];
+			return (object)['content'=>$out, 'page'=>GW::$context->app->page, 'opage'=>GW::$globals['PAGE_BEFORE_REDIRECT']];
 			
 		}else{
 			GW::request();	

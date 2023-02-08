@@ -18,7 +18,7 @@
 {/if}
 
 
-{$GLOBALS.product_modification_display_mode=1}
+{GW::$globals.product_modification_display_mode=1}
 
 {function "ordereditemimage"}
 	{$obj=$item->obj}

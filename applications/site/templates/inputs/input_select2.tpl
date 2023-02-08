@@ -1,8 +1,8 @@
 {* bootrap-multiselect https://select2.github.io/examples.html *}
 {*if !$gwcmssite_input_select2_loaded2*}	
 	{*kazkas buvo isjunges*}
-	<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={$GLOBALS.version_short}"></script>
-	<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>
+	<script type="text/javascript" src="{$app->sys_base}vendor/select2/full.js?v={GW::$globals.version_short}"></script>
+	<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={GW::$globals.version_short}" type="text/css"/>
 	{assign var=$gwcmssite_input_select2_loaded2 value=1 scope=global}	
 {*/if*}	
 	{if $unify2}

@@ -6,8 +6,8 @@
 {/capture}
 
 
-{if !isset($GLOBALS.init_transkey_input_done)}		
-		{$GLOBALS.init_transkey_input_done=1}
+{if !isset(GW::$globals.init_transkey_input_done)}		
+		{GW::$globals.init_transkey_input_done=1}
 		<script type="text/javascript">
 			require(['gwcms'], function(){
 				var transkey_url='{$app->buildUri('datasources/translations/form',[clean=>2,dialog=>1])}';
