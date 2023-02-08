@@ -22,7 +22,7 @@ function initEnviroment($environmentid)
 			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
 			
 
-			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/FETCH_HEAD'));
+			GW::$globals['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/FETCH_HEAD'));
 		break;
 	
 		case GW_ENV_PROD:
@@ -40,7 +40,7 @@ function initEnviroment($environmentid)
 			GW::s("SSH_USERHOST",'root@gw.lt');
 			
 			//reset css,js caches
-			$GLOBALS['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'version'));
+			GW::$globals['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'version'));
 			
 			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=000099');
 		break;
@@ -55,4 +55,4 @@ $env_host_map = ['wdmpc'=>GW_ENV_DEV, 'whatever'=>GW_ENV_TEST, 'odroidXU4'=>GW_E
 GW::s('PROJECT_ENVIRONMENT', $env_host_map[$hostname]?? GW_ENV_DEV);
 initEnviroment(GW::s('PROJECT_ENVIRONMENT'));
 
-$GLOBALS['version_short'] = substr($GLOBALS['version'],0,8);
+GW::$globals['version_short'] = substr(GW::$globals['version'],0,8);
