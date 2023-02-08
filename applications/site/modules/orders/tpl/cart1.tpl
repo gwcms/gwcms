@@ -99,7 +99,6 @@
 					  <i class="js-minus g-color-gray g-color-primary--hover fa fa-angle-down" onclick="cartChanged()"></i>
 					</div>				 
 				{else}
-						aaa
 				 <input id="cart_itm_{$item->id}" name="cart[{$item->id}][qty]" class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="number" value="{$item->qty}" 
 					onchange="if(this.value!=$(this).data('initial'))cartChanged()" onkeyup="$(this).change()" data-initial="{$item->qty}"
 					min='{$range.0}' max='{$range.1}' 

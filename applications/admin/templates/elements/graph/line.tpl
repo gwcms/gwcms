@@ -1,10 +1,10 @@
 
-{$GLOBALS._highchart_line=GW::$globals._highchart_line+1}
-{$index=GW::$globals._highchart_line}
+{$GLOBALS._highchart_line=$GLOBALS._highchart_line+1}
+{$index=$GLOBALS._highchart_line}
 
-{$GLOBALS._highchart=GW::$globals._highchart+1}
+{$GLOBALS._highchart=$GLOBALS._highchart+1}
 
-{if GW::$globals._highchart == 1}
+{if $GLOBALS._highchart == 1}
 <script src="https://code.highcharts.com/4.2.2/highcharts.js"></script>
 {/if}
 

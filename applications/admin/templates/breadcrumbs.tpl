@@ -18,7 +18,7 @@
 							    </ul>
 						</div>									    
 						
-						{if !isset(GW::$globals.dropdown_init_done)}
+						{if !isset($GLOBALS.dropdown_init_done)}
 							{$GLOBALS.dropdown_init_done=1}
 							<script type="text/javascript">
 								require(['gwcms'], function(){

@@ -16,7 +16,7 @@
 </script>
 
 
-{if !isset(GW::$globals.html_inp_autoresize)}
+{if !isset($GLOBALS.html_inp_autoresize)}
 	{$GLOBALS.html_inp_autoresize=1}
 
 

@@ -14,7 +14,7 @@
 			</span>
 		</div>
 
-{if !isset(GW::$globals.html_inp_attachments)}
+{if !isset($GLOBALS.html_inp_attachments)}
 	{$GLOBALS.html_inp_attachments=1}
 	
 	

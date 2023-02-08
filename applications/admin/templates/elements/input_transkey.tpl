@@ -6,7 +6,7 @@
 {/capture}
 
 
-{if !isset(GW::$globals.init_transkey_input_done)}		
+{if !isset($GLOBALS.init_transkey_input_done)}		
 		{$GLOBALS.init_transkey_input_done=1}
 		<script type="text/javascript">
 			require(['gwcms'], function(){

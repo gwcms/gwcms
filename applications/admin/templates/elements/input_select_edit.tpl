@@ -24,7 +24,7 @@ deprecated use this like
 		}	
 *}
 
-{$GLOBALS.input_edit_select=GW::$globals.input_edit_select+1}
+{$GLOBALS.input_edit_select=$GLOBALS.input_edit_select+1}
 
 
 
@@ -180,7 +180,7 @@ deprecated use this like
 
 
 
-{$tag_params=["data-input-index"=>GW::$globals.input_edit_select,"data-url"=>$datasource]}
+{$tag_params=["data-input-index"=>$GLOBALS.input_edit_select,"data-url"=>$datasource]}
 
 
 
@@ -204,7 +204,7 @@ deprecated use this like
 {call e field=$name
 	type="select"
 	after_input=$addnew
-	class="`$class` editSelect editSelect`GW::$globals.input_edit_select`"
+	class="`$class` editSelect editSelect`$GLOBALS.input_edit_select`"
 	btngroup_width="150px"
 }
 	

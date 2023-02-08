@@ -57,7 +57,7 @@
 										{if $active}<!--active-->{/if}
 										<ul class="collapse {if $active}in{/if}">
 											{foreach from=$childs item=sitem}
-												{*GW::$globals.adm_sys_menu[$sitem->path]=1*}
+												{*$GLOBALS.adm_sys_menu[$sitem->path]=1*}
 												
 												<li {if $app->path_arr.1.path_clean == $sitem->path}class="active-link"{/if}>
 													<a href="{$app->buildUri($sitem->path)}">{call "menudisplayicon" item=$sitem} {$sitem->get(title,$ln)}</a>

@@ -88,7 +88,7 @@ instead of {include "elements/input.tpl" name=
 	{/if}
 	
 
-	{if !isset(GW::$globals.form_18n_init_done)}
+	{if !isset($GLOBALS.form_18n_init_done)}
 		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 		
 		{$GLOBALS.form_18n_init_done=1}
