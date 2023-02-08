@@ -231,6 +231,23 @@ class GW
 
 		return $var;
 	}
+	
+	static function globals($var_name, $value = Null)
+	{
+		$var = & self::$globals;
+		$explode = explode('/', $var_name);
+
+		foreach ($explode as $part)
+			$var = & $var[$part];
+
+		if ($value !== Null){
+			$var = $value;
+			return null;
+		}
+
+		return $var;
+	}
+	
 
 	/** vertimai
 	 * 

@@ -70,8 +70,8 @@
     <link href="{$app_root}static/css/pace.min.css" rel="stylesheet">
     <script src="{$app_root}static/js/pace.min.js"></script>
 	
-	<link href="{$app_root}static/css/theme.css?v={GW::$globals.version_short}" rel="stylesheet">
-	<link href="{$app_root}static/css/project.css?v={GW::$globals.version_short}" rel="stylesheet">
+	<link href="{$app_root}static/css/theme.css?v={GW::globals(version_short)}" rel="stylesheet">
+	<link href="{$app_root}static/css/project.css?v={GW::globals(version_short)}" rel="stylesheet">
 
     <!--jQuery [ REQUIRED ]-->{*
     <script src="{$app_root}static/js/jquery-2.2.4.min.js"></script>
@@ -102,7 +102,7 @@
 	
 
  	<script type="text/javascript">
-		require_config.urlArgs = 'version={GW::$globals.version_short}';
+		require_config.urlArgs = 'version={GW::globals(version_short)}';
 		require_config.baseUrl = '{$app_root}static';		
 		require.config(require_config);	
 		

@@ -110,7 +110,7 @@ class Shop_Products extends GW_Composite_Data_Object
 			return $this->get('parent')->title." - ".$this->modif_title;
 		}	
 				
-		if(( (GW::$context->app->app_name != 'SITE' && !isset($GLOBALS['product_modification_display_mode'])) || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
+		if(( (GW::$context->app->app_name != 'SITE' && !GW::globals('product_modification_display_mode')) || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
 		
 			return parent::__get($key);
 		}

@@ -1,3 +1,5 @@
+
+
 {include "product_display.tpl"}
 <input name="act" type="hidden" value="doSaveCart"/>
 
@@ -30,7 +32,6 @@
 		</li>
 	{/if}
 {/function}
-
 
 
 <!-- Shopping Cart -->
@@ -123,6 +124,8 @@
 	     <!-- End Item-->
      {/if}
 {/foreach}
+
+
 
 	   </tbody>
 	 </table>

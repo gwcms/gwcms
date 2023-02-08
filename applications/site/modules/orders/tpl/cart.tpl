@@ -127,8 +127,6 @@
 		  
 	
 		{include "{$m->tpl_dir}cart{$step|default:1}.tpl"}
-		
-
           </div>
 		
 		<input type="hidden" id="step" name="step" value="{$step}">
