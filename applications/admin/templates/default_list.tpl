@@ -90,7 +90,7 @@
 						{/capture}
 						{$tmp}
 						{if $smarty.get.act=doExportListAsSheet}
-							{GW::$globals.capturelist[$rowidx][$field]=trim($tmp)}
+							{$GLOBALS.capturelist[$rowidx][$field]=trim($tmp)}
 						{/if}
 					</td>
 				{/foreach}
@@ -119,7 +119,7 @@
 		</ul>
 	</div>
 		
-	{GW::$globals.dropdown_init_done=1}
+	{$GLOBALS.dropdown_init_done=1}
 		<script type="text/javascript">
 			require(['gwcms'], function(){
 				gwcms.initDropdowns();
@@ -253,7 +253,7 @@
 									{/capture}
 									{$tmp}
 									{if $smarty.get.act==doExportListAsSheet}
-										{GW::$globals.capturelist['head'][$field]=trim($tmp)}
+										{$GLOBALS.capturelist['head'][$field]=trim($tmp)}
 									{/if}
 								</th>
 							{/foreach}	

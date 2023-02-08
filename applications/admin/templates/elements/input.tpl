@@ -91,7 +91,7 @@ instead of {include "elements/input.tpl" name=
 	{if !isset(GW::$globals.form_18n_init_done)}
 		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
 		
-		{GW::$globals.form_18n_init_done=1}
+		{$GLOBALS.form_18n_init_done=1}
 		<script type="text/javascript">
 			require(['forms'], function(){ gw_forms.initI18nForm({json_encode($langs)}) })
 		</script>

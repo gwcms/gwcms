@@ -55,7 +55,7 @@
 </span>
 			
 {if !isset(GW::$globals.init_addEdit_input_done)}		
-	{GW::$globals.init_addEdit_input_done=1}
+	{$GLOBALS.init_addEdit_input_done=1}
 	<script type="text/javascript">
 		translate_submit = "{GW::l('/g/SUBMIT')}";
 		

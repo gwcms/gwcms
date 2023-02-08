@@ -148,7 +148,7 @@
 	
 												
 	{if !isset(GW::$globals.dropdown_init_done)}
-		{GW::$globals.dropdown_init_done=1}
+		{$GLOBALS.dropdown_init_done=1}
 		<script type="text/javascript">
 			require(['gwcms'], function(){
 			gwcms.initDropdowns();

@@ -1,4 +1,4 @@
-{GW::$globals._input_datetime_n=GW::$globals._input_date_n+1}
+{$GLOBALS._input_datetime_n=GW::$globals._input_date_n+1}
 {$suffix=GW::$globals._input_date_n}
 
 {if $value=="0000-00-00"}

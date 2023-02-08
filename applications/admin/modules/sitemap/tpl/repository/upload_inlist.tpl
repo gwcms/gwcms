@@ -15,7 +15,7 @@
 		</div>
 
 {if !isset(GW::$globals.html_inp_attachments)}
-	{GW::$globals.html_inp_attachments=1}
+	{$GLOBALS.html_inp_attachments=1}
 	
 	
 	{capture append=footer_hidden}

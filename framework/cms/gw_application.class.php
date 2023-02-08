@@ -236,7 +236,7 @@ class GW_Application
 
 		//
 		//$s->assignByRef('GLOBALS', $GLOBALS);
-		//$s->assignByRef('GLOBALS', GW::$globals);
+		$s->assignByRef('GLOBALS', GW::$globals);
 		/*
 		if(phpversion()<'8.0'){
 			$s->assignByRef('GLOBALS', $GLOBALS);

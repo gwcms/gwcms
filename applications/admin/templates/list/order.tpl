@@ -44,5 +44,5 @@
 		</script>	
 	{/capture}
 	
-	{GW::$globals.smarty_orderinitdone=1}
+	{$GLOBALS.smarty_orderinitdone=1}
 {/if}

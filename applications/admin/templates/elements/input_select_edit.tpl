@@ -24,7 +24,7 @@ deprecated use this like
 		}	
 *}
 
-{GW::$globals.input_edit_select=GW::$globals.input_edit_select+1}
+{$GLOBALS.input_edit_select=GW::$globals.input_edit_select+1}
 
 
 
@@ -171,8 +171,8 @@ deprecated use this like
 				
 			</script>
 		  
-		<button class="btn btn-default edSelPlus " data-input-index="{GW::$globals.input_edit_select}" type="button" ><i class="fa fa-plus-circle"></i></button>
-		<button class="btn btn-default edSelForm edSelForm{GW::$globals.input_edit_select}" data-input-index="{GW::$globals.input_edit_select}" type="button" ><i class="fa fa-pencil-square-o"></i></button>		  
+		<button class="btn btn-default edSelPlus " data-input-index="{$GLOBALS.input_edit_select}" type="button" ><i class="fa fa-plus-circle"></i></button>
+		<button class="btn btn-default edSelForm edSelForm{$GLOBALS.input_edit_select}" data-input-index="{$GLOBALS.input_edit_select}" type="button" ><i class="fa fa-pencil-square-o"></i></button>		  
       </span>
 	
 	

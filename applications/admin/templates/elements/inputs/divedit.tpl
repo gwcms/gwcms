@@ -17,7 +17,7 @@
 
 
 {if !isset(GW::$globals.html_inp_autoresize)}
-	{GW::$globals.html_inp_autoresize=1}
+	{$GLOBALS.html_inp_autoresize=1}
 
 
 <style>

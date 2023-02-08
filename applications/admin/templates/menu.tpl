@@ -36,7 +36,7 @@
 								<li class="list-header">{$item->get(title,$ln)}</li>
 
 							{else}
-								{*{GW::$globals.adm_sys_menu[$item->path]=1}*}
+								{*{$GLOBALS.adm_sys_menu[$item->path]=1}*}
 								
 								<li class="{if $active} active-sub active{/if}">
 

@@ -82,7 +82,7 @@
 				 display:block !important; float:none !important; 
 			 }
 			 </style>
-		{GW::$globals.gwcms_input_select_ajax_loaded=1}
+		{$GLOBALS.gwcms_input_select_ajax_loaded=1}
 	{/if}	
 	
 
