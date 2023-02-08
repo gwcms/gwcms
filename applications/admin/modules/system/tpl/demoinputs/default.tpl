@@ -1,5 +1,7 @@
 {include file="default_form_open.tpl" form_width="1000px"}
 
+{$debug_edit_add_permission=1}
+
 {$demooptions=[1=>'option1', '2'=>"option2", '3'=>"option3", '4'=>"option4"]}
 {$demooptionsfix=['option1','option2','option3']}
 
@@ -138,6 +140,12 @@
 	{call e field=mail_smtp_user1 notr=1 type=text}
 {call e_group_close}	
 
+{capture assign=tmp}
+	<small class="text-muted">type</small> {call e0 title=false field=body_editor type=select options=GW::l('/M/todo/OPTIONS/body_editor') readonly=isset($custom_cfg.body_editor_ro)}
+	<small class="text-muted">height</small> {call e0 title=false field=body_editor_height type=select options=GW::l('/M/todo/OPTIONS/body_editor_height') readonly=isset($custom_cfg.body_editor_height_ro)}	
+{/capture}
+{call e field="demo_multiinput" type=read value=$tmp hidden_note=GW::l('/g/FIELDS_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
+
 {call e field="country_code"
 	type="select_ajax"
 	object_title=GW::l('/M/datasources/MAP/childs/countries/title')
@@ -194,6 +202,8 @@
 {call e field=demo_divedit hidden_note="Gerai kai ivestis gali buti ir daug ir mazai, kai daug apriboti aukscio prasipletima iki kazkokio limito" maxheight="200px" type="divedit"}
 
 {call e field=demo_after_input_textops after_input_f=textopts options=$demooptionsfix options_fix=1}
+
+
 
 
 

@@ -32,7 +32,7 @@ class GW_Admin_Application extends GW_Application
 			return false;
 			
 		if($this->user->isRoot())
-			return true;
+			return GW_PERM_OPTIONS | GW_PERM_WRITE | GW_PERM_READ | GW_PERM_REMOVE;
 		
 		if(!$page->get('active'))
 			return false;
