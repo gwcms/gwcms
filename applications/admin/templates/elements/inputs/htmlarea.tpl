@@ -81,8 +81,26 @@ require(["ckeditor"], function() {
 			this.updateElement();
 			$(CKEDITOR.instances['{$id}'].element.$).change()
 		});
-	});	
- 
+		
+		//anoying ctr+s shortcut always fails, ctrl+1
+		$('.cke_wysiwyg_frame').each(function(o){
+			this.contentWindow.document.addEventListener('keydown', e => {
+				
+				$("body").get(0).dispatchEvent(
+				  new KeyboardEvent('keydown', e)
+				);
+			
+				//prevent default for ctrl+s
+				if(e.which == 83 && (e.ctrlKey || e.metaKey)){
+					e.preventDefault();
+				}			
+			
+			
+			})
+		})
+		
+	});
+	
 })
 
 </script>

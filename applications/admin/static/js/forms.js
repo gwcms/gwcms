@@ -84,16 +84,23 @@ gw_forms = {
 			}
 		});
 		
-		$(window).bind('keydown', function(event) {
-		    if (event.ctrlKey || event.metaKey) {
-			switch (event.which) {
-			case 83:
-				$('#itemform').get(0).elements['submit_type'].value=1; //apply (stay in form after save)
-				$('#itemform').submit();
-				event.preventDefault();
-			break;
-		    }
-		}});		
+
+		$("body").keydown(function (event) {
+			
+			if (event.ctrlKey || event.metaKey) {
+			    switch (event.which) {
+				case 83:
+					$('#itemform').get(0).elements['submit_type'].value=1; //apply (stay in form after save)
+					$('#itemform').submit();
+					event.preventDefault();
+				break;
+			    }
+
+			}
+		});
+
+
+
 	}	
 }
 

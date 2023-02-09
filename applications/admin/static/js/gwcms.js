@@ -1666,7 +1666,6 @@ function initSearchReplace()
 
 $("body").keydown(function (event) {
 
-
 		//ctrl + 1 = pereiti i kita environmenta
 		if (event.which == 49 && event.ctrlKey) {
 			location.href = GW.app_base + GW.ln + '/system/tools?act=doSwitchEnvironment&uri='+encodeURIComponent(location.href)
