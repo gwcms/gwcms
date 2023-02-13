@@ -21,7 +21,7 @@
 					{$value=$item->$field} 
 				{/if}
 				{if $type==textarea}
-					{$value|nl2br}
+					{$value}
 				{else}
 					{$value}
 				{/if}

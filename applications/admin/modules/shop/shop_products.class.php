@@ -115,6 +115,17 @@ class Shop_Products extends GW_Composite_Data_Object
 			return parent::__get($key);
 		}
 		
+		if($key=='image'){
+			if(parent::__get($key))
+				return parent::__get($key);
+		}
+		
+		if(strpos($key, 'keyval/')===0){
+			if(parent::__get($key))
+				return parent::__get($key);
+		}		
+		
+		
 		$tmp =& $this->content_base[$key];
 		
 
@@ -125,7 +136,7 @@ class Shop_Products extends GW_Composite_Data_Object
 			return $tmp;
 		}
 		
-		//d::ldump($key);
+		
 		return $this->get('parent')->get($key);
 	}
 	
