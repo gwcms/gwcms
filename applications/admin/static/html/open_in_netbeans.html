@@ -1,8 +1,9 @@
 <style>.openfile, .openfile1{ cursor:pointer } .backtracerequest{ color: red }</style>
 <script>
 function runWithJQuery(jQueryCode){
-    if(window.jQuery)  jQueryCode();
-    else{   
+    if(window.jQuery){
+	    runWithJQuery();
+    } else{   
         var script = document.createElement('script'); 
         document.head.appendChild(script);  
         script.type = 'text/javascript';
@@ -20,7 +21,7 @@ function OpenInNetbeans(file, line)
 }
 
 runWithJQuery(function(){
-	$(function(){
+	$(function(){		
 		$('.openfile1').click(function(){
 			OpenInNetbeans($(this).data('file'), $(this).data('line'));
 		});

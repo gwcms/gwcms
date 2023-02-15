@@ -1618,13 +1618,65 @@ class GW_Common_Module extends GW_Module
 	
 	function canBeAccessed($item, $opts=[])
 	{
+		
 		$result = false;
+		$debug = $this->app->sess['debug'] ?? false;
 		
 		if($item && $item->id){
 			$item->load_if_not_loaded();
 		}
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
+		
+		
+		if($debug){
+			
+		
+			
+			$info =[
+			    'access_level'=>$this->access_level,
+			    'request'=>$requestAccess,
+			    'access_level_matches_request'=>$this->access_level & $requestAccess ? 'Y':'N'
+				];
+				
+			if($item){
+				$info['item'] = $item->id;
+				$info['isOwner'] = $this->isOwner($item) ? 'Y':'N';
+				
+				
+				if(isset($item->content_base['access'])){
+					$info['item_has_own_permissions'] = $item->content_base['access'];
+					$availAccess = $item->content_base['access'];
+					//1-read, 2-write check //admin/config/main.php for permission list
+					$info['item_has_own_permissions_test'] = $availAccess & $requestAccess ? 'PASS':'DENY';
+				}
+					
+				
+			}else{
+				$info['canCreateNew'] = $this->canCreateNew? 'Y':'N';
+				$info['path'] = implode('/',$this->module_path);
+			}
+			
+			if(isset($info['action']))
+				$info['action'] = $opts['action'];
+			
+			if($item && method_exists($this, "checkOwnerPermission") && ($tmp=$this->checkOwnerPermission($item, $opts)) > 0){
+				if($tmp == 1)
+					$info['checkOwnerPermission']='PASS';
+
+				if($tmp == 2)
+					$info['checkOwnerPermission']='DENY';
+
+			}				
+			
+			if(!$this->app->user->isRoot() && GW_Permissions::getTempReadAccessMod(implode('/',$this->module_path)) ){
+				$info['readOnlyAccess']= $this->readOnlyAccess($item, $opts);
+			}			
+			
+			
+			
+			d::ldump($info);
+		}
 		
 		
 		

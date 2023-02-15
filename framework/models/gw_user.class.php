@@ -229,6 +229,12 @@ class GW_User extends GW_Composite_Data_Object
 
 	function inGroup($group_id)
 	{
+		if(is_array($group_id)){
+			foreach($group_id as $gid)
+				if($this->inGroup($gid))
+					return true;
+		}
+			
 		return in_array($group_id, $this->group_ids);
 	}
 
