@@ -20,17 +20,6 @@ function parseParams()
 	return $params;
 }
 
-$params = parseParams();
-
-if($params['env'] ?? false == 'test'){
-	initEnviroment(GW_ENV_TEST);
-}else{
-	initEnviroment(GW_ENV_PROD);
-}
-
-
-list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
-
 function mypassthru($cmd)
 {
 	echo $cmd."\n";
@@ -41,43 +30,75 @@ function out($str){
 }
 
 
+$params = parseParams();
 
-//backup cmd:
-$userhost = GW::s("SSH_USERHOST");
-$pcmd="";$pcmd2="";
-$tmp = explode(':', $userhost);
-if(count($tmp)>1){
-	$userhost = $tmp[0];
-	$pcmd="-p".$tmp[1];
-	$pcmd2="-oPort=".$tmp[1];
+
+
+if($params['recoverdb'] ?? false){
+	
+	d::dumpas(GW::s('DB/UPHD'));
+	
+	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+	
+	initEnviroment(GW_ENV_PROD);
+	list($proddbuser, $proddbpass, $prodhost, $proddatabase, $prodport) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+	
+	$backupfolder = $params['recoverdb'];
+	$localfile = "/mnt/back1/sysbackup/natosltserver/backups/$backupfolder/$proddatabase.gz";
+	
+	out("Recovery file: $localfile");
+	
+}else{
+	
+	if($params['env'] ?? false == 'test'){
+		initEnviroment(GW_ENV_TEST);
+	}else{
+		initEnviroment(GW_ENV_PROD);
+	}
+
+
+	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+
+
+
+
+	//backup cmd:
+	$userhost = GW::s("SSH_USERHOST");
+	$pcmd="";$pcmd2="";
+	$tmp = explode(':', $userhost);
+	if(count($tmp)>1){
+		$userhost = $tmp[0];
+		$pcmd="-p".$tmp[1];
+		$pcmd2="-oPort=".$tmp[1];
+	}
+
+	$remotefile="/tmp/$database.gz";
+	
+	$localfile=$remotefile;
+	$unziped="/tmp/$database";
+
+	$extra = "";
+
+	if(isset($params['exclude']))
+	{
+		foreach(explode(',',$params['exclude']) as $tbl)
+		$extra.=" --ignore-table=$database.$tbl ";
+	}
+
+	$t = new GW_Timer;
+	mypassthru("ssh $userhost $pcmd 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
+	out("----------Export-speed: {$t->stop()} secs----------");
+
+	$t = new GW_Timer;
+	mypassthru($cmd="sftp $pcmd2 $userhost:$remotefile $localfile");
+	out("----------Download-speed: {$t->stop()} secs----------");
+
+
+	initEnviroment(GW_ENV_DEV);
+	//prod
+	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+
 }
-
-
-$remotefile="/tmp/$database.gz";
-$localfile=$remotefile;
-$unziped="/tmp/$database";
-
-$extra = "";
-
-if(isset($params['exclude']))
-{
-	foreach(explode(',',$params['exclude']) as $tbl)
-	$extra.=" --ignore-table=$database.$tbl ";
-}
-
-$t = new GW_Timer;
-mypassthru("ssh $userhost $pcmd 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
-out("----------Export-speed: {$t->stop()} secs----------");
-
-$t = new GW_Timer;
-mypassthru($cmd="sftp $pcmd2 $userhost:$remotefile $localfile");
-out("----------Download-speed: {$t->stop()} secs----------");
-
-
-initEnviroment(GW_ENV_DEV);
-//prod
-list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
-
 
 $t = new GW_Timer;
 mypassthru("zcat $localfile | mysql -u $dbuser -p{$dbpass} $database");

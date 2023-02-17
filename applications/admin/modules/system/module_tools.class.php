@@ -625,6 +625,53 @@ class Module_Tools extends GW_Common_Module
 	}
 	
 	
+	public $doTestRecoverBackup = ["info"=>"Can recover whole db from recovery folder"];
+	
+	function doTestRecoverBackup()
+	{
+		//d::dumpas('testas');
+		//tiesiai galima butu atiduot variantas
+		//list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+		//$extra = "";
+		//echo shell_exec("mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database");
+		initEnviroment(GW_ENV_PROD);
+		list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
+
+		
+		
+		
+		$options=glob("/mnt/back1/sysbackup/natosltserver/backups/*/$database.gz");
+		$recoveryopt = [];
+		foreach($options as $filename){
+			$name = basename(dirname($filename));
+			$recoveryopt[$name]= $name. ' - '.date('Y-m-d H:i', filemtime($filename));
+		}
+		
+		
+		
+		$sel=['type'=>'select','options'=>$recoveryopt, 'empty_option'=>1, 'required'=>1];
+		$form = ['fields'=>['src'=>$sel],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/SELECT_SOURCE'))))
+			return false;			
+				
+		
+		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
+		$sudouser = 'wdm';
+		
+		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path recoverdb {$answers['src']}  2>&1");
+		
+		$this->setMessage("<pre>".$res."</pre>");
+						
+
+		$this->jump();	
+	}
+	
+	
+		
+	
+	
 	function initModCfg()
 	{
 		$this->modconfig = new GW_Config_FS('system__tools');

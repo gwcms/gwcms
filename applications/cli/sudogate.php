@@ -25,6 +25,13 @@ switch($argv[1]){
 		}
 	break;
 	
+	case 'recoverdb':
+		$backupfolder = $argv[2];
+		$cmd =  "php ".__DIR__."/db_sync_whole.php --recoverdb=$backupfolder 2>&1";
+		echo $cmd."\n";			
+		echo shell_exec($cmd);		
+	break;
+	
 	case 'sync':
 		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
 			echo shell_exec("php ".GW::s('DIR/ROOT')."/update.php -web 2>&1");
