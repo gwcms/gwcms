@@ -213,9 +213,27 @@ class GW_Imap
 		if($header){
 			$head = imap_headerinfo($this->conn, $message->mailid);				
 			
+			
+			
 			//$head=json_encode($head, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 			$message->subject = $this->getSubject($head->subject ?? '--gwimapnosubj--'); //gali ir nebut tokio
-			$message->from = isset($head->from[0]->personal) ? $head->from[0]->personal : $head->fromaddress;
+			
+			$message->from_personal =  ($head->sender[0]->personal) ?? false;
+			$message->from = 	$head->sender[0]->mailbox.'@'.$head->sender[0]->host;
+			
+					
+			if(strpos($message->from_personal,'=?UTF-8?B?')!==false)
+				$message->from_personal = mb_decode_mimeheader($message->from_personal);
+			
+	
+			
+			
+			//if(isset($_GET['verbose']))
+			//	GW::$context->app->setMessage(json_encode($head));	
+			
+			$message->from = "<{$message->from_personal}> {$message->from}";
+			
+			
 			$message->to = $head->toaddress ?? false;
 			
 			//if($message->to)
@@ -255,7 +273,8 @@ class GW_Imap
 			
 			$steps++;
 			$match = false;
-			//d::ldump([$mailid, $message->subject]);
+			
+			
 
 			foreach($rules as $ruleid => $rule)
 			{
@@ -276,6 +295,14 @@ class GW_Imap
 					if( $match = preg_match($rule['from'], $message->from) )
 						break;					
 			}
+			
+			if(isset($_GET['verbose']))
+				GW::$context->app->setMessage(json_encode([
+				    'mailid'=>$mailid, 
+				    'subject'=>$message->subject, 
+				    'from'=>$message->from, 
+				    'match'=>$match
+				]));			
 
 			
 			if(!$match)

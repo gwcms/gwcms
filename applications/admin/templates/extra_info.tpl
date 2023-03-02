@@ -13,7 +13,7 @@
 				<td nowrap align="right"><i>{$app->fh()->fieldTitle($field_id)}</i></td>
 				<td>
 					{$x=$item->get($field_id)}
-					{if is_array($x)}
+					{if is_array($x) || is_object($x)}
 						{d::jsonNice($x)}
 					{else}
 						{$x}
