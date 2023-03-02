@@ -474,14 +474,23 @@ class Module_Orders extends GW_Public_Module
 	function doCartItemRemove()
 	{
 		$this->userRequired();
-		$cart = $this->order;
-
+		$cart = $this->getOrder();
 		
+		
+		if(!$cart->open){
+			$this->setError(GW::ln('/m/CART_IS_CLOSED'));
+			return $this->app->jump();
+		}
 		
 		//nebepridet pakartotinai
 		if($cart->items)
 			foreach($cart->items as $citem){
-				if($citem->id == $_GET['id']){
+				if($citem->id == $_GET['ciid']){
+					
+					if(!$citem->can_remove){
+						$this->setError(GW::ln('/m/CART_ITEM_NON_REMOVABLE'));
+						return $this->app->jump();
+					}
 					
 					$citem->delete();
 					$cart->updateTotal();
