@@ -36,8 +36,7 @@ $params = parseParams();
 
 if($params['recoverdb'] ?? false){
 	
-	d::dumpas(GW::s('DB/UPHD'));
-	
+
 	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
 	
 	initEnviroment(GW_ENV_PROD);

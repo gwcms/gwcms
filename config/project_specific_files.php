@@ -16,6 +16,7 @@ config/db_prod.php
 framework/helpers/diff_helper.class.php
 nbproject/private/private.xml
 config/project_core_sync.json
+applications/admin/static/js/gwcms_project.js
 ";
 
 

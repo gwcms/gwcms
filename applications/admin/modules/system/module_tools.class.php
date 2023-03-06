@@ -311,6 +311,8 @@ class Module_Tools extends GW_Common_Module
 		
 	}
 	
+
+	
 	
 	function doATestBackgroundRequest()
 	{
@@ -321,6 +323,32 @@ class Module_Tools extends GW_Common_Module
 		$this->modconfig->backgroundTestValue = $_GET['test_string'];
 		echo "your test string: ".$_GET['test_string'];
 		exit;
+	}
+	
+	
+	public $doTestWssNotification = ["info"=>"Test if wss functions if notification popups"];
+	
+	function doTestWssNotification()
+	{
+		
+		$test_string = GW_String_Helper::getRandString(10).' '.date('Y-m-d H:i:s');
+		
+
+		
+		$url = Navigator::backgroundRequest($path=$this->buildUri(false,[],['app'=>'admin']), $get_args=["act"=>'doWssNotification','username'=>$this->app->user->username]);
+		
+		//$this->doWssNotification();
+	}
+			
+	
+	
+	function doWssNotification()
+	{
+		sleep(5);
+		$username = $_GET['username'];
+		$this->packetWS('notification', ['title'=>"Informacija keleiviams norintiems vykti 5sec uzdelsimas", 'text'=>"Dabar yra ".date('Y-m-d H:i:s')], $username);
+		//$this->notifyRowUpdated($message->id, true, $user->username);
+		//$this->packetWS('updateProgress', ["id"=>"outgoing_".$message->id, "progress"=>$message->getProgress(0)], $user->username);
 	}
 	
 	
@@ -658,11 +686,16 @@ class Module_Tools extends GW_Common_Module
 				
 		
 		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
-		$sudouser = 'wdm';
+		
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
+			$sudouser = 'wdm';
+		}else{
+			$sudouser = 'root';
+		}
 		
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path recoverdb {$answers['src']}  2>&1");
 		
-		$this->setMessage("<pre>".$res."</pre>");
+		$this->setMessage("<pre>$cmd\n\n".$res."</pre>");
 						
 
 		$this->jump();	
