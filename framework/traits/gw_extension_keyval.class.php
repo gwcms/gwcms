@@ -88,6 +88,22 @@ class GW_Extension_KeyVal
 		return $this->obj->findOwner(GW_DB::prepare_query(['key LIKE ?', '%'.$phrase.'%']));
 	}	
 	
+	function set($name, $value){
+		
+		if(isset($this->parent->extensions['changetrack'])){
+
+			$old = $this->get($name);
+			if(is_array($value))
+				$value = json_encode ($value);
+
+			if($old != $value){
+				$this->parent->extensions['changetrack']->additional_changes['keyval/'.$name]=['new'=>$value, 'old'=>$old];
+			}
+		}
+
+		$this->obj->set($name, $value);
+	}
+	
 	function __set($name, $value) 
 	{
 		if($this->parent->id){			

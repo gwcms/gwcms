@@ -32,6 +32,14 @@ $am = GW::s('ADMIN/HOOKS/AFTER_MENU');
 $am = is_array($am) ? $am : [];
 $am[] = "emails/widgets/progress";
 
+
+if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST){
+	$am[] = "system/systemwidgets/testenv";
+}
+
+
+
+
 GW::s('ADMIN/HOOKS/AFTER_MENU', $am);
 
 

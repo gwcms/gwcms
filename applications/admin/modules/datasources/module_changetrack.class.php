@@ -68,11 +68,27 @@ class Module_ChangeTrack extends GW_Common_Module
 			unset($cfg['fields']['owner_id']);
 		}
 		
+		$cfg['fields']['username'] = 'Lo';
 		unset($cfg['fields']['update_time']);
 
 		return $cfg;
 	}
 		
-	
+	function __eventBeforeListParams(&$params)
+	{		
+		
+		$params['key_field']='id';
+		
+		
+		$params['select']='a.*, usr.username';
+
+			
+		$params['joins']=[
+		    ['left','gw_users AS usr','a.user_id = usr.id'],
+		];	
+								
+		
+		
+	}	
 	
 }

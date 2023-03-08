@@ -56,3 +56,5 @@ mypassthru("zcat $localfile | mysql -u $dbuser -p{$dbpass} $database");
 out("----------Import-speed: {$t->stop()} secs----------");
 
 out("----------Sum-speed: {$timer->stop()} secs----------");
+
+file_put_contents(GW::s('DIR/TEMP').'sync_with_prod', date('Y-m-d H:i').' took:'.$timer->stop(1).' s.');

@@ -97,9 +97,11 @@ class GW_Extension_ChangeTrack
 	function trackChangesStart()
 	{
 		$this->parent->copyOriginal();
+		$this->additional_changes = [];
 		$this->track_started = true;
 	}
 	
+	public $additional_changes=[];
 		
 	function getChanges()
 	{
@@ -114,6 +116,9 @@ class GW_Extension_ChangeTrack
 				$changes[$field]=['new'=>$itm->get($field), 'old'=>$itm->_original->get($field)];
 			}
 		}
+		
+		if($this->additional_changes)
+			$changes = array_merge($changes, $this->additional_changes);
 		
 		return $changes;
 	}

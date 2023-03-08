@@ -104,6 +104,9 @@ class GW_Permissions
 		else
 			$paths = self::__getPrmByMltGrpIds($gids, $path);
 	
+		//if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST)
+		//	d::ldump($paths);
+		
 		if(isset($paths[$path]))
 			return $paths[$path];
 		

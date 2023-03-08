@@ -20,7 +20,7 @@ class GW_Admin_Application extends GW_Application
 	
 	function isEnabledPath($path)
 	{		
-		return GW_Permissions::canAccess($path, $this->user->group_ids, true, false);		
+		return GW_Permissions::canAccess($path, $this->user->group_ids);		
 	}
 	
 	function canAccess($page)
@@ -213,12 +213,15 @@ class GW_Admin_Application extends GW_Application
 		$resore_module = GW_Lang::$module;
 		
 		if(is_array(GW::s("ADMIN/HOOKS/$name"))) {
-			
+						
 			foreach(GW::s("ADMIN/HOOKS/$name") as $path){
 
-				list($mod,$pathending) = explode('/',$path, 2);
+				$pathexplode = explode('/',$path);
 				
-				if($this->isEnabledPath($mod))
+				$mod1 = $pathexplode[0];
+				$mod2 = $pathexplode[0].'/'.$pathexplode[1];
+				
+				if($this->isEnabledPath($mod1) || $this->isEnabledPath($mod2))
 					$this->innerProcess($path);
 			}
 		}

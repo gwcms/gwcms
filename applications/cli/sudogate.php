@@ -32,6 +32,13 @@ switch($argv[1]){
 		echo shell_exec($cmd);		
 	break;
 	
+
+	case 'test_sync_with_prod':
+		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST){
+			echo shell_exec($cmd="sudo /usr/bin/php ".__DIR__."/test_sync_with_prod.php 2>&1");
+		}
+	break;
+
 	case 'sync':
 		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
 			echo shell_exec("php ".GW::s('DIR/ROOT')."/update.php -web 2>&1");
