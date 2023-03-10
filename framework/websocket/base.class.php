@@ -354,7 +354,9 @@ class Base
 	{
 
 		$changed_sockets = [$this->socket];
-		@stream_select($changed_sockets, $write = null, $except = null, 0, 5000);
+		$write = null;
+		$except = null;
+		@stream_select($changed_sockets, $write, $except, 0, 5000);
 
 		if (!$changed_sockets)
 			return false;

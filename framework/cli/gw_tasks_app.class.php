@@ -212,7 +212,7 @@ class GW_Tasks_App extends GW_App_Base
 		$this->data->insert();
 	}
 
-	function checkAndRun()
+	static function checkAndRun()
 	{
 		$list = GW_Task::singleton()->getForExecution();
 

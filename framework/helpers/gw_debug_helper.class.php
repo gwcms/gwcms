@@ -228,6 +228,9 @@ class GW_Debug_Helper
 	
 	static function openInNetBeans()
 	{
+		if(!($_SERVER["REMOTE_ADDR"] ?? false)) //does not support in cli mode
+			return false;
+		
 		if(isset($GLOBALS['netbeansinitdone']))
 			return false;
 		

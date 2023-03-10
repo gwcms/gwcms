@@ -52,11 +52,24 @@ class Module_Config extends GW_Common_Module
 		$opts['to'] = $this->app->user->email;
 		//$opts['debug'] = 1;
 		
+		
+		$this->setMessage('<pre>'.json_encode($opts, JSON_PRETTY_PRINT).'</pre>');
+		
 		$status = GW_Mail_Helper::sendMail($opts);
 		$opts['to']=implode(',', $opts['to']);
 		
+		$details = '';
+		
+		
+		
+		
+		if(isset($opts['status'])){
+			$details=' ('.$opts['status'].')';
+		}
+
+		
 		$this->setMessage([
-			"text"=>"Mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'),
+			"text"=>"Mail send from ".htmlspecialchars(GW_Mail_Helper::$last_from)." to {$opts['to']} ".($status ? 'succeed':'failed'.$details),
 			'type'=>$status ? GW_MSG_SUCC : GW_MSG_ERR,
 			'footer'=>$opts['error'] ?? false,
 			'float'=>1

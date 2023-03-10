@@ -128,6 +128,9 @@ class Module_Messages extends GW_Common_Module
 	
 	function canBeAccessed($item, $opts=[])
 	{	
+		if(!$item)
+			return false;
+		
 		$item->load_if_not_loaded();
 				
 		$result = $this->app->user->isRoot() || $item->user_id == $this->app->user->id || $item->sender == $this->app->user->id;

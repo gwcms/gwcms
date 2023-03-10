@@ -487,7 +487,7 @@ class GW_DB
 		return $afRows;
 	}
 
-	function __update_set($entry)
+	static function __update_set($entry)
 	{
 		$parts = [];
 
