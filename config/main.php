@@ -54,7 +54,7 @@ GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 GW::s('GW_CMS_VERSION', '3.7');
 GW::s('GW_LANG_SEL_BY_GEOIP',0);
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-GW::s('SMARTY_ERROR_LEVEL8', E_ERROR | E_USER_ERROR);
+GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 include $dir['ROOT'].'config/environment.php';
 include $dir['ROOT'].'config/project.php';

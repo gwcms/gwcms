@@ -377,6 +377,12 @@
       <lt>Sukurti kopija (su visa susijusia inf.)</lt>
       <ru>Создать клон (со всеми соответствующими деталями)</ru>
     </i>
+      <i id="doUndo">
+      <en>Undo</en>
+      <lt>Undo</lt>
+      <ru>Undo</ru>
+    </i>  
+    
     <i id="doSend">
       <en>Send</en>
       <lt>Siųsti</lt>

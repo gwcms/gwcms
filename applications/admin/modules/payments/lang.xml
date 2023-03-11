@@ -326,7 +326,14 @@
           <i id="model">gw_vatgroups</i>
 	  <i id="iconclass">fa fa-percent</i>
         </i>
-      </i>       		          
+      </i> 
+      <i id="sellers">
+        <i id="title">Pardavėjai</i>
+        <i id="info">
+          <i id="model">gw_pay_sellers</i>
+	  <i id="iconclass">material-storefront</i>
+        </i>
+      </i>             		          
     </i>
   </i>
   

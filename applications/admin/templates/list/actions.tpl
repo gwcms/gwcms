@@ -134,6 +134,19 @@
 	{/if}
 {/function}
 
+{function name=dl_actions_undo}
+	{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+		{if $app->user->isRoot()}{*under development 2023-03*}
+			{$undocnt = $item->extensions.changetrack->canUndo()}	
+			{if $undocnt}
+				{list_item_action_m url=[false, [act=>doUndo,id=>$item->id]] 
+					iconclass="fa fa-undo" 
+					caption="{GW::l('/g/VIEWS/doUndo')} ({$undocnt})"}	
+			{/if}	
+		{/if}
+	{/if}
+{/function}
+
 {function name=dl_actions_ext_actions}
 	
 	<div class="btn-group dropright gwcmsAction" style="display: inline;vertical-align: top;">

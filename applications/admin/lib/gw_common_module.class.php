@@ -3374,4 +3374,29 @@ class GW_Common_Module extends GW_Module
 		//d::dumpas($rows);
 		Others\Shuchkin\SimpleXLSXGen::fromArray($rows)->downloadAs(FH::urlStr(implode("_",$file_name)).'.xlsx');
 	}
+	
+	
+	function doUndo()
+	{
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}
+		
+		if(!$this->app->user->isRoot())
+		{
+			$this->setMessage("Feature is experimental yet");
+			return $this->app->jump();
+		}
+
+		$item = $this->getDataObjectById();
+		
+		$changes = $item->extensions['changetrack']->undo();
+		$item->updateChanged();
+		
+		$this->setMessage("Undone: <pre>".json_encode($changes));
+		$this->jump();
+	}
+	
+	
 }

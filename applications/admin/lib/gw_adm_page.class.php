@@ -216,8 +216,16 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 		if($this->info->icon){
 			return $this->info->icon;
 		}
+		
+		
 		if($this->info->iconclass){
-			return "<i class='{$this->info->iconclass}'></i>";
+			if(strpos($this->info->iconclass,'material')===0){
+				list($name, $iconame) = explode('-', $this->info->iconclass,2);
+				
+				return "<span class=\"material-symbols-outlined\">$iconame</span>";
+			}else{
+				return "<i class='{$this->info->iconclass}'></i>";
+			}
 		}	
 	}
 	
