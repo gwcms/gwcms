@@ -169,17 +169,12 @@ class GW_Debug_Helper
 	    return "";
 	}	
 	
-	static function errrorHandler($errno, $errstr, $errfile, $errline)
+	function outputToScreen($error)
 	{
-		static $erroridx;
-		
-		$erroridx++;
-			
-		if (!(error_reporting() & $errno)) {
-			// This error code is not included in error_reporting, so let it fall
-			// through to the standard PHP error handler
-			return false;
-		}
+		$errno = $errno['type'];
+		$errstr = $errno['message'];
+		$errfile = $errno['file'];
+		$errline = $errno['line'];		
 		
 		self::openInNetBeans();
 
@@ -214,8 +209,31 @@ class GW_Debug_Helper
 				echo d::fbacktrace(debug_backtrace(), false, false).'<br>';
 			}
 		}		
+				
+	}
+	
+	static function errrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		static $erroridx;
+		
+		$erroridx++;
+			
+		if (!(error_reporting() & $errno)) {
+			// This error code is not included in error_reporting, so let it fall
+			// through to the standard PHP error handler
+			return false;
+		}
 		
 
+		self::processError([
+		    "type"=>$errno,
+		    "message"=>$errstr,
+		    "file"=>$errfile,
+		    "line"=>$errline
+		]);
+	
+		
+		self::warningHandler($errno, $errstr, $errfile, $errline, $errcontext);
 
 		/* Don't execute PHP internal error handler */
 		return true;
@@ -251,8 +269,12 @@ class GW_Debug_Helper
 			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		
 		$data["errorid"] = date('YmdHis');
+		
+		//jei bus fatalas memory limitas tai max iki cia daeis, reiketu isvesti memory limito errora anksciau
+		
 		$data['type_name'] = array_search($e['type'], get_defined_constants());
 		unset($data['type']);
+		
 
 		$data['code'] = self::getCodeCut($e,10);
 		$data['message'] = str_replace("\n", "<br />", $data['message']);
@@ -264,8 +286,8 @@ class GW_Debug_Helper
 			 $data['debug_data']=$GLOBALS['debug_data'];
 
 		if(isset(GW::$context->app->user->id))
-			$data['user_id'] = GW::$context->app->user->id;
-
+			$data['user_id'] = GW::$context->app->user->id;		
+		
 		if(isset(GW::$context->app->user->id))
 			$data['user_email'] = GW::$context->app->user->email;	
 
@@ -277,6 +299,7 @@ class GW_Debug_Helper
 
 		
 		$data['backtrace'] = debug_backtrace();
+		
 		
 		if(GW::s('REPORT_ERRORS')){
 
@@ -307,7 +330,8 @@ class GW_Debug_Helper
 			
 			if($nosend)
 			{
-				echo $body;			
+				self::outputToScreen($e);	
+				echo $body;
 			}else{
 				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];
 				GW_Mail_Helper::sendMail($opts);
@@ -320,7 +344,8 @@ class GW_Debug_Helper
 			
 		}else{
 			echo "error report turned off<br/>\n";
-			d::ldump($e);
+			
+			self::outputToScreen($e);			
 		}		
 	}
 	

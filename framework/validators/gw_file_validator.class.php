@@ -15,7 +15,7 @@ class GW_File_Validator Extends GW_Validator
 		//pravaliduot extensiona
 
 		$ext = strtolower(pathinfo($item->original_filename, PATHINFO_EXTENSION));
-
+		
 		return in_array($ext, $allowed);
 	}
 

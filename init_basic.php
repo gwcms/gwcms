@@ -19,8 +19,16 @@ if(phpversion()<'8.0'){
 	register_shutdown_function(['GW_Debug_Helper','errorReport']);
 }
 
-set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING);
+
+//siuncia klaida developeriui el pastu arba atvaizduoje ekrane jei pats dev prisijunges
+//
+set_error_handler(['GW_Debug_Helper','warningHandler'], E_USER_WARNING | E_NOTICE);
+
+//isveda klaida i ekrana
+//
 set_error_handler(['GW_Debug_Helper','errrorHandler'], E_WARNING);
+
+
 
 $GLOBALS['proc_timer'] = new GW_Timer;
 
