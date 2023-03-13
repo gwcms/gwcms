@@ -44,5 +44,9 @@ GW::s('ADMIN/HOOKS/AFTER_MENU', $am);
 
 
 
+//siuncia klaida developeriui el pastu arba atvaizduoje ekrane jei pats dev prisijunges
+//
+set_error_handler(['GW_Debug_Helper','errrorHandler'], E_WARNING);
+set_error_handler(['GW_Debug_Helper','warningHandler'], E_NOTICE);
 
 

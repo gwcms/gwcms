@@ -132,6 +132,10 @@ class Module_Comments extends Module_Items
 	{
 		$result = false;
 		
+		//kai sukurti nauja praso
+		if(!$item)
+			return true;
+		
 		if($item->id){
 			$item->load_if_not_loaded();
 		}

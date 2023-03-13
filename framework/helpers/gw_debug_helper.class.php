@@ -82,7 +82,7 @@ class GW_Debug_Helper
 		return $code;
 	}
 	
-	static function warningHandler($errno, $errstr, $errfile, $errline, $errcontext)
+	static function warningHandler($errno, $errstr, $errfile, $errline, $errcontext=false)
 	{
 		$e=[
 		    "type"=>$errno,
@@ -171,10 +171,10 @@ class GW_Debug_Helper
 	
 	function outputToScreen($error)
 	{
-		$errno = $errno['type'];
-		$errstr = $errno['message'];
-		$errfile = $errno['file'];
-		$errline = $errno['line'];		
+		$errno = $error['type'];
+		$errstr = $error['message'];
+		$errfile = $error['file'];
+		$errline = $error['line'];		
 		
 		self::openInNetBeans();
 
@@ -233,7 +233,7 @@ class GW_Debug_Helper
 		]);
 	
 		
-		self::warningHandler($errno, $errstr, $errfile, $errline, $errcontext);
+		self::warningHandler($errno, $errstr, $errfile, $errline);
 
 		/* Don't execute PHP internal error handler */
 		return true;
@@ -300,7 +300,7 @@ class GW_Debug_Helper
 		
 		$data['backtrace'] = debug_backtrace();
 		
-		
+
 		if(GW::s('REPORT_ERRORS')){
 
 			$reci = GW::s('REPORT_ERRORS');
@@ -331,7 +331,7 @@ class GW_Debug_Helper
 			if($nosend)
 			{
 				self::outputToScreen($e);	
-				echo $body;
+				//echo $body;
 			}else{
 				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];
 				GW_Mail_Helper::sendMail($opts);

@@ -137,7 +137,7 @@ class GW_ADM_Sitemap_Helper
 		//check sync
 		if (!$force)
 			foreach ($root_pages as $i => $item)
-				if (date('Y-m-d H:i:s', @filemtime($modules[$item->get('path')])) <= $item->get('sync_time'))
+				if (date('Y-m-d H:i:s', @filemtime($modules[$item->get('path')] ?? false)) <= $item->get('sync_time'))
 					unset($modules[$item->get('path')]);
 
 
