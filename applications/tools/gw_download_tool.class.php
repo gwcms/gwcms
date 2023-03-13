@@ -26,6 +26,10 @@ class GW_Download_Tool
 		$item0 = new GW_File();
 		
 		$params['id'] = array_shift($this->path_arr);
+		
+		
+		if(!$params['id'])
+			die('Bad request.');
 
 
 		$item=$item0->find(Array('`key`=?',$params['id']));
