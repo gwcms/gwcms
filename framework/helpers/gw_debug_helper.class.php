@@ -259,6 +259,12 @@ class GW_Debug_Helper
 	
 	static function processError($e)
 	{
+		//skip smarty notices //2023-03-14
+		
+		if($e['type'] == 'E_NOTICE' && strpos($e['file'], '.tpl.php')!==false){
+			return true;
+		}
+		
 		$data = $e+[
 			    'ip'=>$_SERVER["REMOTE_ADDR"],
 			    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
@@ -278,6 +284,9 @@ class GW_Debug_Helper
 
 		$data['code'] = self::getCodeCut($e,10);
 		$data['message'] = str_replace("\n", "<br />", $data['message']);
+		
+		
+		$data['debuglink'] = self::openInNetbeansLink($e['file'],$e['line']);
 		
 		if($_POST)
 			$data['post'] = print_r($_POST, true);
@@ -301,7 +310,10 @@ class GW_Debug_Helper
 		$data['backtrace'] = debug_backtrace();
 		
 
-		if(GW::s('REPORT_ERRORS')){
+
+		
+		
+		if(GW::s('REPORT_ERRORS') && ($e['type'] == E_ERROR || $e['type']==E_USER_ERROR ) ){
 
 			$reci = GW::s('REPORT_ERRORS');
 			$subj = $data['type_name']." under project: ".GW::s('PROJECT_NAME').' env: '.GW::s('PROJECT_ENVIRONMENT');
@@ -378,4 +390,28 @@ class GW_Debug_Helper
 	}
 	
 	
+	
+	function openInNetbeansLink($file, $line)
+	{
+		static $dev_root;
+		static $env_root;
+		
+		if(GW::s('PROJECT_ENVIRONMENT')!=GW_ENV_DEV){
+
+			if(!$dev_root){
+				$env_root  = GW::s("DEPLOY_DIR");
+				
+				$old=GW::s('PROJECT_ENVIRONMENT');
+				initEnviroment(GW_ENV_DEV);
+				$dev_root = GW::s("DEPLOY_DIR");
+				GW::s('PROJECT_ENVIRONMENT',$old);
+
+			}
+			
+			$file= str_replace($env_root, $dev_root, $subject);
+		}
+			
+		
+		return "http://localhost/gw/tools/netbeanopen/nb_open.php?file=".$file.'&line='.$line;;
+	}
 }

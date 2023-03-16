@@ -166,9 +166,9 @@ class Module_Sms extends GW_Common_Module
 		$this->jump();
 	}
 	
-	function prepareListConfig()
+	function prepareListConfig($item = false)
 	{
-		$x = parent::prepareListConfig();
+		$x = parent::prepareListConfig($item);
 		
 		if(isset($this->filters['number']))
 			$this->tpl_vars['dl_filters']=[];

@@ -32,7 +32,7 @@ class Module_Types extends GW_Common_Module
 	//disable filtering feature
 	function prepareListConfig($item=false)
 	{
-		parent::prepareListConfig();
+		parent::prepareListConfig($item);
 		
 		$this->list_config['dl_filters'] = [];
 	}
