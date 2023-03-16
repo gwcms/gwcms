@@ -168,6 +168,7 @@ class Module_Tools extends GW_Common_Module
 	function viewtestViewPHPinfo()
 	{
 		//
+		//ini_set('memory_limit', '512M');
 		echo phpinfo();
 		
 	}

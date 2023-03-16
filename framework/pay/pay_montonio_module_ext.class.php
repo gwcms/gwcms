@@ -12,6 +12,19 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		return $cfg;
 	}
 	
+	
+	function checkSellerCfg($order, &$cfg)
+	{
+		if($order->seller_id){
+			
+			list($access_key, $secret_key) = explode('|',$order->seller->get('keyval/montonio_config'));
+			$cfg = (object)['access_key'=>$access_key, 'secret_key'=> $secret_key, 'sandbox'=>0];
+			
+			//d::dumpas($cfg);
+		}
+				
+	}
+	
 	function doMontonioPay($args) 
 	{
 		//$this->userRequired();
@@ -26,15 +39,19 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		
 		//if($user->id == 9)
 		//	$args->payprice= 0.01;	
-		
-		
+				
 
 		$cfg = $this->montonioCfg();
+		
+		
+		$this->checkSellerCfg($args->order, $cfg);
+				
+	
 		$api = new GW_PayMontonio_Api($cfg);
 		
 		$return_args="&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}";
 		
-		if($cfg->sanbox)
+		if($cfg->sandbox)
 			$return_args.="&sandbox=1";
 		
 		$payment_data = [
@@ -88,7 +105,16 @@ class pay_montonio_module_ext extends GW_Module_Extension
 	
 	function doMontonioAccept()
 	{
+		
+		$orderid = $_GET['orderid'];
+		$order = GW_Order_Group::singleton()->find(['id=?', $orderid]);	
+		
+		//default
 		$cfg = $this->montonioCfg();
+
+		//other seller
+		$this->checkSellerCfg($order, $cfg);
+		
 		$api = new GW_PayMontonio_Api($cfg);
 		$token = $api->decodeToken($_GET['payment_token']);
 		$pay = $token['payload'];

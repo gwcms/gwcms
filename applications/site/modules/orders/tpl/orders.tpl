@@ -203,7 +203,17 @@
 						{/if}
 					</span>
 				</div>
-			{/if}	
+			{/if}
+			
+			{if $order->seller_id}
+				<div class="col-sm-3 col-md-2 g-mb-20 g-mb-0--sm">
+					<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">
+						
+						{GW::ln('/m/SELLER')}
+					</h4>
+					<span class="g-color-black g-font-weight-300 g-font-size-13">{$order->seller->title}</span>
+				</div>				
+			{/if}
 
 			{if $order->pay_type}
 			<div class="col-sm-3 col-md-2 g-mb-20 g-mb-0--sm">

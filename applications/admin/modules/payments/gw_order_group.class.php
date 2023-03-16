@@ -6,6 +6,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 	public $composite_map = [
 		'items' => ['gw_related_objecs', ['object'=>'GW_Order_Item','relation_field'=>'group_id','readonly'=>1]],
 		'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id','readonly'=>1]],
+		'seller' => ['gw_composite_linked', ['object'=>'GW_Pay_Sellers','relation_field'=>'seller_id','readonly'=>1]],
 		'banktransfer_confirm'=>['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '100x100']],
 		'discountcode' => ['gw_composite_linked', ['object'=>'Shop_DiscountCode','relation_field'=>'discount_id','readonly'=>1]]
 	];		

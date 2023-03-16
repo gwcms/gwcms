@@ -15,6 +15,11 @@ class GW_Pay_Sellers extends GW_Composite_Data_Object
 	public $extensions = ['keyval'=>1];	
 	public $keyval_use_generic_table = 1;	
 	
+	public $validators = [
+		'email' => ['gw_email', ['required' => 1]],
+
+	];	
+	
 
 	public $default_order = "title ASC";	
 	

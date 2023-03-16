@@ -72,6 +72,7 @@
     <i id="invoice_line2">Prekė / paslauga</i>
     <i id="obj_id">Prekės / paslaugos id</i>
     <i id="modpath">Modulis</i>
+    <i id="seller_id">Pardavėjas</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>

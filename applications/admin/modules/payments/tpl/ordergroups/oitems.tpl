@@ -85,10 +85,13 @@
 			
 			<tr><th>{GW::ln('/M/orders/ORDER_TOTAL')}</th><td>{$order->amount_total} &euro;</td></tr>
 			
-			{if $oder->deliverable}
+			{if $order->deliverable}
 				<tr><th>{GW::ln('/M/orders/FIELDS/delivery_type')}</th><td>{GW::ln("/M/orders/DELIVERY_{$order->delivery_opt}")}</td></tr>
 			{/if}
 			
+			{if $order->seller_id}
+				<tr><th>{GW::ln('/M/orders/SELLER')}</th><td>{$order->seller->title}</td></tr>
+			{/if}	
 			
 			{if $order->pay_type}
 				<tr><th>{GW::ln('/M/orders/PAY_METHOD')}</th><td>

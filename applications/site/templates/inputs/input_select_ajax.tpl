@@ -17,7 +17,7 @@
 	{if $modpath}
 		{$tmppath=explode('/', $modpath,2)}
 		{if !$datasource}
-			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/options", $source_args)}
+			{$datasource=$app->buildUri("`$tmppath.0`/`$tmppath.1`/{$optionsview|default:options}", $source_args)}
 		{/if}
 	{/if}	
 	
@@ -38,6 +38,7 @@
 		 {if $btnselectall}data-btnselectall="1"{/if}
 		 {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		 data-empty-option="{GW::ln('/g/EMPTY_OPTION_TITLE')}"
+		 {if $required}required="required"{/if}
 		 >
 		{html_options options=$options selected=$value}
 		

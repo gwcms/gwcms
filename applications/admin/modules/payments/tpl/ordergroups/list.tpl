@@ -38,7 +38,7 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt]}
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id]}
 
 	
 	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
@@ -68,6 +68,11 @@
 	{/function}
 	{function dl_cell_admin_id}
 		<a class="iframeopen" href="{$app->buildUri("users/usr/`$item->admin_id`/form",[clean=>2])}" title="Admin info">{$item->admin_id}</a>
+	{/function}
+	{function dl_cell_seller_id}
+		{if $item->seller_id}
+		<span title="{$item->seller->title}">{$item->seller->short}</span>
+		{/if}
 	{/function}		
 	
 

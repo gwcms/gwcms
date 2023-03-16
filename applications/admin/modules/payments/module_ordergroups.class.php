@@ -36,6 +36,8 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');	
 
 		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
+		
+		$this->sellers_enabled = GW_Permissions::canAccess('payments/sellers', $this->app->user->group_ids);
 	}
 	
 
@@ -56,6 +58,10 @@ class Module_OrderGroups extends GW_Common_Module
 		//d::dumpas($cfg);
 		
 		$cfg['filters']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
+		
+		
+		if($this->sellers_enabled)
+			$cfg['filters']['seller_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/sellers'];
 					
 		return $cfg;
 	}
@@ -79,7 +85,11 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function __eventAfterList(&$list)
 	{		
-		$this->attachFieldOptions($list, 'user_id', 'GW_User');		
+		$this->attachFieldOptions($list, 'user_id', 'GW_User');	
+		
+		if($this->sellers_enabled && $this->list_config['display_fields']['seller_id'] ?? false){
+			GW_Composite_Data_Object::prepareLinkedObjects($list,'seller');
+		}
 	}
 	
 	
@@ -242,6 +252,12 @@ class Module_OrderGroups extends GW_Common_Module
 		}else{
 			$v['FULLNAME'] = $item->name.' '.$item->surname;
 			$v['PHONE'] = $user->phone;			
+		}
+		
+		if($item->seller_id){
+			$v['SELLER'] = $item->seller->title;
+			$v['SELLER_ID'] = $item->seller->company_code;
+			$v['SELLER_ADDR'] = $item->seller->address;
 		}
 		
 		return [$tpl_code, $v];
@@ -531,7 +547,17 @@ class Module_OrderGroups extends GW_Common_Module
 		if($email!='vidmantas.work@gmail.com')
 			$opts['bcc'] = GW_Mail_Helper::getAdminAddr();
 		
-		$msg = GW::ln('/m/MESSAGE_SENT_TO',['v'=>['email'=>$email]]);
+		
+		
+		if($order->seller_id){
+			$opts['bcc'] = $order->seller->email;
+		}
+		
+		$msg = GW::ln('/m/MESSAGE_SENT_TO',
+			['v'=>[
+			    'email'=>$email.', '.$opts['bcc']
+				]
+			]);
 		//$this->setMessage();
 			
 		if(isset($_GET['preview']))

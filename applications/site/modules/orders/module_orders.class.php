@@ -300,6 +300,25 @@ class Module_Orders extends GW_Public_Module
 		
 	}
 	
+	function doCloseOrder()
+	{
+		$order = $this->getOrder();
+		
+		if($order->pay_status==7){
+			
+			$this->setError(GW::ln('/m/CANT_CLOSE_PAYD_ORDERS'));
+			
+		}else{
+			$order->open = 0;
+			$order->pay_type = '';
+			$this->app->user->set('ext/cart_id', '');
+			$order->updateChanged();
+			
+			$this->setMessage(GW::ln('/m/ORDER_IS_CLOSED_STILL_CAN_BE_REOPENED_LATER'));
+		}
+		$this->app->jump(false);		
+	}
+	
 	
 	function doCompletePay()
 	{
