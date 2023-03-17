@@ -169,7 +169,7 @@ class GW_Debug_Helper
 	    return "";
 	}	
 	
-	function outputToScreen($error)
+	static function outputToScreen($error)
 	{
 		$errno = $error['type'];
 		$errstr = $error['message'];
