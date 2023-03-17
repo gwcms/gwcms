@@ -11,7 +11,7 @@
 		{toolbar_button title=GW::l('/A/VIEWS/config') iconclass='gwico-Vertical-Settings-Mixer' href=$m->buildUri(config)}
 	{/function}	
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,config]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2]}		
 	
 	{$dl_actions=['edit','send']}
 	
