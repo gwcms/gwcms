@@ -1712,11 +1712,11 @@ class GW_Common_Module extends GW_Module
 
 		
 		
-		if(!$this->app->user->isRoot() && GW_Permissions::getTempReadAccessMod(implode('/',$this->module_path)) ){
+		if(($this->app->user && !$this->app->user->isRoot()) && GW_Permissions::getTempReadAccessMod(implode('/',$this->module_path)) ){
 			return $this->readOnlyAccess($item, $opts);
 		}
 		
-		$result0 = ($this->access_level & $requestAccess) || $this->app->user->isRoot();
+		$result0 = ($this->access_level & $requestAccess) || ($this->app->user && $this->app->user->isRoot());
 		
 
 		
