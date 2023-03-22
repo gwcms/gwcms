@@ -13,7 +13,7 @@
 {call e field="title" type=text}
 {call e field="username" type=text}
 {call e field="pass" type=text}
-{call e field="comments" type=text}
+{call e field="comments" type=textarea}
 
 {call e field="encryped" type=read}
 
