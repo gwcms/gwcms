@@ -85,4 +85,37 @@ class Module_Classificators  extends Module_GenericClassificator
 		}
 		$this->jump();
 	}
+	
+	
+	function getListConfig($item=false)
+	{
+		
+		$cfg = parent::getListConfig();
+
+		
+
+
+		
+		$cfg['inputs']['title']=['type'=>'text'];	
+		$cfg['inputs']['aka']=['type'=>'text'];	
+
+		$cfg['inputs']['type']=['type'=>'select', 'options'=>$this->options['classtypes']];	
+		
+		
+		
+		
+
+		//d::dumpas($cfg['inputs']);
+
+		
+		return $cfg;
+	}	
+		
+	
+	
+	
 }
+
+
+
+
