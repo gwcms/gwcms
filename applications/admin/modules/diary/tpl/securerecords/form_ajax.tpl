@@ -16,7 +16,7 @@
 		{elseif $field=="title"}
 			{call e field=$field type=text}
 		{elseif $field=="comments"}
-			disabled avoid data loss
+			<td>disabled avoid data loss</td>
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}
