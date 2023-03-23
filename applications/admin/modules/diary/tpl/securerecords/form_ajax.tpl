@@ -5,7 +5,7 @@
 	
 	{foreach $m->list_config.dl_fields as $field}
 					
-		{if in_array($field,[username,pass,comments])}
+		{if in_array($field,[username,pass])}
 			
 			{if $item->encrypted}
 				{$tmp=base64_encode($item->get($field))}
@@ -15,6 +15,8 @@
 			{/if}
 		{elseif $field=="title"}
 			{call e field=$field type=text}
+		{elseif $field=="comments"}
+			disabled avoid data loss
 		{else}
 			<td>{$item->get($field)}</td>
 		{/if}
