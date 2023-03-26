@@ -391,7 +391,7 @@ class GW_Debug_Helper
 	
 	
 	
-	function openInNetbeansLink($file, $line)
+	static function openInNetbeansLink($file, $line)
 	{
 		static $dev_root;
 		static $env_root;

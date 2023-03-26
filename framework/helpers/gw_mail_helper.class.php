@@ -111,7 +111,7 @@ class GW_Mail_Helper
 		}		
 	}
 	
-	function initGenericVars(&$vars)
+	static function initGenericVars(&$vars)
 	{
 		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);		
 	}
@@ -215,7 +215,7 @@ class GW_Mail_Helper
 		}
 		
 		if(isset($opts['debug']))
-			d::dumpas($mailer);
+			d::dumpas([$opts, $mailer]);
 		
 		if(isset($opts['preview']))
 			return $opts;
@@ -271,6 +271,20 @@ class GW_Mail_Helper
 		
 		return $status;
 	}
+	
+	static function sendSms($opts)
+	{
+		$path="datasources/sms";
+
+		$req = ["number"=>$opts['phone'], 'msg'=>$opts['msg'], "act"=>'doInsertNew', "json"=>1,'packets'=>1];
+
+		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
+		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;					
+
+
+		$respo = $this->app->innerRequest("datasources/sms", $req);		
+		d::dumpas($respo);
+	}	
 	
 	static function add2db($opts, $m_queue_item=false)
 	{
@@ -330,5 +344,5 @@ class GW_Mail_Helper
 			'float'=>1
 		]);			
 	}
-
+	
 }
