@@ -93,7 +93,7 @@ class GW_WebSocket_Helper
 	//i message gali buti paduodama tiek masyvas su nurodytais parametrais tiek paprastas tekstas
 	//kuris bus paverciamas i masyva
 	
-	function notifyUser($username, $message)
+	static function notifyUser($username, $message)
 	{
 		$control = self::initControlUserWsc();
 		

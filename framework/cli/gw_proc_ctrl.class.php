@@ -47,7 +47,7 @@ class GW_Proc_Ctrl
 	 *  2 - sustabdytas su SIGKILL
 	 *  
 	 */
-	function terminate($params)
+	static function terminate($params)
 	{
 
 		$pid = $params['pid'];
