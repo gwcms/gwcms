@@ -330,7 +330,13 @@ class GW_Module
 				return true;
 		}
 		
-		$this->processView($this->view_name, array_splice($params,1));
+		
+		//NEKRAUT VIEWSU JEI SYSCALL
+		if(isset($_GET['sys_call']))
+			return false;
+		
+		if($this->view_name)
+			$this->processView($this->view_name, array_splice($params,1));
 	}
 	
 	

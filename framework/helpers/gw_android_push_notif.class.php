@@ -1,5 +1,9 @@
 <?php
 
+
+//NEBEVEIKIA JAU KURIS LAIKAS
+//REIKIA ATNAUJINTI
+
 class GW_Android_Push_Notif
 {
 
@@ -13,7 +17,7 @@ class GW_Android_Push_Notif
 			return self::push($user);
 	}
 
-	function userFromUserid($user, $extra_cond = '')
+	static function userFromUserid($user, $extra_cond = '')
 	{
 		if (is_numeric($user))
 			$user = GW_User::singleton()->find(['id=? AND active=1 ' . $extra_cond, $user]);
@@ -27,6 +31,10 @@ class GW_Android_Push_Notif
 	 */
 	static function push($user)
 	{
+		
+		//NEBEVEIKIA JAU KURIS LAIKAS
+		return false;
+		
 		$user = self::userFromUserid($user);
 
 		if (!$user)

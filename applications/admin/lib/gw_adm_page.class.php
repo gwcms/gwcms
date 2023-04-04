@@ -213,12 +213,12 @@ class GW_ADM_Page extends GW_i18n_Data_Object
 	
 	function getIcon()
 	{
-		if($this->info->icon){
+		if($this->info->icon ?? false){
 			return $this->info->icon;
 		}
 		
 		
-		if($this->info->iconclass){
+		if($this->info->iconclass ?? false){
 			if(strpos($this->info->iconclass,'material')===0){
 				list($name, $iconame) = explode('-', $this->info->iconclass,2);
 				
