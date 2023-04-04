@@ -184,6 +184,9 @@ class GW_Debug_Helper
 	
 		if(GW::$context->app->user && GW::$context->app->user->isRoot())
 		{
+			
+			$erroridx = $error['erroridx'] ?? false;
+			
 			unset($_GET['url']);
 			
 			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
@@ -196,7 +199,7 @@ class GW_Debug_Helper
 			
 
 		}
-				
+		$errfile = self::envRootSwitch($errfile);		
 		$errstr = "<span class='openfile1' data-file='$errfile' data-line='$errline'><b>".self::FriendlyErrorType($errno)."</b> $file_short on line $errline: $errstr</span> $backtrace_request<br/>";
 					
 						
@@ -229,7 +232,8 @@ class GW_Debug_Helper
 		    "type"=>$errno,
 		    "message"=>$errstr,
 		    "file"=>$errfile,
-		    "line"=>$errline
+		    "line"=>$errline,
+		    "erroridx"=>$erroridx
 		]);
 	
 		
@@ -391,7 +395,7 @@ class GW_Debug_Helper
 	
 	
 	
-	static function openInNetbeansLink($file, $line)
+	static function envRootSwitch($file)
 	{
 		static $dev_root;
 		static $env_root;
@@ -408,9 +412,16 @@ class GW_Debug_Helper
 
 			}
 			
-			$file= str_replace($env_root, $dev_root, $subject);
+			$file= str_replace($env_root, $dev_root, $file);
 		}
-			
+
+		return $file;
+	}
+	
+	static function openInNetbeansLink($file, $line)
+	{
+
+		$file = self::envRootSwitch($file);
 		
 		return "http://localhost/gw/tools/netbeanopen/nb_open.php?file=".$file.'&line='.$line;;
 	}

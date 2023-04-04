@@ -152,12 +152,43 @@ class Module_Email_Templates extends GW_Common_Module
 		
 		$list = [];
 		foreach($opts as $id => $title){
-			$list[] =  ["id"=>$id, "title"=>$title];
+			$list[] =  ["id"=>$id, "title"=>$id.'.'.$title];
 		}
 				
 		echo json_encode(["items"=>$list, "total_count"=>count($opts)]);
 		exit;
 	}	
+	
+/*
+	function getOptionsCfg()
+	{
+		$opts = [
+		    'title_func'=>function($o){ 
+			$ms = $o->getActiveMembership();
+			$single = !$ms ? $o->getUnusedSingleUseLic() : false;
+			return 
+			$o->id." ".$o->title. (isset($_GET['birthdate'])?' ('.explode('-',$o->birthdate)[0].')':'').($ms ? ' '.date('Y').'-'.$ms->id: ($single?" SINGLE-LIC":' NO-LIC') );
+		    },
+		    'search_fields'=>['name','surname','email'],
+		];	
+		$opts['condition_add'] = 'removed=0';
+		    
+		    
+		if(isset($_GET['gender']))
+			$opts['condition_add'].= ' AND '. GW_DB::prepare_query(['gender=?',$_GET['gender']]);
+		
+		if(isset($_GET['club']))
+			$opts['condition_add'].= ' AND '. GW_DB::inCondition('club',explode(',',$_GET['club']));		
+		
+		if(isset($_GET['active']))
+			$opts['condition_add'] .= ' AND  active=1';
+		    
+		
+		return $opts;	
+	}
+ * 
+ *  */	
+	
 		
 	
 	function __eventAfterForm($item)
