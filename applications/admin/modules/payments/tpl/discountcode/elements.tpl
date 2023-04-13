@@ -14,11 +14,17 @@
 		singleuse=>[type=>bool],
 		obj_type=>[type=>select, options=>$item->getTypes(), empty_option=>1, options_fix=>1],
 		valid_from=>[type=>date],
-		expires=>[type=>date,title=>GW::l('/m/FIELDS/discount_expires')],
-		products=>[type=>multiselect_ajax, modpath=>"shop/products", preload=>1,options=>[],value_format=>json1 ]
+		expires=>[type=>date,title=>GW::l('/m/FIELDS/discount_expires')]
 	]
 ]
 }
+
+{if $item->obj_type == 'shop_products'}
+	{$fields_config.fields.products=[type=>multiselect_ajax, modpath=>"shop/products", preload=>1,options=>[],value_format=>json1 ]}
+{elseif $item->obj_type == 'nat_products'}
+	{$fields_config.fields.products=[type=>multiselect_ajax, modpath=>"products/items", preload=>1,options=>[],value_format=>json1 ]}
+{/if}
+
 
 {if $smarty.get.shift_key==1 && $app->user->isRoot()}
 	{$fields_config.fields.used_amount=[type=>text]}

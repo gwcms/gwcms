@@ -87,7 +87,7 @@ class Module_OrderGroups extends GW_Common_Module
 	{		
 		$this->attachFieldOptions($list, 'user_id', 'GW_User');	
 		
-		if($this->sellers_enabled && $this->list_config['display_fields']['seller_id'] ?? false){
+		if($this->sellers_enabled && ($this->list_config['display_fields']['seller_id'] ?? false) ){
 			GW_Composite_Data_Object::prepareLinkedObjects($list,'seller');
 		}
 	}
