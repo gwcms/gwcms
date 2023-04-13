@@ -38,7 +38,7 @@ class GW_Cms_Api
 		{
 			list($this->username, $this->api_key) = explode(':',$user_or_userandpi);
 		}else{
-			$this->username = $user;
+			$this->username = $user_or_userandpi;
 			$this->api_key = $api_key;			
 		}
 
