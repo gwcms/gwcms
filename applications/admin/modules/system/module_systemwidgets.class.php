@@ -27,7 +27,13 @@ class Module_SystemWidgets extends GW_Module
 		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
 		
 		$msg = shell_exec($cmd="sudo /usr/bin/php $path test_sync_with_prod 2>&1");
-		$this->setMessage($msg);
+		
+		if($this->app->user->isRoot()){
+			$this->setMessage("(root only) ".$msg);
+		}else{
+			$this->setMessage("sync completed");
+		}
+		
 		header('Location: '.$_SERVER['HTTP_REFERER'] ?: '/');
 		exit;
 	}

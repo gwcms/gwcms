@@ -100,5 +100,6 @@ class GW_Img_Tool
 		}
 
 		readfile($item->getFilename());
+		exit;
 	}
 }
