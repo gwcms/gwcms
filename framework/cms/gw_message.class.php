@@ -84,6 +84,10 @@ class GW_Message extends GW_Data_Object
 				'body' => $data['message']
 			];
 			$status = GW_Mail_Helper::sendMail($opts);
+			
+			
+			if(GW::s('WSS/CONTROL_USER'))
+				GW_WebSocket_Helper::notifyUser($user->username, ['action'=>'notification', 'text'=> $data['subject']."<br>".$data['message']]);
 
 			//d::dumpas([$opts, $status]);
 		}

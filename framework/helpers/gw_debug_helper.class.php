@@ -182,7 +182,7 @@ class GW_Debug_Helper
 
 		$backtrace_request = "";
 	
-		if(GW::$context->app->user && GW::$context->app->user->isRoot())
+		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot())
 		{
 			
 			$erroridx = $error['erroridx'] ?? false;
@@ -206,7 +206,7 @@ class GW_Debug_Helper
 		//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
 		echo $errstr;
 		
-		if(GW::$context->app->user && GW::$context->app->user->isRoot())
+		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot())
 		{			
 			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
 				echo d::fbacktrace(debug_backtrace(), false, false).'<br>';
@@ -269,11 +269,15 @@ class GW_Debug_Helper
 			return true;
 		}
 		
-		$data = $e+[
-			    'ip'=>$_SERVER["REMOTE_ADDR"],
-			    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
-			    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI']
-			];
+		if(isset($_SERVER["REMOTE_ADDR"])){
+			$data = $e+[
+				    'ip'=>$_SERVER["REMOTE_ADDR"],
+				    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+				    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI']
+				];
+		}else{
+			//cli version
+		}
 		
 		if(isset($_SERVER['HTTP_USER_AGENT']))
 			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
@@ -287,7 +291,9 @@ class GW_Debug_Helper
 		
 
 		$data['code'] = self::getCodeCut($e,10);
-		$data['message'] = str_replace("\n", "<br />", $data['message']);
+		
+		if(isset($data['message']))
+			$data['message'] = str_replace("\n", "<br />", $data['message']);
 		
 		
 		$data['debuglink'] = self::openInNetbeansLink($e['file'],$e['line']);
