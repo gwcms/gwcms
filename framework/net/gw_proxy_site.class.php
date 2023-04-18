@@ -85,6 +85,8 @@ class GW_Proxy_Site {
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
 			$extraHeaders[] = 'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'];
 		}		
+		
+		$extraHeaders[] = 'Mirror-Redirect: ' . $cnt;
 
 		/* Forward cookie as it came.  */
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $extraHeaders);
