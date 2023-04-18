@@ -332,7 +332,7 @@ class GW_Module
 		
 		
 		//NEKRAUT VIEWSU JEI SYSCALL
-		if(isset($_GET['sys_call']))
+		if(isset($request_params['act']) && isset($_GET['sys_call']))
 			return false;
 		
 		if($this->view_name)

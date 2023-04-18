@@ -223,7 +223,7 @@ class Navigator
 		$raw = file_get_contents($path);
 		$decode = json_decode($raw);	
 
-		return $decode ? $decode : ['decode_err'=>1,'raw_response'=>$raw];
+		return $decode ? $decode : ['decode_err'=>1,'raw_response'=>$raw, 'request_path'=>$path];
 	}
 	
 	static function isAjaxRequest()

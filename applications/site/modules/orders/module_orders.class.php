@@ -1378,7 +1378,7 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		if(isset($args['debug']))
-			die(htmlspecialchars ($html));
+			die(json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
 		if(isset($args['justhtml']))
 			return $html;
