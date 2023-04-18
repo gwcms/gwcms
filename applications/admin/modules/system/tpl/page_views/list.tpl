@@ -5,6 +5,14 @@
 
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden[] = dialogconf}
+	
+	
+	{if $app->user->isRoot()}
+		{$do_toolbar_buttons_hidden[]=exportdata}
+		{$do_toolbar_buttons_hidden[]=importdata}
+	{/if}
+	
+	{$do_toolbar_buttons[] = search}
 	{$dl_smart_fields=[dropdown,calculate,default,fields,title_short,condition,order]}
 	
 	

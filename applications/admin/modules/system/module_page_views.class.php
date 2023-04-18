@@ -4,7 +4,8 @@
 class Module_Page_Views extends GW_Common_Module
 {
 	public $filterpaths=false;
-	
+	use Module_Import_Export_Trait;
+		
 	function init()
 	{
 		$this->model = new GW_Adm_Page_View();//nebutinas uzloadina per lang faila jei nurodyta
