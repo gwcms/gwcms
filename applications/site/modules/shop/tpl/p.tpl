@@ -213,7 +213,7 @@
 					</button>
 				</div>
 			{/if}
-				{if isset($products.wishlist)}
+				{if $m->feat('wishlist')}
 			<div class="col g-px-5 g-mb-10">
 				<button class="btn btn-block u-btn-outline-black g-brd-gray-dark-v5 g-brd-black--hover g-color-gray-dark-v4 g-color-white--hover g-font-size-12 text-uppercase g-py-15 g-px-25 gwUrlMod" type="button" 
 					data-args='{json_encode([act=>doAdd2WishList,id=>$item->id])}' data-ajax="1" data-refresh="1" data-loading="1" data-auth="1">

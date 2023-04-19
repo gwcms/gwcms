@@ -31,7 +31,7 @@
 			 data-incart="{$m->isItemInCart($item)}" title="{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])}">
 		      </a>   
 		      {/if}
-		      {if $m->config->wishlist_enabled}
+		      {if $m->feat('wishlist')}
 		<a class="gwUrlMod {if $m->isItemInWishlist($item->id)}u-icon-v3 u-icon-size--xs{else} u-icon-v1 u-icon-size--sm g-color-gray-dark-v5{/if} g-color-primary--hover g-font-size-15 rounded-circle" 
 		   href="#add2wishlist" data-args='{json_encode([act=>doAdd2WishList,id=>$item->id])}' data-ajax="1" data-refresh="1" data-loading="1"
 		     data-toggle="tooltip"

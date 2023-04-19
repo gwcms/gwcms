@@ -52,7 +52,7 @@ class Module_Shop extends GW_Public_Module
 		$this->list_params['page'] = isset($_GET['page']) ? $_GET['page'] : 1;
 		
 		
-		if($this->config->wishlist_enabled){
+		if($this->feat('wishlist')){
 			$this->initWishlist();
 		}
 

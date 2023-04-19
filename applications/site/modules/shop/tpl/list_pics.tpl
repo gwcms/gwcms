@@ -87,7 +87,7 @@
 		</li>
 		{/if}
 		
-		{if $m->config->wishlist_enabled}
+		{if $m->feat('wishlist')}
 		<li class="list-inline-item align-middle mx-0">
 		  <a class="{if $m->isItemInWishlist($item->id)}u-icon-v3 u-icon-size--xs{else} u-icon-v1 u-icon-size--sm g-color-gray-dark-v5{/if} gwUrlMod g-color-primary--hover g-font-size-15 rounded-circle" href="#add2wishlist" data-args='{json_encode([act=>doAdd2WishList,id=>$item->id])}' 
 		     data-ajax="1" 

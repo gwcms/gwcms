@@ -23,7 +23,7 @@
     </div>
     <div id="accordion-08-body-{$item->id}" class="collapse show" role="tabpanel" aria-labelledby="accordion-08-heading-{$item->id}" data-parent="#accordion-08">
       <div class="u-accordion__body g-bg-gray-light-v5 g-px-50 g-py-30">
-        {$item->answer|escape}
+        {$item->answer|escape|nl2br}
       </div>
     </div>
   </div>

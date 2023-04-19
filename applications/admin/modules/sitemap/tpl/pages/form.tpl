@@ -91,6 +91,9 @@
 	{if $field=="display_badge"}
 		{call e type=text tabs=[extended]}
 	{/if}	
+	{if $field=="inbrackets"}
+		{call e type=text tabs=[extended]}
+	{/if}		
 {/foreach}
 
 

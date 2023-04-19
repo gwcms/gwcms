@@ -196,6 +196,7 @@
 		<i id="icon">Ikonėlė</i>
 		<i id="display_cond">Rodymo sąlyga</i>
 		<i id="display_badge">Skaitliukas / ženklelis</i>
+		<i id="inbrackets">Meniu punkto paaiškinamasis tekstukas skliaustuose</i>
   </i>
   <i id="OPTIONS">
 	  
@@ -247,6 +248,7 @@
 		<i id="icon">Ikonėlė</i>
 		<i id="display_cond">Rodymo sąlyga</i>
 		<i id="display_badge">Skaitliukas / ženklelis</i>
+		<i id="inbrackets">Meniu punkto paaiškinamasis tekstukas skliaustuose</i>
 	</i>    
   </i>
   <i id="ADD_HOST">
