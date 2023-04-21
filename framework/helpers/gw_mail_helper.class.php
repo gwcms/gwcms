@@ -137,6 +137,12 @@ class GW_Mail_Helper
 		
 		if(!isset($opts['from']) && $tpl->custom_sender)
 			$opts['from'] = $tpl->get("sender", $ln);
+		
+		if($tpl->bcc){
+			$bcc = explode(';', $tpl->bcc);
+			$opts['bcc'] = $opts['bcc'] ? array_merge((array)$opts['bcc'], $bcc) : $bcc;
+		}
+		
 	}
 	
 	static function sendMail(&$opts)
@@ -189,7 +195,7 @@ class GW_Mail_Helper
 			$to = $opts['replyto'];
 			$splitAddr($to, $toname);
 			$mailer->addReplyTo($to, $toname);
-		}	
+		}
 		
 		
 		if(isset($opts['attachments']) && is_array($opts['attachments'])){

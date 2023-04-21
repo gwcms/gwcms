@@ -1,0 +1,1 @@
+ALTER TABLE `gw_mail_templates` ADD `bcc` VARCHAR(150) NOT NULL AFTER `custom_sender`;

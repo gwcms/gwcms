@@ -108,7 +108,6 @@ class Module_Docs extends GW_Public_Module
 {if $input->type == 'date'}		
 		*/
 		
-		
 		$this->tpl_vars['item'] = $item;
 		$this->app->page->title = $item->title;
 		
@@ -117,7 +116,7 @@ class Module_Docs extends GW_Public_Module
 		
 
 		$this->tpl_vars['answer'] = $answ =  $this->getAnswer($item);
-		
+		$this->tpl_vars['answer_date'] = @explode(' ',$answ->insert_time)[0];
 		
 		if($step > 2 && ! $answ->id){
 			$this->setError(GW::ln('/m/PLEASE_COMPLETE_PREVIOUS_STEPS'));

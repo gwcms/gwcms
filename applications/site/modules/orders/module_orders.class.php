@@ -36,6 +36,9 @@ class Module_Orders extends GW_Public_Module
 		
 		$this->initFeatures();
 		$this->tpl_vars['ecommerce_orders']=1;
+		
+		if($this->app->user && $this->config->testpay_user_id == $this->app->user->id)
+			$this->can_do_test_pay = true;
 				
 	}	
 	
@@ -175,8 +178,8 @@ class Module_Orders extends GW_Public_Module
 	{
 		$this->userRequired();
 		
-		if(!$this->app->user->isRoot())
-			die('not root');
+		if(!$this->can_do_test_pay && !$this->app->user->isRoot())
+			die('not permited');
 		
 		
 		$order = $this->getOrder(true);

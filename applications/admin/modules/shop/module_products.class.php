@@ -318,6 +318,7 @@ class Module_Products extends GW_Common_Module
 		$vars['item'] = $item;
 		$vars['product'] = $product;
 		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
+		$vars['CLIENT_TITLE'] = $item->order->user->title;
 				
 		
 		if($this->feat('ttlock') && $product->date && $product->start_time && $product->end_time){

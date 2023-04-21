@@ -27,6 +27,7 @@
 
 
 
+{call e field=bcc  hidden_note="[OPTIONAL] Add invisible recipient -- other admin or 3rd party who need notify, add one or multple separate with semicol - ;"}
 
 {call e field=custom_sender type=bool stateToggleRows="custsender"}
 {call e field=sender type=text rowclass="custsender" i18n=3 }

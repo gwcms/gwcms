@@ -33,6 +33,6 @@
 
 {call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo')}
 
-
+{call e field=testpay_user_id type=select_ajax modpath="users/usr"  preload=1 options=[]}
 
 {include "default_form_close.tpl"}

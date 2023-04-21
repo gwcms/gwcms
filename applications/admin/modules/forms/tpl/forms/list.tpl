@@ -43,7 +43,10 @@
 	{function dl_actions_answers}
 		{$url=$m->buildUri("`$item->id`/answers",[clean=>2])}
 		{*iconclass="fa fa-globe"*}
-		{list_item_action_m href=$url action_addclass="iframe-under-tr" caption="Atsakymai({$item->answer_count})"}
+		{list_item_action_m href=$url 
+			action_addclass="iframe-under-tr" caption="Atsakymai({$item->answer_count})"
+			tag_params=['data-iframeopt'=>'{"min-width":"1000px","height":"600px"}']
+		}
 	{/function}		
 	
 {/block}

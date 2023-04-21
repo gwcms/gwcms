@@ -42,7 +42,7 @@
 				href="/{$item->ln}/direct/docs/docs/item?id={$item->doc->key}&answerid={$item->id}&clean=2" iconclass="fa fa-eye" 
 				action_addclass="iframe-under-tr"
 				title='Atverti atskirame lange<br>'
-				tag_params=['data-iframeopt'=>'{"width":"1000px","height":"600px"}']
+				tag_params=['data-iframeopt'=>'{"min-width":"1000px","height":"600px"}']
 			}
 		{/if}
 	{/function}		
