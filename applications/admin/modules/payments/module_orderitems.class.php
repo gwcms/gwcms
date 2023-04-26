@@ -267,6 +267,9 @@ class Module_OrderItems  extends GW_Common_Module
 		//pridedamas naujas itemsas
 		$this->initObjTypes();
 		
+		
+		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id'];
+		
 
 		return $vars;
 	}
