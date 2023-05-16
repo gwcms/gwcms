@@ -28,6 +28,10 @@
 
 {if $smarty.get.shift_key==1 && $app->user->isRoot()}
 	{$fields_config.fields.used_amount=[type=>text]}
+{else}
+	{$fields_config.fields.used_amount=[type=>read]}
+	{$fields_config.fields.used=[type=>read]}
+	{$fields_config.fields.user_id=[type=>read]}
 {/if}
 
 
