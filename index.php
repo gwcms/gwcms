@@ -5,7 +5,7 @@
 include __DIR__.'/init_basic.php';
 
 
-if(stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false && GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD){
+if(stripos($_SERVER['HTTP_USER_AGENT'] ?? false, 'bot')!==false && GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD){
 	
 	initEnviroment(GW_ENV_TEST);
 	GW_Proxy_Site::redirect(GW::s('SITE_URL'));

@@ -464,6 +464,10 @@ class Module_OrderGroups extends GW_Common_Module
 		$this->tpl_vars['date_to'] = $date_to;		
 		
 		$conds = ['payment_status=7 AND pay_test=0'];
+		
+		//tik pagrindinis
+		if($this->sellers_enabled)
+			$conds[0].=" AND seller_id=0";		
 				
 		$conds[] = GW_DB::prepare_query(['pay_time >= ?', $date_from]);
 		$conds[] = GW_DB::prepare_query(['pay_time <= ?', $date_to." 23:59"]);		

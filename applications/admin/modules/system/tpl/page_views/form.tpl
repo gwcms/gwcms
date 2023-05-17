@@ -19,10 +19,13 @@
 		{call e field=page_by type=number autoresize=1 height=25}
 		{call e field=group_by type=text}
 		{call e field=select type=text}
+		{call e field=path type=text}
 		
-		
+		{call e field=access type=text}
+		{*
+		11 access dabar turetu but daugiau atsirado punktu
 		{call e field=access type=select options=['1'=>"Read", "3"=>"Read + Write"]}
-		
+		*}
 	{else}
 		
 		{if $options.path}

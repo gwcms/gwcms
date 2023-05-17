@@ -607,6 +607,8 @@ class Module_Orders extends GW_Public_Module
 		$order = $this->getOrder(true);
 		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID]);	
 		
+		//if(isset($_GET['debug']))
+		//	d::ldump($response);
 				
 		$vars = $response['vars'];
 		
