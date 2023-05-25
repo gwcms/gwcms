@@ -61,7 +61,7 @@ include $dir['ROOT'].'config/project.php';
 
 
 
-$env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>''];
+$env_title = [GW_ENV_DEV=>'[D] ', GW_ENV_TEST=>'[T] ', GW_ENV_PROD=>'', GW_ENV_DEMO1=>'[DEMO]'];
 GW::s('SITE/TITLE_MARK', $env_title[GW::s('PROJECT_ENVIRONMENT')]);
 
 //whereis php
@@ -76,6 +76,13 @@ define('GW_PERM_REMOVE',8);
 
 GW::s('OFFICE_IP_ADDR', '84.15.236.87');
 
+
+if(isset($_SERVER['REMOTE_ADDR'])){
+	
+	if($_SERVER['REMOTE_ADDR']==GW::s('OFFICE_IP_ADDR')){
+		GW::s('DEVELOPER_PRESENT',1);
+	}	
+}
 
 //define('',4); /* then 8, 16, 32, etc... */
 

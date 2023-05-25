@@ -289,7 +289,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	
 	static $linked_cache;
 	
-	static function prepareLinkedObjects($list, $field=false) 
+	static function prepareLinkedObjects($list, $field=false, $opts=[]) 
 	{
 		$fistel = reset($list);
 		
@@ -320,6 +320,17 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			self::$linked_cache[$obj_classname] = [];
 		
 		self::$linked_cache[$obj_classname] += $addlist;
+		
+		if($opts['return_objects'] ?? false){
+			
+			$objlist = [];
+			foreach($ids as $id)
+				$objlist[$id] = self::$linked_cache[$obj_classname][$id];			
+			
+			return $objlist;
+		}
+		
+		return $ids;
 	}
 	
 	static function prepareImages($list, $field)

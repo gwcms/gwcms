@@ -236,7 +236,7 @@ class GW_Auth
 		    'ip_address' => $_SERVER['REMOTE_ADDR'], 
 		    'admin_user_id' => $adminid,
 		    'last_request' => time()
-		];		
+		];
 	}
 	
 }

@@ -884,8 +884,24 @@ class Module_Users extends GW_Public_Module
 	{
 		
 		if(isset($_COOKIE['user_secret'])){
-			$sort = substr($_COOKIE['user_secret'], 0, 10);
-			GW::db()->update('nat_product_history', ['auser_id = ?',$sort], ['user_id'=>$this->app->user->id]);
+			//$sort = substr($_COOKIE['user_secret'], 0, 10);
+			//GW::db()->update('nat_product_history', ['auser_id = ?',$sort], ['user_id'=>$this->app->user->id]);
+		}
+		
+		if(GW::s('SITE/HOOKS/AFTER_LOGIN')){
+			foreach(GW::s('SITE/HOOKS/AFTER_LOGIN') as $path){	
+				$this->app->subProcessPath($path);
+			}
+		}
+		
+		
+		if(isset($_GET['redirect_url'])){
+			$redir_url=$_GET['redirect_url']??'';
+			
+			$url = Navigator::getBase(). ltrim($redir_url,'/');
+
+
+			Header('Location: '.$url);			
 		}
 	}
 	

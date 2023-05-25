@@ -302,7 +302,7 @@ class GW_Lang
 	static function __highlightActive()
 	{
 		return (GW::$context->app->user && 
-			GW::$context->app->user->is_admin || GW::$devel_debug ) && 
+			GW::$context->app->user->is_admin || GW::$devel_debug || GW::s('DEVELOPER_PRESENT') ) && 
 			isset(GW::$context->app->sess['lang-results-active']) && 
 			GW::$context->app->sess['lang-results-active'] && !isset($_GET['lang-edit-of']);		
 	}
@@ -391,7 +391,7 @@ class GW_Lang
 		
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
-		if (GW::$devel_debug && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
+		if ((GW::$devel_debug || GW::s('DEVELOPER_PRESENT'))  && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
 			
 			if(!isset($opts['redirect'])){
 				$keyx=self::transKeyAnalise($fullkey);
