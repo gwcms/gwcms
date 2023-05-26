@@ -3,6 +3,8 @@
 define('GW_ENV_DEV',1);
 define('GW_ENV_TEST',2);
 define('GW_ENV_PROD',3);
+define('GW_ENV_DEMO1', 11);
+
 
 
 GW::s("APP_BACKGROUND_REQ_TYPE", 'force_http'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
