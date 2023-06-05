@@ -140,7 +140,7 @@ class GW_Lang_XML
 		}
 	}
 	//-------------
-	function __addChildsRecursive($parent, $struct)
+	static function __addChildsRecursive($parent, $struct)
 	{
 		foreach($struct as $key => $substruct)
 		{			
@@ -154,7 +154,7 @@ class GW_Lang_XML
 		}
 	}
 	
-	function modify($xml, $path, $lang_data)
+	static function modify($xml, $path, $lang_data)
 	{
 		$sxml = new SimpleXMLElement($xml, 0, false);
 		
@@ -209,12 +209,12 @@ class GW_Lang_XML
 			
 			if(isset($node['attributes']))
 				foreach($node['attributes'] as $att => $val)
-					$child->addAttribute(strtolower($att), $val);
+					@$child->addAttribute(strtolower($att), $val);
 			
 		}
 	}
 	
-	function struct2Xml($arr)
+	static function struct2Xml($arr)
 	{
 		$sxml = new SimpleXMLExtended('<?xml version="1.0" encoding="utf-8"?><xml></xml>', 0, false);
 		
@@ -232,7 +232,7 @@ class GW_Lang_XML
 	
 	
 	
-	function structMod(&$arr, $key, $val, $ln=false)
+	static function structMod(&$arr, $key, $val, $ln=false)
 	{
 		$key = trim($key,'/');		
 		$keyparts = explode('/', $key);
@@ -306,7 +306,7 @@ class GW_Lang_XML
 		//print_r(['after'=>$pointer]);
 	}
 	
-	function &structLangNodeSeek(&$treePointer,$ln,$create=false)
+	static function &structLangNodeSeek(&$treePointer,$ln,$create=false)
 	{
 		$found = false;
 		foreach($treePointer as &$elm){

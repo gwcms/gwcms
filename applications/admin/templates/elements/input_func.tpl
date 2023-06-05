@@ -2,7 +2,7 @@
 {function calcElmId}{str_replace(['[',']','/'],'__',$input_name)}{/function}
 
 {function input_label}
-	{if method_exists($item, 'isChangedField')}
+	{if is_object($item) && method_exists($item, 'isChangedField')}
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
 	

@@ -154,7 +154,7 @@ class GW_Lang_File extends GW_Data_Object
 	
 	function removeTemp()
 	{
-		unlink($this->getTempName());
+		@unlink($this->getTempName());
 	}
 
 	

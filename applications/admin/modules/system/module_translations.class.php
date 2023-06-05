@@ -173,6 +173,8 @@ class Module_Translations extends GW_Common_Module
 	
 	
 	
+	//uses gw/tools/Skriptai/google_translate/test2.php
+	//placed on web servers services/translate/test2.php
 	
 	function autoTranslateColl(&$collect, &$data, $mainln, $destln) {
 		
@@ -187,6 +189,8 @@ class Module_Translations extends GW_Common_Module
 		$resp_raw = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
 				
 		$resp = json_decode($resp_raw);
+		
+		//D::dumpas([$serviceurl, $resp_raw]);
 			
 		$failed = [];
 		
