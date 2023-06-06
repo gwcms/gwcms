@@ -558,15 +558,7 @@ class GW_DB
 		$this->result = $this->query($query, $nodie);
 
 		return $this->affected();
-	}
-	function increase2($table, $where, $field, $x = 1, $field2, $y=1, $nodie = false)
-	{
-		$query = "UPDATE $table SET `$field` = `$field` + $x, `$field2` = `$field2` + $y WHERE $where";
-
-		$this->result = $this->query($query, $nodie);
-
-		return $this->affected();
-	}	
+	}		
 
 	function affected()
 	{

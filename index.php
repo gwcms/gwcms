@@ -19,8 +19,8 @@ if(isset($GLOBALS['netbeansinitrequest']))
 	GW_Debug_Helper::openInNetBeans();
 	
 	
-
-GW_Bot_Detect::stats();
+if(GW::s('BOT_SEND_TO_MIRROR'))
+	GW_Bot_Detect::stats();
 /*
 echo "<!--err:".error_reporting()."-->";
 if(!GW::s('NO_PROCESS_TIME'))
