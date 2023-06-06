@@ -47,9 +47,9 @@ class GW_Proxy_Site {
 
 		$proxyDomain = $_SERVER['HTTP_HOST'];
 
-		$request = $_SERVER['REQUEST_URI'];
+				
+		$request = Navigator::buildURI($_SERVER['REQUEST_URI'], ['redirmirror'=>$cnt]);
 		
-		$request.=(strpos($request,'?')===false ? '?' : '&').'redirmirror='.$cnt;
 
 		$ch = curl_init();
 
