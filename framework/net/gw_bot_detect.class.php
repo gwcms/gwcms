@@ -54,7 +54,7 @@ class GW_Bot_Detect
 		
 		if($speed>3){
 			
-			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent]);
+			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent, 'speed'=>$speed]);
 		}
 	}
 	
