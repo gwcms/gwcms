@@ -112,6 +112,7 @@
 				base:'{$sys_base}', ln:'{$app->ln}', 
 				path:'{$app->path}', session_exp:{$session_exp|intval}, 
 				server_time:'{"F d, Y H:i:s"|date}',
+				wss:{if GW::s('WSS/USER')}true{else}false{/if},
 				user_id: {if $app->user}{$app->user->id}{else}0{/if}
 			});
 			gw_adm_sys.init();	

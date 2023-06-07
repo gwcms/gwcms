@@ -34,6 +34,11 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 		
 		$id = $master->get($this->params['relation_field']);
 		$class = $this->params['object'];;
+		
+		
+		//pakraudavo kruvas uzklausu WHERE id=0
+		if(!$id)
+			return false;
 
 		if(isset(GW_Composite_Data_Object::$linked_cache[$class][$id])){
 			//echo "--$class--$id--cached--";

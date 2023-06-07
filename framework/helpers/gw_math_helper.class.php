@@ -12,6 +12,17 @@ class GW_Math_Helper
 		$prec = pow(10, $prec);
 		return (round($bytes / pow(1024, floor($exp)) * $prec) / $prec) . ' ' . $m[$exp] . 'B';
 	}
+	
+	//oposite to cFileSize
+	static function unitToInt($s)
+	{
+	    return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($m) {
+		return $m[1] * pow(1024, strpos('BKMG', $m[2]));
+	    }, strtoupper($s));
+	}	
+	
+	
+	
 	/*
 	  uptime funkcija
 	  precision M-menesiais d-dienomis h-valandomis  m-minutemis s-sekundemis
@@ -102,6 +113,7 @@ class GW_Math_Helper
 
 		return substr($t, 0, -1);
 	}
+	
 
 	static function uptimeDate($datetimestr, $precision = 's')
 	{

@@ -41,12 +41,19 @@ class GW_Debug_Helper
 
 			$info['query_times'] = GW::$context->db->query_times;
 
-			$info['query_times_sum'] = array_sum((array) $info['query_times']);
+			
+			$info['query_times_sum']=0;
+			foreach($info['query_times']  as $qt)
+				$info['query_times_sum']+=$qt[1];
+			
+			
+			$info['process_time'] = GW::$globals['proc_timer']->stop(2);
 
 			if ($info['query_times_sum'])
 				$info['process_db_part'] = round($info['query_times_sum'] / $info['process_time'] * 100) . '%';
 			
 			$info['db_speed'] = GW::$context->db->speed;
+			
 
 			d::dumpas($info);
 		}

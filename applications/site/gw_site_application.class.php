@@ -494,7 +494,10 @@ class GW_Site_Application extends GW_Application
 		//d::dumpas('testas');
 		if(GW_Lang::$developLnResList){
 			d::ldump(GW_Lang::$developLnResList);
-			d::ldump(GW::db()->query_times);
+			
+			
+			//d::ldump(GW::db()->query_times);
+			//ctrl+3 debug mode ir rodys
 		}			
 	}
 	

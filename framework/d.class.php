@@ -116,8 +116,22 @@ class d
 		
 		echo $add;
 		
-		if(isset($opts['backtrace']))
-			echo self::fbacktrace(debug_backtrace());
+		
+		//if(isset($opts['backtrace'])){
+			$opts = DEBUG_BACKTRACE_IGNORE_ARGS;
+			
+				
+			if(isset($_GET['backtrace_addargs'])){
+				
+				
+				
+				$opts=false;
+			}
+						
+			//$opts=false;
+			
+			echo self::fbacktrace(debug_backtrace($opts));
+		//}
 		
 		if(isset($_SERVER['SHELL'])){
 			echo "------------------\n";
@@ -145,8 +159,8 @@ class d
 	{
 		//limit size, sometimes can kill memory
 		//$bt = array_slice($bt, 0, 4);
-
-
+		
+		
 		if($shift==-1){
 			if (!isset($bt[0]['file'])) //tiesiai is dump funkcijos kviecia
 				array_shift($bt);
@@ -178,9 +192,9 @@ class d
 
 		$backtracestr = "";
 		foreach ($bt as $point) {
-
+	
 			$data = isset($point["args"]) ? print_r($point["args"], true) : false;
-
+		
 			if (strlen($data) > 1000)
 				$data = substr($data, 0, 1000) . "...";
 
@@ -192,8 +206,9 @@ class d
 		if(isset($_SERVER['SHELL'])){
 			$str = "Im in {$point1['file']} {$point1['line']}\n";
 		}else{
-			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>
-			<div id='debug_bl_{$GLOBALS['debug_block']}' ".($hidden?"style='display:none'":'')."><ul>$backtracestr</ul></div>";
+			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>".
+			" | <a href='".Navigator::buildURI(false,$_GET+['backtrace_addargs'=>1])."'>add args<a/>"	.
+			"<div id='debug_bl_{$GLOBALS['debug_block']}' ".($hidden?"style='display:none'":'')."><ul>$backtracestr</ul></div>";
 			
 			GW_Debug_Helper::openInNetBeans();
 		}

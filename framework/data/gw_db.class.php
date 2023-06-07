@@ -168,8 +168,13 @@ class GW_DB
 		//in case of serious problems
 		//$this->logint($cmd.' - '.$_SERVER['REQUEST_URI']);
 		
-		if ($this->debug)
-			$this->query_times[] = Array($cmd, (float) $this->last_query_time);
+		if ($this->debug){
+			$this->query_times[] = Array($cmd, (float) $this->last_query_time, '<a class="dbbacktrace" href="#">BT</a>');
+			
+			if(isset($_GET['db_backtrace']) && $_GET['db_backtrace'] == count($this->query_times)-1 ){
+				d::dumpas("Backtrace for $this->last_query");
+			}
+		}
 		
 		if($this->profiling){
 			$this->speed[0]++;
