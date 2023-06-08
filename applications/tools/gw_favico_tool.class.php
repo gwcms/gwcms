@@ -62,8 +62,9 @@ class GW_FavIco_Tool
 			$this->fatalError('Error: No text specified.');
 
 		$text = $_GET['text'];
-		if (get_magic_quotes_gpc())
-			$text = stripslashes($text);
+		//deprecated
+		//if (get_magic_quotes_gpc())
+		//	$text = stripslashes($text);
 		$text = $this->javascript2html($text);
 
 
