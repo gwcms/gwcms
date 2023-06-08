@@ -37,8 +37,8 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 		
 		
 		//pakraudavo kruvas uzklausu WHERE id=0
-		if(!$id)
-			return false;
+		//if(!$id)
+		//	return new;
 
 		if(isset(GW_Composite_Data_Object::$linked_cache[$class][$id])){
 			//echo "--$class--$id--cached--";

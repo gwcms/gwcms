@@ -7317,11 +7317,14 @@ a.disabled-link,a.disabled-link:visited,a.disabled-link:active,a.disabled-link:h
 
 
 
-.gwtoolbarbtn span{
+.gwtoolbarbtn .alabel{
 	vertical-align: middle;
 	margin-left: 5px;
 }
-
+.gwtoolbarbtn .materialico{
+	vertical-align: middle;
+	font-size: 20px;
+}
 #gwcms-dynamic-alerts-container > div{
 	margin-bottom:10px;
 }

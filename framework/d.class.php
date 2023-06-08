@@ -113,25 +113,25 @@ class d
 		}
 		
 		
-		
 		echo $add;
 		
-		
-		//if(isset($opts['backtrace'])){
-			$opts = DEBUG_BACKTRACE_IGNORE_ARGS;
+	
+		if(isset($opts['backtrace'])){
+			
+			
+			
+			$backtrace_opts = DEBUG_BACKTRACE_IGNORE_ARGS;
 			
 				
 			if(isset($_GET['backtrace_addargs'])){
 				
 				
 				
-				$opts=false;
+				$backtrace_opts=false;
 			}
 						
-			//$opts=false;
-			
-			echo self::fbacktrace(debug_backtrace($opts));
-		//}
+			echo self::fbacktrace(debug_backtrace($backtrace_opts));
+		}
 		
 		if(isset($_SERVER['SHELL'])){
 			echo "------------------\n";
@@ -139,8 +139,11 @@ class d
 			echo  "</pre>";
 		}
 		
-		if(isset($opts['kill']))
+		
+		
+		if(isset($opts['kill'])){
 			exit;
+		}
 	}
 
 	static function vdump($x, $opts=[])
@@ -235,6 +238,7 @@ class d
 		
 		$opts['kill']=1;
 		self::dump($x, $opts);
+		exit;
 		
 	}
 

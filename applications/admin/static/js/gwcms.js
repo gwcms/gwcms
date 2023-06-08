@@ -234,8 +234,14 @@ var gw_adm_sys = {
 			}
 			
 			var title = $(this).attr('title');
-			if(!title)
-				title = $(this).text();
+			if(!title){
+				var tmp = $(this).find('.alabel').text();
+				if(tmp){
+					title = tmp;
+				}else{
+					title = $(this).text();
+				}
+			}
 			
 			//hold ctrl key & moouse click  to exit iframe
 			title = "<span  data-url='"+$(this).attr('href')+"' onclick='if(window.event.ctrlKey){ window.open($(this).data(\"url\")) }else{ return false }'>"+title+'</span>';
@@ -1735,7 +1741,13 @@ $(function(){
 		}
 		
 
-	});	
+	});
+	
+	$('.dbbacktrace').click(function(e){
+		 e.preventDefault();
+			 gw_navigator.jump(false, { "db_backtrace":  $(this).closest('.debugblock').find('.dbbacktrace').index(this) })
+		
+	})	
 })	
 
 	
