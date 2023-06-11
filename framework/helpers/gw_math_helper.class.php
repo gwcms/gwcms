@@ -30,6 +30,7 @@ class GW_Math_Helper
 
 	static function uptime($secs, $precision = 's')
 	{
+		//d::ldump([$secs, $precision]);
 
 		$y = floor($secs / 31514400);
 		$secs-=$y * 31514400;
@@ -67,21 +68,22 @@ class GW_Math_Helper
 				$t.=$te;
 		}else {
 			switch ($precision) {
-				case 'M':$t.=$M;
-					if ($M)
-						break;;
-				case 'd':$t.=$M . $d;
-					if ($d)
-						break;;
-				case 'h':$t.=$M . $d . $h;
-					if ($h)
-						break;;
-				case 'm':$t.=$M . $d . $h . $m;
-					if ($m)
-						break;;
-				case 's':$t.=$M . $d . $h . $m . $s;
-					if ($s)
-						break;;
+				case 'M':
+					$t=$M;
+					break;
+				case 'd':
+					$t=$M . $d;
+					break;
+				case 'h':
+					$t=$M . $d . $h;
+					break;
+				case 'm':
+					$t=$M . $d . $h . $m;
+					break;
+				case 's':
+					$t=$M . $d . $h . $m . $s;
+					break;
+					
 				case '1':
 					if ($M) {
 						return $M;

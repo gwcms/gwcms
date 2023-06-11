@@ -690,6 +690,7 @@ class Module_Users extends GW_Public_Module
 		$q[]="UPDATE `$membershiptbl` SET user_id=".(int)$new_id." WHERE user_id=".(int)$old_id;
 		$q[]="UPDATE `ts_applications` SET player_mx=".(int)$new_id." WHERE player_mx=".(int)$old_id;	
 		$q[]="UPDATE `ts_applications` SET player_dbl=".(int)$new_id." WHERE player_dbl=".(int)$old_id;	
+		$q[]="UPDATE `ts_applications` SET payer_id=".(int)$new_id." WHERE payer_id=".(int)$old_id;
 		
 		//$q[]="UPDATE `$parttbl` SET user_id=".(int)$new_id." WHERE user_id=".(int)$old_id;
 		$affected = 0;

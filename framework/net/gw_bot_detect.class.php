@@ -39,7 +39,7 @@ class GW_Bot_Detect
 	static function stats(){
 		
 		
-		$user_agent = mb_substr($_SERVER['HTTP_USER_AGENT'], 0, 100);
+		$user_agent = mb_substr(($_SERVER['HTTP_USER_AGENT'] ?? '-'), 0, 100);
 		$date= date('Y-m-d');
 		$speed = GW::$globals['proc_timer']->stop(1);
 		
