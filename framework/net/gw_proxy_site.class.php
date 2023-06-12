@@ -87,6 +87,8 @@ class GW_Proxy_Site {
 		}		
 		
 		$extraHeaders[] = 'Mirror-Redirect: ' . $cnt;
+		$extraHeaders[] = 'Mirror-Redirect-Domain: ' . $proxyDomain;
+		$extraHeaders[] = 'Mirror-Redirect-Client-Ip: ' . $_SERVER['REMOTE_ADDR'];
 
 		/* Forward cookie as it came.  */
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $extraHeaders);

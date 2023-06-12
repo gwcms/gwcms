@@ -18,10 +18,22 @@ class GW_Bot_Detect
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD
 			)
 		){
+			//die('Temporarily off, update is in progress. Please come back later');
 
 			initEnviroment(GW_ENV_TEST);
 			GW_Proxy_Site::redirect(GW::s('SITE_URL'));
 			exit;
+		}
+		
+		if(GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT')){
+			//Mirror-Redirect-Domain
+			
+			if(isset($_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN'])){
+				$_SERVER['HTTP_HOST']=$_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN'];
+				$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_MIRROR_REDIRECT_CLIENT_IP'];
+			}
+			
+			
 		}
 	}
 
