@@ -293,12 +293,12 @@ class GW_Application
 		$this->initDB();
 
 		$this->initSite();
-		$this->requestInfo();
+		$this->requestInfo();		
 		$this->initAuth();
 
 		$this->initLang();
-		
-		
+			
+	
 
 		$this->getPage();
 
@@ -482,17 +482,14 @@ class GW_Application
 		$this->path_arr_parent = $path_arr_parent;
 		$this->path_clean = $path_clean;
 
-
+		$langs = $this->app_name == 'ADMIN' ? GW::s('ADMIN/LANGS') : GW::s('LANGS');
 		
 		if(GW::s('MULTISITE'))
 		{
 			$this->ln = in_array($ln, $this->site->langs) ? $ln : $this->site->langs[0];	
 		}else{
-			$this->ln = in_array($ln, GW::s('LANGS')) || in_array($ln, GW::s('i18nExt')) ? $ln : GW::$settings['LANGS'][0];
-		}
-		
-		
-		
+			$this->ln = in_array($ln, $langs) || in_array($ln, GW::s('i18nExt')) ? $ln : $langs[0];
+		}	
 
 		$_SESSION['GW']['cms_ln'] = $this->ln;
 

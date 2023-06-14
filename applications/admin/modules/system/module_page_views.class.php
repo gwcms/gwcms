@@ -165,6 +165,47 @@ class Module_Page_Views extends GW_Common_Module
 		
 	}
 
+	
+	
+	
+/*
+{function name="cust_inputs"}
+	
+		{if in_array($field,[title,title_short])}
+			{call e}
+		{elseif in_array($field,[calculate,dropdown])}	
+			{call e type=bool}
+		{elseif in_array($field,[priority])}	
+			{call e type=number}
+		{elseif $field=="type"}
+			{call e type=select_plain options=GW::l('/m/OPTIONS/page_view_types')}	
+		{elseif $field=="priority" || $field=="page_by"}
+			{call e type=number}				
+		{elseif $field=="fields" || $field=="condition"}	
+			<td>...</td>
+		{else}
+			<td>{$item->get($field)}</td>
+		{/if}
+		
+{/function}
+ */	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();
+		
+
+
+	
+		$cfg['inputs']['title']=['type'=>'text'];	
+		$cfg['inputs']['title_short']=['type'=>'text'];	
+
+		
+						
+		return $cfg;
+		
+		//return ;
+	}		
+	
 }
 
 ?>

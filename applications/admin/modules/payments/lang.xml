@@ -5,78 +5,266 @@
       <en>Title</en>
       <lt>Pavadinimas</lt>
     </i>
-    <i id="admin_id">Administratorius</i>
-    <i id="admin_note">Admin. pastaba</i>
-    <i id="customer_email">Kliento el.p.</i>
-    <i id="amount">Suma</i>
-    <i id="paytime">Apmokėjimo laikas</i>
-    <i id="expires">Mokėjimo terminas</i>
-    <i id="pay_type">Mok. metodas</i>
+    <i id="admin_id">
+      <lt>Administratorius</lt>
+      <en>Administrator</en>
+    </i>
+    <i id="admin_note">
+      <lt>Admin. pastaba</lt>
+      <en>Admin. Note</en>
+    </i>
+    <i id="customer_email">
+      <lt>Kliento el.p.</lt>
+      <en>Customer Email.</en>
+    </i>
+    <i id="amount">
+      <lt>Suma</lt>
+      <en>Amount</en>
+    </i>
+    <i id="paytime">
+      <lt>Apmokėjimo laikas</lt>
+      <en>Payment Time</en>
+    </i>
+    <i id="expires">
+      <lt>Mokėjimo terminas</lt>
+      <en>Payment term</en>
+    </i>
+    <i id="pay_type">
+      <lt>Mok. metodas</lt>
+      <en>Pay. the method</en>
+    </i>
     <i id="user_id">
       <lt>Vartotojo id.</lt>
+      <en>User ID.</en>
     </i>
-    <i id="adm_processed">Buhalterija apdorojo</i>
+    <i id="adm_processed">
+      <lt>Buhalterija apdorojo</lt>
+      <en>Processed by Bookkeeping</en>
+    </i>
     <i id="pay_confirm_id">
       <lt>Mokėjimo patvirtinimas</lt>
+      <en>Payment Confirmation</en>
     </i>
-    <i id="amount_items">Pirkinių kaina</i>
-    <i id="amount_total">Viso kaina</i>
-    <i id="unit_price">Vieneto kaina</i>
-    <i id="qty">Kiekis</i>
-    <i id="total">Suma</i>
-    <i id="invoice_line">Pavadinimas</i>
-    <i id="user_title">Kliento vardas pav.</i>   
-    <i id="user_email">Kliento el. paštas</i>   
-    <i id="open">Užsakymas pildomas</i>   
-    <i id="pay_time">Apmokėjimo laikas</i>  
-    <i id="group_id">Užsakymo id</i>
-    <i id="company">Įmonės pavadinimas</i>
-    <i id="company_addr">Įmonės adresas</i>
-    <i id="company_code">Įmonės registracijos nr</i>
-    <i id="vat_code">Įmonės mokesčio mok. kodas</i>    
-    <i id="name">Vardas</i>
-    <i id="surname">Pavardė</i>
-    <i id="city">Miestas</i>
-    <i id="email">El. pašto adresas</i>
-    <i id="pay_test">Testinis mokėjimas</i>
-    <i id="mail_accept">Patvirtinimo laiškas išsiųstas</i>
-    <i id="payment_status">Mokėjimo būklė</i>
-    <i id="secret">Identifikavimo kodas</i>
-    <i id="pay_user_msg">Kliento mokėjimo žinutė</i>
-    <i id="adm_message">Admin. pastaba klientui</i>
-    <i id="features">Įgalinti funkcionalumai</i>
-    <i id="limit_amount">Maksimali suma</i>
-    <i id="percent">Nuolaidos procentas</i>
-    <i id="code">Kodas</i>
-    <i id="used">Panaudotas</i>    
-    <i id="amount_coupon">Kupono suma</i>
-    <i id="pay_confirm_id">Mokėjimo patvirtinimas</i>
-    <i id="amount_discount">Nuolaidos suma</i> 
-    <i id="amount_shipping">Pristatymo kaina</i>
-    <i id="region">Regionas</i>
-    <i id="country">Šalis</i>
-    <i id="delivery_type">Pristatymo tipas</i>
-    <i id="discount_id">Nuolaidos kodas</i>
-    <i id="amount_discount">Nuolaidos suma</i>
-    <i id="digital_items">Skaitmeninės prekės</i> 
-    <i id="placed_time">Pildymo užbaigimo laikas</i>
-    <i id="phone">Tel. numeris</i>
-    <i id="delivery_opt">Pristatymo pasirinkimas</i>        
-    <i id="deliverable">Fizinis pristatymas</i>
-    <i id="status">Užsakymo būklė</i>
-    <i id="obj_type">Prekių grupė</i>
-    <i id="discount_expires">Galioja iki</i>
-    <i id="valid_from">Galioja nuo</i>
-    <i id="singleuse">Vienkartinis</i>
-    <i id="vat_group">PVM</i>
-    <i id="invoice_line2">Prekė / paslauga</i>
-    <i id="obj_id">Prekės / paslaugos id</i>
-    <i id="modpath">Modulis</i>
-    <i id="seller_id">Pardavėjas</i>
+    <i id="amount_items">
+      <lt>Pirkinių kaina</lt>
+      <en>Purchase Cost</en>
+    </i>
+    <i id="amount_total">
+      <lt>Viso kaina</lt>
+      <en>Total Price</en>
+    </i>
+    <i id="unit_price">
+      <lt>Vieneto kaina</lt>
+      <en>Unit price</en>
+    </i>
+    <i id="qty">
+      <lt>Kiekis</lt>
+      <en>Quantity</en>
+    </i>
+    <i id="total">
+      <lt>Suma</lt>
+      <en>Amount</en>
+    </i>
+    <i id="invoice_line">
+      <lt>Pavadinimas</lt>
+      <en>Title</en>
+    </i>
+    <i id="user_title">
+      <lt>Kliento vardas pav.</lt>
+      <en>Customer Name surname</en>
+    </i>
+    <i id="user_email">
+      <lt>Kliento el. paštas</lt>
+      <en>Customer Email</en>
+    </i>
+    <i id="open">
+      <lt>Užsakymas pildomas</lt>
+      <en>Order is completed</en>
+    </i>
+    <i id="pay_time">
+      <lt>Apmokėjimo laikas</lt>
+      <en>Payment Time</en>
+    </i>
+    <i id="group_id">
+      <lt>Užsakymo id</lt>
+      <en>Order ID</en>
+    </i>
+    <i id="company">
+      <lt>Įmonės pavadinimas</lt>
+      <en>Company Name</en>
+    </i>
+    <i id="company_addr">
+      <lt>Įmonės adresas</lt>
+      <en>Company address</en>
+    </i>
+    <i id="company_code">
+      <lt>Įmonės registracijos nr</lt>
+      <en>Company registration no</en>
+    </i>
+    <i id="vat_code">
+      <lt>Įmonės mokesčio mok. kodas</lt>
+      <en>Company VAT code</en>
+    </i>
+    <i id="name">
+      <lt>Vardas</lt>
+      <en>Name</en>
+    </i>
+    <i id="surname">
+      <lt>Pavardė</lt>
+      <en>Last Name</en>
+    </i>
+    <i id="city">
+      <lt>Miestas</lt>
+      <en>City</en>
+    </i>
+    <i id="email">
+      <lt>El. pašto adresas</lt>
+      <en>Email mail adress</en>
+    </i>
+    <i id="pay_test">
+      <lt>Testinis mokėjimas</lt>
+      <en>Test Payment</en>
+    </i>
+    <i id="mail_accept">
+      <lt>Patvirtinimo laiškas išsiųstas</lt>
+      <en>Confirmation Letter Sent</en>
+    </i>
+    <i id="payment_status">
+      <lt>Mokėjimo būklė</lt>
+      <en>Payment status</en>
+    </i>
+    <i id="secret">
+      <lt>Identifikavimo kodas</lt>
+      <en>Identification code</en>
+    </i>
+    <i id="pay_user_msg">
+      <lt>Kliento mokėjimo žinutė</lt>
+      <en>Customer Payment Message</en>
+    </i>
+    <i id="adm_message">
+      <lt>Admin. pastaba klientui</lt>
+      <en>Admin. Note for the customer</en>
+    </i>
+    <i id="features">
+      <lt>Įgalinti funkcionalumai</lt>
+      <en>Enabled features</en>
+    </i>
+    <i id="limit_amount">
+      <lt>Maksimali suma</lt>
+      <en>Maximum amount</en>
+    </i>
+    <i id="percent">
+      <lt>Nuolaidos procentas</lt>
+      <en>Percentage of discount</en>
+    </i>
+    <i id="code">
+      <lt>Kodas</lt>
+      <en>Discount Code</en>
+    </i>
+    <i id="used">
+      <lt>Panaudotas</lt>
+      <en>Used</en>
+    </i>
+    <i id="amount_coupon">
+      <lt>Kupono suma</lt>
+      <en>Coupon sum</en>
+    </i>
+    <i id="pay_confirm_id">
+      <lt>Mokėjimo patvirtinimas</lt>
+      <en>[A] Payment Confirmation</en>
+    </i>
+    <i id="amount_discount">
+      <lt>Nuolaidos suma</lt>
+      <en>Discount amount</en>
+    </i>
+    <i id="amount_shipping">
+      <lt>Pristatymo kaina</lt>
+      <en>Delivery price</en>
+    </i>
+    <i id="region">
+      <lt>Regionas</lt>
+      <en>Region</en>
+    </i>
+    <i id="country">
+      <lt>Šalis</lt>
+      <en>Country</en>
+    </i>
+    <i id="delivery_type">
+      <lt>Pristatymo tipas</lt>
+      <en>Delivery Type</en>
+    </i>
+    <i id="discount_id">
+      <lt>Nuolaidos kodas</lt>
+      <en>Discount Code</en>
+    </i>
+    <i id="amount_discount">
+      <lt>Nuolaidos suma</lt>
+      <en>[A] Discount amount</en>
+    </i>
+    <i id="digital_items">
+      <lt>Skaitmeninės prekės</lt>
+      <en>Digital goods</en>
+    </i>
+    <i id="placed_time">
+      <lt>Pildymo užbaigimo laikas</lt>
+      <en>Filling finish time</en>
+    </i>
+    <i id="phone">
+      <lt>Tel. numeris</lt>
+      <en>Phone number</en>
+    </i>
+    <i id="delivery_opt">
+      <lt>Pristatymo pasirinkimas</lt>
+      <en>Delivery Option</en>
+    </i>
+    <i id="deliverable">
+      <lt>Fizinis pristatymas</lt>
+      <en>Physical Delivery</en>
+    </i>
+    <i id="status">
+      <lt>Užsakymo būklė</lt>
+      <en>Order status</en>
+    </i>
+    <i id="obj_type">
+      <lt>Prekių grupė</lt>
+      <en>Product Group</en>
+    </i>
+    <i id="discount_expires">
+      <lt>Galioja iki</lt>
+      <en>Valid until</en>
+    </i>
+    <i id="valid_from">
+      <lt>Galioja nuo</lt>
+      <en>Valid from</en>
+    </i>
+    <i id="singleuse">
+      <lt>Vienkartinis</lt>
+      <en>Single use</en>
+    </i>
+    <i id="vat_group">
+      <lt>PVM</lt>
+      <en>VAT</en>
+    </i>
+    <i id="invoice_line2">
+      <lt>Prekė / paslauga</lt>
+      <en>Item / Service</en>
+    </i>
+    <i id="obj_id">
+      <lt>Prekės / paslaugos id</lt>
+      <en>Goods / Services ID</en>
+    </i>
+    <i id="modpath">
+      <lt>Modulis</lt>
+      <en>Module</en>
+    </i>
+    <i id="seller_id">
+      <lt>Pardavėjas</lt>
+      <en>Seller</en>
+    </i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
-    <i id="need_invoice">Sąsk.F</i>	  
+    <i id="need_invoice"><lt>Sąsk.F</lt><en>Invoice</en></i>
     <i id="admin_id">Admin</i>
     <i id="seller_id">Pard.</i>
     <i id="update_time">
@@ -102,130 +290,250 @@
 <![CDATA[Mokėj. <i class="fa fa-clock-o"></i>]]>
     </i>
     <i id="coupon_codes">%#</i>
-
-    <i id="expires">Mok. term.</i>
-    <i id="user_id"><![CDATA[<i class="fa fa-user"></i>]]></i>
+    <i id="expires"><lt>Mok. term.</lt><en>Expires</en></i>
+    <i id="user_id">
+<![CDATA[<i class="fa fa-user"></i>]]>
+    </i>
     <i id="pay_confirm_id">
-	  <![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-check"></i>]]>
+<![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-check"></i>]]>
     </i>
-    <i id="pay_test">
-	Tst
-    </i>
+    <i id="pay_test">Tst</i>
     <i id="payment_status">
-	<![CDATA[<i class="fa fa-credit-card"></i>?]]>
-    </i>   
+<![CDATA[<i class="fa fa-credit-card"></i>?]]>
+    </i>
     <i id="pay_time">
-	<![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-clock-o"></i>]]>
-    </i>       
-    <i id="use_lang"><![CDATA[<i class="fa fa-language"></i>]]></i>
-    <i id="placed_time"><![CDATA[<i class="fa fa-shopping-basket"></i><i class="fa fa-flag-checkered"></i><i class="fa fa-clock-o"></i>]]></i>    
-    <i id="adm_processed"><![CDATA[Buhal. <i class="fa fa-check"></i>]]></i>
-     <i id="unit_price">Vnt kaina</i>
-     <i id="qty">Kiek</i>
-     <i id="total">Sum</i>
-     <i id="user_title">Klientas</i>   
-     <i id="user_email">Kliento @</i>  
-     <i id="open">Pild.</i>    
-     <i id="group_id">Užs.id</i>
-     <i id="adm_message">Adm. pastaba</i>
-     <i id="delivery_opt"><![CDATA[ <i class="fa fa-truck"></i>]]></i>   
-     <i id="deliverable"><![CDATA[ <i class="fa fa-truck"></i>]]></i>
-     <i id="amount_discount"><![CDATA[ % <i class="fa fa-money"></i>  ]]></i> 
-    <i id="amount_shipping"><![CDATA[ <i class="fa fa-truck"></i><i class="fa fa-money"></i>  ]]></i>
-    <i id="discount_id">Nuol.k.</i>
-    <i id="adm_message"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye" aria-hidden="true"></i>  ]]></i>
-       <i id="admin_note"><![CDATA[ <i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>  ]]></i>
-	<i id="obj_id">Prek. id</i>
+<![CDATA[<i class="fa fa-credit-card"></i><i class="fa fa-clock-o"></i>]]>
+    </i>
+    <i id="use_lang">
+<![CDATA[<i class="fa fa-language"></i>]]>
+    </i>
+    <i id="placed_time">
+<![CDATA[<i class="fa fa-shopping-basket"></i><i class="fa fa-flag-checkered"></i><i class="fa fa-clock-o"></i>]]>
+    </i>
+    <i id="adm_processed">
+<![CDATA[Buhal. <i class="fa fa-check"></i>]]>
+    </i>
+    <i id="unit_price"><lt>Vnt kaina</lt><en>Unit price</en></i>
+    <i id="qty"><lt>Kiek</lt><en>Qty</en></i>
+    <i id="total">Sum</i>
+    <i id="user_title"><lt>Klientas</lt><en>Client</en></i>
+    <i id="user_email"><lt>Kliento @</lt><en>Client @</en></i>
+    <i id="open"><lt>Pild.</lt><en>Open</en></i>
+    <i id="group_id"><lt>Užs.id</lt><en>OrderId</en></i>
+    <i id="adm_message"><lt>Adm. pastaba</lt><en>Adm. note</en></i>
+    <i id="delivery_opt">
+<![CDATA[<i class="fa fa-truck"></i>]]>
+    </i>
+    <i id="deliverable">
+<![CDATA[<i class="fa fa-truck"></i>]]>
+    </i>
+    <i id="amount_discount">
+<![CDATA[% <i class="fa fa-money"></i>]]>
+    </i>
+    <i id="amount_shipping">
+<![CDATA[<i class="fa fa-truck"></i><i class="fa fa-money"></i>]]>
+    </i>
+    <i id="discount_id"><lt>Nuol.k.</lt><en>Disc.Code</en></i>
+    <i id="adm_message">
+<![CDATA[<i class="fa fa-comment-o"></i><i class="fa fa-eye" aria-hidden="true"></i>]]>
+    </i>
+    <i id="admin_note">
+<![CDATA[<i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>]]>
+    </i>
+    <i id="obj_id">Prek. id</i>
   </i>
   <i id="FIELD_NOTE">
-    <i id="import_buyer">Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</i>
+    <i id="import_buyer">
+      <lt>Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</lt>
+      <en>First it is necessary to look for the buyer in the column or we have no existing</en>
+    </i>
   </i>
   <i id="VIEWS">
-    <i id="docsedit">Dokumentų suvestis</i>
-    <i id="passnglist">Keleiviai</i>
-    <i id="doParse">Pakartoti laiško analizę</i>
-    <i id="doFill">Pakartoti duomenų analizę</i>
-    <i id="monthlystats">Pardavimų statistika</i>
-    <i id="invoice">Sąskaita faktūra</i>
-    <i id="preinvoice">Išankstinė sąskaita faktūra</i>
-    <i id="doMarkAsPayd">!! Pažymėti kaip apmokėtą.</i>
-    <i id="doMarkAsProcessed">Pažymėti kaip įvykdytus</i>
- 
-       <i id="paymentsummary">Mokėjimų suvestinė</i>
-       <i id="doRefund">!!!! Įmokos gražinimas</i>
+    <i id="docsedit">
+      <lt>Dokumentų suvestis</lt>
+      <en>Documents attached</en>
+    </i>
+    <i id="passnglist">
+      <lt>Keleiviai</lt>
+      <en>Passengers</en>
+    </i>
+    <i id="doParse">
+      <lt>Pakartoti laiško analizę</lt>
+      <en>Repeat the analysis of the letter</en>
+    </i>
+    <i id="doFill">
+      <lt>Pakartoti duomenų analizę</lt>
+      <en>Repeat data analysis</en>
+    </i>
+    <i id="monthlystats">
+      <lt>Pardavimų statistika</lt>
+      <en>Sales Statistics</en>
+    </i>
+    <i id="invoice">
+      <lt>Sąskaita faktūra</lt>
+      <en>Invoice</en>
+    </i>
+    <i id="preinvoice">
+      <lt>Išankstinė sąskaita faktūra</lt>
+      <en>Pre -invoice</en>
+    </i>
+    <i id="doMarkAsPayd">
+      <lt>!! Pažymėti kaip apmokėtą.</lt>
+      <en>!! Mark as paid.</en>
+    </i>
+    <i id="doMarkAsProcessed">
+      <lt>Pažymėti kaip įvykdytus</lt>
+      <en>Mark as executed</en>
+    </i>
+    <i id="paymentsummary">
+      <lt>Mokėjimų suvestinė</lt>
+      <en>Payment Summary</en>
+    </i>
+    <i id="doRefund">
+      <lt>!!!! Įmokos gražinimas</lt>
+      <en>!!!! Refund</en>
+    </i>
   </i>
-  <i id="PAYMENT_APPROVED">Mokėjimas įskaitytas</i>
-  <i id="ENTER_EXACT_RECEIVED_AMOUNT">Įveskite tikslią gautą sumą</i>
-  <i id="RECEIVED_AMOUNT_DOES_NOT_MATCH">Gauta suma ir užsakymo suma nesutampa</i>
-  <i id="PAYMENT_ALREADY_ACCEPTED">Mokėjimas jau įskaitytas</i>
-  
-  
+  <i id="PAYMENT_APPROVED">
+    <lt>Mokėjimas įskaitytas</lt>
+    <en>Payment approved</en>
+  </i>
+  <i id="ENTER_EXACT_RECEIVED_AMOUNT">
+    <lt>Įveskite tikslią gautą sumą</lt>
+    <en>Enter the exact amount received</en>
+  </i>
+  <i id="RECEIVED_AMOUNT_DOES_NOT_MATCH">
+    <lt>Gauta suma ir užsakymo suma nesutampa</lt>
+    <en>The amount received and the order amount does not match</en>
+  </i>
+  <i id="PAYMENT_ALREADY_ACCEPTED">
+    <lt>Mokėjimas jau įskaitytas</lt>
+    <en>Payment already approved</en>
+  </i>
   <i id="OPTIONS">
     <i id="checkin">
-      <i id="0">No checkin (0)</i>
+      <i id="0">
+        <lt>No checkin (0)</lt>
+        <en>No Checkin (0)</en>
+      </i>
     </i>
-    
     <i id="pay_type">
       <i id="banktransfer">
         <lt>Bankiniu pavedimu</lt>
         <en>Bank transfer</en>
         <ru>Банковским переводом</ru>
       </i>
-      <i id="paysera">Paysera</i>
+      <i id="paysera">
+        <lt>Paysera</lt>
+        <en>Paysera</en>
+      </i>
       <i id="creditcard">
         <lt>Kreditine kortele</lt>
         <en>Credit card</en>
         <ru>Кредитная карта</ru>
       </i>
-      <i id="paypal">Paypal</i>
-      <i id="kevin">Kevin</i>
-      <i id="montonio">Montonio</i>
-      <i id="montonio_cc">Montonio credit card</i>
-      <i id="revolut">Revolut</i>
-      <i id="revolut_cc">Revolut credit card</i>
-    </i>    
-	
-	<i id="features">
-	      <i id="otherpayee">Siųsti mokėjimo informaciją</i>
-	      <i id="mergepaymethods">Mokėjimo metodų apjungimas iš skirtingų pay-gateway</i>
-	      <i id="itax">Itax - buhalterinė apskaita</i>
-	      <i id="rivile">Rivile - buhalterinė apskaita</i>
-	      <i id="discountcode">Nuolaidos kodai</i>
-	      <i id="multitype">Multitype - Daugiau nei vienas prekės paslaugos tipas</i>
-	      <i id="ordersummary">Prie mano užsakymu punktas santrauka</i>
-	      <i id="vat">Pvm mokesčio skaičiavimai</i>
-	</i>
-	<i id="delivery_algo">
-	      <i id="">Išjungta</i>
-	      <i id="natos">Natos</i>	   
-	</i>
-  
-    
+      <i id="paypal">
+        <lt>Paypal</lt>
+        <en>Paypal</en>
+      </i>
+      <i id="kevin">
+        <lt>Kevin</lt>
+        <en>Kevin</en>
+      </i>
+      <i id="montonio">
+        <lt>Montonio</lt>
+        <en>Montonio</en>
+      </i>
+      <i id="montonio_cc">
+        <lt>Montonio credit card</lt>
+        <en>Montonio Credit Card</en>
+      </i>
+      <i id="revolut">
+        <lt>Revolut</lt>
+        <en>Revolut</en>
+      </i>
+      <i id="revolut_cc">
+        <lt>Revolut credit card</lt>
+        <en>Revolut Credit Card</en>
+      </i>
+    </i>
+    <i id="features">
+      <i id="otherpayee">
+        <lt>Siųsti mokėjimo informaciją</lt>
+        <en>Send payment information</en>
+      </i>
+      <i id="mergepaymethods">
+        <lt>Mokėjimo metodų apjungimas iš skirtingų pay-gateway</lt>
+        <en>Connecting payment methods from different pay-gateway</en>
+      </i>
+      <i id="itax">
+        <lt>Itax - buhalterinė apskaita</lt>
+        <en>Itax - Accounting</en>
+      </i>
+      <i id="rivile">
+        <lt>Rivile - buhalterinė apskaita</lt>
+        <en>Rivile - Accounting</en>
+      </i>
+      <i id="discountcode">
+        <lt>Nuolaidos kodai</lt>
+        <en>Discount codes</en>
+      </i>
+      <i id="multitype">
+        <lt>Multitype - Daugiau nei vienas prekės paslaugos tipas</lt>
+        <en>Multititype - More than one type of product service</en>
+      </i>
+      <i id="ordersummary">
+        <lt>Prie mano užsakymu punktas santrauka</lt>
+        <en>Order summary under my orders page</en>
+      </i>
+      <i id="vat">
+        <lt>Pvm mokesčio skaičiavimai</lt>
+        <en>VAT calculations</en>
+      </i>
+    </i>
+    <i id="delivery_algo">
+      <i id="">
+        <lt>Išjungta</lt>
+        <en>[A] disabled</en>
+      </i>
+      <i id="natos">
+        <lt>Natos</lt>
+        <en>Natos</en>
+      </i>
+      <en>Disabled</en>
+    </i>
   </i>
   <i id="MAP">
-    <i id="title">El. komercija</i>
+    <i id="title">
+      <lt>El. komercija</lt>
+      <en>E-commerce</en>
+    </i>
     <i id="info">
       <i id="iconclass">fa fa-money</i>
     </i>
     <i id="childs">
-
       <i id="ordergroups">
-        <i id="title">Užsakymai</i>
+        <i id="title">
+          <lt>Užsakymai</lt>
+          <en>Orders</en>
+        </i>
         <i id="info">
           <i id="model">GW_Order_Group</i>
           <i id="iconclass">fa fa-shopping-cart</i>
-	  <i id="itemactions">1</i>
+          <i id="itemactions">1</i>
         </i>
       </i>
       <i id="orderitems">
-        <i id="title">Užsakytos prekės / paslaugos</i>
+        <i id="title">
+          <lt>Užsakytos prekės / paslaugos</lt>
+          <en>Goods / Services ordered</en>
+        </i>
         <i id="info">
           <i id="model">GW_Order_Item</i>
           <i id="iconclass">fa fa-shopping-cart</i>
         </i>
         <i id="in_menu">1</i>
       </i>
-      
       <i id="payments_paysera">
         <i id="title">
           <en>Payments PS</en>
@@ -236,7 +544,7 @@
           <i id="iconclass">fa fa-money</i>
         </i>
       </i>
-       <i id="payments_kevin">
+      <i id="payments_kevin">
         <i id="title">
           <en>Payments Kevin</en>
           <lt>Mokėjimai Kevin</lt>
@@ -246,7 +554,7 @@
           <i id="iconclass">fa fa-money</i>
         </i>
       </i>
-       <i id="payments_revolut">
+      <i id="payments_revolut">
         <i id="title">
           <en>Payments Revolut</en>
           <lt>Mokėjimai Revolut</lt>
@@ -255,8 +563,7 @@
           <i id="model">gw_payrevolut_log</i>
           <i id="iconclass">fa fa-money</i>
         </i>
-      </i>     
-      
+      </i>
       <i id="payments_paypal">
         <i id="title">
           <en>Payments PP</en>
@@ -275,9 +582,9 @@
         <i id="info">
           <i id="model">gw_pay_creditcard</i>
           <i id="iconclass">fa fa-cc-mastercard</i>
-	  <i id="itemactions">1</i>
+          <i id="itemactions">1</i>
         </i>
-      </i>  
+      </i>
       <i id="payments_montonio">
         <i id="title">
           <en>Payments Montonio</en>
@@ -287,55 +594,75 @@
           <i id="model">gw_paymontonio_log</i>
           <i id="iconclass">fa fa-money</i>
         </i>
-      </i>      
+      </i>
       <i id="requests">
-        <i id="title">Mokėjimo užklausimai</i>
+        <i id="title">
+          <lt>Mokėjimo užklausimai</lt>
+          <en>Payment requests</en>
+        </i>
         <i id="info">
           <i id="model">GW_Payments</i>
           <i id="iconclass">fa fa-level-down</i>
         </i>
       </i>
-       <i id="mergedpaymethods">
-        <i id="title">Apjungti mokėjimo metodai</i>
+      <i id="mergedpaymethods">
+        <i id="title">
+          <lt>Apjungti mokėjimo metodai</lt>
+          <en>Combined payment methods</en>
+        </i>
         <i id="info">
           <i id="model">GW_Pay_Methods</i>
           <i id="iconclass">fa fa-connectdevelop</i>
         </i>
-      </i>     
-	<i id="config">
-		<i id="title">Nustatymai</i>
-		<i id="info">
-		  <i id="iconclass">fa fa-cog</i>
-		</i>		
-	</i>     
-	<i id="delivery">
-		<i id="title">Pristatymas</i>
-		<i id="info">
-		  <i id="iconclass">fa fa-truck</i>
-		</i>		
-	</i>  
+      </i>
+      <i id="config">
+        <i id="title">
+          <lt>Nustatymai</lt>
+          <en>Settings</en>
+        </i>
+        <i id="info">
+          <i id="iconclass">fa fa-cog</i>
+        </i>
+      </i>
+      <i id="delivery">
+        <i id="title">
+          <lt>Pristatymas</lt>
+          <en>Delivery</en>
+        </i>
+        <i id="info">
+          <i id="iconclass">fa fa-truck</i>
+        </i>
+      </i>
       <i id="discountcode">
-        <i id="title">Nuolaidos kodai</i>
+        <i id="title">
+          <lt>Nuolaidos kodai</lt>
+          <en>Discount codes</en>
+        </i>
         <i id="info">
           <i id="model">shop_discountcode</i>
-	  <i id="iconclass">fa fa-percent</i>
+          <i id="iconclass">fa fa-percent</i>
         </i>
-      </i>	
+      </i>
       <i id="vatgroups">
-        <i id="title">PVM grupės</i>
+        <i id="title">
+          <lt>PVM grupės</lt>
+          <en>VAT groups</en>
+        </i>
         <i id="info">
           <i id="model">gw_vatgroups</i>
-	  <i id="iconclass">fa fa-percent</i>
+          <i id="iconclass">fa fa-percent</i>
         </i>
-      </i> 
+      </i>
       <i id="sellers">
-        <i id="title">Pardavėjai</i>
+        <i id="title">
+          <lt>Pardavėjai</lt>
+          <en>Sellers</en>
+        </i>
         <i id="info">
           <i id="model">gw_pay_sellers</i>
-	  <i id="iconclass">material-storefront</i>
+          <i id="iconclass">material-storefront</i>
         </i>
-      </i>             		          
+      </i>
     </i>
   </i>
-  
 </xml>

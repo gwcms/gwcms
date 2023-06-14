@@ -95,7 +95,9 @@ class Navigator
 		  file_put_contents(GW::s('DIR/REPOSITORY').'redirect.html', $out, FILE_APPEND);
 		 */
 
-
+		//trace request uncomment lines:
+		//d::dumpas('test');
+		
 		header("Location: $uri");
 		exit;
 	}

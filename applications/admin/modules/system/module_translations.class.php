@@ -182,45 +182,45 @@ class Module_Translations extends GW_Common_Module
 		foreach($collect as $item)
 			$title_array[] = $item;
 				
-		$opts = http_build_query(['from'=>$mainln,'to'=>$destln]);
-		
-		$serviceurl = GW_Config::singleton()->get('system__translations/main_service_url');
-								
-		$resp_raw = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
-				
-		$resp = json_decode($resp_raw);
-		
-		//D::dumpas([$serviceurl, $resp_raw]);
+			$opts = http_build_query(['from'=>$mainln,'to'=>$destln]);
+
+			$serviceurl = GW_Config::singleton()->get('system__translations/main_service_url');
+
+			$resp_raw = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
+
+			$resp = json_decode($resp_raw);
 			
-		$failed = [];
-		
-		if($_GET['item']['interupt'] ?? false)
-		{
-			d::ldump(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], ['hidden'=>'request_details']);
-			d::ldump([$resp_raw], ['hidden'=>'response raw']);
-			d::ldump([$resp], ['hidden'=>'response']);
-		}
-		
-		$idxmap = array_keys($collect);
-		
-		if(!isset($resp->result))
-		{
-			$errinfo = json_encode(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], JSON_PRETTY_PRINT);
-			$this->setError("Translation request failed <pre>". htmlspecialchars($resp_raw)."</pre>");
-			$this->setError("<pre>$errinfo</pre>");
-			$failed = $idxmap;
-			return $failed;
-		}
-		
-		
-		
-		foreach($resp->failed_idxs as $idx)
-			$failed[ $idxmap[$idx] ] = $collect[ $idxmap[$idx] ];
-		
-		
-		foreach($resp->result as $idx => $res)			
-			$collect[ $idxmap[$idx] ] = "[A] ".$res->res;
-		
+			//D::dumpas([$serviceurl, $resp_raw]);
+
+			$failed = [];
+
+			if($_GET['item']['interupt'] ?? false)
+			{
+				d::ldump(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], ['hidden'=>'request_details']);
+				d::ldump([$resp_raw], ['hidden'=>'response raw']);
+				d::ldump([$resp], ['hidden'=>'response']);
+			}
+
+			$idxmap = array_keys($collect);
+
+			if(!isset($resp->result))
+			{
+				$errinfo = json_encode(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], JSON_PRETTY_PRINT);
+				$this->setError("Translation request failed <pre>". htmlspecialchars($resp_raw)."</pre>");
+				$this->setError("<pre>$errinfo</pre>");
+				$failed = $idxmap;
+				return $failed;
+			}
+
+
+
+			foreach($resp->failed_idxs as $idx)
+				$failed[ $idxmap[$idx] ] = $collect[ $idxmap[$idx] ];
+
+
+			foreach($resp->result as $idx => $res)			
+				$collect[ $idxmap[$idx] ] = "[A] ".$res->res;
+
 		return $failed;
 	}
 	
@@ -255,7 +255,7 @@ class Module_Translations extends GW_Common_Module
 		$item = $this->getDataObjectById();
 		
 		$sel=['type'=>'select','options'=>array_merge(GW::s("LANGS"),GW::s('i18nExt')), 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
-		$form = ['fields'=>['mainlang'=>$sel, 'addlang'=>$sel],'cols'=>4];
+		$form = ['fields'=>['mainlang'=>$sel, 'addlang'=>$sel, 'chunk'=>['type'=>'number','default'=>50]],'cols'=>4];
 		if($this->app->user->isRoot())
 			$form['fields']['interupt'] = ['type'=>'bool','note'=>'(Debug mode)'];
 		
@@ -300,38 +300,28 @@ class Module_Translations extends GW_Common_Module
 		
 		//d::dumpas(implode("\n\n",array_values($collect)));
 		
-		$translate_in_chuncks=false;
+		$chunks = array_chunk($collect, $answers['chunk'], true);
 		
-		if($translate_in_chuncks){
-		
-			$chuncs = [];
-			$i = 0;
-			foreach($collect as &$elm){
-				$chuncs[$i][] =& $elm;
-				$i++;
-			}
 
+		//d::dumpas($chunks);
 
 			//d::ldump($chuncs);
 			$i = 0;		
-			foreach($chuncs as &$chuncs)
+			foreach($chunks as $chunk)
 			{
+								
 				$i++;
-				if($failed = $this->autoTranslateColl($chuncs, $data,$mainln,$destln)){
+				if($failed = $this->autoTranslateColl($chunk, $data,$mainln,$destln)){
 					$this->setMessage(["FAILED"=>$failed]);
 				}
-				//sleep(2);
+				
+								//sleep(2);
 
 				//if($i > 10)
 				//	d::dumpas($data);
 
 			}
-		}else{
-			
-			if($failed = $this->autoTranslateColl($collect, $data,$mainln,$destln)){
-				$this->setMessage(["FAILED"=>$failed]);
-			}
-		}
+		
 		
 		if($answers['interupt']){
 			d::dumpas($data,['hidden'=>'final data']);
