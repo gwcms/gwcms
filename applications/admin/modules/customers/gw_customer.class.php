@@ -4,42 +4,75 @@ class GW_Customer extends GW_User
 {
 
 
-	var $min_pass_length = 6;
-	var $max_pass_length = 16;
-	var $validators = Array();
-	var $calculate_fields = Array('title' => 1/* did project specified */);
-	var $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1);
-	var $autologgedin = false;
+	public $min_pass_length = 6;
+	public $max_pass_length = 16;
+	public $validators = [
+		'email' => 'gw_email',
+		
+	];
+	public $calculate_fields = [
+	    'title'=>1,
+	    'title_player_opt'=>1,
+	    'licence_id'=>1,
+	    'ext'=>1,
+	    'approvedgroups'=>1,
+	    'emailx'=>1,
+	    'parent_user'=>1,	    
+	];
+	
+	public $composite_map_ext = [
+		'passportscan' => ['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '400x400']],
+		'medicalpermit' => ['gw_image', ['dimensions_resize' => '1600x1600', 'dimensions_min' => '400x400']],
+		//'coachObj' => ['gw_composite_linked', ['object'=>'LTF_Coaches','relation_field'=>'coach']],
+		//'clubObj' => ['gw_composite_linked', ['object'=>'LTF_Clubs','relation_field'=>'club']],
+	];
+	
+	public $ignore_fields = ['pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1];
+	public $autologgedin = false;
+	
+	
+	
 
 	function setValidators($set) 
 	{
 		if (!$set)
-			return $this->validators = Array(); //remove validators
+			return $this->validators = []; //remove validators
 
-		$validators_def = Array(
-			'username' => Array('gw_string', Array('min_length' => 2, 'max_length' => 120, 'required' => 1)),
-			'name' => Array('gw_string', Array('required' => 1)),
-			'surname' => Array('gw_string', Array('required' => 1)),
-			'phone' => Array('gw_phone', Array('min_length' => 6, 'max_length' => 20, 'required' => 1)),
-			'email' => Array('gw_email', Array('required' => 1)),
+		$validators_def = [
+			'username' => ['gw_string', ['min_length' => 2, 'max_length' => 120, 'required' => 1]],
+			'name' => ['gw_string', ['required' => 1]],
+			'surname' => ['gw_string', ['required' => 1]],
+			'phone' => ['gw_phone', ['min_length' => 6, 'max_length' => 20, 'required' => 1]],
+			'email' => ['gw_email', ['required' => 1]],
+			'country' => ['gw_string', ['required' => 1]],
+			'gender' => ['gw_string', ['required' => 1]],
+			'birthdate' => ['gw_date', ['required' => 1]],
 			'pass_old' => 1,
-			'pass_new' => Array('gw_string', Array('min_length' => 6, 'max_length' => 120,'required' => 1)),
-			'pass_new_repeat' => Array('gw_string', Array('min_length' => 6, 'max_length' => 120, 'required' => 1)),
+			'pass_new' => ['gw_string', ['min_length' => 6, 'max_length' => 120,'required' => 1]],
+			'pass_new_repeat' => ['gw_string', ['min_length' => 6, 'max_length' => 120, 'required' => 1]],
 			'unique_email' => 1,
-			'license' => 1,
-		);
+			'unique_person_id' => 1,
+			'agreetc' => ['gw_string', ['required' => 1]],
+			'unique_username'=>1,		    
+		];
 
 		$validators_set = Array
 		(
-			'change_pass_check_old' => Array('pass_old', 'pass_new', 'pass_new_repeat'),
-			'update_pass' => Array('pass'),
-			'change_pass' => Array('pass_new'),
-			'change_pass_repeat' => Array('pass_new','pass_new_repeat'),
-			'register' => Array('name', 'surname', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone'),
-			'update' => Array('name', 'surname', 'phone', 'email', 'username'),
+			'change_pass_check_old' => ['pass_old', 'pass_new', 'pass_new_repeat'],
+			'update_pass' => ['pass'],
+			'change_pass' => ['pass_new'],
+			'change_pass_repeat' => ['pass_new','pass_new_repeat'],
+			'birthdate'=> ['birthdate'],
+			'register' => ['name', 'surname', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone','agreetc'],
+			'profile' => ['name', 'surname', 'phone','agreetc'],
+			'update' => ['name', 'surname', 'phone', 'email', 'username'],
+			'update_admin' => ['name','surname'],
+			'insert' => ['name', 'surname', 'phone', 'email', 'username'],
+			'register_fb' => ['name', 'surname', 'unique_username'],
+			'addchild' => ['name', 'surname', 'email', 'phone'],
 		);
 
-		$this->validators = Array();
+		$this->validators = [];
 
 		foreach ($validators_set[$set] as $key)
 			$this->validators[$key] = $validators_def[$key];
@@ -47,76 +80,49 @@ class GW_Customer extends GW_User
 
 	function validate() 
 	{	
-		if (!parent::validate())
-			return false;
-
+		
 		if (isset($this->validators['license']))
-			if (!$_REQUEST['license'])
-				$this->errors['license'] = '/USER/LICENSE';
+			if (!$this->content_base['license'])
+				$this->errors['license'] = '/M/USER/LICENSE';
 
 		if (isset($this->validators['pass_old']))
 			if (!$this->checkPass($this->get('pass_old')))
-				$this->errors['pass_old'] = '/USER/PASS_OLD';
+				$this->errors['pass_old'] = '/M/USER/PASS_OLD';
 
 		if (isset($this->validators['pass_new']) && $this->get('pass_new'))
 			if (mb_strlen($this->get('pass_new')) < $this->min_pass_length)
-				$this->errors['pass_new'] = '/USER/PASS_TOO_SHORT';
+				$this->errors['pass_new'] = '/M/USER/PASS_TOO_SHORT';
 
 		if (isset($this->validators['pass_new_repeat']))
 			if ($this->get('pass_new') != $this->get('pass_new_repeat'))
-				$this->errors['pass_new_repeat'] = '/USER/PASS_REPEAT';
-
-		if (isset($this->validators['unique_username']))
-			if ($this->count(Array('email=? AND !removed', $this->get('email'))))
-				$this->errors['email'] = '/USER/EMAIL_TAKEN';
+				$this->errors['pass_new_repeat'] = '/M/USER/PASS_REPEAT';
 
 		if (isset($this->validators['unique_email']))
-			if ($this->count(Array('email=? AND !removed', $this->get('email'))))
-				$this->errors['email'] = '/USER/EMAIL_TAKEN';
-			
-			
+			if ($this->count(['email=? AND removed=0 AND id!=?', $this->get('email'), $this->id]))
+				$this->errors['email'] = '/M/USER/EMAIL_ALREADY_REGISTERED';
+				
+		if (isset($this->validators['unique_username']))
+			if ($this->count(['email=? AND removed=0', $this->get('email')]))
+				$this->errors['email'] = '/M/USERS/ERRORS/EMAIL_TAKEN';			
 		
-
-		return $this->errors ? false : true;
-	}
-
-	function logLogin() 
-	{
-		$inf = GW_Request_Helper::visitorInfo();
-		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
-		GW_DB_Logger::msg($msg, 'user', 'login', $this->id, $inf['browser']);
-	}
-
-	function onLogin() 
-	{
-		$this->set('login_time', date('Y-m-d H:i:s'));
-		$this->set('login_count', $this->get('login_count') + 1);
-		$this->set('last_ip', $_SERVER['REMOTE_ADDR']);
-
-		$this->onRequest();
-
-		$this->update(Array('login_time', 'login_count', 'last_ip', 'last_request_time'));
-		$this->logLogin();
-	}
-
-	function onRequest($db_update = true) 
-	{
-		$_SESSION[AUTH_SESSION_KEY]['last_request'] = time();
-		$this->set('last_request_time', date('Y-m-d H:i:s'));
-
-		if ($db_update)
-			$this->update(Array('last_request_time'));
+	
+		return parent::validate();
 	}
 
 
-	function cryptPassword() 
-	{
-		$this->set('pass', self::cryptPass($this->get('pass')));
-	}
 
-	function eventHandler($event) 
+
+
+
+
+	function eventHandler($event, &$context_data = []) 
 	{
 		switch ($event) {
+			case 'AFTER_CONSTRUCT':
+				$this->composite_map += $this->composite_map_ext;
+				
+				//d::dumpas('test');
+			break;
 			case 'BEFORE_SAVE':
 				
 				if(!$this->username && $this->email)
@@ -125,7 +131,7 @@ class GW_Customer extends GW_User
 				break;
 		}
 
-		parent::EventHandler($event);
+		parent::EventHandler($event, $context_data);
 	}
 
 	function isRoot() 
@@ -139,7 +145,7 @@ class GW_Customer extends GW_User
 		$this->fireEvent('BEFORE_DELETE');
 		$this->set('removed', 1);
 		$this->set('active', 0);
-		$this->update(Array('removed', 'active'));
+		$this->update(['removed', 'active']);
 
 		$this->fireEvent('AFTER_DELETE');
 	}
@@ -147,7 +153,7 @@ class GW_Customer extends GW_User
 	
 	function getById($id) 
 	{
-		return $this->find(Array('id=?', $id));
+		return $this->find(['id=?', $id]);
 	}
 
 	function getByUsername($username) 
@@ -157,14 +163,7 @@ class GW_Customer extends GW_User
 
 	function getForActivationById($id) 
 	{
-		return $this->find(Array('id=? AND removed=0', $id));
-	}
-
-	function getByUsernamePass($username, $pass) 
-	{
-		$user = $this->getByUsername($username);
-		if ($user && $user->checkPass($pass))
-			return $user;
+		return $this->find(['id=? AND removed=0', $id]);
 	}
 
 	function generateKey() 
@@ -172,89 +171,145 @@ class GW_Customer extends GW_User
 		$this->key = md5(time() . rand(0, 1000) . $this->name);
 	}
 
-	function calculateField($key) {
-		$cache = & $this->cache['calcf'];
-
-		if (isset($cache[$key]))
-			return $cache[$key];
-
-		switch ($key) {
-			case 'title':
-				$val = $this->get('email');
-				break;
-			case 'name':
-				$val = $this->get('first_name').' '.$this->get('second_name');
-				break;
-		}
-
-		return $cache[$key] = $val;
-	}
-
-	function onLogout() 
-	{
-		//dump("Logging out");
-		//exit;
-	}
-
-
 	
-	function setPassChangeSecret()
+	static function __genSecret($length)
 	{
 		$set="ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 		$secret = date('Ymd').'000';
 		
-		for($i=0;$i<40;$i++)
+		for($i=0;$i<$length;$i++)
 			$secret.=$set[rand(0,34)];
 		
+		return $secret;	
+	}
 			
-		$this->saveValues(Array('passchange'=>$secret));
-		
-		
+	function setPassChangeSecret()
+	{
+		$secret = self::__genSecret(40);
+		$this->saveValues(['site_passchange'=>$secret]);
 		
 		return $secret;
 	}
-	
-	
-	function canDebit($funds, &$errors)
+		
+	function setSignUpApprovalSecret()
 	{
-		if($this->sms_funds < $funds && !$this->allow_credit){
-			$errors[MIS_ERROR_NOFUNDS] = sprintf(GW_Error_Message::read('/USER/INSUFFICIENT FUNDS'), $funds, $this->sms_funds);
+		$secret = self::__genSecret(40);
+		$this->saveValues(['site_verif_key'=>$secret]);
+		
+		return $secret;
+	}	
+	
+	
+	function calculateField($key) {
+
+		switch ($key) {
+			case 'title':
+				if($this->id)
+					return $this->name.' '.$this->surname;
+			break;
+			case 'title_player_opt':
+				return $this->title." / ".$this->country.' '.$this->licence_id;
+			break;
+			case 'name':
+				return $this->get('first_name').' '.$this->get('second_name');
+			break;
+			case 'birthdate_year':
+				list($y,$m,$d) = explode('-',$this->birthdate);
+				return (int)$y;
+			break;	
+			case 'birthdate_month':
+				list($y,$m,$d) = explode('-',$this->birthdate);
+				return (int)$m;
+			break;
+			case 'birthdate_day':
+				list($y,$m,$d) = explode('-',$this->birthdate);
+				return (int)$d;
+			break;
+			case 'licence_id':
+				return $this->country=='LT' ? "LTF-".sprintf("%04s",$this->lic_id) : '';
+			break;
+			case 'approvedgroups':
+				return array_flip((array)json_decode($this->get("ext/approvedgroups"), true));
+			break;
+			case 'emailx':
+				return !$this->email && $this->parent_user_id ? $this->parent_user->email : $this->email;
+			break;
+			case 'parent_user':
+				return $this->find(['id=?', $this->get('parent_user_id')]);
+			break;		
+				
+		}
+		
+		return parent::calculateField($key);
+	}
+
+
+	//max vienas pass change per diena - apsaugot vartotojus nuo uzdooldinimo
+	function passChangeExpired()
+	{
+		$passchangeset = substr($this->site_passchange, 0, 8);
+	
+		return date('Ymd') != $passchangeset;
+	}	
+	
+	
+	function getActiveMembership($time=false)
+	{
+		if($this->country!='' && $this->country != "LT" )
+		{
+			return GW_Membership::singleton()->find(['user_id=0 AND active=1']);;
+		}
+		
+		if($time==false)
+			$time = date('Y-m-d H:i:s');
+		
+		$license = GW_Membership::singleton()->find(['user_id=? AND active=1 AND validfrom <= ? AND expires >= ?', $this->id, $time, $time]);
+		
+		return $license;
+	}
+	
+	function getAge()
+	{
+		if(!$this->birthdate || $this->birthdate=='0000-00-00')
+		{
 			return false;
-		}		
+		}
+
+		$date = new DateTime($this->birthdate);
+		$now = new DateTime();
+		$interval = $now->diff($date);
+		return $interval->y;
 	}
 	
-	function debitFunds($funds, $msg, &$errors=[])
-	{
-		if(!$this->canDebit($funds, $errors))
-			return false;
-		
-		$this->sms_funds = $this->sms_funds - $funds;
-		
-		$bl = new GW_Balance_Log_Item([
-		    'user_id'=>$this->id, 
-		    'msg'=>$msg,
-		    'balance_diff'=>-$funds]);
-		$bl->insert();
-		
-		$this->update(['sms_funds']);
-	}
 	
-	function addFunds($funds, $msg)
+	function getCart($create=false)
 	{
-		$old = $this->sms_funds;
-		$this->sms_funds = $this->sms_funds + $funds;
-		$new = $this->sms_funds;
+		$cartid = $this->get('ext/cart_id');
+		if($cartid)
+			$cart = GW_Order_Group::singleton()->find(['id=? AND payment_status!=7 AND open=1', $cartid]);
+	
 		
 		
-		$bl = new GW_Balance_Log_Item([
-		    'user_id'=>$this->id, 
-		    'msg'=>$msg,
-		    'balance_diff'=>$funds]);
-		$bl->insert();
+		if($create && (!isset($cart) || !$cart)){
+			$cart = GW_Order_Group::singleton()->createNewObject(['user_id'=>$this->id]);
+			$cart->open = 1;
+			$cart->payment_status = 0;
+			$cart->active = 1;
+			$cart->insert();
+			$this->set('ext/cart_id', $cart->id);
+		}
 		
-		$this->update(['sms_funds']);
+		return $cart ?? false;
+	}	
+	
+	
+	
+	function isGroupApproved($group)
+	{
+		//d::ldump([$this->approvedgroups, $group->id]);
 		
-		return ['old'=>$old, 'new'=>$new];
+		return isset($this->approvedgroups[$group->id]);
 	}
+
 
 }

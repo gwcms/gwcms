@@ -1307,7 +1307,7 @@ class Module_Orders extends GW_Public_Module
 		
 		$order = $this->getOrder(true);
 
-		if($order->payment_status!=7){
+		if($order->payment_status!=7 && $order->amount_total){
 			$this->setError("Cant download pdf scores, payment is still in waiting state");
 			$this->jump(false);
 		}

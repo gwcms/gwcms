@@ -58,7 +58,7 @@
 		*}
 
 
-	{if $order->downloadable && $order->payment_status==7}
+	{if $order->downloadable && ($order->payment_status==7 || $order->amount_total==0)}
 		<a class="gwUrlMod btn u-btn-primary btn-md rounded-0" href="#!" data-args='{ "act":"doDownload", "id":"{$order->id}" }'><i class="fa fa-download"></i> {GW::ln('/m/DOWNLOAD')}</a>
 	{/if}
 	
