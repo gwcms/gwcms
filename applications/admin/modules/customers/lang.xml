@@ -50,9 +50,12 @@
 		<i id="balance_diff">Changeg</i>
 		<i id="balance_diff_message">Change info</i>
 		<i id="profilefoto">Profile photo</i>
-		<i id="gender">Gender</i>
-		<i id="birthdate">Birthdate</i>
+		<i id="gender">Lytis</i>
+		<i id="birthdate">Gimimo data</i>
 		<i id="age">Age</i>
+		<i id="regothers">Registruoti kitus</i>
+
+		
 	</i>
 	<i id="FIELDS_SHORT">	
 		<i id="email">@</i>
@@ -61,6 +64,8 @@
 		<i id="gender"><![CDATA[<i class="fa fa-venus-mars"></i>]]></i>
 		<i id="location_country"><![CDATA[<i class="fa fa-flag-o"></i>]]></i>
 		<i id="birthdate">BD</i>
+		<i id="regothers">Reg. kitus</i>
+		<i id="changetrack"><![CDATA[<i class="fa fa-pencil"></i>]]></i>		
 	</i>
 	
 	<i id="VIEWS">
@@ -68,6 +73,32 @@
 			Balance log
 		</i>
 	</i>
+	<i id="OPTIONS">
+		<i id="gender">
+			<i id="F">Moteris</i>
+			<i id="M">Vyras</i>
+		</i>
+		<i id="gender_short">
+			<i id="F">Mot.</i>
+			<i id="M">Vyr.</i>
+		</i>	
+		<i id="gender_ico">
+			<i id="F"><![CDATA[<i class="fa fa-female"></i>]]></i>
+			<i id="M"><![CDATA[<i class="fa fa-male"></i>]]></i>
+		</i>
+		
+		<i id="regothers">		
+			<i id="1">Registruosiu save</i>
+			<i id="2">Registruosiu kitus (sporto klubams, mokykloms</i>
+		</i>
+		
+		<i id="features">
+			<i id="regothers">Registruos kiti</i>
+
+		</i>			
+	</i>
+	
+
 
 	<i id="SESSION_VALIDITY_OPT">
 		<i id="30">30 min</i>
@@ -99,8 +130,9 @@
 				</i>		
 				<i id="info">
 					<i id="model">GW_Customer</i>
+					<i id="itemactions">1</i>
 				</i>
-			</i>
+			</i>			
 			<i id="config">
 				<i id="title">
 					<en>Configuration</en>

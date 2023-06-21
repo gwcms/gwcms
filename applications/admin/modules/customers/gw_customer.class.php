@@ -14,28 +14,33 @@ class GW_Customer extends GW_User
 	    'title'=>1,
 	    'title_player_opt'=>1,
 	    'licence_id'=>1,
+	    'license'=>1, // perskaiciuojamas
+	    'group_ids_cached'=>1,
 	    'ext'=>1,
-	    'approvedgroups'=>1,
-	    'emailx'=>1,
-	    'parent_user'=>1,	    
+	    'parent_user'=>1,
+	    'short_title'=>1,
 	];
 	
 	public $composite_map_ext = [
-		'passportscan' => ['gw_image', ['dimensions_resize' => '1024x1024', 'dimensions_min' => '400x400']],
-		'medicalpermit' => ['gw_image', ['dimensions_resize' => '1600x1600', 'dimensions_min' => '400x400']],
-		//'coachObj' => ['gw_composite_linked', ['object'=>'LTF_Coaches','relation_field'=>'coach']],
-		//'clubObj' => ['gw_composite_linked', ['object'=>'LTF_Clubs','relation_field'=>'club']],
 	];
 	
 	public $ignore_fields = ['pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1];
 	public $autologgedin = false;
 	
 	
+	public $ownerkey = 'customers/users';
+	public $extensions = [
+	    'keyval'=>1,
+	    'changetrack'=>1
+	];	
+	
+	public $ignored_change_track = ['update_time'=>1];
+	
 	
 
-	function setValidators($set) 
+	function setValidators($set, $single=false) 
 	{
-		if (!$set)
+		if ($set===null)
 			return $this->validators = []; //remove validators
 
 		$validators_def = [
@@ -47,6 +52,7 @@ class GW_Customer extends GW_User
 			'country' => ['gw_string', ['required' => 1]],
 			'gender' => ['gw_string', ['required' => 1]],
 			'birthdate' => ['gw_date', ['required' => 1]],
+			'country' => ['gw_string', ['required' => 1]],
 			'pass_old' => 1,
 			'pass_new' => ['gw_string', ['min_length' => 6, 'max_length' => 120,'required' => 1]],
 			'pass_new_repeat' => ['gw_string', ['min_length' => 6, 'max_length' => 120, 'required' => 1]],
@@ -63,19 +69,24 @@ class GW_Customer extends GW_User
 			'change_pass' => ['pass_new'],
 			'change_pass_repeat' => ['pass_new','pass_new_repeat'],
 			'birthdate'=> ['birthdate'],
-			'register' => ['name', 'surname', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone','agreetc'],
-			'profile' => ['name', 'surname', 'phone','agreetc'],
-			'update' => ['name', 'surname', 'phone', 'email', 'username'],
-			'update_admin' => ['name','surname'],
+			'register' => ['name', 'surname', 'unique_email', 'email', 'pass_new', 'pass_new_repeat', 'phone','agreetc','country'],
+			'profile' => ['name', 'surname', 'phone','agreetc','country', 'city', 'birthdate','gender'],
+			'update' =>  [],//['name', 'surname', 'phone', 'email', 'username'],
 			'insert' => ['name', 'surname', 'phone', 'email', 'username'],
-			'register_fb' => ['name', 'surname', 'unique_username'],
-			'addchild' => ['name', 'surname', 'email', 'phone'],
+			'quick_insert' => ['name', 'surname', 'country','birthdate', 'gender'],
+			'quick_insert_foreigner' => ['name', 'surname', 'country','gender'],		    
+			'register_fb' => ['name', 'surname', 'unique_username'],		    
 		);
 
 		$this->validators = [];
 
-		foreach ($validators_set[$set] as $key)
-			$this->validators[$key] = $validators_def[$key];
+		if(isset($validators_set[$set]))
+			foreach ($validators_set[$set] as $key)
+				$this->validators[$key] = $validators_def[$key];
+		
+		if($single)
+			$this->validators[$single] = $validators_def[$single];
+			
 	}
 
 	function validate() 
@@ -103,9 +114,9 @@ class GW_Customer extends GW_User
 				
 		if (isset($this->validators['unique_username']))
 			if ($this->count(['email=? AND removed=0', $this->get('email')]))
-				$this->errors['email'] = '/M/USERS/ERRORS/EMAIL_TAKEN';			
-		
-	
+				$this->errors['email'] = '/M/USERS/ERRORS/EMAIL_TAKEN';		
+			
+				
 		return parent::validate();
 	}
 
@@ -120,6 +131,7 @@ class GW_Customer extends GW_User
 		switch ($event) {
 			case 'AFTER_CONSTRUCT':
 				$this->composite_map += $this->composite_map_ext;
+				//$this->calculate_fields += $this->calculate_fields_ext;
 				
 				//d::dumpas('test');
 			break;
@@ -127,29 +139,33 @@ class GW_Customer extends GW_User
 				
 				if(!$this->username && $this->email)
 					$this->username = $this->email;
-
-				break;
+				
+				if($this->birthdate){
+					$birthyear = explode('-',$this->birthdate)[0];
+					$this->age = date('Y')-$birthyear;
+				}else{
+					$this->age = 0;
+				}
+				
+				//auto susiejimas su amziaus grupe
+				
+			break;
+				
 		}
 
 		parent::EventHandler($event, $context_data);
 	}
 
-	function isRoot() 
-	{
-		return GW_Permissions::isRoot($this->group_ids);
-	}
 
-	/*
-	function delete() 
+	
+	function realDelete() 
 	{
-		$this->fireEvent('BEFORE_DELETE');
-		$this->set('removed', 1);
-		$this->set('active', 0);
-		$this->update(['removed', 'active']);
+		return GW_Data_Object::delete();
 
-		$this->fireEvent('AFTER_DELETE');
 	}
-	*/
+	
+	
+	
 	
 	function getById($id) 
 	{
@@ -210,8 +226,11 @@ class GW_Customer extends GW_User
 			case 'title_player_opt':
 				return $this->title." / ".$this->country.' '.$this->licence_id;
 			break;
-			case 'name':
-				return $this->get('first_name').' '.$this->get('second_name');
+			case 'parent_user':
+				return GW_User::singleton()->find(['id=?',$this->parent_user_id]);
+			break;
+			case 'short_title':
+				return mb_substr($this->name, 0,1).'. '.mb_substr($this->surname, 0,10);
 			break;
 			case 'birthdate_year':
 				list($y,$m,$d) = explode('-',$this->birthdate);
@@ -226,20 +245,16 @@ class GW_Customer extends GW_User
 				return (int)$d;
 			break;
 			case 'licence_id':
-				return $this->country=='LT' ? "LTF-".sprintf("%04s",$this->lic_id) : '';
+				return $this->country=='LT' ? GW::s('PROJECT_SHORTNAME')."-".sprintf("%04s",$this->lic_id) : '';
 			break;
-			case 'approvedgroups':
-				return array_flip((array)json_decode($this->get("ext/approvedgroups"), true));
-			break;
-			case 'emailx':
-				return !$this->email && $this->parent_user_id ? $this->parent_user->email : $this->email;
-			break;
-			case 'parent_user':
-				return $this->find(['id=?', $this->get('parent_user_id')]);
+			case 'license':
+				return $this->lic_id2;
 			break;		
+			//case 'age_group_title':
+			//	return $this->ageGroupObj->title;
+			
 				
 		}
-		
 		return parent::calculateField($key);
 	}
 
@@ -253,20 +268,9 @@ class GW_Customer extends GW_User
 	}	
 	
 	
-	function getActiveMembership($time=false)
-	{
-		if($this->country!='' && $this->country != "LT" )
-		{
-			return GW_Membership::singleton()->find(['user_id=0 AND active=1']);;
-		}
-		
-		if($time==false)
-			$time = date('Y-m-d H:i:s');
-		
-		$license = GW_Membership::singleton()->find(['user_id=? AND active=1 AND validfrom <= ? AND expires >= ?', $this->id, $time, $time]);
-		
-		return $license;
-	}
+
+	
+
 	
 	function getAge()
 	{
@@ -282,34 +286,9 @@ class GW_Customer extends GW_User
 	}
 	
 	
-	function getCart($create=false)
-	{
-		$cartid = $this->get('ext/cart_id');
-		if($cartid)
-			$cart = GW_Order_Group::singleton()->find(['id=? AND payment_status!=7 AND open=1', $cartid]);
+
 	
-		
-		
-		if($create && (!isset($cart) || !$cart)){
-			$cart = GW_Order_Group::singleton()->createNewObject(['user_id'=>$this->id]);
-			$cart->open = 1;
-			$cart->payment_status = 0;
-			$cart->active = 1;
-			$cart->insert();
-			$this->set('ext/cart_id', $cart->id);
-		}
-		
-		return $cart ?? false;
-	}	
-	
-	
-	
-	function isGroupApproved($group)
-	{
-		//d::ldump([$this->approvedgroups, $group->id]);
-		
-		return isset($this->approvedgroups[$group->id]);
-	}
+
 
 
 }

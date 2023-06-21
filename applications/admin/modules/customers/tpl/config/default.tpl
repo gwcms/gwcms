@@ -28,6 +28,14 @@
 	{call e field=registration_fields_optional options=$options.fields_enabled type=multiselect note="(Root only)" 	value_format=json1}	
 	{*type=tags*}
 	{call e field=available_fields  default='phone,name,surname,email,birth_date,gender,city,image,company_name,country,agreetc' note="(Root only)"}
+	
+
+
+	
+	{call e field="superadmin_group" type=select_ajax modpath="users/groups" preload=1 options=[]}
+	{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
 {/if}
+
+
 
 {include file="default_form_close.tpl" submit_buttons=[save]}

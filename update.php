@@ -278,22 +278,25 @@ class GW_CMS_Sync
 
 
 
-		echo "Copying files ";
-		foreach($changed_files['copy'] as $file){
-			@mkdir(dirname($destdir.$file), 0777, true);
+		
+		if($_GET['type']=='copy'){
+			echo "Copying files ";
+			foreach($changed_files['copy'] as $file){
+				@mkdir(dirname($destdir.$file), 0777, true);
 
-			copy($sourcedir.$file, $destdir.$file);
-			echo $file."\n";
-		}
-		echo "\n";
-
-
-		$rm_cmds = '';
-		foreach($changed_files['remove'] as $rmfile){
-			unlink($destdir.$rmfile);
-			$rm_cmds.="rm $rmfile\n";
+				copy($sourcedir.$file, $destdir.$file);
+				echo $file."\n";
+			}
+			echo "\n";
 		}
 
+		if($_GET['type']=='remove'){
+			$rm_cmds = '';
+			foreach($changed_files['remove'] as $rmfile){
+				unlink($destdir.$rmfile);
+				$rm_cmds.="rm $rmfile\n";
+			}
+		}
 
 		if($copy2temp){
 			if($changed_files['remove'])
@@ -599,11 +602,15 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		$iRm = count($list['imp']['remove']);
 		
 		if($iCp || $iRm)
-		echo "<br><br><a href='?proj={$_GET['proj']}&dir=1&act=doSync'><b>{$_GET['proj']}</b> &raquo;&raquo;&raquo; <b>gwcms</b> copy($iCp) remove($iRm)</a>";
+			echo "<br><br><b>{$_GET['proj']}</b> &raquo;&raquo;&raquo; <b>gwcms</b> 
+				<a href='?proj={$_GET['proj']}&dir=1&act=doSync&type=copy'>copy($iCp)</a> 
+				<a href='?proj={$_GET['proj']}&dir=1&act=doSync&type=remove'>remove($iRm)</a>";
 	
 		
 		if($eCp || $eRm)
-		echo "<br><br><a href='?proj={$_GET['proj']}&dir=0&act=doSync'><b>gwcms</b> &raquo;&raquo;&raquo; <b>{$_GET['proj']}</b> copy($eCp) remove($eRm)</a>";
+		echo "<br><br><b>gwcms</b> &raquo;&raquo;&raquo; <b>{$_GET['proj']}</b> 
+			<a href='?proj={$_GET['proj']}&dir=0&act=doSync&type=copy'>copy($eCp)</a> 
+				<a href='?proj={$_GET['proj']}&dir=0&act=doSync&type=remove'>remove($eRm)</a>";
 		
 		exit;
 	}
