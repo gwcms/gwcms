@@ -102,6 +102,11 @@ class GW_WebSocket_Helper
 		if(!is_array($message))
 			$message = ['text'=>$message];
 		
-		$control->messagePrivate($username, json_encode($message));		
+		if($control){
+			$control->messagePrivate($username, json_encode($message));	
+		}else{
+			throw new Exception("control user wsc fail", E_USER_ERROR); 
+		}
+		
 	}
 }

@@ -576,7 +576,7 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_GET));
 		
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
-		d::ldump($cmd);
+		d::ldump("$cmd\n:$res");
 		
 		exit;			
 	}
