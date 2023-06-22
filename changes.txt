@@ -31,3 +31,15 @@
  
 3.5
 	composer update dompdf/dompdf
+
+
+3.8
+ smarty4
+	smarty_internal_compile_private_modifier
+			  /*
+                                trigger_error('Using php-function "' . $modifier . '" as a modifier is deprecated and will be ' .
+                                    'removed in a future release. Use Smarty::registerPlugin to explicitly register ' .
+                                    'a custom modifier.', E_USER_DEPRECATED);
+                                $output = "{$modifier}({$params})";
+				   * 
+				   */

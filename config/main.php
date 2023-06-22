@@ -54,7 +54,15 @@ GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 GW::s('GW_CMS_VERSION', '3.7');
 GW::s('GW_LANG_SEL_BY_GEOIP',0);
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
+
+
+if(phpversion()<'8.0'){
+	GW::s('GW_LANG_SEL_BY_GEOIP', 1);
+}else{
+	GW::s('GW_LANG_SEL_BY_GEOIP', false);
+	include GW::s('DIR/ROOT').'test/fakegeoip.php';
+}
 
 include $dir['ROOT'].'config/environment.php';
 include $dir['ROOT'].'config/project.php';
@@ -92,3 +100,4 @@ print_r(GW::$settings);
 exit;
 
 */
+

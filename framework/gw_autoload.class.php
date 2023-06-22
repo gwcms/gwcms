@@ -11,8 +11,11 @@ class GW_Autoload
 		$file = $dir . $file;
 
 		if (is_file($file)) {
+			
 			require_once $file;
 			return true;
+		}else{
+			//d::ldump("negative check $file");
 		}
 	}
 
@@ -69,6 +72,9 @@ class GW_Autoload
 		self::$search_timer->start();
 		$files = glob($root_dir . "*/" . $file);
 		self::$search_timer->pause();
+		
+		//verify found files
+		//d::ldump($files);
 
 		//Pažiūrėti kiek sugaištama laiko paieškoms
 		//dump(self::$search_timer->result(10));

@@ -193,8 +193,7 @@ class GW_Application
 			$s->compile_check = true;
 			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');;
 			//$s->security_policy = false;
-			//to test compilation errors or other cases
-			//$s->force_compile = true;
+			$s->force_compile = true;
 			//$compiler->known_modifier_type
 			/*
 			$s->security_policy =  new class($s) extends Smarty_Security{

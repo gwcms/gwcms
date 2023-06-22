@@ -9,8 +9,8 @@
 	{assign var=$param@key value=$param}
 {/foreach}
 
-{$input_name=$input_name_pattern|sprintf:$name}
-{$inputct_name=$inputct_name_pattern|sprintf:$name}
+{$input_name=sprintf($input_name_pattern,$name)}
+{$inputct_name=sprintf($inputct_name_pattern,$name)}
 
 
 

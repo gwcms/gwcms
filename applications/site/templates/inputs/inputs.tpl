@@ -9,7 +9,7 @@
 		{if $multiple}{$input_name_pattern="`$input_name_pattern`[]"}{/if}
 	{/if}
 	
-	{$input_name=$input_name_pattern|sprintf:$field}
+	{$input_name=sprintf($input_name_pattern,$field)}
 	
 	{if !$title && $title!==false}
 		{if !isset($fields_source)}

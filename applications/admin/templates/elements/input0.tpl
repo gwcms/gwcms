@@ -14,7 +14,9 @@ instead of {include "elements/input0.tpl" name=
 	{$input_name_pattern="item[%s]"}
 	{if strpos($type, 'multiselect')!==false}{$input_name_pattern="`$input_name_pattern`[]"}{/if}
 {/if}
-{$input_name=$input_name_pattern|sprintf:$name}
+
+{$input_name=sprintf($input_name_pattern,$name)}
+
 
 {if !$id}
 	{$id=str_replace(["[","]"],'__',$input_name)}
@@ -60,5 +62,5 @@ instead of {include "elements/input0.tpl" name=
 	
 {if !in_array($type,["read",'image','attachments','file']) && $readonly != 1}
 	{$tmppattern = str_replace('item[','fields[', $input_name_pattern)}
-	<input name="{$tmppattern|sprintf:$name}" type="hidden" value="1" />
+	<input name="{sprintf($tmppattern,$name)}" type="hidden" value="1" />
 {/if}

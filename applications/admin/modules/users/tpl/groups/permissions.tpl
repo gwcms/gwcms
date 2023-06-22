@@ -3,7 +3,7 @@
 <div style="max-width:600px;">
 
 
-<h3>{GW::l('/m/CHANGE_GROUP_PERMISSIONS')|sprintf:$item->title}</h3>
+<h3>{sprintf(GW::l('/m/CHANGE_GROUP_PERMISSIONS'),$item->title)}</h3>
 
 <p>{gw_link levelup=1 title=GW::l('/g/BACK')}</p>
 <br />

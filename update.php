@@ -262,6 +262,8 @@ class GW_CMS_Sync
 		$destdir = $this->destDir;
 		$sourcedir = $this->sourceDir;
 		
+	
+		
 		
 		//copy to temp dir
 		if(!isset($this->params['s'])){
@@ -279,7 +281,7 @@ class GW_CMS_Sync
 
 
 		
-		if($_GET['type']=='copy'){
+		if($this->params['type']=='copy'){
 			echo "Copying files ";
 			foreach($changed_files['copy'] as $file){
 				@mkdir(dirname($destdir.$file), 0777, true);
@@ -290,7 +292,7 @@ class GW_CMS_Sync
 			echo "\n";
 		}
 
-		if($_GET['type']=='remove'){
+		if($this->params['type']=='remove'){
 			$rm_cmds = '';
 			foreach($changed_files['remove'] as $rmfile){
 				unlink($destdir.$rmfile);
@@ -483,6 +485,7 @@ class GW_CMS_Sync
 		if($res->act=='doSync'){
 			$this->params['proj'] = $res->proj;
 			$this->params['s'] = true;
+			$this->params['type'] = $res->type;
 			
 			$this->setDirection($res->dir == '1');
 			$this->actSync();			
@@ -573,10 +576,8 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='gwcms'){
 		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_GET));
 		
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
+		d::ldump($cmd);
 		
-		
-		
-		d::ldump($res);
 		exit;			
 	}
 	

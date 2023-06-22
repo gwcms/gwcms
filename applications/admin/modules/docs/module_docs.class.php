@@ -268,8 +268,15 @@ class Module_Docs extends GW_Common_Module
 		    'modpath'=>"customers/users", 
 		    'empty_option'=>1, 
 		    'options'=>[], 
-		    'preload'=>1, 'required'=>1, 'width'=>"500px"
+		    'preload'=>1, 'required'=>1, 'width'=>"500px",
+		    'after_input_f'=>"editadd",
+		    'import_url'=>$this->app->buildUri('emails/subscribers/importsimple'),
+		    'export_url'=>$this->app->buildUri('emails/subscribers/exportsimple'),
+			'btngroup_width'=>"100%"	
 		];
+		
+
+		
 		
 		$emailtpl = [
 		    'type'=>'select_ajax', 
@@ -279,7 +286,8 @@ class Module_Docs extends GW_Common_Module
 		    'source_args'=>['byid'=>1,'owner_type'=>'customers/users'] , 
 		    'preload'=>1, 
 		    'required'=>1, 
-		    'width'=>"250px"
+		    'width'=>"250px",
+		    
 		];
 
 		$form = ['fields'=>['users'=>$users,'tpl'=>$emailtpl],'cols'=>2];
@@ -348,4 +356,6 @@ class Module_Docs extends GW_Common_Module
 	{
 		d::dumpas($_GET);
 	}
+	
+	
 }

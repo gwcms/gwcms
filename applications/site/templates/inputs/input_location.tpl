@@ -1,5 +1,5 @@
 {$dfield="`$field`_data"}
-{$dinput_name=$input_name_pattern|sprintf:$dfield}
+{$dinput_name=sprintf($input_name_pattern,$dfield)}
 {$did=str_replace(["[","]"],'_',$dinput_name)}
 	
 {include file="inputs/input_text.tpl" type=text other_tags=["data-store-details"=>'']} 
