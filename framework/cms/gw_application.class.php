@@ -187,9 +187,15 @@ class GW_Application
 
 			//error_reporting(0);
 			$s->setErrorReporting(0);
-			$s->muteUndefinedOrNullWarnings();		
-			$s->compile_check = false;
-			$s->error_reporting = 0;
+			$s->muteUndefinedOrNullWarnings();	
+			
+			//ant productiono del performanco galima butu netikrinti, po ikelimo istrinti
+			$s->compile_check = true;
+			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');;
+			//$s->security_policy = false;
+			//to test compilation errors or other cases
+			//$s->force_compile = true;
+			//$compiler->known_modifier_type
 			/*
 			$s->security_policy =  new class($s) extends Smarty_Security{
 				public function isTrustedPhpFunction($function_name, $compiler){ return true; } 
@@ -201,7 +207,12 @@ class GW_Application
 				public function isTrustedModifier($modifier_name, $compiler){ return true; } 
 				public function isTrustedSpecialSmartyVar($var_name, $compiler){ return true; } 
 			};
-			*/
+			 * 
+			 */
+			
+			
+			//$s->enableSecurity("GW_TplEngine_Security");
+			
 		}else{
 			require_once GW::s('DIR/VENDOR') . 'smarty/SmartyBC.class.php';
 			$s = & $this->smarty;
