@@ -24,7 +24,7 @@ class GW_Mail_Helper
 		return self::$cfg_cache;
 	}
 	
-	static function initPhpmailer($from='')
+	static function initPhpmailer($from='', $cfg=false)
 	{
 		if(version_compare(PHP_VERSION, '7.4.0') >= 0){
 			include_once GW::s('DIR/VENDOR').'phpmailer/phpmailer.class.php';
@@ -45,8 +45,9 @@ class GW_Mail_Helper
 		$mail->XMailer = "GWCMS v".GW::s('GW_CMS_VERSION').' author Vidmantas Norkus';
 
 		$mail->CharSet = 'UTF-8';
-				
-		$cfg = self::loadCfg();
+			
+		if(!$cfg)
+			$cfg = self::loadCfg();
 				
 		if(!$from)
 			$from = $cfg->mail_from;
@@ -166,7 +167,7 @@ class GW_Mail_Helper
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
 		
-		$mailer = $opts['mailer'] ?? self::initPhpmailer(isset($opts['from'])? $opts['from']:'');
+		$mailer = $opts['mailer'] ?? self::initPhpmailer($opts['from'] ?? '', $opts['cfg'] ?? false);
 				
 		if(isset($opts['subject']))
 			$mailer->Subject = $opts['subject'];
