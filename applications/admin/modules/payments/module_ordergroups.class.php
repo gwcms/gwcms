@@ -190,6 +190,11 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$v['INVOICE_NUM'] = GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX').'-'.$item->id;
 		$v['DATE'] = explode(' ',$item->pay_time)[0];
+		
+		if($v['DATE']=='0000-00-00')
+			$v['DATE'] = explode(' ',$item->insert_time)[0];
+		
+		
 		$v['EMAIL'] = $payconfirm->p_email ?: $item->email;
 		$v['ITEMS'] = [];
 		$v['ORDERID'] = $item->id;
