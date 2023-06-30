@@ -27,6 +27,9 @@
 
 
 {list_item_action_m url=[false,[act=>doSendInvitations,id=>$item->id]] iconclass="fa fa-envelope-o" caption="Siųsti kvietimus pasirašyti"}
+
+{list_item_action_m url=[false,[act=>doSendInvitationsCreateUsers,id=>$item->id]] iconclass="fa fa-envelope-o" caption="Siųsti kvietimus pasirašyti pagal el pašto adresą"}
+
 {list_item_action_m 
 	href=$app->buildUri("emails/email_queue",[searchbycontent=>$item->key,clean=>2]) 
 	iconclass="fa fa-envelope-square" action_addclass="iframe-under-tr"  

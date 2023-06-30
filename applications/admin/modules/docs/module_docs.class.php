@@ -261,49 +261,19 @@ class Module_Docs extends GW_Common_Module
 		return parent::getTranslation($opts);
 	}
 	
-	function doSendInvitations()
+	
+	function __sendInvitations($users, $answers)
 	{
-		$users = [
-		    'type'=>'multiselect_ajax', 
-		    'modpath'=>"customers/users", 
-		    'empty_option'=>1, 
-		    'options'=>[], 
-		    'preload'=>1, 'required'=>1, 'width'=>"500px",
-		    'after_input_f'=>"editadd",
-		    'import_url'=>$this->app->buildUri('emails/subscribers/importsimple'),
-		    'export_url'=>$this->app->buildUri('emails/subscribers/exportsimple'),
-			'btngroup_width'=>"100%"	
-		];
 		
-
-		
-		
-		$emailtpl = [
-		    'type'=>'select_ajax', 
-		    'modpath'=>"emails/email_templates", 
-		    'empty_option'=>1, 
-		    'options'=>[], 
-		    'source_args'=>['byid'=>1,'owner_type'=>'customers/users'] , 
-		    'preload'=>1, 
-		    'required'=>1, 
-		    'width'=>"250px",
-		    
-		];
-
-		$form = ['fields'=>['users'=>$users,'tpl'=>$emailtpl],'cols'=>2];
-		
-		
-		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_USERS_AND_TEMPLATE'))))
-			return false;		
-		
-				
-		$users = GW_Customer::singleton()->findAll(GW_DB::inCondition('id', $answers['users']));
 		$temmplateid = $answers['tpl'];
 		
 		
 		$item = $this->getDataObjectById();
 				
 		$link1=Navigator::__getAbsBase().'/';
+		
+		
+		
 		$link2='/direct/docs/docs/item?id='.$item->key;
 		
 		if(!isset($_GET['confirm'])){
@@ -320,10 +290,13 @@ class Module_Docs extends GW_Common_Module
 			$contractlink = $link1.$opts['ln'].$link2;
 			
 			
+			
 			$opts['vars']=[
 			    'user'=>$user,
 			    'CONTRACT_LINK'=>$contractlink
 			];
+			
+			//d::dumpas($contractlink);
 			
 			if(!isset($_GET['confirm'])){
 				$opts['dryrun']=1;
@@ -343,15 +316,165 @@ class Module_Docs extends GW_Common_Module
 			}
 			
 		}
-		
+
 		if(isset($_GET['confirm'])){
 			$this->setMessage('SENT: '.count($users));
 			$this->jump();
 		}
 		
 		$this->askConfirm("Are you sure you want to send");
+		
+	}
+	
+	function doSendInvitations()
+	{
+		$users = [
+		    'type'=>'multiselect_ajax', 
+		    'modpath'=>"customers/users", 
+		    'empty_option'=>1, 
+		    'options'=>[], 
+		    'preload'=>1, 'required'=>1, 'width'=>"500px",
+		    'after_input_f'=>"editadd",
+		    'import_url'=>$this->app->buildUri('emails/subscribers/importsimple'),
+		    'export_url'=>$this->app->buildUri('emails/subscribers/exportsimple'),
+			'btngroup_width'=>"100%"	
+		];
+		
+		$emailtpl = [
+		    'type'=>'select_ajax', 
+		    'modpath'=>"emails/email_templates", 
+		    'empty_option'=>1, 
+		    'options'=>[], 
+		    'source_args'=>['byid'=>1,'owner_type'=>'customers/users'] , 
+		    'preload'=>1, 
+		    'required'=>1, 
+		    'width'=>"250px",
+		    
+		];
+
+		$form = ['fields'=>['users'=>$users,'tpl'=>$emailtpl],'cols'=>2];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_USERS_AND_TEMPLATE'))))
+			return false;		
+		
+		$users = GW_Customer::singleton()->findAll(GW_DB::inCondition('id', $answers['users']));
+		$this->__sendInvitations($users, $answers);
+		
+
 	}
 
+	
+	function doSendInvitationsCreateUsers()
+	{
+		$users = [
+			'type'=>'textarea', 
+			'width'=>'500px',
+			'height'=>'500px',
+		    'hidden_note'=>"Pavizdys (kopijuojama iš el. puslapio lentelės): <pre>SPORTININKAS	NUMERIS	POZICIJA	EL. PAŠTAS	TELEFONAS	
+Jonas Jonaitis	123	libero	jonas.jonaitis@gmail.com	860012345
+Petras Petraitis	124	outside	petras.petraitis@gmail.com	860054321</pre>
+"
+		];
+		
+		$map = ['type'=>'text', 'default'=>"SPORTININKAS:namesurname;EL. PAŠTAS:email;TELEFONAS:phone"];
+
+		
+		
+		$emailtpl = [
+		    'type'=>'select_ajax', 
+		    'modpath'=>"emails/email_templates", 
+		    'empty_option'=>1, 
+		    'options'=>[], 
+		    'source_args'=>['byid'=>1,'owner_type'=>'customers/users'] , 
+		    'preload'=>1, 
+		    'required'=>1, 
+		    'width'=>"250px",
+		    
+		];
+
+		$form = ['fields'=>['users'=>$users, 'map'=>$map,'tpl'=>$emailtpl],'cols'=>1];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_USERS_AND_TEMPLATE'),['method'=>'post'])))
+			return false;	
+
+		$lines = explode("\n", trim($answers['users']));
+		
+		$maptxt = $answers['map'];
+		$map=[];
+		foreach(explode(';',$maptxt) as $mapentry){
+			list($key, $trans) = explode(':',$mapentry);
+			$map[$key] = $trans;
+		}
+		//d::dumpas($map);
+		
+		$head = trim(array_shift($lines));
+		$head= explode("\t", $head);
+		
+		$rows = [];
+		
+		foreach($lines as $line){
+			
+			$line= explode("\t", trim($line));
+			$row = [];
+			foreach($head as $idx => $col){
+				if(isset($map[$col]))
+					$row[ $map[$col] ] = $line[$idx];
+			}
+			
+			$rows[] = $row;
+		}
+		
+		$users = [];
+		
+		foreach($rows as $row){
+			
+			
+			if(!($row['email'] ?? false)){
+				$this->setError("Skipping ".json_encode($row). " (no email)");
+				continue;
+			}
+			
+			$c = GW_Customer::singleton()->find(["a.removed=0 AND email=?", $row['email']]);
+			$insert = false;
+			if(!$c){
+				$c = GW_Customer::singleton()->createNewObject();
+				$insert=true;
+			}
+			
+			if($row['namesurname']){
+				$name =  explode(' ', $row['namesurname'], 2);
+				$c->name = $name[0];
+				$c->surname = $name[1];
+			}
+			
+			$c->email = $row['email'];
+			
+			if($row['phone']){
+				$c->phone = $row['phone'];
+			}
+			
+			if($insert)
+			{
+				$c->insert();
+				$this->setMessage("New user ". json_encode($row));
+			}elseif($c->changed_fields){
+				$this->setMessage("User updated ". json_encode($row));
+				$c->updateChanged();
+				
+			}
+			$users[$c->id] = $c;
+		}
+			
+		
+		
+		$this->__sendInvitations($users, $answers);
+		
+		
+	}
+	
+	
 	function viewDocument()
 	{
 		d::dumpas($_GET);
