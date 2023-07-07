@@ -32,7 +32,7 @@ class Module_Config extends GW_Common_Module
 		
 		if($_POST['submit_type']=='testemail')
 		{
-			$this->doTestPhpMailer();
+			$this->jump(false, ['act'=>'doTestPhpMailer']);
 		}
 		
 		///$this->__afterSave($vals);
@@ -45,11 +45,22 @@ class Module_Config extends GW_Common_Module
 	function doTestPhpMailer()
 	{			
 			
+		$form = ['fields'=>[
+			//'from'=>$sel, 
+			'to'=>['type'=>'email', 'default'=>$this->app->user->email, 'required'=>1] 
+		    ],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, "Input receivers address")))
+			return false;	
+		
+				
+		
 		////--------------2nd test----------------------------------
 		$opts['subject']="This is test message ".date('Y-m-d H:i:s');
 		$opts['body']="You asked to send test message from emails/config";
 		
-		$opts['to'] = $this->app->user->email;
+		$opts['to'] = $answers['to'];
 		//$opts['debug'] = 1;
 		
 		
