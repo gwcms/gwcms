@@ -37,6 +37,21 @@
 
 	</i>
 	<i id="OPTIONS">
+		
+		<i id="types">
+		  <i id="file">file</i>
+		  <i id="text">text</i>
+		  <i id="textarea">textarea</i>
+		  <i id="number">number</i>
+		  <i id="radio">radio</i>
+		  <i id="select">select</i>
+		  <i id="checkbox">checkbox</i>
+		  <i id="checkboxes">checkboxes</i>
+		  <i id="birthdate">birthdate</i>
+		  <i id="htmlarea">htmlarea</i>
+		  <i id="code_smarty">code_smarty</i>
+		  <i id="infotext">infotext</i>
+		 </i>		
 		<i id="format_texts">
 			<i id="0"><lt>Paprastas tekstas</lt><en>No interpret</en></i>
 			<i id="2"><lt>Interpret. (Smarty kodas)</lt><en>Interpreter (Smarty code)</en></i>

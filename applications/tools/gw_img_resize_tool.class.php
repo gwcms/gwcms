@@ -64,9 +64,13 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 	
 	function process()
 	{
+		ob_clean();
+		
+		
 		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
 		
 		GW::s('DIR/SYS_IMAGES_CACHE_1', $cachedir=GW::s('DIR/SYS_REPOSITORY').'cache/images_1/');
+		
 		
 
 		@mkdir($cachedir);

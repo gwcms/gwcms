@@ -49,6 +49,26 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 		return parent::calculateField($name);
 	}
 	
-	
+	function setSecretIfNotSet($update=false)
+	{
+		if(!$this->secret){
+			$this->secret = GW_String_Helper::getRandString(30,GW_String_Helper::$simple);
+			
+			if($update)
+				$this->updateChanged();
+		}		
+	}
+
+	function eventHandler($event, &$context_data=[]) {
+		
+		switch($event){
+			case 'BEFORE_SAVE';
+				$this->setSecretIfNotSet();
+			break;
+					
+		}
+		
+		return parent::eventHandler($event, $context);
+	}		
 
 }

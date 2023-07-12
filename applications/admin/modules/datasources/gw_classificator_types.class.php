@@ -23,5 +23,16 @@ class GW_Classificator_Types extends GW_Composite_Data_Object
 		$cond="";
 		
 		return $this->getAssoc(['key','title'], $cond);
-	}		
+	}	
+
+
+	function getChildOptions($active=true)
+	{
+		$opts = [];
+		foreach($this->childs as $child){
+			$opts[$child->key] = $child->title;
+		}
+		
+		return $opts;
+	}	
 }

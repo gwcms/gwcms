@@ -33,8 +33,14 @@
 	composer update dompdf/dompdf
 
 
-3.8
- smarty4
+4.0 2023-07-01
+
+compatability with php82
+	smarty4
+	composer require "dompdf/dompdf 1.0.2" -W
+	many notice fixes
+
+	smarty4 
 	smarty_internal_compile_private_modifier
 			  /*
                                 trigger_error('Using php-function "' . $modifier . '" as a modifier is deprecated and will be ' .

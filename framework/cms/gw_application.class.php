@@ -231,7 +231,7 @@ class GW_Application
 
 		}
 		
-		
+		//$s->setLiterals(array('{{{','}}}','{{','}}'));
 
 		//$s->allow_php_tag=true;
 		//$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL');

@@ -28,6 +28,8 @@ class GW_Form_Elements extends GW_i18n_Data_Object
 	
 	function getTypes()
 	{
+		
+		d::dumpas('pakeista i varchar(20)');
 		return  $this->getDB()->getColumnOptions($this->table, 'type');
 	}
 	

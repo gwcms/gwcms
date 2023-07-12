@@ -130,6 +130,12 @@
 		</div>	
 	{/if}
 {/if}
+
+{if $fields.fields.fivb_number &&  !$register}	
+	<div class="col-md-6">	
+	{input field="fivb_number" type=number help=GW::ln('/M/USERS/FIELD_HELP/fivb_number')}
+	</div>
+{/if}
 {*sports*}
 {if $fields.fields.coach &&  !$register}
 	<div class="col-md-6">

@@ -153,6 +153,11 @@ class GW_Generic_Extended
 		return $list;
 	}
 	
+	function cacheClear()
+	{
+		$this->_cache = [];
+	}
+	
 	function getAll($extra_cond=false)
 	{
 		$db = $this->getDB();

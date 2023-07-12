@@ -432,11 +432,13 @@ class GW_Lang
 			return self::lnResult($orig_key, $orig_key, $orig_val ?? false);
 		}
 		
+		/*
 		if(!$vr && isset($opts['default'])){
 			GW_Translation::singleton()->store($module, $key, $opts['default'], GW_Lang::$ln);
 			
 			return $opts['default'];
 		}
+		 */
 		
 		if(!$vr)
 			return $vr=$orig_key;

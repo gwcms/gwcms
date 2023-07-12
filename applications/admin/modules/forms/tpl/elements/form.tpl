@@ -14,7 +14,7 @@
 {call e field="title" i18n=4}
 
 {call e field="required" type=bool}
-{call e field="type" type=select options=$item->getTypes() empty_option=1 options_fix=1}
+{call e field="type" type=select options=GW::l('/APP/admin/M/forms/OPTIONS/types') empty_option=1 options_fix=1}
 {call e field="options_src" type="select_ajax" modpath="datasources/classificator_types" options=[] preload=1 after_input_f="editadd"}
 
 

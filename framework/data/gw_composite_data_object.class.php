@@ -291,6 +291,9 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	
 	static function prepareLinkedObjects($list, $field=false, $opts=[]) 
 	{
+		if(!$list)
+			return [];
+		
 		$fistel = reset($list);
 		
 		if(!isset($fistel->composite_map[$field]))

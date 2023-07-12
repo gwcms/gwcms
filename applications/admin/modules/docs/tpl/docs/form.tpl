@@ -121,8 +121,12 @@
 	{capture assign=tmp1}Form "{$item->form->admin_title}" variables{/capture}
 {capture assign=tmp}
 <textarea style="min-height:100px;width:100%;overflow-y: scroll;padding:1px" >
-{foreach $fieldnames as $fieldname}
-{literal}{{/literal}$form.{$fieldname}|escape{literal}}{/literal}
+{foreach $item->form->elements as $fieldname => $e}
+{if $e->type=='checkboxes'}
+	{literal}{foreach {/literal}$form.{$fieldname} as $val{literal}} {$options.{/literal}{$fieldname}{literal}[$val]}{if !$val@last}, {/if}  {/foreach}{/literal}
+{else}
+	{literal}{{/literal}$form.{$fieldname}|escape{literal}}{/literal}
+{/if}
 {/foreach}
 {foreach $item->doc_forms as $groupid => $form}
 {foreach $form->elements as $input}
@@ -153,7 +157,7 @@
 {call e field=admin_emails type=text}
 
 
-{include file="elements/input_transkey.tpl" name=site_info_trans}
+{include file="elements/input_transkey.tpl" name=site_info_trans empty_option=1}
 
 {if $app->user->isRoot()}
 	{call e field=protected type=bool}

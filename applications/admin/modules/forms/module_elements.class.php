@@ -18,7 +18,8 @@ class Module_Elements extends GW_Common_Module
 		
 		
 		
-		$this->model->getTypes();
+		//$this->model->getTypes();
+		//pakeista i varchar(20)
 	}
 	
 	function __eventAfterList(&$list){

@@ -142,6 +142,13 @@
 			<i id="text">text</i>
 			<i id="textarea">textarea</i>
 		</i>
+		<i id="steps">
+			<i id="preview_blank">Šablono peržiūra</i>
+			<i id="form">Užpildyti duomenis</i>
+			<i id="preview">Suformuoto dokumento peržiūra</i>
+			<i id="sign_basic">Peržiūrėti / Pasirašyti paprastuoju</i>
+			<i id="sign_marksign">Pasirašyti marksign</i>
+		</i>
 	</i>
 	
 	<i id="VIEWS">
@@ -180,7 +187,7 @@
 		<i id="title">Dokumentai</i>
 		
 		<i id="info">
-			
+			<i id="model">GW_Doc</i>
 			<i id="iconclass">fa fa-file-o</i>
 			<i id="itemactions">1</i>
 		</i>		

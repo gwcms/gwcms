@@ -1,4 +1,10 @@
 {function input}
+	{if $params_expand}
+		{foreach $params_expand as $k => $v}
+			{assign var=$k value=$v}
+		{/foreach}
+		{$params_expand=[]}
+	{/if}	
 	
 	{if $type=='checkboxes' || $type=="bsmultiselect"}
 		{$multiple=1}
@@ -10,6 +16,7 @@
 	{/if}
 	
 	{$input_name=sprintf($input_name_pattern,$field)}
+
 	
 	{if !$title && $title!==false}
 		{if !isset($fields_source)}
@@ -45,12 +52,7 @@
 	
 	
 	
-	{if $params_expand}
-		{foreach $params_expand as $k => $v}
-			{assign var=$k value=$v}
-		{/foreach}
-		{$params_expand=[]}
-	{/if}					
+					
 				
 	{if $type==checkbox}
 		
@@ -89,8 +91,9 @@
 		
 		{if in_array($type, ['text','email','password','url','hidden','number'])}
 			{include file="inputs/input_text.tpl"}
-		{elseif $type=='radios'}
+		{elseif $type=='radios' || $type=='radio'}
 			<br />
+			
 			{foreach $options as $key => $opttitle}
 				<div class="form-check form-check-inline mb-0">
 				<label class="form-check-label mr-2">
@@ -125,7 +128,7 @@
 			<div class="row">
 			{foreach $options as $key => $opttitle}
 				<div class="{if $newline}col-md-12{else}col-md-4{/if}">
-				 <label class="checkbox-inline"><input style="opacity:1" type="checkbox" name="{$input_name}" value="{$key|escape}" {if isset($selected[$key])}checked="checked"{/if}>{$opttitle}</label>
+				 <label class="checkbox-inline"><input style="opacity:1" type="checkbox" name="{$input_name}" value="{$key|escape}" {if isset($selected[$key])}checked="checked"{/if}> {$opttitle}</label>
 				</div>
 				
 			{/foreach}
