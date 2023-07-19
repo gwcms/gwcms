@@ -206,9 +206,9 @@ class GW_Debug_Helper
 			
 
 		}
-		$errfile = self::envRootSwitch($errfile);		
 		
 		if(self::isHTMLerror()){
+			$errfile = self::envRootSwitch($errfile);
 			$errstr = "<span class='openfile1' data-file='$errfile' data-line='$errline'><b>".self::FriendlyErrorType($errno)."</b> $file_short on line $errline: $errstr</span> $backtrace_request<br/>";
 		}else{
 			$errstr = self::FriendlyErrorType($errno)." | $file_short on line $errline: $errstr\n";
@@ -337,7 +337,7 @@ class GW_Debug_Helper
 		if(isset($_SERVER['HTTP_REFERER']))
 			$data['referer'] = $_SERVER['HTTP_REFERER'];
 
-		if(function_exists('geoip_country_code_by_name'))
+		if(function_exists('geoip_country_code_by_name') && isset($_SERVER['REMOTE_ADDR']))
 				$data['ip_country'] = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
 
 		
@@ -439,6 +439,7 @@ class GW_Debug_Helper
 				initEnviroment(GW_ENV_DEV);
 				$dev_root = GW::s("DEPLOY_DIR");
 				GW::s('PROJECT_ENVIRONMENT',$old);
+				initEnviroment($old);
 
 			}
 			

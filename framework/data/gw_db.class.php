@@ -79,7 +79,7 @@ class GW_DB
 	}
 
 	function __construct($conf = Array())
-	{
+	{		
 		$this->conf['logfile'] = GW::s('DIR/LOGS') . 'MySQL.log';
 		$conf = array_merge(GW::$settings['DB'], $conf);
 		$this->conf = array_merge($this->conf, (array) $conf);

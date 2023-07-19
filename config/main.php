@@ -64,6 +64,8 @@ if(phpversion()<'8.0'){
 	include GW::s('DIR/ROOT').'test/fakegeoip.php';
 }
 
+date_default_timezone_set('Europe/Vilnius');
+
 include $dir['ROOT'].'config/environment.php';
 include $dir['ROOT'].'config/project.php';
 
@@ -91,6 +93,8 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 		GW::s('DEVELOPER_PRESENT',1);
 	}	
 }
+
+
 
 //define('',4); /* then 8, 16, 32, etc... */
 
