@@ -22,6 +22,10 @@ trait Module_Import_Export_Trait
 			$cols[$col] = $col;
 
 
+		foreach($cols as $col){
+			if(isset($_GET['no_'.$col]))
+				unset($cols[$col]);
+		}
 
 		return $cols;
 	}

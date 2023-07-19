@@ -8,9 +8,9 @@
 {function gettoggler}
 	{$get=$smarty.get|default:[]}
 	{if !$smarty.get[$id]}
-		<a href="{$app->buildUri(false, $get+[$id=>1])}">+{$id}</a>
+		<a href="{$app->buildUri(false, $get+[$id=>1])}">+{$title|default:$id}</a>
 	{else}
-		<a href="{$app->buildUri(false, [$id=>null]+$get)}">-{$id}</a>
+		<a href="{$app->buildUri(false, [$id=>null]+$get)}">-{$title|default:$id}</a>
 	{/if}
 {/function}
 
@@ -46,7 +46,11 @@
 <p>
 
 	<b>Eksportuojami stulpeliai:</b>
-	{implode(', ', array_keys($fields))}
+
+	
+	{foreach array_keys($fields)  as $fieldname}
+		{gettoggler id="no_$fieldname" title=$fieldname}{if !$fieldname@last}, {/if}
+	{/foreach}
 </p>
 
 <b>Neleistini simboliai užkoduojami:</b>

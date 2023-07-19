@@ -14,7 +14,7 @@
 
 
 {if $item->doc_id}
-	{list_item_action_m href="/{$item->ln}/direct/docs/docs/item?id={$item->doc->key}&answerid={$item->id}" iconclass="fa fa-globe text-mint" caption="Suformuotas dokumentas"}
+	{list_item_action_m href="/{$item->ln}/direct/docs/docs/item?id={$item->doc->key}&answerid={$item->id}&s=preview" iconclass="fa fa-globe text-mint" caption="Suformuotas dokumentas"}
 {/if}
 
 	

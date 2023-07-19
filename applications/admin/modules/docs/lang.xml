@@ -149,7 +149,13 @@
 			<i id="sign_basic">Peržiūrėti / Pasirašyti paprastuoju</i>
 			<i id="sign_marksign">Pasirašyti marksign</i>
 		</i>
+		<i id="features">
+			<i id="sign_again">Leisti pakartotinai pasirašyti</i>			
+			<i id="step_pick_per_contract">Kontraktui žingsnių komplekto parinkimas</i>
+		</i>
 	</i>
+
+	    
 	
 	<i id="VIEWS">
 		<i id="send">Siuntimas</i>

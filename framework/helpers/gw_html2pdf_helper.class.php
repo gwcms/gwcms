@@ -72,15 +72,14 @@ class GW_html2pdf_Helper
 		//$dompdf->setPaper('A4', 'landscape');
 
 		
-		;	
-		
-		
 		// Render the HTML as PDF
 		$dompdf->render();
 		
-		header("Content-Type: application/pdf");
+		if($stream){
+			header("Content-Type: application/pdf");
 
-		header('Content-Fisposition: inline; filename="' . 'document.pdf' . '"');
+			header('Content-Fisposition: inline; filename="' . 'document.pdf' . '"');
+		}
 
 		// Output the generated PDF to Browser
 		if($stream)

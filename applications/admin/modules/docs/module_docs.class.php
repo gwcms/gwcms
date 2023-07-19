@@ -36,6 +36,8 @@ class Module_Docs extends GW_Common_Module
 		//	GW::db()->query('SET GLOBAL sort_buffer_size = 512000');
 		//}
 		
+
+		$this->initFeatures(true);
 	}
 
 	function viewDefault()
