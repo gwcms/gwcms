@@ -25,7 +25,7 @@ class Module_FBLogin extends GW_Public_Module
 		
 	
 		
-		if($this->user_cfg->use_auth_gw_lt){
+		if($this->user_cfg->fb_use_auth_gw){
 			
 			$comebackurlAuthgw = $this->app->buildURI('direct/users/fblogin/loginAuthGw',[],['absolute'=>1]);
 			
