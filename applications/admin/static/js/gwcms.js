@@ -498,6 +498,14 @@ var gw_adm_sys = {
 		$('#list_row_' + id).remove();
 	},
 	
+	
+	reinitfunctions: [],
+	
+	registerReinitFunction: function(funct)
+	{
+		gw_adm_sys.reinitfunctions.push(funct)
+	},
+		
 	initObjects: function()
 	{
 		$('.shiftbtn').click(function(e){
@@ -537,6 +545,10 @@ var gw_adm_sys = {
 		
 		
 		$(".add-popover:not([data-initdone='1'])").popover().attr('data-initdone',1);
+		
+		for(var key in gw_adm_sys.reinitfunctions){
+			gw_adm_sys.reinitfunctions[key]();
+		}
 		
 		gw_adm_sys.init_iframe_open();
 		gw_checklist.init();
@@ -1094,8 +1106,6 @@ var gwcms = {
 			})
 
 		});
-		
-		
 	},
 	
 	showMessages: function(msg_arr, title)
@@ -1109,11 +1119,12 @@ var gwcms = {
 			var title = msg_arr[i]['title']
 			
 			var data = {
-							type: types[level],
-							message: msg,
-							container: 'floating',
-							timer: 5000
-						};
+				type: types[level],
+				message: msg,
+				container: 'floating',
+				timer: 5000
+			};
+			
 			if(title)
 				data.title = title;
 			

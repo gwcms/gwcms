@@ -715,6 +715,8 @@ class GW_Common_Module extends GW_Module
 			$status = true;
 		}
 		
+		$this->fireEvent('AFTER_SERIES_ACT', $method);
+		
 		if($status==true){
 			$this->sys_call = false;
 

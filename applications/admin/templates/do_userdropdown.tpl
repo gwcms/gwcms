@@ -1,4 +1,4 @@
-
+{if $app->user}
 <!--User dropdown-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <li id="dropdown-user" class="dropdown">
@@ -16,7 +16,7 @@
 				<i class="fa fa-user-circle-o ic-user"></i>
 			{/if}
 		</span>
-		<div class="username hidden-xs">{$app->user->title|default:$app->user->get('username')} </div>
+		<div class="username hidden-xs">{$app->user->title|default:$app->user->username} </div>
 	</a>
 
 
@@ -34,7 +34,7 @@
 		</div>
 		*}
 
-
+		
 		<!-- User dropdown menu -->
 		<ul class="head-list">
 			<li>
@@ -77,5 +77,6 @@
 		</div>
 	</div>
 </li>
+{/if}
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <!--End user dropdown-->
