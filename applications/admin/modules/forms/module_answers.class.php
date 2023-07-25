@@ -62,17 +62,47 @@ class Module_Answers extends GW_Common_Module
 		
 		$fields = [];
 		foreach($elms as $e){
-			//
+			$options=[];
 			$params_expand = json_decode($e->config, true);
 			
+			$type = $e->type;
+			if($type=='checkboxes')
+				$type='multiselect';
+			
+			if($type=='radio')
+				$type='select';
+			
+
+				
+			
 			$fields["keyval/{$e->fieldname}"]=[
-			    'type'=>$e->type, 
+			    'type'=>$type, 
 			    "title"=>$e->title, 
 			    "hidden_note"=>$e->hidden_note,
 			    //'required'=>$e->required,
 			    'params_expand'=>$params_expand,
-			    'note'=>$e->note
+			    'note'=>$e->note,
+			    'options'=>$options,
 			];
+			
+		
+			
+			if(in_array($e->type, ['radio','checkboxes','select'])  && $e->options_src){
+				
+				
+			
+					//itraukti pasyvias opcijas
+				$fields["keyval/{$e->fieldname}"]['options'] = $e->optionsgroup->getChildOptions(true);
+				
+				
+				if($e->type=='checkboxes'){
+					$fields["keyval/{$e->fieldname}"]['value_format']='json1';
+				}
+			}			
+						
+			
+			
+				
 						
 			if(isset($params_expand['options_ln'])){	
 				$fields["keyval/{$e->fieldname}"]['options'] = GW::ln($params_expand['options_ln']);
@@ -82,6 +112,8 @@ class Module_Answers extends GW_Common_Module
 		$fields['admin_note'] = ['type'=>'text'];
 		$fields['signature'] = ['type'=>'text'];
 		$fields['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'users/usr'];
+		$fields['user_signed'] = ['type'=>'file'];
+	
 		
 		$fields['active'] = ['type'=>'bool'];
 		$fields['ln'] = ['type'=>'select', 'options'=>$this->app->langs,'options_fix'=>1, 'empty_option'=>1];
@@ -90,6 +122,12 @@ class Module_Answers extends GW_Common_Module
 		    'cols'=>2,
 		    'fields'=>$fields
 		];
+		
+			//d::ldump($fields);
+			
+			
+		
+		//d::dumpas($fields);
 		
 		return $x;
 	}

@@ -279,7 +279,7 @@ class Navigator
 		setcookie($name, $val, time()+3600*24*365*10, Navigator::getBase());	
 	}	
 	
-	function postLink($url, $title, $args,$opts=[])
+	static function postLink($url, $title, $args,$opts=[])
 	{
 		$GLOBALS['postlinkformidx'] = ($GLOBALS['postlinkform'] ?? 0) +1;
 		

@@ -15,7 +15,7 @@ class GW_File_Helper
 		return $files;
 	}
 
-	function createZip($files = array(), $destination = '', $overwrite = false)
+	static function createZip($files = array(), $destination = '', $overwrite = false)
 	{
 		//if the zip file already exists and overwrite is false, return false
 		if (file_exists($destination) && !$overwrite) {
@@ -59,7 +59,7 @@ class GW_File_Helper
 		}
 	}
 
-	function unlinkOldTempFiles($dir, $expire_time = '7 day')
+	static function unlinkOldTempFiles($dir, $expire_time = '7 day')
 	{
 		$files = glob($dir . '/*');
 		$expire_time = strtotime('-' . $expire_time);
@@ -70,7 +70,7 @@ class GW_File_Helper
 		}
 	}
 
-	function cleanName($name)
+	static function cleanName($name)
 	{
 		$name = str_replace(' ', '_', $name);
 		setlocale(LC_CTYPE, 'en_GB.utf8');
@@ -79,7 +79,7 @@ class GW_File_Helper
 		return $name;
 	}
 
-	function output($file, $view=false)
+	static function output($file, $view=false)
 	{
 		header('HTTP/1.0 200 OK', true, 200);
 		

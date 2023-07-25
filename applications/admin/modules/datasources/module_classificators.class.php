@@ -3,6 +3,8 @@
 
 class Module_Classificators  extends GW_Common_Module
 {	
+	public $import_add_filters=true;
+	use Module_Import_Export_Trait;
 	
 	function init()
 	{
@@ -108,5 +110,22 @@ class Module_Classificators  extends GW_Common_Module
 		$this->setMessage("New entries cnt: $cnt");
 		$this->jump();
 	}
+	
+	
+	function getListConfig()
+	{
 
+		
+		
+		$cfg = parent::getListConfig();
+				
+		foreach($this->app->langs as $ln)
+			$cfg['inputs']['title_'.$ln]=['type'=>'text'];	
+		
+		$cfg['inputs']['key']=['type'=>'text'];	
+		$cfg['inputs']['type']=['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'datasources/classificator_types'];
+		//$cfg['inputs']['aka']=['type'=>'text'];	
+
+		return $cfg;
+	}
 }

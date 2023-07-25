@@ -16,7 +16,7 @@
 	{$dl_smart_fields=[value,user_id]}
 	
 	
-	{$dl_actions=[preview,invert_active_ajax,edit,delete,ext_actions]}
+	{$dl_actions=[preview,invert_active_ajax,edit,ext_actions]}
 	{$dl_output_filters=[
 		signature=>expand_truncate
 	]}	

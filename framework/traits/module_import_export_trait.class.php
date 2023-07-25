@@ -5,6 +5,10 @@
 trait Module_Import_Export_Trait
 {
 
+	//jei importuojama eksportuojama vaikiniai objektai tai tokiu atveju jie turi sasajos su teviniu objektu lauka
+	//ideti i moduli si kitanmaji kad prisegti per filtrus uzdedamas vertes (dazniausiai taip naudojama tevinio elemento vaikams filtruoti)
+	//public $import_add_filters = true;
+	
 	function __importExportGetCols()
 	{
 		$cols = $this->model->getColumns();
@@ -161,14 +165,18 @@ trait Module_Import_Export_Trait
 		foreach ($data as $line => $row) {
 			$item = $this->model->createNewObject();
 			
-			//$item->setValues($this->filters);
+			if($this->import_add_filters)
+				$item->setValues($this->filters);
 
 			foreach ($header as $i => $fieldname) {
 				$val = isset($row[$i]) ? $row[$i] : '';
 				$val = str_replace($this->importexport_replacibles[1], $this->importexport_replacibles[0], $val);
 				$item->set($fieldname, $val);
 			}
-
+			
+			$this->fireEvent('BEFORE_ITEM_IMPORT', $item);
+			
+			
 			if (!$item->validate()) {
 				$error_rows[] = [$row, $item->errors];
 				$counts['fail'] ++;

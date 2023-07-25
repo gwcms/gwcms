@@ -14,7 +14,7 @@
 	
 	
 	{$do_toolbar_buttons = [addinlist]}	
-	{$do_toolbar_buttons_hidden=[modactions,types]}
+	{$do_toolbar_buttons_hidden=[modactions,types,exportdata,importdata]}
 	
 	
 	{$do_toolbar_buttons[]=dialogconf}
@@ -25,7 +25,7 @@
 	
 	
 	
-	{$dl_actions=[move,invert_active,edit,delete]}
+	{$dl_actions=[move,invert_active,edit,delete,clone]}
 
 	{$dl_output_filters=[
 		insert_time=>short_time, 

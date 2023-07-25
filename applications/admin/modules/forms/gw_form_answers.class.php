@@ -10,8 +10,11 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'owner_id']],
 		'user' => ['gw_composite_linked', ['object'=>'GW_User','relation_field'=>'user_id']],
 		'doc' => ['gw_composite_linked', ['object'=>'GW_Doc','relation_field'=>'doc_id']],
+		'user_signed'=>['gw_file', ['allowed_extensions' => 'pdf']],
 	];		
 
+	
+//	///'banktransfer_confirm' => ['gw_file', ['allowed_extensions'=>'pdf,jpg,png,gif']],
 	/*
 	function getFiles()
 	{

@@ -26,11 +26,12 @@ class GW_Classificator_Types extends GW_Composite_Data_Object
 	}	
 
 
-	function getChildOptions($active=true)
+	function getChildOptions($passive=false)
 	{
 		$opts = [];
 		foreach($this->childs as $child){
-			$opts[$child->key] = $child->title;
+			if($passive || $child->active==1)
+				$opts[$child->key] = $child->title;
 		}
 		
 		return $opts;

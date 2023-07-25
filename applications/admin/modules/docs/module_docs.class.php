@@ -264,7 +264,7 @@ class Module_Docs extends GW_Common_Module
 	}
 	
 	
-	function __sendInvitations($users, $answers)
+	function __sendInvitations($users, $answers, $args=[])
 	{
 		
 		$temmplateid = $answers['tpl'];
@@ -278,6 +278,8 @@ class Module_Docs extends GW_Common_Module
 		
 		$link2='/direct/docs/docs/item?id='.$item->key;
 		
+		$link3='';
+		
 		if(!isset($_GET['confirm'])){
 			echo "<style>.bodytest{ max-height:300px;overflow:scroll;background-color:white; padding: 10px;color:black }</style>";
 			echo "</pre>";
@@ -289,13 +291,22 @@ class Module_Docs extends GW_Common_Module
 			$opts['tpl']=$temmplateid;
 			$opts['to'] = $user->email;
 			$opts['ln'] = $user->use_lang ? $user->use_lang : 'lt';
-			$contractlink = $link1.$opts['ln'].$link2;
 			
 			
+			if(isset($args['authkey']))
+			{
+				$link3='&authkey='.$user->get('keyval/authkey').'&cid='.$user->id;
+			}
+			
+			
+			$contractlink = $link1.$opts['ln'].$link2.$link3;
+			
+			$contractlink = '<a href="'.$contractlink.'">'.GW::ln("/M/docs/CONTRACT_LINK_TEXT").'</a>';
 			
 			$opts['vars']=[
 			    'user'=>$user,
-			    'CONTRACT_LINK'=>$contractlink
+			    'CONTRACT_LINK'=>$contractlink,
+			    'PASS_RESET_LINK'=>$link1."/direct/users/users/passchange?email=".$user->email
 			];
 			
 			//d::dumpas($contractlink);
@@ -452,6 +463,7 @@ Petras Petraitis	124	outside	petras.petraitis@gmail.com	860054321</pre>
 			}
 			
 			$c->email = $row['email'];
+			$c->active = 1;
 			
 			if($row['phone']){
 				$c->phone = $row['phone'];
@@ -460,18 +472,23 @@ Petras Petraitis	124	outside	petras.petraitis@gmail.com	860054321</pre>
 			if($insert)
 			{
 				$c->insert();
+								
+				
 				$this->setMessage("New user ". json_encode($row));
 			}elseif($c->changed_fields){
 				$this->setMessage("User updated ". json_encode($row));
 				$c->updateChanged();
 				
 			}
+			
+			$c->set('keyval/authkey', GW_String_Helper::getRandString(35));
+			
 			$users[$c->id] = $c;
 		}
-			
 		
 		
-		$this->__sendInvitations($users, $answers);
+				
+		$this->__sendInvitations($users, $answers, ['authkey'=>1]);
 		
 		
 	}
