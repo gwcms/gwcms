@@ -183,4 +183,9 @@
 </div>
 
 *}
+
+{if $app->sess('navigate_after_auth')}
+	<p class='text-muted'><small>{GW::ln('/m/AFTER_AUTH_REDIRECT')} <a href="{$app->sess('navigate_after_auth')}" ><i class='fa fa-link'></i></a></small></p>
+{/if}
+
 {include "default_close.tpl"}

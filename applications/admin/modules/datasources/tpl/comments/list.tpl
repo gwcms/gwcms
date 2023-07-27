@@ -20,7 +20,7 @@
 
 	{$dl_output_filters=[insert_time=>short_time]}
 		
-	{$dl_smart_fields = [user_id,description]}
+	{$dl_smart_fields = [user_id,description,comment]}
 	
 	{$do_toolbar_buttons = []}
 	{$dl_inline_edit=1}

@@ -71,6 +71,8 @@
 		<i id="attachments"><lt>Prisegtukai</lt><en>Attachments</en></i>
 		<i id="form_id"><lt>Svetainės vartotojo forma</lt><en>Site user form</en></i>
 		<i id="site_info_trans">Svetainėje paaiškinamasis tekstas</i>
+		<i id="inform_email_field">El. pašto informacijai siųsti</i>
+		<i id="admin_emails">Admin. el. paštai</i>
 	</i>
 	
     <i id="FIELDS_SHORT">
@@ -152,6 +154,7 @@
 		<i id="features">
 			<i id="sign_again">Leisti pakartotinai pasirašyti</i>			
 			<i id="step_pick_per_contract">Kontraktui žingsnių komplekto parinkimas</i>
+			<i id="anonymous_access">Leisti be paskyros</i>
 		</i>
 	</i>
 

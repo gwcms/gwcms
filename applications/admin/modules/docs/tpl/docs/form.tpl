@@ -71,6 +71,15 @@
 
 {call e field="form_id" type=select_ajax modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT') empty_option=1}
 
+{if $m->feat(anonymous_access) && $item->form_id}
+	{call e field=inform_email_field type=select_ajax 
+		modpath="forms/forms/{$item->form_id}/elements" 
+		source_args=[form_id=>$form->id]
+		preload=1 options=[]
+		hidden_note="Send signed contract to user from filled details in form, pick email field. (press apply if form is just changed)"
+	}
+{/if}
+
 {call e field="doc_vars" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/PUSH_APPLY_TO_TAKE_EFFECT')}
 
 {if $item->id > 25}
@@ -163,6 +172,10 @@
 	{call e field=protected type=bool}
 {/if}
 
+
+
+
+
 {if $app->user->isRoot()}
 	{$tmpreadonly=false}
 {else}
@@ -224,6 +237,9 @@
 {/foreach}
 {$fields_config.cols=2}
 
+{assign var="comments" value=1 scope=global}
+
+
 
 </table><table class="gwTable gwcmsTableForm">
 {include "tools/form_components.tpl"}
@@ -234,5 +250,7 @@
 {call e field=owner_type readonly=$tmpreadonly}
 {call e field=owner_field readonly=$tmpreadonly}
 *}
+
+
 
 {include file="default_form_close.tpl"}

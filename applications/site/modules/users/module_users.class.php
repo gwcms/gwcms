@@ -432,7 +432,8 @@ class Module_Users extends GW_Public_Module
 	}
 	
 	function testIfJumpRequest()
-	{
+	{		
+		// userRequired() - public module
 		if($tmp = $this->app->sess('navigate_after_auth')){
 			$this->app->sess('navigate_after_auth', null);
 			header("Location: ".$tmp);
@@ -889,11 +890,16 @@ class Module_Users extends GW_Public_Module
 			//GW::db()->update('nat_product_history', ['auser_id = ?',$sort], ['user_id'=>$this->app->user->id]);
 		}
 		
+		
+		
+		
 		if(GW::s('SITE/HOOKS/AFTER_LOGIN')){
 			foreach(GW::s('SITE/HOOKS/AFTER_LOGIN') as $path){	
 				$this->app->subProcessPath($path);
 			}
 		}
+		
+		
 		
 		
 		if(isset($_GET['redirect_url'])){
@@ -904,6 +910,8 @@ class Module_Users extends GW_Public_Module
 
 			Header('Location: '.$url);			
 		}
+		
+		
 	}
 	
 
@@ -1049,7 +1057,12 @@ class Module_Users extends GW_Public_Module
 				$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
 				
 				
+				//d::dumpas('nublet');
+				
 				$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
+				
+				
+				$this->testIfJumpRequest();
 				
 				//kad nesilinkintu paskiau
 				unset($_SESSION['3rdAuthUser']);
@@ -1061,7 +1074,9 @@ class Module_Users extends GW_Public_Module
 					$this->app->sess('after_auth_nav', "");
 					header("Location: ".$uri);
 					exit;				
-				}				
+				}	
+				
+				
 				
 				
 				$this->app->jump('/');

@@ -68,5 +68,16 @@ class Module_Elements extends GW_Common_Module
 	}
 	
 	
+	function getOptionsCfg()
+	{
+	  
+		if($this->parent_id)
+			$opts['condition_add']=  GW_DB::prepare_query(['owner_id=?', $this->parent_id]);
+		
+		    
+		
+		return $opts;	
+	}		
+	
 	
 }

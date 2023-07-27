@@ -1,10 +1,9 @@
-{if $app->user && $app->user->is_admin}
+{if ($app->user && $app->user->is_admin) || GW::$devel_debug || GW::s('DEVELOPER_PRESENT')}
         <style>
                 .lnresulthighl{ background-color: brown !important; color: white !important; }
                 .transover{ background-color: blue !important; }
         </style>
         <script>
-		console.log('Hello {$app->user->title}');
                 var gw_lang_results_active = {intval($app->sess['lang-results-active'])};
                 var gw_ln = "{$app->ln}";
         </script>
@@ -22,5 +21,7 @@
 
 				*/
 </script>
-	
+
+
+		
 {/if}

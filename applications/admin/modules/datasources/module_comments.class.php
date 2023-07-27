@@ -76,7 +76,7 @@ class Module_Comments extends GW_Common_Module
 	
 	function canBeAccessed($item, $opts = array()) {
 		
-		if(!$item->id)
+		if(!$item || !$item->id)
 			return true;
 		
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
