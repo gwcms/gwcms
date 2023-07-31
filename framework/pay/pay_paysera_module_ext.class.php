@@ -76,6 +76,14 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		WebToPay::redirectToPayment($data);
 		exit;
 	}
+	
+	function log($msg){
+		
+		if(is_array($msg))
+			$msg= json_encode ($msg);
+		
+		file_put_contents(GW::s('DIR/TEMP').'paysera.log', date('Ymd H:i:s'). ' '.$msg."\n\n", FILE_APPEND);
+	}
 
 	function doPayseraAccept()
 	{
@@ -89,15 +97,28 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			    'sign_password' => $cfg->paysera_sign_password,
 			    'log' => GW::s('DIR/LOGS') . 'paysera.log'
 			));
+			
+			if($this->app->user && $this->app->user->isRoot()){
 
+			//	$this->confirm("<pre>".json_encode($response, JSON_PRETTY_PRINT).'</pre>');
+			}
+		
+			$this->log(['get_action'=>$_GET['action']] + (array)$response);
+			
 		} catch (Exception $e) {
+			
+			
 
 			//if($_GET['action']=='callback'){
 				
 			//}
 			$data = ['uri'=>$_SERVER['REQUEST_URI'], 'error'=>$e->getMessage(), '_POST'=>$_POST ?? []];
+			
+			
+			$this->log($data);
+			
 			$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
+			
 			$opt=[
 			    'subject'=>GW::s('PROJECT_NAME').' paysera error',
 			    'body'=>$data
@@ -137,8 +158,11 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 		$order = $this->getOrder(true);
 		
-		if(!$order)
-			d::dumpas("PAYSERA ERROR NO ORDERID RECEIVED");		
+		if(!$order){
+			$this->log($msg="PAYSERA ERROR NO ORDERID RECEIVED");
+			
+			d::dumpas($msg);	
+		}
 		//
 		if($action=='notify')
 		{	
@@ -156,7 +180,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
 			
-			file_put_contents(GW::s('DIR/TEMP').'lastpayment_approve_link', $url);
+			$this->log($url);
 			
 			
 			$log_entry->handler_state = 7;
@@ -175,6 +199,9 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			$out = ob_get_contents();
 			ob_end_clean();
 			if($out){
+				
+				$this->log("Unexpexted output: $out");
+				
 				$opt=[
 				    'subject'=>GW::s('PROJECT_NAME').' paysera error 2',
 				    'body'=>$data

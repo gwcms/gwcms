@@ -22,6 +22,10 @@ class GW_Img_Tool
 	
 	function process()
 	{
+		
+		ob_clean();
+
+		
 		$params=$_GET;
 		$item0 = new GW_Image();
 		
@@ -35,7 +39,6 @@ class GW_Img_Tool
 		}
 		
 		
-
 		$condition=$this->admin?'id=?':'`key`=?';
 
 		if(isset($_REQUEST['f']) && $_REQUEST['f'] == '1'){
@@ -89,7 +92,7 @@ class GW_Img_Tool
 			exit;
 		}	
 
-
+		
 		if(isset($_REQUEST['download'])){
 			header("Content-Type: application/x-download");	
 			header('Content-Disposition: attachment; filename="'.$item->get('original_filename').'";');

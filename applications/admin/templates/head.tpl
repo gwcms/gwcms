@@ -111,7 +111,7 @@
 				app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', 
 				base:'{$sys_base}', ln:'{$app->ln}', 
 				path:'{$app->path}', session_exp:{$session_exp|intval}, 
-				server_time:'{"F d, Y H:i:s"|date}',
+				server_time:'{date("F d, Y H:i:s")}',
 				wss:{if GW::s('WSS/USER')}true{else}false{/if},
 				user_id: {if $app->user}{$app->user->id}{else}0{/if}
 			});
