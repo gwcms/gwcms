@@ -1,7 +1,7 @@
 
 {if !$readonly}
 	&nbsp;
-	{$input_name_del=$input_name_pattern|sprintf:"delete_composite"}
+	{$input_name_del=sprintf($input_name_pattern,"delete_composite")}
 
 	
 	
