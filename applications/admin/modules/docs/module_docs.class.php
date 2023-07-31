@@ -299,13 +299,14 @@ class Module_Docs extends GW_Common_Module
 			}
 			
 			
-			$contractlink = $link1.$opts['ln'].$link2.$link3;
+			$contracturl = $link1.$opts['ln'].$link2.$link3;
 			
-			$contractlink = '<a href="'.$contractlink.'">'.GW::ln("/M/docs/CONTRACT_LINK_TEXT").'</a>';
+			$contractlink = '<a href="'.$contracturl.'">'.GW::ln("/M/docs/CONTRACT_LINK_TEXT").'</a>';
 			
 			$opts['vars']=[
 			    'user'=>$user,
 			    'CONTRACT_LINK'=>$contractlink,
+			    'CONTRACT_URL'=>$contracturl,
 			    'PASS_RESET_LINK'=>$link1."/direct/users/users/passchange?email=".$user->email
 			];
 			
