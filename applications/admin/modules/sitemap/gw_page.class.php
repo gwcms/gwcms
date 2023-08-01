@@ -290,7 +290,7 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		$langs = GW::$context->app->langs;
 		$list_found = [];
-
+		
 		
 		foreach($inputs as $key => $opts)
 		{
@@ -323,7 +323,7 @@ class GW_Page extends GW_i18n_Data_Object
 				
 			$vals[]= $value+$default;
 		}	
-
+		
 		$db->multi_insert('gw_sitemap_data', $vals, true);
 	}
 

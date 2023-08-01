@@ -348,7 +348,7 @@ class GW_Site_Application extends GW_Application
 	function userzoneAccess()
 	{
 		if(strpos($this->page->path, GW::s('SITE/USERZONE_PATH'))===0 && !$this->user)
-		{		
+		{					
 			$getargs=$_GET;
 			unset($getargs['url']);
 			

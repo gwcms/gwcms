@@ -1,8 +1,8 @@
-{if $type=='text'}
-	{*some fckin shit happens asked text type but sends here*}
+{*if $type=='text'}
+	{some fckin shit happens asked text type but sends here}
 	{include "elements/inputs/text.tpl"}
 	{php}return false;{/php}
-{/if}
+{/if*}
 	
 {if !isset($placeholder)}{$placeholder="Add tag"}{/if}
 
