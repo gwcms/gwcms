@@ -23,7 +23,7 @@
 	{$dl_smart_fields = [user_id,description,comment]}
 	
 	{$do_toolbar_buttons = []}
-	{$dl_inline_edit=1}
+	{$dl_inline_edit=0}
 	
 	
 	{$dl_actions=[edit,delete_ajax]}
