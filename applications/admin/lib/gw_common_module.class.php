@@ -1863,10 +1863,12 @@ class GW_Common_Module extends GW_Module
 			}
 		}
 		
+
+		
 		$this->setPlainMessage(sprintf(GW::l('/g/SELECTED_ITEMS_REMOVED'), $cnt), GW_MSG_SUCC);
 
 		
-		$this->jump($this->app->path_arr_parent['path']);
+		$this->jump();
 	}	
 	
 	

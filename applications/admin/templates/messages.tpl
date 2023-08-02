@@ -6,7 +6,7 @@
 
 	{foreach $tmp as $field => $msg}
 		{if $msg.float}
-			<script>require(['gwcms'],function(){ gw_adm_sys.notification({$msg|json_encode}) })</script>
+			<script>require(['gwcms'],function(){ gw_adm_sys.notification({json_encode($msg)}) })</script>
 		{else}
 		<div class="alert {$classes[$msg.type]}" data-objid="{$msg.obj_id}" {if $msg.title}title="{$msg.title|escape}"{/if}>
 			<button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>

@@ -189,7 +189,10 @@ class GW_Debug_Helper
 
 		$backtrace_request = "";
 	
-		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
+		
+		
+		
+		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || GW::s('DEVELOPER_PRESENT') )
 		{
 			
 			$erroridx = $error['erroridx'] ?? false;
@@ -270,7 +273,11 @@ class GW_Debug_Helper
 	static function fatalError(){
 		$err = error_get_last();
 		
+		
+		
 		if (! is_null($err) && in_array($err['type'], [E_USER_ERROR, E_ERROR, E_COMPILE_ERROR, E_CORE_ERROR])) {
+			
+			
 
 		    GW_Debug_Helper::processError($err);
 		    //$this->errrorHandler(-1, $err['message'], $err['file'], $err['line']);
@@ -362,7 +369,7 @@ class GW_Debug_Helper
 
 		
 		
-		if(GW::s('REPORT_ERRORS') && ($e['type'] == E_ERROR || $e['type']==E_USER_ERROR ) ){
+		if(GW::s('REPORT_ERRORS') && ($e['type'] == E_ERROR || $e['type']==E_USER_ERROR ) ){  // fatal
 
 			$reci = GW::s('REPORT_ERRORS');
 			$subj = $data['type_name']." under project: ".GW::s('PROJECT_NAME').' env: '.GW::s('PROJECT_ENVIRONMENT');
@@ -389,12 +396,16 @@ class GW_Debug_Helper
 				    'message'=>0,
 				]]);	
 			
+			
 			if($nosend)
 			{
 				self::outputToScreen($e);	
 				echo implode(' | ',$nosend);
 				//echo $body;
 			}else{
+				if(GW::s('DEVELOPER_PRESENT'))
+					self::outputToScreen($e);
+				
 				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];
 				GW_Mail_Helper::sendMail($opts);
 			}

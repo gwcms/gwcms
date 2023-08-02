@@ -7,10 +7,17 @@
 </div>
 
 
-<form id="changestatus"  action="{$smarty.server.REQUEST_URI}" method="post" >
+<form id="changestatus"  action="" method="post" >
 
 <input type="hidden" name="act" value="do:dialogremove" />
 <input type="hidden" name="ids" value="{$smarty.get.ids}" />
 
 Pasirinkta {$items_count}, patvirtinkite pasirinkto/ų įrašo/ų šalininimą
 </form>
+
+<script>
+	require(['gwcms'], function(){
+		$('#changestatus').attr('action', window.parent.location.href)
+		
+	});
+</script>
