@@ -15,10 +15,8 @@ include "config/main.php";
 GW_Autoload::init();
 
 //EXPERIMENTAL php8.1 labai daug erroru meto is po smarcio reiktu protingesnio varianto
-if(phpversion()<'8.0'){
-	register_shutdown_function(['GW_Debug_Helper','errorReport']);
-}
 
+register_shutdown_function(['GW_Debug_Helper','fatalError']);
 
 //siuncia klaida developeriui el pastu arba atvaizduoje ekrane jei pats dev prisijunges
 //

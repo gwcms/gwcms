@@ -877,6 +877,6 @@ class GW_Public_Module {
 			$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . implode('_',$this->module_path) . '.log');
 			$this->lgr->collect_messages = true;
 		}
-	}	
-	
+	}
+
 }

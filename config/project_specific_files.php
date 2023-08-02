@@ -28,6 +28,7 @@ applications/site/templates/admin_func.tpl
 applications/site/assets/js/gw.js
 applications/site/assets/js/admin.js
 applications/site/templates/messages.tpl
+vendor/smarty4/*
 ";
 //inc
 

@@ -189,12 +189,14 @@ class GW_Debug_Helper
 
 		$backtrace_request = "";
 	
-		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot())
+		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
 		{
 			
 			$erroridx = $error['erroridx'] ?? false;
 			
 			unset($_GET['url']);
+			
+			echo '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
 			
 			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
 				$url= Navigator::buildURI(false, ['backtrace_request'=>null]+$_GET);
@@ -264,11 +266,24 @@ class GW_Debug_Helper
 		/* Don't execute PHP internal error handler */
 		return true;
 	}
+	
+	static function fatalError(){
+		$err = error_get_last();
+		
+		if (! is_null($err) && in_array($err['type'], [E_USER_ERROR, E_ERROR, E_COMPILE_ERROR, E_CORE_ERROR])) {
+
+		    GW_Debug_Helper::processError($err);
+		    //$this->errrorHandler(-1, $err['message'], $err['file'], $err['line']);
+		}		
+	}
+	
 
 	static function openInNetBeans0()
 	{
 		$GLOBALS['netbeansinitrequest']=1;
 	}
+	
+	
 	
 	
 	
@@ -377,6 +392,7 @@ class GW_Debug_Helper
 			if($nosend)
 			{
 				self::outputToScreen($e);	
+				echo implode(' | ',$nosend);
 				//echo $body;
 			}else{
 				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];

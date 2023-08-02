@@ -309,7 +309,7 @@ class GW_Lang
 	
 	static $developLnResList = [];
 	
-	static function lnResult($key, &$result, $orig_val=false, $afteronly=false)
+	static function lnResult($key, &$result, $orig_val=false, $afteronly=false, &$opts=[])
 	{
 		if(!self::__highlightActive()) 
 			return $result;
@@ -331,6 +331,10 @@ class GW_Lang
 		if(!is_array($result))
 			self::$developLnResList[$key] = $ret_rich;
 		
+				
+		if($opts['nohl'] ?? false)
+			return $result;
+		
 		
 		return $ret;
 	}
@@ -346,7 +350,7 @@ class GW_Lang
 	 *	c - 1 lowercase, 2 - pirma didzioji
 	 *	l - linksniavimas
 	 *	asis - jei neegzistuoja grazins null
-	 *	
+	 *	nohl - no highligh - jei svarbu kad vertimas nesikeistu vertimo isryskinimo rezime
 	 */
 	static function ln($fullkey, $opts=[])
 	{		
@@ -429,7 +433,7 @@ class GW_Lang
 				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
 				GW_Translation::singleton()->store($module, $key, $key, GW_Lang::$ln);
 			//}
-			return self::lnResult($orig_key, $orig_key, $orig_val ?? false);
+			return self::lnResult($orig_key, $orig_key, $orig_val ?? false, $opts);
 		}
 		
 		/*
@@ -447,7 +451,7 @@ class GW_Lang
 			
 		self::optProc($vr, $opts, $orig_val);		
 		
-		return self::lnResult($orig_key, $vr, $orig_val);
+		return self::lnResult($orig_key, $vr, $orig_val, $opts);
 	}
 	
 	static function optProc(&$vr, &$opts, &$orig_val=false)
