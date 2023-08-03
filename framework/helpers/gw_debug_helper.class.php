@@ -192,6 +192,7 @@ class GW_Debug_Helper
 		
 		
 		
+		
 		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || GW::s('DEVELOPER_PRESENT') )
 		{
 			
@@ -212,23 +213,26 @@ class GW_Debug_Helper
 
 		}
 		
+		
+		
 		if(self::isHTMLerror()){
 			$errfile = self::envRootSwitch($errfile);
 			$errstr = "<span class='openfile1' data-file='$errfile' data-line='$errline'><b>".self::FriendlyErrorType($errno)."</b> $file_short on line $errline: $errstr</span> $backtrace_request<br/>";
+			echo "<pre>$errstr</pre>";
 		}else{
 			$errstr = self::FriendlyErrorType($errno)." | $file_short on line $errline: $errstr\n";
+			echo $errstr;
 		}
 			
 		
 					
-						
+					
 		//$errstr .= " (uri: {$_SERVER['REQUEST_URI']})";
-		echo $errstr;
-		
+			
 		if(GW::$context->app && GW::$context->app->user && GW::$context->app->user->isRoot())
 		{			
 			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
-				echo d::fbacktrace(debug_backtrace(), false, false).'<br>';
+				echo '<pre>'. d::fbacktrace(debug_backtrace(), false, false).'</pre><br>';
 			}
 		}		
 				
