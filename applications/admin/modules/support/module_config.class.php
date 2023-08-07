@@ -39,5 +39,3 @@ class Module_Config extends GW_Common_Module
 	}
 
 }
-
-?>

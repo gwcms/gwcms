@@ -134,4 +134,3 @@ class Module_Modules extends GW_Common_Module
 		
 }
 
-?>

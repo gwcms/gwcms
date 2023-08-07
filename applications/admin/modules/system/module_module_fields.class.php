@@ -181,5 +181,3 @@ class Module_Module_Fields extends GW_Common_Module
 	
 
 }
-
-?>

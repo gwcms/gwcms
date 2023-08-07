@@ -214,4 +214,3 @@ class PEAR_Autoloader extends PEAR
 
 overload("PEAR_Autoloader");
 
-?>

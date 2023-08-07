@@ -208,4 +208,3 @@ class Module_Page_Views extends GW_Common_Module
 	
 }
 
-?>

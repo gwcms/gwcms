@@ -23,4 +23,3 @@ class Module_Default extends GW_Module
 	
 }
 
-?>

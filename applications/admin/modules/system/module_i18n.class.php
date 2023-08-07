@@ -98,4 +98,3 @@ class Module_i18n extends GW_Common_Module
 	
 }
 
-?>

@@ -60,4 +60,4 @@ class Module_DemoInputs extends GW_Common_Module
 
 }
 
-?>
+

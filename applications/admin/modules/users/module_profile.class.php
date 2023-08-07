@@ -173,4 +173,4 @@ class Module_Profile extends GW_Module
 	}
 }
 
-?>
+
