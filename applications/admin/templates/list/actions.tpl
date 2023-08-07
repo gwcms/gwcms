@@ -25,7 +25,8 @@
 {/strip}{/function}
 
 {function list_item_action_m}
-	{if $url}
+	{if $url && is_array($url)}
+
 		{if $url_return_to}
 			{$url.1.return_to=$url_return_to}
 		{/if}			
@@ -36,7 +37,7 @@
 		{/if}
 		
 		{if $autocaption && !$caption}
-			{$searchkey=$url.1.act|default:basename($url.0)}
+			{$searchkey=($url.1.act)|default:basename($url.0)}
 			{call list_item_title assign=caption}
 		{/if}
 	{/if}

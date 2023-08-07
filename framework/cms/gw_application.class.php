@@ -366,7 +366,7 @@ class GW_Application
 		return array_intersect_key($_GET, $this->carry_params);
 	}
 
-	function jump($path = false, $params = Array())
+	function jump($path = false, $params = Array(), $opts=[])
 	{		
 		if (!is_array($params))
 			backtrace();
@@ -374,6 +374,8 @@ class GW_Application
 		$url=self::buildUri($path, $params, ['carry_params' => 1]);
 		
 		//d::dumpas($url);
+		if($opts['return_url'] ?? false)
+			return $url;
 		
 		Navigator::jump($url);
 	}

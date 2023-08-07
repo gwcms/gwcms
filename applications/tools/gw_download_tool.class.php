@@ -22,6 +22,8 @@ class GW_Download_Tool
 	
 	function process()
 	{
+		ob_clean();
+		
 		$params=$_GET;
 		$item0 = new GW_File();
 		

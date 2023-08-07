@@ -21,12 +21,18 @@ class GW_Site_Application extends GW_Application
 		//kol kas atjungiam PIECES KOL TVARKOM ant prancuzu konkurso
 	
 		gw::s("LANGS",array_merge(gw::s("LANGS"),GW::s('i18nExt')));;
+		
+		
 
 		if(in_array($this->ln, GW::s('i18nExt'))){
 			$this->i18next = array_flip(GW::s('i18nExt'));
 
 			$this->initI18nSchema();
+			
+			$this->initSite(); //again// previuosly not loaded i18ext
 		}
+		
+		
 	}
 	
 	function init()

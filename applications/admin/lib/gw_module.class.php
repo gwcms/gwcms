@@ -458,6 +458,16 @@ class GW_Module
 			exit;
 		}
 		
+		
+		
+		if($debug = ($this->app->sess['debug'] ?? false)){
+			$url = $this->app->jump($path, $params, ['return_url'=>1]);
+			
+			d::ldump("<span style='color:red'>Youre in debug mode so jump disabled click manualy jump link here: <a href='$url'>$url</a></span>");
+			
+			return false;
+		}
+		
 		$this->app->jump($path, $params);
 	}
 	
