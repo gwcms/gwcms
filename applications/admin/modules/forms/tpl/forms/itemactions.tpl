@@ -17,15 +17,18 @@
 
 	
 	
-{*
+
 <li class="divider"></li>
 
 
-{dl_actions_delete shift_button=1}
 
-*}
+
 
 
 {list_item_action_m url=["`$item->id`", [act=>doClone3, id=>$item->id]] iconclass="fa fa-files-o text-mint" caption="Sukurti kopiją su elementais"}
 {list_item_action_m url=["`$item->id`/form",[id=>$item->id]] iconclass="fa fa-pencil-square-o" caption=GW::l('/g/VIEWS/form')}	
-	
+
+
+
+
+{dl_actions_delete shift_button=1}

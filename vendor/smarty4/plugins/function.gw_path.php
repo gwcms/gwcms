@@ -20,11 +20,11 @@
 
 function smarty_function_gw_path($params, &$smarty)
 {
-	$app = $smarty->getVariable('app')->value;
+	
+	$app = GW::$context->app;
 		
 	return $app->fh()->gw_path($params);
 }
 
 /* vim: set expandtab: */
 
-?>

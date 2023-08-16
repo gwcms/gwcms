@@ -71,4 +71,9 @@
 	<i id="DATE">
 		<i id="INVALID_DATE">Patikrinkite datos įvestį</i>
 	</i>
+	
+	<i id="ITEM_IS_PROTECTED_CANT_REMOVE">
+		<lt>Įrašas apsaugotas, šalinimas negalimas</lt>
+		<en>ITEM_IS_PROTECTED_CANT_REMOVE</en>
+	</i>
 </xml>

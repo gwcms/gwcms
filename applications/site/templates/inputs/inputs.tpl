@@ -106,6 +106,7 @@
 				</label>
 				</div>
 				{if $newline}<br>{/if}
+				{if $separator}{$separator}{/if}
 			{/foreach}
 
 			{if $onchangeFunc}

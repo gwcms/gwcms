@@ -1631,10 +1631,9 @@ class GW_Common_Module extends GW_Module
 		$requestAccess = $opts['access'] ?? GW_PERM_WRITE;
 		
 		
-		if($debug){
-			
 		
-			
+		
+		if($debug){			
 			$info =[
 			    'access_level'=>$this->access_level,
 			    'request'=>$requestAccess,
@@ -1652,7 +1651,8 @@ class GW_Common_Module extends GW_Module
 					//1-read, 2-write check //admin/config/main.php for permission list
 					$info['item_has_own_permissions_test'] = $availAccess & $requestAccess ? 'PASS':'DENY';
 				}
-					
+				
+
 				
 			}else{
 				$info['canCreateNew'] = $this->canCreateNew? 'Y':'N';
@@ -1677,10 +1677,17 @@ class GW_Common_Module extends GW_Module
 			
 			
 			
-			d::ldump($info);
+			if($item && $item->protected &&  $requestAccess == GW_PERM_REMOVE){
+				$info['protected_item_cant_remove']=1;
+			}
 		}
 		
-		
+		if($item && $item->protected &&  $requestAccess == GW_PERM_REMOVE){
+			//kai bandoma suzinoti grazinti tiesiog false
+			//kai bandoma ivykdyti galetu ir error mesti
+			//$this->setError(GW::l('/G/validation/ITEM_IS_PROTECTED_CANT_REMOVE'));
+			return false;
+		}		
 		
 		//permit new item creation
 		if(($opts['action'] ?? false)=='create_new' && $this->canCreateNew){

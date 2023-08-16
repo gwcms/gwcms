@@ -27,7 +27,7 @@ function smarty_function_gw_link($params, &$smarty)
 	//smarty4
 	$app = $smarty->getTemplateVars('app');
 	
-	
+
 	
 	return $app->fh()->gw_link($params);
 }
