@@ -55,6 +55,32 @@ class Module_Classificator_Types  extends GW_Common_Module
 		
 		return $opts;	
 	}
+	
+	
+	function __eventBeforeClone($ctx)
+	{		
+		$this->incrementSetUniqueField($ctx, 'title');
+		$this->incrementSetUniqueField($ctx, 'key');
+	}
+		
+	function __eventAfterClone($ctx)
+	{
+		$source = $ctx['src'];
+		$dest = $ctx['dst'];
+		
+		$cnt = 0;
+		foreach($source->childs as $subitem){
+			$subvals = $subitem->toArray();
+			unset($subvals['id']);
+			
+			$subitemnew = $subitem->createNewObject($subvals);
+			$subitemnew->type = $dest->id;
+			$subitemnew->insert();
+			$cnt ++;
+		}
+		
+		$this->setMessage("Subelements copy count: $cnt");
+	}	
 }
 
 
