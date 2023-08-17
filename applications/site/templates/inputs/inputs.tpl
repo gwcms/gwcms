@@ -70,7 +70,7 @@
                     <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
                       <i class="fa" data-check-icon=""></i>
                     </span>
-                    {$title} {if $note}<i>({$note})</i>{/if} {if $note_raw}{$note_raw}{/if} {if $help}<i class="fa fa-question-circle" onclick="alert('{$help|escape:js}')"></i>{/if} 
+                    {$title} {if $note}<i>({$note})</i>{/if} {if $note_raw}{$note_raw}{/if} {if $help}<i class="fa fa-question-circle" onclick="alert('{$help|escape:javascript}')"></i>{/if} 
 		    
 		    {if $longtext}
 			 <div style="padding:10px;border:1px solid #eee;float:right;margin-right:10px;"> {$longtext} </div>
