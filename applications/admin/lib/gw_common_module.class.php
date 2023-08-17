@@ -1680,6 +1680,8 @@ class GW_Common_Module extends GW_Module
 			if($item && $item->protected &&  $requestAccess == GW_PERM_REMOVE){
 				$info['protected_item_cant_remove']=1;
 			}
+			
+			d::ldump($info);
 		}
 		
 		if($item && $item->protected &&  $requestAccess == GW_PERM_REMOVE){
