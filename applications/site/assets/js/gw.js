@@ -184,11 +184,16 @@ var GW = {
 				event.preventDefault();
 			}
 		})
-	}
+	},
 		
 	
 	
-
+	scrollTo: function(elmquery){
+		console.log($(elmquery).offset().top);
+		$([document.documentElement, document.body]).animate({
+						scrollTop: $(elmquery).offset().top-100
+		}, 1000);		
+	}
 }
 
 var gwcms = () => GW;
@@ -473,3 +478,4 @@ $.fn.isInViewport = function() {
 
     return elementBottom > viewportTop && elementTop < viewportBottom;
 };	
+
