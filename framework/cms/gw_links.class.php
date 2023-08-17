@@ -179,8 +179,9 @@ class GW_Links implements GW_Composite_Slave
 			$add = array_diff($newbinds, $oldbinds);
 			$remove = array_diff($oldbinds, $newbinds);
 			
-			//d::dumpas([$add,$remove]);
-
+			
+			//d::ldump(['new'=>$newbinds, 'old'=>$oldbinds, 'add'=>$add, 'remove'=>$remove]);
+			
 			$this->removeBinds($remove);
 			$this->addBinds($add);
 			
