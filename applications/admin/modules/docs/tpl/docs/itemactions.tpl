@@ -23,8 +23,9 @@
 {/if}
 
 
-{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" confirm=1 caption="Suvesti į Itax"}
-
+{if $m->feat(itax)}
+	{list_item_action_m url=[false,[act=>doItaxSync,id=>$item->id]] iconclass="fa fa-cloud-upload" confirm=1 caption="Suvesti į Itax"}
+{/if}
 
 {list_item_action_m url=[false,[act=>doSendInvitations,id=>$item->id]] iconclass="fa fa-envelope-o" caption="Siųsti kvietimus pasirašyti"}
 
@@ -40,3 +41,6 @@
 
 {list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 caption=GW::l('/g/REMOVE') shift_button=1}
 *}
+
+
+{dl_actions_delete shift_button=1}
