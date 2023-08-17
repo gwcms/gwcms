@@ -17,7 +17,7 @@ class Module_Projects extends GW_Common_Module
 			]
 		);
 		
-		$cfg['filters']['project_id'] = ['type'=>'select','options'=>$this->options['project_id']];
+		//$cfg['filters']['project_id'] = ['type'=>'select','options'=>$this->options['project_id']];
 			
 			
 		return $cfg;
