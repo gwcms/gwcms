@@ -162,6 +162,24 @@ class GW_html2pdf_Helper
 		} else {
 			return $result;
 		}
+	}
+
+
+	static function pdfConvert2Html($file)
+	{
+		$tmpfile = 'wizzattach'.time().rand(1,100000);
+		shell_exec($cmd = "cd /tmp && pdftohtml -c -s -i -hidden '$file' $tmpfile");
+		
+		$tmpfile ="/tmp/$tmpfile-html.html";
+		if(file_exists("$tmpfile"))
+		{
+			$html = file_get_contents($tmpfile);
+						
+			unlink($tmpfile);
+			
+			return $html;
+		}
+			
 	}	
 }
 
