@@ -40,7 +40,7 @@
 	   
 	   {for $i=1 to 5}
 		   {$date = "{$year}-{GW_String_Helper::zero($month)}-01"}
-			   {$title="{GW::l("/G/date/MONTHS/{$month|intval}")}"}
+			   {$title="{GW::l("/G/date/MONTHS/{intval($month)}")}"}
 			   
 		'{$year} {$title}':["{$date}","{date('Y-m-d',strtotime("last day of {$date}"))}"],	   
 			

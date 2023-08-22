@@ -39,7 +39,7 @@ class GW_Image_Manipulation
 				break;
 
 			default:
-				die("Error: unsupported image format");
+				die("Error: unsupported image format type: ".var_dump($type));
 		}
 	}
 

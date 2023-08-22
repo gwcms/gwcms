@@ -70,7 +70,7 @@
 	{foreach $fields as $id => $enabled}
 		<li>
 			<input type="checkbox" {if $enabled}checked{/if} />
-			<input type="hidden" name="fields[{$id}]" value="{$enabled|intval}">
+			<input type="hidden" name="fields[{$id}]" value="{intval($enabled)}">
 			<span>{$app->fh()->fieldTitle($id)}</span>
 		</li>
 	{/foreach}
@@ -89,7 +89,7 @@
 	{foreach $order_fields as $id => $info}
 		<li class="orderrow">
 			<input class="orderCheckbox" type="checkbox" {if $info.enabled}checked{/if} />
-			<input type="hidden" name="order_fields[{$id}][enabled]" value="{$info.enabled|intval}">
+			<input type="hidden" name="order_fields[{$id}][enabled]" value="{intval($info.enabled)}">
 			<input class="dirdrop" type="hidden" name="order_fields[{$id}][dir]" value="{$info.dir|default:'ASC'}">
 			<span>
 				<a href="#" class="dirchange">
