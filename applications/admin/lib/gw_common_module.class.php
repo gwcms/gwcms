@@ -1094,10 +1094,18 @@ class GW_Common_Module extends GW_Module
 			if ($view->calculate) {
 				$key = $this->app->page->path . '::views::' . $view->id;
 
-				if (!($view->count_result = GW_Session_Cache::get($key))) {
+				if (!($view->count_result = GW_Session_Cache::get($key)) || isset($_GET['recalc_views'])) {
 					
-					try{	
-						$view->count_result = $tmp = $this->model->countExt($view->condition);
+					try{							
+						$filtercond = GW_DB::prepare_query(GW_DB::buidConditions($this->filters, ' AND '));
+						
+						//d::dumpas($filtercond);
+						
+						$cond = GW_DB::mergeConditions($filtercond, $view->condition, "AND");
+						//d::dumpas($cond);
+						
+						
+						$view->count_result = $tmp = $this->model->countExt($cond);
 					} catch (Exception $e) {
 						$this->setError("Can't calculate '$view->title' {$e->getMessage()}");
 						$view->count_result = $tmp = "!Err";
