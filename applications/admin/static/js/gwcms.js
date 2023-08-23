@@ -770,10 +770,17 @@ var gwcms = {
 		if(conf.buttons){
 			dconf.buttons = conf.buttons;
 		}else{
-			dconf.buttons[translations.CLOSE] = function () {
-				$(this).dialog("close");
-				$('#' + id).dialog('destroy');
-			}			
+			try{
+				if(!dconf.buttons)
+					dconf.buttons = {};
+				
+				dconf.buttons[translations.CLOSE] = function () {
+					$(this).dialog("close");
+					$('#' + id).dialog('destroy');
+				}
+			}catch(err){
+				console.log(err)
+			}
 		}		
 
 		$.extend(dconf, conf);
