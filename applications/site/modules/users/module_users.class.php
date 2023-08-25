@@ -90,6 +90,7 @@ class Module_Users extends GW_Public_Module
 	{
 		if(isset($_GET['after_auth_nav'])){
 			$this->app->sess('after_auth_nav', $_GET['after_auth_nav']);
+			$this->app->sess('navigate_after_auth', $_GET['after_auth_nav']);
 		}		
 		
 		//$this->tpl_vars['breadcrumbs_attach'] = [['title'=>GW::ln('/m/VIEWS/login')]];

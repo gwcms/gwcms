@@ -107,7 +107,11 @@ class Module_Relays extends GW_Common_Module
 		$schedule = file_get_contents($this->cfg->schedule_source);
 		Navigator::getUri();
 		
-		$resp = GW_Http_Agent::singleton()->postRequest($this->cfg->endpoint.'set.php?run=1', ['schedule'=>$schedule]);
+		//radau kad is svetaines kas penkias minutes siuncia atnaujinima ir paciame kompiuteryje vyksta kas minute atnaujinimas tai pasalinau ta kur is svetaines siuncia
+		//pagalvojau kad galimai toks galejo but sutapimas kad vienu metu tapati daro ir susipjauna			
+		//$resp = GW_Http_Agent::singleton()->postRequest($this->cfg->endpoint.'set.php?run=1', ['schedule'=>$schedule]);
+		
+		$resp = GW_Http_Agent::singleton()->postRequest($this->cfg->endpoint.'set.php', ['schedule'=>$schedule]);
 		
 		
 		d::ldump($resp);
