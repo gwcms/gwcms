@@ -86,7 +86,7 @@ define('GW_PERM_REMOVE',8);
 
 GW::s('OFFICE_IP_ADDR', '84.15.236.87');
 
- GW::s('IMAGE_THUMB_FORMAT', 'webp');
+ GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
 
 
 if(isset($_SERVER['REMOTE_ADDR'])){

@@ -17,7 +17,7 @@ class GW_Image_Resize_Helper
 		    '__' . pathinfo($filename, PATHINFO_FILENAME) . '__' .
 		    (isset($params['method']) ? $params['method'] : '') .
 			md5(json_encode($params)).
-		    '.jpg'; // use jpg extension to all types
+		    '.webp'; // use jpg extension to all types
 	}
 
 	static function formatResult(&$image_obj, $file)
@@ -47,8 +47,8 @@ class GW_Image_Resize_Helper
 	 */
 	static function validateSaveFormats($str)
 	{
-		$formats = Array('jpg' => 1, 'png' => 1, 'gif' => 1);
-		$default = 'jpg';
+		$formats = Array('jpg' => 1, 'png' => 1, 'gif' => 1, 'webp'=>1);
+		$default = 'webp';
 
 		return isset($formats[$str]) ? $str : $default;
 	}
@@ -73,6 +73,10 @@ class GW_Image_Resize_Helper
 
 	static function resize(&$item, $params, $destination)
 	{
+		
+		if(isset($_GET['debug']))
+			d::ldump($params);
+		
 		self::checkSaveFormat($params);
 
 		if (

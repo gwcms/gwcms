@@ -83,7 +83,7 @@ class GW_Img_Tool
 		
 		if(isset($params['debug']))
 		{
-			dump(Array
+			d::dumpas(Array
 			(
 				'params' => $params,
 				'item' => $item,

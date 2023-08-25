@@ -26,17 +26,22 @@ class GW_Image_Manipulation
 			case 1:
 				$this->im = ImageCreateFromGIF($this->file);
 				$this->type = "gif";
-				break;
+			break;
 
 			case 2:
 				$this->im = ImageCreateFromJPEG($this->file);
 				$this->type = "jpg";
-				break;
+			break;
 
 			case 3:
 				$this->im = ImageCreateFromPNG($this->file);
 				$this->type = "png";
-				break;
+			break;
+			case 15:
+				$this->im = ImageCreateFromWEBP($this->file);
+				$this->type = "webp";
+			break;				
+			
 
 			default:
 				die("Error: unsupported image format type: ".var_dump($type));

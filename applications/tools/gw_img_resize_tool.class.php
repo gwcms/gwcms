@@ -166,7 +166,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		}
 				
 
-		$params['save_format']='auto';
+		$params['save_format']=GW::s('IMAGE_THUMB_FORMAT');
 
 		$im->save($resized, $params['save_format']);
 		$im->clean();
