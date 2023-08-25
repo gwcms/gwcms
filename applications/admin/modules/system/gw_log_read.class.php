@@ -3,7 +3,7 @@
 
 class GW_Log_Read
 {
-	function cutXStr(&$haystack,$needle,$x)
+	static function cutXStr(&$haystack,$needle,$x)
 	{
 		$pos=0;$cnt=0;	
 		while( $cnt < $x && ($pos=strpos($haystack,$needle,$pos)) !==false ){$pos++;$cnt++;}	
@@ -11,7 +11,7 @@ class GW_Log_Read
 	}
 	
 	
-	function linesRead($file, $lines, &$fsize=0)
+	static function linesRead($file, $lines, &$fsize=0)
 	{
 		$f=fopen($file,'r');
 		if(!$f)return Array();
@@ -49,7 +49,7 @@ class GW_Log_Read
 		return str_replace("\r",'',implode('',array_reverse($buff1)));
 	}
 	
-	function offsetRead($file, &$offset)
+	static function offsetRead($file, &$offset)
 	{
 		$fsize=filesize($file);
 	

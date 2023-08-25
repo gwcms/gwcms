@@ -51,7 +51,7 @@ define('GW_GENERIC_ERROR', 100);
 GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
-GW::s('GW_CMS_VERSION', '4.0');
+GW::s('GW_CMS_VERSION', '4.1');
 GW::s('GW_LANG_SEL_BY_GEOIP',0);
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
@@ -85,6 +85,8 @@ define('GW_PERM_OPTIONS',4);
 define('GW_PERM_REMOVE',8);
 
 GW::s('OFFICE_IP_ADDR', '84.15.236.87');
+
+ GW::s('IMAGE_THUMB_FORMAT', 'webp');
 
 
 if(isset($_SERVER['REMOTE_ADDR'])){

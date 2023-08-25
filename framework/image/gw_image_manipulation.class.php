@@ -239,14 +239,25 @@ class GW_Image_Manipulation
 			$type = $this->type;
 
 
+		
+		
+		
 		switch ($type) {
-			case 'png': imagepng($this->im, $file);
-				break;
-			case 'jpg': imagejpeg($this->im, $file, 85);
-				break;
-			case 'gif': imagegif($this->im, $file);
-				break;
+			case 'webp':
+				imagewebp($this->im, $file);
+			break;
+			case 'png': 
+				imagepng($this->im, $file);
+			break;
+			case 'jpg':
+				imagejpeg($this->im, $file, 85);
+			break;
+			case 'gif': 
+				imagegif($this->im, $file);
+			break;
 		}
+		
+		
 
 		@chmod($file, $file_mode);
 
