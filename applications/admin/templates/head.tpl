@@ -108,7 +108,7 @@
 		
 		require(['gwcms'], function(){
 			$.extend(GW, { 
-				app_name: '{$app->app_name|strtolower}', app_root: '{$app_root}', app_base:'{$app_base}', 
+				app_name: '{strtolower($app->app_name)}', app_root: '{$app_root}', app_base:'{$app_base}', 
 				base:'{$sys_base}', ln:'{$app->ln}', 
 				path:'{$app->path}', session_exp:{intval($session_exp)}, 
 				server_time:'{date("F d, Y H:i:s")}',

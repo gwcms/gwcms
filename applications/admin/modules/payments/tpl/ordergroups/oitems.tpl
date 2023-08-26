@@ -98,7 +98,7 @@
 					{if $order->pay_subtype}
 						{$order->pay_subtype_human}
 					{else}
-						{GW::ln("/M/orders/PAY_METHOD_{$order->pay_type|strtoupper}")}
+						{GW::ln("/M/orders/PAY_METHOD_{strtoupper($order->pay_type)}")}
 					{/if}
 						
 								{if $order->pay_details}

@@ -116,7 +116,7 @@
 	
 	{function dl_cell_pay_type}
 		{if $item->pay_type}
-			{GW::ln("/M/orders/PAY_METHOD_{$item->pay_type|strtoupper}")} {if $item->pay_subtype}/ {$item->pay_subtype_human}{/if}
+			{GW::ln("/M/orders/PAY_METHOD_{strtoupper($item->pay_type)}")} {if $item->pay_subtype}/ {$item->pay_subtype_human}{/if}
 		{else}
 			-
 		{/if}
