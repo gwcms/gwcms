@@ -240,8 +240,6 @@ class GW_Image_Manipulation
 	{
 		// if ( $this->type == "gif" ) $this->convert("png");
 		
-
-
 		if ($type == 'auto')
 			$type = $this->type;
 
