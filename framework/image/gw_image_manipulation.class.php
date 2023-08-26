@@ -239,6 +239,8 @@ class GW_Image_Manipulation
 	function save($file, $type = 'auto', $file_mode = 0666)
 	{
 		// if ( $this->type == "gif" ) $this->convert("png");
+		
+
 
 		if ($type == 'auto')
 			$type = $this->type;
@@ -249,6 +251,10 @@ class GW_Image_Manipulation
 		
 		switch ($type) {
 			case 'webp':
+				
+				if($_GET['debug_type']??false)
+					d::dumpas(['type'=>$type]);				
+				
 				imagewebp($this->im, $file);
 			break;
 			case 'png': 

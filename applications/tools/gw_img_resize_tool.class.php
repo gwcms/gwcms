@@ -140,7 +140,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			die('Failed to locate file: '.$file);
 
 
-		$resized = $cachedir.md5($file).'.'.md5(serialize($_GET)).'.'.(filesize($file));
+		$resized = $cachedir.md5($file).'.'.md5(serialize($_GET)).'.'.(filesize($file)).'.webp';
 
 		//check if is cached
 
@@ -150,6 +150,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			exit;
 		}
 		
+		$params['save_format']=GW::s('IMAGE_THUMB_FORMAT');
 
 		//doresize & output file
 		$im = new GW_Image_Manipulation($file);
@@ -166,10 +167,13 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		}
 				
 
-		$params['save_format']=GW::s('IMAGE_THUMB_FORMAT');
+		
 
 		$im->save($resized, $params['save_format']);
 		$im->clean();
+		
+		if($_GET['debug']??false)
+			d::dumpas($resized);
 
 
 		if(file_exists($resized))
