@@ -225,7 +225,7 @@
 					{if $order->pay_subtype}
 						{$order->pay_subtype_human}
 					{else}
-						{GW::ln("/m/PAY_METHOD_{$order->pay_type|strtoupper}")}
+						{GW::ln("/m/PAY_METHOD_{strtoupper($order->pay_type)}")}
 					{/if}
 				</span>
 			</div>			

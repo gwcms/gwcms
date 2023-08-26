@@ -70,7 +70,7 @@
 			{elseif $type=='select'}
 				{*Add empty option*}
 
-				{$options=GW::l('/g/FILTER_EMPTY_OPTION')+$options|default:[]}
+				{$options=GW::l('/g/FILTER_EMPTY_OPTION')+(array)$options|default:[]}
 			{/if}
 
 			{if $smarty.get.type}
