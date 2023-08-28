@@ -43,7 +43,7 @@ class GW_Doc extends GW_i18n_Data_Object
 		parent::validate();
 		
 		
-		$config= is_array($this->config) ? $this->config : json_decode($this->config);
+		$config= is_array($this->config) || is_object($this->config) ? $this->config : json_decode($this->config);
 		
 		if(!isset($config->no_idname)){
 			if($this->count(Array('idname=? AND id!=?', $this->idname, $this->id)))

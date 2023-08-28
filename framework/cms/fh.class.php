@@ -15,7 +15,7 @@ class FH
 	static function &getTplVars(&$template_obj, $vars_arr)
 	{
 		$res = Array();
-
+		
 		if(GW::s('SMARTY_VERSION')>=4){
 			return $smarty->getTemplateVars();
 		}
