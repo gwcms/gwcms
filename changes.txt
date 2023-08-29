@@ -49,3 +49,10 @@ compatability with php82
                                 $output = "{$modifier}({$params})";
 				   * 
 				   */
+
+
+4.1
+	WEBP paveiksliukai,
+	esant poreikiui galima gryžti prie ankstesnio veikimo prie paveiksliuko url dadedant save_format=auto argumenta (html2pdf buvo butina neprisitaike dar)
+
+	chmod -R a+rwX vendor/dompdf/dompdf/lib/fonts/ pasirodo nori buti writable direktorija

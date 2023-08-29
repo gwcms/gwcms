@@ -90,7 +90,10 @@ class GW_Image_Resize_Helper
 		$im = new GW_Image_Manipulation($file);
 		$im->resize($params);
 
-		$params['save_format'] = GW::s('IMAGE_THUMB_FORMAT');
+		
+		
+		if(!isset($params['save_format']))
+			$params['save_format'] = GW::s('IMAGE_THUMB_FORMAT');
 
 		$im->save($destination, $params['save_format']);
 		$im->clean();

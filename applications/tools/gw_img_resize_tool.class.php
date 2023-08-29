@@ -140,7 +140,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 			die('Failed to locate file: '.$file);
 
 
-		$resized = $cachedir.md5($file).'.'.md5(serialize($_GET)).'.'.(filesize($file)).'.webp';
+		$resized = $cachedir.md5($file).'.'.md5(serialize($_GET)).'.'.(filesize($file));
 
 		//check if is cached
 
@@ -151,6 +151,10 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		}
 		
 		$params['save_format']=GW::s('IMAGE_THUMB_FORMAT');
+		//pdf converter still have issues with webp
+		if(isset($_GET['save_format'])){
+			$params['save_format'] = $_GET['save_format'];
+		}
 
 		//doresize & output file
 		$im = new GW_Image_Manipulation($file);

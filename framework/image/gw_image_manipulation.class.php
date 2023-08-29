@@ -37,7 +37,7 @@ class GW_Image_Manipulation
 				$this->im = ImageCreateFromPNG($this->file);
 				$this->type = "png";
 			break;
-			case 15:
+			case 18:
 				$this->im = ImageCreateFromWEBP($this->file);
 				$this->type = "webp";
 			break;				

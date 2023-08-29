@@ -76,6 +76,10 @@ class GW_Img_Tool
 						
 			$item->resize($params);
 		}
+		
+		if(isset($_GET['save_format'])){
+			$params['save_format'] = $_GET['save_format'];
+		}		
 
 
 		GW_Cache_Control::setExpires('+24 hour');
