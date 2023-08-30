@@ -10,6 +10,8 @@ class Module_Docs extends GW_Public_Module
 		$this->app->carry_params['obj'] = 1;
 		$this->app->carry_params['multiple']=1;	
 		$this->modconfig = $this->initModCfgEx("docs");
+		
+		$this->initFeatures(true);
 	}
 	
 	
@@ -52,24 +54,34 @@ class Module_Docs extends GW_Public_Module
 		if($this->steps)
 			return true; //second call
 		
+		$this->steps = json_decode($this->modconfig->steps, true);
 		
-		if(!$this->modconfig->steps)
+		if(!$this->steps)
 		{
 			d::dumpas('NOT CONFIGURED PLEASE ADD CONFIGURATION FROM ADMIN');
 		}
 				
 		$this->steps = json_decode($this->modconfig->steps, true);
 		
+		if($this->tpl_vars['answer'] && $this->isSigned($this->tpl_vars['answer'])){
 		
+			$idx = $this->getStepIdx('preview');
+			unset($this->steps[$idx]);
+			$this->steps = array_values($this->steps); // indexus suderina kad butu paeiliui
+		}
 
+		if(!is_numeric($_GET['s'])){
+			$_GET['s']=$this->getStepIdx($_GET['s'])+1;
+		}
 				
 		
-		//if($_SERVER['REMOTE_ADDR']=='78.61.228.118')
-		//	d::dumpas($this->register_steps);
-				
-				
 		if(is_numeric($_GET['s'])){
-			$this->steps_current = $this->steps[$_GET['s']-1];
+			$index = $_GET['s']-1;
+				
+			if($index > count($this->steps)-1)
+				$index = count($this->steps)-1;
+				
+			$this->steps_current = $this->steps[$index];
 		}elseif(in_array($_GET['s'], $this->steps) || $_GET['s']=='finish'){
 			$this->steps_current = $_GET['s'];
 		}
@@ -93,12 +105,34 @@ class Module_Docs extends GW_Public_Module
 	}
 	
 	
-	function viewItem()
+	
+	function userRequired()
 	{
+		if(isset($_GET['authkey']) && $_GET['cid']){
 		
-		$this->initSteps();
-		$this->userRequired();
+			$user = GW_User::singleton()->find(['id=?', $_GET['cid']]);
 		
+			if(!$user){
+				$this->setError(GW::ln('/m/INCORRECT_LINK'));
+			}
+			
+			if($user->get('keyval/authkey')==$_GET['authkey']){
+				
+				$this->app->auth->login($user);
+				
+				Navigator::jump(false,['authkey'=>null,'cid'=>null,'url'=>null]+$_GET);
+			}
+		}
+		
+		
+		if(!$this->feat('anonymous_access')){
+			parent::userRequired();
+		}
+		
+	}
+	
+	function viewItem($answ=false)
+	{
 		$item = $this->getDataObjectById();
 		
 		
@@ -175,9 +209,26 @@ class Module_Docs extends GW_Public_Module
 		$_GET['s'] = $_GET['s'] ?? 1;
 		$step = $_GET['s'];
 		
+		if($answ && $answ instanceof GW_Form_Answers){
+			//ateina per marksignaccept
+		}else{
 
-		$this->tpl_vars['answer'] = $answ =  $this->getAnswer($item);
+			$this->userRequired();	
+			$answ =  $this->getAnswer($item);
+		}
+		
+		
+		
+		
+		//d::dumpas([$item, $answ]);
+		
+		$this->tpl_vars['answer'] = $answ;
+		
 		$this->tpl_vars['answer_date'] = @explode(' ',$answ->insert_time)[0];
+		
+		
+		$this->initSteps();
+		
 		
 		if(in_array($this->steps_current, ['preview', 'sign_basic', 'sign_marksign']) && ! $answ->id){
 			$this->setError(GW::ln('/m/PLEASE_COMPLETE_PREVIOUS_STEPS'));
@@ -205,7 +256,7 @@ class Module_Docs extends GW_Public_Module
 			
 			
 			
-			if($this->steps_current=='preview'){
+			if($this->steps_current=='preview' && !$this->admin_access){
 				$vals[$fieldname] = ($answ->get("keyval/$fieldname") ?: '<'.GW::ln('/m/INPUT').': '.$e->title.'>');	
 			}else{
 				$vals[$fieldname] = $answ->get("keyval/$fieldname");
@@ -225,7 +276,15 @@ class Module_Docs extends GW_Public_Module
 			}
 			
 			if(in_array($e->type, ['radio','checkboxes','select'])  && $e->options_src){
-				$options = $e->optionsgroup->getChildOptions();	
+				
+				
+				if($this->isSigned($answ)){
+					//itraukti pasyvias opcijas
+					$options = $e->optionsgroup->getChildOptions(true);
+				}else{
+					$options = $e->optionsgroup->getChildOptions(false);
+				}
+				
 				$e->options = $options;
 			}
 			
@@ -247,11 +306,13 @@ class Module_Docs extends GW_Public_Module
 			$form_elms_grpd[$e->fieldset][$fieldname] = $e;
 		}
 		
-		//d::dumpas($vals);
+		if(isset($_GET['debug'])){
+			d::dumpas($vals);
+		}
 		
 		
 		//sasajos su vartotojo laukais / uzkrauti anksciau uzpildytas vertes
-		if($this->app->user)
+		if($this->app->user  && !$this->admin_access)
 		foreach($item->form->elements as $e){
 			if($e->linkedfields){
 				foreach($e->linkedfields as $field){
@@ -303,9 +364,24 @@ class Module_Docs extends GW_Public_Module
 			$answer = $answ;
 			$info = $answer->temporary_signing;
 			$sign_details = explode('|', $info);
+			$answerupdate = $sign_details[3] ?? false;
 			
-			if(!$info || $sign_details[2] < time() || isset($_GET['reinit'])){
+				
+			//$sign_details[2] < time() laikinasis dokumento galiojimo laikas baigesi
+			//$answer->update_time >  $answerupdate
+			
+			//d::dumpas([$answer->update_time,  $answerupdate]);
+			
+			if(strtotime($answer->update_time) >  $answerupdate){
+				//$this->setMessage('Renew');
+			}
+			
+			
+			
+			if(!$this->isSigned($answer)){
+				if(!$info || $sign_details[2] < time() || strtotime($answer->update_time) >  $answerupdate || isset($_GET['reinit'])){
 				$info = $this->__exportToMarkSign();
+				}
 			}
 			
 			if(isset($_GET['reinit'])){
@@ -320,19 +396,13 @@ class Module_Docs extends GW_Public_Module
 			$this->tpl_vars['url'] = $sign_details[1];
 			$this->tpl_vars['valid_until'] =$sign_details[2];
 			
-			d::ldump($answer->temporary_signing);
+			//d::ldump($answer->temporary_signing);
 			
 			//stadija kai jau pasirasyta
-			d::ldump($answer->keyval->signed_document_filename);
+			//d::ldump($answer->keyval->signed_document_filename);
+
+			//d::ldump($info);
 		}
-
-
-
-		
-		
-		//if($_GET['s'] ?? 0 == 4){
-		//	$this->__sendMail($item);
-		//}
 	}
 	
 	
@@ -342,17 +412,25 @@ class Module_Docs extends GW_Public_Module
 	{
 		if($this->admin_access){
 			$answ = GW_Form_Answers::singleton()->find(['id=?',$_GET['answerid']]);
+						
 			return $answ;
 			
 		}
 		
 		$initial = [
 		    'owner_id'=>$doc->form->id,
-		    'user_id'=>$this->app->user->id,
+		    'user_id'=>$this->app->user ? $this->app->user->id : false,
 		    'doc_id'=>$doc->id
 		];
 		
-		if($this->modconfig->allow_sign_again)
+		
+		if($this->feat('anonymous_access') && !$this->app->user){
+			$anonymous = $this->app->initAnonymousUser();	
+			$initial['auid'] = $anonymous->id;			
+		}
+		
+		
+		if($this->feat('sign_again'))
 			$initial['sequence'] = $_GET['multiple'] ?? 1;
 		
 		if(isset($_GET['obj'])){
@@ -448,6 +526,37 @@ class Module_Docs extends GW_Public_Module
 		$this->app->jump(false,['id'=>$_GET['id'],'s'=>$step]);
 	}
 	
+	
+	function doUploadSigned()
+	{
+		$this->userRequired();
+		
+		$item = $this->getDataObjectById();
+		
+		$answer =  $this->getAnswer($item);
+		
+		
+		if(!$answer->user_signed){
+			$this->setError(GW::ln('/m/DOC_NOT_UPLOADED').'...');
+			$this->jump2Step($_GET['s']);
+		}
+		
+
+		if($answer->signature){
+			$this->setError(GW::ln('/m/ALREADY_SIGNED').'...');
+			$this->jump2Step($_GET['s']);
+		}		
+			
+		$answer->sign_time = date('Y-m-d H:i:s');
+		$answer->updateChanged();
+		
+		$this->__sendMail($item);
+		
+		$this->setMessage(GW::ln('/m/DOC_SIGN_SUCC'));	
+		
+		$this->jump2Step($_GET['s']);
+	}
+	
 	function doSign()
 	{
 		$this->userRequired();
@@ -502,8 +611,17 @@ class Module_Docs extends GW_Public_Module
 	{
 		$docs = $this->doExportAsPdf(false);
 				
+		$to = $this->app->user ? $this->app->user->email : false;
+			
+		if(!$to && $this->feat('anonymous_access') && $doc->inform_email_field){
+			
+			$elm = GW_Form_Elements::singleton()->find(['id=?', $doc->inform_email_field]);
+			
+			$to = $this->tpl_vars['answer']->get('keyval/'.$elm->fieldname);
+		}
+		
 		$opts = [
-			'to' => $this->app->user->email,
+			'to' => $to,
 			'body'=> GW::ln('/m/SIGNED_DOCUMENT_ATTACHED'),
 			'subject' => GW::ln('/m/DOCUMENT_SIGNED') .' - '. $doc->title,
 			'attachments' => [
@@ -524,8 +642,10 @@ class Module_Docs extends GW_Public_Module
 	{
 		$_GET['pdf'] = 1;
 		
-		if(!isset($this->tpl_vars['item']))
-			$this->viewItem();
+		if(!isset($this->tpl_vars['item'])){
+			$this->{"view".$this->view_name}();
+			//$this->viewItem();
+		}
 		
 		$doc = $this->tpl_vars['item'];
 		
@@ -539,17 +659,53 @@ class Module_Docs extends GW_Public_Module
 		
 		$dpi = $this->tpl_vars['item']->get('config/dpi') ? : 150;
 				
-		$pdf = GW_html2pdf_Helper::convert($html, false, ['params'=>['dpi'=>$dpi]]);
+		
+		if($this->tpl_vars['answer'] && $this->tpl_vars['answer']->user_signed){
+			$pdf = file_get_contents($this->tpl_vars['answer']->user_signed->getFilename());
+		}elseif($this->tpl_vars['answer'] && $this->tpl_vars['answer']->keyval->signed_document_filename){
+			$pdf = file_get_contents($this->tpl_vars['answer']->keyval->signed_document_filename);
+		}else{
+			$pdf = GW_html2pdf_Helper::convert($html, false, ['params'=>['dpi'=>$dpi]]);
+		}
+		
+		
+		
 		
 		
 		if(!$out2Screen)
 			return ['html'=>$html, 'pdf'=>$pdf];
+		
+		
+		
 		
 		header("Content-type:application/pdf");
 		header("Content-Disposition:inline;filename=".$doc->idname.".pdf");
 		die($pdf);			
 	}
 	
+	
+	function doAnonymousToRealUserLogin()
+	{
+		parent::userRequired();
+		Navigator::jump(false,['act'=>null,'answerid'=>null,'secret'=>null,'url'=>null]+$_GET);
+	}
+	
+	function doAnonymousSaveAnswer()
+	{
+		parent::userRequired();
+		
+		$answer = GW_Form_Answers::singleton()->find(['id=? AND secret=? AND user_id=0', $_GET['answerid'], $_GET['secret']]);
+		
+		if(!$answer){
+			$this->setError(GW::ln('/m/ANSWER_NOT_FOUND_OR_ALREADY_ASSIGNED'));
+		}else{
+			$answer->user_id = $this->app->user->id;
+			$answer->updateChanged();
+			$this->setMessage(GW::ln('/m/ANSWER_SAVED'));
+		}
+		
+		Navigator::jump(false,['act'=>null,'answerid'=>null,'secret'=>null,'url'=>null]+$_GET);
+	}
 	
 	
 	function marksignCall($url, $payload = false, $headers)
@@ -616,18 +772,20 @@ class Module_Docs extends GW_Public_Module
 		
 		
 		$response = $this->doExportAsPdf(false);
+		$callback = 'https://contracts.tmcvolley.lt/lt/direct/docs/docs/marksignaccept?answer_id='.$answer->id.'&verify='.$answer->secret.'&id='.$_GET['id'];
 		
 		$headers =[];
 		$headers['content-type']='application/json';
 		$payload = [
 			'access_token'=>'565400d1-06ab-9fbd-5e14-699245405579',
-			'callback_url'=>'https://contracts.tmcvolley.lt/lt/direct/docs/docs/marksignaccept?answer_id='.$answer->id.'&verify='.$answer->secret,
+			'callback_url'=>$callback,
 			"file"=>[
 			    "filename"=> "test.pdf",
 			    "content"=> base64_encode($response['pdf'])
 			]
 		];
 		
+		//d::ldump($callback);
 		
 		//d::dumpas();
 
@@ -637,7 +795,7 @@ class Module_Docs extends GW_Public_Module
 		
 			$tmp_link = $result['temporary_signing_links'][0]['temporary_signing_link'];
 			$tmp_valid = $result['temporary_signing_links'][0]['valid_until'];
-			$answer->temporary_signing = implode('|', [$result['document_id'], $tmp_link, $tmp_valid]);
+			$answer->temporary_signing = implode('|', [$result['document_id'], $tmp_link, $tmp_valid, time()]);
 			
 
 			$answer->updateChanged();
@@ -661,7 +819,7 @@ class Module_Docs extends GW_Public_Module
 	function __downdoadSigned($answer)
 	{		
 		
-		//d::dumpas($answer->temporary_signing);
+		//d::ldump($answer->temporary_signing);
 		$sign_info = explode('|', $answer->temporary_signing);
 		$document_id = $sign_info[0];
 		
@@ -674,6 +832,7 @@ class Module_Docs extends GW_Public_Module
 		
 		$answer->keyval->signed_document_filename = $fn;
 		$answer->sign_time = date('Y-m-d H:i:s');
+		$answer->updateChanged();
 		
 		
 		return strlen($pdfcontent);
@@ -682,15 +841,26 @@ class Module_Docs extends GW_Public_Module
 	
 	function viewMarksignAccept()
 	{
-		$answer= GW_Form_Answers::singleton()->find($_GET['id']);
+		$answer= GW_Form_Answers::singleton()->find($_GET['answer_id']);
+		
 		if($answer && $answer->secret == $_GET['verify']){
 			$sz = $this->__downdoadSigned($answer);
+		}else{
+			die('unauthorised call');
 		}
 		
 		file_put_contents(GW::s('DIR/LOGS').'mark_sign', 
 			json_encode(['get'=>$_GET,'post'=>$_POST, 'server'=>$_SERVER, 'date'=>date('Y-m-d H:i:s'), 'downloaded_size'=>$sz], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
 			FILE_APPEND
 		);
+		
+		
+		$this->viewItem($answer);
+		$this->__sendMail($this->tpl_vars['item']);	
+		
+		//d::dumpas($this->tpl_vars['item']);
+		
+		die('download ok '.date('Y-m-d H:i:s'));
 	}
 	
 	function doWaitSigned()
@@ -700,7 +870,7 @@ class Module_Docs extends GW_Public_Module
 		
 		$answer= GW_Form_Answers::singleton()->find($_GET['id']);
 		
-		for($i = 0; $i < 20; $i++){
+		for($i = 0; $i < 15; $i++){
 			
 			if($answer->keyval->signed_document_filename){
 				die("signed");
@@ -720,10 +890,10 @@ class Module_Docs extends GW_Public_Module
 		
 		if($answer->keyval->signed_document_filename){
 			$answer->keyval->signed_document_filename = "";
-			d::dumpas('isvalytas');
+			die('isvalytas');
 		}else{
 			$answer->keyval->signed_document_filename = "testas";
-			d::dumpas('nustatytas');
+			die('nustatytas');
 		}
 		
 		
@@ -742,8 +912,13 @@ class Module_Docs extends GW_Public_Module
 		    $adminid && $adm=GW_User::singleton()->find(['id=?', $adminid]) && GW_Permissions::canAccess('form/answers', $adm->group_ids)
 		]);
 		*/
+		$adminid && ($adm=GW_User::singleton()->find(['id=?', $adminid]));
 		
-		if($adminid && ($adm=GW_User::singleton()->find(['id=?', $adminid])) && GW_Permissions::canAccess('forms/forms', $adm->group_ids)){
+			
+		if(
+			($adm && GW_Permissions::canAccess('forms/forms', $adm->group_ids) || ($adm && $adm->isRoot()))
+			
+		){
 			//d::dumpas("hello {$adm->title}");
 			$this->app->user = $adm;
 		}elseif(!$this->app->user || !GW_Permissions::canAccess('forms/forms', $this->app->user->group_ids))
@@ -754,5 +929,17 @@ class Module_Docs extends GW_Public_Module
 		
 		$this->admin_access = true;
 		$this->viewItem();
+	}
+		
+
+	function getInputFileItem()
+	{
+		
+		
+		$answer = GW_Form_Answers::singleton()->find(['id=? AND secret=?', $_GET['id'], $_GET['secret']]);
+		
+		//d::dumpas($answer);
+		
+		return $answer;
 	}
 }

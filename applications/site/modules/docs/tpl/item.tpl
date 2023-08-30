@@ -24,7 +24,13 @@
 
 {$idx=1}
 {foreach $m->steps as $step}
-	{$steps[$idx]=['title'=>GW::ln("/m/STEPS/{$step}")]}
+	{$steps[$idx]=['title'=>GW::ln("/m/STEPS/{$step}"), 'key'=>$step]}
+	
+	{if $m->steps_current == $step}
+		{$steps[$idx].current=1}
+	{/if}
+		
+	
 	{$idx=$idx+1}
 {/foreach}
 
@@ -41,18 +47,24 @@
 
 
 
-{if in_array($m->steps_current, [preview,sign_basic])}
+{if in_array($m->steps_current, [preview,sign_basic])  || ($m->steps_current==sign_marksign && $m->isSigned($answer))}
   
 
-	<div class='containercontainer'>
+	<div class='containercontainer' >
+		
+		<div class="scrollcontainer"  style="margin-bottom: 15px;overflow-y:scroll;{if $m->isSigned($answer)}max-height: 40vh;{else}max-height: 70vh;{/if}">
 <div class="containerim">
+	<div >
+		{$body}
+
+		{if $answer->signature}
+			{include "{$smarty.current_dir}/digitalsignature.tpl"}
+		{/if}
+	</div>
 	
-	{$body}
-	
-	{if $answer->signature}
-		{include "{$smarty.current_dir}/digitalsignature.tpl"}
-	{/if}
 </div>
+		 </div>
+		
 	</div>
 
 
@@ -60,6 +72,14 @@
 
 
 {if $m->steps_current==form}
+	
+	{if $m->feat(anonymous_access) && !$app->user->id}
+		Jei norite tęsti sutarties sudarymą kurį anksčiau buvote pradėję ir išsaugoję į paskyrą
+		<a class='btn btn-warning btn-sm' href='{$m->buildDirectUri('docs/docs/item',['act'=>doAnonymousToRealUserLogin, 'id'=>$smarty.get.id],[level=>0])}'>{GW::ln('/m/LOGIN')}</a>
+		<br><br>
+	{/if}	
+	
+	
 	{if GW::s(PROJECT_NAME)==artistdb}
 <div class="panel panel-primary animated fadeInDown">
 	<div class="panel-heading">{$item->form->title}</div>
@@ -85,6 +105,9 @@
 
 
 	{foreach $grouplist as $fieldset => $fieldsetlist}
+		{if $m->isSigned($answer)}
+			{$readonly=1}
+		{/if}
 		
 		
 		{if $fieldset && !is_numeric($fieldset)}
@@ -119,8 +142,7 @@
 					{$params_expand.note=$elm->note}
 					{$params_expand.placeholder=$elm->placeholder}
 					{$params_expand.value=$elm->value}
-					
-					
+										
 					
 					{if $debug}
 						{d::ldump($params_expand)}
@@ -146,17 +168,39 @@
 		</a>
 		{/if}
 		
-		<input class="btn btn-warning float-right" type="submit" value="{GW::ln('/g/SUBMIT')}"> 
-		<br /><br />	
+		
+		{if !$m->isSigned($answer)}
+			<input class="btn btn-warning float-right" type="submit" value="{GW::ln('/m/SUBMIT')}"> 
+			<br /><br />	
+		{else}
+			<span class="text-muted">{GW::ln('/m/SIGN_TIME')}: {$answer->sign_time}</span>
+		{/if}
 	
 {/if}
 
 
 {if $m->steps_next==sign_marksign || $m->steps_current==preview_blank}
+
 	<a class="btn btn-ar btn-default float-right" href="{$app->buildUri(false,[s=>$smarty.get.s+1]+$smarty.get)}">
 		{GW::ln('/g/NEXT')} &raquo;
 	</a>	
 	<br/><br/>
+	
+	{if $m->feat(sign_again)}
+
+		<div class="float-right" style="margin-bottom:10px">
+			{GW::ln('/m/CREATE_CONTRACT_AGAIN_EXPLAIN')}
+		<br>
+
+		{$seq=$smarty.get.multiple|default:1}
+		<a class="btn btn-ar btn-primary" href="{$app->buildUri(false, [multiple=>$seq+1,s=>$m->getStepIdx(form)]+$smarty.get)}">
+			 {GW::ln('/m/CREATE_CONTRACT_AGAIN')} ({$seq+1})
+		</a>
+		</div>
+
+
+		<br><br>			
+	{/if}		
 {/if}
 
 
@@ -164,7 +208,7 @@
 
 	
 	{if !$m->isSigned($answer)}
-		<br/>
+
 		<a class="btn btn-ar btn-default" href="javascript:window.history.back()">&laquo;
 			{GW::ln('/g/BACK')}
 		</a>			
@@ -174,6 +218,7 @@
 		   href="{$app->buildUri(false, [act=>doSign]+$smarty.get)}">
 			{GW::ln('/m/VIEWS/doSign')}
 		</a>	
+		
 		<a class="btn btn-ar btn-default" href="{$app->buildUri(false, [act=>doExportAsPdf]+$smarty.get)}" target='_blank'>
 			<i class='fa fa-file-pdf-o'></i> {GW::ln('/g/DOWNLOAD')}
 		</a>
@@ -181,12 +226,11 @@
 			<i class='fa fa-print'></i> {GW::ln('/g/PRINT')}
 		</a>
 	{else}
-		<br/>
 		<a class="btn btn-ar btn-default" href="{$app->buildUri(false, [act=>doExportAsPdf]+$smarty.get)}" target='_blank'>
 			<i class='fa fa-file-pdf-o'></i> {GW::ln('/g/DOWNLOAD')}
 		</a>		
 
-		{if $m->modconfig->allow_sign_again}
+		{if $m->feat(sign_again)}
 			{$seq=$smarty.get.multiple|default:1}
 			<a class="btn btn-ar btn-primary" href="{$app->buildUri(false, [multiple=>$seq+1,s=>$m->getStepIdx(form)]+$smarty.get)}">
 				 {GW::ln('/g/CREATE_CONTRACT_AGAIN')} ({$seq+1})
@@ -204,8 +248,6 @@
 
 {if $m->steps_current==finish}
 	
-
-	<br /><br />
 	
 	
 	<a class="btn btn-ar btn-default" href="{$app->buildUri(false, [act=>doExportToMarkSign]+$smarty.get)}" target='_blank'>
@@ -220,49 +262,10 @@
 {/if}
 
 
-{if $m->steps_current=='sign_marksign'}
+{if $m->steps_current==sign_marksign}
+	{include "`$smarty.current_dir`/step_marksign.tpl"}
 
-	{*d::ldump($answer)*}
-	{if $app->user->isRoot()}
-		<a class="text-muted" href="{$app->buildUri(false, [reinit=>1]+$smarty.get)}">reinit</a>
-	{/if}
 	
-	<span class='text-muted'>{$valid_until}</span>
-	<iframe src="{$url}" style='width:100%;height:90vh'></iframe>
-	
-	
-	{*
-	{$m->app->buildUri('direct/docs/docs',[act=>doWaitSigned,'id'=>$answer->id])}
-	*}
-	<script>
-		
-		waitcnt = 0;
-		function waitSigned(){
-			waitcnt++;
-			console.log('waitcnt: '+waitcnt);
-			$.ajax({
-				url: "{$m->app->buildUri('direct/docs/docs',[act=>doWaitSigned,'id'=>$answer->id])}",
-				timeout: 60000,
-				error: function(jqXHR, textStatus, errorThrown) {
-					
-					waitSigned();
-				},
-				success: function(data){
-					if(data=='signed'){
-						location.href  = '{$app->buildUri(false,[s=>finish]+$smarty.get)}';
-					}
-				}
-			});		
-			
-		}
-		
-		$(function(){
-			waitSigned();
-		})
-		
-	</script>
-
-
 {/if}
 
 
@@ -282,17 +285,22 @@
 .containercontainer{
 	all: unset;
 }	
-.containerim{
-
-    
-	
+.containerim{    
 	border:4px inset;
+	position: relative;
+	z-index:1;
+	overflow:hidden; /*if you want to crop the image*/
+	text-shadow: 1px 1px rgba(255,255,255,0.8);
 	padding:80px;
-    position: relative;
-    z-index:1;
-    overflow:hidden; /*if you want to crop the image*/
-    text-shadow: 1px 1px rgba(255,255,255,0.8);
 }
+
+@media only screen and (max-width: 800px) {
+  .containerim {
+
+    padding:30px;
+  }
+}
+
 .containerim p{ color:black; }
 
 .containerim:before{
