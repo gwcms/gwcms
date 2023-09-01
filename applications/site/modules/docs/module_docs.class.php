@@ -332,7 +332,7 @@ class Module_Docs extends GW_Public_Module
 		
 		$this->tpl_vars['form'] = $vals;
 		$this->tpl_vars['answer'] = $answ;
-		$this->tpl_vars['user'] = $this->app->user;
+		$this->tpl_vars['user'] = $answ->user;//$this->app->user;
 		$this->tpl_vars['SIGNATURE'] = "abc";
 		
 		//gauti paraso data jei tokios nera tada paduoti siandienos data

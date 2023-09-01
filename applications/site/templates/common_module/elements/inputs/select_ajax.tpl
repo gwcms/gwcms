@@ -80,11 +80,11 @@
 		{*<link rel="stylesheet" href="{$app->sys_base}vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>*}
 	
 		<script type="text/javascript">
-			translate_submit = "{GW::ln('/g/SUBMIT')|trim}";
-			translate_selectall = "{GW::ln('/g/SELECT_ALL')|trim}";
-			translate_foundresults = "{GW::ln('/g/TOTAL')|trim} {GW::ln('/g/FOUND')|trim}";
-			translate_not_found = "{GW::ln('/g/OPTION_NOT_FOUND')}"
-			translate_add_new = "{GW::ln('/g/ADD_NEW_OPTION')}"
+			translate_submit = "{GW::ln('/g/SUBMIT')|escape:javascript}";
+			translate_selectall = "{GW::ln('/g/SELECT_ALL')|escape:javascript}";
+			translate_foundresults = "{GW::ln('/g/TOTAL')|escape:javascript} {GW::ln('/g/FOUND')|escape:javascript}";
+			translate_not_found = "{GW::ln('/g/OPTION_NOT_FOUND')|escape:javascript}"
+			translate_add_new = "{GW::ln('/g/ADD_NEW_OPTION')|escape:javascript}"
 
 			//this will allow open dialog in root window, if this window is iframed
 			{if $bootstrap4}bootstrap4 = true;{/if}

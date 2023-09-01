@@ -457,7 +457,7 @@ class GW_Public_Module {
 	
 	function inputFilePreview($name, $onlyids=false)
 	{
-		$item = $this->getDataObjectById();
+		$item = $this->getInputFileItem();
 		
 		$files = is_array($item->$name) ? $item->$name : false;
 		$file = $files ? false : $item->$name;
@@ -509,11 +509,16 @@ class GW_Public_Module {
 	{
 		$item = $this->getInputFileItem();
 		
+		
+		
 		//d::ldump($_FILES);
 		//d::dumpas($item);
 
 		foreach ($_FILES as $name => $data) {
 			//leisti pdf uploadint
+			
+			
+			
 			if($item->composite_map[$name][0]=='gw_image' && $data['type']=='application/pdf'){
 				
 				GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'));
@@ -574,7 +579,7 @@ class GW_Public_Module {
 	
 	function viewRemoveFile() {
 
-		$item = $this->getDataObjectForFiles(); 
+		$item = $this->getInputFileItem(); 
 
 		$id = $_GET['id'] ?? false;
 		$name = $_GET['name'] ?? false;
@@ -761,9 +766,11 @@ class GW_Public_Module {
 		$vals = array_intersect_key($vals, $permit_fields);		
 	}		
 	
-	function initFeatures()
+	function initFeatures($modconfig=false)
 	{
-		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);		
+		$features = $modconfig ? $this->modconfig->features : $this->config->features;
+		
+		$this->features = array_fill_keys((array)json_decode($features), 1);		
 	}
 	
 	function feat($id)
@@ -877,6 +884,6 @@ class GW_Public_Module {
 			$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . implode('_',$this->module_path) . '.log');
 			$this->lgr->collect_messages = true;
 		}
-	}
-
+	}	
+	
 }
