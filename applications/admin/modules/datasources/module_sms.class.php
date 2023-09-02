@@ -38,8 +38,9 @@ class Module_Sms extends GW_Common_Module
 		
 		$uid = $this->config->user_id;
 		$api_key = $this->config->api_key;
+		$host = $this->config->host;
 		
-		$resp = file_Get_contents("https://gw.lt/service/mis/public/sendsms?uid={$uid}&api_key={$api_key}&to=$to&msg=".urlencode($msg).$addarg);
+		$resp = file_Get_contents("https://{$host}/service/mis/public/sendsms?uid={$uid}&api_key={$api_key}&to=$to&msg=".urlencode($msg).$addarg);
 		$resp = json_decode($resp,true);
 		
 		$extra = $resp;
