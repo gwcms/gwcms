@@ -234,15 +234,15 @@
 	<div class="row">
 	{/if}
 
-		{if $dl_filters && !$smarty.get.print_view && !$smarty.get.filterhide && (count($list) || $m->list_params.filters)}
+		{if $dl_filters && !$smarty.get.print_view && !$smarty.get.filterhide && ($list || $m->list_params.filters)}
 			<div class="col-xs-auto" id="gwFiltersContainer">
 				{include "list/filters.tpl"}
 			</div>	
 		{/if}		
 
 		<div>
-			{if !count($list)}
-				<div class="gwcmsNoItems">{GW::l('/g/NO_ITEMS')}</div>
+			{if !$list}
+				<div class="gwcmsNoItems">{GW::l('/g/NO_ITEMS')}</div> 
 			{else}
 					<table class="table-condensed table-hover table-vcenter table-bordered gwTable gwActiveTable gwListTable" data-context="{get_class(current($list))}">
 						<tr>	

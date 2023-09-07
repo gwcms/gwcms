@@ -13,7 +13,7 @@
 
 <br />
 
-{if !count($list)}
+{if !$list}
 	<p>{GW::l('/g/NO_ITEMS')}</p>
 {else}
 

@@ -283,13 +283,17 @@ class GW_Mail_Helper
 	{
 		$path="datasources/sms";
 
-		$req = ["number"=>$opts['phone'], 'msg'=>$opts['msg'], "act"=>'doInsertNew', "json"=>1,'packets'=>1];
+	
+		
+		$req = ["number"=>$opts['to'], 'msg'=>$opts['body'], "act"=>'doInsertNew', "json"=>1,'packets'=>1];
+		
+		//d::dumpas($req);
 
 		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
 		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;					
 
 
-		$respo = $this->app->innerRequest("datasources/sms", $req);		
+		$respo = GW::$context->app->innerRequest("datasources/sms", $req);		
 		d::dumpas($respo);
 	}	
 	
