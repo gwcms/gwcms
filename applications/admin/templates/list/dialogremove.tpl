@@ -6,10 +6,10 @@
 	<div id="title">{$tmp=basename($app->path)}{GW::l("/A/VIEWS/`$tmp`")}</div>
 </div>
 
-
+{*butinai post methodas, nes grys neten*}
 <form id="changestatus"  action="" method="post" >
 
-<input type="hidden" name="act" value="do:dialogremove" />
+<input type="hidden" name="act" value="doDialogRemove" />
 <input type="hidden" name="ids" value="{$smarty.get.ids}" />
 
 Pasirinkta {$items_count}, patvirtinkite pasirinkto/ų įrašo/ų šalininimą
@@ -17,7 +17,7 @@ Pasirinkta {$items_count}, patvirtinkite pasirinkto/ų įrašo/ų šalininimą
 
 <script>
 	require(['gwcms'], function(){
-		$('#changestatus').attr('action', window.parent.location.href)
+		//$('#changestatus').attr('action', window.parent.location.href)
 		
 	});
 </script>

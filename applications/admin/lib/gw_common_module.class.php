@@ -1858,9 +1858,9 @@ class GW_Common_Module extends GW_Module
 	
 	function viewDialogRemove()
 	{
-		$items = explode(',',$_GET['ids']);
-		$this->tpl_vars['ids']=$_GET['ids'];
-		$this->tpl_vars['items_count']=count($items);
+		$items = explode(',', $_REQUEST['ids']);
+		$this->tpl_vars['ids'] = $_REQUEST['ids'];
+		$this->tpl_vars['items_count'] = count($items);
 		
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . "list/dialogremove";
 	}
@@ -1868,6 +1868,7 @@ class GW_Common_Module extends GW_Module
 	function doDialogRemove()
 	{
 		$ids = explode(',',$_REQUEST['ids']);
+		
 		
 		$cnt = 0;
 		foreach($ids as $id)
@@ -1877,15 +1878,11 @@ class GW_Common_Module extends GW_Module
 			if($this->canBeAccessed($item,['nodie'=>1])){
 				$item->delete();
 				$cnt++;
-			}
+			}		
 		}
 		
-
-		
 		$this->setPlainMessage(sprintf(GW::l('/g/SELECTED_ITEMS_REMOVED'), $cnt), GW_MSG_SUCC);
-
-		
-		$this->jump();
+		$this->app->jump();
 	}	
 	
 	
