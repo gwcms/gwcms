@@ -371,7 +371,10 @@ class GW_Site_Application extends GW_Application
 		
 		$path_args = explode('?', $url);
 		$args =[];
-		parse_str($path_args[1] ? $path_args[1]:"", $args);
+		
+		if(isset($path_args[1]))
+			parse_str($path_args[1] ? $path_args[1]:"", $args);
+		
 		$path = $this->ln.'/'.$path_args[0];
 
 		$oldget = $_GET;
