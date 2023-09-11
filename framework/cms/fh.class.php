@@ -132,7 +132,7 @@ class FH
 	function gw_link_confirm($include_onclick = true)
 	{
 		$title_or_inner_txt = "(this.title ? this.title : this.textContent)";
-		$str = "return confirm($(this).data('confirm_text') ? $(this).data('confirm_text') : '" . GW::ln('/g/ACTION_CONFIRM_REQUIRED') . "\\n" . GW::ln('/g/ACTION') . ": '+$title_or_inner_txt)";
+		$str = "return confirm($(this).data('confirm_text') ? $(this).data('confirm_text') : '" . trim(GW::ln('/g/ACTION_CONFIRM_REQUIRED')) . '\\n' . trim(GW::ln('/g/ACTION')) . ": '+$title_or_inner_txt)";
 
 		return $include_onclick ? 'onclick="' . $str . '"' : $str;
 	}

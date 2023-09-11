@@ -63,10 +63,10 @@ class GW_Image_Resize_Helper
 		self::checkSaveFormat($params);
 
 		$destination = self::getCacheFileName($item->getFilename(), $params);
-
+		
 		if (!isset($params['nocache']) && file_exists($destination))
 			return self::formatResult($item, $destination);
-
+		
 		if (!self::resize($item, $params, $destination))
 			return false;
 	}
@@ -81,10 +81,15 @@ class GW_Image_Resize_Helper
 
 		if (
 		    (int) $item->get('width') <= (int) $params['width'] &&
-		    (int) $item->get('height') <= (int) $params['height']
-		)
+		    (int) $item->get('height') <= (int) $params['height'] &&
+			($params['method'] ?? false) != 'crop'
+		){
+			if($params['debug'] ?? false)
+				d::ldump(['no resize'=>'image is too small']);				
+			
 			return false; // no need to resize
-
+		}
+		
 		$file = $item->getFilename();
 
 		$im = new GW_Image_Manipulation($file);
