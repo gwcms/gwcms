@@ -75,7 +75,7 @@ class GW_Image_Manipulation
 
 		// calculate size of resized image (with auto method)
 		list($arw, $arh) = $this->calcResizedSize($w, $h, $this->width, $this->height, ($method == 'crop' ? 'forcrop' : 'auto'));
-
+		
 
 		// create new image
 		$image_resized = imagecreatetruecolor($rw, $rh);
@@ -141,7 +141,7 @@ class GW_Image_Manipulation
 		$arh=$arh*$zoom;
 		
 		
-		if(isset($_GET['debug'])){
+		if(isset($params['debug'])){
 			d::ldump([
 			    'resized_image'=>['width'=>$rw, 'height'=>$rh],
 			    'original_image'=>['width'=>$this->width, 'height'=>$this->height],

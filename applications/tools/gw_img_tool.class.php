@@ -64,6 +64,11 @@ class GW_Img_Tool
 			header('Location: '.GW::s("SITE_URL").$_SERVER['REQUEST_URI']);
 		}
 
+		//pdf converter still have issues with webp
+		if(isset($_GET['save_format'])){
+			$params['save_format'] = $_GET['save_format'];
+		}
+		
 		if(isset($params['width']) || isset($params['height']) || isset($params['zoom']) || isset($params['offset'])){
 						
 			if(isset($params['method']))
@@ -73,16 +78,16 @@ class GW_Img_Tool
 				//max zoom level 10x /// execution time not normal if zoom over 1000x
 				$params['zoom'] = min(10, (float)$params['zoom']);
 			}
-						
+				
+			
+			
 			$item->resize($params);
 		}
 		
-		if(isset($_GET['save_format'])){
-			$params['save_format'] = $_GET['save_format'];
-		}		
 
-
-		GW_Cache_Control::setExpires('+24 hour');
+		if(!isset($params['nocache']))
+			GW_Cache_Control::setExpires('+24 hour');
+		
 		//GW_Cache_Control::checkFile($item->getFilename());
 		
 		if(isset($params['debug']))
