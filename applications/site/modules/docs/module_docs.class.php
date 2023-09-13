@@ -63,7 +63,7 @@ class Module_Docs extends GW_Public_Module
 				
 		$this->steps = json_decode($this->modconfig->steps, true);
 		
-		if($this->tpl_vars['answer'] && $this->isSigned($this->tpl_vars['answer'])){
+		if(($this->tpl_vars['answer'] ?? false) && $this->isSigned($this->tpl_vars['answer'])){
 		
 			$idx = $this->getStepIdx('preview');
 			unset($this->steps[$idx]);
@@ -504,7 +504,17 @@ class Module_Docs extends GW_Public_Module
 			}
 			$this->app->user->updateChanged();
 		}
+		
+		
+		//checkbox nesiuncia vertes jei nepazymeta
+		foreach($item->form->elements as $e){
+			if($e->type=='checkbox' && !isset($vals["keyval/".$e->fieldname])){
+				$answer->set("keyval/".$e->fieldname, 0);
+				$vals["keyval/".$e->fieldname] = 0;
+			}
 			
+		}
+		
 		$answer->save();
 		
 		$this->setMessage(GW::ln('/m/FORM_ACCEPTED_VERIFY_AND_SIGN'));
@@ -780,7 +790,7 @@ class Module_Docs extends GW_Public_Module
 			'access_token'=>'565400d1-06ab-9fbd-5e14-699245405579',
 			'callback_url'=>$callback,
 			"file"=>[
-			    "filename"=> "test.pdf",
+			    "filename"=> FH::urlStr($answer->doc->title.'__'.$answer->user->title.'__contractID'.$answer->id).".pdf",
 			    "content"=> base64_encode($response['pdf'])
 			]
 		];

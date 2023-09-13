@@ -57,7 +57,7 @@
 	{if $type==checkbox}
 		
 	<div class="mb-3 {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}">
-                  <label class="form-check-inline u-check g-color-gray-dark-v5 g-font-size-13 g-pl-25 mb-2">
+                  <label class="form-check-inline u-check g-font-size-13 g-pl-25 mb-2">
                     <input 
 			class="g-hidden-xs-up {if $addclass} {$addclass}{/if}"
 			    name="{$input_name}" 

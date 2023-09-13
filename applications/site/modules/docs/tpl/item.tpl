@@ -54,7 +54,7 @@
 		
 		<div class="scrollcontainer"  style="margin-bottom: 15px;overflow-y:scroll;{if $m->isSigned($answer)}max-height: 40vh;{else}max-height: 70vh;{/if}">
 <div class="containerim">
-	<div >
+	<div style="">
 		{$body}
 
 		{if $answer->signature}
@@ -186,8 +186,8 @@
 	</a>	
 	<br/><br/>
 	
-	{if $m->feat(sign_again)}
-
+	{if $m->feat(sign_again) && ($m->isSigned($answer) || $m->steps_current==sign_marksign)}
+		
 		<div class="float-right" style="margin-bottom:10px">
 			{GW::ln('/m/CREATE_CONTRACT_AGAIN_EXPLAIN')}
 		<br>
@@ -292,6 +292,10 @@
 	overflow:hidden; /*if you want to crop the image*/
 	text-shadow: 1px 1px rgba(255,255,255,0.8);
 	padding:80px;
+	font-family: Times New Roman; color:black;
+}
+.containerim *{
+	font-family: Times New Roman; color:black;
 }
 
 @media only screen and (max-width: 800px) {
@@ -313,7 +317,7 @@
     height:100%;
     content: '';
     background-image: url('/applications/site/assets/img/seamless_paper_texture.jpg');
-    opacity:0.4;
+    opacity:0.3;
 }
 
 .containersm{ max-height: 400px; overflow-y: scroll; border:4px inset; }
