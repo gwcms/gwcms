@@ -18,5 +18,5 @@
 	{$dl_smart_fields=[type,params]}
 	
 	
-	{$dl_actions=[edit,ext_actions]}
+	{$dl_actions=[edit,ext_actions,move]}
 {/block}

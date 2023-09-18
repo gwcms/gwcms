@@ -199,7 +199,7 @@ class GW_Page extends GW_i18n_Data_Object
 		if(! $tpl_id=$this->get('template_id'))
 			return [];
 		
-		$list = GW_TplVar::singleton()->findAll(['template_id=?', $tpl_id], ['key_field'=>'name']);
+		$list = GW_TplVar::singleton()->findAll(['template_id=?', $tpl_id], ['key_field'=>'name', 'order'=>'priority ASC']);
 
 		
 		return $list;

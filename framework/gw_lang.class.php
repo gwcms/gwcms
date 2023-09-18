@@ -359,12 +359,15 @@ class GW_Lang
 		
 		list($module, $key) = GW_Lang::transKeyAnalise($fullkey);
 		
+		$lnover = false;
+		
 		if($module == "LN")
 		{
 			list($ln, $fullkey) = explode('/', $key, 2);
 			
 			$prevln = GW_Lang::$ln;
 			GW_Lang::$ln = $ln;
+			$lnover = $ln;
 			$result = GW_Lang::ln('/'.$fullkey, $opts);
 			//$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
 			
@@ -376,7 +379,7 @@ class GW_Lang
 		$orig_key = $module.'/'.$key;
 		
 		
-		if($tmp=GW_Lang::transOver($orig_key))
+		if($tmp=GW_Lang::transOver($orig_key, $lnover))
 			return $tmp;		
 
 		//uzloadinti vertima jei nera uzloadintas
@@ -529,11 +532,16 @@ class GW_Lang
 		self::$transOverContextId = $id;
 	}
 	
-	static function &transOverLoadCache($cid)
+	static function &transOverLoadCache($cid, $lnover=false)
 	{		
+		
+		$ln = $lnover ? $lnover : GW_Lang::$ln;
+		
+		$cid = $cid.'__'.$ln;
+		
 		if (!isset(self::$transOverCache[$cid])) {
 			$tr = GW_Translation_Over::singleton()->getAssoc(
-				['concat(`module`,"/",`key`)', 'value_' . GW_Lang::$ln], 
+				['concat(`module`,"/",`key`)', 'value_' .$ln ], 
 				['context_group=? AND context_id=?', self::$transOverContextGroup, self::$transOverContextId], 
 				['order' => 'priority ASC']
 			);
@@ -554,12 +562,12 @@ class GW_Lang
 	}	
 	
 	
-	static function transOver($key)
+	static function transOver($key, $lnover = false)
 	{
 		if(!(self::$transOverContextGroup && self::$transOverContextId))
 			return false;
 				
-		$cache = self::transOverLoadCache($ownr=self::$transOverContextGroup.'/'.self::$transOverContextId);	
+		$cache = self::transOverLoadCache($ownr=self::$transOverContextGroup.'/'.self::$transOverContextId, $lnover);	
 		//d::dumpas($cache);
 		$xpld = explode('/', $key);
 		

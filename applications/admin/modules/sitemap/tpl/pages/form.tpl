@@ -96,7 +96,16 @@
 	{/if}		
 {/foreach}
 
-
+{if GW::s('MULTISITE') && $app->user->isRoot()}
+	{call e field="site_id"
+		type="select_ajax"
+		modpath="sitemap/sites"
+		options=[]
+		preload=1
+		tabs=[base]
+	}
+	
+{/if}
 {if GW::s('MULTISITE') && !$smarty.get.site_id && $app->site->id==1}
 	{call e field=multisite type=bool  tabs=[extended]}	 
 {/if}

@@ -11,7 +11,7 @@
 class GW_TplVar extends GW_Data_Object
 {
 	var $table = 'gw_template_vars';
-	var $default_order = 'id ASC';
+	var $default_order = 'priority ASC';
 	
 	var $validators = Array('params'=>'gw_json');
 	var $encode_fields=Array('params'=>'json');		
@@ -52,4 +52,11 @@ class GW_TplVar extends GW_Data_Object
 			
 		return parent::eventHandler($event, $context_data);
 	}
+	
+	function getMoveCondition($item)
+	{
+		return GW_SQL_Helper::condition_str([
+		    'template_id'=>$item->template_id
+		]);
+	}		
 }
