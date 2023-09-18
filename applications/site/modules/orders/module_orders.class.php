@@ -355,7 +355,7 @@ class Module_Orders extends GW_Public_Module
 	function doCancelOrder()
 	{
 		$order = $this->getOrder();
-		
+				
 		
 		if($this->app->user->get('ext/cart_id') == $order->id){
 			$this->app->user->set('ext/cart_id', '');
@@ -497,7 +497,7 @@ class Module_Orders extends GW_Public_Module
 	{
 		$this->userRequired();
 		$cart = $this->getOrder();
-		
+				
 		
 		if(!$cart->open){
 			$this->setError(GW::ln('/m/CART_IS_CLOSED'));

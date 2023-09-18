@@ -107,7 +107,7 @@
 						<span class="g-color-lightred"><small>{GW::ln('/m/DISCOUNT')}:</small> -{$citem->discount*$citem->qty} &euro;</span>				
 					{/if}
 					{if !$order->payment_status!=7 && $item->can_remove}
-						<a href="{$m->buildUri(false, [act=>doCartItemRemove,id=>$citem->id])}"><i class="fa fa-times"></i></a>
+						<a href="{$m->buildUri(false, [act=>doCartItemRemove,id=>$item->item,ciid=>$citem->id])}"><i class="fa fa-times"></i></a>
 						{/if}
 
 					{if $citem->expirable  && $order->payment_status!=7}
