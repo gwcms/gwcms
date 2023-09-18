@@ -7,9 +7,9 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 	public $ownerkey = 'forms/answers';	
 	public $extensions = ['keyval'=>1, 'attachments'=>1];	
 	public $composite_map = [
-		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'owner_id']],
-		'user' => ['gw_composite_linked', ['object'=>'GW_User','relation_field'=>'user_id']],
-		'doc' => ['gw_composite_linked', ['object'=>'GW_Doc','relation_field'=>'doc_id']],
+		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'owner_id','readonly'=>1]],
+		'user' => ['gw_composite_linked', ['object'=>'GW_User','relation_field'=>'user_id','readonly'=>1]],
+		'doc' => ['gw_composite_linked', ['object'=>'GW_Doc','relation_field'=>'doc_id','readonly'=>1]],
 		'user_signed'=>['gw_file', ['allowed_extensions' => 'pdf']],
 	];		
 

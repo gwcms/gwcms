@@ -67,7 +67,7 @@ class GW_Composite_Linked extends GW_Data_Object implements GW_Composite_Slave {
 
 		if($this->linkedobject->id && method_exists($this->linkedobject, 'updateChanged')){
 			$this->linkedobject->updateChanged();
-		}else{
+		}elseif(is_object($this->linkedobject) && method_exists($this->linkedobject, 'save')){
 			$this->linkedobject->save();
 		}		
 	}
