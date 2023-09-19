@@ -119,7 +119,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 			
-			$opt=[
+			$opts=[
 			    'subject'=>GW::s('PROJECT_NAME').' paysera error',
 			    'body'=>$data
 			];
