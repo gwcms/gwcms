@@ -23,13 +23,22 @@ function OpenInNetbeans(file, line)
 runWithJQuery(function(){
 	$(function(){		
 		$('.openfile1').click(function(){
-			OpenInNetbeans($(this).data('file'), $(this).data('line'));
+			var file=$(this).data('file');
+			file = file.replace(prodloc, devloc);
+			
+			
+			OpenInNetbeans(file, $(this).data('line'));
 		});
 
 
 		$('.openfile').click(function(e){ 
 			var arg=this.innerText; arg=arg.split(':'); 
-			OpenInNetbeans(arg[0].split(' ')[0], arg[1].split(' ')[1]);
+			
+			var file=arg[0].split(' ')[0];
+			file = file.replace(prodloc, devloc);
+			
+			
+			OpenInNetbeans(file, arg[1].split(' ')[1]);
 		});
 		
 		

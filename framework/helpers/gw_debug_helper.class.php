@@ -306,7 +306,23 @@ class GW_Debug_Helper
 		if(isset($GLOBALS['netbeansinitdone']))
 			return false;
 		
-		echo file_get_contents(GW::s('DIR/ADMIN/ROOT').'static/html/open_in_netbeans.html');		
+		
+		
+		$old=GW::s('PROJECT_ENVIRONMENT');
+		initEnviroment(GW_ENV_DEV);
+		$dev_root = GW::s("DEPLOY_DIR");
+		GW::s('PROJECT_ENVIRONMENT',$old);
+		initEnviroment($old);
+		
+		echo "<script>
+			prodloc='".GW::s('DEPLOY_DIR')."';
+			devloc='$dev_root'
+			</script>
+			";	
+		
+		
+		echo file_get_contents(GW::s('DIR/ADMIN/ROOT').'static/html/open_in_netbeans.html');	
+		
 		$GLOBALS['netbeansinitdone'] = 1;
 		
 	}
