@@ -36,11 +36,13 @@
 	iconclass="fa fa-envelope-square" action_addclass="iframe-under-tr"  
 	caption="išsiųsti laiškai"}
 {*
-<li class="divider"></li>
+
 
 
 {list_item_action_m url=[false,[act=>doDelete,id=>$item->id]] iconclass="fa fa-trash-o text-danger" confirm=1 caption=GW::l('/g/REMOVE') shift_button=1}
 *}
 
+<li class="divider"></li>
 
+{dl_actions_clone}
 {dl_actions_delete shift_button=1}
