@@ -94,6 +94,10 @@
 {/function}
 
 {function name=dl_actions_edit}
+	{if $itemactions}
+		{$caption=GW::l('/g/VIEWS/form')}
+		{$addlitag=1}
+	{/if}	
 	{list_item_action_m url=["`$app->idInPath($item->id)`/form"] iconclass="fa fa-pencil-square-o text-brown"}
 {/function}
 

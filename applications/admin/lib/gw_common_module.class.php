@@ -303,7 +303,7 @@ class GW_Common_Module extends GW_Module
 
 	function __doCloneAfterClone($item)
 	{
-		$item->title = $item->title . ' (' . $this->app->lang['ITEM_COPY'] . ')';
+		$item->title = $item->title . ' (' . GW::l('/g/ITEM_COPY') . ')';
 	}
 
 	public $auto_images = 1;

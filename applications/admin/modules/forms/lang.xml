@@ -95,11 +95,19 @@
 			<i id="user/ext/contract_address">Vartotojas / adresas sutartims</i>
 			<i id="user/ext/contract_fullname">Vartotojas / pilnas vardas sutartims</i>
 			<i id="itax/contact/fullname">Itax / kontaktas / pilnas vardas</i>
+			<i id="itax/purchase/amount">Itax / Pirkimo sąsk. / Suma</i>
+			<i id="itax/purchase/item_title">Itax / Pirkimo sąsk. / Prekės paslaugos pavadinimas</i>
 		</i>
+		
+		<i id="features">
+			<i id="itax">Itax</i>
+		</i>			
+		
 	</i>
 	
 	<i id="VIEWS">
 		<i id="doSyncWithLinked">Susinchronizuoti susietus laukus</i>
+		<i id="doItaxSyncPurchase">ITAX: Pirkimo sąskaita</i>
 	</i>
 	
 	<i id="LINK">
@@ -116,7 +124,7 @@
 	<i id="SKIPPED">Praleistas</i>
 	<i id="UPDATED_NAME">Atnaujintas vard./pavard.</i>
 	
-	
+
 
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
@@ -155,7 +163,15 @@
 					<i id="model">GW_Form_Answers</i>
 				</i>
 			</i>																																																																			
-																																																																																																																																																																																																	
+			<i id="config">
+			   <i id="title">
+			     <lt>Nustatymai</lt>
+			     <en>Settings</en>
+			   </i>
+			   <i id="info">
+			     <i id="iconclass">fa fa-cog</i>
+			   </i>
+			 </i>																																																																																																																																																																																																	
 		</i>
 	</i>
 	<!-- =============== MODULE MAP END ===================== -->

@@ -2,11 +2,6 @@
 
 {$addlitag=true}
 
-<li class="divider"></li>
-
-{dl_actions_clone}
-{dl_actions_delete}
-
 
 {if $item->user_id}
 	{list_item_action_m url=[false,[act=>doSyncWithLinked,id=>$item->id]] iconclass="fa fa-upload" confirm=1 caption=GW::l('/m/VIEWS/doSyncWithLinked')}
@@ -20,4 +15,14 @@
 {/if}
 
 	
+
+<li class="divider"></li>
+
+{dl_actions_clone}
+{dl_actions_delete}
 		
+
+
+{if $m->feat(itax)}
+	{list_item_action_m url=[false,[act=>doItaxSyncPurchase,id=>$item->id]] iconclass="fa fa-cloud-upload"  caption=GW::l('/m/VIEWS/doItaxSyncPurchase') shift_button=1}
+{/if}

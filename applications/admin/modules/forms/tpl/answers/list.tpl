@@ -5,6 +5,9 @@
 {block name="init"}
 
 
+	{if $m->feat(itax)}
+		{include "`$smarty.current_dir`/itax_stat.tpl"}	
+	{/if}
 
 	
 	{$do_toolbar_buttons[] = hidden}
@@ -13,7 +16,7 @@
 	
 	{$dl_actions=[]}
 	{$dl_filters=[]}
-	{$dl_smart_fields=[value,user_id]}
+	{$dl_smart_fields=[value,user_id,user_actions,itax_stat]}
 	
 	
 	{$dl_actions=[preview,invert_active_ajax,edit,ext_actions]}
@@ -45,7 +48,20 @@
 				tag_params=['data-iframeopt'=>'{"min-width":"1000px","height":"600px"}']
 			}
 		{/if}
-	{/function}		
+	{/function}
+	
+	{function dl_cell_user_actions}
+		{if $item->user_id}
+			
+			
+			{include "tools/ajaxdropdown.tpl" item=[actions=>"/admin/{$ln}/customers/users/itemactions?id={$item->user_id}&outside=1"]}
+		{/if}
+	{/function}
+	
+	{function dl_cell_itax_stat}
+		{call "itax_status"}
+	{/function}	
+	
 	
 {/block}
 

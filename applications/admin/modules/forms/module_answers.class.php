@@ -48,7 +48,15 @@ class Module_Answers extends GW_Common_Module
 			$this->obj_id = $this->filters['obj_id'] = $_GET['obj_id'];
 		}
 		
+		
+		$this->initConfig();
+		$this->initFeatures();
 		//d::dumpas($this->filters);
+		
+		
+		if($this->feat('itax')){
+			$this->addRedirRule('/^doItax|^viewItax/i','itax');
+		}
 	}
 	
 	
@@ -143,6 +151,12 @@ class Module_Answers extends GW_Common_Module
 		foreach($elms as $e){	
 			$cfg['fields'][$e->fieldname]="Lof";
 		}	
+		
+		$cfg['fields']['user_actions']='Lof';
+		
+		if($this->feat('itax')){
+			$cfg['fields']['itax_stat'] = 'Lof';
+		}
 		
 		
 		
