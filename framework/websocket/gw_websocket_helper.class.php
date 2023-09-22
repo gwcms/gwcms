@@ -3,17 +3,23 @@
 class GW_WebSocket_Helper 
 {
 	static $client=false;
+	static $cfg_cache = false;
 	
 	static function initControlUserWsc($connect=true)
 	{
 		if(self::$client)
 			return self::$client;
 		
-		$wss = GW::s('WSS');
-		$user = $wss['CONTROL_USER'];
-		$pass = $wss['CONTROL_USER_PASS'];
-		$host = $wss['HOST'];
-		$port = $wss['PORT'];
+		$cfg = self::loadCfg();
+		
+		//$wss = GW::s('WSS');
+		
+		list($user, $pass) = explode(':', $cfg->WSS_CONTROL_USER_PASS);
+		//$user = $wss['CONTROL_USER'];
+		//$pass = $wss['CONTROL_USER_PASS'];
+		
+		list($host, $port) = explode(':', $cfg->WSS_HOST_PORT);
+
 
 		$client = new WebSocket\Client($uri="wss://$user:$pass@$host:$port/irc");
 		$client->messages_enabled = false;
@@ -33,9 +39,25 @@ class GW_WebSocket_Helper
 		
 	}
 	
+	static function loadCfg()
+	{
+		if(!self::$cfg_cache){
+			$cfg = new GW_Config('sys/');
+			$cfg->preload('WSS_');	
+			self::$cfg_cache = $cfg;	
+		}
+				
+		return self::$cfg_cache;
+	}	
+		
+	
+	
 	static function getFrontConfig(GW_User $user, $updateTempPass=false)
 	{
-		$username = GW::s('WSS/USER_PREFIX').$user->username;
+		$cfg = self::loadCfg();
+		$prefix = $cfg->WSS_CONTROL_USER_PREFIX;
+		
+		$username = $prefix.$user->username;
 		list($pass,$updtime) = explode('||',$user->get('keyval/wss_pass'));
 		
 		$time = time()-(int)$updtime;
@@ -84,8 +106,11 @@ class GW_WebSocket_Helper
 				// 'nera rysioooo!!'
 			}
 		}
+		$cfg = self::loadCfg();
+	
+		list($host, $port) = explode(':', $cfg->WSS_HOST_PORT);		
 		
-		return ['host'=>GW::s('WSS/HOST'), 'port'=>GW::s('WSS/PORT'), 'user'=>$username, 'apikey'=>$pass];
+		return ['host'=>$host, 'port'=>$port, 'user'=>$username, 'apikey'=>$pass];
 		
 	}
 	

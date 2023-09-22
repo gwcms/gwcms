@@ -35,5 +35,18 @@ moved to emails module
 {call e field=html2pdf_config type=read value=$tmp rowclass="html2pdf"}
 
 
+{capture assign=tmp}
+	<table >
+
+{call e field=WSS_CONTROL_USER_PREFIX type=text}
+{call e field=WSS_CONTROL_USER_PASS type=password hidden_note="user:pass"}
+{call e field=WSS_HOST_PORT type=text hidden_note="host:port"}
+{call e field=_WSSCFG_NOTES type=text}
+	</table>
+{/capture}
+
+{call e field=wss_config type=read value=$tmp rowclass="html2pdf"}
+
+
 
 {include file="default_form_close.tpl" submit_buttons=[save]}
