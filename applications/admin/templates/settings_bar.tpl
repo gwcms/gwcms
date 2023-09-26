@@ -24,6 +24,15 @@
 	&nbsp;&nbsp;&nbsp;
 {/function}
 
+{function "txt_setting"}
+	{$GLOBALS.pgsett.$key=$smarty.get.$key|default:$default}
+	<span class="settlab">{$title}:</span> 
+		
+		<input onchange="gw_navigator.jump(false,{ '{$key}':this.value })"  style="width:80px">
+	
+	&nbsp;&nbsp;&nbsp;
+{/function}
+
 {function "int_setting"}
     {$GLOBALS.pgsett.$key=$smarty.get.$key|default:$default}
     <span class="settlab">{$title}:</span> <a class="btnsm" href="{$app->buildUri(false,[$key=>$GLOBALS.pgsett.$key-1]+$smarty.get)}">-</a> {$GLOBALS.pgsett.$key} <a  class="btnsm" href="{$app->buildUri(false,[$key=>$GLOBALS.pgsett.$key+1]+$smarty.get)}">+</a>
