@@ -34,7 +34,7 @@ class GW_Admin_Application extends GW_Application
 		if($this->user->isRoot())
 			return GW_PERM_OPTIONS | GW_PERM_WRITE | GW_PERM_READ | GW_PERM_REMOVE;
 		
-		if(!$page->get('active'))
+		if(!is_object($page) || !$page->get('active'))
 			return false;
 		
 		return  GW_Permissions::canAccess($page->get('path'), $this->user->group_ids_cached) ;

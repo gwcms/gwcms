@@ -13,6 +13,7 @@ class Module_Orders extends GW_Public_Module
 		$this->addRedirRule('/^doKevin/i',['options','pay_kevin_module_ext']);	
 		$this->addRedirRule('/^doPaypal/i',['options','pay_paypal_module_ext']);	
 		$this->addRedirRule('/^doPaysera/i',['options','pay_paysera_module_ext']);	
+		$this->addRedirRule('/^doKlix/i',['options','pay_klix_module_ext']); //citadele card payment
 		
 		$this->config = new GW_Config('payments/');
 		$this->config->preload('');
