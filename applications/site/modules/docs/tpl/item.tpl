@@ -233,7 +233,7 @@
 		{if $m->feat(sign_again)}
 			{$seq=$smarty.get.multiple|default:1}
 			<a class="btn btn-ar btn-primary" href="{$app->buildUri(false, [multiple=>$seq+1,s=>$m->getStepIdx(form)]+$smarty.get)}">
-				 {GW::ln('/g/CREATE_CONTRACT_AGAIN')} ({$seq+1})
+				 {GW::ln('/m/CREATE_CONTRACT_AGAIN')} ({$seq+1})
 			</a>			
 		{/if}	
 

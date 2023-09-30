@@ -500,5 +500,14 @@ Petras Petraitis	124	outside	petras.petraitis@gmail.com	860054321</pre>
 		d::dumpas($_GET);
 	}
 	
-	
+	function getOptionsCfg()
+	{
+		
+		$opts = [
+		    'title_func'=>function($item){ return $item->id.' - '.$item->title;  },
+		    'search_fields'=>['title','id']
+		];	
+		
+		return $opts;	
+	}	
 }

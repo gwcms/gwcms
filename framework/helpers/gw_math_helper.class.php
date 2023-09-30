@@ -31,7 +31,7 @@ class GW_Math_Helper
 	static function uptime($secs, $precision = 's')
 	{
 		//d::ldump([$secs, $precision]);
-
+		$secs = (int)$secs;
 		$y = floor($secs / 31514400);
 		$secs-=$y * 31514400;
 		$M = floor($secs / 2592000);

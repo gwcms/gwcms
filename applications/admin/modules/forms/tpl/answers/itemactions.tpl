@@ -12,6 +12,7 @@
 	{list_item_action_m href="/{$item->ln}/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}&s=preview" iconclass="fa fa-globe text-mint" caption="Suformuotas dokumentas"}
 	{list_item_action_m href="/{$item->ln}/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}&act=doExportAsPdf" iconclass="fa fa-file-pdf-o" caption="Suformuotas dokumentas (pdf)"}
 	
+	{list_item_action_m url=[false, [act=>doCopyAnswerToOtherDoc, id=>$item->id]] iconclass="fa fa-files-o text-mint" caption="Dubliuoti atsakymą į kitą dokumentą"}	
 {/if}
 
 	

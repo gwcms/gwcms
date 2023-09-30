@@ -328,4 +328,53 @@ class Module_Answers extends GW_Common_Module
 		$this->jump();
 	}
 	
+	
+	function doCopyAnswerToOtherDoc()
+	{
+		$item = $this->getDataObjectById();
+		
+		
+		$form = ['fields'=>[
+			'anotherdoc' => ['type'=>'select_ajax','modpath'=>"docs", 'required'=>true, "width"=>"300px",'options'=>'', 'preload'=>1], //is vartotojo $item->set('ext/itax_suplier_id')
+			'signature_copy' => ['type'=>'bool']
+		],'cols'=>1];
+		
+		
+		
+		
+		if(!($answers=$this->prompt($form, "Pasirinkite dokumentą į kurį kopijuoti")))
+			return false;	
+				
+		
+		$keyval_vals = $item->extensions['keyval']->getAll();
+		$new = GW_Form_Answers::singleton()->createNewObject();
+		
+		$new->owner_id = $item->owner_id;
+		$new->doc_id = $answers['anotherdoc'];
+		$new->owner_id = $item->owner_id;
+		$new->ln = $item->ln;
+		
+		
+		$original_url = "/admin/".$this->app->ln."/forms/forms/".$item->owner_id."/answers/".$item->id."/form?doc_id=".$item->doc_id;
+		$new->admin_note = "Copy from $original_url";
+		
+		if($answers['signature_copy'] ?? false){
+			$new->signature = $item->signature;
+			
+		}
+		
+		$new->insert();
+		
+		foreach($keyval_vals as $key => $val)
+		{
+			$new->set("keyval/$key", $val);
+		}
+		
+		
+		$copy_url = "/admin/".$this->app->ln."/forms/forms/".$new->owner_id."/answers/".$new->id."/form?doc_id=".$new->doc_id;
+		
+		$this->setMessage("Copy create success. <a class='btn btn-primary' href='".$copy_url."'>Navigate to new answer</a>");
+		//po perkelimo ismesti mygtuka su nuoroda i to kito dokumento atsakymus
+		$this->app->jump();
+	}
 }
