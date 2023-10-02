@@ -248,7 +248,14 @@ class Module_Shop extends GW_Public_Module
 		
 		$item=$this->getDataObjectById();
 		
+		if(!$item)
+		{
+			$this->setError("Item not found");
+			$this->app->jump('direct/shop/shop');
+		}
+		
 		$this->afterList([$item]);
+		
 		
 		
 		$this->tpl_vars['addinfo'] = $item->extensions['keyval']->getAll();

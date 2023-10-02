@@ -20,6 +20,11 @@
 				{else}
 					{$value=$item->$field} 
 				{/if}
+				
+				{if $nl2br}
+					{$value=$value|nl2br}
+				{/if}
+				
 				{if $type==textarea}
 					{$value}
 				{else}
@@ -122,7 +127,7 @@
 			{/foreach}
 
 	
-			{call "dl_specif_row" field="keyval/description" type=textarea}
+			{call "dl_specif_row" field="keyval/description" type=textarea nl2br=1}
 			
 		</ul>
 			
