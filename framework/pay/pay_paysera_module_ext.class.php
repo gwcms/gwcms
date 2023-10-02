@@ -92,11 +92,11 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		$cfg = $this->getPayseraCfg();	
 		
 		try {
-			$response = WebToPay::checkResponse($_GET, array(
+			$response = WebToPay::checkResponse($_GET, [
 			    'projectid' => $cfg->paysera_project_id,
 			    'sign_password' => $cfg->paysera_sign_password,
 			    'log' => GW::s('DIR/LOGS') . 'paysera.log'
-			));
+			]);
 			
 			if($this->app->user && $this->app->user->isRoot()){
 
@@ -112,18 +112,26 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			//if($_GET['action']=='callback'){
 				
 			//}
-			$data = ['uri'=>$_SERVER['REQUEST_URI'], 'error'=>$e->getMessage(), '_POST'=>$_POST ?? []];
+			$data = ['server'=>$_SERVER, 'error'=>$e->getMessage(), 'validation_response'=>$response, '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
 			
+			
+			if($_SERVER['REMOTE_ADDR'] == '84.15.236.87'){
+				d::dumpas($data);
+			}
 			
 			$this->log($data);
 			
 			$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 			
-			$opts=[
-			    'subject'=>GW::s('PROJECT_NAME').' paysera error',
-			    'body'=>$data
-			];
-			GW_Mail_Helper::sendMailDeveloper($opts);				
+			if( ($_GET['action'] ?? false) != 'return' ){
+				$opts=[
+				    'subject'=>GW::s('PROJECT_NAME').' paysera error',
+				    'body'=>"<pre>".$data."</pre>"
+				];
+				GW_Mail_Helper::sendMailDeveloper($opts);				
+			}
+			
+			
 			
 			
 			$this->redirectAfterPaymentAccept($order);
@@ -199,10 +207,9 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			$out = ob_get_contents();
 			ob_end_clean();
 			if($out){
-				
 				$this->log("Unexpexted output: $out");
 				
-				$opt=[
+				$opts=[
 				    'subject'=>GW::s('PROJECT_NAME').' paysera error 2',
 				    'body'=>$data
 				];

@@ -26,11 +26,13 @@
 	
 	{$imurl=""}
 	
+	{* 2023-09 html2pdf converteris dar nevalgo webp failo &save_format=jpg *}
+	
 	{if $obj->image}
 		{$img = $obj->image}
-		{$imurl="/tools/img/{$img->key}&v={$img->v}&size=100x100"}
+		{$imurl="/tools/img/{$img->key}&v={$img->v}&size=100x100&save_format=jpg"}
 	{elseif $obj->image_url}
-		{$imurl="{$obj->image_url}&size=100x100"}
+		{$imurl="{$obj->image_url}&size=100x100&save_format=jpg"}
 	{/if}
 	{if $imurl}
 		{if strpos($imurl,'http')===false}
