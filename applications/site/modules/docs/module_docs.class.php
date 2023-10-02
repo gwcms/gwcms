@@ -630,13 +630,16 @@ class Module_Docs extends GW_Public_Module
 			$to = $this->tpl_vars['answer']->get('keyval/'.$elm->fieldname);
 		}
 		
+		$answer = $this->tpl_vars['answer'];
+		$fname = FH::urlStr($answer->doc->title.'__'.$answer->user->title.'__contractID'.$answer->id);
+			
 		$opts = [
 			'to' => $to,
 			'body'=> GW::ln('/m/SIGNED_DOCUMENT_ATTACHED'),
 			'subject' => GW::ln('/m/DOCUMENT_SIGNED') .' - '. $doc->title,
 			'attachments' => [
-			    $doc->idname.'.html' => $docs['html'], 
-			    $doc->idname.'.pdf' => $docs['pdf']
+			    $fname.'.html' => $docs['html'], 
+			    $fname.'.pdf' => $docs['pdf']
 			],
 			'bcc'=>explode(';',$doc->admin_emails)
 		];
