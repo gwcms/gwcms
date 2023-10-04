@@ -58,7 +58,7 @@ if(isset($_SERVER['HTTP_HOST'])){
 	
 	if(!isset($_GET['proj'])){
 
-		foreach(glob(dirname(__DIR__).'/*') as $path)
+		foreach(glob(dirname(GW::s('DIR/ROOT')).'/*') as $path)
 		{
 			$proj= basename($path);
 			echo "<li><a href='?proj=$proj'>$proj</a></li>";
