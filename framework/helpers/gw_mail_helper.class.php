@@ -12,6 +12,7 @@ class GW_Mail_Helper
 	static $last_from = "";
 	static $insert_to_queue_if_fail = true;
 	static $cfg_cache = false;
+	static $secure_smarty = false;
 	
 	static function loadCfg()
 	{
@@ -74,6 +75,7 @@ class GW_Mail_Helper
 		}
 		
 		//$mail->Subject = $subject;
+		self::$secure_smarty = self::initSmarty(); 
 		
 		return $mail;
 	}
@@ -89,11 +91,59 @@ class GW_Mail_Helper
 		return implode(';', $arr);
 	}	
 	
+	static function initSmarty()
+	{
+		$s = new Smarty;
+
+		//error_reporting(0);
+		$s->setErrorReporting(0);
+		$s->muteUndefinedOrNullWarnings();	
+
+		//ant productiono del performanco galima butu netikrinti, po ikelimo istrinti
+		$s->compile_check = true;
+		$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');;
+		//$s->security_policy = false;
+		$s->force_compile = true;
+		//$compiler->known_modifier_type
+
+		$s->security_policy =  new class($s) extends Smarty_Security{
+			public function isTrustedPhpFunction($function_name, $compiler){ 
+
+				return false;
+
+				//to debug use this line
+				//d::ldump($function_name);return true; 
+
+			} 
+			public function isTrustedResourceDir($filepath, $isConfig = null){ return true; } 
+			public function isTrustedTag($tag_name, $compiler){ 
+				if(in_array($tag_name, ['private_modifier','if','else','ifclose','elseif','foreach','foreachclose'])) return true; 
+
+				return false;
+
+			} 
+			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ return false; } 
+			public function isTrustedPhpModifier($modifier_name, $compiler){ return false; } 
+			public function isTrustedConstant($const, $compiler){ return false; } 
+			public function isTrustedModifier($modifier_name, $compiler){ return false; } 
+			public function isTrustedSpecialSmartyVar($var_name, $compiler){ return false; } 
+		};
+			
+		$s->compile_dir = GW::s("DIR/TEMPLATES_C");
+		$s->template_dir = false;
+
+
+		$s->_file_perms = 0666;
+		$s->_dir_perms = 0777;
+			
+			
+		return $s;
+	}	
 	
 	static function prepareSmartyCode($tpl_code, &$vars)
 	{		
-		GW::$context->app->smarty->assign($vars);
-		return GW::$context->app->smarty->fetch('string:' . $tpl_code);
+		self::$secure_smarty->assign($vars);
+		return self::$secure_smarty->fetch('string:' . $tpl_code);
 	}
 	
 	
