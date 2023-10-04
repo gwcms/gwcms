@@ -18,6 +18,8 @@ nbproject/private/private.xml
 config/project_core_sync.json
 applications/admin/static/js/gwcms_project.js
 config/*_module_sync.json
+framework/cms/gw_cms_sync.class.php
+framework/cms/gw_cms_sync_update.php
 ";
 
 
