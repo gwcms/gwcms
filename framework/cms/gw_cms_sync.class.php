@@ -92,8 +92,11 @@ class GW_CMS_Sync
 		if(GW::s('SYNC_MODULE'))
 		{
 			$f=$this->projDir."config/".GW::s('SYNC_MODULE')."_module_sync.json";
+			//d::dumpas($f);
+			//d::dumpas('test 123');
 		}else{
 			$f=$this->projDir."config/project_core_sync.json";
+			//d::dumpas('test abc');
 		}
 
 		
@@ -178,9 +181,9 @@ class GW_CMS_Sync
 
 		include $dir.'config/project_specific_files.php';
 		
-		$module = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE').'_' : "";
+		$module = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE').'_module' : "project";
 		
-		include $dir."config/{$module}project_specific_files.php";
+		include $dir."config/{$module}_specific_files.php";
 
 		$paths=explode("\n", trim($paths));
 		
