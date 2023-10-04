@@ -75,7 +75,7 @@ class GW_Mail_Helper
 		}
 		
 		//$mail->Subject = $subject;
-		self::$secure_smarty = self::initSmarty(); 
+		self::$secure_smarty = self::initSafeSmarty(); 
 		
 		return $mail;
 	}
@@ -91,8 +91,8 @@ class GW_Mail_Helper
 		return implode(';', $arr);
 	}	
 	
-	static function initSmarty()
-	{
+	static function initSafeSmarty()
+	{	
 		$s = new Smarty;
 
 		//error_reporting(0);
@@ -122,7 +122,12 @@ class GW_Mail_Helper
 				return false;
 
 			} 
-			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ return false; } 
+			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ 
+				//vertimai ir tt
+				if(in_array($class_name, ['GW'])) return true; 
+				
+				return false; 
+			} 
 			public function isTrustedPhpModifier($modifier_name, $compiler){ return false; } 
 			public function isTrustedConstant($const, $compiler){ return false; } 
 			public function isTrustedModifier($modifier_name, $compiler){ return false; } 
@@ -138,7 +143,7 @@ class GW_Mail_Helper
 			
 			
 		return $s;
-	}	
+	}
 	
 	static function prepareSmartyCode($tpl_code, &$vars)
 	{		
