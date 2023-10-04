@@ -17,6 +17,6 @@
 
 	{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
 
-	{call e field="secure" type=bool}
+	{call e field="enable_unsafe" type=bool}
 
 {/if}

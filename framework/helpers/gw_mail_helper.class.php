@@ -93,6 +93,11 @@ class GW_Mail_Helper
 	
 	static function initSafeSmarty()
 	{	
+		if(isset($_GET['test']))
+		{
+			d::ldump('SafeSmarty');
+		}
+		
 		$s = new Smarty;
 
 		//error_reporting(0);
