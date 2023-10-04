@@ -87,7 +87,7 @@
 	{else}
 <div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
 	<header class="text-center mb-4">
-                <h1 class="h4 g-color-black g-font-weight-400">{$item->form->title}</h1>
+                <h1 class="h4 g-color-black g-font-weight-400">{$item->title}</h1>
               </header>		
 	{/if}
 
