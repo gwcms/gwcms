@@ -75,7 +75,7 @@ class GW_Mail_Helper
 		}
 		
 		//$mail->Subject = $subject;
-		self::$secure_smarty = self::initSafeSmarty(); 
+		self::initSafeSmarty(); 
 		
 		return $mail;
 	}
@@ -93,6 +93,10 @@ class GW_Mail_Helper
 	
 	static function initSafeSmarty()
 	{	
+		
+		if(self::$secure_smarty)
+			return self::$secure_smarty;
+		
 		if(isset($_GET['test']))
 		{
 			d::ldump('SafeSmarty');
@@ -122,7 +126,8 @@ class GW_Mail_Helper
 			} 
 			public function isTrustedResourceDir($filepath, $isConfig = null){ return true; } 
 			public function isTrustedTag($tag_name, $compiler){ 
-				if(in_array($tag_name, ['private_modifier','if','else','ifclose','elseif','foreach','foreachclose'])) return true; 
+				//private_print_expression example: $user->title
+				if(in_array($tag_name, ['private_modifier','private_print_expression','if','else','ifclose','elseif','foreach','foreachclose'])) return true; 
 
 				return false;
 
@@ -146,14 +151,16 @@ class GW_Mail_Helper
 		$s->_file_perms = 0666;
 		$s->_dir_perms = 0777;
 			
+		self::$secure_smarty = $s;
 			
 		return $s;
 	}
 	
 	static function prepareSmartyCode($tpl_code, &$vars)
 	{		
-		self::$secure_smarty->assign($vars);
-		return self::$secure_smarty->fetch('string:' . $tpl_code);
+		$s = self::initSafeSmarty();
+		$s->assign($vars);
+		return $s->fetch('string:' . $tpl_code);
 	}
 	
 	
