@@ -194,10 +194,23 @@ class GW_Module
 			
 			$bgtask = new GW_Background_Task($taskparams);
 			$this->app->sess['bgtasks'][$bgtask->id] = $bgtask;
+			
+			//neimplementinta tokio kol kas
+			GW_WebSocket_Helper::notifyUser(
+				$this->app->user->username, 
+				[
+				    'action'=>'bgtask_open',
+				    'bgtaskid'=>$bgtask->id, 
+				    'starttime'=>time(), 
+				    'title'=>$taskparams['title'],
+				    'expectedDuration'=>$bgtask->expected_duration
+				]
+			);
 
 			$args = ['background'=>2, 'bgtaskid'=>$bgtask->id, 'GWSESSID'=>session_id()];
 			
 			//isimt app user id is sessijos jau eina
+			
 			Navigator::backgroundRequest($this->app->buildUri(false, $_GET), $args);
 
 			$this->jump();

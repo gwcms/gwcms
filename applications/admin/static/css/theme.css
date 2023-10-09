@@ -8029,3 +8029,8 @@ a.badge:hover{
 .triframetitle{
 	color: silver;
 }
+
+.navbar-content .material-symbols-outlined{
+	position: relative;
+	top: 4px;
+}

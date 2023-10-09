@@ -202,9 +202,21 @@ class Navigator
 		return $url;
 	}
 	
-	static function backgroundRequest($path, $get_args = [], $uid=false)
+	static function backgroundRequest($path, $get_args = [], $uid=false, $opts=[])
 	{
+		if($opts['background'] ?? false){
+			$get_args['background']=1;
+			$get_args['background_duration']=1;
+			$get_args['GWSESSID']=session_id();
+			
+			if(!$uid)
+				$uid = GW::$context->app->user->id;
+			
+			GW::$context->app->sessionWriteClose();
+		}
+		
 		GW_Http_Agent::impuls($url=self::tempAccessUrl($uid ? $uid: GW_USER_SYSTEM_ID, $path, $get_args));
+		//file_put_contents(GW::s('DIR/LOGS').'background_requests', date('Ymd H:i:s').' '.$url."\n", FILE_APPEND);
 
 		return $url;
 	}

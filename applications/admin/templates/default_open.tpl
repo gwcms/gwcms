@@ -45,6 +45,10 @@
 						
 						{$app->processHook("NAVBAR_LEFT_1")}
 
+			{if $app->user && $app->user->isRoot()}
+				{include "notifications.tpl"}
+			{/if}
+			
                         {include "langselect.tpl"}
                         {include "do_userdropdown.tpl"}
 

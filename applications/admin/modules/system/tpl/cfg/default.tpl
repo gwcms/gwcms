@@ -1,6 +1,8 @@
-{include file="default_form_open.tpl" form_width="824px"}
+{include file="default_form_open.tpl" form_width="1024px"}
 
-{*$nowrap=1*}
+<style>
+	.input_label_td{ width: 140px !important; }
+</style>
 
 
 {call e field=project_url type=text title="Project url"}
@@ -24,28 +26,77 @@ moved to emails module
 *}
 
 
+
 {capture assign=tmp}
-	<table >
-{call e field=html2pdf_type type=select options=[dompdf,remote,remotechrome] options_fix=1}
-{call e field=html2pdf_remote_url type=text default="http://1.voro.lt:2080/html/dompdf2022/convert.php"}
-{call e field=html2pdf_remotechrome_url type=text default="http://1.voro.lt:2080/apps/chromeheadless/html2pdf.php"}
+	<table style="width:100%">
+		<tr>
+			<td>
+				<table style="width:100%">
+					{call e field=html2pdf_type type=select options=[dompdf,remote,remotechrome] options_fix=1}
+				</table>
+			</td>	
+			<td>
+				<table style="width:100%">
+					{call e field=html2pdf_remote_url type=text default="http://1.voro.lt:2080/html/dompdf2022/convert.php"}
+					{call e field=html2pdf_remotechrome_url type=text default="http://1.voro.lt:2080/apps/chromeheadless/html2pdf.php"}
+				</table>
+			</td>	
+		<tr>
 	</table>
+
 {/capture}
+
 
 {call e field=html2pdf_config type=read value=$tmp rowclass="html2pdf"}
 
 
 {capture assign=tmp}
-	<table >
-
-{call e field=WSS_CONTROL_USER_PREFIX type=text}
-{call e field=WSS_CONTROL_USER_PASS type=password hidden_note="user:pass"}
-{call e field=WSS_HOST_PORT type=text hidden_note="host:port"}
-{call e field=_WSSCFG_NOTES type=text}
+	<table style="width:100%">
+		<tr>
+			<td>
+				<table style="width:100%">
+					{call e field=WSS_CONTROL_USER_PREFIX type=text}
+					{call e field=WSS_CONTROL_USER_PASS type=password hidden_note="user:pass"}
+				</table>
+			</td>	
+			<td>
+				<table style="width:100%">
+					{call e field=WSS_HOST_PORT type=text hidden_note="host:port"}
+					{call e field=_WSSCFG_NOTES type=text}
+				</table>
+			</td>	
+		<tr>
 	</table>
+
 {/capture}
 
 {call e field=wss_config type=read value=$tmp rowclass="html2pdf"}
+
+
+{capture assign=tmp}
+	<table style="width:100%">
+		<tr>
+			<td>
+				<table style="width:100%">
+					{call e field=VAPID_PUBLIC_KEY type=textarea height=50px}
+				</table>
+			</td>	
+			<td>
+				<table style="width:100%">
+					{call e field=VAPID_PRIVATE_KEY type=textarea height=50px}
+				</table>
+			</td>	
+		<tr>
+	</table>
+{/capture}
+{capture assign=tmp2}		
+<pre>openssl ecparam -genkey -name prime256v1 -out private_key.pem
+openssl ec -in private_key.pem -pubout -outform DER|tail -c 65|base64|tr -d '=' |tr '/+' '_-' >> public_key.txt
+openssl ec -in private_key.pem -outform DER|tail -c +8|head -c 32|base64|tr -d '=' |tr '/+' '_-' >> private_key.txt</pre>
+
+{/capture}
+
+{call e field=vapidconfg type=read value=$tmp rowclass="vapidconfg" hidden_note=$tmp2 hidden_note_copy=1}
 
 
 

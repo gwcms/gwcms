@@ -1,7 +1,8 @@
+<div class="mainnav-widget" id="backgroundTasks">
 {if isset($app->sess.bgtasks) && $app->sess.bgtasks}
 	{GW_Background_Task::singleton()->checkExpired()}
 	
-<div class="mainnav-widget" id="backgroundTasks">
+
 
 	<!-- Show the button on collapsed navigation -->
 	<div class="show-small">
@@ -36,7 +37,7 @@
 			*}
 		</ul>
 	</div>
-</div>
+
 		
 		<script>
 			require(['gwcms'], function(){
@@ -46,3 +47,5 @@
 		
 		
 {/if}
+
+</div>

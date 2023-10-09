@@ -312,14 +312,58 @@ class Module_Tools extends GW_Common_Module
 		
 	}
 	
+	
+	
+	function doDelayUpdate()
+	{
+		
+		
+		
+		file_put_contents(GW::s('DIR/LOGS').'background_requests', date('Ymd H:i:s').' BKTASKID: '.$_GET['bgtaskid']."\n", FILE_APPEND);
+		
+		sleep(5);
+		
+		GW_WebSocket_Helper::notifyUser('wdm', ['action'=>'notification', 'text'=> "Wait update starts now 5sec ".$_GET['test_string'].' BKTASKID:'.$_GET['bgtaskid'] ]);
+		
+		sleep(5);
 
+		
+		GW_WebSocket_Helper::notifyUser('wdm', ['action'=>'notification', 'text'=> "Wait update ends now".$_GET['test_string'].' BKTASKID:'.$_GET['bgtaskid']  ]);
+	}
+
+	
+	
+
+	function doTestMaxScriptExecutionTime1()
+	{
+		$max = 600;//10min
+		$start = time();
+		while(time() - $start > $max){
+			$this->modconfig->maxExecResult = time() - $start;
+		}		
+	
+	}	
+	
+	public $doTestMaxScriptExecutionTime = ["info"=>"Test max stript exec time"];
+	
+	function doTestMaxScriptExecutionTime()
+	{	
+		$url = Navigator::backgroundRequest("admin/{$this->app->ln}/system/tools?act=doTestMaxScriptExecutionTime1",[],false,['background'=>1]);	
+	}
+
+
+	public $doTestBackgroundRequestTASK = ["info"=>"Tests ability to call running task with progress / end progress after task complete | 5sec | developing..."];
+	
+	function doTestBackgroundRequestTASK()
+	{	
+		$test_string = GW_String_Helper::getRandString(10).' '.date('Y-m-d H:i:s');
+		$url = Navigator::backgroundRequest("admin/{$this->app->ln}/system/tools?act=doDelayUpdate&test_string=$test_string",[],false,['background'=>1]);	
+	}	
+	
 	
 	
 	function doATestBackgroundRequest()
 	{
-		
-	
-		
 		$this->initModCfg();
 		$this->modconfig->backgroundTestValue = $_GET['test_string'];
 		echo "your test string: ".$_GET['test_string'];

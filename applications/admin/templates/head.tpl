@@ -69,6 +69,8 @@
     <!--Page Load Progress Bar [ OPTIONAL ]-->
     <link href="{$app_root}static/css/pace.min.css" rel="stylesheet">
     <script src="{$app_root}static/js/pace.min.js"></script>
+    <script src="{$app_root}static/js/user_agent.js"></script>
+    
 	
 	<link href="{$app_root}static/css/theme.css?v={GW::globals(version_short)}" rel="stylesheet">
 	<link href="{$app_root}static/css/project.css?v={GW::globals(version_short)}" rel="stylesheet">
@@ -96,8 +98,11 @@
 	<script src="{$app->sys_base}vendor/jslibs/require.js"></script>
 	<script src="{$app_root}static/js/require_config.js"></script>
 	
-	{if GW::s('SW_NOTIFICATIONS')}
-	<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
+	{$vapidpublic=GW_Config::singleton()->get('sys/VAPID_PUBLIC_KEY')}
+	{if $vapidpublic && $app->user && $app->user->isRoot()}
+		<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
+		{$vapidpublic=explode("\n",$vapidpublic)}
+		{$vapidpublic=trim($vapidpublic.0)}
 	{/if}
 	
 
@@ -113,11 +118,10 @@
 				path:'{$app->path}', session_exp:{intval($session_exp)}, 
 				server_time:'{date("F d, Y H:i:s")}',
 				wss:{if GW::s('WSS/USER')}true{else}false{/if},
+				vapid:{if $vapidpublic}'{$vapidpublic}'{else}false{/if},
 				user_id: {if $app->user}{$app->user->id}{else}0{/if}
 			});
-			gw_adm_sys.init();	
-			
-			
+			gw_adm_sys.init();
 		});
 		
 		

@@ -18,8 +18,8 @@
 		</span>
 		<div class="username hidden-xs">{$app->user->title|default:$app->user->username} </div>
 	</a>
-
-
+	
+	
 	<div class="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
 
 		{*

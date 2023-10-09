@@ -370,14 +370,45 @@ var gw_adm_sys = {
 		gwws.connect("wss://"+config.host+":"+config.port+"/irc");
 	},
 	
+	
+	bgTaskOpen:function(data){
+		
+		var str = `<div id="demo-wg-server" class="hide-small mainnav-widget-content">
+		<ul class="list-group">
+		
+							
+			<li class="mar-btm backgroundTask" id="backgroundtask_`+data.bgtaskid+`" title="id: ">
+				<span style="display:none" class="startTime">`+data.starttime+`</span>
+				<span class="label label-primary pull-right timeGoing">0 s</span>
+				<p>`+data.title+`</p>
+								<span style="display:none" class="expectedDuration">`+data.expectedDuration+`</span>
+				<div class="progress progress-sm">
+					<div class="progress-bar progress-bar-mint" style="width: 1%;">
+						<span class="sr-only">1%</span>
+					</div>
+				</div>
+							</li>
+			</ul>
+		</div>`;
+		
+		console.log(str);
+		
+		$('#backgroundTasks').append(str);
+		
+		console.log("open bg task vars:");
+		console.log(data);
+	},
+	
 	bgTaskComplete: function(id)
 	{
+		
+		
 		$('#backgroundtask_'+id).fadeOut("slow", function() {
 			
 			if($('.backgroundTask:visible').length==0)
 			{
 				clearInterval(gw_adm_sys.bgTaskRunCountersInterval);
-				$('#backgroundTasks').fadeOut()
+				//$('#backgroundTasks').fadeOut()
 			}
 			
 			
@@ -452,7 +483,9 @@ var gw_adm_sys = {
 		{
 			gw_adm_sys.notification(data);
 		},
-		
+		bgtask_open: function(data){
+			gw_adm_sys.bgTaskOpen(data)
+		},		
 		bgtask_close: function(data){
 			gw_adm_sys.bgTaskComplete(data.bgtaskid)
 		},

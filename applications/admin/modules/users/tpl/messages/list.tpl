@@ -58,3 +58,78 @@
 	{/function}
 	
 {/block}
+
+
+
+
+{block "after_list"}
+	
+	
+{*
+
+sudedamios dalys
+1. php7.4 composer.phar require minishlink/web-push
+2. Vapid konfigas
+3. ant head <script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
+4. system/config inputai vapid configui
+5. users/profile?act=doStoreSubscription
+
+
+*}
+	
+{*
+a. php7.4 composer.phar require minishlink/web-push
+b. Vapid konfigas
+
+1 uzregistruoti service workeri
+
+2. uzregistruoti subscriberi nusiusti subscriptiona oer ajax i backenda
+
+3. siuntimo testas su vapid raktais
+
+4. statuso atvaizdavimas per motifikation varpeli 50%
+
+5. unsubcribe
+
+6. siunciama ir gaunama kad subsriptionas pabeges,
+(issiust laiska vartotojui kad pabego)
+
+
+
+xx Anoniminiai subscriberiai
+
+
+
+TODO
+padaryti testa 
+system/tools doTestWebPushSubscribersForThisUser doTestWebPushNotification
+
+
+
+
+
+
+*}
+	
+<script>
+	
+	
+require(['gwcms'], function(){
+	//GW_SW.initBtns();
+	
+
+})
+
+</script>
+
+{if $app->user->isRoot()}
+	<a href="{$ln}/users/profile?act=doTestNotification">Test notification</a>
+	
+	<button id="updateserviceworker">UpdateService worker</button>
+	<button id="unregister_sw">Unregister worker</button>
+	
+{/if}
+
+
+{/block}
+

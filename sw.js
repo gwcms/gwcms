@@ -1,37 +1,35 @@
 self.addEventListener('push', function (event) {
-		console.log('Received a push message', event);
+    if (!(self.Notification && self.Notification.permission === 'granted')) {
+        return;
+    }
 
-		event.waitUntil(
-		fetch("/lt/users/messages/newjson", { credentials: 'include' }).then(function (res) {
-
-				return res.json().then(function (data) {
+    const sendNotification = data => {
+        // you could refresh a notification badge here with postMessage API
+        
+         
 
 						//event.waitUntil(  	
-						self.registration.showNotification(data.title, {
-								body: data.body,
-								icon: data.icon,
-								tag: data.tag,
-								data: data
-						})
-				})
-		})
-		)
+						self.registration.showNotification(data.title, data)
+			    
+    };
 
-
-
+    if (event.data) {
+        const message = event.data.text();
+        event.waitUntil(sendNotification(JSON.parse(message)));
+    }
 });
 
 
-self.addEventListener('notificationclick', function (event) {
-		console.log('On notification click: ', event);
-
-		if (Notification.prototype.hasOwnProperty('data')) {
-				console.log('Using Data');
-				var url = event.notification.data.url;
-				clients.openWindow(url);
-		}else{
-				clients.openWindow('/');
-		}
-		
-		event.notification.close();
-});
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  
+  if (event.action) {
+    // Archive action was clicked
+    clients.openWindow('/action='+event.action);
+  } else {
+    // Main body of notification was clicked
+      console.log(event.notification.data);
+      
+    clients.openWindow(event.notification.data.url);
+  }
+}, false);

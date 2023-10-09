@@ -1,6 +1,10 @@
 <?php
 
 
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
+
+
 class Module_Profile extends GW_Module
 {	
 	function init()
@@ -87,6 +91,38 @@ class Module_Profile extends GW_Module
 
 	function doStoreSubscription()
 	{
+		$subscription = json_decode($_POST['data'], true);
+		
+
+		if (!isset($subscription['endpoint'])) {
+		    echo 'Error: not a subscription';
+		    return;
+		}
+
+
+		$file = GW::s('DIR/LOGS').'subscriber.dat';
+		
+		
+		if(isset($_REQUEST['unsubscribe'])){
+
+			//cia reiketu issaugoti ir statusa kad auto notificationu nenori
+			
+			file_put_contents($file, "");
+			echo "Subscription cleared";
+		}else{
+			
+			$subscription['user_agent'] = $_POST['user_agent'] ?? $_SERVER['HTTP_USER_AGENT'];
+			$subscription['insert_time'] = date('Y-m-d H:i');
+			
+			file_put_contents($file, json_encode($subscription));
+			echo "Subscription saved";			
+		}
+
+		
+		exit;
+		
+		/*
+		
 		$subscription = GW_Android_Push_Notif::getRegistrationId($_GET["subscription"]);
 		$new = $this->app->user->get('ext')->insertIfNotExists('android_subscription', $subscription);
 
@@ -94,27 +130,53 @@ class Module_Profile extends GW_Module
 		echo $subscription;
 		echo "\nOK";
 		exit;
+		 * 
+		 */
 	}
 	
-	function doTestSubscription()
+	function doTestNotification()
 	{
+		$file = GW::s('DIR/LOGS').'subscriber.dat';
+		$subscriber = json_decode(file_get_contents($file), true);
 		
-		GW_Message::singleton()->message([
-			'to'=>$this->app->user->id,
-			'subject'=>"Testing push", 
-			'message'=>"Hi, If you see this text - it workss!",
-			'level'=>15,
-			'group'=>false
-		]);		
 		
-		if(isset($_GET['debug'])){
-			$data = GW_Android_Push_Notif::push($this->app->user);
-			d::ldump(json_encode($data, JSON_PRETTY_PRINT));
-		}
-
-		exit;
+		$subscription = Subscription::create($subscriber);
 			
+		$auth = array(
+		    'VAPID' => array(
+			'subject' => GW::s('SITE_URL'),
+			'publicKey' => GW_Config::singleton()->get('sys/VAPID_PUBLIC_KEY'), // don't forget that your public key also lives in app.js
+			'privateKey' => GW_Config::singleton()->get('sys/VAPID_PRIVATE_KEY'), // in the real world, this would be in a secret file
+		    ),
+		);
+
+		$webPush = new WebPush($auth);
+			
+		$data = [
+		    'title'=>'this is title testas', 
+		    'body'=>'this is body testas',
+		    'icon'=>"/applications/admin/static/img/logo_push_messages.png",
+		    //'image'=>"/applications/admin/static/img/logo_push_messages.png",
+		    /*
+		    'actions'=>[
+			[
+			'action'=>'1bbdaction',
+			'title'=>'1do bbd',
+			//'icon'=>"/applications/admin/static/img/logo_push_messages.png"
+			]
+		    ],
+		     * 
+		     */
+		    'data'=>['url'=>'/lt/users/messages']
+		];
+
+		$report = $webPush->sendOneNotification($subscription, json_encode($data));
+		
+		d::ldump($report);
+		exit;
+		
 	}
+
 	
 	function doLinkWithFb()
 	{

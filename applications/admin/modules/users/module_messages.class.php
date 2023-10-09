@@ -137,7 +137,7 @@ class Module_Messages extends GW_Common_Module
 		
 		
 		
-		if(!$die || $result)
+		if(!isset($opts['die']) || $result)
 			return $result;
 
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
@@ -154,6 +154,27 @@ class Module_Messages extends GW_Common_Module
 		$item->sender = $this->app->user->id;
 		
 	}
+	
+	function doTestSubscription()
+	{
+		
+		GW_Message::singleton()->message([
+			'to'=>$this->app->user->id,
+			'subject'=>"Testing push", 
+			'message'=>"Hi, If you see this text - it workss!",
+			'level'=>15,
+			'group'=>false
+		]);		
+		
+		if(isset($_GET['debug'])){
+			$data = GW_Android_Push_Notif::push($this->app->user);
+			d::ldump(json_encode($data, JSON_PRETTY_PRINT));
+		}
+
+		exit;
+			
+	}
+	
 	
 }
 

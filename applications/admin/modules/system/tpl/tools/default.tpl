@@ -65,6 +65,7 @@
 <p>
 	FOR WGET AUTH:
 	GWSESSID={session_id()}
+	Max script execution time result: {intval($m->modconfig->maxExecResult)} secs
 </p>
 
 Hot Keys:
