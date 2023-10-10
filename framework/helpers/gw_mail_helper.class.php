@@ -107,7 +107,7 @@ class GW_Mail_Helper
 		//error_reporting(0);
 		$s->setErrorReporting(0);
 		$s->muteUndefinedOrNullWarnings();	
-
+				
 		//ant productiono del performanco galima butu netikrinti, po ikelimo istrinti
 		$s->compile_check = true;
 		$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');;
@@ -158,9 +158,13 @@ class GW_Mail_Helper
 	
 	static function prepareSmartyCode($tpl_code, &$vars)
 	{		
+		//$s = GW::$context->app->smarty; // unsafe version
 		$s = self::initSafeSmarty();
 		$s->assign($vars);
+		
+		
 		return $s->fetch('string:' . $tpl_code);
+		
 	}
 	
 	

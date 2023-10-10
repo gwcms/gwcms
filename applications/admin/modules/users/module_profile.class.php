@@ -95,8 +95,8 @@ class Module_Profile extends GW_Module
 		
 
 		if (!isset($subscription['endpoint'])) {
-		    echo 'Error: not a subscription';
-		    return;
+			echo 'Error: not a subscription';
+			return;
 		}
 
 
