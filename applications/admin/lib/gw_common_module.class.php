@@ -2448,7 +2448,7 @@ class GW_Common_Module extends GW_Module
 		
 		$info = $this->model->lastRequestInfo();
 		$res['total_count'] = $info['item_count'];
-	
+		
 		if(isset($_GET['debug'])){
 			header('content-type: text/json');
 			echo json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
