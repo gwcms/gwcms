@@ -347,6 +347,8 @@ class Module_Answers extends GW_Common_Module
 				
 		
 		$keyval_vals = $item->extensions['keyval']->getAll();
+
+		
 		$new = GW_Form_Answers::singleton()->createNewObject();
 		
 		$new->owner_id = $item->owner_id;
@@ -376,5 +378,33 @@ class Module_Answers extends GW_Common_Module
 		$this->setMessage("Copy create success. <a class='btn btn-primary' href='".$copy_url."'>Navigate to new answer</a>");
 		//po perkelimo ismesti mygtuka su nuoroda i to kito dokumento atsakymus
 		$this->app->jump();
+	}
+	
+	function doActOfAcceptance()
+	{
+		$form = ['fields'=>[
+			'acceptance_date' => ['type'=>'date','required'=>1], //is vartotojo $item->set('ext/itax_suplier_id')
+			'signature_copy' => ['type'=>'bool','default'=>1]
+		],'cols'=>1];
+		
+		if(!($answers=$this->prompt($form, "Nurodykite priėmimo perdavimo akto datą")))
+			return false;			
+		
+		$item = $this->getDataObjectById();
+		
+		$item->set('keyval/act_of_acceptance_date', $answers['acceptance_date']);
+		$item->set('keyval/act_of_acceptance_signature_copy', $answers['signature_copy']);
+		
+		
+		$actofacceptance_url = "{$item->ln}/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}&act_of_acceptance=1";
+		
+		$this->setMessage("
+			<a class='btn btn-primary' href='".$actofacceptance_url."&s=preview'>View html</a>
+			<a class='btn btn-default' href='".$actofacceptance_url."&act=doExportAsPdf'>View pdf</a>
+			");
+		//$item->
+		//
+		
+		///{$item->ln}/direct/docs/docs/document?id={$item->doc->key}&answerid={$item->id}&s=preview"
 	}
 }

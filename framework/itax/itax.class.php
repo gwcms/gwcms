@@ -116,26 +116,27 @@ class Itax
 		curl_setopt($curl, CURLOPT_VERBOSE, 1);
 		curl_setopt($curl, CURLOPT_HEADER, 1);		
 
-		$data = curl_exec($curl);
+		$rdata = curl_exec($curl);
 
 		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-		$header = substr($data, 0, $header_size);
-		$data = substr($data, $header_size);
+		$header = substr($rdata, 0, $header_size);
+		$rdata = substr($rdata, $header_size);
 
 		$this->last_request_header = $header;
-		$this->last_request_body = $data;
+		$this->last_request_body = $rdata;
 		$information = curl_getinfo($curl);
 		$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		
 
 		$header_info = curl_getinfo($curl,CURLINFO_HEADER_OUT);		
 		
-		//d::ldump(['request_header'=>$header_info, 'response_header'=>$header, 'response_data'=>$data]);
+		if($data['_DEBUG'] ?? false)
+			d::ldump(['request_header'=>$header_info, 'response_header'=>$header, 'request_data'=>$data, 'response_data'=>$rdata]);
 
 
 		curl_close($curl);
 
-		return json_decode($data);
+		return json_decode($rdata);
 	}
 	
 	
@@ -297,10 +298,9 @@ class Itax
 		
 		$pitm =& $postdata['purchase']['purch_inv_lines_attributes'][0];
 		
-		//teztour su discount amount eina
 		if(isset($data['discount_amount'])){
 			$pitm['discount_amount'] = $data['discount_amount'];
-			$pitm['amount'] -= $pitm['discount_amount'];
+			$pitm['amount'] -= (float)$pitm['discount_amount'];
 			$pitm['total_amount'] = $pitm['amount'] + $pitm['vat_amount'];
 		}
 		
@@ -409,7 +409,7 @@ class Itax
 		//teztour su discount amount eina
 		if(isset($data['discount_amount'])){
 			$pitm['discount_amount'] = $data['discount_amount'];
-			$pitm['amount'] -= $pitm['discount_amount'];
+			$pitm['amount'] -= (float)$pitm['discount_amount'];
 			$pitm['total_amount'] = $pitm['amount'] + $pitm['vat_amount'];
 		}
 		
@@ -504,6 +504,64 @@ class Itax
 		}
 		 */	
 		return $result;
+	}
+	
+	
+	function saveGeneralJournal($general_joural)
+	{
+		
+		/*
+		 * test 
+		$attribs=[	
+			'date' => "2023-10-11",
+			'journable_type' => "Suplier",
+			'journable_id' => "168067",
+			'journal_balanceable_type' => "Suplier",
+			'journal_balanceable_id' => "30379",
+			'amount' => "61",
+			'currency' => "EUR",
+			'_destroy' => "false",
+			//'id' => "",
+			'due_date' => "2023-10-15",
+			'reference_number' => "",
+			'description' => "",
+			'document_number' => ""
+		];		
+
+			$data = [];
+
+
+		$general_joural['number']= "BZ+201111111";
+		$general_joural['name'] = "vardas+pabarde+GPM";
+		$general_joural['period_closing'] = "";
+		$general_joural['fc_closing'] = "";
+		$general_joural['department_id'] = "";
+		$general_joural['project_id'] = "";
+		$general_joural['posted'] = true;
+		$general_joural['general_journal_lines_attributes'] = [$attribs];
+		 
+		 */
+
+		$data['general_journal'] = $general_joural;
+		$data['_DEBUG'] = 1;
+		
+		
+		$url = self::ENDPOINT.'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
+		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $data);
+	
+		$result->postdata = $data;
+		/*
+		POST https://www.itax.lt/api/v1/clients
+		{  
+		   "client":{  
+		      "name":"Testas",
+		      "default_currency":"EUR",
+		      "payment_term":30,
+		      "all_tags":["Svarbu", "GPM"]
+		   }
+		}
+		 */	
+		return $result;		
 	}
 	
 	function searchClient($search=[])

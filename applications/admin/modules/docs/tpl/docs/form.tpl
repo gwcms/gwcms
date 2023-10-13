@@ -183,7 +183,7 @@
 {/if}
 
 {call e field="doc_adm_fields" type="multiselect_ajax"  modpath="forms/forms" options=[] after_input_f="editadd" preload=1 hidden_note=GW::l('/m/FIELD_NOTE/doc_adm_fields')}
-
+{call e field="act_of_acceptance" type="select_ajax"  modpath="docs/docs" options=[] after_input_f="editadd" preload=1}
 
 
 {foreach $item->doc_ext_fields as $groupid => $form}

@@ -23,7 +23,10 @@
 {dl_actions_delete}
 		
 
-
+{if $item->doc_id && $m->feat(act_of_acceptance,[mod=>docs])}
+	
+	{list_item_action_m url=[false,[act=>doActOfAcceptance,id=>$item->id]] iconclass="fa fa-globe text-mint" caption="Priėmimo perdavimo aktas"}
+{/if}
 {if $m->feat(itax)}
 	{list_item_action_m url=[false,[act=>doItaxSyncPurchase,id=>$item->id]] iconclass="fa fa-cloud-upload"  caption=GW::l('/m/VIEWS/doItaxSyncPurchase') shift_button=1}
 {/if}

@@ -23,7 +23,8 @@ class GW_Doc extends GW_i18n_Data_Object
 	];
 	
 	public $composite_map = [
-		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'form_id']]
+		'form' => ['gw_composite_linked', ['object'=>'GW_Forms','relation_field'=>'form_id','readonly'=>1]],
+		'actOfAcceptance' => ['gw_composite_linked', ['object'=>'GW_Doc','relation_field'=>'act_of_acceptance','readonly'=>1]]
 	];
 	
 	public $encode_fields = [

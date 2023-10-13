@@ -117,7 +117,9 @@ class GW_Mail_Helper
 
 		$s->security_policy =  new class($s) extends Smarty_Security{
 			public function isTrustedPhpFunction($function_name, $compiler){ 
-
+				if(in_array($function_name, ['number_format'])) return true; 
+				
+				
 				return false;
 
 				//to debug use this line
@@ -134,7 +136,7 @@ class GW_Mail_Helper
 			} 
 			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ 
 				//vertimai ir tt
-				if(in_array($class_name, ['GW'])) return true; 
+				if(in_array($class_name, ['GW','FH','GW_Sum_To_Text_Helper'])) return true; 
 				
 				return false; 
 			} 

@@ -52,8 +52,6 @@
 	
 	{function dl_cell_user_actions}
 		{if $item->user_id}
-			
-			
 			{include "tools/ajaxdropdown.tpl" item=[actions=>"/admin/{$ln}/customers/users/itemactions?id={$item->user_id}&outside=1"]}
 		{/if}
 	{/function}

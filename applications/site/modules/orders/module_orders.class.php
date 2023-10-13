@@ -1031,7 +1031,7 @@ class Module_Orders extends GW_Public_Module
 		
 		$this->prepareOrderForPay($item);
 		
-		$extra = $item->extra;
+		$extra = (object)$item->extra;
 		$extra->bt_confirm = date('Y-m-d H:i');
 		$extra->bt_confirm_cnt = ($extra->bt_confirm_cnt??0) +1;
 		$item->extra = $extra;		

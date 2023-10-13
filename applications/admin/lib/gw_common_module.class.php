@@ -2448,7 +2448,7 @@ class GW_Common_Module extends GW_Module
 		
 		$info = $this->model->lastRequestInfo();
 		$res['total_count'] = $info['item_count'];
-		
+	
 		if(isset($_GET['debug'])){
 			header('content-type: text/json');
 			echo json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -3226,8 +3226,15 @@ class GW_Common_Module extends GW_Module
 		$this->features = array_fill_keys((array)json_decode($cfg->features), 1);		
 	}
 	
-	function feat($id)
+	function feat($id, $opts=[])
 	{
+		//pakrauti is kito modulio pvz is formu pakrauti docs configa per $m->feat(a)
+		if(isset($opts['mod'])){
+			$cfg = new GW_Config($opts['mod'].'/');
+			$features = array_fill_keys((array)json_decode($cfg->features), 1);
+			return isset($features[$id]);
+		}
+		
 		return isset($this->features[$id]);
 	}	
 	

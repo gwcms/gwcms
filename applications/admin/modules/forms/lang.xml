@@ -97,6 +97,9 @@
 			<i id="itax/contact/fullname">Itax / kontaktas / pilnas vardas</i>
 			<i id="itax/purchase/amount">Itax / Pirkimo sąsk. / Suma</i>
 			<i id="itax/purchase/item_title">Itax / Pirkimo sąsk. / Prekės paslaugos pavadinimas</i>
+			<i id="itax/purchase/serial_num">Itax / Pirkimo sąsk. / Serijos numeris</i>
+			<i id="itax/purchase/tax_amount">Itax / Pirkimo sąsk. / Mokestinė suma</i>
+			
 		</i>
 		
 		<i id="features">

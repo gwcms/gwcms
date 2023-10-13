@@ -73,6 +73,8 @@
 		<i id="site_info_trans">Svetainėje paaiškinamasis tekstas</i>
 		<i id="inform_email_field">El. pašto informacijai siųsti</i>
 		<i id="admin_emails">Admin. el. paštai</i>
+		<i id="act_of_acceptance">Priėmimo perdavimo aktas</i>
+		
 	</i>
 	
     <i id="FIELDS_SHORT">
@@ -156,6 +158,7 @@
 			<i id="step_pick_per_contract">Kontraktui žingsnių komplekto parinkimas</i>
 			<i id="anonymous_access">Leisti be paskyros</i>
 			<i id="itax">Itax</i>
+			<i id="act_of_acceptance">Priėmimo perdavimo aktas</i>
 		</i>
 	</i>
 

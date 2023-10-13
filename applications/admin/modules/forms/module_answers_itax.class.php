@@ -17,7 +17,7 @@ class Module_Answers_Itax extends GW_Module_Extension
 	function itaxPurchaseForm($existing, $newvals)
 	{
 		
-		$selajax=['type'=>'select_ajax','options'=>'','preload'=>1];
+		$selajax=['type'=>'select_ajax','options'=>[],'preload'=>1, 'empty_option'=>1];
 		$iSel= $selajax + ['optionsview'=>"optionsremote",'modpath'=>'datasources/itax'];
 		
 		
@@ -30,6 +30,7 @@ class Module_Answers_Itax extends GW_Module_Extension
 			'currency' => ['type'=>'text', 'default'=>'EUR'], 
 			'department_id' => $iSel+['source_args' => ['group'=>'departments']], 
 			'product_id'=> $iSel+['source_args' => ['group'=>'products']], 
+			'description' => ['type'=>'text','hidden_note'=>'pasirinkite product_id arba jei nera iveskite teksta'],
 			'quantity' => ['type'=>'number', 'default'=>1],
 			'price' => ['type'=>'number'], //is 
 			//'amount_paid'=>100,
@@ -39,10 +40,13 @@ class Module_Answers_Itax extends GW_Module_Extension
 			'tags'=>['type'=>'multiselect_ajax','source_args'=>['group'=>'tags']]+$iSel,
 			'footer_message'=> ['type'=>'text'], 
 			'discount_amount'=>['type'=>'number'],
-			'description' => ['type'=>'text'], 
+			
+			'journal_balanceable_id' => $iSel+['source_args' => ['group'=>'supliers']], //is vartotojo $item->set('ext/itax_suplier_id')
+			'tax_amount' => ['type'=>'number','hidden_note'=>'perduodama i general_journal'], //i
+		    
 			'confirm'=>['type'=>'bool', 'required'=>1],
 		
-		],'cols'=>4];
+		],'cols'=>2];
 		
 		
 		if($existing){
@@ -53,9 +57,6 @@ class Module_Answers_Itax extends GW_Module_Extension
 				if(isset($existing->$fieldname)){
 					$form['fields'][$fieldname]['value'] = $existing->$fieldname;
 				}
-				
-				
-				
 			}
 		}
 		
@@ -100,6 +101,11 @@ class Module_Answers_Itax extends GW_Module_Extension
 		
 		
 		$existing = [];
+		$contract_serialnum = '';
+		$contract_tax_amount = 0;
+		
+		
+
 		
 		
 		
@@ -107,17 +113,21 @@ class Module_Answers_Itax extends GW_Module_Extension
 		//tapati galima butu panaudoti ir is formos kuri uzpildo pats asmuo
 		//tik ne $item->doc->get("keyval/{$groupid}_".$e->fieldname);
 		//o $item->get("keyval/".$e->fieldname));
-		
+		$ext_fields = [];
 		foreach($item->doc->doc_ext_fields as $groupid => $form)
 		{
 			foreach($form->elements as $e){
+				
+				$value = $item->doc->get("keyval/{$groupid}_".$e->fieldname);
+				$ext_fields[$groupid][$e->fieldname] = $value;
 
 				if($e->linkedfields){
 					foreach($e->linkedfields as $field){
 						list($obj, $key) = explode('/',$field,2);
-
+						
+						
 						if($obj=='itax'){
-							$value = $item->doc->get("keyval/{$groupid}_".$e->fieldname);
+							
 							//d::ldump([$key, $value]);
 							
 							
@@ -128,6 +138,13 @@ class Module_Answers_Itax extends GW_Module_Extension
 								case 'purchase/item_title':
 									$existing['description'] = $value;
 								break;
+								case 'purchase/serial_num':
+									$contract_serialnum = $value;
+								break;	
+								case 'purchase/tax_amount':
+									$contract_tax_amount = $value;
+								break;								
+							
 							}
 						}
 						
@@ -136,6 +153,8 @@ class Module_Answers_Itax extends GW_Module_Extension
 			}			
 		}
 		
+			
+		
 		
 		if($item->user->id && $item->user->get("ext/itax_suplier_id")){
 			$existing['suplier_id'] = $item->user->get("ext/itax_suplier_id");
@@ -143,46 +162,15 @@ class Module_Answers_Itax extends GW_Module_Extension
 
 		$existing += (array)json_decode($item->get("keyval/purchase_vals"), true);
 		
+		//$item->set('keyval/act_of_acceptance_date'
+		//d::dumpas();
+		$existing['date'] = $item->get("keyval/act_of_acceptance_date");
+		$existing['due_date'] = date('Y-m-d', strtotime($existing['date'].' +7 DAY'));
+		$existing['invoice_num'] = 'Intelektinių paslaugų teikimo sutartis '.$contract_serialnum.'-'.$item->user->id  ;
+		$existing['tax_amount'] = $contract_tax_amount;
+
+				
 		
-		
-		
-/*		
-		//jei jau yra toks tai nekurti naujo
-		$search_existing = $itax->searchAny('supliers',['email'=>$item->email]);
-		$existing = $search_existing->response[0] ?? false;
-		
-		$vals=[];
-		$vals['name'] = $item->get('ext/contract_fullname');
-		$vals['bank_acc'] = $item->get('ext/iban');
-		$vals['code'] = $item->get('ext/tax_payer_id');
-		$vals['address'] = $item->get('ext/contract_address');
-		
-		$vals['email'] = $item->get('email');
-		$vals['phone'] = $item->get('phone');
-		$vals['country_code'] = $item->get('country_code');
-		
-		if(!$vals['address']){
-			$vals['address'] = [];
-			if($item->region) $vals['address'][]=$item->region;
-			if($item->city) $vals['address'][]=$item->city;
-			if($item->address_l1) $vals['address'][]=$item->address_l1;
-			if($item->address_l2) $vals['address'][]=$item->address_l2;
-			if($item->zipcode) $vals['address'][]=$item->zipcode;
-			
-			$vals['address'] = implode(', ', $vals['address']);
-		}
-		
-		if(!$vals['name']){
-			$vals['name'] = $item->title;
-		}
-		
-		//if(!$existing){
-		//	$vals['is_active'] = 1;
-		//}
-		
-		$debug = function($m, $msg) { $m->setMessage("<pre>". (is_array($msg) ? json_encode($msg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : $msg).'</pre>');  };
-		
-*/		//$existing = false;
 		$vals = [];
 		if(!($answers = $this->itaxPurchaseForm((object)$existing, $vals))){
 			return false;
@@ -197,6 +185,15 @@ class Module_Answers_Itax extends GW_Module_Extension
 		
 		$answers['unit_price'] = $answers['price'];
 		
+		if(!$answers['description'] && $answers['product_id']){
+			$answers['description'] = $itax->itax_mt->getOptionTitle('products', $answers['product_id']);
+		}
+		
+		//d::dumpas($answers);
+		
+
+		
+
 		$addPresp = $itax->savePurchase2($answers, ['update_if_posted'=>1,'update_if_has_tag'=>'MTcrmAuto']);
 		
 		
@@ -204,16 +201,67 @@ class Module_Answers_Itax extends GW_Module_Extension
 		{
 			$stat = (array)json_decode($item->get('keyval/itax_status_ex'), true);
 			$stat['purchase'] = 7;
-			$item->set('keyval/itax_status_ex', json_encode($stat));
-			$item->set('keyval/itax_purchase_id', $addPresp->response->id);
+			$stat['client'] = 7;
 			
-			$this->setMessage("Itax entry updated");
+			
+			$item->set('keyval/itax_purchase_id', $addPresp->response->id);
+			$item->set('keyval/itax_client_id', $answers['suplier_id']);
+			
+			$this->setMessage("Itax entry updated purchaseId:{$addPresp->response->id} clientId:{$answers['suplier_id']}");
+			
+			
+			if($answers['journal_balanceable_id'] ?? false){
+
+				$attribs=[	
+					'date' => date('Y-m-d'),
+					'journable_type' => "Suplier",
+					'journable_id' => "168067",
+					'journal_balanceable_type' => "Suplier",
+					'journal_balanceable_id' => $answers['journal_balanceable_id'],
+					'amount' => $answers['tax_amount'],
+					'currency' => "EUR",
+					'_destroy' => "false",
+					//'id' => "",
+					'due_date' => (int)date('d') <= 15 ? date('Y-m-').'15' : date("Y-n-d", strtotime("last day of this month")),
+					'reference_number' => "",
+					'description' => "",
+					'document_number' => ""
+				];		
+
+					$data = [];
+
+
+				$general_joural['number']= "BZ+P".$addPresp->response->id;
+				$general_joural['name'] = $item->user->title.' GPM';
+				$general_joural['period_closing'] = "";
+				$general_joural['fc_closing'] = "";
+				$general_joural['department_id'] = "";
+				$general_joural['project_id'] = "";
+				$general_joural['posted'] = true;
+				$general_joural['general_journal_lines_attributes'] = [$attribs];		
+				$addJresp = $itax->saveGeneralJournal($general_joural);			
+
+				if($addJresp->response->id ?? false){
+					$stat['gjournal'] = 7;
+					$item->set('keyval/itax_gjournal_id', $addJresp->response->id);
+					$this->setMessage("Itax entry updated general_journal");
+				}
+			
+			}
+			
+			$item->set('keyval/itax_status_ex', json_encode($stat));
 		}elseif($addPresp->error){
 			$this->setError("ITAX Cant create Purchse. <b>{$addPresp->error}</b>: ".json_encode($addPresp->messages));
 			
 		}else{
 			d::dumpas(['vals'=>$answers, 'response'=>$addPresp]);
 		}
+		
+		
+		
+		
+		
+		
 		
 		$this->jump();
 		//d::dumpas([$addPresp,$answers]);
@@ -255,6 +303,8 @@ class Module_Answers_Itax extends GW_Module_Extension
 		$this->jump();
 		 *
 		 */
-	}	
+	}
+
+	
 		
 }
