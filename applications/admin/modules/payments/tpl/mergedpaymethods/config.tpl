@@ -16,3 +16,6 @@
 {call e field="priority_group" type=multiselect_ajax sorting=1 options=$m->options.group value_format=json1  options_fix=1}
 *}
 {call e field="disabled_group" type=multiselect_ajax options=$m->options.group  value_format=json1  options_fix=1}
+
+{call e field=all_countries type="bool" hidden_note="some countries might not have any options but you might want to list them, so call OTH - other country options"}
+

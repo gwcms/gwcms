@@ -11,7 +11,14 @@
 {/foreach}	
 
 
+
 {call e field=aka type=tags}
 
+
+{$cols=$item->getColumns()}
+
+{if isset($cols.fake)}
+	{call e field=fake type=bool hidden_note="if country is not real please tick this box"}
+{/if}
 
 {include file="default_form_close.tpl"}

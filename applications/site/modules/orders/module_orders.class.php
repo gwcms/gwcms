@@ -1130,7 +1130,7 @@ class Module_Orders extends GW_Public_Module
 	
 			
 		$list0 = GW_Pay_Methods::singleton()->findAll(
-			['active=1 AND (country=? OR country="") AND (min_amount=0 OR min_amount <= ?) AND (max_amount=0 OR max_amount>?)', $country, $amount, $amount],
+			['active=1 AND (country=? OR country="" OR country="oth") AND (min_amount=0 OR min_amount <= ?) AND (max_amount=0 OR max_amount>?)', $country, $amount, $amount],
 			['priority ASC']
 		);
 		$list = [];
@@ -1144,12 +1144,24 @@ class Module_Orders extends GW_Public_Module
 		}		
 		
 		
-		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');	
+		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en', 'fake=0');	
 
 		$countries = [];
 		$active_country = GW_Pay_Methods::singleton()->getDistinctVals('country');
 		foreach($active_country as $cc)
 			$countries[strtoupper($cc)] = $countries0[strtoupper($cc)] ?? $cc;
+		
+		
+		
+		
+		if($cfg->all_countries){
+			$countries = [];
+			
+			
+			foreach($countries0 as $cc => $title)
+				$countries[strtoupper($cc)] = $title;			
+			
+		}
 		
 	
 		

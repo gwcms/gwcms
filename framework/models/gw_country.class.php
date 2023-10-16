@@ -11,12 +11,12 @@ class GW_Country extends GW_i18n_Data_Object
 		'title' => 1,
 	);	
 
-	function getOptions($lang = 'lt')
+	function getOptions($lang = 'lt', $extracond=false)
 	{
 		//return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
 		$opts= [];
 		
-		foreach($this->findAll(false, ['order'=>"title_$lang ASC"]) as $country)
+		foreach($this->findAll($extracond, ['order'=>"title_$lang ASC"]) as $country)
 		{
 			$opts[$country->code] = $country->get('title', $lang);
 		}
