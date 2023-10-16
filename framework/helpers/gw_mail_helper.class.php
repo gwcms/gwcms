@@ -129,8 +129,10 @@ class GW_Mail_Helper
 			public function isTrustedResourceDir($filepath, $isConfig = null){ return true; } 
 			public function isTrustedTag($tag_name, $compiler){ 
 				//private_print_expression example: $user->title
-				if(in_array($tag_name, ['private_modifier','private_print_expression','if','else','ifclose','elseif','foreach','foreachclose'])) return true; 
-
+				if(in_array($tag_name, ['assign','private_modifier','private_print_expression','if','else','ifclose','elseif','foreach','foreachclose'])) return true; 
+				
+				//assign $x=123;
+				
 				return false;
 
 			} 

@@ -1,10 +1,11 @@
 
 
-{assign var=itax_short_names scope=global value=['client'=>'C','purchase'=>'P','invoice'=>'I','gjournal'=>'J']}
+{assign var=itax_short_names scope=global value=['client'=>'C','supplier'=>'S','purchase'=>'P','invoice'=>'I','gjournal'=>'J']}
 {assign var=itax_status_color scope=global value=[0=>red,6=>red,7=>green,5=>orange,8=>violet]}
 {assign var=itax_status_title scope=global value=[0=>"Hmmm",6=>"Klaida kuriant",7=>"Sukurta",5=>"Negalimas sukurti",8=>"Pašalintas"]}
 {assign var=itax_links scope=global value=[
 "purchase"=>"https://www.itax.lt/purchases/", 
+"supplier"=>"https://www.itax.lt/supliers/", 
 "client"=>"https://www.itax.lt/clients/",
 "invoice"=>"https://www.itax.lt/invoices/",
 'gjournal'=>"https://www.itax.lt/general_journals/"

@@ -13,6 +13,11 @@
 	
 }
 
+
+{if $m->feat(act_of_acceptance)}
+	{call e field="act_of_acceptance" type="select_ajax"  modpath="docs/docs" options=[] after_input_f="editadd" preload=1}
+{/if}
+
 {if $app->user->isRoot()}
 
 	{call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}

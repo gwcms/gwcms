@@ -40,11 +40,10 @@ class Module_Answers_Itax extends GW_Module_Extension
 			'tags'=>['type'=>'multiselect_ajax','source_args'=>['group'=>'tags']]+$iSel,
 			'footer_message'=> ['type'=>'text'], 
 			'discount_amount'=>['type'=>'number'],
-			
 			'journal_balanceable_id' => $iSel+['source_args' => ['group'=>'supliers']], //is vartotojo $item->set('ext/itax_suplier_id')
 			'tax_amount' => ['type'=>'number','hidden_note'=>'perduodama i general_journal'], //i
-		    
 			'confirm'=>['type'=>'bool', 'required'=>1],
+			'save2defaults'=>['type'=>'bool', 'required'=>1],
 		
 		],'cols'=>2];
 		
@@ -99,16 +98,13 @@ class Module_Answers_Itax extends GW_Module_Extension
 		
 		$item = $this->getDataObjectById();
 		
+		$defaultkeys = ['department_id','product_id','tax_id','journal_balanceable_id'];
 		
 		$existing = [];
 		$contract_serialnum = '';
 		$contract_tax_amount = 0;
 		
-		
-
-		
-		
-		
+			
 		//is prijungiamu kintamuju
 		//tapati galima butu panaudoti ir is formos kuri uzpildo pats asmuo
 		//tik ne $item->doc->get("keyval/{$groupid}_".$e->fieldname);
@@ -153,12 +149,17 @@ class Module_Answers_Itax extends GW_Module_Extension
 			}			
 		}
 		
-			
-		
-		
 		if($item->user->id && $item->user->get("ext/itax_suplier_id")){
 			$existing['suplier_id'] = $item->user->get("ext/itax_suplier_id");
 		}
+		
+		
+		foreach($defaultkeys as $key){
+			if($this->config->{"itax_defaults_".$key})
+				$existing[$key] = $this->config->{"itax_defaults_" . $key};
+		}		
+		
+		
 
 		$existing += (array)json_decode($item->get("keyval/purchase_vals"), true);
 		
@@ -169,15 +170,10 @@ class Module_Answers_Itax extends GW_Module_Extension
 		$existing['invoice_num'] = 'Intelektinių paslaugų teikimo sutartis '.$contract_serialnum.'-'.$item->user->id  ;
 		$existing['tax_amount'] = $contract_tax_amount;
 
-				
-		
 		$vals = [];
 		if(!($answers = $this->itaxPurchaseForm((object)$existing, $vals))){
 			return false;
 		}
-		
-		
-
 		
 		$item->set("keyval/purchase_vals", json_encode($answers));
 		$itax = $this->initItax();
@@ -189,11 +185,16 @@ class Module_Answers_Itax extends GW_Module_Extension
 			$answers['description'] = $itax->itax_mt->getOptionTitle('products', $answers['product_id']);
 		}
 		
+		
+		
+		if($answers['save2defaults'] ?? false){
+			foreach($defaultkeys as $key){
+				$this->config->{"itax_defaults_".$key}  = $answers[$key];
+			}
+		}
+		
 		//d::dumpas($answers);
 		
-
-		
-
 		$addPresp = $itax->savePurchase2($answers, ['update_if_posted'=>1,'update_if_has_tag'=>'MTcrmAuto']);
 		
 		
@@ -201,13 +202,13 @@ class Module_Answers_Itax extends GW_Module_Extension
 		{
 			$stat = (array)json_decode($item->get('keyval/itax_status_ex'), true);
 			$stat['purchase'] = 7;
-			$stat['client'] = 7;
+			$stat['supplier'] = 7;
 			
 			
 			$item->set('keyval/itax_purchase_id', $addPresp->response->id);
-			$item->set('keyval/itax_client_id', $answers['suplier_id']);
+			$item->set('keyval/itax_supplier_id', $answers['suplier_id']);
 			
-			$this->setMessage("Itax entry updated purchaseId:{$addPresp->response->id} clientId:{$answers['suplier_id']}");
+			$this->setMessage("Itax entry updated purchaseId:{$addPresp->response->id} supplierID:{$answers['suplier_id']}");
 			
 			
 			if($answers['journal_balanceable_id'] ?? false){
@@ -215,7 +216,7 @@ class Module_Answers_Itax extends GW_Module_Extension
 				$attribs=[	
 					'date' => date('Y-m-d'),
 					'journable_type' => "Suplier",
-					'journable_id' => "168067",
+					'journable_id' => $answers['suplier_id'],
 					'journal_balanceable_type' => "Suplier",
 					'journal_balanceable_id' => $answers['journal_balanceable_id'],
 					'amount' => $answers['tax_amount'],
@@ -244,7 +245,7 @@ class Module_Answers_Itax extends GW_Module_Extension
 				if($addJresp->response->id ?? false){
 					$stat['gjournal'] = 7;
 					$item->set('keyval/itax_gjournal_id', $addJresp->response->id);
-					$this->setMessage("Itax entry updated general_journal");
+					$this->setMessage("Itax entry updated general_journalID: ".$addJresp->response->id);
 				}
 			
 			}
