@@ -26,7 +26,16 @@
 
 
 
-{call e field="international_delivery" type=bool}
+{call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo') empty_option=1}
+
+
+{if $m->algo=='orderprint'}
+{/if}
+
+
+
+{if $m->algo=='std'}
+{/if}
 
 
 {if $m->algo==natos}

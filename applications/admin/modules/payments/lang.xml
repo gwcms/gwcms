@@ -500,7 +500,14 @@
         <lt>Natos</lt>
         <en>Natos</en>
       </i>
-      <en>Disabled</en>
+      <i id="universal">
+        <lt>Universalusis</lt>
+        <en>universalusis</en>
+      </i>
+      <i id="orderprint">
+        <lt>Užsakom. spausd. pristatymas</lt>
+        <en>Printing press delivery</en>
+      </i>      
     </i>
   </i>
   <i id="MAP">
