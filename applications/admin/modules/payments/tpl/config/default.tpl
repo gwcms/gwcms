@@ -31,7 +31,7 @@
 {call e field="features" type=multiselect options=GW::l('/m/OPTIONS/features') value_format=json1}
 
 
-{call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo')}
+{call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo') empty_option=1}
 
 {call e field=testpay_user_id type=select_ajax modpath="users/usr"  preload=1 options=[]}
 
