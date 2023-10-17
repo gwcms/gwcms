@@ -79,12 +79,13 @@
 				{$opts = [''=>$oitem->modif_title]}
 				{$disabled=[]}
 				{foreach $modifications as $mod}
-					{$opts[$mod->id]="{$mod->modif_title} | {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}"}
+					{$opts[$mod->id]="{$mod->modif_title} {if !$m->feat(infinite_qty)}| {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}"}
 					{if !$mod->qty}
 						{$disabled[$mod->id]=$mod->id}
 					{/if}
 				{/foreach}
 				
+
 				<li> 
 					{if $m->config->modification_display==list}
 						{foreach $modifications as $mod}
@@ -104,13 +105,14 @@
 								   {/if}
 								   class="modification_select {implode(' ',$addclass)}"
 								   >
-									{$mod->modif_title} | {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}
+									{$mod->modif_title} {if !$m->feat(infinite_qty)} | {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}
 								</a>
 							</li>
 						{/foreach}
 							
 							
-					{elseif $m->config->modification_display==dropdown}
+					{elseif $m->config->modification_display==select}	
+
 						{include "inputs/input_select.tpl" name="modif" value=$smarty.get.modid options=$opts  
 						onchange="gw_navigator.jump(false,{ modid:this.value })"}
 					{/if}
@@ -150,10 +152,10 @@
 				</span>
 		{else}
 		
-			{if $item->oldprice}
+			{if $item->oldprice > 0}
 				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-16">{$item->oldprice} &euro;</s>
 			{/if}
-			<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
+			<span class="{if $item->oldprice > 0}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
 
 
 
@@ -408,7 +410,9 @@
 
 {*$app->processPath('shop/products/subscribeblock',['current'=>$item->id])*}
 
-{$m->processView('inproductHistory')}
+{if $m->feat('prod_visit_history')}
+	{$m->processView('inproductHistory')}
+{/if}
 
 {capture append=footer_hidden}
 	

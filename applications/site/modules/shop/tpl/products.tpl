@@ -8,6 +8,8 @@
 	<div class="d-flex justify-content-end align-items-center g-brd-bottom g-brd-gray-light-v4 g-pt-40 g-pb-20">
 	  <!-- Show -->
 	  
+	  
+	  {if count($list) >=12 }
 	  <div class="gw-g-mr-60 d-none d-lg-block">
 		{include "`$m->tpl_dir`/paging.tpl" short=1}		  
 		 </div>
@@ -37,7 +39,8 @@
 	    <!-- End Secondary Button -->
 	  </div>
 	  <!-- End Show -->
-
+	  {/if}
+	{if count($list) >=12 }
 	  <!-- Sort By -->
 	  <div class="gw-g-mr-60">
 	    <h2 class="h6 align-middle d-inline-block g-font-weight-400 text-uppercase g-pos-rel g-top-1 mb-0 customiselist">{GW::ln('/g/SORT')}:</h2>
@@ -62,24 +65,42 @@
 	    <!-- End Secondary Button -->
 	  </div>
 	  <!-- End Sort By -->
+	  {/if}
 
 	  {$passive_c="u-icon-v2 u-icon-size--xs g-brd-gray-light-v3 g-brd-black--hover g-color-gray-dark-v5 g-color-black--hover gwUrlMod"}
 	  {$active_c="u-icon-v2 u-icon-size--xs g-brd-primary g-color-primary gwUrlMod"}
 	  
+	  
+	  
+	  {$list_types = json_decode($m->config->site_list_types, true)}
+	  
+	  
+	  
+	  {if count($list_types) > 1}	 
+		  {$icon_by_type=['table'=>'icon-list','pics'=>'icon-grid', 'unprepared'=>'icon-music-020 u-line-icon-pro']}
+		  {$default_li_type=$list_types.0}
 	  <!-- Sort By -->
 	  <ul class="list-inline mb-0">
-	    <li class="list-inline-item">
-	      <a class="{if $smarty.get.displ=='table'}{$active_c}{else}{$passive_c}{/if}" href="#" data-args='{ "displ":"table" }' >
-		<i class="icon-list"></i>
-	      </a>
-	    </li>
-	    <li class="list-inline-item">
-	      <a class="{if $smarty.get.displ!='table'}{$active_c}{else}{$passive_c}{/if}" href="#" data-args='{ "displ":"pics" }' >
-		<i class="icon-grid"></i>
-	      </a>
-	    </li>
+		  
+		{foreach $list_types as $listtype}
+			
+				{*sarasas tik pavadinimas ir produkto ikona*}
+				{*http://1.voro.lt:2080/html/unify/2.6.3/html/unify-main/shortcodes/icons/shortcode-base-icon-line-icons-pro-1.html*}
+				{*http://1.voro.lt:2080/html/unify/2.6.3/html/unify-main/shortcodes/icons/shortcode-base-icon-line-icons-pro-2.html*}
+			<li class="list-inline-item">
+			  <a class="{if $smarty.get.displ==$listtype || (!$smarty.get.displ && $listtype == $default_li_type)}{$active_c}{else}{$passive_c}{/if}" href="#" data-args='{ "displ":"{$listtype}" }' >
+			    <i class="{if $icon_by_type[$listtype]}{$icon_by_type[$listtype]}{else}{$icon_by_type.unprepared}{/if}"></i>
+			  </a>
+			</li>	
+			
+			
+		{/foreach}
+		  
+
 	  </ul>
+	
 	  <!-- End Sort By -->
+	  {/if}
 	</div>
 	<!-- End Filters -->
 

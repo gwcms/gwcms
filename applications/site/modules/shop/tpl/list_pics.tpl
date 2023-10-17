@@ -25,13 +25,14 @@
 	<figcaption class="w-100 g-bg-lightred text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5">
 		<span class="g-color-white g-font-size-11 text-uppercase g-letter-spacing-1">{GW::ln('/M/SHOP/SOLD_OUT')}</a>
 	      </figcaption>
-	      {elseif $item->oldprice}
+	      {elseif $item->oldprice > 0}
+
 		       <span class="u-ribbon-v1 g-width-40 g-height-40 g-color-white g-bg-primary g-font-size-13 text-center text-uppercase g-rounded-50x g-top-10 g-right-minus-10 g-px-2 g-py-10">-{$item->discount_display}</span>
 	      {/if}
 	    
 	      {if $item->komisas}
 		      <span class="u-ribbon-v1 g-width-40 g-height-40 g-color-white g-bg-img-hero g-font-size-8 text-center text-uppercase g-rounded-50x g-px-2 g-py-10" 
-			    style="right:20px;{if $item->oldprice}top:60px;{else}top: 20px;{/if}">Naudota</span>
+			    style="right:20px;{if $item->oldprice>0}top:60px;{else}top: 20px;{/if}">Naudota</span>
 		      
 		      {*
 		      	<figcaption class="w-100 g-bg-primary text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5" style="opacity:0.6">
@@ -67,10 +68,10 @@
 				{/if}				
 				</span>
 			{else}
-			{if $item->oldprice}
+			{if $item->oldprice > 0}
 				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-15">{$item->oldprice} &euro;</s>
 			{/if}
-			<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if}">{$item->price} &euro;</span>
+			<span class="{if $item->oldprice > 0}g-color-red{else}g-color-black{/if}">{$item->price} &euro;</span>
 			{/if}
 		</span>
 	      </div>

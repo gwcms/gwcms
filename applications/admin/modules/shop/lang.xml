@@ -233,12 +233,15 @@
 		<i id="modifications">Produktų variacijos</i>
 		<i id="site_add2cart_from_list"></i>
 		<i id="delivery">Pristatymas</i>
-		<i id="cart_item_qty1">Išjungti kiekio pasirinkimą</i>
+		<i id="no_qty_change_in_cart">Išjungti kiekio pasirinkimą krepšelyje</i>
+		<i id="infinite_qty">Kiekis beribis</i>
 		<i id="site_add2cart_from_list">Pridėti į krepšelį iš sąrašo</i>
 		<i id="wishlist">Wishlist - įsiminti pamėgtas prekes</i>
 		<i id="selectqty">Kiekio pasirinkimas</i>
 		<i id="ttlock">Bilietams turintiems laiką siųsti durų kodą</i>
 		<i id="vatgroups">Pvm grupės kiekvienam produktui</i>
+		<i id="prod_visit_history">Registruoti žiūrėtų produktų istoriją</i>
+		<i id="jump2cartafteradd">Po pridėjimo peršokti į krepšelį</i>
           </i>
 	  
   </i>

@@ -1,12 +1,17 @@
 
-
 	{include "product_display.tpl"}
+	
+	{$default_li_type=$list_types.0}
+	
 	{if $smarty.get.displ=='table'}
 		{$displ=table}
 		{include "`$m->tpl_dir`list_table.tpl"}
-	{else}
+	{elseif $smarty.get.displ=='pics'}
 		{$displ=icons}
-		{include "`$m->tpl_dir`list_pics.tpl"}
+		{include "`$m->tpl_dir`list_pics.tpl"}	
+	{else}
+
+		{include "`$m->tpl_dir`list_`$default_li_type`.tpl"}
 	{/if}
 
 	

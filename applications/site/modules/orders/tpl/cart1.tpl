@@ -77,8 +77,8 @@
 		 </div>
 	       </td>
 	       <td class="g-color-gray-dark-v2 g-font-size-13">
-		       {if $item->obj->oldprice}<s class="g-color-gray-dark-v4">{$item->obj->oldprice} &euro;</s><br/>{/if}
-		       <span class="{if $item->obj->oldprice}g-color-red{/if}">{$item->unit_price} &euro;</span>
+		       {if $item->obj->oldprice>0}<s class="g-color-gray-dark-v4">{$item->obj->oldprice} &euro;</s><br/>{/if}
+		       <span class="{if $item->obj->oldprice > 0}g-color-red{/if}">{$item->unit_price} &euro;</span>
 		       
 	       </td>
 	       <td>
@@ -87,6 +87,8 @@
 			 <input name="cart[{$item->id}][id]" type="hidden" value="{$item->id}">
 			 
 			 {$range = explode(';', $item->qty_range)}
+			 
+			 
 			 {if $item->qty_range && $range.0!=$range.1}
 				 
 				 

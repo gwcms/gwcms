@@ -264,7 +264,9 @@ class Module_Shop extends GW_Public_Module
 			d::Dumpas($this->tpl_vars['addinfo']);
 		
 		
-		$this->addHistory($item);
+		if($this->feat('prod_visit_history')){
+			$this->addHistory($item);
+		}
 		
 		
 		
@@ -291,7 +293,8 @@ class Module_Shop extends GW_Public_Module
 			$this->tpl_vars['modifications_pricerange'] = [$minprice, $maxprice];
 			
 			$this->tpl_vars['modifications'] = $modifications;
-
+			
+	
 			if($_GET['modid'] ?? false){
 				$amod = $modifications[$_GET['modid']] ?? false;
 				$oitem = $item;
@@ -509,8 +512,8 @@ class Module_Shop extends GW_Public_Module
 		
 		$cart = $this->app->user->getCart(true);
 	
-		
-		$payprice = $item->price;
+				
+		$payprice = $item->calcPrice($cartvals['qty']);
 		
 
 		//nebepridet pakartotinai
@@ -520,18 +523,38 @@ class Module_Shop extends GW_Public_Module
 		$url = $this->app->buildUri('direct/shop/shop/p',['id'=>$item->id]);
 		
 		
+		$orderqty = ($cartvals['qty'] ?? 1);
+		
+		
+		
+		if(!$payprice && $item->singlebuyredirect)
+		{
+			header('Location: '.$item->singlebuyredirect);
+			exit;
+		}
+			
+			
+		
+		
 		$vals = [
 			'obj_type'=>'shop_products',
 			'obj_id'=>$item->id,
-			'qty' => min($cartitem->qty + ($cartvals['qty'] ?? 1), $item->qty),
+			'qty' => min($cartitem->qty + $orderqty, $item->qty),
 			'unit_price'=>$payprice,
 			//'context_obj_id'=>$user->id,
 			//'context_obj_type'=>'gw_customer'
-			'qty_range'=>$this->feat('cart_item_qty1') ? "" :  "1;$item->qty",
+			
 			'deliverable'=>$this->feat('delivery') ? 10 : 0, //real item
 			'vat_group'=>$item->vat_group ? $item->vat_group : $this->config->vatgroup,
 			'link' =>$url
 		];
+		
+		
+		if($this->feat('no_qty_change_in_cart')){
+			$vals['qty_range']= "$orderqty;$orderqty";
+		}else{
+			$vals['qty_range']="1;$item->qty";
+		}
 		
 		//modifikacijoms
 		if($item->parent_id){
@@ -544,19 +567,22 @@ class Module_Shop extends GW_Public_Module
 		$cart->addItem($cartitem);
 		
 		
+		if($this->feat('jump2cartafteradd')){
+			$this->app->jump('direct/orders/orders/cart');
+		}else{
 		
+			$this->setMessage([
+			    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/ADDED_TO').' '.GW::ln('/M/SHOP/CART', ['l'=>'gal','c'=>1]),
+			    'type'=>0,
+			    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_CART'), 'url'=>$this->app->buildUri('direct/orders/orders/cart')]]
+				]);
 		
-		$this->setMessage([
-		    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/ADDED_TO').' '.GW::ln('/M/SHOP/CART', ['l'=>'gal','c'=>1]),
-		    'type'=>0,
-		    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_CART'), 'url'=>$this->app->buildUri('direct/orders/orders/cart')]]
-			]);
-		
-		
-		//d::dumpas('aaa');
-		$args = $_GET;
-		unset($args['act']);
-		$this->app->jump(false, $args);
+
+			//d::dumpas('aaa');
+			$args = $_GET;
+			unset($args['act']);
+			$this->app->jump(false, $args);
+		}
 		
 	}	
 
