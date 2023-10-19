@@ -75,7 +75,9 @@ class GW_Mail_Helper
 		}
 		
 		//$mail->Subject = $subject;
+		
 		self::initSafeSmarty(); 
+		
 		
 		return $mail;
 	}
@@ -93,6 +95,9 @@ class GW_Mail_Helper
 	
 	static function initSafeSmarty()
 	{	
+		
+		if(GW::s('SMARTY_VERSION')<4)
+			d::dumpas("Please upgrade smarty to version 4");
 		
 		if(self::$secure_smarty)
 			return self::$secure_smarty;
@@ -197,6 +202,7 @@ class GW_Mail_Helper
 		$tpl = $opts['tpl'];
 		
 		
+		
 		//paduodamas sablonas arba sablono id
 		//betkokiu atveju $tpl pavirsta i GW_Mail_Template objekta
 		if(is_numeric($tpl))
@@ -239,20 +245,26 @@ class GW_Mail_Helper
 		$cfg = self::loadCfg();
 		$toname = '';
 		
+		
+		
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
 		
+
+		
 		$mailer = $opts['mailer'] ?? self::initPhpmailer($opts['from'] ?? '', $opts['cfg'] ?? false);
+		
 				
 		if(isset($opts['subject']))
 			$mailer->Subject = $opts['subject'];
+		
 		
 		if(isset($opts['plain']) && $opts['plain']){
 			$mailer->Body = $opts['body'];
 		}else{
 			$mailer->msgHTML($opts['body']);
 		}
-
+		
 		if(!is_array($opts['to']))
 			$opts['to'] = self::explodeMultipleEmails($opts['to']);
 				
@@ -279,7 +291,7 @@ class GW_Mail_Helper
 				$mailer->addStringAttachment($data, $filename);
 		}
 		
-
+		
 		if(isset($opts['bcc'])){
 			if(!is_array($opts['bcc']))
 				$opts['bcc'] = [$opts['bcc']];

@@ -12,13 +12,19 @@ class Module_Config extends GW_Common_Module
 		$this->initLogger();
 		
 		
-		$this->addRedirRule('/^doItax|^viewItax/i','itax');
-		$this->addRedirRule('events','itax');
+		
+		
+		
 		
 				
 		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table]);
 		
 		$this->features = array_fill_keys((array)json_decode($this->config->features), 1);
+		
+		if($this->feat('itax')){
+			$this->addRedirRule('events','itax');
+			$this->addRedirRule('/^doItax|^viewItax/i','itax');
+		}
 		
 		parent::init();
 	}

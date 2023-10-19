@@ -165,6 +165,20 @@ class Shop_Products extends GW_Composite_Data_Object
 		
 	}
 	
+	
+	function getFields()
+	{
+		static $cache;
+		
+		if($cache)
+			return $cache;
+		
+		
+		$cache =  GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->table],['key_field'=>'fieldname']);
+		
+		return $cache;
+	}
+	
 	function eventHandler($event, &$context_data = array()) {
 		
 		switch ($event){
@@ -172,6 +186,25 @@ class Shop_Products extends GW_Composite_Data_Object
 				if($this->parent_id){
 					$this->parent->calcPriceRange();
 				}
+				
+			break;
+			
+			case 'AFTER_LOAD':
+				$dynamicFields = $this->getFields();
+				//d::dumpas($dynamicFields);
+				
+				foreach($dynamicFields as $field)
+				{
+					
+					if($field->inp_type=="file"){
+						$this->composite_map[$field->fieldname] =  ['gw_file',[]];
+						
+						if(isset($field->config->allowed_extensions))
+							$this->composite_map[$field->fieldname][1]['allowed_extensions'] = $field->config->allowed_extensions;
+					}
+				}
+
+				
 			break;
 		}
 		

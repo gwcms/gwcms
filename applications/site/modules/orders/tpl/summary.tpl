@@ -39,7 +39,7 @@
     {if $m->order->deliverable}
 	<div class="d-flex justify-content-between">
 	  <span class="g-color-black">{GW::ln('/m/SHIPPING')}</span>
-	  <span class="g-color-black g-font-weight-300">{if $step > 2}{$order->amount_shipping} &euro;{else}?{/if}</span>
+	  <span class="g-color-black g-font-weight-300">{if $step > 2 || $order->amount_shipping}{$order->amount_shipping} &euro;{else}?{/if}</span>
 	</div>	
     {/if}
     

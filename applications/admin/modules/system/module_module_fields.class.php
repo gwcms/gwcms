@@ -5,6 +5,8 @@ class Module_Module_Fields extends GW_Common_Module
 {
 	public $filterpaths=false;
 	
+	use Module_Import_Export_Trait;	
+	
 	function init()
 	{
 		$this->model = GW_Adm_Page_Fields::singleton();

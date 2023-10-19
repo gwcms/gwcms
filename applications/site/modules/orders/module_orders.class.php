@@ -788,45 +788,150 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		if($step==2){
-	
-	
-			$erritem = $this->getErrorItem('delivery');
-		
-			if($erritem){
-				$order->setValues($erritem);
+				
+			$method = "deliveryView".$this->config->delivery_algo;
+			
+			if(method_exists($this, $method)){
+				$this->$method($order);
 			}else{
-
-
-				if(!$order->name || !$order->email)
-				if($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id])){
-
-					$fields = 'email,name,surname,company,phone,country,region,city,address_l1,postcode,company_code,vat_code,company_addr';
-					$fields = explode(',',$fields);
-
-					foreach($fields as $field)
-						
-						$order->set($field,$last->$field);	
-
-				}
-				
-				
-				
+				$this->setError("Please check admin panel. Pick delivery algorithm");
 			}
-
-
-
-
-			if($this->config->international_delivery)
-				$this->options['country'] = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');	
-			
-			
-			
 		}
 		$this->tpl_vars['item'] = $order;
 		
 		$this->tpl_vars['order'] = $order;
 	}	
 	
+	
+	function deliveryViewNatos($order)
+	{
+		$erritem = $this->getErrorItem('delivery');
+
+		if($erritem){
+			$order->setValues($erritem);
+		}else{
+
+
+			if(!$order->name || !$order->email)
+			if($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id])){
+
+				$fields = 'email,name,surname,company,phone,country,region,city,address_l1,postcode,company_code,vat_code,company_addr';
+				$fields = explode(',',$fields);
+
+				foreach($fields as $field)
+
+					$order->set($field,$last->$field);	
+
+			}
+		}
+
+
+		if($this->config->international_delivery)
+			$this->options['country'] = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');			
+	}
+	
+	function deliveryViewOrderPrint($order)
+	{
+		$erritem = $this->getErrorItem('delivery');
+
+		if($erritem){
+			$order->setValues($erritem);
+		}else{
+
+
+			if(!$order->name || !$order->email)
+			if($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id])){
+
+				$fields = 'email,name,surname,company,phone,country,region,city,address_l1,postcode,company_code,vat_code,company_addr';
+				$fields = explode(',',$fields);
+
+				foreach($fields as $field)
+
+					$order->set($field,$last->$field);	
+
+			}
+
+		}
+		
+		$this->options['country'] = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en');
+		
+		
+		if(isset($_GET['deliverycountry'])){
+			
+			$this->order->amount_shipping = $this->doCalcDeliveryOrderPrint($order, $_GET['deliverycountry']);
+			
+		}else{
+			$this->order->amount_shipping = 0;
+		}
+		
+		//siuntimas
+		$this->order->delivery_opt=1;
+		
+		
+		$this->order->updateChanged();
+	}	
+	
+	
+	function doCalcDeliveryOrderPrintEx($order, $countryid, $item, $qty)
+	{
+		$executers=Shop_Executers::singleton()->findAll(['active=1']);
+		
+		$options = [];
+		
+		foreach($executers as $ex){
+			if($ex->serv_countries){
+				$countries = json_decode($ex->serv_countries, true);
+				$countries = array_flip($countries);
+				
+				if(!isset($countries[$countryid])){
+					continue;
+				}
+			}
+			
+			
+			$prices  = Shop_ShipPrice::singleton()->findAll(['owner_id=?', $ex->id], ['key_field'=>'id']);
+			
+			foreach($prices as $price){
+				if($price->qty_min <= $qty && $price->qty_max >= $qty){
+					$options[$ex->id.'_'.$price->id] = $price->price;
+				}
+			}
+			
+		}
+		
+		$ship_price = min($options);
+		
+		$options = array_flip($options);
+		
+		
+		$selected_executor = $options[$ship_price];
+		
+		list($executerid, $priceid) = explode('_', $selected_executor);
+		$order->extra = ['executerid'=>$executerid, 'priceid'=>$priceid];
+		
+		
+		return $ship_price;
+		//
+	}
+	
+	function doCalcDeliveryOrderPrint($order, $country)
+	{
+		$country = GW_Country::singleton()->find(['code=?', $country]);
+		
+			
+		$sum =0;
+		
+		foreach($order->items as $oi){
+			if($oi->context_obj_type!='shop_products')
+				continue;
+			$sum += $this->doCalcDeliveryOrderPrintEx($order, $country->id, $oi, $oi->qty);
+			
+		}
+		
+				
+
+		return $sum;
+	}
 	
 	
 	function applyDiscountCode($order)
@@ -1182,6 +1287,7 @@ class Module_Orders extends GW_Public_Module
 
 	function doCalcDelivery($order)
 	{
+		
 		$data = $this->app->innerRequest("payments/delivery",
 			['format'=>'json','act'=>'doCalculateDelivery','order_id'=>$order->id],[],
 			['app'=>'admin', 'user'=> GW_USER_SYSTEM_ID]

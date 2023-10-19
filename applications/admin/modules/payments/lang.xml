@@ -457,6 +457,25 @@
         <en>Revolut Credit Card</en>
       </i>
     </i>
+    
+    <i id="delivery_algo">
+      <i id="">
+        <lt>Išjungta</lt>
+        <en>Disabled</en>
+      </i>
+      <i id="natos">
+        <lt>Natos</lt>
+        <en>Natos</en>
+      </i>
+      <i id="universal">
+        <lt>Universalusis</lt>
+        <en>universalusis</en>
+      </i>
+      <i id="orderprint">
+        <lt>Užsakom. spausd. pristatymas</lt>
+        <en>Printing press delivery</en>
+      </i>      
+    </i>   
     <i id="features">
       <i id="otherpayee">
         <lt>Siųsti mokėjimo informaciją</lt>
@@ -491,25 +510,7 @@
         <en>VAT calculations</en>
       </i>
     </i>
-    <i id="delivery_algo">
-      <i id="">
-        <lt>Išjungta</lt>
-        <en>[A] disabled</en>
-      </i>
-      <i id="natos">
-        <lt>Natos</lt>
-        <en>Natos</en>
-      </i>
-      <i id="universal">
-        <lt>Universalusis</lt>
-        <en>universalusis</en>
-      </i>
-      <i id="orderprint">
-        <lt>Užsakom. spausd. pristatymas</lt>
-        <en>Printing press delivery</en>
-      </i>      
-    </i>
-  </i>
+  </i>   
   <i id="MAP">
     <i id="title">
       <lt>El. komercija</lt>

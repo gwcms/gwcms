@@ -90,6 +90,12 @@ class Module_Delivery extends GW_Common_Module
 	}
 
 	
+	function doCalculateDeliveryOrderPrint($order)
+	{
+		echo json_encode(['amount_shipping'=>$order->amount_shipping]);
+		exit;
+	}	
+	
 	function __getDeliveryOptionsNatos($plan)
 	{
 		$cfg = GW_Config::singleton()->preload("payments/{$plan}delivery_");		
