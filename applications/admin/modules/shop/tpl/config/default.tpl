@@ -52,7 +52,7 @@
 {/if}
 
 
-{call e field=site_list_types type=multiselect_ajax options=[grid,list,listbigrow] options_fix=1 sorting=1 value_format=json1}
+{call e field=site_list_types type=multiselect_ajax options=[grid,list,table,listbigrow] options_fix=1 sorting=1 value_format=json1}
 {call e field=site_itemspp type=multiselect_ajax options=[12,24,32,64,100,200,300] options_fix=1  value_format=json1}
 
 

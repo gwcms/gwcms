@@ -75,9 +75,7 @@ class GW_Mail_Helper
 		}
 		
 		//$mail->Subject = $subject;
-		
 		self::initSafeSmarty(); 
-		
 		
 		return $mail;
 	}
@@ -202,7 +200,6 @@ class GW_Mail_Helper
 		$tpl = $opts['tpl'];
 		
 		
-		
 		//paduodamas sablonas arba sablono id
 		//betkokiu atveju $tpl pavirsta i GW_Mail_Template objekta
 		if(is_numeric($tpl))
@@ -245,19 +242,13 @@ class GW_Mail_Helper
 		$cfg = self::loadCfg();
 		$toname = '';
 		
-		
-		
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
 		
-
-		
 		$mailer = $opts['mailer'] ?? self::initPhpmailer($opts['from'] ?? '', $opts['cfg'] ?? false);
 		
-				
 		if(isset($opts['subject']))
 			$mailer->Subject = $opts['subject'];
-		
 		
 		if(isset($opts['plain']) && $opts['plain']){
 			$mailer->Body = $opts['body'];

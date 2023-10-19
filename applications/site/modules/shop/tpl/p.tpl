@@ -85,7 +85,6 @@
 					{/if}
 				{/foreach}
 				
-
 				<li> 
 					{if $m->config->modification_display==list}
 						{foreach $modifications as $mod}

@@ -77,7 +77,7 @@
 	  
 	  
 	  {if count($list_types) > 1}	 
-		  {$icon_by_type=['table'=>'icon-list','pics'=>'icon-grid', 'unprepared'=>'icon-music-020 u-line-icon-pro']}
+		  {$icon_by_type=['table'=>'icon-list','grid'=>'icon-grid', 'unprepared'=>'icon-music-020 u-line-icon-pro']}
 		  {$default_li_type=$list_types.0}
 	  <!-- Sort By -->
 	  <ul class="list-inline mb-0">
