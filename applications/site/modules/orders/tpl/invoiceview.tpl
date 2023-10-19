@@ -11,7 +11,7 @@
 			</a>
 			<div class="dropdown-menu pull-right dropdown-menu-right" style="">
 
-				<a class="dropdown-item " href="{$app->buildUri('direct/orders/orders/invoice',['id'=>$item->id,html=>1]+$invoiceargs)}">Debug html</a>
+				<a class="dropdown-item " href="{$app->buildUri('direct/orders/orders/invoice',['id'=>$item->id,html=>1,head=>1]+$invoiceargs)}">Debug html</a>
 				<a class="dropdown-item " href="{$app->buildUri('direct/orders/orders/invoice',['id'=>$item->id,vars=>1]+$invoiceargs)}">Debug vars</a>
 			</div>
 		</div>	

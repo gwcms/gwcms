@@ -157,7 +157,18 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->jump();
 		}
 		
-		$tpl_code = $tpl->get("body_lt");
+		
+		
+		
+		//Since 2022 it is provided universal template for all languages
+		if($tpl->get("ln_enabled_".$this->app->ln)){
+			$tpl_code = $tpl->get("body_".$this->app->ln);
+		}else{
+			//default language
+			$tpl_code = $tpl->get("body_lt");
+		}
+		
+		
 		
 		
 		$v =& $this->tpl_vars;
@@ -180,6 +191,7 @@ class Module_OrderGroups extends GW_Common_Module
 		if($item->pay_test)
 			$v['PAY_TEST']=1;
 		
+		
 		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], 'lt');
 
@@ -195,7 +207,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['DATE'] = explode(' ',$item->insert_time)[0];
 		
 		
-		$v['EMAIL'] = $payconfirm->p_email ?: $item->email;
+		$v['EMAIL'] = isset($payconfirm->p_email) ? $payconfirm->p_email : $item->email;
 		$v['ITEMS'] = [];
 		$v['ORDERID'] = $item->id;
 		$v['SECRET'] = $item->secret;
@@ -352,17 +364,25 @@ class Module_OrderGroups extends GW_Common_Module
 	{		
 		$item = $this->getDataObjectById();
 		
-		if($item->payment_status==7){
+		
+		$query = $_GET['rcv_amount'] ?? false;
+		
+		
+		if($this->app->user->isRoot() && $query==777){
+			$this->setMessageEx(['text'=>'No payment already accepted verification for root user (testing purposes)', 'type'=>GW_MSG_INFO]);
+		}elseif($item->payment_status==7){
 			$this->setError(GW::l('/m/PAYMENT_ALREADY_ACCEPTED'));
 			$this->app->jump();
 		}
 		
 	
-		$query = $_GET['rcv_amount'] ?? false;
 		
 		
-		if($query != $item->amount_total)
-		{
+		
+		if($this->app->user->isRoot() && $query==777){
+			$this->setMessageEx(['text'=>'No price verification for root user and code 777', 'type'=>GW_MSG_INFO]);
+			$_GET['rcv_amount'] = $item->amount_total;
+		}elseif($query != $item->amount_total){
 			$this->setError(GW::l('/m/RECEIVED_AMOUNT_DOES_NOT_MATCH'));
 			$this->app->jump();
 			return false;
@@ -436,9 +456,18 @@ class Module_OrderGroups extends GW_Common_Module
 		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		
 		if($this->config->confirm_email_tpl){
-			$lang = $order->user->use_lang ?: 'lt';
+			$lang = $order->user->use_lang ?: $order->use_lang;
 			$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderPaydNotifyUser&cron=1");	
+			
+			if($this->app->user->isRoot()){
+				$this->setMessage("Bg call for mail notification: $url");
+			}
+		}else{
+			if($this->app->user->isRoot())
+				$this->setMessageEx(['text'=>'No notification email', 'type'=>GW_MSG_WARN]);
 		}
+		
+		
 		
 		return false;
 	}

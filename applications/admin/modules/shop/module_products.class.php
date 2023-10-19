@@ -363,5 +363,55 @@ class Module_Products extends GW_Common_Module
 		}
 	}	
 	
+	
+	function doAfterBuyEmailForExecutor()
+	{		
+		
+		$item = GW_Order_Item::singleton()->find(['id=?', $_GET['id']]);
+		
+		$product = $item->obj;
+		
+		$template_id = $product->modval("after_buy_email_tpl");
+		
+		if(!$template_id)
+			return false;
+		
+		
+		$to = $item->order->user->email;
+		$vars['item'] = $item;
+		$vars['product'] = $product;
+		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
+		$vars['CLIENT_TITLE'] = $item->order->user->title;
+				
+		
+		
+		$opts = [
+		    'to'=>$to,
+		    'tpl'=>GW_Mail_Template::singleton()->find($template_id),
+		    'vars'=>$vars,
+		    //'attachments'=>[$filename=>$pdf]
+		];
+		
+		
+		
+		
+		$msg = GW::ln('/g/MESSAGE_SENT_TO',['v'=>['email'=>$to]]);
+		//$this->setMessage();
+		
+		$status = GW_Mail_Helper::sendMail($opts);
+		
+		$item->set('keyval/email',$status);
+		
+			
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode(['resp'=>$msg]);
+			exit;
+		}else{
+			$this->setMessage($msg);
+			$this->jump();
+		}
+	}	
+	
 }
 

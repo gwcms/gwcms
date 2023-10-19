@@ -318,7 +318,10 @@ class GW_Lang
 		$ret_rich = is_array($result) ? $result : "<span class='lnresult' data-module='".self::$module."' data-key='".$key."' data-val='". htmlspecialchars($orig_val ? $orig_val : $result)."'>".$result."</span>";
 		
 		//allow only root user to edit abstract translations within module context
-		if(self::$module && strpos($key, 'G/application')===0 && GW::$context->app->user && GW::$context->app->user->id==9){
+		//d::ldump([self::$module, $key, 'developer'=> ( GW::$context->app->user && GW::$context->app->user->id==9 ? 'yes':'no') ]);
+		
+		if(self::$module && strpos($key, 'G/application')===0 && GW::$context->app->user && GW::$context->app->user->id!=9){
+			//jei ne developeris ir site useris, kad neleistu keitaliot globaliu vertimu
 			$ret_rich = $result;
 		}
 		

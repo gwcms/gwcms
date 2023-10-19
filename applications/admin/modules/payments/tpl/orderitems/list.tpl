@@ -61,6 +61,10 @@
 		{$dl_actions=[]}
 	{else}
 		{$dl_actions=[editshift,invoice]}
+		
+		{if $app->user->isRoot()}
+			{$dl_actions[]=ext_actions}
+		{/if}
 	{/if}
 	
 	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type]}

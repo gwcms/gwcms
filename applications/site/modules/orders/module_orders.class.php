@@ -124,6 +124,7 @@ class Module_Orders extends GW_Public_Module
 			}
 		}
 			
+		$order->use_lang = $this->app->ln;
 		$order->updateChanged();
 		
 		if($type=='paysera'){
@@ -620,17 +621,24 @@ class Module_Orders extends GW_Public_Module
 		if($this->feat('vat'))
 			$vars['VAT']=1;
 		
-		if(isset($_GET['vars']))
-			d::dumpas($vars);		
+		if(isset($_GET['vars']) && $this->app->user->isRoot())
+			d::dumpas(['response'=>$response]);		
 		
 		$html = GW_Mail_Helper::prepareSmartyCode($response['tpl'], $vars);
 		
 		
 		
 		//$tmp = $this->mute_errors; $this->mute_errors = true;
+		if(isset($_GET['head'])){
+			//enable ln trans
+			echo $this->smarty->fetch('head.tpl');
+			echo $this->smarty->fetch('foot.tpl');
+		}
 		
 		if(isset($_GET['html']))
 			die($html);
+		
+		
 		
 
 		
@@ -1089,6 +1097,7 @@ class Module_Orders extends GW_Public_Module
 	{
 		
 		$order = $this->doInitCart();
+		$order->use_lang = $this->app->ln;
 		
 		$vals = $_POST['cart'] ?? false;
 				
@@ -1249,7 +1258,12 @@ class Module_Orders extends GW_Public_Module
 		}		
 		
 		
-		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en', 'fake=0');	
+		$cols=array_flip(GW_Country::singleton()->getColumns());
+		
+		
+		$extracond = isset($cols['fake'])?'fake=0' : false;
+		
+		$countries0 = GW_Country::singleton()->getOptions($this->app->ln == 'lt' ? 'lt': 'en', $extracond);	
 
 		$countries = [];
 		$active_country = GW_Pay_Methods::singleton()->getDistinctVals('country');

@@ -91,13 +91,22 @@ class Shop_Products extends GW_Composite_Data_Object
 	function orderItemPayd($unit_price, $qty, $order, $orderitem)
 	{
 		$this->fireEvent('BEFORE_CHANGES');
+		$qty_before = $this->qty;
 		$this->qty = $this->qty - $qty;
 		$this->updateChanged();
 		
-		if($this->modval("after_buy_email_tpl")){
-			$url=Navigator::backgroundRequest('admin/lt/shop/products?act=doAfterBuyEmail&id='.$orderitem->id);
-		}
+		$resp = ['qty_prev'=>$qty_before, 'qty_after'=>$this->qty];
 		
+		//$this->modval("after_buy_email_tpl")
+		if($this->modval("after_buy_email_tpl") ){
+			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyEmail&id='.$orderitem->id);
+			$resp['after_buy_email_act'] = $url;
+		}
+		if($this->modval("executor_after_buy_email_tpl") ){
+			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyExecutorEmail&id='.$orderitem->id);
+			$resp['after_buy_executor_email_act'] = $url;
+		}		
+		return $resp;
 	}
 	
 

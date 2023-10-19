@@ -309,6 +309,30 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->setMessage("Updated {$changed}/{$cnt} speed: $speed");
 	}
 	
+	
+	function doMarkAsPayd()
+	{
+		if(!$this->app->user->isRoot()){
+			$this->setError("DEV only");
+			$this->app->jump();
+		}
+		
+		$item = $this->getDataObjectById();
+		
+		
+		if(!$item->order->pay_test){
+			$this->confirm("pay_test is not 1 so it is real payment, if you proceeed you might cause damage");
+		}
+		
+		$obj = $item->obj;
+		if($obj){
+			
+			$markaspaydresponse = $obj->orderItemPayd($item->unit_price, $item->qty, $item->order, $item);
+			
+			d::ldump($markaspaydresponse);
+		}
+		
+	}
 /*	
 	function __eventAfterList(&$list)
 	{
