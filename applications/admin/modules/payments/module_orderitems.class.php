@@ -75,6 +75,9 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
 		$this->initObjTypes();
+		
+		
+		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
 
 	}
 	

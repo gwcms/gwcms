@@ -41,6 +41,38 @@
 	{$fields_config.fields.obj_id=[type=>select_ajax,modpath=>$item->modpath, preload=>1,options=>[],source_args=>[addcontext=>1]]}
 {/if}
 
+
+{*dinamiskai pagal projekta dadedami*}
+{foreach $m->mod_fields as $input}
+	{if $input->type==optional && !isset($dynfields[$input->fieldname])}
+		{continue}
+	{/if}
+	
+	{$field=[
+		field=>$input->get(fieldname),
+		type=>$input->get(inp_type),
+		note=>$input->get(note),
+		title=>$input->get(title),
+		placeholder=>$input->placeholder,
+		hidden_note=>$input->hidden_note,
+		i18n=>$input->get(i18n),
+		colspan=>1
+	]}
+	{$opts=$input->get('config')}		
+	{if $input->get(inp_type)=='select_ajax'}
+		{$opts.preload=1}
+		{$opts.modpath=$input->get('modpath')}
+		{$opts.after_input_f=editadd}
+	{/if}	
+	{if is_array($opts)}
+		{$field = array_merge($field, $opts)}
+	{/if}
+	
+	{$fields_config.fields[$input->get(fieldname)] = $field}
+	
+{/foreach}
+
+
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}
 {assign var="item" value=$item scope=global}

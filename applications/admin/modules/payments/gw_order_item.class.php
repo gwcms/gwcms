@@ -108,7 +108,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 			break;
 			case 'door_code';
 				return gw_ttlock_codes::singleton()->createNewObject($this->get('keyval/door_code_id'), true)->code;
-			break;		
+			break;	
+		
+		
 			case 'coupon_codes':
 				return explode(',',$this->keyval->coupon_codes);
 			break;

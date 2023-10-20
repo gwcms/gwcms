@@ -882,7 +882,7 @@ class Module_Orders extends GW_Public_Module
 	
 	function doCalcDeliveryOrderPrintEx($order, $countryid, $item, $qty)
 	{
-		$executers=Shop_Executers::singleton()->findAll(['active=1']);
+		$executers=Shop_Executors::singleton()->findAll(['active=1']);
 		
 		$options = [];
 		
@@ -915,8 +915,11 @@ class Module_Orders extends GW_Public_Module
 		$selected_executor = $options[$ship_price];
 		
 		list($executerid, $priceid) = explode('_', $selected_executor);
-		$order->extra = ['executerid'=>$executerid, 'priceid'=>$priceid];
+		$order->extra = ['executerid'=>$executerid, 'shippriceid'=>$priceid];
 		
+		
+		$item->executor_id = $executerid;
+		$item->updateChanged();
 		
 		return $ship_price;
 		//
