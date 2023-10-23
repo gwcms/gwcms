@@ -58,6 +58,10 @@
 		i18n=>$input->get(i18n),
 		colspan=>1
 	]}
+	{if $input->type==extended}
+		{$field.field="keyval/{$input->get(fieldname)}"}
+	{/if}
+	
 	{$opts=$input->get('config')}		
 	{if $input->get(inp_type)=='select_ajax'}
 		{$opts.preload=1}

@@ -364,25 +364,33 @@ class Module_Products extends GW_Common_Module
 	}	
 	
 	
-	function doAfterBuyEmailForExecutor()
+	function doAfterBuyExecutorEmail()
 	{		
 		
 		$item = GW_Order_Item::singleton()->find(['id=?', $_GET['id']]);
 		
 		$product = $item->obj;
 		
-		$template_id = $product->modval("after_buy_email_tpl");
+		$template_id = $product->modval("executor_after_buy_email_tpl");
 		
 		if(!$template_id)
 			return false;
 		
+		if(!$item->executor_id)
+			return false;
 		
-		$to = $item->order->user->email;
-		$vars['item'] = $item;
+		$executor = Shop_Executors::singleton()->find($item->executor_id);
+		
+		$vars['ordereditem'] = $item;
 		$vars['product'] = $product;
 		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
 		$vars['CLIENT_TITLE'] = $item->order->user->title;
-				
+		$vars['order'] = $item->order;
+		$vars['buyer'] = $item->order->user;
+		$vars['executor'] = $executor;
+		$vars['EXECUTION_FILE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['act'=>'doRetrieveExecFile','id'=>$item->order->id,'ordered_item_id'=>$item->id,'key'=>$item->order->secret],['app'=>"site"]);
+		
+		$to = $executor->email;
 		
 		
 		$opts = [
@@ -392,15 +400,23 @@ class Module_Products extends GW_Common_Module
 		    //'attachments'=>[$filename=>$pdf]
 		];
 		
+
+		$file_link = GW::s('SITE_URL');
 		
 		
 		
 		$msg = GW::ln('/g/MESSAGE_SENT_TO',['v'=>['email'=>$to]]);
-		//$this->setMessage();
+		//$this->setMessage();\
+		
+		
+		//$opts['dryrun'] = 1;
 		
 		$status = GW_Mail_Helper::sendMail($opts);
 		
-		$item->set('keyval/email',$status);
+		
+		
+		
+		$item->set('keyval/email_executor',$status);
 		
 			
 		

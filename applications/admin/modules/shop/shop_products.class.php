@@ -114,17 +114,35 @@ class Shop_Products extends GW_Composite_Data_Object
 	//jei neuzpildytas imamas aprasymas is tevinio produkto	
 	function __get($key)
 	{
+		$val = $this->gettt($key);
+		return $val;
+	}
+	
+	function gettt($key)
+	{
+
+		
 		//jei nenurodyta modifikacijos title
 		if($key=='title' && $this->parent_id){
 			return $this->get('parent')->title." - ".$this->modif_title;
 		}	
 				
-		if(( (GW::$context->app->app_name != 'SITE' && !GW::globals('product_modification_display_mode')) || !$this->get('parent_id') || !$this->get('parent')) && $key!='qty'){
+		if(	
+			( 
+				(
+				GW::$context->app->app_name != 'SITE' && 
+				!GW::globals('product_modification_display_mode')
+				) || 
+					!$this->get('parent_id') || 
+					!$this->get('parent')
+			) 
+				&& $key!='qty'
+			){
 		
 			return parent::__get($key);
 		}
 		
-		if($key=='image'){
+		if($key=='image' || $this->isCompositeField($key)){
 			if(parent::__get($key))
 				return parent::__get($key);
 		}
@@ -138,15 +156,16 @@ class Shop_Products extends GW_Composite_Data_Object
 		$tmp =& $this->content_base[$key];
 		
 
+		
 	
 		
-		if($tmp || $key=='qty'){
+		if($tmp || $key=='qty' || $key=='id'){
 			
 			return $tmp;
 		}
 		
 		
-		return $this->get('parent')->get($key);
+		return $this->get('parent')->get($key);		
 	}
 	
 	

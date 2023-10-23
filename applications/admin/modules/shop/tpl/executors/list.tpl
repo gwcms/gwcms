@@ -16,7 +16,23 @@
 	
 	
 	{$dl_actions=[invert_active_ajax,edit,ext_actions]}
+	{$dl_smart_fields = [shipprices,execprices]}
 	
+	{function dl_cell_execprices}
+		{$cnt=count($item->execprice)}
+
+		<a title="Exec prices {$item->items_count}" class='gwcmsAction iframe-under-tr' href="{$m->buildUri("`$item->id`/execprice",[clean=>2])}">
+			<i class="fa fa-money"></i> <span style='color:violet;position:relative;left:-4px'>{$cnt}</span>
+		</a>	
+		
+	{/function}
+	{function dl_cell_shipprices}
+		{$cnt=count($item->shipprice)}
+		<a title="Ship Price {$item->items_count}" class='gwcmsAction iframe-under-tr' href="{$m->buildUri("`$item->id`/shipprice",[clean=>2])}">
+			<i class="fa fa-ship"></i> <span style='color:orange;position:relative;left:-4px'>{$cnt}</span>
+		</a>	
+		
+	{/function}
 	
 	
 	{*

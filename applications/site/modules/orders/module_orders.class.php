@@ -67,6 +67,36 @@ class Module_Orders extends GW_Public_Module
 		return $order;
 	}
 	
+	
+	function doRetrieveExecFile()
+	{
+		$order = $this->getOrder(true);
+		
+		foreach($order->items as $oi){
+			
+			if($oi->id==$_GET['ordered_item_id']){
+				$dlcnt = (int)$oi->get('keyval/downloadcnt');
+				
+				if($dlcnt > 3){
+					die('File download limit reached, please request platform admin for file via email');
+				}
+				
+				$print_file = $oi->obj->printfile;
+				//d::dumpas(GW::db()->last_query);
+				
+				if($oi->obj->modval('printfile')){
+					$oi->set('keyval/downloadcnt',$dlcnt+1);
+					GW_File_Helper::output($oi->obj->printfile->getFilename(), $_GET['view'] ?? false);
+				}else{
+					die("Print file for {$oi->obj->title} not availble please contact platform admin");
+				}
+			}
+		}
+		
+		
+	}
+	
+	
 	function doOrderPay()
 	{
 		//$this->viewDefault();
@@ -866,7 +896,10 @@ class Module_Orders extends GW_Public_Module
 		
 		if(isset($_GET['deliverycountry'])){
 			
+			
 			$this->order->amount_shipping = $this->doCalcDeliveryOrderPrint($order, $_GET['deliverycountry']);
+			
+			
 			
 		}else{
 			$this->order->amount_shipping = 0;
@@ -882,8 +915,8 @@ class Module_Orders extends GW_Public_Module
 	
 	function doCalcDeliveryOrderPrintEx($order, $countryid, $item, $qty)
 	{
-		$executers=Shop_Executors::singleton()->findAll(['active=1']);
-		
+		$executers = Shop_Executors::singleton()->findAll(['active=1']);
+		$exec_prices = [];
 		$options = [];
 		
 		foreach($executers as $ex){
@@ -899,27 +932,49 @@ class Module_Orders extends GW_Public_Module
 			
 			$prices  = Shop_ShipPrice::singleton()->findAll(['owner_id=?', $ex->id], ['key_field'=>'id']);
 			
-			foreach($prices as $price){
-				if($price->qty_min <= $qty && $price->qty_max >= $qty){
-					$options[$ex->id.'_'.$price->id] = $price->price;
-				}
-			}
+			
+			$shipprice = $ex->getShipPrice($item->obj->id, $qty);
+			
+			if(!$shipprice)
+				continue;
+			
+			$exec_prices[$ex->id] = $ex->getExecPrice($item->obj->id, $qty);
+			
+		
+			
+			$options[$ex->id.'_'.$shipprice->id] = $shipprice->price;
+			
 			
 		}
 		
+
+		
 		$ship_price = min($options);
+		
+		//d::dumpas($options);
+		
+		
+		//d::dumpas($options);
 		
 		$options = array_flip($options);
 		
 		
 		$selected_executor = $options[$ship_price];
 		
+		
 		list($executerid, $priceid) = explode('_', $selected_executor);
+		$exec_price = $exec_prices[$executerid]->price;
+		
 		$order->extra = ['executerid'=>$executerid, 'shippriceid'=>$priceid];
 		
 		
 		$item->executor_id = $executerid;
+		$item->set("keyval/ship_price", $ship_price);
+		$item->set("keyval/exec_price", $exec_price);
+		
 		$item->updateChanged();
+		
+		//d::dumpas([$ship_price, $exec_price, $executerid]);
 		
 		return $ship_price;
 		//
@@ -932,14 +987,22 @@ class Module_Orders extends GW_Public_Module
 			
 		$sum =0;
 		
+		
+		
 		foreach($order->items as $oi){
-			if($oi->context_obj_type!='shop_products')
+			
+			//d::ldump($oi);
+			
+			if($oi->obj_type!='shop_products')
 				continue;
+			
+			
 			$sum += $this->doCalcDeliveryOrderPrintEx($order, $country->id, $oi, $oi->qty);
 			
 		}
 		
-				
+		
+		//d::dumpas([$country,$order, $this->order]);
 
 		return $sum;
 	}
@@ -1514,7 +1577,7 @@ class Module_Orders extends GW_Public_Module
 		if(isset($args['req_args']))
 			$reqargs = array_merge($reqargs, $args['req_args']);
 			
-		$result = Navigator::sysRequest('admin/lt/payments/ordergroups/oitems',$reqargs);
+		$result = Navigator::sysRequest('admin/'.$this->app->ln.'/payments/ordergroups/oitems',$reqargs);
 		$html = $result->html ?? $result->raw_response;
 		
 		

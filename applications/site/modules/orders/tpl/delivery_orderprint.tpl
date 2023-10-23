@@ -32,7 +32,7 @@
 				onchange="if(!$(this).data('init')) return $(this).data('init',1);  if(this.value)gw_navigator.jump(location.href,{ deliverycountry: this.value })"
 			}
 			{if !$smarty.get.deliverycountry}
-			<button class="btn btn-primary" onclick="$('#order_country_').change()">Pick</button>
+			<button class="btn btn-primary" onclick="$('#order_country_').change();return false">Pick</button>
 			{/if}
 		   </div> 
 	</div>

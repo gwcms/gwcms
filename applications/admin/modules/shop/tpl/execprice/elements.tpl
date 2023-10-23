@@ -6,7 +6,7 @@
 
 {$fields_config=[
 	fields=>[
-		product_id=>[type=>select_ajax, modpath=>"shop/products", preload=>1,options=>[]],
+		product_id=>[type=>select_ajax, modpath=>"shop/products", preload=>1,options=>[],'empty_option'=>1],
 		qty_min=>[type=>number],
 		qty_max=>[type=>number],
 		price=>[type=>number,step=>0.01]

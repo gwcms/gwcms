@@ -10,9 +10,9 @@
     <i id="delivery_in">Pristatymas kitoms pasaulio šalims</i>
     <i id="size">Pakavimo dydis</i>
     <i id="order_accept_mail">Užsakymo patvirtinimo laiškas</i>
-    <i id="weight">Svoris</i>
-    <i id="price">Kaina</i>
-    <i id="qty">Kiekis</i>
+    <i id="weight"><lt>Svoris</lt><en>Weight</en></i>
+    <i id="price"><lt>Kaina</lt><en>Price</en></i>
+    <i id="qty"><lt>Kiekis</lt><en>Quantity</en></i>
     <i id="year">Metai</i>
     <i id="diffic">Sunkumo lygis</i>
     <i id="minord">Min. užs. kiekis</i>
@@ -45,7 +45,7 @@
       <lt>Produktų skaičius</lt>
     </i>
     <i id="fields">Laukeliai</i>
-    <i id="oldprice">Priešnuolaidinė kaina</i>
+    <i id="oldprice"><lt>Priešnuolaidinė kaina</lt><en>Price before discount</en></i>
     <i id="site_itemspp">Prekių per puslapį</i>
     <i id="site_list_types">
       <lt>Sąrašo atvaizdavimas</lt>
@@ -129,7 +129,9 @@
       </lt>
     </i>
     <i id="oldprice">
-<![CDATA[<s>Kaina</s>]]>
+	    <lt><![CDATA[<s>Kaina</s>]]></lt>
+	    <en><![CDATA[<s>Price</s>]]></en>
+
     </i>
     <i id="group_id">Užs. #</i>
         <i id="changetrack">
@@ -183,19 +185,25 @@
         </i>
       </i>
       <i id="classificators">
-        <i id="title">Klasifikatoriai</i>
+        <i id="title">
+		<lt>Klasifikatoriai</lt>
+		<en>Classificators</en>
+	</i>
         <i id="info">
           <i id="model">Shop_classificators</i>
         </i>
       </i>
       <i id="classificator_types">
-        <i id="title">Klasifikatorių tipai</i>
+        <i id="title">
+		<lt>Klasifikatorių tipai</lt>
+		<en>Classif. types</en>		
+	</i>
         <i id="info">
           <i id="model">Shop_classificator_Types</i>
         </i>
       </i>
       <i id="config">
-        <i id="title">Nustatymai</i>
+        <i id="title"><lt>Nustatymai</lt><en>Settings</en></i>
       </i>
       <i id="executors">
         <i id="title">Executors</i>
@@ -223,6 +231,7 @@
   </i>
   <i id="UPDATE_AFTER_CHANGE">
     <lt>Pakeitus išaugokite</lt>
+    <en>Save/apply after change</en>
   </i>
   <i id="UPDATE_AFTER_CHANGE_HIDD">
     <lt>Priklausomai nuo produkto tipo rodomi skirtingi laukeliai, pakeitę tipą spauskite [išsaugoti liekant] kad pasimatytų naujai pasirinkto tipo laukeliai</lt>

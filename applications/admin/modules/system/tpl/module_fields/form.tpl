@@ -5,8 +5,9 @@
 {*todo: dropdownas is vertimu perrasymu*}
 {$editinsite="Vertimai susikurs saite CTLR+Q - redaguoti"}
 
-{if false && $app->user->isRoot()}
-	{call e field="owner_id"}
+
+
+{if $smarty.get.shift_key && $app->user->isRoot()}
 	{call e field="parent"}
 {/if}
 

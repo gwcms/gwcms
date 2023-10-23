@@ -19,7 +19,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'title'=>1,
 		'keyval'=>1,
 		'recipient'=>1,
-		'pay_subtype_human'=>1
+		'pay_subtype_human'=>1,
+		'delivery_country'=>1
 	];
 	
 	
@@ -157,7 +158,9 @@ class GW_Order_Group extends GW_Composite_Data_Object
 				$pm = GW_Pay_Methods::singleton()->find(['gateway=? AND `key`=?', $this->pay_type, $this->pay_subtype]);
 				return $pm ? $pm->title : $this->pay_subtype;
 			break;
-				
+			case 'delivery_country':
+				return GW_Country::singleton()->find(['code=?', $this->country]);
+			break;
 		}
 		
 			

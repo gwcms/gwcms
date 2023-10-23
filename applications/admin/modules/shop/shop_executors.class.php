@@ -22,10 +22,14 @@ class Shop_Executors extends GW_i18n_Data_Object
 		parent::calculateField($name);
 	}	
 	
-	function getPrintPrice($prodid, $qty)
+	function getExecPrice($prodid, $qty)
 	{		
-		return shop_execprice::singleton()->find(['owner_id=? AND product_id=? AND qty_min<=? AND qty_max>=?', $this->id, $prodid, $qty, $qty]);
+		return shop_execprice::singleton()->find(['owner_id=? AND (product_id=? OR product_id=0) AND qty_min<=? AND qty_max>=?', $this->id, $prodid, $qty, $qty]);
 	}
 	
+	function getShipPrice($prodid, $qty)
+	{		
+		return Shop_ShipPrice::singleton()->find(['owner_id=? AND (product_id=? OR product_id=0) AND qty_min<=? AND qty_max>=?', $this->id, $prodid, $qty, $qty]);
+	}	
 
 }

@@ -72,5 +72,13 @@ class Module_Executors extends GW_Common_Module
 		$this->recoveryEmail($item);
 	}
 	
+	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();	
+		$cfg['fields']['execprices'] = "l";
+		$cfg['fields']['shipprices'] = "l";	
 		
+		return $cfg;
+	}
 }

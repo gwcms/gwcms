@@ -46,7 +46,9 @@ class Module_Module_Fields extends GW_Common_Module
 		
 		if($item->changed_fields || !$item->id){
 			
-			$this->modifDbStructure($item);
+			//extended per keyval eina
+			if($item->type=='generic' || $item->type=='optional')
+				$this->modifDbStructure($item);
 		}
 	/*
 		unset($item->content_base['order_enabled']);
