@@ -122,6 +122,10 @@ class GW_Mail_Helper
 			public function isTrustedPhpFunction($function_name, $compiler){ 
 				if(in_array($function_name, ['number_format'])) return true; 
 				
+				if(GW::$context->app->user && GW::$context->app->user->isRoot()){
+					if(in_array($function_name, ['var_dump'])) return true; 
+				}
+				
 				
 				return false;
 
@@ -246,7 +250,7 @@ class GW_Mail_Helper
 			self::processTpl($opts);
 		
 		$mailer = $opts['mailer'] ?? self::initPhpmailer($opts['from'] ?? '', $opts['cfg'] ?? false);
-		
+				
 		if(isset($opts['subject']))
 			$mailer->Subject = $opts['subject'];
 		
@@ -255,7 +259,7 @@ class GW_Mail_Helper
 		}else{
 			$mailer->msgHTML($opts['body']);
 		}
-		
+
 		if(!is_array($opts['to']))
 			$opts['to'] = self::explodeMultipleEmails($opts['to']);
 				
@@ -282,7 +286,7 @@ class GW_Mail_Helper
 				$mailer->addStringAttachment($data, $filename);
 		}
 		
-		
+
 		if(isset($opts['bcc'])){
 			if(!is_array($opts['bcc']))
 				$opts['bcc'] = [$opts['bcc']];
