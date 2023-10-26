@@ -588,8 +588,6 @@ class Module_Shop extends GW_Public_Module
 	
 	
 
-	
-	
 	public function afterList($list) 
 	{
 		

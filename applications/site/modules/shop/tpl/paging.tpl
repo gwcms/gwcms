@@ -1,4 +1,5 @@
 {if $paging}
+	
 {function "page_func"}
 	    <li class="list-inline-item hidden-down">
 			<a class="gwUrlMod {if $currentpage==$page}active u-pagination-v1__item g-width-30 g-height-30 g-brd-gray-light-v3 g-brd-primary--active g-color-white g-bg-primary--active g-font-size-12 rounded-circle g-pa-5

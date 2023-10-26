@@ -210,6 +210,10 @@ class Shop_Products extends GW_Composite_Data_Object
 	function eventHandler($event, &$context_data = array()) {
 		
 		switch ($event){
+			case 'BEFORE_LIST':
+				//prepare fields to avoid multiple queries, last query for paging to be not interupted
+				$this->getFields();
+			break;
 			case 'AFTER_SAVE':
 				if($this->parent_id){
 					$this->parent->calcPriceRange();
