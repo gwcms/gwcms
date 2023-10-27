@@ -19,6 +19,11 @@
 	{$dl_output_filters.insert_time=short_time}
 	{$dl_output_filters.update_time=short_time}	
 	
+
+	{$dl_output_filters.valid_from=short_time}	
+	{$dl_output_filters.expires=short_time}	
+	{$dl_output_filters.placed_time=short_time}	
+	{$dl_output_filters.changetrack=changetrack}	
 	
 	
 	{*

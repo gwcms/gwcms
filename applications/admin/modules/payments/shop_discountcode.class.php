@@ -7,7 +7,12 @@ class Shop_DiscountCode extends GW_i18n_Data_Object
 	    'product_ids'=>1
 	];
 
-
+	public $ownerkey = 'payments/discountcode';
+	public $extensions = [
+	    'changetrack'=>1,
+	    //'keyval'=>1
+	];				
+	public $keyval_use_generic_table = 1;	
 	
 
 	
@@ -60,6 +65,5 @@ class Shop_DiscountCode extends GW_i18n_Data_Object
 	function getTypes()
 	{
 		return  $this->getDB()->getColumnOptions($this->table, 'obj_type');
-	}	
-
+	}
 }

@@ -51,4 +51,16 @@ class Module_DiscountCode extends GW_Common_Module
 	{
 		$this->recoveryEmail($item);
 	}
+	
+	function getListConfig()
+	{
+		$cfg = parent::getListConfig();
+		
+		$cfg['fields']['changetrack'] = 'L';
+	
+		$cfg['filters']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
+		$cfg['inputs']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
+	
+		return $cfg;
+	}	
 }

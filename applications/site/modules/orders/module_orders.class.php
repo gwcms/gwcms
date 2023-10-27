@@ -182,7 +182,7 @@ class Module_Orders extends GW_Public_Module
 				$args['pay_type'] = 'couponpay';
 						
 				$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
-				d::dumpas($url);
+				
 				$this->setMessage($url);		
 				header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'key'=>$order->secret]));
 			}
@@ -1040,7 +1040,7 @@ class Module_Orders extends GW_Public_Module
 						$dc->used  = 1;
 						$dc->user_id = $this->app->user ? $this->app->user->id : -1;
 					}
-					$dc->use_count = $dc->use_count+1;
+					$dc->use_count = (int)$dc->use_count+1;
 					$dc->update();
 					
 					$this->setOrderedItemPrices($order);
@@ -1485,6 +1485,8 @@ class Module_Orders extends GW_Public_Module
 					$coupon->percent = 100;
 					$coupon->active = 1;
 					$coupon->user_id = $this->app->user ? $this->app->user->id : 0;
+					$coupon->create_order_id = $order->id;
+					$coupon->expires = date('Y-m-d', strtotime("+12 month"));
 					$coupon->insert();
 					$codes[] = $code;
 					$cids[] = $coupon->id;

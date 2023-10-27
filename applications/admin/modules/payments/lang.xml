@@ -261,6 +261,9 @@
       <lt>Pardavėjas</lt>
       <en>Seller</en>
     </i>
+    <i id="create_order_id">Pirkimo užsakymas</i>
+    <i id="last_use_order_id">Paskutinis panaudojimo užsakymas</i>
+    <i id="used_amount">Panaudota suma</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
