@@ -39,10 +39,6 @@ class GW_Site_Application extends GW_Application
 	{
 		
 		parent::init();
-	
-		
-
-
 	}
 	
 	
@@ -67,7 +63,6 @@ class GW_Site_Application extends GW_Application
 			}
 				
 			array_unshift($this->path_arg, $this->path_arr[$i]['name']);
-			
 			$this->path_arr[$i]['isarg']=1;
 		}
 		

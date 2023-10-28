@@ -75,21 +75,27 @@ class GW_Extension_KeyVal
 	
 	function get($name, $all=false)
 	{
-		if($this->parent->id)
+		if($this->parent->id){
 			return $this->obj->get($name, $all);
+		}else{
+			return $this->cacheNotSaved[$name] ?? null;
+		}
 	}
 	
 	function search($phrase)
 	{
 		return $this->obj->findOwner(GW_DB::prepare_query(['value LIKE ?', '%'.$phrase.'%']));
 	}
+	
 	function searchKey($phrase)
 	{
 		return $this->obj->findOwner(GW_DB::prepare_query(['key LIKE ?', '%'.$phrase.'%']));
 	}	
 	
-	function set($name, $value){
-		
+	
+	
+	function set($name, $value)
+	{
 		if(isset($this->parent->extensions['changetrack'])){
 
 			$old = $this->get($name);
@@ -101,19 +107,18 @@ class GW_Extension_KeyVal
 			}
 		}
 
-		$this->obj->set($name, $value);
-	}
-	
-	function __set($name, $value) 
-	{
+
 		if($this->parent->id){			
 			$this->obj->setOwnerId($this->parent->id);
 			
-			return $this->obj->replace($name, $value);
+			return $this->obj->set($name, $value);
 		}else{
 			$this->cacheNotSaved[$name] = $value;
+			
 		}
 	}
+	
+
 	
 	function __isset($name)
 	{

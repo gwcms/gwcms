@@ -2711,6 +2711,11 @@ class GW_Common_Module extends GW_Module
 				return 5;
 			}
 			
+			
+			if(strpos($val,"\n") !==false){
+				return 6; //dont translate textareas
+			}
+			
 			return 0;
 		};
 		
