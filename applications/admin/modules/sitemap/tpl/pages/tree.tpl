@@ -137,6 +137,16 @@ function updateSite(id){
 				}).on('open_node.jstree', function(e, data){
 					console.log({ "event":e, "data": data });
 				})
+				.on('copy.jstree', function(e, data){
+					console.log({ "event":e, "data": data });			
+				})
+				.on('paste.jstree', function(e, data){
+					console.log({ "event":e, "data": data });
+					backEndAction({ act: "doClone3", id: data.node[0].id, parent: data.parent, returnonlynewid:1  }, function(newid){
+						openEdit(newid);	
+						gw_navigator.switchHash(newid);
+					});
+				})				
 				.on('move_node.jstree', function(e, data){
 					console.log({ "event":e, "data": data });
 					backEndAction({ act: "doMoveNode", id: data.node.id, parent: data.parent, old_parent: data.old_parent, priority:data.position, old_priority:data.old_position  });
@@ -226,6 +236,10 @@ function updateSite(id){
 	</script>
 	*}
 
-
+<br><br>	
+<div class="text-muted">
+	<li>2022-07 v1.0 - see list, multiple sites, rearrange sitemap order, move to different parent
+	<li>2023-10 v1.1 - clone page, can copy from different site, pick page, right click context menu pick <b>Edit</b> &amp; <b>Copy</b> go to destination parent, pick <b>Edit</b> &amp; <b>Paste</b>
+</div>
 
 {include file="default_close.tpl"}

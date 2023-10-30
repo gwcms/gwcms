@@ -2370,13 +2370,15 @@ class GW_Common_Module extends GW_Module
 		$params = [];
 		$cond = "";
 		
+		
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);
 			$search = "'%".$exact."%'";
 
 			
-			
-			if(isset($opts['search_fields'])){
+			if(isset($opts['condition'])){
+				$cond = $opts['condition'];
+			}elseif(isset($opts['search_fields'])){
 				foreach($opts['search_fields'] as $field){
 					$condarr[] = "$field LIKE $search";
 					
@@ -2385,20 +2387,22 @@ class GW_Common_Module extends GW_Module
 				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
 					$params['joins'] = $joins;
 				}
-				$simplecond = '('.implode(' OR ', $condarr).')';
+				$cond = '('.implode(' OR ', $condarr).')';
 				
 				//simple cond sample:
 				//(team_name LIKE '%%'; OR partic1.name LIKE '%%'; OR partic2.name LIKE '%%'; OR partic1.surname LIKE '%%'; OR partic2.surname LIKE '%%';) AND `event_id`=6
+			}elseif(isset($opts['search_fields'])){
+					
+				$cond = ($opts['search_field'] ?? $this->options_search_field)." LIKE $search";	
+				
+			}elseif(isset($i0->i18n_fields['title'])){
+	
+				$cond = $i0->buildFieldCond('title',$search);
 			}else{
-				$simplecond = ($opts['search_field'] ?? $this->options_search_field)." LIKE $search";
+				$cond='1=1';
 			}
 			
-			
-			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) :  $simplecond);
-			
 
-					
-			
 			
 		}elseif(isset($_REQUEST['ids'])){
 			$ids = json_decode($_REQUEST['ids'], true);
@@ -2428,6 +2432,7 @@ class GW_Common_Module extends GW_Module
 			$params['order'] = $opts['order'];
 		
 		$list0 = $i0->findAll($cond ?? '', $params);
+		$q = GW::db()->last_query;
 	
 		
 		
@@ -2448,9 +2453,11 @@ class GW_Common_Module extends GW_Module
 		
 		$info = $this->model->lastRequestInfo();
 		$res['total_count'] = $info['item_count'];
+		
 	
 		if(isset($_GET['debug'])){
 			header('content-type: text/json');
+			//$res['q'] = $q;
 			echo json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 		}else{
 			echo json_encode($res);
