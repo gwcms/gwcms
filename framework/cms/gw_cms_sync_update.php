@@ -67,8 +67,16 @@ if(isset($_SERVER['HTTP_HOST'])){
 	}else{
 		
 		$sync = new GW_CMS_Sync();
+		
+		
+		
+		
 		$list = $sync->checkOne($_GET['proj']);
+		
+		
+		
 		$sync->fileDiffLink($list['exp'],['dir'=>0]);
+		
 		$sync->fileDiffLink($list['imp'],['dir'=>1]);
 		d::ldump($list);
 		

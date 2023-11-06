@@ -179,7 +179,7 @@ class GW_CMS_Sync
 
 		$dir = $direction ? $this->sourceDir : $this->destDir;
 
-		include $dir.'config/project_specific_files.php';
+		//include $dir.'config/project_specific_files.php';
 		
 		$module = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE').'_module' : "project";
 		
@@ -463,8 +463,11 @@ class GW_CMS_Sync
 		
 		$this->params['proj'] = $proj;
 
+		$this->out("<b>Files to import checking</b>");
 		$this->setDirection(true);
 		$imp = $this->actSync();
+		
+		$this->out("<b>Files to export checking</b>");
 		$this->setDirection(false);
 		$exp = $this->actSync();
 			
