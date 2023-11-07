@@ -2,10 +2,13 @@
 
 {$width_title=100px}
 
-{if $item->path==separator}
+
 	{foreach GW::$settings.LANGS as $lncode}
 		{call e field="title_$lncode"}
 	{/foreach}	
+
+{if $item->path==separator}
+
 
 {else}
 	{call e field=path}

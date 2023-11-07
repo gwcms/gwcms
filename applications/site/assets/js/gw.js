@@ -65,6 +65,7 @@ var GW = {
 	open_dialog2: function (conf)
 	{
 		if (!$('#modalDialogDrop').length) {
+			console.log('init dialog..'); 
 			$('body').append(`<div style="display:none" id="modal-type-aftersometime" style="z-index:999999" class="js-autonomous-popup text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;" data-modal-type="aftersometime" data-effect="fadein">
 			  <button type="button" class="close" onclick="Custombox.modal.close();">
 			    <i class="hs-icon hs-icon-close"></i>
@@ -79,6 +80,8 @@ var GW = {
 			GW.assets_root + '../assets/js/components/hs.modal-window.js',
 			GW.assets_root + '../assets/vendor/custombox/custombox.min.js',
 		], function(){
+			
+			
 			if (!conf.hasOwnProperty('width'))
 				conf.width = "90vw"
 			if (!conf.hasOwnProperty('height'))
@@ -86,12 +89,16 @@ var GW = {
 
 			if(conf.close_callback)
 				GW.close_callback = conf.close_callback;
+			
+			
+			
 
 			if(conf.html){
 				$('#modalDialogDrop').html(conf.html)
 			}else if(conf.elementid){
 				var element = $(conf.elementid).detach();
 				$('#modalDialogDrop').append(element);
+				$('#modalDialogDrop').data('detachelementid', conf.elementid)
 			}else{
 				$('#modalDialogDrop').html("<iframe style='width:" + conf.width + ";height:" + conf.height + ";border:0;' src='" + conf.url + "'></iframe>")
 			}
@@ -117,7 +124,15 @@ var GW = {
 	
 	afterclose_dialog2: function(){
 		console.log('closing..'); 
-		$('#modalDialogDrop').html(""); 
+		
+		
+		if($('#modalDialogDrop').data('detachelementid')){
+			console.log('Deatach element: '+$('#modalDialogDrop').data('detachelementid'));
+			var element=$($('#modalDialogDrop').data('detachelementid')).detach();
+			$('body').append(element);
+		}
+		
+		$('.js-autonomous-popup').remove(); 
 	},
 	
 	close_dialog2: function(context)
@@ -128,6 +143,9 @@ var GW = {
 			GW.close_callback(context)
 			GW.close_callback = false;
 		}
+		
+		
+		
 		
 		Custombox.modal.close();
 		GW.afterclose_dialog2();
@@ -193,7 +211,8 @@ var GW = {
 		$([document.documentElement, document.body]).animate({
 						scrollTop: $(elmquery).offset().top-100
 		}, 1000);		
-	}
+	},
+	carry_params: { }
 }
 
 var gwcms = () => GW;
