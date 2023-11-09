@@ -129,7 +129,7 @@ var GW = {
 			$('body').append(element);
 		}
 		
-		$('.js-autonomous-popup').remove(); 
+		$('#modalDialogDrop').html(""); 
 	},
 	
 	close_dialog2: function(context)
