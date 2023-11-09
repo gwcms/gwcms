@@ -90,9 +90,6 @@ var GW = {
 			if(conf.close_callback)
 				GW.close_callback = conf.close_callback;
 			
-			
-			
-
 			if(conf.html){
 				$('#modalDialogDrop').html(conf.html)
 			}else if(conf.elementid){

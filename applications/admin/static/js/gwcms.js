@@ -401,8 +401,6 @@ var gw_adm_sys = {
 	
 	bgTaskComplete: function(id)
 	{
-		
-		
 		$('#backgroundtask_'+id).fadeOut("slow", function() {
 			
 			if($('.backgroundTask:visible').length==0)

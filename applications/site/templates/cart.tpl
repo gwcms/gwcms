@@ -93,7 +93,7 @@
 	  <strong class="d-block g-py-10 text-uppercase g-color-main g-font-weight-500 g-py-10">{GW::ln('/g/CART_TOTAL')}</strong>
 	</div>
 	<div class="col">
-	  <strong class="d-block g-py-10 g-color-main g-font-weight-500 g-py-10">{$cart->amount_items} &euro;</strong>
+	  <strong class="d-block g-py-10 g-color-main g-font-weight-500 g-py-10">{$cart->amount_total} &euro;</strong>
 	</div>
       </div>
     </div>

@@ -328,7 +328,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			
 			$objlist = [];
 			foreach($ids as $id)
-				$objlist[$id] = self::$linked_cache[$obj_classname][$id];			
+				if(self::$linked_cache[$obj_classname][$id] ?? false)
+					$objlist[$id] = self::$linked_cache[$obj_classname][$id];			
 			
 			return $objlist;
 		}
