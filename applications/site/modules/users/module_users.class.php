@@ -752,6 +752,12 @@ class Module_Users extends GW_Public_Module
 		$vals = $_POST['item'];
 
 		
+		if(GW::s('PROJECT_NAME') == 'events_ltf_lt'){
+			$vals = $this->ltf_SaveClub($vals);
+			$vals = $this->ltf_SaveCoach($vals);			
+		}
+		
+		
 		if(GW::s('SPORT')){
 			$vals = $this->ts_SaveClub($vals);
 			$vals = $this->ts_SaveCoach($vals);
