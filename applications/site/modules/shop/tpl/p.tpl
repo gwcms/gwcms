@@ -21,7 +21,7 @@
 					{$value=$item->$field} 
 				{/if}
 				
-				{if $nl2br}
+				{if $nl2br && strpos($value,'<br>')===false && strpos($value,'<br/>')===false && strpos($value,'<br />')===false}
 					{$value=$value|nl2br}
 				{/if}
 				
