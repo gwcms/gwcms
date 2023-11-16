@@ -37,7 +37,8 @@ class Module_OrderGroups extends GW_Common_Module
 
 		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
 		
-		$this->sellers_enabled = GW_Permissions::canAccess('payments/sellers', $this->app->user->group_ids);
+		$this->sellers_enabled = GW_Permissions::canAccess('payments/sellers',true, $this->app->user->group_ids, false);
+		
 	}
 	
 

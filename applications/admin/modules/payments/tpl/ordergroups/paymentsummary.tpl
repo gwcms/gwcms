@@ -33,6 +33,12 @@
 				<a href="{$url}" class="btn btn-primary">Nesugrupuotas</a>
 			</td>
 			{/if}
+			
+			{if $app->user->isRoot() }
+			<td>
+				Nuasmeninti {include file="elements/inputs/bool.tpl" input_name="nuasmenintas" value=$smarty.get.nuasmenintas}
+			</td>
+			{/if}			
 		</tr>
 	</table>
 </form>
@@ -47,10 +53,17 @@
 		<tr>
 		<th>{$item->id}</th>
 		<th>{$date[0]}</th>	
-		<th>{if $item->company}{$item->company}{if $item->company_code} | {$item->company_code} <small>({$item->user->title})</small> {/if}{else}{$item->user->title}{/if}</th>
+		<th>
+			{if $smarty.get.nuasmenintas}
+				userid:{$item->user->id}
+			{else}
+				{if $item->company}{$item->company}{if $item->company_code} | {$item->company_code} <small>({$item->user->title})</small> {/if}{else}{$item->user->title}{/if}
+			{/if}
+		</th>
 		<th>
 			
 			{$item->pay_type}
+			
 			{if $item->pay_type==paysera}
 				{$item->pay_confirm->title}
 			{/if}
