@@ -118,6 +118,18 @@ class GW_Extension_KeyVal
 		}
 	}
 	
+	function __set($name, $value){
+
+		if($this->parent->id){			
+			$this->obj->setOwnerId($this->parent->id);
+	
+			return $this->obj->replace($name, $value);
+		}else{
+			$this->cacheNotSaved[$name] = $value;
+			
+		}		
+	}
+	
 
 	
 	function __isset($name)

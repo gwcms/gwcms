@@ -24,6 +24,12 @@
 	<br />
 	{GW::l('/g/YOUR_IP')}: {$smarty.server.REMOTE_ADDR} | {if GW::$globals.proc_timer}{GW::$globals.proc_timer->stop()}{/if}
 	
+	{if GW::s('BOT_SEND_TO_MIRROR')}
+		| Mirror speed 
+		{GW_Bot_Detect::getProcSpeed(1)} {GW_Bot_Detect::getProcSpeed(5)} {GW_Bot_Detect::getProcSpeed(10)} 
+	{/if}
+		
+	
 </p>
 
 

@@ -5,6 +5,8 @@ class GW_Bot_Detect
 
 	static function process(){
 
+		GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
+		
 		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
 		if(
 			GW::s('BOT_SEND_TO_MIRROR') && 
@@ -21,7 +23,12 @@ class GW_Bot_Detect
 			//die('Temporarily off, update is in progress. Please come back later');
 
 			initEnviroment(GW_ENV_TEST);
+			$t = new GW_Timer;
 			GW_Proxy_Site::redirect(GW::s('SITE_URL'));
+			
+			
+			
+			GW::db()->insert("gw_mirror_serv_track", ['servid'=>1,'time'=>date('Y-m-d H:i:s'), 'took'=>$t->stop()*100]);
 			exit;
 		}
 		
@@ -37,6 +44,11 @@ class GW_Bot_Detect
 		}
 	}
 
+	static function getProcSpeed($min=1){
+		return GW::db()->fetch_result("SELECT round(avg(took)/100, 2) FROM `gw_mirror_serv_track` WHERE `time` > '".
+			date('Y-m-d H:i:s', strtotime("-$min minute")).
+			"'");
+	}
 	
 	static function increase2($table, $where, $field, $x = 1, $field2, $y=1, $nodie = false)
 	{
