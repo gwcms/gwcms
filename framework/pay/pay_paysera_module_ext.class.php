@@ -112,12 +112,14 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			//if($_GET['action']=='callback'){
 				
 			//}
-			$data = ['server'=>$_SERVER, 'error'=>$e->getMessage(), 'validation_response'=>$response, '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
+			$data = ['server'=>$_SERVER, 'error'=>$e->getMessage(), '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
+			
 			
 			
 			if($_SERVER['REMOTE_ADDR'] == '84.15.236.87'){
 				d::dumpas($data);
 			}
+			
 			
 			$this->log($data);
 			
@@ -131,7 +133,9 @@ class pay_paysera_module_ext extends GW_Module_Extension
 				GW_Mail_Helper::sendMailDeveloper($opts);				
 			}
 			
-			
+			$logvals=['action'=>$_GET['action'], 'orderid'=>$_GET['orderid'], 'paytext'=>$e->getMessage(),'handler_state'=>666,'ip'=>$_SERVER['REMOTE_ADDR']];
+			$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
+			$log_entry->insert();
 			
 			
 			$this->redirectAfterPaymentAccept($order);
@@ -146,7 +150,8 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			//GW_Message::singleton();
 			//notify someone about intereestin thing
 		}
-
+		
+		$response['ip'] = $_SERVER['REMOTE_ADDR'];
 		$logvals = array_intersect_key($response, GW_Paysera_Log::singleton()->getColumns());	
 		$logvals['action'] = $_GET['action'];
 		$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);

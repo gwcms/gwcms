@@ -885,6 +885,8 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
+		
+		$this->fireEvent('AFTER_INIT_FIELD_ALIAS', $params);	
 	}
 	
 	
