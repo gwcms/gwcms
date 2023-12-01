@@ -108,11 +108,11 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		} catch (Exception $e) {
 			
 			
-
+			$errtxt = $e->getMessage();
 			//if($_GET['action']=='callback'){
 				
 			//}
-			$data = ['server'=>$_SERVER, 'error'=>$e->getMessage(), '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
+			$data = ['server'=>$_SERVER, 'error'=>$errtxt, '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
 			
 			
 			
@@ -125,7 +125,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 			
-			if( ($_GET['action'] ?? false) != 'return' ){
+			if( $errtxt!='Expected status code 1' && ($_GET['action'] ?? false) != 'return' ){
 				$opts=[
 				    'subject'=>GW::s('PROJECT_NAME').' paysera error',
 				    'body'=>"<pre>".$data."</pre>"
@@ -133,7 +133,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 				GW_Mail_Helper::sendMailDeveloper($opts);				
 			}
 			
-			$logvals=['action'=>$_GET['action'], 'orderid'=>$_GET['orderid'], 'paytext'=>$e->getMessage(),'handler_state'=>666,'ip'=>$_SERVER['REMOTE_ADDR']];
+			$logvals=['action'=>$_GET['action'], 'orderid'=>$_GET['orderid'], 'paytext'=>$errtxt,'handler_state'=>666,'ip'=>$_SERVER['REMOTE_ADDR']];
 			$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
 			$log_entry->insert();
 			
