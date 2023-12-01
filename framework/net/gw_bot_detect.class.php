@@ -21,6 +21,11 @@ class GW_Bot_Detect
 			)
 		){
 			//die('Temporarily off, update is in progress. Please come back later');
+			$load1srv5min=self::getProcSpeed(5);
+			if($load1srv5min > 1 ){
+				$lgr = new GW_Logger(GW::s('DIR/LOGS').'slow_mirror_track.log');
+				$lgr->msg($load1srv5min);
+			}
 
 			initEnviroment(GW_ENV_TEST);
 			$t = new GW_Timer;
