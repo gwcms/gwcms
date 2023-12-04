@@ -2382,10 +2382,12 @@ class GW_Common_Module extends GW_Module
 				$cond = $opts['condition'];
 			}elseif(isset($opts['search_fields'])){
 				foreach($opts['search_fields'] as $field){
+					if(strpos($field, '`')===false)
+						$field = "`$field`";
+					
 					$condarr[] = "$field LIKE $search";
-					
-					
 				}
+				
 				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
 					$params['joins'] = $joins;
 				}
