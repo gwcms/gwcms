@@ -60,7 +60,8 @@ class GW_Order_Item extends GW_Composite_Data_Object
 		
 		switch($event){
 			case 'BEFORE_INSERT':
-				$this->invoice_line2 = $this->invoice_line;
+				if(!$this->invoice_line2)
+					$this->invoice_line2 = $this->invoice_line;
 			break;
 			
 

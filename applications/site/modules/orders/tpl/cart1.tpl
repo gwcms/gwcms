@@ -67,7 +67,7 @@
 			</a>
 		 
 		 <div class="d-inline-block align-middle">
-		   <h4 class="h6 g-color-black"><a href="{$item->link}">{$item->title}</a></h4>
+		   <h4 class="h6 g-color-black"><a href="{$item->link}">{$item->invoice_line2}</a></h4>
 		   <ul class="list-unstyled g-color-gray-dark-v4 g-font-size-12 g-line-height-1_6 mb-0">
 		     {call "dl_specif_row" field=composer_id type=opts}
 		     

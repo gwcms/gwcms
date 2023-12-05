@@ -99,7 +99,7 @@
 						{if $citem->link}<a href="{$citem->link}">{/if}
 
 							{if $obj->context_short}<i>{$obj->context_short}</i> - {/if} 
-							{$obj->title}
+							{$citem->invoice_line2}
 						{if $citem->link}</a>{/if}
 
 					{$citem->qty}x{$citem->unit_price} Eur 
