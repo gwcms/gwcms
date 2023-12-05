@@ -5,6 +5,9 @@ class GW_Bot_Detect
 
 	static function process(){
 
+		if(!GW::s('BOT_SEND_TO_MIRROR'))
+			return false;
+			
 		GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
 		
 		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
