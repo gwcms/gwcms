@@ -55,7 +55,7 @@ class GW_Permissions
 	{
 
 		
-		if (!count($gids)) {
+		if (!count((array)$gids)) {
 			$empty = [];
 			return $empty;
 		}

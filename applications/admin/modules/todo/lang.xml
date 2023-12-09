@@ -308,6 +308,15 @@
         <i id="title">Komentarai</i>
         <i id="in_menu">0</i>
       </i>      
+	<i id="periods">
+        <i id="title">
+          <lt>Periodai</lt>
+          <en>Periods</en>
+        </i>
+        <i id="info">
+          <i id="model">gw_todo_periods</i>
+        </i>
+      </i>      
     </i>
   </i>
 </xml>

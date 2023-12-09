@@ -8,8 +8,6 @@ class GW_Bot_Detect
 		if(!GW::s('BOT_SEND_TO_MIRROR'))
 			return false;
 			
-		GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
-		
 		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
 		if(
 			GW::s('BOT_SEND_TO_MIRROR') && 
@@ -23,6 +21,10 @@ class GW_Bot_Detect
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD
 			)
 		){
+			
+			if(rand(0,10)==5)
+				GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
+			
 			//die('Temporarily off, update is in progress. Please come back later');
 			$load1srv5min=self::getProcSpeed(5);
 			if($load1srv5min > 1 ){

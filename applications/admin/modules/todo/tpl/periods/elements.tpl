@@ -1,0 +1,1 @@
+{assign var="comments" value=1 scope=global}
