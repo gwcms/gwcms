@@ -22,7 +22,7 @@ class Module_Countries extends GW_Common_Module
 	{
 		$opts = [
 			'title_func'=>function($item){ return $item->get("title_".$this->app->ln).' ('.$item->get('code').')';  },
-			'search_fields'=>['path','info']			
+			'search_fields'=>['code']			
 		];	
 		
 		foreach(GW::s('LANGS') as $ln)
