@@ -30,6 +30,11 @@ class GW_Bot_Detect
 			if($load1srv5min > 1 ){
 				$lgr = new GW_Logger(GW::s('DIR/LOGS').'slow_mirror_track.log');
 				$lgr->msg($load1srv5min);
+				
+				header('HTTP/1.1 503 Service Temporarily Unavailable');
+				header('Status: 503 Service Temporarily Unavailable');
+				header('Retry-After: 300');//300 seconds
+				exit;
 			}
 
 			initEnviroment(GW_ENV_TEST);
