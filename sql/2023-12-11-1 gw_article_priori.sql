@@ -1,0 +1,1 @@
+ALTER TABLE `gw_articles` ADD `priority` SMALLINT NOT NULL AFTER `active`;
