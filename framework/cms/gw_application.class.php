@@ -190,10 +190,13 @@ class GW_Application
 			$s->muteUndefinedOrNullWarnings();	
 			
 			//ant productiono del performanco galima butu netikrinti, po ikelimo istrinti
-			$s->compile_check = true;
+			
 			$s->error_reporting = GW::s('SMARTY_ERROR_LEVEL8');;
 			//$s->security_policy = false;
-			$s->force_compile = true;
+			if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV){
+				$s->compile_check = true;
+				$s->force_compile = true;
+			}
 			//$compiler->known_modifier_type
 			/*
 			$s->security_policy =  new class($s) extends Smarty_Security{

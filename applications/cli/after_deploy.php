@@ -15,4 +15,5 @@ Navigator::backgroundRequest('admin/lt/system/tools?act=doimportSqlUpdates');
 Navigator::backgroundRequest('admin/lt/system/modules?act=doSyncFromXmls&force=1');
 
 
-echo shell_exec("cd '".GW::s('DIR/ROOT')."' && rm repository/.sys/templates_c/*");
+echo shell_exec("cd '".GW::s('DIR/ROOT')."' && rm -f repository/.sys/templates_c/*");
+//

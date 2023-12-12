@@ -326,12 +326,18 @@ class GW_Module
 		
 		$this->ob_end();
 
-		return $this->processTemplate(false, $params['return_as_string'] ?? false);
+		$t = new GW_Timer;
+		$res = $this->processTemplate(false, $params['return_as_string'] ?? false);
+		GW::$globals['debug']['module_process'][$this->module_name.'_template'] = $t->stop(3);
+			
+		return $res;
 	}
 	
 	
 	function process()
 	{
+		$t = new GW_Timer;
+			
 		extract($this->_args);
 				
 		
@@ -350,6 +356,8 @@ class GW_Module
 		
 		if($this->view_name)
 			$this->processView($this->view_name, array_splice($params,1));
+		
+		GW::$globals['debug']['module_process'][$this->module_name] = $t->stop(3);
 	}
 	
 	
