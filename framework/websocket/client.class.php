@@ -66,6 +66,7 @@ class Client extends Base
 	 */
 	public function connect()
 	{
+		
 		$url_parts = parse_url($this->socket_uri);
 		$scheme = $url_parts['scheme'];
 		$host = $url_parts['host'];
@@ -124,6 +125,8 @@ class Client extends Base
 
 
 		if ($this->socket === false) {
+			
+			$this->msg("Cant connect to \"$host:$port\": $errstr ($errno)");
 
 			$this->errors[] = [self::CANT_CONNECT, "Cant connect to \"$host:$port\": $errstr ($errno)"];
 
@@ -399,6 +402,8 @@ class Client extends Base
 				$this->msg("INT connected");
 				
 				$this->lastping = time();
+			}else{
+				$this->msg("INT conn failed");
 			}
 			
 		} else {
@@ -561,14 +566,20 @@ class Client extends Base
 		//	return self::CHAN_JOIN_FAIL;
 		
 		
-		$return = $this->messageChannel($args['channel'], $message, 20000);
+		$this->notJoinedMessageChan($args['channel'], $message);
+	}
+	
+	function notJoinedMessageChan($chan, $message)
+	{
+		$return = $this->messageChannel($chan, $message, 20000);
 		
 		if($return && isset($return['data']) && $return['data'] == "FAIL")
 			return self::CHAN_MSG_FAIL;
 		
 		
-		return 0;
+		return 0;		
 	}
+	
 
 	
 	/**

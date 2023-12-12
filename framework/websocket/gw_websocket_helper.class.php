@@ -122,7 +122,10 @@ class GW_WebSocket_Helper
 	{
 		$control = self::initControlUserWsc();
 		
-		$username = GW::s('WSS/USER_PREFIX').$username;
+		$cfg = self::loadCfg();
+		$prefix = $cfg->WSS_CONTROL_USER_PREFIX;
+		
+		$username = $prefix.$username;
 		
 		if(!is_array($message))
 			$message = ['text'=>$message];
