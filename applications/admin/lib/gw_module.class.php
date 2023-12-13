@@ -140,9 +140,12 @@ class GW_Module
 	{
 		if(isset($_REQUEST['list_params']) && ($tmp = $_REQUEST['list_params'])){
 			
+	
 			if(isset($tmp['search']) && isset($this->list_params['page']) && $this->list_params['page']!=1)
 				$this->list_params['page']=1;
 			
+			if(isset($tmp['page_by']))
+				$this->list_params['page']=1;			
 			
 			$this->list_params = array_merge($this->list_params, $tmp);
 		}
