@@ -36,6 +36,10 @@ $t = new GW_Timer;
 mypassthru("rsync --exclude='*.log' --exclude='repository/.sys/templates_c/*' -azP $userhost:$sourcedir $destinationdir");
 out("----------RSYNC speed: {$t->stop()} secs----------");
 
+echo shell_exec("cd '".GW::s('DIR/ROOT')."' && rm -f repository/.sys/templates_c/*");
+out("----------TEMPLATE_C cleanup speed: {$t->stop()} secs----------");
+//
+
 $t = new GW_Timer;
 mypassthru("ssh $userhost 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
 out("----------Export-speed: {$t->stop()} secs----------");
