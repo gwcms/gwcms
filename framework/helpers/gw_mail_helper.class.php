@@ -365,18 +365,24 @@ class GW_Mail_Helper
 	{
 		$path="datasources/sms";
 
-	
+		self::processTpl($opts);
+		//d::dumpas($opts);
 		
 		$req = ["number"=>$opts['to'], 'msg'=>$opts['body'], "act"=>'doInsertNew', "json"=>1,'packets'=>1];
-		
+		if($opts['scheduled'] ?? false)
+			$req['send_time'] = $opts['scheduled'];
 		//d::dumpas($req);
+		
+		
+		
 
 		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
 		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;					
 
 
 		$respo = GW::$context->app->innerRequest("datasources/sms", $req);		
-		d::dumpas($respo);
+		//d::dumpas($respo);
+		return $respo;
 	}	
 	
 	static function add2db($opts, $m_queue_item=false)

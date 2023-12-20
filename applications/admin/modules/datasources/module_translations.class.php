@@ -97,7 +97,7 @@ class Module_Translations extends GW_Common_Module
 	
 	function __importReadDb()
 	{
-		return GW_Translation::singleton()->findAll();		
+		return GW_Translation::singleton()->findAll(false);		
 	}
 	
 	function viewSynchronizeFromXml()
@@ -131,7 +131,7 @@ class Module_Translations extends GW_Common_Module
 		
 		foreach($trans_db as $item)
 		{
-			$index = $item->module.'/'.$item->key;
+			$index = $item->modnamefix.'/'.$item->key;
 			$oldvals = $item->toArray();
 			
 			//jeigu xmluose nerasta skipina
@@ -140,7 +140,7 @@ class Module_Translations extends GW_Common_Module
 				$xml_not_found[]=$index;
 				continue;
 			}
-				
+			
 			
 			$xmlentry = $trans_xml[$index];
 			

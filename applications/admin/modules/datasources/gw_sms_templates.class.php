@@ -13,9 +13,14 @@ class GW_SMS_Templates extends GW_Data_Object
 	
 	public $calculate_fields = [
 		'title'=>1,
-		'doc_forms'=>1,
-		'doc_ext_fields'=>1
+		'body'=>1
 	];
+	
+	
+	//for GW_Mail_helper::__fSubjBody - to interpret smarty code
+	public $format_texts =2;
+	
+		
 	
 	
 	
@@ -24,7 +29,11 @@ class GW_SMS_Templates extends GW_Data_Object
 		switch($name){
 			case 'title':
 				return $this->id.'. '.GW_String_Helper::truncate($this->message, 80);
-			break;		
+			break;	
+			case 'body':
+				//for GW_Mail_helper::__fSubjBody - to interpret smarty code
+				return $this->message;
+			break;
 		}
 		
 		

@@ -40,7 +40,11 @@ class Module_Sms extends GW_Common_Module
 		$api_key = $this->config->api_key;
 		$host = $this->config->host;
 		
-		$resp = file_Get_contents("https://{$host}/service/mis/public/sendsms?uid={$uid}&api_key={$api_key}&to=$to&msg=".urlencode($msg).$addarg);
+		$context = stream_context_create(array('http' => array('ignore_errors' => true)));
+		$resp = file_Get_contents($url = "http://{$host}/service/mis/public/sendsms?uid={$uid}&api_key={$api_key}&to=$to&msg=".urlencode($msg).$addarg, false, $context);
+		
+		//d::dumpas([$http_response_header, $url, $resp]);
+		
 		$resp = json_decode($resp,true);
 		
 		$extra = $resp;
@@ -101,7 +105,11 @@ class Module_Sms extends GW_Common_Module
 	
 	function doRetrySend()
 	{
-		$list = GW_Outg_SMS::singleton()->findAll(['retry < 2 AND status=6 AND insert_time + INTERVAL 3 DAY > NOW()']);
+		
+		//status - 6  fail
+		//status - 0 in queue
+		
+		$list = GW_Outg_SMS::singleton()->findAll(['retry < 2 AND (status=6 OR status=0) AND insert_time + INTERVAL 3 DAY > NOW()']);
 		$found = count($list);
 		$succ = 0;
 		
@@ -116,6 +124,12 @@ class Module_Sms extends GW_Common_Module
 		$this->setMessage($stat = "Found $found, resend success: $succ");
 		
 		$this->config->last_retry_status = $stat.', '.date('Y-m-d H:i:s');
+	}
+	
+	//alias to doRetrySend
+	function doSendQueue()
+	{
+		$this->doRetrySend();
 	}
 	
 	function viewConfig()
@@ -142,9 +156,16 @@ class Module_Sms extends GW_Common_Module
 		$item = GW_Outg_SMS::singleton()->createNewObject();
 		$item->set('number', $_GET['number']);
 		$item->set('msg', $_GET['msg']);
+		
+		if($_GET['send_time'] ?? false)
+			$item->send_time = $_GET['send_time'];
+		
 		$item->insert();
 		
-		Navigator::backgroundRequest('admin/'.$this->app->ln.'/datasources/sms?act=doSend&id='.$item->id);	
+		
+		if($item->send_time == false || $item->send_time == '0000-00-00 00:00:00'){
+			Navigator::backgroundRequest('admin/'.$this->app->ln.'/datasources/sms?act=doSend&id='.$item->id);	
+		}
 		
 		if($item->id){
 			$this->setMessage("Sms message created",[

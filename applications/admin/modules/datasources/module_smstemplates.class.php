@@ -12,7 +12,7 @@ class Module_SMSTemplates extends GW_Common_Module
 		$this->admin = $this->app->user->isRoot();
 		
 		//test
-		$this->admin=false;
+		$this->admin=true;
 		
 		parent::init();
 		
@@ -46,7 +46,8 @@ class Module_SMSTemplates extends GW_Common_Module
 		if(!$item)
 			return true;
 				
-		$result = ($item && $item->id == 0) || $this->admin || $item->user_id == $this->app->user->id;
+		return true;
+		//$result = ($item && $item->id == 0) || $this->admin || $item->user_id == $this->app->user->id;
 		
 		if(!$die || $result)
 			return $result;

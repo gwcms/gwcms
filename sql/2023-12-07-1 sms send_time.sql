@@ -1,0 +1,1 @@
+ALTER TABLE `gw_outg_sms` ADD `send_time` DATETIME NULL DEFAULT NULL AFTER `remote_id`;

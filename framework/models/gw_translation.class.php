@@ -5,7 +5,7 @@ class GW_Translation extends GW_i18n_Data_Object
 
 	public $table = 'gw_translations';
 	public $i18n_fields = ['value' => 1];
-	public $calculate_fields = ['title'=>'fullkey'];
+	public $calculate_fields = ['title'=>'fullkey','modnamefix'=>'modnamefix'];
 	public $skip_i18next = true;
 
 	function storeOne($db, $module, $key, $lang, $value, $backend=0)
@@ -38,6 +38,20 @@ class GW_Translation extends GW_i18n_Data_Object
 			return $this->get('module').'/'.$this->get('key');
 	}
 	
+	function modnamefix()
+	{
+		$split = explode('/',$this->get('module'));
+		
+		
+		//pasalinti blogus vertimus
+		if(count($split) != 2){
+			$this->delete();
+		}
+			
+			
+		return $split[0] .'/'.strtolower($split[1]);
+	}
+	
 	
 	static function fullkeyToModAndKey($fullkey)
 	{
@@ -53,5 +67,15 @@ class GW_Translation extends GW_i18n_Data_Object
 			
 		return $this->find(['module=? AND `key`=?', $module, $key]);		
 	}
+	
+	function validate() 
+	{	
+		$split = explode('/',$this->get('module'));
+		
+		if(count($split) != 2)
+			$this->errors['module'] = '/M/datasources/BAD_TRANSLATION_MODULE_NAME';				
+	
+		return parent::validate();
+	}	
 	
 }
