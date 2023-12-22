@@ -274,8 +274,9 @@ class GW_Public_Module {
 	function setUpPaging($last_query_info) {
 		$current = $this->list_params['page'] ?? 1;
 		
-		
-		$length = ceil($last_query_info['item_count'] / $this->list_params['page_by']);
+
+		$length = ceil((int)$last_query_info['item_count'] / (int)$this->list_params['page_by']);
+	
 
 		$this->tpl_vars['paging_tpl_page_count'] = $length;
 

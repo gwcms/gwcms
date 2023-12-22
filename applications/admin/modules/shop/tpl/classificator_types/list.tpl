@@ -5,7 +5,7 @@
 	
 	
 	{function name=do_toolbar_buttons_modactions} 
-		{toolbar_button title="Suskaiciuoto produktus" href=$m->buildUri(false,[act=>doCounts])  iconclass="fa fa-refresh"}
+		{*{toolbar_button title="Suskaiciuoto produktus" href=$m->buildUri(false,[act=>doCounts])  iconclass="fa fa-refresh"}*}
 	{/function}	
 	
 	{$do_toolbar_buttons_hidden=[modactions]}

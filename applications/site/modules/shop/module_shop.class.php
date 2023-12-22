@@ -38,7 +38,8 @@ class Module_Shop extends GW_Public_Module
 		
 
 		if(isset($_GET['pageby'])){
-			$this->list_params['page_by']=$_GET['pageby'];
+			$this->list_params['page_by']=max((int)$_GET['pageby'], 1);
+			
 		}else{
 			if(($_GET['displ']??false)=='table'){
 				$this->list_params['page_by']=64;
@@ -129,14 +130,34 @@ class Module_Shop extends GW_Public_Module
 		
 		if(isset($_GET['classid'])){
 			
-			$class = $this->tpl_vars['classificators'][$_GET['classid']];
-			$type = $this->tpl_vars['classTypes'][$class->type];
-			$field = GW_DB::escapeField($type->key);
+			$class = $this->tpl_vars['classificators'][$_GET['classid']] ?? false;
+			
+			
+			if($class)
+				$type = $this->tpl_vars['classTypes'][$class->type] ?? false;
+			
+			
+			if(!$class)
+			{
+				
+				$this->setError("Class ".$_GET['classid']." not exists");
+			}elseif(!$type){
+				$this->setError("Class type ".$class->type." not exists");
+			}else{
+				$field = GW_DB::escapeField($type->key);
 						
-			$extra.=" AND  $field=".(int)($_GET['classid']);
+				$extra.=" AND  $field=".(int)($_GET['classid']);				
+			}
+				
+			
+
 		}		
 		
 		$params = ['conditions'=>"active=1 AND parent_id=0 AND qty>0 AND $extra"];
+		
+		if(isset($_GET['pageby']))
+			$_GET['pageby'] = max((int)$_GET['pageby'], 1);
+		
 		
 		$pageby = $this->tpl_vars['current_page_by'] = $_GET['pageby'] ?? $this->list_params['page_by'];
 			
@@ -144,6 +165,9 @@ class Module_Shop extends GW_Public_Module
 		$page = $this->list_params['page']?$this->list_params['page']-1: 0;
 		$params['offset'] = $pageby*$page;
 		$params['limit'] = $pageby;	
+		
+		
+		
 		
 		$validord=['priority','title','price'];
 		$this->tpl_vars['validord'] = $validord;
