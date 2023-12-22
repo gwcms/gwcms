@@ -151,7 +151,9 @@ class GW_Common_Module extends GW_Module
 				$type="Notice";
 			default:
 				$type = $type ?? "Unknown";
-				$errstr = "<a href='http://localhost/gw/tools/netbeanopen/nb_open.php?file=$errfile&line=$errline'>$type on line $errline in file $errfile:<br /> [$errno] $errstr</a>";
+				$file = GW_Debug_Helper::envRootSwitch($errfile);
+				
+				$errstr = "<a href='http://localhost/gw/tools/netbeanopen/nb_open.php?file=$file&line=$errline'>$type on line $errline in file $errfile:<br /> [$errno] $errstr</a>";
 					if($this->action_name)
 						$errstr .= " (act:$this->action_name)";
 					
