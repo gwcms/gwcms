@@ -17,6 +17,8 @@
 	i18n=4
 }
 
+{call e field=priority type=number}
+
 
 
 {include file="default_form_close.tpl"}

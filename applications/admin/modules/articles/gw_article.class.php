@@ -4,6 +4,7 @@
 class GW_Article extends GW_Composite_Data_Object
 {
 	var $table = 'gw_articles';
+	public $default_order = 'priority DESC, insert_time DESC';
 	
 	var $composite_map = Array
 	(

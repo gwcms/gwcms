@@ -1,4 +1,5 @@
-{if $prodtypes || $classificatorGroup}   
+
+{if count($prodtypes)>1 || count($classificatorGroup) >1}   
 <!-- Filters -->
     <div class="col-md-3 order-md-1 g-brd-right--lg g-brd-gray-light-v4 g-pt-40">
       <div class="g-pr-15--lg g-pt-60">

@@ -54,6 +54,7 @@
     <i id="group_id">Užsakymo id</i>
     <i id="pay_time">Apmokėjimo laikas</i>
     <i id="vat_group">PVM</i>
+    <i id="priority"><lt>Svarba</lt><en>Priority</en></i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="language_id">

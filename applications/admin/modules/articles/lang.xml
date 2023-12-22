@@ -32,7 +32,7 @@
 			<en>Images / files</en>
 			<lt>Paveisliukai / bylos</lt>			
 		</i>
-		
+		    <i id="priority"><lt>Svarba</lt><en>Priority</en></i>
 	</i>
 	
 	
@@ -40,6 +40,11 @@
 
 		<i id="update_time"><![CDATA[<i class="fa fa-refresh"></i><i class="fa fa-clock-o"></i>]]></i>
 		<i id="insert_time"><![CDATA[<i class="fa fa-plus-square"></i><i class="fa fa-clock-o"></i>]]></i>
+		<i id="priority">
+		  <lt>
+	    <![CDATA[<i class="fa fa-star"></i>]]>
+		  </lt>
+		</i>		
 	</i>	
 	
 	<!-- =============== MODULE MAP START =================== -->
