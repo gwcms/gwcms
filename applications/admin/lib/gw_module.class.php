@@ -668,9 +668,11 @@ class GW_Module
 	{
 		$query_info = $this->tpl_vars['query_info'];
 		$params = $this->list_params;
+		
+		$params['page_by'] = max(1, (int)$params['page_by']);
 
 		$current=(int)$params['page'] ? (int)$params['page'] : 1;
-		$length=ceil($query_info['item_count'] / $params['page_by']);
+		$length=ceil((int)$query_info['item_count'] / $params['page_by']);
 
 		if($length<2)
 			return;
