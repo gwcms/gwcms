@@ -55,7 +55,7 @@
 		{if $item->type!=0}
 			{gw_link params=[pid=>$id] title=$item->title}
 		{else}
-			{$item->title}
+			{$item->title|truncate:50}
 		{/if}
 		
 		{if $item->child_count}
@@ -89,11 +89,10 @@
 				$("#sortable").sortable({ items: 'li.sortable', update: function(){ $('#sortable_actions').fadeIn() } });
 				$("#sortable").disableSelection();
 				$('#sortable li')
-					.mouseover(function(){  $(this).find('td:eq(2)').show() })
-					.mouseout(function(){  $(this).find('td:eq(2)').hide() })
+					.mouseover(function(){  $(this).find('td:eq(2)').show(); })
+					.mouseout(function(){  $(this).find('td:eq(2)').hide(); })
 
-				$('#sortable .inactive').css('opacity', '0.5')
-				
+				$('#sortable .inactive').css('opacity', '0.5');
 				$('#applysort').click(function(){ gw_sortable.apply('#sortable') })
 			});	
 			
@@ -136,7 +135,7 @@
 				
 			</td></tr>
 			<tr><td align="center">
-				<a href="{$link}">{$item->title}</a>		
+				<a href="{$link}">{$item->title|truncate:50}</a>		
 			</td></tr>
 			<tr><td style="display:none;text-align:center">{call dl_display_actions}</td></tr>
 			
