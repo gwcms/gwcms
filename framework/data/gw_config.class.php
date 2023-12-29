@@ -15,20 +15,20 @@ class GW_Config
 		$this->prefix = $prefix;
 	}
 
-	function &getDB()
+	function getDB()
 	{
-		return GW::$context->vars['db'];
+		return GW::db();
 	}
 
 	function set($key, $value)
 	{
-		$db = & $this->getDB();
+		$db =  $this->getDB();
 		$db->save($this->table, Array('key' => $this->prefix . $key, 'value' => $value));
 	}
 
 	function get($key, &$time = 0)
 	{
-		$db = & $this->getDB();
+		$db =  $this->getDB();
 
 		$key = addslashes(substr($this->prefix . $key, 0, 100));
 
@@ -43,7 +43,7 @@ class GW_Config
 
 	function preload($key, &$time = 0)
 	{
-		$db = & $this->getDB();
+		$db =  $this->getDB();
 
 		$key = addslashes(substr($this->prefix . $key, 0, 50));
 		$rows = $db->fetch_assoc($q = "SELECT `key`,value FROM {$this->table} WHERE `key` LIKE '$key%'");

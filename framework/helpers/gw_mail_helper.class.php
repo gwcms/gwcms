@@ -71,11 +71,15 @@ class GW_Mail_Helper
 			$mail->Port = $cfg->mail_smtp_port;
 			$mail->SMTPAuth = true;
 			$mail->Username = $cfg->mail_smtp_user;
-			$mail->Password = $cfg->mail_smtp_pass;		
+			$mail->Password = $cfg->mail_smtp_pass;	
+			
+			if(strpos($cfg->mail_smtp_user, '@gmail.com')!==false){
+				$mail->SMTPSecure = "ssl";
+			}
 		}
 		
 		//$mail->Subject = $subject;
-		self::initSafeSmarty(); 
+		//self::initSafeSmarty(); 
 		
 		return $mail;
 	}
