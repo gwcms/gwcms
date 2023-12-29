@@ -121,6 +121,42 @@ class GW_Math_Helper
 	{
 		return self::uptime(time() - strtotime($datetimestr), $precision);
 	}
+	
+	static function overlapCheck($startTime, $endTime, $chkStartTime, $chkEndTime)
+	{
+		/*
+		$startTime = strtotime("7:00");
+		$endTime   = strtotime("10:30");
+
+		$chkStartTime = strtotime("10:00");
+		$chkEndTime   = strtotime("12:10");
+		*/
+		
+		if($chkStartTime > $startTime && $chkEndTime < $endTime)
+		{
+			#-> Check time is in between start and end time
+			//echo "1 Time is in between start and end time";
+			return 1;
+		}elseif(($chkStartTime > $startTime && $chkStartTime < $endTime) || ($chkEndTime > $startTime && $chkEndTime < $endTime))
+		{	#-> Check start or end time is in between start and end time
+			//echo "2 ChK start or end Time is in between start and end time";
+			return 2;
+		}elseif($chkStartTime==$startTime || $chkEndTime==$endTime)
+		{	#-> Check start or end time is at the border of start and end time
+			//echo "3 ChK start or end Time is at the border of start and end time";
+			return 3;
+		}elseif($startTime > $chkStartTime && $endTime < $chkEndTime)
+		{	#-> start and end time is in between  the check start and end time.
+			//echo "4 start and end Time is overlapping  chk start and end time";
+			return 4;
+		}		
+		
+		return false;
+	}
+	
+
+	
+	
 
 	static function uptimeReverse($str)
 	{
