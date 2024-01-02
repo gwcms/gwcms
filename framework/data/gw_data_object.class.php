@@ -1268,7 +1268,7 @@ class GW_Data_Object
 	
 	function deleteMultiple($cond)
 	{
-		$this->getDB()->delete($this->table, $cond);
+		return $this->getDB()->delete($this->table, $cond);
 	}
 	
 	function attachAssocRecs($list, $fieldname, $obj_classname, $options=[])

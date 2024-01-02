@@ -170,13 +170,17 @@ class GW_Lang
 			list($ln, $key) = explode('/', $otherargs, 2);
 			$key = '/'.$key;
 			
-			GW_Lang::setCurrentLang($ln);
-			
-			$res = self::readWrite($key, $opts);
 						
+			//if(!is_numeric($ln))
+			GW_Lang::setCurrentLang($ln);
+
+			$res = self::readWrite($key, $opts);
+
+			//if(!is_numeric($ln))
 			GW_Lang::setCurrentLang($prevln);
-			
+
 			return $res;
+			
 		}
 
 		self::$last_realkey = '';
@@ -369,12 +373,16 @@ class GW_Lang
 			list($ln, $fullkey) = explode('/', $key, 2);
 			
 			$prevln = GW_Lang::$ln;
-			GW_Lang::$ln = $ln;
+			
+			//if(!is_numeric($ln))			
+				GW_Lang::$ln = $ln;
+			
 			$lnover = $ln;
 			$result = GW_Lang::ln('/'.$fullkey, $opts);
 			//$result = GW_Lang::ln('/'.$fullkey, $valueifnotfound);
 			
-			GW_Lang::$ln = $prevln;
+			//if(!is_numeric($ln))
+				GW_Lang::$ln = $prevln;
 			
 			return $result;
 		}
@@ -539,6 +547,7 @@ class GW_Lang
 	{		
 		
 		$ln = $lnover ? $lnover : GW_Lang::$ln;
+		
 		
 		$cid = $cid.'__'.$ln;
 		
