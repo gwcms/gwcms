@@ -2,9 +2,17 @@
 
 class GW_Bot_Detect
 {
-
 	static function process(){
 
+		if( (GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST) || GW::s('SHADOW_SYS') ){
+			//Mirror-Redirect-Domain
+			if(isset($_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN']))
+				$_SERVER['HTTP_HOST']=$_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN'];
+			
+			if(isset($_SERVER['HTTP_MIRROR_REDIRECT_CLIENT_IP']))
+				$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_MIRROR_REDIRECT_CLIENT_IP'];
+		}
+		
 		if(!GW::s('BOT_SEND_TO_MIRROR'))
 			return false;
 			
@@ -47,16 +55,7 @@ class GW_Bot_Detect
 			exit;
 		}
 		
-		if(GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT')){
-			//Mirror-Redirect-Domain
-			
-			if(isset($_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN'])){
-				$_SERVER['HTTP_HOST']=$_SERVER['HTTP_MIRROR_REDIRECT_DOMAIN'];
-				$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_MIRROR_REDIRECT_CLIENT_IP'];
-			}
-			
-			
-		}
+		
 	}
 
 	static function getProcSpeed($min=1){
@@ -72,12 +71,9 @@ class GW_Bot_Detect
 		GW::db()->query($query, $nodie);
 
 		return GW::db()->affected();
-	}	
-	
+	}
 	
 	static function stats(){
-		
-		
 		$user_agent = mb_substr(($_SERVER['HTTP_USER_AGENT'] ?? '-'), 0, 100);
 		$date= date('Y-m-d');
 		$speed = GW::$globals['proc_timer']->stop(1);
@@ -96,5 +92,4 @@ class GW_Bot_Detect
 			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent, 'speed'=>$speed]);
 		}
 	}
-	
 }
