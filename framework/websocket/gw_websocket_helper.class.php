@@ -137,4 +137,23 @@ class GW_WebSocket_Helper
 		}
 		
 	}
+	
+	static function fastChanMessage($channame, $message)
+	{
+		$control = self::initControlUserWsc(false);
+		$cfg = GW_WebSocket_Helper::loadCfg();
+		
+		list($user, $pass) = explode(':', $cfg->WSS_CONTROL_USER_PASS);
+
+		if($control){
+			return $control->fastChanMessage([
+			'user_name' => $user,
+			'user_pass' => $pass,
+			'channel' => $channame,
+			'channel_pass' => ''
+			], $message);
+		}else{
+			throw new Exception("control user wsc fail", E_USER_ERROR); 
+		}
+	}
 }
