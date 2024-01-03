@@ -3426,6 +3426,7 @@ class GW_Common_Module extends GW_Module
 		
 		//d::dumpas($rows);
 		Others\Shuchkin\SimpleXLSXGen::fromArray($rows)->downloadAs(FH::urlStr(implode("_",$file_name)).'.xlsx');
+		$this->view_name = false;
 	}
 	
 	
