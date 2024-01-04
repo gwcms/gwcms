@@ -30,5 +30,5 @@
 {/if}
 
 
-{include file="default_form_close.tpl" extra_fields=false}
+{include file="default_form_close.tpl"}
 	
