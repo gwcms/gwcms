@@ -151,7 +151,9 @@ class Module_OrderGroups extends GW_Common_Module
 		if($_GET['offset'] ?? false)
 			$list = [$list[$_GET['offset']]];
 		
-		$tpl = GW_Mail_Template::singleton()->find(['idname=?', $this->modconfig->invoice_template]);
+		$idname = $this->modconfig->invoice_template;
+		
+		$tpl = GW_Mail_Template::singleton()->find(['`'.(is_numeric($idname) ? 'id' : 'idname').'`=?', $idname]);
 		
 		if(!$tpl){
 			$this->setError("Nenurodytas sąskaitos šablonas, modulio žiūrėti nustatymuose");

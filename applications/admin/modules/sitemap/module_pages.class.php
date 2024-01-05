@@ -159,7 +159,13 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			
 			
 			$site = GW_Site::singleton()->createNewObject($item->site_id, true);
-			$host = "http://".explode(',',$site->hosts)[0];
+			$host = explode(',',$site->hosts)[0];
+			
+			if($host=='*'){
+				$host=GW::s('SITE_URL');
+			}else{
+				$host = "http://".$host;
+			}			
 		}
 		
 		

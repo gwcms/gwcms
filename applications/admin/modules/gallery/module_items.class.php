@@ -1,5 +1,9 @@
 <?php
-
+	
+ini_set('memory_limit', '300M');
+ini_set('upload_max_filesize', '300M');
+ini_set('post_max_size', '300M');
+set_time_limit(500);
 
 class Module_Items extends GW_Common_Module_Tree_Data
 {	
@@ -51,7 +55,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			$this->jump();
 		}
 		
-		$zip_dir = GW::s('TEMP').'gw_zipdir_'.rand(0, 9999).'/';
+		$zip_dir = GW::s('DIR/TEMP').'gw_zipdir_'.rand(0, 9999).'/';
 		GW_Install_Helper::createDir($zip_dir);
 		
 		chdir($zip_dir);

@@ -1,0 +1,1 @@
+ALTER TABLE `shop_subscription_groups` ADD `contractonce` TINYINT NOT NULL AFTER `active`;

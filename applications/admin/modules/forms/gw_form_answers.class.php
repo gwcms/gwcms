@@ -72,6 +72,11 @@ class GW_Form_Answers extends GW_i18n_Data_Object
 		}
 		
 		return parent::eventHandler($event, $context);
-	}		
+	}
+	
+	function isSigned()
+	{
+		return $this->sign_time > '2020-01-01 00:00:00';
+	}
 
 }

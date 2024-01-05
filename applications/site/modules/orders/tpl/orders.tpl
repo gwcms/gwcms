@@ -16,7 +16,7 @@
 {function orderactions}
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
 		
-		{if count($pay_methods) > 1}
+		{if count($pay_methods) > 1 || $m->feat('mergepaymethods')}
 			{$args=[id=>$order->id,orderid=>$order->id,payselect=>1]}
 		{else}
 			{$args=[act=>doOrderPay,id=>$order->id]}

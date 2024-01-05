@@ -52,16 +52,21 @@ class Module_Orders extends GW_Public_Module
 		if(!$id)		
 			$id = $_GET['orderid'] ?? false;
 		
+		$order= false;;
 		
 		if($allowwithsecret && isset($_GET['key'])){
 			$order = GW_Order_Group::singleton()->find(['id=? AND secret=?', $id, $_GET['key']]);
-		}else{
-			$order = GW_Order_Group::singleton()->createNewObject($id, true);
+		}elseif($this->app->user){
+			
+			if($id){
+				$order = GW_Order_Group::singleton()->find(['id=? AND user_id=?', $id, $this->app->user->id]);
+			}else{
+				$order = $this->app->user->getCart();
+			}
 		}
 				
-		if(!$allowwithsecret && $order->user_id != $this->app->user->id){
-			$this->setError("/m/ORDER_OWNER_ERROR");
-			$this->app->jump("direct/orders/orders");
+		if(!$order){
+			return $this->setError("/m/ORDER_NOT_AVAIL_OR_NO_ACCESS");
 		}
 		
 		return $order;
@@ -113,8 +118,13 @@ class Module_Orders extends GW_Public_Module
 	
 		$pay_methods=json_decode($this->config->pay_types, 1);
 		
-		if(count($pay_methods) > 1 && !isset($_GET['type'])){
-			$this->app->jump('direct/orders/orders/payselect',['id'=>$order->id,'orderid'=>$order->id]);
+		if((count($pay_methods) > 1 || $this->feat('mergepaymethods'))  && !isset($_GET['type']) ){
+			
+			if($this->feat('mergepaymethods')){
+				$this->app->jump('direct/orders/orders',['id'=>$order->id,'orderid'=>$order->id,'payselect'=>1]);
+			}else{
+				$this->app->jump('direct/orders/orders/payselect',['id'=>$order->id,'orderid'=>$order->id]);
+			}
 		}
 		
 		$type = $_GET['type'] ?? $pay_methods[0];

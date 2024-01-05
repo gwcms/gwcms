@@ -54,8 +54,11 @@
 
 
 
-
-
+<small class="text-muted">
+{ini_get('memory_limit')} |
+{ini_get('upload_max_filesize')} | 
+{ini_get('post_max_size')}
+</small>
 
 
 {include file="default_close.tpl"}

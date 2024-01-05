@@ -199,13 +199,9 @@ class GW_Image_Manipulation
 					break;
 				}
 
-				$k1 = $w ? ($cw / $w) : 0;
-				$k2 = $h ? ($ch / $h) : 0;
-				$k = $k1 > $k2 ? $k1 : $k2;
-				
-				if(!$k)
-					$k = 1;
-				
+				$k1 = $cw / ($w ?? 1);
+				$k2 = $ch / ($h ?? 1);
+				$k = $k1 < $k2 ? $k1 : $k2;
 				$rw = (int) ($cw / $k);
 				$rh = (int) ($ch / $k);
 				break;
@@ -218,13 +214,9 @@ class GW_Image_Manipulation
 					break;
 				}
 
-				$k1 = $w ? ($cw / $w) : 0;
-				$k2 = $h ? ($ch / $h) : 0;
+				$k1 = $cw / ($w ?? 1);
+				$k2 = $ch / ($h ?? 1);
 				$k = $k1 > $k2 ? $k1 : $k2;
-				
-				if(!$k)
-					$k = 1;
-				
 				$rw = (int) ($cw / $k);
 				$rh = (int) ($ch / $k);
 		}

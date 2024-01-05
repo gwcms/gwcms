@@ -18,7 +18,7 @@
 					</center>
 				{else}
 
-					{if count($pay_methods) > 1}
+					{if count($pay_methods) > 1 || $m->feat('mergepaymethods')}
 						{include "`$m->tpl_dir`payselect.tpl"}
 						<p>
 							{GW::ln('/m/PAY_METHOD_SELECT')}:
