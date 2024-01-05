@@ -149,7 +149,8 @@ class GW_Mail_Helper
 			} 
 			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ 
 				//vertimai ir tt
-				if(in_array($class_name, ['GW','FH','GW_Sum_To_Text_Helper'])) return true; 
+				//reiktu galimybes ideti prie projekto
+				if(in_array($class_name, ['GW','FH','GW_Sum_To_Text_Helper','Adb_Event_Helper'])) return true; 
 				
 				return false; 
 			} 
