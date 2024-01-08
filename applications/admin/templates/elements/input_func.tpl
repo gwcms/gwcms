@@ -38,6 +38,7 @@
 {/function}
 
 {function name=input_content}
+	{$rowclass="`$rowclass` inp_{$type}"}
 
 	{if $i18n==2}
 		{foreach $langs as $ln_code}

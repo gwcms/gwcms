@@ -2942,7 +2942,7 @@ class GW_Common_Module extends GW_Module
 		$field = $_GET['field'] ?? false;
 		
 
-		
+		$form=['cols'=>1];
 		$form['fields']=[];
 		
 		$fields = $this->__getListFields();

@@ -643,7 +643,7 @@ class GW_DB
 		return $conditions;
 	}
 
-	static function inCondition($fieldname, $ids)
+	static function inCondition($fieldname, $ids, $notin=false)
 	{
 		if (!$ids)
 			return '1=0';
@@ -654,7 +654,7 @@ class GW_DB
 		if (strpos($fieldname, '`') === false)
 			$fieldname = '`' . $fieldname . '`';
 
-		return $fieldname . ' IN (' . implode(',', $ids) . ')';
+		return $fieldname . ($notin ? ' NOT':'').' IN (' . implode(',', $ids) . ')';
 	}
 
 	static function inConditionStr($fieldname, $ids)

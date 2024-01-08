@@ -31,3 +31,7 @@
 </form>
 
 
+<style>
+	.promptform .inp_select_ajax{ min-width: 150px; }
+</style>
+

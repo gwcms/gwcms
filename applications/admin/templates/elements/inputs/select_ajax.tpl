@@ -36,7 +36,7 @@
 	
 	
 	<select  id="{$id}" {if $maximumSelectionLength>1}multiple="multiple"{/if} class="form-control GWselectAjax" name="{$input_name}{if $maximumSelectionLength>1 && substr($input_name,-2)!='[]'}[]{/if}" 
-		 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"
+		 style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if} {if $minwidth}min-width:{$minwidth};{/if}""
 		 {if $preload}data-preload="{$preload}"{/if}
 		 {if $value}data-value="{json_encode($value)|escape}"{/if}
 		 {if $datasource}data-source="{$datasource}"{/if}
