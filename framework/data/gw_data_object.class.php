@@ -1409,6 +1409,7 @@ class GW_Data_Object
 		return $this->getDB()->getColTypes($this->table);
 	}
 	
+	//default recovery // if it is needed to add related data please expand or override this function
 	function getRecoveryData()
 	{
 		$data = [
@@ -1458,6 +1459,7 @@ class GW_Data_Object
 			return $value;
 		}
 	}	
+	
 	
 }
 

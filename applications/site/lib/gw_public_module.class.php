@@ -883,12 +883,29 @@ class GW_Public_Module {
 		return json_decode($answers['data'], true);	
 	}
 	
+	function getLogFileName()
+	{
+		return 'mod_' . implode('_',$this->module_path) . '.log';
+	}
+	
 	function initLogger()
 	{
 		if(!$this->lgr){
-			$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . implode('_',$this->module_path) . '.log');
+			$this->lgr = new GW_Logger(GW::s('DIR/LOGS').$this->getLogFileName());
 			$this->lgr->collect_messages = true;
 		}
+	}		
+	
+	function recoveryLog($item, $user=false, $recoveryReason='')
+	{
+		if(!$user)
+			$user=$this->app->user;
+		
+		
+		$this->initLogger();
+		$data = $item->getRecoveryData();
+		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Recovery line:");	
+		$this->lgr->msg(json_encode($data));		
 	}	
 	
 }

@@ -110,10 +110,17 @@ class GW_Common_Module extends GW_Module
 		$this->config = new GW_Config($this->module_path[0] . '/');		
 	}	
 	
+	function getLogFileName()
+	{
+		return 'mod_' . $this->module_name . '.log';
+	}
+	
 	function initLogger()
 	{
-		$this->lgr = new GW_Logger(GW::s('DIR/LOGS') .'mod_' . $this->module_name . '.log');
-		$this->lgr->collect_messages = true;
+		if(!$this->lgr){
+			$this->lgr = new GW_Logger(GW::s('DIR/LOGS').$this->getLogFileName());
+			$this->lgr->collect_messages = true;
+		}
 	}
 
 	
@@ -265,13 +272,14 @@ class GW_Common_Module extends GW_Module
 			return false;
 
 		$this->fireEvent('BEFORE_DELETE', $item);
+		
 
 		if($item->delete()){
 			$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_SUCCESS"), "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
 		}else{
 			$this->setMessage(["text"=>GW::l("/g/ITEM_REMOVE_FAILED"), "type"=>GW_MSG_ERR, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
 		}
-
+		
 		$this->fireEvent('AFTER_DELETE', $item);
 
 		if($this->isPacketRequest())	
@@ -1880,6 +1888,8 @@ class GW_Common_Module extends GW_Module
 			$item = $this->model->createNewObject($id, true);
 			
 			if($this->canBeAccessed($item,['nodie'=>1])){
+				$this->fireEvent("BEFORE_DELETE", $item);
+				
 				$item->delete();
 				$cnt++;
 			}		
@@ -2486,6 +2496,12 @@ class GW_Common_Module extends GW_Module
 				if($this->auto_translate_enabled)
 					$this->autoTranslate($context);
 			break;
+			
+			case 'BEFORE_DELETE':
+				if($this->item_remove_log)
+					$this->recoveryLog($context);
+						
+			break;
 		}
 		
 		
@@ -2861,6 +2877,18 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage(['text'=>"Environment not production, so recovery mail not sent", 'type'=>GW_MSG_INFO,'float'=>1]);
 		}		
 	}
+	
+	function recoveryLog($item, $user=false, $recoveryReason='')
+	{
+		if(!$user)
+			$user=$this->app->user;
+		
+		
+		$this->initLogger();
+		$data = $item->getRecoveryData();
+		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Recovery line:");	
+		$this->lgr->msg(json_encode($data));		
+	}	
 	
 	function __getListFields(){
 		$this->initListParams(false,'list');
