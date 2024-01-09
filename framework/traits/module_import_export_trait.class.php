@@ -165,7 +165,7 @@ trait Module_Import_Export_Trait
 		foreach ($data as $line => $row) {
 			$item = $this->model->createNewObject();
 			
-			if($this->import_add_filters)
+			if($this->import_add_filters ?? false)
 				$item->setValues($this->filters);
 
 			foreach ($header as $i => $fieldname) {
