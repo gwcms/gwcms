@@ -399,6 +399,7 @@
     <i id="addcomment">Pridėti komentarą</i>
     <i id="comments">Komentarai</i>
     <i id="doMultiSetValue">Grupinis vertės keitimas</i>
+    <i id="doFilterByColumn">Filtruoti</i>
     <i id="doDragMoveSorting">Drag &amp; drop vertės rikiavimas</i>
     <i id="doFillSeries">Užpildyti serija</i>
     <i id="doExportListAsSheet">Eksportuoti į xlsx</i>
