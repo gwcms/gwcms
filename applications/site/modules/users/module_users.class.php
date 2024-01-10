@@ -1047,7 +1047,7 @@ class Module_Users extends GW_Public_Module
 		$field = $map[$remoteuser->type];
 
 
-		if($user=GW_Customer::singleton()->find(["($field=? OR email=? OR username=?) AND active=1", $remoteuser->id, $remoteuser->email, $remoteuser->email])) 
+		if($user=GW_Customer::singleton()->find(["($field=? OR email=? OR username=?) AND active=1 AND removed=0", $remoteuser->id, $remoteuser->email, $remoteuser->email])) 
 		{
 			//$user->fbid!=$fbusr->id dadejau salyga kad atnaujintu po to kai pasidare appso pasikeitimas
 			
