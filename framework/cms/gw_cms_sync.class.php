@@ -7,6 +7,7 @@ class GW_CMS_Sync
 	public $destDir;
 	public $projDir;
 	public $sync_direction;
+	public $timezone='2';
 	
 	function parseParams($argv)
 	{
@@ -393,14 +394,15 @@ class GW_CMS_Sync
 	function actSync()
 	{
 		if(isset($this->params['date'])){
-			$datefrom = $this->params['date'];
+			$timestampfromO = $timestampfrom = $this->params['date'];
 		}else{
-			$datefrom = strtotime($this->getLastSyncTime());
+			$timestampfromO = strtotime($this->getLastSyncTime());
+			$timestampfrom =  $timestampfromO - $this->timezone*3600;
 		}
 		//intended to get updates from core gwcms
-		$this->out("Last sync ".date('Y-m-d H:i:s', $datefrom));
+		$this->out("Last sync ($timestampfrom) TZ+{$this->timezone} ".date('Y-m-d H:i:s', $timestampfromO));
 		
-		$newcommits = $this->getNewCommitsFromDate($datefrom);
+		$newcommits = $this->getNewCommitsFromDate($timestampfrom);
 		
 		
 		//print_r($newcommits);
