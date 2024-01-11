@@ -18,10 +18,14 @@ class Module_OrderGroups extends GW_Common_Module
 		$this->app->carry_params['composer_id']=1;
 		$this->app->carry_params['clean']=1;
 		
-		if(isset($_GET['composer_id'])){
-			$this->filters['composer_id'] = (int)$_GET['composer_id'];
-			$this->list_params['paging_enabled']=0;	
+		if(isset($_GET['user_id'])){
+			$this->filters['user_id'] = $_GET['user_id'];
+			$this->userObj = GW_Customer::singleton()->createNewObject($_GET['user_id'], true);
 		}
+		
+		$this->app->carry_params['clean'] = 1;
+		$this->app->carry_params['user_id'] = 1;	
+		
 		
 		$this->config =  new GW_Config($this->module_path[0].'/');	
 		

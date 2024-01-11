@@ -1023,7 +1023,7 @@ class GW_Common_Module extends GW_Module
 		
 		
 		//d::dumpas($cond);
-		
+		//d::dumpas([$this->paging_enabled , $this->list_params['paging_enabled'] , $this->list_params['page_by']]);
 		
 			
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
@@ -3483,6 +3483,50 @@ class GW_Common_Module extends GW_Module
 		
 		$this->setMessage("Undone: <pre>".json_encode($changes));
 		$this->jump();
+	}
+	
+	
+	function __prepareRelation(&$cfg)
+	{
+		if(!isset($cfg['url']) && isset($cfg['modpath'])){
+			$relationgetarg = $cfg['relarg'] ?? 'user_id';
+			$cfg['url'] = $this->app->buildUri($cfg['modpath'],['clean'=>2,$relationgetarg=>'']);
+
+			if(!isset($cfg['title']) && isset($cfg['modpath'])){
+				$modpath = explode('/',$cfg['modpath']);
+				$cfg['title'] = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/title');
+			}
+		}
+		
+	}
+	
+	function prepareRelations($list)
+	{
+		foreach($list as $idx => $cfg){
+			$this->__prepareRelation($list[$idx]);
+		}
+	}
+	
+	function addRelCount(&$ids, $cfg)
+	{
+		
+		$modpath = explode('/',$cfg['modpath']);
+		$obj = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/info/model');
+		
+		
+		$cond = GW_DB::prepare_query(GW_DB::inCondition($cfg['field'], $ids));
+		
+		$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
+		
+		
+		
+		
+		
+		$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	
+		//$cfg = ['modpath'=>$cfg['modpath'], 'bg'=>$cfg['bg']];
+		$this->__prepareRelation($cfg);
+		$this->tpl_vars['relations'][ $cfg['modpath'] ] = $cfg;
+		
 	}
 	
 	

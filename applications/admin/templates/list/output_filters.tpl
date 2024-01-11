@@ -74,6 +74,14 @@
 {/function}
 
 
+{function dl_output_filters_relations}
+	{foreach $relations as $key => $cfg}
+		{if isset($counts[$key][$item->id])}
+			{list_item_action_m href="{$cfg.url}{$item->id}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]}"}
+		{/if}
+	{/foreach}
+{/function}	
+
 {function name=dl_output_filters_genderico}
 	{if strtoupper($val)==F}<i class="fa fa-female genderfe"></i>{elseif strtoupper($val)==M}<i class="fa fa-male genderma"></i>{/if}
 {/function}

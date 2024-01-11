@@ -48,6 +48,11 @@ class Module_Answers extends GW_Common_Module
 			$this->obj_id = $this->filters['obj_id'] = $_GET['obj_id'];
 		}
 		
+		if(isset($_GET['user_id']))
+		{
+			$this->user_id = $this->filters['user_id'] = $_GET['user_id'];
+		}		
+		
 		
 		$this->initConfig();
 		$this->initFeatures();
