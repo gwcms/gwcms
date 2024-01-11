@@ -3550,6 +3550,8 @@ class GW_Common_Module extends GW_Module
 			//if($cfg['modpath']=='membership'){
 			//	d::ldump($counts);
 			//}
+			
+			//d::ldump([$cfg['modpath'], $cond ,$counts, $obj]);
 		}
 		
 		//$cfg = ['modpath'=>$cfg['modpath'], 'bg'=>$cfg['bg']];
