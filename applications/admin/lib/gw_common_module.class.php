@@ -3493,8 +3493,7 @@ class GW_Common_Module extends GW_Module
 			$cfg['url'] = $this->app->buildUri($cfg['modpath'],['clean'=>2,$relationgetarg=>'']);
 
 			if(!isset($cfg['title']) && isset($cfg['modpath'])){
-				$modpath = explode('/',$cfg['modpath']);
-				$cfg['title'] = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/title');
+				$cfg['title'] = $this->getTitleFromPath($cfg['modpath']);
 			}
 		}
 		
@@ -3507,26 +3506,55 @@ class GW_Common_Module extends GW_Module
 		}
 	}
 	
+	
+	function getModelFromPath($modpath)
+	{
+		$modpath = explode('/',$modpath);
+
+		if(count($modpath)>1){
+			$obj = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/info/model');
+		}else{
+			$obj = GW::l('/M/'.$modpath[0].'/MAP/info/model');
+		}
+		
+		return $obj;
+	}
+	
+	function getTitleFromPath($modpath)
+	{
+		$modpath = explode('/',$modpath);
+
+		
+		if(count($modpath)>1){
+			$title = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/title');
+		}else{
+			$title = GW::l('/M/'.$modpath[0].'/MAP/title');
+		}
+		
+		return $title;
+	}	
+	
 	function addRelCount(&$ids, $cfg)
 	{
+		if(!isset($cfg['nocount'])){
+			
+
+			$obj = $this->getModelFromPath($cfg['modpath']);
+
+			$cond = GW_DB::prepare_query(GW_DB::inCondition($cfg['field'], $ids));
+
+			$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
+
+			$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	
+			
+			//if($cfg['modpath']=='membership'){
+			//	d::ldump($counts);
+			//}
+		}
 		
-		$modpath = explode('/',$cfg['modpath']);
-		$obj = GW::l('/M/'.$modpath[0].'/MAP/childs/'.$modpath[1].'/info/model');
-		
-		
-		$cond = GW_DB::prepare_query(GW_DB::inCondition($cfg['field'], $ids));
-		
-		$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
-		
-		
-		
-		
-		
-		$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	
 		//$cfg = ['modpath'=>$cfg['modpath'], 'bg'=>$cfg['bg']];
 		$this->__prepareRelation($cfg);
 		$this->tpl_vars['relations'][ $cfg['modpath'] ] = $cfg;
-		
 	}
 	
 	
