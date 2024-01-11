@@ -2885,7 +2885,12 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$this->initLogger();
+		
+		if(!method_exists($item, 'getRecoveryData'))
+			return false;
+		
 		$data = $item->getRecoveryData();
+		
 		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Recovery line:");	
 		$this->lgr->msg(json_encode($data));		
 	}	
