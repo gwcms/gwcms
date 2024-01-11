@@ -2498,7 +2498,7 @@ class GW_Common_Module extends GW_Module
 			break;
 			
 			case 'BEFORE_DELETE':
-				if($this->item_remove_log)
+				if($this->item_remove_log ?? false)
 					$this->recoveryLog($context);
 						
 			break;

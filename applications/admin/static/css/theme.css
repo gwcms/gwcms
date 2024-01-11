@@ -8034,3 +8034,9 @@ a.badge:hover{
 	position: relative;
 	top: 4px;
 }
+
+.gwListTable .material-symbols-outlined{
+	font-size: 16px !important;
+	position: relative;
+	top: 2px;	
+}
