@@ -1256,8 +1256,8 @@ class GW_Common_Module extends GW_Module
 
 		//d::Dumpas($cond);
 
-
-		$params['key_field'] = $this->model->primary_fields[0];
+		if(!isset($this->no_key_field))
+			$params['key_field'] = $this->model->primary_fields[0];
 
 		$params['soft_error'] = true;
 		

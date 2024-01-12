@@ -123,13 +123,13 @@
     <ru>Создать новый</ru>
   </i>
   <i id="CREATE_NEW_VIEW">
-    <en>Save page view parameters</en>
-    <lt>Išsaugoti puslapio peržiūros parametrus</lt>
+    <en>Save display settings rendering preset</en>
+    <lt>Sukurti naują atvaizdavimo ruošinį</lt>
     <ru>Сохранение параметров просмотра страницы</ru>
   </i>
   <i id="PAGE_VIEWS">
-    <en>Saved views</en>
-    <lt>Paruoštos peržiūros</lt>
+    <en>Saved rendering presets</en>
+    <lt>Atvaizdavimo nust. ruošiniai</lt>
     <ru>Сохраненные просмотры</ru>
   </i>
   <i id="PAGE_VIEW">
@@ -143,8 +143,8 @@
     <ru>Стандартный</ru>
   </i>
   <i id="PAGE_VIEW_DEFAULT">
-    <lt>Numatytasis</lt>
-    <en>Default</en>
+    <lt>Pagrindinis atvaizdavimo nust. ruošinys</lt>
+    <en>Save as default rendering preset</en>
     <ru>По умолчанию</ru>
   </i>
   <i id="CREATE_NEW_ORDER">
@@ -153,13 +153,13 @@
     <ru>Сохранить текущую очередность</ru>
   </i>
   <i id="SAVE_AS_DEFAULT_PAGE_VIEW">
-    <en>Save as default view</en>
-    <lt>Saugoti kaip pagrindinę peržiūrą</lt>
+    <en>Save as default rendering preset</en>
+    <lt>Saugoti kaip pagrindinį atvaizdavimo nust. ruošinį</lt>
     <ru>Сохранить как просмотр по умолчанию</ru>
   </i>
   <i id="UPDATE_CURRENT_VIEW">
-    <en>Update current view</en>
-    <lt>Atnaujinti pasirinktąją peržiūrą</lt>
+    <en>Update current rendering preset</en>
+    <lt>Atnaujinti atvaizdavimo nust. ruošinį</lt>
     <ru>Обновить текущий вид</ru>
   </i>
   <i id="ACTION_CONFIRM_REQUIRED">
@@ -296,8 +296,8 @@
     </i>
     <i id="features"><en>Enabled features</en><lt>Įgalinti funkcionalumai</lt></i>
     <i id="field"><en>Field</en><lt>Laukelis</lt></i>
-   <i id="fromln">From lang</i>
-   <i id="toln">To lang</i>
+	<i id="fromln">From lang</i>
+	<i id="toln">To lang</i>
 	<i id="value">Vertė</i>
   </i>
 	<i id="FIELD_NOTE">		
@@ -783,10 +783,10 @@
     <en>Data has been changed after form open, save was canceled to prevent data loss</en>
     <ru>Данные были изменены после открытия формы, сохранение было отменено, чтобы предотвратить потерю данных</ru>
   </i>
-  <i id="MANAGE">
-    <lt>Tvarkyti</lt>
-    <en>Manage</en>
-    <ru>Управлять</ru>
+  <i id="MANAGE_PVIEWS">
+    <lt>Tvarkyti atvaizdavimo nust. ruošinius</lt>
+    <en>Manage rendering presets</en>
+    <ru>Управление настройками рендеринга</ru>
   </i>
   <i id="DEACTIVATED_FIELDS">
     <lt>Deaktyvuoti</lt>

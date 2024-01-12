@@ -140,7 +140,10 @@
 	</i>	
       </i>
       <i id="page_views">
-        <i id="title">Sąrašo formacija</i>
+        <i id="title">
+		<lt>Modulių atvaizdavimo nust. ruošiniai</lt>
+		<en>Module rendering preset</en>
+	</i>
         <i id="info">
           <i id="model">GW_Adm_Page_View</i>
         </i>

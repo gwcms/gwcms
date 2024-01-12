@@ -33,7 +33,7 @@
 	    {if $m->list_config.pview->id}
 		<li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,update=>1,clean=>2])}">{GW::l('/g/UPDATE_CURRENT_VIEW')}</a></li>
 	    {/if}
-	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE')}</a></li>
+	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE_PVIEWS')}</a></li>
 	</ul>
     </div>	
 	
@@ -68,7 +68,7 @@
 	</button>
 	<ul class="dropdown-menu">
 	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2,saveasorder=>1])}">{GW::l('/g/CREATE_NEW_ORDER')}</a></li>
-	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE')}</a></li>
+	    <li><a class="iframeopen" href="{$m->buildUri(false,[act=>doManagePageViews,clean=>2])}" title="{GW::l('/M/SYSTEM/MAP/childs/page_views/title')}">{GW::l('/g/MANAGE_PVIEWS')}</a></li>
 	</ul>
     </div>	
 	

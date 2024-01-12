@@ -402,7 +402,7 @@ class GW_Data_Object
 		if (isset($options['group_by']) && $options['group_by'])
 			$sql.= ' GROUP BY ' . $options['group_by'];
 
-		if ($order)
+		if ($order && !isset($options['count']))
 			$sql.= ' ORDER BY ' . $order;
 
 		if (isset($options['limit']))
@@ -594,9 +594,11 @@ class GW_Data_Object
 	}
 	
 	
-	function countExt($condition)
+	function countExt($condition, $params=[])
 	{
-		$sql = $this->buildSql(['conditions'=>$condition, 'count'=>1]);
+		$params['conditions']=$condition;
+		$params['count']=1;
+		$sql = $this->buildSql($params);
 		return $this->getDB()->fetch_result($sql);
 	}
 	

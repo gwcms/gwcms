@@ -9,9 +9,13 @@
 {if $m->list_config.pview->id}
 	{list_item_action_m url=[false, [act=>doCreatePageView,update=>1,clean=>2]] iconclass="fa fa-refresh" title="{GW::l('/g/UPDATE_CURRENT_VIEW')}" caption="{GW::l('/g/UPDATE_CURRENT_VIEW')}" action_addclass="iframeopen"}
 {/if}
-{list_item_action_m url=[false, [act=>doManagePageViews,clean=>2]] iconclass="fa fa-pencil-square-o" title=GW::l('/M/SYSTEM/MAP/childs/page_views/title') caption=GW::l('/g/MANAGE') action_addclass="iframeopen"}
+{list_item_action_m url=[false, [act=>doManagePageViews,clean=>2]] iconclass="fa fa-pencil-square-o" title=GW::l('/M/SYSTEM/MAP/childs/page_views/title') caption=GW::l('/g/MANAGE_PVIEWS') action_addclass="iframeopen"}
+
+<li class="divider"></li>
 
 {list_item_action_m href=$m->buildUri(false,[print_view=>1],[carry_params=>1]) caption=GW::l('/g/PRINT_VIEW') iconclass='fa fa-print'}
+
+
 {list_item_action_m href=$m->buildUri(false,[act=>doExportListAsSheet],[carry_params=>1]) caption=GW::l('/g/VIEWS/doExportListAsSheet') iconclass='fa fa-file-excel-o'}
 
 

@@ -7788,11 +7788,12 @@ input[type="color"] {
 	margin-right: .3em; width: 1.28571429em;text-align: center;
 }
 
+.material-symbols-outlined{ font-size: inherit !important; vertical-align: middle; }
+
+/*taip pat kaip fa*/
 #mainnav-menu .material-symbols-outlined{
-	position:relative; top:4px;left:-3px;
-	margin-right: 2.5px; width: 18px !important;text-align: center;
-	font-size: 18px !important;
-	line-height:0.5;
+	margin-right: 0.3em;
+	width: 1.28571429em;
 }
 
 .change_lang a.selected{ font-weight:bold;color:#000 }
@@ -8031,12 +8032,9 @@ a.badge:hover{
 }
 
 .navbar-content .material-symbols-outlined{
-	position: relative;
-	top: 4px;
+	font-size: 24px !important;
 }
 
 .gwListTable .material-symbols-outlined{
 	font-size: 16px !important;
-	position: relative;
-	top: 2px;	
 }
