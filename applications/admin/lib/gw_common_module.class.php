@@ -2384,7 +2384,7 @@ class GW_Common_Module extends GW_Module
 		$params = [];
 		$cond = "";
 		
-	
+		
 		
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);

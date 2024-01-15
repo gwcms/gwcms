@@ -122,12 +122,25 @@ class GW_Generic_Extended
 		if($this->own_table)
 			$vals['own_table'] = $this->own_table;		
 		
-		$id = $db->fetch_result(["SELECT id FROM {$this->table} WHERE $own_tbl_cond `owner_id`=? AND `key`=?", $this->owner_id, $key]);
-
-		if ($id)
-			$db->update($this->table, "id=" . (int) $id, $vals);
-		else
+		
+		$cond = GW_DB::prepare_query(["$own_tbl_cond `owner_id`=? AND `key`=?", $this->owner_id, $key]);
+		
+		$id = $db->fetch_result("SELECT id FROM {$this->table} WHERE $cond");
+		
+		if ($id){
+			
+			if($value===null){
+				
+				//d::ldump([$key, $cond]);
+				
+				$this->delete($cond);
+				//d::dumpas($cond);
+			}else{
+				$db->update($this->table, "id=" . (int) $id, $vals);
+			}
+		}else{
 			$db->insert($this->table, $vals + ['insert_time' => date('Y-m-d H:i:s')]);
+		}
 	}
 
 	function get($key, $all = false)
