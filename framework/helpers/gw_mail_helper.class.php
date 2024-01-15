@@ -315,6 +315,13 @@ class GW_Mail_Helper
 			return $opts;
 		
 		
+		if(isset($opts['draft']) && !isset($m_queue_item))
+		{
+			$opts['status'] = 'draft';
+			self::add2db($opts);
+			return true;
+		}
+		
 		if(isset($opts['scheduled']) && !$m_queue_item)
 		{
 			$opts['status'] = 'scheduled';
@@ -390,7 +397,7 @@ class GW_Mail_Helper
 		return $respo;
 	}	
 	
-	static function add2db($opts, $m_queue_item=false)
+	static function add2db(&$opts, $m_queue_item=false)
 	{
 		$vals=[];
 		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status']);
@@ -401,7 +408,9 @@ class GW_Mail_Helper
 			$m_queue_item->update();
 			$opts=$m_queue_item;
 		}else{
-			GW_Mail_Queue::singleton()->createNewObject($vals)->insert();
+			$entry = GW_Mail_Queue::singleton()->createNewObject($vals);
+			$entry->insert();
+			$opts['id'] = $entry->id;
 		}		
 	}
 	
