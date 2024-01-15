@@ -2384,17 +2384,19 @@ class GW_Common_Module extends GW_Module
 		$params = [];
 		$cond = "";
 		
+	
 		
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);
 			$search = "'%".$exact."%'";
 
-			
 			if(isset($opts['condition'])){
-				$cond = $opts['condition'];
-			}elseif(isset($opts['search_fields'])){
+				$cond0 = $opts['condition'];
+			}		
+			
+			if(isset($opts['search_fields'])){
 				foreach($opts['search_fields'] as $field){
-					if(strpos($field, '`')===false)
+					if(strpos($field, '`')===false && strpos($field, '.')===false)
 						$field = "`$field`";
 					
 					$condarr[] = "$field LIKE $search";
@@ -2403,6 +2405,7 @@ class GW_Common_Module extends GW_Module
 				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
 					$params['joins'] = $joins;
 				}
+				
 				$cond = '('.implode(' OR ', $condarr).')';
 				
 				//simple cond sample:
@@ -2419,6 +2422,9 @@ class GW_Common_Module extends GW_Module
 			}
 			
 
+			if($opts['condition']){
+				$cond = GW_DB::mergeConditions($cond0, $cond);
+			}
 			
 		}elseif(isset($_REQUEST['ids'])){
 			$ids = json_decode($_REQUEST['ids'], true);
@@ -2447,11 +2453,20 @@ class GW_Common_Module extends GW_Module
 		if($opts['order'] ?? false)		
 			$params['order'] = $opts['order'];
 		
+		//d::dumpas($params);
+		if(isset($_GET['debug']) && $this->app->user->isRoot()){
+			$res['params'] = $params;
+		}		
+		
+		
 		$list0 = $i0->findAll($cond ?? '', $params);
 		$q = GW::db()->last_query;
 	
 		
-		
+		if(isset($_GET['debug']) && $this->app->user->isRoot()){
+			$res['params'] = $params;
+			$res['dbquery'] = $q;
+		}
 		if(isset($opts['list_process'])){
 			$opts['list_process']($list0);
 		}
