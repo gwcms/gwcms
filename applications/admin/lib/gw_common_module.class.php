@@ -2389,10 +2389,7 @@ class GW_Common_Module extends GW_Module
 		if(isset($_GET['q'])){
 			$exact = GW_DB::escape($_GET['q']);
 			$search = "'%".$exact."%'";
-
-			if(isset($opts['condition'])){
-				$cond0 = $opts['condition'];
-			}		
+	
 			
 			if(isset($opts['search_fields'])){
 				foreach($opts['search_fields'] as $field){
@@ -2423,7 +2420,7 @@ class GW_Common_Module extends GW_Module
 			
 
 			if($opts['condition']){
-				$cond = GW_DB::mergeConditions($cond0, $cond);
+				$cond = GW_DB::mergeConditions($opts['condition'], $cond);
 			}
 			
 		}elseif(isset($_REQUEST['ids'])){
