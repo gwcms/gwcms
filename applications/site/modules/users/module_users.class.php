@@ -600,10 +600,7 @@ class Module_Users extends GW_Public_Module
 	}
 	
 	
-	function filterPermitFields(&$vals, $permit_fields)
-	{
-		$vals = array_intersect_key($vals, $permit_fields);		
-	}	
+
 	
 	
 	function notifyAdminUserTransfer($user, $olduser)
@@ -765,15 +762,19 @@ class Module_Users extends GW_Public_Module
 		
 		$fields = $this->getFieldsConfig();
 		$permit_fields = $fields['fields'];
+		
 				
-		$this->filterPermitFields($vals,$permit_fields+['id'=>1]);	
+		$this->filterPermitFields(
+			$vals,
+			$permit_fields+['id'=>1]
+		);	
 	
 		$item->fireEvent('BEFORE_CHANGES');
 		
 		$item->setValues($vals);
 		
 		
-		
+		/*
 		if(
 			GW::s('OLD_USER_DB') &&
 			$item->birthdate && $item->name && $item->surname &&
@@ -781,6 +782,8 @@ class Module_Users extends GW_Public_Module
 		){
 			$this->searchOldUser($item);
 		}
+		 * 
+		 */
 		//d::dumpas($vals);
 		
 		$item->setValidators('profile');
@@ -898,15 +901,7 @@ class Module_Users extends GW_Public_Module
 		}
 		
 		
-		
-		
-		if(GW::s('SITE/HOOKS/AFTER_LOGIN')){
-			foreach(GW::s('SITE/HOOKS/AFTER_LOGIN') as $path){	
-				$this->app->subProcessPath($path);
-			}
-		}
-		
-		
+		$this->processHook('AFTER_LOGIN');
 		
 		
 		if(isset($_GET['redirect_url'])){

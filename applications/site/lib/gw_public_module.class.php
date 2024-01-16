@@ -908,4 +908,13 @@ class GW_Public_Module {
 		$this->lgr->msg(json_encode($data));		
 	}	
 	
+	function processHook($name)
+	{
+		if(GW::s('SITE/HOOKS/'.$name)){
+			foreach(GW::s('SITE/HOOKS/'.$name) as $path){	
+				$this->app->subProcessPath($path);
+			}
+		}
+	}	
+	
 }
