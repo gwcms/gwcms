@@ -1,6 +1,5 @@
-{*
 {assign scope=global var=form_width value="1224px"}
-*}
+
 {include "tools/form_components.tpl"}
 
 <style>
