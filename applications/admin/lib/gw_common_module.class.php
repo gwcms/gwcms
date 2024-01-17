@@ -2419,7 +2419,7 @@ class GW_Common_Module extends GW_Module
 			}
 			
 
-			if($opts['condition']){
+			if($opts['condition'] ?? false){
 				$cond = GW_DB::mergeConditions($opts['condition'], $cond);
 			}
 			

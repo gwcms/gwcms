@@ -8,7 +8,7 @@
 	
 	<{if $rotatedlabel}span{else}td{/if} id="{$id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass} {$rowclass}" 
 		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $labelright}text-align:right;{/if}{if $height}top:{$height-5}px{/if}" >
-		<span style="white-space:nowrap;">
+		{*<span style="white-space:nowrap;"> 2024-01 pasalinta pagal formos atsakymai, blokuoja persikelima i kita eil*}
 			{if !$hidden_note}
 				{if GW::l("/m/FIELD_NOTE/{$name}",[asis=>1])!==null}
 					{$hidden_note=GW::l("/m/FIELD_NOTE/{$name}")}
@@ -25,7 +25,7 @@
 
                     {if $required} <span title="{GW::l('/g/REQUIRED')}">*</span>{/if}</span>
                     {if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
-		</span>
+		{*</span>*}
 
 		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
 		
