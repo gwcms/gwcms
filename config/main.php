@@ -37,9 +37,7 @@ $adir['MODULES']=$adir['ROOT'].'modules/';
 $adir['LANG']=$adir['ROOT'].'lang/';
 
 
-		
-//used to send mail through
-//GW::$static_conf['REMOTE_SERVICES']['MAIL1'] = 'http://uostas.net/services/mail.php?key=fh5ad2fg1ht4a6s5dg1hy4a5d4fg';	
+			
 GW::s('DEFAULT_APPLICATION','SITE');		
 GW::s('LANGS', Array('lt','en'));
 GW::s('i18nExt', []);
@@ -56,9 +54,6 @@ GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
 
 
-if(phpversion()>'8.0'){
-	include GW::s('DIR/ROOT').'test/fakegeoip.php';
-}
 
 date_default_timezone_set('Europe/Vilnius');
 
