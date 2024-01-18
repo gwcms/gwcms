@@ -3,6 +3,7 @@
 	{$inputct_name_pattern="filters[ct][%s][]"}
 	
 {/if}
+{function calcElmId}{str_replace(['[',']','/'],'__',$input_name)}{/function}
 
 
 {foreach $params as $param}
@@ -20,6 +21,7 @@
 
 
 {$inp_type=$type|default:'text'}
+{include "elements/input_func.tpl"}
 
 <div class="filterRow filterRow{$name} {if $muted}filterRowMuted{/if}">
 	
@@ -72,11 +74,18 @@
 
 				{$options=GW::l('/g/FILTER_EMPTY_OPTION')+(array)$options|default:[]}
 			{/if}
+			
+			
+			{if $compare_type=="DATERANGE"}
+				{$inp_type='daterange'}
+			{/if}
 
 			{if $smarty.get.type}
 				{$inp_type=$smarty.get.type}
 			{/if}
 
+			{*{call e0 type=$inp_type field=$name input_name_pattern=$input_name_pattern}   *}
+			{call calcElmId assign=id}
 			{include file="elements/inputs/`$inp_type`.tpl"}    
 		</div>
 		<div class="col-xs-auto gwFiltActions" style="col-xs-autopadding:2px">
