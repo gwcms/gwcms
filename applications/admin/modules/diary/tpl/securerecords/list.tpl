@@ -10,6 +10,8 @@
 	{$do_toolbar_buttons[]='encrypt'}
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf]}	
+	{$do_toolbar_buttons[] = search}
+	
 	{$dl_output_filters=[
 		insert_time=>short_time,
 		update_time=>short_time,
