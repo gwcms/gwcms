@@ -36,5 +36,5 @@
 
 
 {if !$readonly}
-	<input id="{$inp_file_id}" type="file" name="{$name}" class="inp-file" />
+	<input id="{$inp_file_id}" type="file" name="{$name}" class="form-control inp-file" style="width: {$width|default:"100%"}; {if $height}height:{$height};{/if}"  />
 {/if}

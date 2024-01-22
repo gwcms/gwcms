@@ -18,6 +18,10 @@ class Module_Subscribers extends GW_Common_Module
 		$this->__prepareImportFields();
 		
 	}
+	
+	
+
+	
 
 	
 	function viewDefault()
@@ -387,21 +391,40 @@ class Module_Subscribers extends GW_Common_Module
 
 		$sett = $_POST['item'];
 		
+		//d::dumpas($sett);
+		$add=[0=>[], 1=>[]];
+				
 		foreach($emails as $email){
 	
+
 			
-			$sub = GW_NL_Subscriber::singleton()->createNewObject();
-			$sub->email = $email['email'];
-			$sub->lang = $sett['lang'];
-			$sub->active = $sett['active'];
+			if($sub=GW_NL_Subscriber::singleton()->find(Array('email=?',$email['email']))){
+				
+				$new = 0;
+			}else{
+				$new = 1;
+				$sub = GW_NL_Subscriber::singleton()->createNewObject();
+				$sub->email = $email['email'];
+				$sub->lang = $sett['lang'];
+				$sub->active = $sett['active'];
+			}
+			
+			$groups = $sub->groups;
+			$groups[]=$sett['groups'];
+			$sub->groups = $groups;
+				
+			
 			if(!$sub->validate()){
 				$this->setError($email['email'].": ".array_values($sub->errors)[0]);
 			}else{
-				$sub->insert();
-				$this->setMessage(GW::l('/m/ADD_SUCCESS').' '.$email['email']);
+				$sub->save();
+				$add[ $new ][] = $email['email'];
 			}
 			
+			
 		}
+		
+		$this->setMessage("ADD ".count($add[1]).":  ".implode(',',$add[1])."<br>UPDATE ".count($add[0]).": ".implode(',',$add[0]));
 		$this->app->jump();	
 		//$this->tpl_vars['result'] = addslashes($data);
 	}
@@ -496,9 +519,10 @@ class Module_Subscribers extends GW_Common_Module
 		$cfg = parent::getListConfig();
 
 		$cfg['fields']['title']='L';
+		$cfg['fields']['groups']='Lf';
 
 		//$cfg['fields']['progress']="L";
-		
+		$cfg['filters']['groups'] = ['type'=>'multiselect_ajax','options'=>[],'modpath'=>'emails/groups','preload'=>1];
 		
 		return $cfg;
 	}	

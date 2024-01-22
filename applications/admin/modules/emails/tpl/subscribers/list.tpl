@@ -17,17 +17,7 @@
 	{$dl_actions=[invert_active,edit,delete]}
 	{$dl_output_filters=[update_time=>short_time,insert_time=>short_time]}	
 	
-	{$dl_filters=[
-		name=>1, 
-		surname=>1, 
-		email=>1,
-		lang=>1,
-		insert_time=>1, 
-		active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')],
-		unsubscribed=>[type=>select, options=>['0'=>GW::l('/g/NO'), '1'=>GW::l('/g/YES')]],
-		unsubscribe_note=>1,
-		groups=>[type=>multiselect, options=>$options.groups]]
-	}
+
 	
 
 	{function dl_cell_title}
