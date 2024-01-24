@@ -24,6 +24,20 @@ class GW_Country extends GW_i18n_Data_Object
 		return $opts;
 	}
 	
+	
+	function get_code3_to_code2_map($lang = 'lt')
+	{
+		//return $this->getAssoc(['code', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
+		$opts= [];
+		
+		foreach($this->findAll(false) as $country)
+		{
+			$opts[$country->code2] = $country->code;
+		}
+		
+		return $opts;
+	}
+	
 	function getIdOptions($lang = 'lt')
 	{
 		return $this->getAssoc(['id', 'title_' . $lang], '', ['order' => 'title_' . $lang . ' ASC']);
