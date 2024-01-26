@@ -922,7 +922,7 @@ class Module_Users extends GW_Public_Module
 	{
 		$opts = [
 		    'title_func'=>function($o){ return '<span class="text-muted">#'.$o->id."</span> ".$o->title." ".explode('-',$o->birthdate)[0]; },
-		    'condition_add'=>"is_admin=0 AND active=1",
+		    'condition_add'=>"is_admin=0 AND active=1 AND removed=0",
 		    'search_fields'=>["concat(name,' ',surname, ' ',club)"]
 		];	
 		

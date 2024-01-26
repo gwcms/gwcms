@@ -126,10 +126,13 @@ class GW_Array_Helper
 		return $arr;
 	}
 	
-	static function sortByField($field, &$array)
+	static function sortByField($field, &$array, $reverse = false)
 	{
 		uasort($array, function($a, $b) use ($field) { return $a[$field] <=> $b[$field]; });
 
+		if($reverse)
+			$array = array_reverse($array, true);
+		
 		return true;
 	}
 	
