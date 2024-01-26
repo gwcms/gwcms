@@ -1303,8 +1303,8 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$this->prepareCounts($list);
-
 		
+			
 		$this->fireEvent('AFTER_LIST', $list);	
 		
 		return ['list' => $list];
@@ -2004,6 +2004,11 @@ class GW_Common_Module extends GW_Module
 			$cfg['fields'][$fieldname] = 'Lof';
 		}
 		
+		
+		if($this->model && $this->model->extensions && isset($this->model->extensions['changetrack'])){
+			$cfg['fields']['changetrack'] = 'L';
+		}
+		
 		return $cfg;
 	}
 	
@@ -2513,6 +2518,14 @@ class GW_Common_Module extends GW_Module
 				if($this->item_remove_log ?? false)
 					$this->recoveryLog($context);
 						
+			break;
+			
+			case 'AFTER_LIST':
+				
+				//changetrack extension
+				if($this->isListEnabledField("changetrack")){	
+					$this->tpl_vars['dl_output_filters']['changetrack'] = 'changetrack';
+				}	
 			break;
 		}
 		

@@ -52,7 +52,7 @@ class FH
 	{
 		$title = self::fieldTitle($key);
 
-		if (($tmp = GW::l($fkey="/m/FIELDS_SHORT/$key", ['noedit'=>1])) && ($fkey!=$tmp))
+		if (($tmp = GW::l($fkey="/A/FIELDS_SHORT/$key", ['noedit'=>1])) && ($fkey!=$tmp))
 			return "<span title='".strip_tags ($title)."'>$tmp</span>";
 
 		return $title;
