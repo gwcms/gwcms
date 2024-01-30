@@ -1029,8 +1029,9 @@ class GW_Common_Module extends GW_Module
 		if ($this->paging_enabled && $this->list_params['paging_enabled'] && $this->list_params['page_by']) {
 			$page = isset($this->list_params['page']) && $this->list_params['page'] ? $this->list_params['page'] - 1 : 0;
 			$params['offset'] = (int)$this->list_params['page_by'] * (int)$page;
-			$params['limit'] = (int)$this->list_params['page_by'];
+			$params['limit'] = max( (int)$this->list_params['page_by'] ,1);
 		}
+		
 		
 		if ($pview && $pview->group_by){
 			$params['group_by'] = $pview->group_by;
