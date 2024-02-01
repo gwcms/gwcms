@@ -199,8 +199,8 @@ class GW_Image_Manipulation
 					break;
 				}
 
-				$k1 = $cw / ($w ?? 1);
-				$k2 = $ch / ($h ?? 1);
+				$k1 = $cw / ($w ?: 1);
+				$k2 = $ch / ($h ?: 1);
 				$k = $k1 < $k2 ? $k1 : $k2;
 				$rw = (int) ($cw / $k);
 				$rh = (int) ($ch / $k);
@@ -214,8 +214,8 @@ class GW_Image_Manipulation
 					break;
 				}
 
-				$k1 = $cw / ($w ?? 1);
-				$k2 = $ch / ($h ?? 1);
+				$k1 = $cw / ($w ?: 1);
+				$k2 = $ch / ($h ?: 1);
 				$k = $k1 > $k2 ? $k1 : $k2;
 				$rw = (int) ($cw / $k);
 				$rh = (int) ($ch / $k);
