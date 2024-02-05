@@ -817,9 +817,15 @@ class GW_Module
 			$this->setMessage($error);
 		}	
 	}
+	
+	public $dynamicFieldTitles=[];
 		
 	function fieldTitle($field)
 	{
+
+		if(isset($this->dynamicFieldTitles[$field]))
+			return $this->dynamicFieldTitles[$field];
+		
 		if(strpos($field,'/')!==false)
 		{
 			// user/name -> name
@@ -829,6 +835,13 @@ class GW_Module
 		
 		$title= GW::l($fkey = '/A/FIELDS/' . $field);
 		return $title != $fkey ? $title : $field;
+	}
+	
+	function shortFieldTitle($field){
+		if(isset($this->dynamicFieldTitles[$field]))
+			return $this->dynamicFieldTitles[$field];		
+		
+		return $this->app->FH()->shortFieldTitle($field);
 	}
 	
 	function runActInBackground()

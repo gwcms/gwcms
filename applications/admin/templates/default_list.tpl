@@ -49,9 +49,9 @@
 			{call name="dl_custom_head_$field"}
 		{else}
 			{if $smarty.get.act==doExportListAsSheet}
-				{$coltitle=$app->fh()->fieldTitle($field)}
+				{$coltitle=$m->fieldTitle($field)}
 			{else}
-				{$coltitle=$app->fh()->shortFieldTitle($field)}
+				{$coltitle=$m->shortFieldTitle($field)}
 			{/if}
 			{if isset($dl_order_enabled_fields.$field)}
 				{include file="list/order.tpl" name=$field title=$coltitle}
