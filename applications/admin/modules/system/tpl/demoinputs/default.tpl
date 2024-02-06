@@ -203,6 +203,10 @@
 
 {call e field=demo_after_input_textops after_input_f=textopts options=$demooptionsfix options_fix=1}
 
+{call e field=select_ajax_but_not_ajax note="preloaded options with search" 
+	type=select_ajax options=DateTimeZone::listIdentifiers() empty_option=1 options_fix=1}
+   
+
 
 
 

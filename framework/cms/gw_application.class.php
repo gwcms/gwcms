@@ -98,6 +98,12 @@ class GW_Application
 		}
 	}
 	
+	function initTimeZone()
+	{
+		if($this->site->timezone)
+			date_default_timezone_set($this->site->timezone);
+	}
+	
 
 	function initDB()
 	{
@@ -305,6 +311,9 @@ class GW_Application
 		$this->initDB();
 
 		$this->initSite();
+		$this->initTimeZone();
+		
+		
 		$this->requestInfo();		
 		$this->initAuth();
 

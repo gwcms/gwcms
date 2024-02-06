@@ -111,12 +111,15 @@
     </i>
     <i id="editor"><lt>HTML redaktoriaus nustatymo perašymas</lt><en>HTML editor override</en></i>
     <i id="editor_height"><lt>HTML redaktoriaus aukštis</lt><en>HTML editor height</en></i>
+    <i id="timezone"><lt>Laiko juosta</lt><en>Time Zone</en></i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="templatevars">TV</i>
     <i id="relations">
 <![CDATA[<i class="fa fa-link"></i>]]>
     </i>
+    
+    <i id="timezone"><![CDATA[<i class="fa fa-globe"></i><i class="fa fa-clock-o"></i>]]></i>
   </i>
   <i id="TYPE_OPT">
     <i id="0">

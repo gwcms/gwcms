@@ -1,0 +1,1 @@
+ALTER TABLE `gw_sites` ADD `timezone` VARCHAR(40) NOT NULL AFTER `langs`;

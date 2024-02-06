@@ -48,7 +48,7 @@ class Module_Sites extends GW_Common_Module
 		$cfg["fields"]['update_time'] = 'lof';
 		$cfg["fields"]['langs'] = 'Lof';
 		$cfg["fields"]['priority'] = 'lof';
-		
+		$cfg["fields"]['timezone'] = 'Lof';
 		
 		$cfg['inputs']['langs']=[
 		    'type'=>'multiselect', 
@@ -58,6 +58,10 @@ class Module_Sites extends GW_Common_Module
 		$cfg['inputs']['key']=['type'=>'text'];
 		$cfg['inputs']['hosts']=['type'=>'tags', 'placeholder'=>GW::l('/m/ADD_HOST')];
 		$cfg['inputs']['title'] = ['type'=>'text', 'i18n'=>3, 'i18n_expand'=>1];
+
+		
+		$cfg['inputs']['timezone'] = ['type'=>'select_ajax', 'options'=>DateTimeZone::listIdentifiers(), 'empty_option'=>1, 'options_fix'=>1];
+		
 
 		
 		return $cfg;
