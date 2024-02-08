@@ -185,6 +185,16 @@ class GW_Image_Manipulation
 	{
 		switch ($method) {
 			case 'crop':
+				if($cw < $w && $ch < $h){
+					
+					$rw = $cw;
+					$aspect = $w/$h;
+					$rh = round($cw / $aspect);
+					
+					
+					break;
+					
+				}
 			case 'strict':
 			case 'fill':
 				$rw = $w;
@@ -221,7 +231,9 @@ class GW_Image_Manipulation
 				$rh = (int) ($ch / $k);
 		}
 
-		return array($rw, $rh, NULL, "width='{$rw}' height='{$rh}'");
+		$calc = [$rw, $rh, NULL, "width='{$rw}' height='{$rh}'"];
+		//d::dumpas(['method'=>$method,'original'=>"{$cw}x{$ch}", 'ask'=>"{$w}x{$h}", "calc"=>"{$rw}x{$rh}"]);;
+		return $calc;
 	}
 
 	function clean()

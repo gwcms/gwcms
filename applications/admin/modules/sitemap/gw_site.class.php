@@ -11,7 +11,15 @@ class GW_Site extends GW_i18n_Data_Object
 	    'relations'=>1,
 	];
 	public $encode_fields = ['langs'=>'comma'];
+	
 
+		
+	public $composite_map = Array
+	(
+		
+		'favico' => Array('gw_image', Array('dimensions_resize'=>'500x500', 'dimensions_min'=> '32x32')),
+	);
+	
 
 
 	function calculateField($key)

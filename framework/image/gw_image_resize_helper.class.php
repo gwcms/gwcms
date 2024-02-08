@@ -79,13 +79,16 @@ class GW_Image_Resize_Helper
 		
 		self::checkSaveFormat($params);
 
-		if (
-		    (int) $item->get('width') <= (int) $params['width'] &&
-		    (int) $item->get('height') <= (int) $params['height'] &&
-			($params['method'] ?? false) != 'crop'
-		){
-			if($params['debug'] ?? false)
-				d::ldump(['no resize'=>'image is too small']);				
+		$dh = (int)$params['width'];
+		$dw = (int)$params['height'];
+		$ow = (int)$item->get('width');
+		$oh = (int)$item->get('height');
+				
+		if ( $ow <= $dw && $oh <= $dh && ($params['method'] ?? false) != 'crop'){
+			if($params['debug'] ?? false){
+				
+				d::ldump(['no resize'=>"original image({$ow}x{$oh}) is too small for resize({$dw}x{$dh})"]);				
+			}
 			
 			return false; // no need to resize
 		}

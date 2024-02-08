@@ -100,7 +100,7 @@ class GW_Application
 	
 	function initTimeZone()
 	{
-		if($this->site->timezone)
+		if($this->site && $this->site->timezone)
 			date_default_timezone_set($this->site->timezone);
 	}
 	

@@ -702,6 +702,8 @@ class Module_Tools extends GW_Common_Module
 	
 	function doTestRecoverBackup()
 	{
+		$timer = new GW_Timer;
+		
 		//d::dumpas('testas');
 		//tiesiai galima butu atiduot variantas
 		//list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
@@ -715,9 +717,11 @@ class Module_Tools extends GW_Common_Module
 		
 		$options=glob("/mnt/back1/sysbackup/natosltserver/backups/*/$database.gz");
 		$recoveryopt = [];
+		$recovertime = [];
 		foreach($options as $filename){
 			$name = basename(dirname($filename));
 			$recoveryopt[$name]= $name. ' - '.date('Y-m-d H:i', filemtime($filename));
+			$recovertime[$name] = date('Y-m-d H:i', filemtime($filename));
 		}
 		
 		
@@ -739,6 +743,10 @@ class Module_Tools extends GW_Common_Module
 		}
 		
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path recoverdb {$answers['src']}  2>&1");
+		
+		
+		$recovery_time = $recovertime[$answers['src']];
+		file_put_contents(GW::s('DIR/TEMP').'sync_with_prod', "recovery(".$recovery_time.') took:'.$timer->stop(1).' s.');
 		
 		$this->setMessage("<pre>$cmd\n\n".$res."</pre>");
 						

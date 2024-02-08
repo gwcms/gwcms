@@ -74,6 +74,17 @@
 {/function}
 
 
+{function dl_output_filters_image_sm}
+	{$image=$item->$field}
+	{if $image}
+		<a href="{$app->sys_base}tools/imga/{$image->id}" target="_blank">
+			<img src="{$app->sys_base}tools/imga/{$image->id}?size=16x16" align="absmiddle" vspace="2" />
+		</a>
+	{else}
+		-
+	{/if}
+{/function}
+
 {function dl_output_filters_relations}
 	{foreach $relations as $key => $cfg}
 		{if isset($counts[$key][$item->id])}
