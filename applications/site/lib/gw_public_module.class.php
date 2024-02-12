@@ -743,9 +743,9 @@ class GW_Public_Module {
 		return new GW_Config($modp[0].(isset($modp[1]) ? '__'.$modp[1]:'' ).'/');
 	}
 
-	function initModCfg()
+	function initModCfg($modp=false)
 	{
-		$this->modconfig = $this->initModCfgEx($this->module_path);
+		$this->modconfig = $this->initModCfgEx($modp ? $modp : $this->module_path);
 	}
 
 	function initConfig()

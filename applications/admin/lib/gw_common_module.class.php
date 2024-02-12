@@ -2049,7 +2049,7 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
-		
+				
 		
 		$o = new $obj_classname;
 			
