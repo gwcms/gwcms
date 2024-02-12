@@ -678,36 +678,51 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	
 	
 	
-	//JSTREE after copy, paste
-	//admin/lt/sitemap/pages/tree
+
 	function __eventBeforeClone($ctx)
-	{		
-		$source = $ctx['src'];
-		$dest = $ctx['dst'];
+	{	
 		
-		$parent = GW_Page::singleton()->find($_GET['parent']);
 		
-		$dest->parent_id = $parent->id;
-		$dest->site_id = $parent->site_id;
+		//JSTREE after copy, paste
+		//admin/lt/sitemap/pages/tree		
+		if(is_array($ctx) && isset($ctx['src'])){
+		
+			$source = $ctx['src'];
+			$dest = $ctx['dst'];
+		
+	
+			$parent = GW_Page::singleton()->find($_GET['parent']);
+
+			$dest->parent_id = $parent->id;
+			$dest->site_id = $parent->site_id;
+
+		}
 	}
 		
 	function __eventAfterClone($ctx)
 	{
-		$source = $ctx['src'];
-		$dest = $ctx['dst'];
 		
+		//JSTREE after copy, paste
+		//admin/lt/sitemap/pages/tree		
+		if(is_array($ctx) && isset($ctx['src'])){
+			
 		
-		$content = $source->exportContent(['lns'=>$opts['export_lns_vals']]);
-		
-		$dest->importContent($content);
-		
-		$this->setMessage("Copied tpl vars: ".count($content));
-		$this->doFixPaths();
-		
-		
-		if(isset($_GET['returnonlynewid'])){
-			echo $dest->id;
-			exit;
+			$source = $ctx['src'];
+			$dest = $ctx['dst'];
+
+
+			$content = $source->exportContent(['lns'=>$opts['export_lns_vals']]);
+
+			$dest->importContent($content);
+
+			$this->setMessage("Copied tpl vars: ".count($content));
+			$this->doFixPaths();
+
+
+			if(isset($_GET['returnonlynewid'])){
+				echo $dest->id;
+				exit;
+			}
 		}
 	}	
 	
