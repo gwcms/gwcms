@@ -772,6 +772,8 @@ class GW_Common_Module extends GW_Module
 		$this->canBeAccessed($item, ['access'=>GW_PERM_WRITE]);
 		
 		$this->fireEvent("BEFORE_INVERT_ACTIVE", $item);
+		
+		$item->fireEvent('BEFORE_CHANGES');
 
 		if (!$item->invertActive())
 			return $this->setError('/g/GENERAL/ACTION_FAIL');
@@ -2049,7 +2051,7 @@ class GW_Common_Module extends GW_Module
 				}
 			}
 		}
-				
+		
 		
 		$o = new $obj_classname;
 			
