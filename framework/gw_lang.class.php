@@ -347,6 +347,10 @@ class GW_Lang
 	}
 	
 	
+	static function isEmptyTranslation($value){
+		return $value == Null || (is_string($value) && $value[0] == '*' && $value[strlen($value) - 1] == '*');
+	}
+	
 	/**
 	 * pakrauna vertimus is duombazes, 
 	 * jei nera duombazeje tada pakrauna is 
@@ -409,21 +413,39 @@ class GW_Lang
 		
 
 		//nerasta verte arba verte su ** reiskias neisversta - pabandyti automatiskai importuoti
-		if ((GW::$devel_debug || GW::s('DEVELOPER_PRESENT'))  && !isset($opts['nocreate']) && ($vr == Null || (is_string($vr) && $vr[0] == '*' && $vr[strlen($vr) - 1] == '*'))) {
+		if ((GW::$devel_debug || GW::s('DEVELOPER_PRESENT'))  && !isset($opts['nocreate']) && (self::isEmptyTranslation($vr))) {
+			$keyx=self::transKeyAnalise($fullkey);	
+			$keyx = implode('/',$keyx);
+			
+	
+			
 			
 			if(!isset($opts['redirect'])){
-				$keyx=self::transKeyAnalise($fullkey);
 				
-				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.implode('/',$keyx));
+				
+				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.$keyx);
 
 
 				if($resp = json_decode($resraw, true)){
-
-
-					if($resp['result']){
-						$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
-						$newtr->trshare = 1;
-						$newtr->replaceInsert();
+					
+					$value_store_key = 'value_'.GW_Lang::$ln;
+					$result_value_ln = $resp['result'][$value_store_key] ?? false;
+					
+					$existingtr = GW_Translation::singleton()->findByFullKey($keyx);
+					
+					//d::ldump(['result_from_central'=>$resp['result'], 'existing_tr'=>$existingtr, 'result_from_central_ln'=>$result_value_ln]);
+					
+					if($resp['result'] && GW_Lang::isEmptyTranslation($result_value_ln)){
+						
+						if($existingtr){
+							$existingtr->$value_store_key = $result_value_ln;
+							$existingtr->updateChanged();
+						}else{
+							$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
+							$newtr->trshare = 1;
+							$newtr->save();
+						}
+						
 						$opts['redirect'] = 1;
 						self::transCacheReset($keyx[0]);;
 						
@@ -446,6 +468,10 @@ class GW_Lang
 				
 				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
 				GW_Translation::singleton()->store($module, $key, $key, GW_Lang::$ln);
+				
+				
+				
+				//d::ldump(GW::db()->last_query);
 			//}
 			return self::lnResult($orig_key, $orig_key, $orig_val ?? false, $opts);
 		}
