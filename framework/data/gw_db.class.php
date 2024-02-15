@@ -435,6 +435,7 @@ class GW_DB
 	}
 
 	public $mi_odk_unset_insert=true;
+	public $fieldfunc=[];
 	//required that all entries have set full keys
 	function _multi_insert($table, $entries, $replace = false, $nodie = false)
 	{
@@ -452,8 +453,15 @@ class GW_DB
 		foreach ($entries as $entry) {
 			$values = Array();
 
-			foreach ($keys as $key)
-				$values[] = "'" . addslashes($entry[$key]??'') . "'";
+			foreach ($keys as $key){
+				$val = "'" . addslashes($entry[$key]??'') . "'";
+				
+				if(isset($this->fieldfunc[$key])){
+					$val = $this->fieldfunc[$key].'('.$val.')';
+				}
+					
+				$values[] = $val;
+			}
 
 			$query.= "(" . implode(',', $values) . "),\n";
 		}

@@ -1008,7 +1008,9 @@ class GW_Common_Module extends GW_Module
 					
 					$this->buildConds(['field' => 'id', 'value' => $ids, 'ct' => 'IN'], $subcond, 'OR');
 				}
-			}			
+			}
+
+			$this->eventHandler("AFTER_SEARCH_COND_BUILD", $subcond);
 			
 			$cond.=($cond ? ' AND ':'')."($subcond)";
 			
@@ -1970,6 +1972,8 @@ class GW_Common_Module extends GW_Module
 		
 
 		$this->initFilterByType();
+		
+		$this->eventHandler("AFTER_LIST_CONFIG", $item);
 		
 		return true;
 	}

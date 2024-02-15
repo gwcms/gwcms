@@ -112,13 +112,19 @@
 
 {$tpl = $item->getTemplate()}
 
+
 {if $update}
+	{$versions=$item->getContentVersions()}
+	
 	{call e field=in_menu type=bool  i18n=3 i18n_expand=1  tabs=[base]}
 	
 	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
 	{$ck_set='medium'}
 	{foreach $item->getInputs() as $input}
+		{$fieldname=$input->get(name)}
+		{$title = $input->get(title)}
+
 		{$if18n=$input->get(multilang)}
 		{if $if18n} {$if18n=4} {else} {$if18n=0} {/if}
 		
@@ -150,16 +156,49 @@
 			{$opts.height=$ck_options.height}
 		{/if}
 		
+		{$note=$input->get(note)}
+		{if $if18n}
+			{capture assign=note}
+				{$note}
+				<span class='changetrack'>
+					<i class='fa fa-pencil'></i>
+					
+				{foreach $versions as $key => $cnt}
+					{$key=explode('/', $key)}
+					{if $key.0==$fieldname}
+						
+						<a title="{$title} / {strtoupper($key.1)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[key=>$fieldname,page_id=>$item->id,ln=>$key.1,clean=>2])}">
+							<span class='ln'>{$key.1}</span>:{$cnt}
+						</a>
+					{/if}
+				{/foreach}
+				</span>
+			{/capture}
+		{else}
+			{capture assign=note}
+				{$note}
+				{$cnt=$versions["{$fieldname}/"]}
+				{if $cnt}
+					<span class='changetrack'>
+					<a  title="{$title} / {GW::l('/g/FIELDS/changetrack')}"  class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[key=>$fieldname,page_id=>$item->id,clean=>2,ln=>''])}">
+						<i class='fa fa-pencil'></i> {$cnt}
+					</a>	
+					</span>
+				{/if}
+			{/capture}
+		{/if}
 		
-		{call e field=$input->get(name) 
+		{call e field=$fieldname
 			type=$tmptype
-			note=$input->get(note) 
-			title=$input->get(title) 
+			note=$note
+			title=$title 
 			params_expand=$opts
 			valget_func=$valgetf
 			i18n=$if18n
 			tabs=[templatevars]
 		}
+		
+		
 	{/foreach}
 {/if}
 
@@ -191,5 +230,9 @@
 {if $item->template_id && $app->user->isRoot()}
 	{$submit_buttons[]=tplvarsedit}
 {/if}
+
+{capture append=footer_hidden}
+	
+{/capture}
 
 {include file="default_form_close.tpl" extra_fields=[id,path,unique_pathid,insert_time,update_time]}

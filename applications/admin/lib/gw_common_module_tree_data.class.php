@@ -13,8 +13,11 @@ class GW_Common_Module_Tree_Data extends GW_Common_Module
 		$this->filters['parent_id']=isset($_GET['pid']) && (int)$_GET['pid']?(int)$_GET['pid']:-1;	
 		
 		
+		
+		
+		
 		//jeigu vykdomas filtravimas rodyti visus elementus
-		if(isset($this->list_params['filters']) && $this->list_params['filters'])
+		if(($this->list_params['search'] ?? false) || ($this->list_params['filters'] ?? false))
 			unset($this->filters['parent_id']);		
 		
 		

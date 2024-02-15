@@ -157,12 +157,7 @@ class GW_Page extends GW_i18n_Data_Object
 				break;
 					
 			case 'BEFORE_UPDATE':	
-				if(isset($this->content_base['input_data']))
-				{
-					$this->saveContent($this->content_base['input_data']);
-					unset($this->content_base['input_data']);
-					unset($this->changed_fields['input_data']);
-				}
+				
 			break;
 			case 'BEFORE_INSERT':
 				$this->prepare();
@@ -212,7 +207,7 @@ class GW_Page extends GW_i18n_Data_Object
 	}
 	
 	
-	function getContent($key, $ln=false)
+	function getContent($key=null, $ln=false)
 	{
 		
 
@@ -234,7 +229,8 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		
 		//d::ldump([$key, $ln,$c]);
-		
+		if($key===null)
+			return $c;
 		
 		if(isset($c[$key]))
 			return $c[$key];
@@ -260,6 +256,15 @@ class GW_Page extends GW_i18n_Data_Object
 		return $this->getDB()->fetch_rows($cond);
 	}
 	
+	function searchContent($query)
+	{
+		
+		$query = GW_DB::escape($query);
+		$cond = "SELECT page_id FROM gw_sitemap_data WHERE content LIKE '%$query%'";
+				
+		return $this->getDB()->fetch_one_column($cond);		
+	}
+	
 	function deleteContent()
 	{
 		return $this->getDB()->delete('gw_sitemap_data',"page_id=".(int)$this->get('id'));
@@ -279,52 +284,21 @@ class GW_Page extends GW_i18n_Data_Object
 		$this->getDB()->multi_insert('gw_sitemap_data', $rows);
 	}
 
-	function saveContent($list)
+	
+	
+	function getContentVersions($key=null, $ln=false, $count=1)
 	{
-		$default = Array('page_id'=> (int)$this->get('id'));
-		$db =& $this->getDB();
 		
-		$vals=Array();
-
-		$inputs = $this->getInputs(['index'=>'name']);
-		
-		$langs = GW::$context->app->langs;
-		$list_found = [];
-		
-		
-		foreach($inputs as $key => $opts)
-		{
-			if(!isset($inputs[$key]))
-				continue;
+		//$sel =  $count ? "count(*)"
+		//if(!$ln)
+		//	$ln = $this->lang();
 			
-			if($inputs[$key]->multilang){
-				foreach($langs as $ln){
-					if(isset($list[$key.'_'.$ln])){
-						$list_found[] = ['ln'=>$ln,  'key'=>$key, 'content'=>$list[$key.'_'.$ln] ];
-						unset($list[$key.'_'.$ln]);
-					}
-						
-				}
-			}else{
-				if(isset($list[$key])){
-					$list_found[] = ['ln'=>'',  'key'=>$key, 'content'=>$list[$key] ];
-					unset($list[$key]);
-				}			
-			}
-		}
+	
+		//return $this->getDB()->fetch_rows("SELECT uncompress(diff) FROM gw_sitemap_data_versions WHERE page_id=".(int)$this->get('id'));
 		
-		foreach($list as $key){
-			$this->errors[] = GW::s("/G/validation/UNKNOWN_FIELD", ['v'=>['field'=>$key]]);
-		}
-			
-		foreach($list_found as $key => $value){
-			if(is_array($value['content']))
-				$value['content'] = json_encode($value['content']);
-				
-			$vals[]= $value+$default;
-		}	
+		return $this->getDB()->fetch_assoc("SELECT concat(`key`,'/',ln),count(*)  FROM gw_sitemap_data_versions WHERE page_id=".(int)$this->get('id')." GROUP BY `key`, `ln`");
 		
-		$db->multi_insert('gw_sitemap_data', $vals, true);
+		
 	}
 
 	function getTemplate()

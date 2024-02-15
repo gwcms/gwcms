@@ -8038,3 +8038,7 @@ a.badge:hover{
 .gwListTable .material-symbols-outlined{
 	font-size: 16px !important;
 }
+
+.changetrack, .changetrack i, .changetrack a{ color:orange !important; }
+.changetrack .ln{ color:gray; text-transform:uppercase }
+.changetrack a:hover{ background-color: silver }

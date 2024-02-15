@@ -299,6 +299,7 @@
 	<i id="fromln">From lang</i>
 	<i id="toln">To lang</i>
 	<i id="value">Vertė</i>
+	<i id="changetrack"><en>Changes history</en><lt>Redagavimo istorija</lt></i>
   </i>
   <i id="FIELDS_SHORT">
 

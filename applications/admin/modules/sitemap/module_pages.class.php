@@ -106,6 +106,99 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 
 		return GW_SQL_Helper::condition_str($tmp);
 	}
+	
+	function saveContent($item,$list)
+	{
+		
+		
+		
+		$default = ['page_id'=> (int)$item->get('id'), 'user_id'=>$this->app->user->id];
+		$db = GW::db();
+		
+		$vals=Array();
+
+		$inputs = $item->getInputs(['index'=>'name']);
+		
+		$langs = $this->app->langs;
+		$list_found = [];
+		
+		
+		foreach($inputs as $key => $opts)
+		{
+			if(!isset($inputs[$key]))
+				continue;
+			
+			if($inputs[$key]->multilang){
+				foreach($langs as $ln){
+					if(isset($list[$key.'_'.$ln])){
+						$list_found[] = ['ln'=>$ln,  'key'=>$key, 'content'=>$list[$key.'_'.$ln] ];
+						unset($list[$key.'_'.$ln]);
+					}
+						
+				}
+			}else{
+				if(isset($list[$key])){
+					$list_found[] = ['ln'=>'',  'key'=>$key, 'content'=>$list[$key] ];
+					unset($list[$key]);
+				}			
+			}
+		}
+		
+		foreach($list as $key){
+			$item->errors[] = GW::s("/G/validation/UNKNOWN_FIELD", ['v'=>['field'=>$key]]);
+		}
+			
+		foreach($list_found as $key => $value){
+			if(is_array($value['content']))
+				$value['content'] = json_encode($value['content']);
+				
+			$vals[]= $value+$default;
+		}	
+		
+		$prev0 =  $db->fetch_rows("SELECT * FROM gw_sitemap_data WHERE page_id=".(int)$item->get('id'));
+		$prev = [];
+		foreach($prev0 as $row){
+			$prev[$row['ln'].'/'.$row['key']] = $row;
+		}
+		
+		$changes = [];
+		$old=[];
+		foreach($vals as $row){
+			$key0 = $row['key'];
+			$key = $row['ln'].'/'.$key0;
+			if( !isset($prev[$key]) || $prev[$key]['content'] != $row['content'] ) {
+				$changes[] = $row;
+				
+				$type = $inputs[$key0]->type;
+				
+				
+				
+				
+				$prevr = $prev[$key];
+				if(in_array($type, ['code_smarty','htmlarea', 'textarea'])){
+					
+					$prevr['diff'] = GW_String_Helper::createDiff($row['content'], $prev[$key]['content']);
+					$prevr['content'] = 'diffc';
+				}
+				
+				
+				$prevr['time'] = $prevr['update_time'];
+				
+				unset($prevr['update_time']);
+				unset($prevr['id']);
+				
+				$old[] = $prevr;
+			}
+		}
+		
+		
+		if($changes){
+			$db->fieldfunc['diff'] = 'compress';
+			$db->multi_insert('gw_sitemap_data_versions', $old, true);
+			
+			$db->multi_insert('gw_sitemap_data', $changes, true);
+		}
+	}	
 
 	function eventHandler($event, &$context) {
 		switch ($event) {
@@ -123,7 +216,29 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 
 				if (GW::$settings['LANGS'][0] == $this->lang())
 					$this->preparePage($context);
-				break;
+				
+				
+				if($item->id){
+					if(isset($item->content_base['input_data']))
+					{
+						$this->saveContent($item, $item->content_base['input_data']);
+						unset($item->content_base['input_data']);
+						unset($item->changed_fields['input_data']);
+					}
+				}
+			break;
+	
+			
+			case 'AFTER_SEARCH_COND_BUILD':
+				
+				$ids = $this->model->searchContent($this->list_params['search']);
+				$subcond =& $context;
+				
+				if($ids){	
+					$this->buildConds(['field' => 'id', 'value' => $ids, 'ct' => 'IN'], $subcond, 'OR');
+				}
+				
+			break;
 		}
 
 		parent::eventHandler($event, $context);
@@ -446,7 +561,6 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$cfg['filters']['type'] = ['type'=>'select','options'=>GW::l('/m/TYPE_OPT')];
 
 		
-		
 		if(isset($this->tpl_vars['additfields'])){
 			foreach($this->tpl_vars['additfields'] as $field)
 				$cfg['fields'][$field] = 'lof';
@@ -458,6 +572,13 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		return $cfg;
 	}	
+	
+	function __eventAfterListConfig()
+	{
+		if(($this->list_params['search'] ?? false) || ($this->list_params['filters'] ?? false) && !in_array('path', $this->list_config['dl_fields'])){
+			$this->list_config['dl_fields'][]='path';
+		}
+	}
 	
 	
 
