@@ -15,7 +15,7 @@
 	<span class="settlab">{$title}:</span> 
 		
 		<select onchange="gw_navigator.jump(false,{ '{$key}':this.value })"  style="width:80px">
-			<option> --- </option>
+			{if !$skip_empty_opt}<option> --- </option>{/if}
 			{*  values=$options output=$options *}
 			{html_options  selected=$smarty.get.$key options=$options}
 		</select>

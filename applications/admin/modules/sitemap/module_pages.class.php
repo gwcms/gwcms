@@ -172,29 +172,31 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 				$type = $inputs[$key0]->type;
 				
 				
-				
-				
-				$prevr = $prev[$key];
-				if(in_array($type, ['code_smarty','htmlarea', 'textarea'])){
-					
-					$prevr['diff'] = GW_String_Helper::createDiff($row['content'], $prev[$key]['content']);
-					$prevr['content'] = 'diffc';
+				if(isset($prev[$key])){
+					$prevr = $prev[$key];
+					if(in_array($type, ['code_smarty','htmlarea', 'textarea'])){
+
+						$prevr['diff'] = GW_String_Helper::createDiff($row['content'], $prev[$key]['content']);
+						$prevr['content'] = 'diffc';
+					}
+
+
+					$prevr['time'] = $prevr['update_time'];
+
+					unset($prevr['update_time']);
+					unset($prevr['id']);
+
+					$old[] = $prevr;
 				}
-				
-				
-				$prevr['time'] = $prevr['update_time'];
-				
-				unset($prevr['update_time']);
-				unset($prevr['id']);
-				
-				$old[] = $prevr;
 			}
 		}
 		
 		
 		if($changes){
-			$db->fieldfunc['diff'] = 'compress';
-			$db->multi_insert('gw_sitemap_data_versions', $old, true);
+			if($old){
+				$db->fieldfunc['diff'] = 'compress';
+				$db->multi_insert('gw_sitemap_data_versions', $old, true);
+			}
 			
 			$db->multi_insert('gw_sitemap_data', $changes, true);
 		}

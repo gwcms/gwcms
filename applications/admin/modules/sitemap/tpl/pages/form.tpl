@@ -160,9 +160,10 @@
 		{if $if18n}
 			{capture assign=note}
 				{$note}
-				<span class='changetrack'>
-					<i class='fa fa-pencil'></i>
+				
 					
+					{$totalcnt=0}
+					{capture assign=tmp}
 				{foreach $versions as $key => $cnt}
 					{$key=explode('/', $key)}
 					{if $key.0==$fieldname}
@@ -171,8 +172,15 @@
 							<span class='ln'>{$key.1}</span>:{$cnt}
 						</a>
 					{/if}
+					{$totalcnt=$totalcnt+$cnt}
 				{/foreach}
-				</span>
+					{/capture}
+					
+				{if $totalcnt}
+					<span class='changetrack'>
+					<i class='fa fa-pencil'></i> {$tmp}
+					</span>
+				{/if}
 			{/capture}
 		{else}
 			{capture assign=note}
@@ -227,7 +235,7 @@
 {/function}
 
 {$submit_buttons=[save,apply,preview,cancel]}
-{if $item->template_id && $app->user->isRoot()}
+{if $item->template_id && GW_Permissions::canAccess('sitemap/tplvars', $app->user->group_ids)}
 	{$submit_buttons[]=tplvarsedit}
 {/if}
 
