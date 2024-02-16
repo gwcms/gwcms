@@ -50,7 +50,7 @@ class Module_Versions  extends GW_Common_Module
 		$cfg['fields']['content'] = 'Lof';
 		$cfg['fields']['diff'] = 'Lof';
 		$cfg['fields']['time'] = 'Lof';
-				
+		$cfg['fields']['user_id'] = 'Lof';		
 
 		if(isset($this->filters['key'])){
 			unset($cfg['fields']['key']);
