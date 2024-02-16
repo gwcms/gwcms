@@ -4,7 +4,7 @@
 {block name="init"}
 
 
-	{$do_toolbar_buttons[] = search}
+	{$do_toolbar_buttons = search}
 	
 	
 	

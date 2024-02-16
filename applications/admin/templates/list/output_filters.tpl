@@ -52,8 +52,17 @@
 	{/foreach}
 {/function}	
 
-{function name=dl_output_filters_linked_obj}
+{function name=dl_output_filters_linked_obj_title}
+	{$objfld=$item->linkedObjMap($field)}
 	
+	{if $item->get($objfld)}
+		{$item->get($objfld)->title}
+	{else}
+		<span title="{$id|escape}">-</span>
+	{/if}
+{/function}
+
+{function name=dl_output_filters_linked_obj}	
 	{if $item->get($field)}
 		{$item->get($field)->title}
 	{else}

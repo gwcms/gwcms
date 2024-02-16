@@ -831,7 +831,10 @@ var gwcms = {
 			 heightOffset : 0,
 			 widthOffset:0,
 			 delay: 1000,
-			 interval: 5000
+			 interval: 5000,
+			 cwidth: 'auto',
+			 cclass: 'modal-content' // pakeitus cclass: 'modalcontent' idomiai rodo transparent tai neuzsidengia neesminiu turiniu
+			 
 		 };
 		 
 		 var conf = $.extend({}, defaults, conf || {});		
@@ -839,14 +842,17 @@ var gwcms = {
 		if(conf.close_callback)
 			gwcms.close_callback = conf.close_callback;
 
-		 console.log(conf);
+		//if (!conf.hasOwnProperty('cwidth'))
+		//	conf.cwidth = 'auto';
+		
+		console.log(conf);
 
 		require(["iframeautoheight"], function (test) {
 
-			var modal_body = '<iframe id="gwDialogConfiFrm" src="' + conf.url + '" frameborder="0"></iframe>';
+			var modal_body = '<iframe id="gwDialogConfiFrm" style="'+(conf.cwidth!='auto'?'width:100%':'')+'" src="' + conf.url + '" frameborder="0"></iframe>';
 
-			$('body').append('<div class="modal fade" id="gwcmsDialog" role="dialog" tabindex="-1" aria-hidden="true"><div class="modal-dialog" style="width:auto"><div class="modal-content">\
-					<div class="modal-header"><button type="button" class="close" data-dismiss="modal" onclick="gwcms.close_dialog2()"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
+			$('body').append('<div class="modal fade" id="gwcmsDialog" role="dialog" tabindex="-1" aria-hidden="true"><div class="modal-dialog" style="width:'+conf.cwidth+'"><div class="'+conf.cclass+'">\
+					<div class="modal-header" style="background-color:white"><button type="button" class="close" data-dismiss="modal" onclick="gwcms.close_dialog2()"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
 					</div></div></div></div>'
 					);
 				

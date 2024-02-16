@@ -2,24 +2,32 @@
 
 {if $item->content=='diffc'}
 	
-			
-		{$file1=$item->getCurrentContent()}
-		{$file2=GW_String_helper::applyDiff($item->uncompressDiff(),$item->getCurrentContent())}
+		{include "head.tpl"}	
+		<div style="background-color:white;color:black">
+		{$headversion=$item->getHeadVersion()}
+		{$pastversion=$item->getRevertedContent()}
 		
 
 		<table style='width:100%'>
-
+			<tr><td width="50%">Past version {$item->time}</td><td width="50%">Current verssion ({$item->head_version_time})</td></tr>
+		</table>
 
 		
 		{diff_helper::getTableStyle()}
 		
-
-		{diff_helper::toTable(diff_helper::compare($file1,$file2),'','')}
+		
+		{diff_helper::toTable(diff_helper::compare($pastversion, $headversion),'','')}
 
 		{diff_helper::scripts()}
 				
 		
 		</table>
+		</div>
+		
+		<script>
+			parent.window.$('.modal-dialog').css('width',"95%")
+			parent.window.$('#gwDialogConfiFrm').css('width',"100%")
+		</script>
 	
 {else}
 	{include file="default_form_open.tpl"}

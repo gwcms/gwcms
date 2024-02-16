@@ -42,6 +42,14 @@ class Module_Versions  extends GW_Common_Module
 		
 		
 		$cfg = parent::getListConfig();
+		
+		$cfg['fields'] = [];
+		$cfg['fields']['key'] = 'Lof';
+		$cfg['fields']['page_id'] = 'Lof';
+		$cfg['fields']['ln'] = 'Lof';
+		$cfg['fields']['content'] = 'Lof';
+		$cfg['fields']['diff'] = 'Lof';
+		$cfg['fields']['time'] = 'Lof';
 				
 
 		if(isset($this->filters['key'])){
@@ -61,5 +69,13 @@ class Module_Versions  extends GW_Common_Module
 		//$cfg['inputs']['aka']=['type'=>'text'];	
 
 		return $cfg;
+	}
+	
+	
+	
+	function __eventAfterListConfig()
+	{
+		if(isset($_GET['clean']) )
+			$this->list_config['dl_filters'] = [];
 	}
 }

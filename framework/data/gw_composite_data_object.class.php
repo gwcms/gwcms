@@ -288,6 +288,12 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	 */
 	
 	static $linked_cache;
+	static $linked_map=[];
+	
+	function linkedObjMap($field)
+	{
+		return self::$linked_map[$field];
+	}
 	
 	static function prepareLinkedObjects($list, $field=false, $opts=[]) 
 	{
@@ -306,6 +312,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		
 		$linkfield = $info[1]['relation_field']; 
 		$obj_classname = $info[1]['object']; 
+		
+		self::$linked_map[$linkfield] = $field;
 	
 		$ids = [];
 
