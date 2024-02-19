@@ -38,7 +38,7 @@
 	{$dl_cl_actions=[dialogremove]}	
 	
 	
-
+	{$dl_calc_totals.weight=0}
 {/block}
 
 

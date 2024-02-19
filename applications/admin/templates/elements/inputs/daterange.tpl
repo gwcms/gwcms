@@ -9,15 +9,33 @@
 {else}
 	{*{$value=[date('Y-m-d'),date('Y-m-d')]}*}
 {/if}
+
+
+{*---------months12up------------------------------------------------------*}
+{$year = (int)date('Y')}
+{$month = (int)date('m')}
+{if $months12up}	
+	{for $i=1 to 12}
+		{$date = "{$year}-{GW_String_Helper::zero($month)}-01"}
+			{$title="{GW::l("/G/date/MONTHS/{intval($month)}")}"}
+
+	     {$ranges["{$year} {$title}"]=[$date, date('Y-m-d',  strtotime('+1 DAY',strtotime("last day of {$date}") ) ) ]}	   
+
+	     {if $month==12}
+		     {$year=$year+1}
+		     {$month=1}
+	     {else}
+		     {$month=$month+1}
+	     {/if}
+	{/for}		
+{/if}
+{*---------months12up------------------------------------------------------*}
+
 <script type="text/javascript">
 	
-	{$year = (int)date('Y')};
-	{$month = (int)date('m')};
+	{$year = (int)date('Y')}
+	{$month = (int)date('m')}
 		
-		
-	
-	
-	
 	require(['gwcms'], function(){
 		require(['moment'], function(){  require(['pack/daterange/daterangepicker'], function(){ 
 			
@@ -34,7 +52,7 @@
 			    ranges: {
 
 			       //'LastMonth': ["{date('Y-m-d',strtotime('first day of last month'))}", "{date('Y-m-d',strtotime('last day of last month'))}"],
-
+				{if !$nodefaultranges}
 			       {for $i=1 to 5}
 				       {$date = "{$year}-{GW_String_Helper::zero($month)}-01"}
 					       {$title="{GW::l("/G/date/MONTHS/{intval($month)}")}"}
@@ -48,6 +66,7 @@
 					    {$month=$month-1}
 				    {/if}
 				{/for}
+					{/if}
 					{foreach $ranges as $key => $range}
 						'{$key}': ["{$range.0}","{$range.1}"],
 					{/foreach}
@@ -67,15 +86,6 @@
 			
 		}) });
 	})
-	
-	
-
-	
-	
-
-	
-	
-	
 	
 
 </script>

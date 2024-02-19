@@ -35,7 +35,7 @@
 			{$do_toolbar_buttons_hidden[]=rootact}
 		{/if}		
 		
-		{$dl_calc_totals.total=1}
+		{$dl_calc_totals.total=0}
 	{/if}	
 	
 	

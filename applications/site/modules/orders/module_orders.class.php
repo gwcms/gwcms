@@ -111,6 +111,9 @@ class Module_Orders extends GW_Public_Module
 		
 		$order = $this->getOrder(true);
 		
+		if(!$order)
+			return false;
+		
 		$this->prepareOrderForPay($order);
 		
 		

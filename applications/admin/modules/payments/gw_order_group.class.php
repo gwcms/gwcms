@@ -20,7 +20,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'keyval'=>1,
 		'recipient'=>1,
 		'pay_subtype_human'=>1,
-		'delivery_country'=>1
+		'delivery_country'=>1,
+		'payd'=>1,
 	];
 	
 	
@@ -148,7 +149,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			break;	
 			case 'title':
 				if($this->id)
-					return "#".$this->id." ".($this->payment_status==7? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
+					return "#".$this->id." ".($this->payd? 'PAYD':"NOPAY").' '.$this->amount_total.' EUR';
 			break;
 
 			case 'recipient':
@@ -160,6 +161,9 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			break;
 			case 'delivery_country':
 				return GW_Country::singleton()->find(['code=?', $this->country]);
+			break;
+			case 'payd':
+				return $this->payment_status == 7;
 			break;
 		}
 		

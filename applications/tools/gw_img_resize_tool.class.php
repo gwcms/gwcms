@@ -128,6 +128,7 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		
 		if(!isset($_REQUEST['size'])){
 			self::output_image($file, $file);
+			exit;
 		}
 
 		list($params['width'],$params['height'])=explode('x',$_REQUEST['size']);
