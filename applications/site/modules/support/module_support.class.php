@@ -53,15 +53,41 @@ class Module_Support  extends GW_Public_Module {
 			
 			//mail(, 'New support request', $this->encodeTextMessage($vals));
 			
-			$opts['subject']="Gauta nauja zinute i ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
+			if(isset($vals['date'])){
+				$opts['subject']="Gauta nauja zinute i ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
+			}else{
+				$opts['subject']="Užregistruota specialisto konsultacija! ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
+			}
+			
 
 			$str = "Nuo: <b>".$vals['name'].'</b><br />';
 
+			if(isset($vals['date']))
+				$str .= "Data: <b>".$vals['date'].'</b><br />';			
+			
+			if(isset($vals['time']))
+				$str .= "Laikas: <b>".$vals['time'].'</b><br />';		
+			
+			if(isset($vals['subject']))
+				$str .= "Tema: <b>".$vals['subject'].'</b><br />';				
+			
 			if(isset($vals['phone']))
 				$str .= "Telnr: <b>".$vals['phone'].'</b><br />';
 			
-			if(isset($vals['email']))
+			if(isset($vals['email'])){
 				$str .= "El pašto adresas: <b>".$vals['email'].'</b><br />';
+				$opts['replyto'] = $vals['email'];
+			}
+			
+			if(isset($this->app->user->email)){
+				$str .= "El pašto adresas: <b>".$this->app->user->email.'</b><br />';
+				$opts['replyto'] = $this->app->user->email;
+			}
+			if(isset($this->app->user->phone)){
+				$str .= "Telnr: <b>".$this->app->user->phone.'</b><br />';
+			}			
+			
+			
 
 			if(isset($vals['message']))
 				$str .= "Žinutė: <b><br /><br />".$vals['message'].'</b><br />';
@@ -78,7 +104,14 @@ class Module_Support  extends GW_Public_Module {
 			if($_GET['json'])
 				die(json_encode(['status'=>'1']));
 			
-			$this->setMessage(GW::ln('/m/MESSAGE_SENT'));
+			if(isset($vals['date'])){
+				$this->setMessage(GW::ln('/m/APPOINTMENT_REGISTERED'));
+			}else{
+				$this->setMessage(GW::ln('/m/MESSAGE_SENT'));
+
+			}
+			
+			
 			$this->jump('/');
 		}else{
 			if($_GET['json'])
@@ -140,6 +173,17 @@ class Module_Support  extends GW_Public_Module {
 		
 		return $arrResponse;
 	}	
-	
+	function  viewAppointment()
+	{
+		$ids = json_decode($this->config->appointment_topic_ids, true);
+		$this->tpl_vars['subject_opt'] = GW_Classificators::singleton()->getKeyTitleOptions(GW_DB::inCondition('id', $ids), $this->app->ln);
+		
+		
+		
+		$this->tpl_vars['item'] = GW_Support_Message::singleton()->createNewObject();
+	}
 
 }
+
+	
+

@@ -14,5 +14,12 @@ class GW_Classificators extends GW_i18n_Data_Object
 		if($group)
 			return $this->findAll(['`type`=?', $group->id],['key_field'=>'id']);
 	}
+	
+	function getKeyTitleOptions($cond, $ln)
+	{
+		//$cond = $active ? 'active!=0' : '';
+		
+		return $this->getAssoc(['key','title_'.$ln], $cond);
+	}
 
 }
