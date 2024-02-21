@@ -54,9 +54,9 @@ class Module_Support  extends GW_Public_Module {
 			//mail(, 'New support request', $this->encodeTextMessage($vals));
 			
 			if(isset($vals['date'])){
-				$opts['subject']="Gauta nauja zinute i ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
-			}else{
 				$opts['subject']="Užregistruota specialisto konsultacija! ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
+			}else{
+				$opts['subject']="Gauta nauja zinute i ".$_SERVER['HTTP_HOST']." (".($vals['subject'] ?? 'betemos').")";
 			}
 			
 
