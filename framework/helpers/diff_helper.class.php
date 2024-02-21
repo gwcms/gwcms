@@ -470,5 +470,3 @@ $("body").keydown(function (event) {
 
 
 
-
-?>
