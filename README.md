@@ -29,3 +29,6 @@ play_number_of_teams_exits => play_offs_team_count
 play_fight_positions =>play_offs_fight_positions
 play_limit_lose => play_offs_limit_lose
 play_match_point => play_offs_match_point
+
+
+php7.4 /var/www/gw/gwcms/composer.phar require yetanotherape/diff-match-patch

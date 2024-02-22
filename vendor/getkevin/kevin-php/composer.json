@@ -1,0 +1,24 @@
+{
+    "name": "getkevin/kevin-php",
+    "description": "PHP client for kevin. platform.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kevin.",
+            "email": "help@kevin.eu"
+        }
+    ],
+    "support": {
+        "email": "help@kevin.eu"
+    },
+    "require": {
+        "php": ">=5.6",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kevin\\": "src/"
+        }
+    }
+}

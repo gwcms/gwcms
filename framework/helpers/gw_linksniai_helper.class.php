@@ -30,7 +30,8 @@ class GW_Linksniai_Helper
 			'ius' => 'iui',
 			'tys' => 'čiui',
 			'dys' => 'džiui',
-			'ys' => 'iui'		
+			'ys' => 'iui',
+			'ia' => 'iai'
 	    ],
 	    // galininkas (ką?)
 		'gal'=>[
@@ -90,7 +91,7 @@ class GW_Linksniai_Helper
 	*/
 	static function getName ( $vardas, $linksnis = 'sau') 
 	{
-		$vardai = explode( ' ', self::sanitizeName($vardas) );
+		$vardai = preg_split( '/[ -]/', self::sanitizeName($vardas) );
 		
 		//d::ldump([$linksnis]);
 		
@@ -99,7 +100,7 @@ class GW_Linksniai_Helper
 		foreach ( $vardai as $v ) {
 			if(mb_strlen($v)<3)
 				continue;
-				
+			
 			$replacelimit = 1;
 			$vardas = str_ireplace($v,self::getLinksnis( $v, $linksnis ) , $vardas, $replacelimit);
 		}

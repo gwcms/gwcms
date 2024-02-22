@@ -78,8 +78,6 @@ class GW_String_Helper
 		return sprintf('%0'.$zerocnt.'d', $number);
 	}
 
-	
-	
 	static function split2($string, $center = 0.4) {
 		
 		$string = str_replace('  ',' ', $string);
@@ -100,41 +98,25 @@ class GW_String_Helper
 		return $result;
 	}
 	
+
 	static function applyDiff($diff, $text)
 	{
-	    $tmpname = tempnam(sys_get_temp_dir(), "diff");
-	    $outname = tempnam(sys_get_temp_dir(), "diff");
-	    $tmp = fopen($tmpname, "w");
-	    $out = fopen($outname, "r");
-	    fwrite($tmp, $text);
-	    $proc = proc_open(
-		'patch '.$tmpname.' -o '.$outname, array(
-		   0 => array("pipe", "r"),
-		   1 => array("pipe", "w"),
-		   2 => array("pipe", "w")
-		), $pipes
-	    );
-	    if (is_resource($proc)) {
-		fwrite($pipes[0], $diff);
-		fclose($pipes[0]);
-		stream_get_contents($pipes[1]);
-		$newText = stream_get_contents($out);
-		fclose($pipes[1]);
-		return $newText;
-	    }
+		$dmp = new \DiffMatchPatch\DiffMatchPatch();
+		$patches = $dmp->patch_fromText($diff);
+		
+		//d::dumpas([$text, $diff]);
+		
+		$result = $dmp->patch_apply($patches, $text);
+
+		return $result[0];
 	}
 
-	static function createDiff($text1, $text2){
-	    $tmpname1 = tempnam(sys_get_temp_dir(), "diff");
-	    $tmpname2 = tempnam(sys_get_temp_dir(), "diff");
-	    $tmpname3 = tempnam(sys_get_temp_dir(), "diff");
-	    file_put_contents($tmpname1, $text1);
-	    file_put_contents($tmpname2, $text2);
-
-	    return shell_exec("diff $tmpname1 $tmpname2");
-	    //return file_get_contents($tmpname3);
+	static function createDiff($text1, $text2)
+	{
+		$dmp = new \DiffMatchPatch\DiffMatchPatch();
+		$patches = $dmp->patch_make($text1, $text2);
+		return $dmp->patch_toText($patches);
+		
 	}
-
-
-	
 }
+
