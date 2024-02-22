@@ -54,11 +54,17 @@ class Module_GGLogin extends GW_Public_Module
 		$req_id = $_SESSION['auth_gw_req_id'];
 		$dat = file_get_contents(GW::s('GW_GG_SERVICE').'?get_response='.$req_id);
 		$dat = json_decode($dat);
-		$dat->type='google';
-		$_SESSION['3rdAuthUser'] = $dat;
 		
-		
-		$this->app->jump('direct/users/users/signInOrRegister');
+		if($dat->error){
+			$this->setError(GW::ln("/M/users/LOGIN_FAILED"). ': '. $dat->error);
+			unset($_SESSION['3rdAuthUser']);
+			
+			$this->app->jump('direct/users/users/login');
+		}else{
+			$dat->type='google';
+			$_SESSION['3rdAuthUser'] = $dat;
+			$this->app->jump('direct/users/users/signInOrRegister');
+		}
 	}
 
 
