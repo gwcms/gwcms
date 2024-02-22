@@ -113,6 +113,7 @@ class GW_String_Helper
 
 	static function createDiff($text1, $text2)
 	{
+		//php7.4 /var/www/gw/gwcms/composer.phar require yetanotherape/diff-match-patch
 		$dmp = new \DiffMatchPatch\DiffMatchPatch();
 		$patches = $dmp->patch_make($text1, $text2);
 		return $dmp->patch_toText($patches);
