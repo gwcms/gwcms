@@ -271,6 +271,9 @@ class Module_Orders extends GW_Public_Module
 	
 	function prepareOrderForPay($order)
 	{
+		if(!$order)
+			return false;
+		
 		if($order->payment_status==7)
 			return false;
 			
@@ -1625,6 +1628,25 @@ class Module_Orders extends GW_Public_Module
 		//d::dumpas($html);		
 	}	
 	
+	
+	function canBeAccessed($item, $opts = []): bool {
+		
+		
+		
+		if(!$item->id){
+			$result=true;
+		}elseif($item->user_id == $this->app->user->id){
+			$result = true;
+		}else{
+			$result = false;
+		}
+
+		if (isset($opts['nodie']) || $result)
+			return $result;
+
+		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
+		$this->jump('direct/orders/orders');
+	}
 	
 	
 	
