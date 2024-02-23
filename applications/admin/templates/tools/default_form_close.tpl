@@ -50,3 +50,15 @@
 </table>
 
 </form>
+
+
+
+{if $app->page->info->itemactions && $smarty.get.clean}
+	<div style="display:none;">
+		<div id="itemactions_hidden" style="display:inline-block;margin-left:10px;" >
+
+		{include "tools/ajaxdropdown.tpl" item=[actions=>$m->buildUri("{$item->id}/itemactions")]}
+
+		</div>
+	</div>
+{/if}

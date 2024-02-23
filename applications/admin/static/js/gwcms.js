@@ -322,13 +322,23 @@ var gw_adm_sys = {
 		initSearchReplace();
 	},
 	
-	contextMenu: function(el,url){
+	contextMenu: function(el,url, detach){
 		gw_adm_sys.clearContextMenu();
 		
 		$.get(url, function(data){
 			gw_adm_sys.contextMenuPresent=true;
 			el.addClass('labelForContextMenu');
 			el.append('<div class="contextMenu dropdown-menu2"><ul>'+data+'</ul></div>')
+			
+			if(detach){
+				var rect = $('.contextMenu').get(0).getBoundingClientRect()
+				el = $('.contextMenu').detach();
+				el.css('position','absolute')
+				el.css('top', rect.y);
+				el.css('left', rect.x);
+				$('body').append(el);
+			}
+			
 		})
 	},
 	clearContextMenu: function()
@@ -855,6 +865,20 @@ var gwcms = {
 					<div class="modal-header" style="background-color:white"><button type="button" class="close" data-dismiss="modal" onclick="gwcms.close_dialog2()"><i class="pci-cross pci-circle"></i></button><h4 class="modal-title">' + conf.title + '</h4></div><div class="modal-body" style="padding:0">' + modal_body + '\
 					</div></div></div></div>'
 					);
+				
+			//load title, itemactions into title bar	
+			$('#gwDialogConfiFrm').on('load', function(){
+				
+				if(!conf.title){
+					$('.modal-title').text(this.contentDocument.title);
+				}
+				
+				var itemactions=$(this.contentDocument).find('#itemactions_hidden');
+				if(itemactions.length){
+					var el = itemactions.detach();
+					$('.modal-title').append(el);
+				}
+			});	
 				
 			$('.modal-title').click(function(event){
 				if(event.ctrlKey){
