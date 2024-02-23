@@ -882,7 +882,7 @@ var gwcms = {
 		$('#gwcmsDialog').remove();
 		$('.modal-backdrop').fadeOut();
 		$('body').removeClass('modal-open');
-		
+
 		if(gwcms.close_callback)
 		{
 			gwcms.close_callback(context)

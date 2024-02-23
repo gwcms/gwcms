@@ -136,7 +136,10 @@
 			var iframeDoc = this.contentDocument || this.contentWindow.document;
 
 			// resizeHeight
-			function resizeHeight(iframe, delayed) {
+			function resizeHeight(iframe, delayed, interval) {
+				
+				
+				
 				if (options.diagnostics) {
 					showDiagnostics(iframe, "resizeHeight");
 				}
@@ -159,6 +162,14 @@
 
 				// get the iframe body height and set inline style to that plus a little
 				var $body = $(iframe, window.parent).contents().find('body');
+				
+				if($body.length == 0){
+					clearInterval(interval);
+					console.log('iframe closed or removed');
+					return false;
+				}
+				
+				
 				var lastelement = $body.find('#lastelement')
 				var strategy = findStrategy($.browser);
 				var newHeight = strategy(iframe, $body, options, $.browser)[0];
@@ -248,7 +259,7 @@
 			if (options.triggerFunctions.length > 0) {
 				debug(options.triggerFunctions.length + " trigger Functions");
 				for (var i = 0; i < options.triggerFunctions.length; i++) {
-					alert('bitch');
+					alert('tttttttest');
 					options.triggerFunctions[i](resizeHeight, this);
 				}
 			}
@@ -259,7 +270,10 @@
 					
 			if(options.interval)
 			{
-				setInterval(function () { resizeHeight(iframe); }, options.interval)
+				var interval = setInterval(function () { 
+					resizeHeight(iframe, false, interval); 
+					
+				}, options.interval)
 			}			
 
 			// Check if browser is Webkit (Safari/Chrome) or Opera
