@@ -337,6 +337,8 @@ var gw_adm_sys = {
 				el.css('top', rect.y);
 				el.css('left', rect.x);
 				$('body').append(el);
+				$('body').click(function(){ gw_adm_sys.clearContextMenu() })
+				
 			}
 			
 		})
