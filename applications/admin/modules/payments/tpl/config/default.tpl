@@ -23,8 +23,8 @@
 
 
 {call e field="confirm_email_tpl" type=select_ajax modpath="emails/email_templates" preload=1  options=[]  source_args=[byid=>1] after_input_f="editadd"}
+{call e field="confirm_email_bcc" type=text}
 {call e field="default_currency_code"}
-
 
 
 {call e field="pay_types" type=multiselect_ajax sorting=1 options=GW::l('/m/OPTIONS/pay_type') value_format=json1}
@@ -34,5 +34,7 @@
 {call e field="delivery_algo" type=select options=GW::l('/m/OPTIONS/delivery_algo') empty_option=1}
 
 {call e field=testpay_user_id type=select_ajax modpath="users/usr"  preload=1 options=[]}
+
+
 
 {include "default_form_close.tpl"}

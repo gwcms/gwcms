@@ -590,7 +590,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		if($email!='vidmantas.work@gmail.com')
-			$opts['bcc'] = GW_Mail_Helper::getAdminAddr();
+			$opts['bcc'] = $this->config->confirm_email_bcc ?: GW_Mail_Helper::getAdminAddr();
 		
 		
 		
