@@ -2522,6 +2522,9 @@ class GW_Common_Module extends GW_Module
 			break;
 			
 			case 'BEFORE_DELETE':
+				if($this->item_remove_email ?? false)
+					$this->recoveryEmail($context);
+				
 				if($this->item_remove_log ?? false)
 					$this->recoveryLog($context);
 						
@@ -2884,10 +2887,18 @@ class GW_Common_Module extends GW_Module
 
 		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD)
 		{
-			$data = $item->getRecoveryData();
+			$data = $this->getItemRecoveryData($item);
 
 			$body = "Page path: <a hreg='".$this->buildUri()."'>".$this->buildUri().'</a>';
-			$body .= "Recovery json: <hr>";
+			
+			
+			$body .= "<br>Main item recovery tool: <a href='".$tmp."'>".$tmp.'</a> ';
+			
+			$tmp = $this->buildUri(false,['act'=>'doRecoverFromRecoveryLine']);
+			$body .= "<br>Todo recovery tool: <a href='".$tmp."'>".$tmp.'</a> ';
+			
+			
+			$body .= "<br>Recovery json: <hr>";
 			$body .= '<small style="color:gray"><pre>'. json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE).'</pre></small>';
 
 			$admintitle = $this->app->user->title;
@@ -2910,22 +2921,72 @@ class GW_Common_Module extends GW_Module
 		}		
 	}
 	
-	function recoveryLog($item, $user=false, $recoveryReason='')
+	function getItemRecoveryData($item)
 	{
-		if(!$user)
-			$user=$this->app->user;
-		
-		
-		$this->initLogger();
-		
 		if(!method_exists($item, 'getRecoveryData'))
 			return false;
 		
 		$data = $item->getRecoveryData();
 		
+		$this->fireEvent("AFTER_RECOVERY_DATA_COLLECT", $data);
+		
+		return $data;
+	}
+	
+	function recoveryLog($item, $user=false, $recoveryReason='')
+	{
+		if(!$user)
+			$user=$this->app->user;
+		
+		$this->initLogger();
+		
+		$data = $this->getItemRecoveryData($item);
+				
 		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Recovery line:");	
 		$this->lgr->msg(json_encode($data));		
 	}	
+	
+	
+	
+	function recoverData($data)
+	{
+		
+		d::ldump('todo: implement');
+		d::dumpas($data);
+		
+		$this->setMessage($msg = "Import done, cnt: ".count($entries).", speed: {$t->stop()}");
+	}
+	
+	function doRecoverFromRecoveryLine()
+	{
+	//die("u:".$this->app->user->username);
+			
+		if(!$this->app->user->isRoot())
+			return $this->setError("Roor only permission");
+		
+		$form = ['fields'=>[
+		    'codejson'=>['type'=>'code_json','height'=>'200px','width_input'=>'600px', 'required'=>1],
+		    'multiple'=>['type'=>'bool', 'required'=>1],
+		],'cols'=>3];
+		
+	
+		
+		
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/PASTE_MULTIPLE_OR_SINGLE_JSON_DUMP'),['method'=>'post'])))		
+			return false;		
+		
+
+
+		
+		$data = json_decode($answers['codejson'], true);
+		
+		$this->recoverData($data);
+				
+		
+		$this->jump();		
+	}
 	
 	function __getListFields(){
 		$this->initListParams(false,'list');
