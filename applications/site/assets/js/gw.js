@@ -209,7 +209,12 @@ var GW = {
 						scrollTop: $(elmquery).offset().top-100
 		}, 1000);		
 	},
-	carry_params: { }
+	carry_params: { },
+	formStupidBot: function(){ 
+		setInterval(function(){ 
+			$('#formStupidBot').val( $('#formStupidBot').val()-1+2  );
+		}, 1000);
+	}
 }
 
 var gwcms = () => GW;

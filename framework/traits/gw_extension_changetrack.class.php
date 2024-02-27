@@ -111,10 +111,13 @@ class GW_Extension_ChangeTrack
 		
 		
 		foreach(array_keys($itm->getColumns()) as $field){
-			if(!isset($itm->ignored_change_track[$field]) && $itm->_original->get($field) != $itm->get($field))
-			{
-				$changes[$field]=['new'=>$itm->get($field), 'old'=>$itm->_original->get($field)];
-			}
+			if($field=='update_time' || isset($itm->ignored_change_track[$field]))
+				continue;
+			
+			if($itm->_original->get($field) == $itm->get($field))
+				continue;
+			
+			$changes[$field]=['new'=>$itm->get($field), 'old'=>$itm->_original->get($field)];
 		}
 		
 		if($this->additional_changes)

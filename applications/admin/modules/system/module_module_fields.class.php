@@ -18,8 +18,9 @@ class Module_Module_Fields extends GW_Common_Module
 		if($this->modid){
 			$page = GW_ADM_Page::singleton()->find(['id=?', $this->modid]);
 
-			if(isset($page->info->model))
-				$this->filters['parent'] = strtolower($page->info->model);		
+			if(isset($page->info->model)){
+				$this->filters['parent'] = strtolower($page->info->model);
+			}
 		}
 		
 		if(isset($_GET['path'])){
@@ -58,14 +59,19 @@ class Module_Module_Fields extends GW_Common_Module
 	*/	
 	}
 	
+	function getTable($item)
+	{
+		$class = $item->parent;
+		return $class::singleton()->table;
+	}
 	
 	function __eventBeforeDelete($item)
 	{
-	
+		$tbl = $this->getTable($item);
 				
 		if($this->allowChange($this->getFieldsInfo($item), $item->fieldname))
 		{
-			$sql = "ALTER TABLE  `$item->parent` DROP  `$item->fieldname`";
+			$sql = "ALTER TABLE  `$tbl` DROP  `$item->fieldname`";
 			GW::db()->query($sql, true);
 			$this->setMessage($sql);
 		}
@@ -74,7 +80,9 @@ class Module_Module_Fields extends GW_Common_Module
 	
 	function getFieldsInfo($item)
 	{
-		return GW::db()->fetch_rows_key("SHOW FULL  COLUMNS FROM `$item->parent`", 'Field');
+		$tbl = $this->getTable($item);
+		
+		return GW::db()->fetch_rows_key("SHOW FULL  COLUMNS FROM `$tbl`", 'Field');
 	}
 	
 	function allowChange($fieldsInfo, $fieldname, $errorShow = true)
@@ -162,7 +170,8 @@ class Module_Module_Fields extends GW_Common_Module
 			$method="CHANGE `$fieldname`";
 		}
 	
-		$sql = "ALTER TABLE  `$item->parent` $method  `$fieldname` $type $null $default $comment  $after ;";		
+		$tbl = $this->getTable($item);
+		$sql = "ALTER TABLE  `$tbl` $method  `$fieldname` $type $null $default $comment  $after ;";		
 
 		GW::db()->query($sql, true);
 		//d::dumpas($sql);

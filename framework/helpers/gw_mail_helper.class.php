@@ -315,6 +315,8 @@ class GW_Mail_Helper
 			return $opts;
 		
 		
+		
+		
 		if(isset($opts['draft']) && !isset($m_queue_item))
 		{
 			$opts['status'] = 'draft';
@@ -328,6 +330,8 @@ class GW_Mail_Helper
 			self::add2db($opts);
 			return true;
 		}
+		
+		
 			
 		
 		try {
@@ -346,7 +350,7 @@ class GW_Mail_Helper
 		} catch (Exception $e) {
 			$opts['error'] = $e->getMessage();
 		}
-
+		
 		//saugoti tuo atveju jei yra sukonfiguruota kad saugoti errorus ir yra erroras
 		//arba jei neeroras bet sukonfiguruota adminkej kad saugoti visus
 		//nesaugoti jei paduodamas parametras nostoredb
@@ -402,14 +406,15 @@ class GW_Mail_Helper
 		$vals=[];
 		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status']);
 
-
+		
 		if($m_queue_item){
 			$m_queue_item->setValues($vals);
 			$m_queue_item->update();
 			$opts=$m_queue_item;
 		}else{
 			$entry = GW_Mail_Queue::singleton()->createNewObject($vals);
-			$entry->insert();
+			//jei queued tai galimai saugos antra kart poto statusa uzfiksuot
+			$entry->save();
 			$opts['id'] = $entry->id;
 		}		
 	}
