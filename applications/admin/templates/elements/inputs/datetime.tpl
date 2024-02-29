@@ -6,7 +6,13 @@
 
 {if $value=="0000-00-00"}
 	{$value=""}
+{else} 
+	{$value=explode(' ',$value)}
+	{$value.1 = explode(':',$value.1)}
+	{$value="{$value.0} {$value.1.0}:{$value.1.1}"}
 {/if}
+
+
 	<div id="inp-datetime_{$suffix}" style="width:220px">
 	
 				<input type="text" class="form-control {if $class} {$class}{/if} datetime" value="{$value|escape}" name="{$input_name}" 
