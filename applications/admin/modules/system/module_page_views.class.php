@@ -198,6 +198,13 @@ class Module_Page_Views extends GW_Common_Module
 	
 		$cfg['inputs']['title']=['type'=>'text'];	
 		$cfg['inputs']['title_short']=['type'=>'text'];	
+		$cfg['inputs']['priority']=['type'=>'number'];	
+		$cfg['inputs']['page_by']=['type'=>'number'];	
+		$cfg['inputs']['type']=['type'=>'select_plain', 'options'=>GW::l('/m/OPTIONS/page_view_types')];	
+		$cfg['inputs']['calculate']=['type'=>'bool'];	
+		$cfg['inputs']['dropdown']=['type'=>'bool'];	
+		
+		
 
 		
 						

@@ -995,7 +995,7 @@ class GW_Common_Module extends GW_Module
 			
 			$is_utf8 = mb_detect_encoding($this->list_params['search']) != 'ASCII';
 			
-			$cols = $this->getModelCols($is_utf8 ? 'text':'all');		
+			$cols = $this->getModelCols($is_utf8 ? 'text':'all');	
 			$subcond = '';
 			
 			foreach ($cols as $key => $x){
@@ -2254,6 +2254,7 @@ class GW_Common_Module extends GW_Module
 	
 	function getModelCols($type='all')
 	{
+		//d::dumpas([$this->extra_cols, $this->model->getColumns($type)]);
 		return $this->extra_cols+$this->model->getColumns($type);
 	}
 	
