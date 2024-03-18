@@ -166,7 +166,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		
-		
+				
 		//Since 2022 it is provided universal template for all languages
 		if($tpl->get("ln_enabled_".$this->app->ln)){
 			$tpl_code = $tpl->get("body_".$this->app->ln);
@@ -234,9 +234,13 @@ class Module_OrderGroups extends GW_Common_Module
 		if($opts['ORDER_DETAILS_HTML'] ?? false){
 			$v['ORDER_DETAILS_HTML'] = $this->getOrderItems($item,true);
 		}
-			
+		
+		
+		
+		
 		if($this->feat('vat')){
 			GW_VATgroups::singleton()->getOptionsNote();
+			$v["VAT"]=1;
 		}
 		
 		foreach($item->items as $oitem){
@@ -283,6 +287,8 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['SELLER_ID'] = $item->seller->company_code;
 			$v['SELLER_ADDR'] = $item->seller->address;
 		}
+		
+		
 		
 		return [$tpl_code, $v];
 	}

@@ -101,6 +101,7 @@ class Module_OrderItems  extends GW_Common_Module
 			'vat_group'=>'Lof',
 			'insert_time'=>'lof',
 			'update_time'=>'lof',	
+			'group_id'=>'lof',	
 			]
 		);
 		

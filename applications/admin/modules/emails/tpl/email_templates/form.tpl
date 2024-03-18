@@ -81,4 +81,4 @@
 {call e field=owner_field readonly=$tmpreadonly}
 
 
-{include file="default_form_close.tpl"}
+{include file="default_form_close.tpl" comments=1}
