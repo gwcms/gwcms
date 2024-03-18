@@ -68,6 +68,10 @@ class Module_Users extends GW_Public_Module
 	{
 		//return false;
 		
+		//prisijunges administruojantis vartotojas
+		if(isset($_SESSION['site_auth']['admin_user_id']))
+			return false;
+		
 		//gali ivykti jei nera kazkokio failo tada redirectina i index
 		if($this->app->user && !in_array($this->app->path, ['direct/users/users/profile', 'direct/users/users/logout']) && !isset($_SESSION['3rdAuthUser']) && !$this->testMissingInfo()){
 			
