@@ -2436,6 +2436,10 @@ class GW_Common_Module extends GW_Module
 				$cond = GW_DB::mergeConditions($opts['condition'], $cond);
 			}
 			
+			if($opts['include_ids']??false){
+				$cond = GW_DB::mergeConditions($cond, GW_DB::inCondition('`a`.`id`',$opts['include_ids']), 'OR');
+			}
+			
 		}elseif(isset($_REQUEST['ids'])){
 			$ids = json_decode($_REQUEST['ids'], true);
 			if(!is_array($ids))

@@ -181,6 +181,25 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		
 	}
 	
+	function doMontonioRetryProcess()
+	{
+		$log = gw_payuniversal_log::singleton()->find($_GET['id']);
+		$order = GW_Order_Group::singleton()->find(['id=?', $log->order_id]);	
+		
+		$args = [
+			    'id'=>$order->id,
+			    'rcv_amount'=>$log->received_amount,
+			    'pay_type'=>'montonio',
+			    'log_entry_id'=>$log->id
+			];
+		
+		$markaspayd = $this->markAsPaydSystem($args);	
+			
+		$log->processed = 1;
+		$log->updateChanged();
+		
+		d::dumpas(['packet'=>$log, 'mark_as_payd'=>$markaspayd]);
+	}
 	
 
 	
