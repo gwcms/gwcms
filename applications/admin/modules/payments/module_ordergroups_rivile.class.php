@@ -38,7 +38,8 @@ $clients.="
 	<I06_OP_TIP>51</I06_OP_TIP>
 	<I06_VAL_POZ>0</I06_VAL_POZ>
 	<I06_DOK_NR>".GW::ln("/G/application/PAYMENT_BANKTRANSFER_DETAILS_PREFIX").($order->id)."</I06_DOK_NR>
-	<I06_OP_DATA>".($order->insert_time)."</I06_OP_DATA>
+	<I06_OP_DATA>".($order->pay_time)."</I06_OP_DATA>
+	<I06_DOK_DATA>".($order->pay_time)."</I06_DOK_DATA>
 	<I06_KODAS_KS>{$ccode}</I06_KODAS_KS>
 	<I06_KODAS_SS>2714</I06_KODAS_SS>
 	<I06_MOK_SUMA>".($order->amount_total)."</I06_MOK_SUMA>
@@ -49,14 +50,11 @@ $clients.="
 		{
 			//5303 - nario mokestis,5310 - Starto mokestis,5312 -bilietų pardavimas
 			switch($oi->obj_type){
-				case 'gw_membership':
-					$code = 5303;
-				break;
-				case 'ltf_participants':
-					$code = 5310;
+				case 'shop_subscribers':
+					$code = 5000;
 				break;
 				default:
-					$code = 5312;
+					$code = 6000;
 				break;
 			}
 		
@@ -64,12 +62,14 @@ $clients.="
 	<I07>
 	     <I07_TIPAS>3</I07_TIPAS>
 	     <I07_KODAS>{$code}</I07_KODAS>
+	     <I07_KODAS_IS>01</I07_KODAS_IS>
 	     <I07_KAINA_BE>{$oi->unit_price}</I07_KAINA_BE>
 	     <I07_MOKESTIS>0</I07_MOKESTIS>
 	     <I07_MOKESTIS_P>0.00</I07_MOKESTIS_P>
 	     <T_KIEKIS>{$oi->qty}</T_KIEKIS>
 	</I07>
 	";
+	     //<I07_KODAS_IS>01</I07_KODAS_IS> sandelio kodas ivedeme 2024-03-18
 
 		}
 		
@@ -82,6 +82,11 @@ $clients.="
 	
 	
 
+	function ancientRivileString(&$csv)
+	{
+		setlocale(LC_CTYPE, "lt_LT.UTF-8"); //set your own locale
+		$csv = iconv("UTF-8", "WINDOWS-1257//TRANSLIT//IGNORE", $csv);	
+	}
 	
 	function doRivileExport()
 	{
@@ -91,7 +96,8 @@ $clients.="
 		
 		$form = ['fields'=>[
 		    'from'=>['type'=>'date', 'default'=>$defaults['from'],'required'=>1],
-		    'to'=>['type'=>'date', 'default'=>$defaults['to'],'required'=>1]
+		    'to'=>['type'=>'date', 'default'=>$defaults['to'],'required'=>1],
+		    'mail'=>['type'=>'text','hidden_note'=>'Nurodžius bus siunčiama el paštu']
 		    ],'cols'=>5];
 		
 		
@@ -132,22 +138,58 @@ $clients.="
 		 
 		$range = $answers['from'].'_'.$answers['to'];
 		
-		$zip = new ZipArchive();
-		$zip_fname = GW::s('DIR/TEMP')."rivile_export.zip"; // Zip name
-		$zip->open($zip_fname,  ZipArchive::CREATE);
 		
-		$zip->addFromString("clients_".$range.'.eis', $clients);  
-		$zip->addFromString("income_".$range.'.eis', $income);  
-		$zip->close();
 		
-		header("Content-Type: application/x-download");	
-		header("Content-Disposition: attachment; filename=rivile_export_{$range}.zip");
-		header("Accept-Ranges: bytes");
-		header("Content-Length: ".filesize($zip_fname));
-		echo file_get_contents($zip_fname);
-		unlink($zip_fname);
-
-		exit;
+		$filename = "rivile_export_{$range}.zip";
 		
+		if($answers['mail'] ?? false){
+			$opts = [
+			    'subject'=>GW::s('PROJECT_NAME').' Mėnesinis įplaukų eksportas į Rivilė '.$range, 
+			    'body'=>'Informacija prisegta rinkmenoje:  '.$filename.' ('.GW_File_Helper::cFileSize(filesize($zip_fname)).')',
+			    'to'=>$answers['mail']
+			];
+		
+			$opts['attachments'] = [$filename => file_get_contents($zip_fname)];
+			$rez =GW_Mail_Helper::sendMail($opts);
+			
+			unlink($zip_fname);
+			//d::dumpas($rez);
+			
+			//d::dumpas($opts);
+			$this->setMessage('Sent mail to '.implode(', ',$opts['to']). ' status: '.($rez?'ok':'fail'));
+			$this->jump();
+		}else{
+		
+			header("Content-Type: application/x-download");	
+			header("Content-Disposition: attachment; filename=".$filename);
+			header("Accept-Ranges: bytes");
+			header("Content-Length: ".filesize($zip_fname));
+			echo file_get_contents($zip_fname);
+			
+			unlink($zip_fname);
+			exit;
+		}
+		
+		
+		
+	}
+	
+	
+	function doRivileExportMonthlyMail()
+	{
+		if(date('d')=='01')
+		{
+			$start = date('Y-m-01',strtotime('-1 MONTH'));
+			$end = date('Y-m-d',  strtotime("last day of {$start}")) ;
+			$_GET['item']['from'] = $start;
+			$_GET['item']['to'] = $end;
+			
+			$_GET['item']['mail'] = 'info@buhalterijos.lt';
+			
+			
+			
+			$file = $this->doRivileExport();
+			$this->config->last_rivile_monthly_exec = date('Y-m-d H:i:s');
+		}
 	}
 }

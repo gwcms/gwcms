@@ -38,6 +38,11 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		if($this->feat('rivile'))
 			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');	
+		
+		if($this->feat('dumbacc'))
+			$this->addRedirRule('/^doDumbAccounting|^viewDumbAccounting/i','dumbaccounting');		
+		
+		
 
 		$this->options['vatgroups'] = GW_VATgroups::singleton()->getOptions();
 		

@@ -29,7 +29,13 @@
 			{toolbar_button iconclass="fa fa-money"
 				title="Eksportas į 'Rivilė' sistemą"
 				href=$m->buildUri(false,[act=>doRivileExport])}
-		{/if}	
+		{/if}
+		
+		{if $m->feat(dumbacc)}
+			{toolbar_button iconclass="fa fa-money"
+				title="Eksportas *uhalterijai"
+				href=$m->buildUri(false,[act=>doDumbAccountingExport])}
+		{/if}		
 		
 		{toolbar_button iconclass="fa fa-money"
 			title="Prijungti SB banko išrašu"
