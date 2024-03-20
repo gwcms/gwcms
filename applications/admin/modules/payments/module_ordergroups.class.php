@@ -672,4 +672,88 @@ class Module_OrderGroups extends GW_Common_Module
 		$this->getOrderItems($item, $_GET['export']??false);		
 	}	
 	
+	
+	
+/*
+ *	Siauliu banko |  montonio
+            [0] => 2024.03.20
+            [1] => O240801567268599
+            [2] => Gautų mokėjimų eurais įskaitymas (SEPA)
+            [3] => Uzsakymas nr 290 Mokėjimo identifikavimo numeris: Payment 
+            [4] => DALIA .......
+            [5] => Gautų mokėjimų eurais įskaitymas (SEPA)Uzsakymas nr 290 Mokėjimo identifikavimo numeris: Payment MOKĖTOJAS: DALIA ....... Sąskaita: LT55730XXXXXXXXXXXX Mokėtojo kredito įstaiga: SWEDBANK AB HABALT22XXX
+            [6] => 
+            [7] => 
+            [8] => 
+            [9] => 
+            [10] => 80.00
+ *  */	
+	
+	
+	function doAddBankStatement(){
+		$form = ['fields'=>['statement'=>[
+		    'type'=>'textarea','width'=>'500px','height'=>'500px', 'required'=>1,
+		    'note'=>'4 stulpelyje pavedimo priezastis, 7 gauta suma']],'cols'=>1];
+		
+		
+		
+		
+		if(!($answers=$this->prompt($form, 'pateikite banko israsa tik israso eilutes pazymekite copy ir paste cia(veikia su siauliu banko statementu | montonio)', ['method'=>'post'])))
+			return false;		
+		
+		
+		$rows = explode("\n", $answers['statement']);
+		
+		$kiek = 0;
+		$gwcmssumos = 0;
+		$statementosumos = 0;
+		
+		foreach($rows as $row)
+		{
+			$row = explode("\t", $row);
+			
+			
+			
+			if(!preg_match('/Uzsakymas nr (\d+)/', $row[3], $matches)){
+				$this->setError("Pašalinis įrašas <pre>". print_r($row, true) ."</pre>");
+				continue;
+			}
+			
+			
+				
+			$uzsakymonr = $matches[1];
+			$amount = (float)trim($row[10]);
+			
+			$order = GW_Order_Group::singleton()->find(['id=?', $uzsakymonr]);
+			if(!$order){
+				$this->setError("Nerastas uzsakymas! $uzsakymonr ".implode('|', $row));
+				continue;;
+			}
+			
+			$extra = ['date'=>$row[0], 'payer'=>$row[4], 'amount'=>$amount];
+			
+			
+			//d::dumpas($row[3]);
+			
+			if(preg_match('/Sąskaita: ([A-Z0-9]+)/', $row[5], $matches))
+				$extra['payeriban']= $matches[1];
+				
+			if((float)$amount != (float)$order->amount_total){
+				$extra['err'] = 'SUMOS!!!';
+			}
+			
+			$order->extra = $extra;
+			$order->updateChanged();
+			
+			$gwcmssumos += (float)$order->amount_total;
+			$statementosumos += $amount;
+			
+			$kiek ++;
+			
+			//d::dumpas(['orderid'=>$uzsakymonr, 'data'=>$row, 'amount'=>$amount, 'order'=>$order, 'extra'=>$extra]);
+		}
+		
+		$this->setMessage("Atnaujinta $kiek, sistemos sumos: $gwcmssumos, statemento sumos: $statementosumos");
+		//d::dumpas();
+	}
 }

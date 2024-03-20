@@ -9,7 +9,7 @@
 {/if}
 	
 	{$dl_inline_edit=1}
-	{$dl_calc_totals.amount_total=1}
+	{$dl_calc_totals.amount_total=0}
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 
@@ -29,7 +29,11 @@
 			{toolbar_button iconclass="fa fa-money"
 				title="Eksportas į 'Rivilė' sistemą"
 				href=$m->buildUri(false,[act=>doRivileExport])}
-		{/if}				
+		{/if}	
+		
+		{toolbar_button iconclass="fa fa-money"
+			title="Prijungti SB banko išrašu"
+			href=$m->buildUri(false,[act=>doAddBankStatement])}		
 	{/function}
 	
 
