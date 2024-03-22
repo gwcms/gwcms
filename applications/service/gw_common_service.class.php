@@ -187,4 +187,16 @@ class GW_Common_Service
 		GW_Lang::$ln = 'en';
 		GW_Lang::$langf_dir = GW::s("DIR/APPLICATIONS") . $appname . '/lang/';
 	}
+	
+	function initAdminAutoload()
+	{
+		$rdir =& GW::s('DIR');
+		$dir =& $rdir['SITE'];
+
+		$rdir['ADMIN']['ROOT']=$rdir['APPLICATIONS'].'admin/';
+		$rdir['ADMIN']['MODULES']=$rdir['ADMIN']['ROOT'].'modules/';
+
+		$rdir['AUTOLOAD'][] = @$dir['LIB'];
+		$rdir['AUTOLOAD_RECURSIVE'] = $rdir['ADMIN']['MODULES'];		
+	}	
 }

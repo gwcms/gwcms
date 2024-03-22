@@ -79,7 +79,9 @@ class Module_Sms extends GW_Common_Module
 		if($this->gwSendSms($item->number, $item->msg, ['add_balance'=>1], $err, $extra)){
 			$item->status = 7;
 			$item->err = "";
-			$item->remote_id = $extra['message']['remote_id'];
+			//$item->remote_id = $extra['message']['remote_id'];
+			$item->remote_id = $extra['message']['id'];
+			
 			$this->setmessage("Message sent!");
 			$stat = "SENT";
 		}else{
@@ -108,8 +110,8 @@ class Module_Sms extends GW_Common_Module
 		
 		//status - 6  fail
 		//status - 0 in queue
-		
-		$list = GW_Outg_SMS::singleton()->findAll(['retry < 2 AND (status=6 OR status=0) AND insert_time + INTERVAL 3 DAY > NOW()']);
+		$curtime = date('Y-m-d H:i:s');
+		$list = GW_Outg_SMS::singleton()->findAll(['send_time < ? AND retry < 2 AND (status=6 OR status=0) AND insert_time + INTERVAL 3 DAY > NOW()', $curtime]);
 		$found = count($list);
 		$succ = 0;
 		
