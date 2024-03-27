@@ -170,7 +170,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			
 		
 		
-		return parent::calculateField($name);
+		return parent::calculateField($key);
 	}
 	
 	

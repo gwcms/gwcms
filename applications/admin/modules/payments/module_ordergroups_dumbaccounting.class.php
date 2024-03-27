@@ -43,19 +43,18 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 		$defaults = json_decode($this->config->last_buhalt_exportas_data, true);
 		
 		$form = ['fields'=>[
-		    'range'=>['type'=>'daterange', 'default'=>$this->config->last_buhalt_exportas_data,'required'=>1],
+		    'range'=>['type'=>'daterange','required'=>1],
 		    'mail'=>['type'=>'text','hidden_note'=>'Nurodžius bus siunčiama el paštu']
 		    ],'cols'=>5];
 		
-		if(!($answers=$this->prompt($form,'Nurodykite užsakymo sukūrimo intervalą')))
+		if(!($answers=$this->prompt($form,'Nurodykite užsakymo sukūrimo intervalą', ['rememberlast'=>1])))
 			return false;
 		
 		$range = explode(' - ', $answers['range']);
 		$answers['from'] = $range[0];
 		$answers['to'] = $range[1];
 		
-		
-		$this->config->last_buhalt_exportas_data = $answers['range'];
+	
 		
 		
 		$conds = ['payment_status=7 AND pay_test=0'];
@@ -93,7 +92,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 			$opts = [
 			    'subject'=>GW::s('PROJECT_NAME').' Mėnesinis įplaukų eksportas '.$range, 
 			    'body'=>'Informacija prisegta rinkmenoje:  '.$filename.' ('.GW_File_Helper::cFileSize(strlen($filecontents)).')',
-			    'to'=>$answers['mail']
+			    'to'=>explode(';',$answers['mail'])
 			];
 		
 			$opts['attachments'] = [$filename => $filecontents];
@@ -120,7 +119,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 			$_GET['item']['from'] = $start;
 			$_GET['item']['to'] = $end;
 			
-			$_GET['item']['mail'] = 'xxxbugalterija@mailinator.com';
+			$_GET['item']['mail'] = 'zivile.bajorunaite@gmail.com;lijana.galdikiene@gmail.com;info@voro.lt';
 			
 			
 			

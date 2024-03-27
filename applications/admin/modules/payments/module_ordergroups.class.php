@@ -61,6 +61,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$cfg['fields']['user_title'] = 'Lf';
 		$cfg['fields']['changetrack'] = 'L';
+		$cfg['fields']['item_lines'] = 'l';
 		
 		if($this->feat('itax')){
 			$cfg["fields"]['itax_status_ex'] = 'Lof';

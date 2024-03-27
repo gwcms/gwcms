@@ -3523,6 +3523,7 @@ class GW_Common_Module extends GW_Module
 	
 	function doExportListAsSheet()
 	{
+		
 		$this->processView('list',['return_as_string'=>1]);
 		
 		$table = GW::$globals['capturelist'];
@@ -3549,7 +3550,8 @@ class GW_Common_Module extends GW_Module
 			$rows[]=$cells;
 		}
 		
-		$bc = $this->app->getBreadcrumbs($this->tpl_vars['breadcrumbs_attach']);
+		
+		$bc = $this->app->getBreadcrumbs($this->tpl_vars['breadcrumbs_attach'] ?? false);
 		
 		$file_name=[GW::s('PROJECT_NAME')];
 		foreach($bc as $b)

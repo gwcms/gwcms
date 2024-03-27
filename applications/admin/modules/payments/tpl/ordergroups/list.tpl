@@ -48,7 +48,7 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id]}
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines]}
 
 	
 	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
@@ -61,7 +61,15 @@
 			<i class="fa fa-shopping-basket"></i> <span style='color:red;position:relative;left:-6px'>{$item->itmcnt}</span>
 		</a>	
 		
+	{/function}
+	{function dl_cell_item_lines}
+		{foreach $item->items as $sitem}
+			{$sitem->qty}x{$sitem->unit_price} EUR {$sitem->invoice_line2}
+			{if !$sitem@last}|{/if}
+		{/foreach}
 	{/function}	
+
+	
 
 	{function dl_prepare_item}
 		{if !$item->approved}{$item->set(row_class,notapproved)}{/if}

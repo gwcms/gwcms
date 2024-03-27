@@ -1,5 +1,9 @@
 {function name=dl_output_filters_short_time}
-	<span title="{$val}">{$app->fh()->shortTime($val)}</span>
+	{if $smarty.get.act==doExportListAsSheet}
+		{$val}
+	{else}
+		<span title="{$val}">{$app->fh()->shortTime($val)}</span>
+	{/if}
 {/function}
 
 {function name=dl_output_filters_expand_truncate}
