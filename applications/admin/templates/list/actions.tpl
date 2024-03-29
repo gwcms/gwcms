@@ -10,7 +10,9 @@
 		href="{$href|default:'#'}"
 		{foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 		{if $title}title="{$title|escape}"{/if}
-		>{if $iconclass}<i class="{$iconclass}"></i>{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
+		>{if $iconclass}
+			{if strpos($iconclass,'material ')!==false}<span class="materialico material-symbols-outlined">{str_replace(material,'',$iconclass)}</span>
+			{else}<i class="{$iconclass}"></i>{/if}{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
 	{if $addlitag}</li>{/if}
 {/function}
 

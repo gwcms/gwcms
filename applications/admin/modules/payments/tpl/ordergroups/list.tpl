@@ -61,7 +61,7 @@
 			<i class="fa fa-shopping-basket"></i> <span style='color:red;position:relative;left:-6px'>{$item->itmcnt}</span>
 		</a>	
 		
-	{/function}
+	{/function}	
 	{function dl_cell_item_lines}
 		{foreach $item->items as $sitem}
 			{$sitem->qty}x{$sitem->unit_price} EUR {$sitem->invoice_line2}

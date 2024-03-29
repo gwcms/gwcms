@@ -78,7 +78,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		
 		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
-
+		$this->item_remove_log=1;
 	}
 	
 

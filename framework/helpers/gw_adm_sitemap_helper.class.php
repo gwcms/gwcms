@@ -68,16 +68,17 @@ class GW_ADM_Sitemap_Helper
 
 	static function loadModuleMap($pathname)
 	{
-		$tmp = GW_Lang_XML::getAllLn(GW::s('ADMIN/LANGS'), GW::s('DIR/ADMIN/MODULES') . $pathname . '/lang.xml');
-
-
+		$tmp = GW_Lang_XML::getAllLn(GW::s('ADMIN/LANGS'), $path = GW::s('DIR/ADMIN/MODULES') . $pathname . '/lang.xml');
 
 		foreach ($tmp as $ln => $tree) {
-			if ($tree['MAP'])
+			if ($tree['MAP'] ?? false)
 				$map[$ln] = self::treeToArray($tree['MAP']);
 		}
+		
+		if(!isset($map))
+			GW::$context->app->setError('Having problems reading '.$pathname.'/lang.xml');
 
-		return $map;
+		return $map ?? [];
 	}
 
 	static function syncModule($pathname)

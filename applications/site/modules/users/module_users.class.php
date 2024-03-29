@@ -572,11 +572,20 @@ class Module_Users extends GW_Public_Module
 				$this->app->jump('/');
 			}
 			
+			$this->tpl_vars['username'] = $item->username;;
+			
 			$this->tpl_name = 'passchange';
 		
 		}else{
 			$this->tpl_name = 'passreset';
 		}
+	}
+	
+	function viewActivateAccount()
+	{
+		
+		$this->viewPassChange();
+		$this->tpl_name = 'activateaccount';
 	}
 	
 	function viewProfile()

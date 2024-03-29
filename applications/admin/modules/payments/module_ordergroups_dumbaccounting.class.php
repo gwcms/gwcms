@@ -54,7 +54,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 		$answers['from'] = $range[0];
 		$answers['to'] = $range[1];
 		
-	
+		
 		
 		
 		$conds = ['payment_status=7 AND pay_test=0'];
@@ -92,7 +92,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 			$opts = [
 			    'subject'=>GW::s('PROJECT_NAME').' Mėnesinis įplaukų eksportas '.$range, 
 			    'body'=>'Informacija prisegta rinkmenoje:  '.$filename.' ('.GW_File_Helper::cFileSize(strlen($filecontents)).')',
-			    'to'=>explode(';',$answers['mail'])
+			    'to'=>$answers['mail']
 			];
 		
 			$opts['attachments'] = [$filename => $filecontents];
@@ -119,7 +119,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 			$_GET['item']['from'] = $start;
 			$_GET['item']['to'] = $end;
 			
-			$_GET['item']['mail'] = 'zivile.bajorunaite@gmail.com;lijana.galdikiene@gmail.com;info@voro.lt';
+			$_GET['item']['mail'] = 'xxxbugalterija@mailinator.com';
 			
 			
 			
