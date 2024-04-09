@@ -564,7 +564,7 @@ class Module_Users extends GW_Public_Module
 			$key = $_GET['id2'];
 
 			$item = $this->model->find(Array('id=? AND site_passchange=? AND removed=0 AND active=1', $id, $key));
-
+			
 
 			if(!$item){
 				$this->setError("/M/USERS/INVALID_PASSCHANGE_LINK");

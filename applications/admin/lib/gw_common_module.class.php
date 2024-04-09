@@ -3642,6 +3642,10 @@ class GW_Common_Module extends GW_Module
 			$obj = $this->getModelFromPath($cfg['modpath']);
 
 			$cond = GW_DB::prepare_query(GW_DB::inCondition($cfg['field'], $ids));
+			
+			if($cfg['andcond'] ?? false){
+				$cond .= " AND ".$cfg['andcond']; 
+			}
 
 			$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
 

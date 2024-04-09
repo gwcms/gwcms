@@ -879,6 +879,8 @@ var gwcms = {
 				if(itemactions.length){
 					var el = itemactions.detach();
 					$('.modal-title').append(el);
+					
+					gwcms.initDropdowns();
 				}
 			});	
 				
