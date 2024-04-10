@@ -67,11 +67,11 @@
 	{$dl_smart_fields=[type,user_title,user_id]}
 	
 	{function dl_cell_user_id}
-		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$item->user_id}</a>
+		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$item->user_id}">{$item->user_id}</a>
 	{/function}	
 	
 	{function dl_cell_user_title}
-		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$item->user->title} {$item->user->country}</a>
+		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$item->user->title}">{$item->user->title} {$item->user->country}</a>
 	{/function}	
 
 	

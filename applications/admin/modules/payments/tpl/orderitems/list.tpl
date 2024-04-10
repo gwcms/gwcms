@@ -92,7 +92,7 @@
 	{/function}		
 	
 	{function dl_cell_user_title}
-		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info">{$options.user_id[$item->user_id]->title}</a>
+		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$options.user_id[$item->user_id]->title}">{$options.user_id[$item->user_id]->title}</a>
 	{/function}		
 	
 	{function dl_cell_user_email}

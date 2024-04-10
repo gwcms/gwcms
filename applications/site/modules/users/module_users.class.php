@@ -517,7 +517,10 @@ class Module_Users extends GW_Public_Module
 		$opts = [
 		    'to'=>$item->email,
 		    'tpl'=>$this->cfg->verify_mail_tpl_id,
-		    'vars'=>['CONFIRM_LINK'=>"<a href='$verif_link'>$verif_link</a>"]
+		    'vars'=>[
+			'CONFIRM_LINK'=>"<a href='$verif_link'>$verif_link</a>", 
+			'CONFIRM_URL'=>$verif_link
+			]
 		];
 				
 		
