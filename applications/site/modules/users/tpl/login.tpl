@@ -81,7 +81,7 @@
                   <button class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-12 g-px-25" type="button" onclick="$('#loginform').submit()">{GW::ln('/m/LOGIN')}</button>
                 </div>
 
-		{if !$smarty.session.3rdAuthUser}
+		{if !$smarty.session.3rdAuthUser && !$m->cfg->get(disable3rdAuthGateways)}
                 <div class="d-flex justify-content-center text-center g-mb-30">
                   <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>
                   <span class="align-self-center g-color-gray-dark-v5 mx-4">{GW::ln('/m/OR_LOGIN_WITH_3RD_PARTY')}</span>
