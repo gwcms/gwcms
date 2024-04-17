@@ -12,7 +12,7 @@
 
 
 <script>
-RevolutCheckout("{$revolog->public_id}", 'sandbox').then(function(instance) {
+RevolutCheckout("{$revolog->public_id}"{*, 'sandbox'*}).then(function(instance) {
   instance.revolutPay({
     target: document.getElementById('revolut-pay'),
 	{if $revolog->phone}phone: '{$revolog->phone}',{/if} // recommended

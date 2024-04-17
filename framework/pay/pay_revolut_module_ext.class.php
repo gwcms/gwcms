@@ -16,9 +16,27 @@ class pay_revolut_module_ext extends GW_Module_Extension
 	{
 		$order = $this->getOrder(true);
 		
+		//$return_args="&id={$order->id}&orderid={$order->id}&key={$order->secret}";
+		
+		//$args=(object)['base'=>'https://shop.drpaulclayton.eu/'];
+		
+		//$return_url = $args->base.$this->app->ln."/direct/orders/orders?act=doRevolutAccept&action=return".$return_args;
+		//
+		
+		$payment_data = ['amount'=>$order->amount_total*100,'currency'=>'EUR'];
+		//$payment_data['redirectUrls']=['success'=>$return_url, 'failure'=>$return_url, 'cancel'=>$return_url];
+
+			
+		if($this->app->user && $this->app->user->isRoot()){
+			
+			$payment_data = $this->rootConfirmJson($payment_data);
+			if(!$payment_data)
+				return false;
+			
+		}		
 		
 		$key = 'pay_revolut_'.$order->id.'_'.$order->amount_total;
-		if(($tmp = $this->app->sess($key)) && ($revolog = new GW_PayRevolut_Log($tmp, true)) && $revolog->public_id){
+		if(false && ($tmp = $this->app->sess($key)) && ($revolog = new GW_PayRevolut_Log($tmp, true)) && $revolog->public_id){
 			
 			
 			//d::dumpas($revolog);
@@ -26,8 +44,11 @@ class pay_revolut_module_ext extends GW_Module_Extension
 			
 
 			list($cfg, $api) = $this->revolutApi();
-			$revoresponse = $api->request('POST','orders',['amount'=>$order->amount_total*100,'currency'=>'EUR']);
-
+			
+			//https://developer.revolut.com/docs/merchant/create-order
+			$revoresponse = $api->request('POST','orders', $payment_data);
+			
+			
 			
 			$revolog = new GW_PayRevolut_Log;
 			$revolog->order_id = $order->id;
@@ -41,6 +62,7 @@ class pay_revolut_module_ext extends GW_Module_Extension
 			$revolog->remote_id = $revoresponse['id'];
 			$revolog->email = $this->app->user ? $this->app->user->email : '';
 			$revolog->test = $cfg->sandbox;
+			$revolog->checkout_url = $revoresponse['checkout_url'];
 			$revolog->insert();
 			
 			if($this->app->user && $this->app->user->isRoot()){
@@ -49,6 +71,7 @@ class pay_revolut_module_ext extends GW_Module_Extension
 			
 			$this->app->sess($key, $revolog->id);
 			
+			//Navigator::jump($revoresponse['checkout_url']);
 		}
 		
 		$this->tpl_vars['revolog'] = $revolog;
@@ -63,6 +86,8 @@ class pay_revolut_module_ext extends GW_Module_Extension
 	
 		$resp = $this->revolutUpdate($revolog);
 		$payment = $resp['payments'][0];
+		
+		$authorised_amount = $payment['authorised_amount']['value']/100;
 		$received_amount = $payment['settled_amount']['value']/100;
 		
 		
@@ -72,8 +97,9 @@ class pay_revolut_module_ext extends GW_Module_Extension
 		}
 		
 		if($resp['state']=='COMPLETED'){
+			//d::dumpas([$order->amount_total, $received_amount]);
 			
-			if($order->amount_total != $received_amount){
+			if($order->amount_total != $authorised_amount){
 				$debugdata = ['response'=>$resp,'paylog'=>$revolog->toArray()];
 				$mail=[
 					'subject'=>'Payment error amount_total in cart does not match revolut response',
@@ -83,12 +109,13 @@ class pay_revolut_module_ext extends GW_Module_Extension
 				return $this->setError('Payment error amount_total in cart does not match revolut response / this prolbem was reported');
 			}
 		
-		
+			$extra = $order->extra;
+			$extra['received_amount'] = $received_amount;
 			
 			
 			$args = [
 			    'id'=>$order->id,
-			    'rcv_amount'=>$received_amount,
+			    'rcv_amount'=>$authorised_amount,
 			    'pay_type'=>'revolut',
 			    'log_entry_id'=>$revolog->id
 			];		

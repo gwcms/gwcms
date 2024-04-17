@@ -33,6 +33,7 @@ class GW_PayRevolut_Api
 		$headers = array();
 		//sk_sMGGQ_URIIY9Z3t-5P3h6-sc8Qt1AnH9Uz6ugl1RvIbQUxN02t6A5QcLy8aBEp1J
 		$headers[] = "Authorization: Bearer {$this->apikey}";
+		$headers[] = 'Revolut-Api-Version: 2023-09-01';
 		$headers[] = 'Content-Type: application/json; charset=utf-8';
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
