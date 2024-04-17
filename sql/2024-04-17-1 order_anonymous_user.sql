@@ -1,0 +1,1 @@
+ALTER TABLE `gw_order_group` ADD `auser_id` INT NOT NULL AFTER `user_id`;
