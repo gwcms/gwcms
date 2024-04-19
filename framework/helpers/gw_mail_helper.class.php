@@ -127,7 +127,7 @@ class GW_Mail_Helper
 				if(in_array($function_name, ['number_format'])) return true; 
 				
 				if(GW::$context->app->user && GW::$context->app->user->isRoot()){
-					if(in_array($function_name, ['var_dump'])) return true; 
+					if(in_array($function_name, ['var_dump','str_replace'])) return true; 
 				}
 				
 				

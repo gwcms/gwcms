@@ -1,6 +1,7 @@
 {include "inputs/inputs.tpl"}
 
 {$fields= $m->getFieldsConfig()}
+
 <div class="row"> 		
 
 {if $register}
