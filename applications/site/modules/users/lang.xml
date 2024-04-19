@@ -3,6 +3,11 @@
 
 	<i id="CANT_BE_EMPTY"></i>
 
+	<i id="VIEWS">
+		<i id="acquire">Įsigyti licenzija</i>
+		<i id="default">Metinė licenzija</i>
+	</i>
+
 	<i id="FIELDS">
 	
 		<i id="company_name">Įmonės pavadinimas</i>
@@ -80,10 +85,6 @@
 			<en>Apartment, suite, unit, building, floor, etc.</en>
 		</i>
 		
-		<i id="printprofilefoto">min. rezuliucija 1000x1000, formatas: .jpg, .png</i>		
-		<i id="passportscan">formatas: .jpg, .png, .gif</i>	
-		<i id="biography_file">formatas .pdf, .odt, .docx, .doc</i>
-		<i id="extra_info">Čia galite parašyti ką Mes turėtume žinoti, kad Jūs konkurso metu jaustumėtės komfortiškai ir patogiai, arba tai ko nėra anketoje, o Jūsų manymu turėtų būti</i>
 		<i id="expirity_time">mėnuo / metai</i>
 	</i>
 	
@@ -104,77 +105,6 @@
 			<i id="F">Moteris</i>
 			<i id="M">Vyras</i>
 		</i>
-		<i id="professor_title">
-			<i id="1">
-				<lt>Profesorius</lt>
-				<en>Professor</en>
-				<ru>Професор</ru>				
-			</i>
-			<i id="2">
-				<lt>Docentas</lt>
-				<en>Docent</en>
-				<ru>Доцент</ru>				
-			</i>
-			<i id="3">
-				<lt>Mokslų Daktaras</lt>
-				<en>Doctor</en>
-				<ru>Доктор наук</ru>				
-			</i>
-			<i id="4">
-				<lt>Maestro</lt>
-				<en>Maestro</en>
-				<ru>Маэстро</ru>
-			</i>
-			<i id="5">
-				<lt>Mokytojas</lt>
-				<en>Master</en>
-				<ru>Учитель</ru>
-			</i>
-			<i id="6">
-				<lt>Ponas</lt>
-				<en>Mr</en>
-				<ru>Господин</ru>
-			</i>
-			<i id="7">
-				<lt>Ponia</lt>
-				<en>Ms</en>
-				<ru>Госпожа</ru>
-			</i>		
-			<i id="80">Vyresnysis mokytojas</i>		
-			<i id="81">Mokytojas metodininkas</i>
-			<i id="82">Mokytojas ekspertas</i>
-			<i id="90">Lektorius</i>
-		</i>
-		
-		<i id="professor_title_short">
-			<i id="1">
-				<lt>Prof.</lt>			
-			</i>
-			<i id="2">
-				<lt>Doc.</lt>		
-			</i>
-			<i id="3">
-				<lt>Dr.</lt>			
-			</i>
-			<i id="4">
-				<lt>Maestro</lt>
-			</i>
-			<i id="5">
-				<lt>Mok.</lt>
-			</i>
-			<i id="6">
-				<lt>Ponas</lt>
-			</i>
-			<i id="7">
-				<lt>Ponia</lt>
-			</i>		
-			<i id="80">Vyr. mok.</i>		
-			<i id="81">Mok. met.</i>
-			<i id="82">Mok. eksp.</i>	
-			
-			<i id="90">Lekt.</i>					
-		</i>		
-		
 		<i id="biography_select">
 			<i id="link">Nuoroda</i>
 			<i id="text">Tekstas</i>
@@ -194,6 +124,10 @@
 			<i id="AMERICAN EXPRESS">AMERICAN EXPRESS</i>			
 		</i>
 		
+		<i id="regothers">
+			<i id="0">Registruosiu save</i>
+			<i id="1">Registruosiu kitus (klubams, sporto mokykloms)</i>
+	</i>	
 	</i>	
 	
 	
@@ -246,4 +180,7 @@
 	
 	<i id="PROFILE_WAS_LINKED_WITH_FB_ACCOOUNT">Jūsų profilis buvo susietas su Facebook paskyra "%s"</i>
 	<i id="LOGOUT_MESSAGE">You are logged out now</i>
+	
+	<i id="REGISTER_EMAIL_NOTE">Correct email address required</i>
+	<i id="REGISTER_EMAIL_HELP">After form submited will be sent code to provided email to verify address, please double check for possible mistype</i>	
 </xml>

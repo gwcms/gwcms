@@ -39,12 +39,12 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		    'paytext' => $args->paytext,
 		    'p_firstname' => $user->name,
 		    'p_lastname' => $user->surname,
-		    'p_email' => $user->email,
+		    'p_email' => $user->email ? $user->email : $args->order->email,
 		    'amount' => $args->payprice * 100,
 		    'currency' => $cfg->default_currency_code,
 		    'country' => 'LT',
 		    'accepturl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=return&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
-		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$args->order->id}&id={$args->order->id}",
+		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$args->order->id}&id={$args->order->id}&key={$args->order->secret}",
 		    'callbackurl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=notify&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
 		    'test' => $test,
 		);
@@ -90,6 +90,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		ob_start();
 		
 		$cfg = $this->getPayseraCfg();	
+		$order = $this->getOrder();
 		
 		try {
 			$response = WebToPay::checkResponse($_GET, [
@@ -115,10 +116,10 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			$data = ['server'=>$_SERVER, 'error'=>$errtxt, '_POST'=>$_POST ?? [], '_GET'=>$_GET ?? []];
 			
 			
-			
+			/*
 			if($_SERVER['REMOTE_ADDR'] == '84.15.236.87'){
 				d::dumpas($data);
-			}
+			}*/
 			
 			
 			$this->log($data);

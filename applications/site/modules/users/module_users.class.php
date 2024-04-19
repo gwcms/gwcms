@@ -161,6 +161,8 @@ class Module_Users extends GW_Public_Module
 			$this->tpl_vars['item'] = (object)$vals;
 		}
 		
+		
+		
 		if(isset($_REQUEST['success'])){
 			if(isset($_REQUEST['authgw']) && ($_REQUEST['authgw']=='fb' || $_REQUEST['authgw']=='gg')){
 				$msg = GW::ln('/M/users/USER_REGISTER_SUCCESS');
@@ -247,6 +249,14 @@ class Module_Users extends GW_Public_Module
 		
 		$item->setValidators('register');
 		$item->username = $item->email;
+		
+		
+		$fields = $this->getFieldsConfig();
+		
+		foreach($fields['required'] as $reqfield)
+			$item->validators[$reqfield] = $item->validators_def[$reqfield];
+		
+		//foreach($validators_def)
 		
 		
 		if($link3rdAuth)
