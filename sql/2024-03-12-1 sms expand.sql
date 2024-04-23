@@ -1,5 +1,5 @@
 ALTER TABLE `gw_outg_sms` ADD `remote_status` TINYINT NOT NULL AFTER `status`;
-
+ALTER TABLE `gw_outg_sms` ADD `send_time` DATETIME NOT NULL AFTER `remote_id`;
 
 CREATE TABLE `gw_inco_sms` (
   `id` int NOT NULL,
@@ -33,3 +33,5 @@ ALTER TABLE `gw_inco_sms`
 ALTER TABLE `gw_inco_sms`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+
