@@ -79,7 +79,7 @@
 
 		<button id="proceedCheckout" 
 				class="btn btn-block u-btn-primary g-font-size-13 text-uppercase g-py-15 mb-4" type="button"
-		{if $m->order->deliverable}
+		{if $m->order->deliverable || $m->auser}
 			data-next-step="#step2" data-step="2">
 			{GW::ln('/m/PROCEED_DELIVERY')}
 		{else}

@@ -26,6 +26,14 @@ class Module_Users extends GW_Public_Module
 		
 		//d::ldump($this->app->page);
 		
+		if(isset($_GET['RETURN_TO'])){
+			$this->app->sess('navigate_after_auth',$_GET['RETURN_TO']);
+		
+			unset($_GET['url']);
+			unset($_GET['RETURN_TO']);
+			$this->app->jump($this->app->path, $_GET);
+		}
+	
 		
 	}
 	

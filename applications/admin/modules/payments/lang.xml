@@ -478,6 +478,10 @@
         <lt>Užsakom. spausd. pristatymas</lt>
         <en>Printing press delivery</en>
       </i>      
+      <i id="anonymoususer_dev">
+        <lt>Kai neprisijunges klientas</lt>
+        <en>For not loged in users</en>
+      </i>       
     </i>   
     <i id="features">
       <i id="otherpayee">
@@ -512,7 +516,8 @@
         <lt>Pvm mokesčio skaičiavimai</lt>
         <en>VAT calculations</en>
       </i>
-       <i id="dumbacc">[SSA] Dumb accounting</i>     
+       <i id="dumbacc">[SSA] Dumb accounting</i>  
+       <i id="anonymous_access">Leisti be paskyros</i>   
     </i>
   </i>   
   <i id="MAP">

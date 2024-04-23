@@ -11,7 +11,7 @@
 				
 				{if $m->feat(discountcode) && $order->amount_total==0}
 					<center>
-					<a href="{$app->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>'zeroprice'])}" class="btn u-btn-indigo btn-{$version} rounded-0">
+					<a href="{$app->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>'zeroprice'],['carry_params'=>1])}" class="btn u-btn-indigo btn-{$version} rounded-0">
 							
 							{GW::ln('/m/CONFIRM_ORDER')}
 					</a>
@@ -31,7 +31,7 @@
 					{else}
 						<center>
 							{$order=GW::$globals.site_cart}
-					    <a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>$pay_methods.0])}" class="btn btn-primary">
+					    <a href="{$app->buildUri('direct/orders/orders', [act=>doOrderPay,id=>$order->id,type=>$pay_methods.0],['carry_params'=>1])}" class="btn btn-primary">
 						<i class="fa fa-credit-card g-mr-2"></i>
 						{GW::ln('/m/PROCEED_PAYMENT')} {$order->amount_total} &euro;
 					      </a>
@@ -40,7 +40,7 @@
 
 						{if $m->feat('otherpayee')}
 							<br><br>
-							<a href="{$app->buildUri('direct/orders/orders/otherpayee', [id=>$order->id])}" class="btn u-btn-indigo btn-{$version} rounded-0">
+							<a href="{$app->buildUri('direct/orders/orders/otherpayee', [id=>$order->id],['carry_params'=>1])}" class="btn u-btn-indigo btn-{$version} rounded-0">
 								<i class="fa fa-credit-card g-mr-2"></i>
 								{GW::ln('/m/OTHERPAYEE')}
 

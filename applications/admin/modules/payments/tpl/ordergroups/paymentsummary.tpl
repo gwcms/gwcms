@@ -57,7 +57,13 @@
 			{if $smarty.get.nuasmenintas}
 				userid:{$item->user->id}
 			{else}
-				{if $item->company}{$item->company}{if $item->company_code} | {$item->company_code} <small>({$item->user->title})</small> {/if}{else}{$item->user->title}{/if}
+				{if $item->company}{$item->company}{if $item->company_code} | {$item->company_code} <small>({$item->user->title})</small> {/if}{else}
+					{if $item->user}
+					{$item->user->title}
+					{else}
+						{$order->name} {$order->surname} {$order->email}
+					{/if}
+				{/if}
 			{/if}
 		</th>
 		<th>

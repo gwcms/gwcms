@@ -79,10 +79,20 @@
 	
 
 	{function dl_cell_user_title}
-		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$options.user_id[$item->user_id]->title}">{$options.user_id[$item->user_id]->title}</a>
+		{if $item->user_id}
+			<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$options.user_id[$item->user_id]->title}">{$options.user_id[$item->user_id]->title}</a>
+		{else}
+			{$item->name|escape} {$item->surname|escape} <span class="text-muted">{$item->email|escape}</span>
+		{/if}
 	{/function}	
 	{function dl_cell_user_id}
+		
+		{if $item->user_id}
 		<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->user_id`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$item->user_id}">{$item->user_id}</a>
+		
+		{else}
+			<i class="fa fa-user-secret" aria-hidden="true"></i> {$item->auser_id}
+		{/if}
 	{/function}
 	{function dl_cell_admin_id}
 		<a class="iframeopen" href="{$app->buildUri("users/usr/`$item->admin_id`/form",[clean=>2])}" title="Admin info {$item->admin_id}">{$item->admin_id}</a>

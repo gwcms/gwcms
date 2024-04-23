@@ -252,6 +252,8 @@
 		<i id="vatgroups">Pvm grupės kiekvienam produktui</i>
 		<i id="prod_visit_history">Registruoti žiūrėtų produktų istoriją</i>
 		<i id="jump2cartafteradd">Po pridėjimo peršokti į krepšelį</i>
+		<i id="anonymous_cart">Leisti be paskyros</i>
+		<i id="add2cart_top">Pridėti į krepšelį mygtukas prieš aprašymą</i>
           </i>
 	  
   </i>

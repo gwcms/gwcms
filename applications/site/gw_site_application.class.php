@@ -517,22 +517,25 @@ class GW_Site_Application extends GW_Application
 		return parent::preRun();
 	}
 	
-	function initAnonymousUser()
+	function initAnonymousUser($create=true)
 	{
 		if($this->user)
 			return false;
 			
 		// Anonymous User Identification cookie
-		if(!isset($_COOKIE['AUID'])){
+		if(!isset($_COOKIE['AUID']) && $create){
 			Navigator::setCookie("AUID", $uid = GW_String_Helper::getRandString(40));			
 		}else{
-			$uid = $_COOKIE['AUID'];
+			$uid = $_COOKIE['AUID'] ?? false;
 		}
 		
 		$user = GW_Anonymous_User::singleton()->find(['idcookie=?', $uid]);
 		
 			
 		if(!$user){
+			if(!$create)
+				return false;
+			
 			$vals = ['idcookie'=>$uid];
 			
 			$user = GW_Anonymous_User::singleton()->createNewObject($vals);
@@ -541,7 +544,8 @@ class GW_Site_Application extends GW_Application
 		
 		$user->setValues([
 				'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-			    'lastip'=>$_SERVER['REMOTE_ADDR']
+			    'lastip'=>$_SERVER['REMOTE_ADDR'],
+			'use_lang' => $this->ln
 		]);
 		$user->updateChanged();
 		

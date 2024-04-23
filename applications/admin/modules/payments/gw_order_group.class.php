@@ -129,11 +129,15 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		return $list;
 	}
 	
+	function setSecret()
+	{
+		$this->secret = GW_String_Helper::getRandString(20, GW_String_Helper::$simple);
+	}
 	
 	function setSecretIfNotSet()
 	{
 		if(!$this->secret){
-			$this->secret = GW_String_Helper::getRandString(8,GW_String_Helper::$simple);
+			$this->setSecret();
 			$this->updateChanged();
 		}		
 	}

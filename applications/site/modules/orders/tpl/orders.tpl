@@ -22,7 +22,7 @@
 			{$args=[act=>doOrderPay,id=>$order->id]}
 		{/if}
 		
-			<a href="{if $order->open}{$ln}/direct/orders/orders/cart{else}{$m->buildDirectUri('', $args)}{/if}" class="btn u-btn-brown btn-md rounded-0">
+			<a href="{if $order->open}{$m->buildUri(cart)}{else}{$m->buildUri(false, $args)}{/if}" class="btn u-btn-brown btn-md rounded-0">
 				<i class="fa fa-credit-card g-mr-2"></i>
 
 				{if $item->status==3} {*bank transfer confirm sent*}
@@ -256,26 +256,31 @@
 
 						{if $order->active}
 							{if $order->payment_status==7}
-								{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id])}
+								{$link=$m->buildUri('prepareinvoice', [id=>$order->id])}
 							{else}
-								{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
+								{$link=$m->buildUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
 							{/if}
 							<a class="dropdown-item"  href="{$link}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> {GW::ln('/m/INVOICE')}</a>
 						{/if}
 			
-
-						<a class="dropdown-item" href="{$app->buildUri('direct/orders/orders',[act=>doOrderSummary,id=>$order->id,viewable=>1])}">
+						
+						<a class="dropdown-item" href="{$m->buildUri(false,[act=>doOrderSummary,id=>$order->id,viewable=>1])}">
 							<i class="fa fa-print"></i> {GW::ln('/m/PRINT_ORDER_INFO')}
 						</a>
 
-						{if $order->payment_status!=7 && $app->user->get('ext/cart_id') != $order->id && $order->get('extra/bt_confirm_cnt') < 1}
+						{if $m->auser}
+							{$currentcartid=$m->auser->get('ext/cart_id')}
+						{else}
+							{$currentcartid = $app->user->get('ext/cart_id')}
+						{/if}
+						{if $order->payment_status!=7 && $currentcartid != $order->id && $order->get('extra/bt_confirm_cnt') < 1}
 							<a href="{$m->buildUri(false, [act=>doOpenOrder,id=>$order->id])} " class="dropdown-item" title="{GW::ln('/m/VIEWS/doOpenOrder')}">
 								<i class="fa fa-shopping-cart"></i> {GW::ln('/m/VIEWS/doOpenOrder_short')}
 							</a>			
 						{/if}
 						<div class="dropdown-divider"></div>
-						{if ($app->user->isRoot() || $m->can_do_test_pay) && $order->payment_status!=7}
-						<a href="{$m->buildUri('direct/orders/orders', [act=>doOrderPayRoot,id=>$order->id])}" class="dropdown-item">
+						{if (($app->user && $app->user->isRoot()) || $m->can_do_test_pay) && $order->payment_status!=7}
+						<a href="{$m->buildUri(false, [act=>doOrderPayRoot,id=>$order->id])}" class="dropdown-item">
 							<i class="fa fa-credit-card g-mr-2"></i>
 							TEST pay!
 						</a>
@@ -285,10 +290,12 @@
 								 <i class='fa fa-pencil-square-o text-warning'></i> Go to admin </a>
 						{/if}						
 						
-						
+						{if $order->payment_status!=7}
 						<a href="{$m->buildUri(false, [act=>doCancelOrder,id=>$order->id,state=>$order->active])} " class="dropdown-item">
 							<i class="fa fa-times"></i> {if $order->active}{GW::ln('/g/CANCEL')}{else}{GW::ln('/g/UNDO_CANCEL')}{/if}
-						</a>				
+						</a>			
+						{/if}
+						
 					</div>
 				</div>				
 			</div>

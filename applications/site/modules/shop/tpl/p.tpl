@@ -35,6 +35,65 @@
 	{/if}
 {/function}
 
+{function action_buttons}
+	<!-- Buttons -->
+	<form action="{$smarty.server.REQUEST_URI}" method="post">
+		<input name="act" value="doAdd2Cart" type="hidden">
+		<input name="item[id]" value="{$item->id}" type="hidden">
+		
+		
+	<div class="row g-mx-minus-5 g-mb-20 g-mt-10">
+		
+		{if $modifications && !$smarty.get.modid}
+				<div class="col g-px-5 g-mb-10">
+
+					<button class="btn btn-block u-btn-darkgray g-font-size-12 text-uppercase g-py-15 g-px-25 " disabled="disabled" style="cursor: not-allowed">
+						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+					</button>
+				</div>	
+					<br/>
+				<span class="text-error"><i class="fa fa-info-circle"></i> {GW::ln('/m/SELECT_MOD')}</span>
+					
+			
+		{else}
+
+			{if $item->qty > 1 && $m->feat('selectqty')}
+			<div class="col g-px-5 g-mb-10" style="text-align:right">
+				{GW::ln('/m/QUANTITY')}  <i class="btn fa fa-plus-circle" style="width:20px;padding:0" 
+				   onclick="if(($('#qty').val()-0) <  ($('#qty').attr('max')-0))$('#qty').val($('#qty').val()-0+1)"></i> 
+
+				<br><input name="item[qty]" id="qty" type="number" style="width:70px;" max="{$item->qty}" min="1" value="1">
+			</div>
+			{/if}
+
+			{if $item->qty ==0}
+				<div class="col g-px-5 g-mb-10 text-error" style="border:1px solid red;border-radius:5px" >
+					{GW::ln('/m/SOLDOUT')}
+				</div>
+			{else}
+
+				<div class="col g-px-5 g-mb-10">
+
+					<button class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-15 g-px-25">
+						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+					</button>
+				</div>
+			{/if}
+				{if $m->feat('wishlist')}
+			<div class="col g-px-5 g-mb-10">
+				<button class="btn btn-block u-btn-outline-black g-brd-gray-dark-v5 g-brd-black--hover g-color-gray-dark-v4 g-color-white--hover g-font-size-12 text-uppercase g-py-15 g-px-25 gwUrlMod" type="button" 
+					data-args='{json_encode([act=>doAdd2WishList,id=>$item->id])}' data-ajax="1" data-refresh="1" data-loading="1" data-auth="1">
+					{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/WISHLIST',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-medical-022 u-line-icon-pro"></i>
+				</button>
+			</div>
+				{/if}
+			
+		{/if}
+	</div>
+	</form>
+	<!-- End Buttons -->
+{/function}
+
 {include "product_display.tpl"}
 
 {if $app->user && $app->user->isRoot()}
@@ -121,6 +180,10 @@
 				</li>
 			{/if}
 			
+			{if $m->feat('add2cart_top')}
+				{call action_buttons}
+			{/if}
+			
 
 			{foreach $m->mod_fields as $field}
 				
@@ -176,61 +239,7 @@
 	<!-- End Price -->			
 	<div style="clear:both"></div>
 
-	<!-- Buttons -->
-	<form action="{$smarty.server.REQUEST_URI}" method="post">
-		<input name="act" value="doAdd2Cart" type="hidden">
-		<input name="item[id]" value="{$item->id}" type="hidden">
-		
-		
-	<div class="row g-mx-minus-5 g-mb-20 g-mt-10">
-		
-		{if $modifications && !$smarty.get.modid}
-				<div class="col g-px-5 g-mb-10">
-
-					<button class="btn btn-block u-btn-darkgray g-font-size-12 text-uppercase g-py-15 g-px-25 " disabled="disabled" style="cursor: not-allowed">
-						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
-					</button>
-				</div>	
-					<br/>
-				<span class="text-error"><i class="fa fa-info-circle"></i> {GW::ln('/m/SELECT_MOD')}</span>
-					
-			
-		{else}
-
-			{if $item->qty > 1 && $m->feat('selectqty')}
-			<div class="col g-px-5 g-mb-10" style="text-align:right">
-				{GW::ln('/m/QUANTITY')}  <i class="btn fa fa-plus-circle" style="width:20px;padding:0" 
-				   onclick="if(($('#qty').val()-0) <  ($('#qty').attr('max')-0))$('#qty').val($('#qty').val()-0+1)"></i> 
-
-				<br><input name="item[qty]" id="qty" type="number" style="width:70px;" max="{$item->qty}" min="1" value="1">
-			</div>
-			{/if}
-
-			{if $item->qty ==0}
-				<div class="col g-px-5 g-mb-10 text-error" style="border:1px solid red;border-radius:5px" >
-					{GW::ln('/m/SOLDOUT')}
-				</div>
-			{else}
-
-				<div class="col g-px-5 g-mb-10">
-
-					<button class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-15 g-px-25">
-						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
-					</button>
-				</div>
-			{/if}
-				{if $m->feat('wishlist')}
-			<div class="col g-px-5 g-mb-10">
-				<button class="btn btn-block u-btn-outline-black g-brd-gray-dark-v5 g-brd-black--hover g-color-gray-dark-v4 g-color-white--hover g-font-size-12 text-uppercase g-py-15 g-px-25 gwUrlMod" type="button" 
-					data-args='{json_encode([act=>doAdd2WishList,id=>$item->id])}' data-ajax="1" data-refresh="1" data-loading="1" data-auth="1">
-					{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/WISHLIST',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-medical-022 u-line-icon-pro"></i>
-				</button>
-			</div>
-				{/if}
-			
-		{/if}
-	</div>
-	<!-- End Buttons -->
+	{call action_buttons}
 {*	
 	<ul class="nav d-flex justify-content-between g-font-size-12 text-uppercase" role="tablist" data-target="nav-1-1-default-hor-left">
                 <li class="nav-item g-brd-bottom g-brd-gray-dark-v4">

@@ -52,8 +52,20 @@
 		
 		
 <style>
+{*
+.wrapper {
+  display: flex;
+}
+.cellim {
+  flex: 0 0 200px;
+}
+.cellcont {
+  flex: 1;
+}	
+*}
 	
 
+	
 .wrapper {
   width: 100%;
   display: flex;
@@ -66,8 +78,8 @@
 
 .eventlist .col-md-6{ padding-left: 5px; padding-right: 5px; }
 
-.cellim { min-width: 170px; flex-grow: 1;margin-right:15px } 
-.cellcont { flex-grow: 4; } 
+.cellim {  flex: 0 0 200px;;margin-right:15px } 
+.cellcont { flex: 1; } 
 
 .:before {
   content:'';

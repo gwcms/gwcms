@@ -87,7 +87,7 @@
       <em class="u-nav-v8__description">{GW::ln('/m/SHOPPING_CART_EXPLAIN')}</em>
     </a>
   </li>
-  {if $m->order->deliverable}
+  {if $m->order->deliverable || $m->auser}
   <li class="nav-item">
 	  {if $step==2}{$active=1}{else}{$active=0}{/if}
     <a class="nav-link {if $step==2}active{/if} {if $m->order}gwUrlMod" href="#" data-args='{ "step":2 }'{else}"{/if}  >

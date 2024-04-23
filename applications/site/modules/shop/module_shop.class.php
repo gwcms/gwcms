@@ -525,16 +525,32 @@ class Module_Shop extends GW_Public_Module
 	
 	function doAdd2Cart()
 	{
-		$this->userRequired();
+		
 		$cartvals = $_REQUEST['item'];
 		
 		
 		
 		$item = Shop_Products::singleton()->find(['id=? AND active=1', $cartvals['id']]);
 		
+				
+		
+		if($this->feat('anonymous_cart') && !$this->app->user){
+			$auser = $this->app->initAnonymousUser();
+			$cart = $auser->getCart(true);
+			
+			
+		}else{
+			$auser = false;
+			$this->userRequired();
+			$cart = $this->app->user->getCart(true);
+			
+			
+		}
 		
 		
-		$cart = $this->app->user->getCart(true);
+		
+		
+		
 	
 				
 		$payprice = $item->calcPrice($cartvals['qty']);
@@ -592,7 +608,14 @@ class Module_Shop extends GW_Public_Module
 		
 		
 		if($this->feat('jump2cartafteradd')){
-			$this->app->jump('direct/orders/orders/cart');
+			$args=[];
+			if($auser)
+				$args['anonymous']=1;
+			
+			//if($auser)
+			//	$args['key']=$cart->secret;			
+			
+			$this->app->jump('direct/orders/orders/cart', $args);
 		}else{
 		
 			$this->setMessage([
