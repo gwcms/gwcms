@@ -25,10 +25,11 @@ class GW_Module_Extension
 			//public $options=[]; pirmas variantas bus
 			//public $options; bus antras - not set
 			
-			d::ldump("trying access non existing $name this part might have probs");
-			$x = $this->mod->$name;;
+			//d::ldump("trying access non existing $name this part might have probs");
+			//d::dumpas('test');
+			$x = $this->mod->$name ?? null;;
 			
-			d::ldump($this->mod->$name);
+			//d::ldump($this->mod->$name);
 			return $x;
 		}
 	}

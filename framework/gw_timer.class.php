@@ -37,4 +37,8 @@ class GW_Timer
 		$this->start();
 		return $this->result($precision);
 	}
+	
+	function __toString(): string {
+		return $this->stop();
+	}
 }

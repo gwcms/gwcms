@@ -124,10 +124,13 @@ class GW_Mail_Helper
 
 		$s->security_policy =  new class($s) extends Smarty_Security{
 			public function isTrustedPhpFunction($function_name, $compiler){ 
-				if(in_array($function_name, ['number_format'])) return true; 
+				
+				
+				if(in_array($function_name, ['number_format', 'str_replace'])) 
+					return true; 
 				
 				if(GW::$context->app->user && GW::$context->app->user->isRoot()){
-					if(in_array($function_name, ['var_dump','str_replace'])) return true; 
+					if(in_array($function_name, ['var_dump'])) return true; 
 				}
 				
 				
