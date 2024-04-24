@@ -135,12 +135,58 @@
       <!-- End Checkout Form -->
       
 <script>
-		function cartChanged()
+		function cartChanged(itemid)
 		{
+			//$('#item_qty_control_'+itemid).;
+			
 			$('#proceedCheckout').hide();
 			$('#updateCart').fadeIn();
 			$('.cart_total').hide();
 		}
+		
+		$('.jss-plus').click(function(){
+			var inp = $(this).parents('.js-quantity').find('.qty_input');
+			
+			inp.val( (inp.val()-0)+1 );
+			inp.change();
+			
+		})
+		$('.jss-minus').click(function(){
+			var inp = $(this).parents('.js-quantity').find('.qty_input');
+						
+			inp.val( (inp.val()-0)-1 );
+			inp.change();
+			
+		})
+		
+		$('.qty_input').change(function(){
+			
+			var max = $(this).data('max')-0;
+			var min = $(this).data('min')-0;
+			var val = this.value-0;
+			
+			
+			if(val > max){
+				this.value = max;
+			}
+			
+			if(val < min){
+				this.value = min;
+			}
+			
+			if(this.value==min){
+				$(this).parent().find('.jss-minus').addClass('text-muted');
+			}else{
+				$(this).parent().find('.jss-minus').removeClass('text-muted');
+			}
+			
+			if(this.value==max){
+				$(this).parent().find('.jss-plus').addClass('text-muted');
+			}else{
+				$(this).parent().find('.jss-plus').removeClass('text-muted');
+			}
+			
+		})
 		
 		$(function(){
 			$('#updateCart').click(function(){

@@ -91,22 +91,16 @@
 			 
 			 {if $item->qty_range && $range.0!=$range.1}
 				 
-				 
-
-				{if GW::s('PROJECT_NAME')=='manonatos.eu' || GW::s('PROJECT_NAME')=='natos.lt'}
-					 <input name="cart[{$item->id}][qty]" 
-						class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="text" value="{$item->qty}" 
-						readonly onchange="cartChanged()">	
-					<div class="input-group-addon d-flex align-items-center g-width-30 g-brd-gray-light-v2 g-bg-white g-font-size-12 rounded-0 g-px-5 g-py-6">
-					  <i class="js-plus g-color-gray g-color-primary--hover fa fa-angle-up" onclick="cartChanged()"></i>
-					  <i class="js-minus g-color-gray g-color-primary--hover fa fa-angle-down" onclick="cartChanged()"></i>
-					</div>				 
-				{else}
-				 <input id="cart_itm_{$item->id}" name="cart[{$item->id}][qty]" class="js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="number" value="{$item->qty}" 
-					onchange="if(this.value!=$(this).data('initial'))cartChanged()" onkeyup="$(this).change()" data-initial="{$item->qty}"
-					min='{$range.0}' max='{$range.1}' 
-					>
-				 {/if}
+				<input id="item_qty_{$item->id}" name="cart[{$item->id}][qty]" 
+					class="qty_input js-result form-control text-center g-font-size-13 rounded-0 g-pa-0" type="text" 
+					data-min="{$range.0}" data-max="{$range.1}"
+					value="{$item->qty}" 
+					onchange="cartChanged()">	
+				<div id="item_qty_control_{$item->id}" data-itemid="{$item->id}"  class="input-group-addon d-flex align-items-center g-width-30 g-brd-gray-light-v2 g-bg-white g-font-size-12 rounded-0 g-px-5 g-py-6">
+				  <i class="jss-plus g-color-gray g-color-primary--hover fa fa-angle-up" ></i>
+				  <i class="jss-minus g-color-gray g-color-primary--hover fa fa-angle-down"></i>
+				</div>
+				
 			 {else}
 				 {$item->qty}
 			 {/if}
