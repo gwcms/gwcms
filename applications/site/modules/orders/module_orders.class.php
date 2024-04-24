@@ -25,9 +25,9 @@ class Module_Orders extends GW_Public_Module
 		//$this->tpl_dir .= $this->module_name."/";
 
 		
-		
-		
 		$this->app->carry_params['anonymous'] = 1;
+		$this->app->carry_params['key'] = 1;
+		
 
 		
 		$this->tpl_vars['breadcrumbs_attach'][] =  [
@@ -119,11 +119,8 @@ class Module_Orders extends GW_Public_Module
 	function doOrderPay()
 	{
 		//$this->viewDefault();
-		
-		
-		
-		
 		$order = $this->getOrder(true);
+		
 		
 		if(!$order)
 			return false;
@@ -137,10 +134,15 @@ class Module_Orders extends GW_Public_Module
 		
 		if((count($pay_methods) > 1 || $this->feat('mergepaymethods'))  && !isset($_GET['type']) ){
 			
+			$args = ['id'=>$order->id,'orderid'=>$order->id];
+			
+			if(isset($_GET['key']))
+				$args['key'] = $_GET['key'];
+						
 			if($this->feat('mergepaymethods')){
-				$this->app->jump('direct/orders/orders',['id'=>$order->id,'orderid'=>$order->id,'payselect'=>1]);
+				$this->app->jump('direct/orders/orders/', $args+['payselect'=>1]);
 			}else{
-				$this->app->jump('direct/orders/orders/payselect',['id'=>$order->id,'orderid'=>$order->id]);
+				$this->app->jump('direct/orders/orders/payselect', $args);
 			}
 		}
 		
@@ -750,7 +752,8 @@ class Module_Orders extends GW_Public_Module
 		
 				
 		if($this->feat('anonymous_access') && !$this->app->user){
-			$cart = $this->auser->getCart(false);
+			if($this->auser)
+				$cart = $this->auser->getCart(false);
 		}else{
 			if(!$this->app->user)
 				return false;
@@ -1728,10 +1731,26 @@ class Module_Orders extends GW_Public_Module
 			$this->auser = $this->app->initAnonymousUser();
 			
 		}else{
-			parent::userRequired();
+			if($this->feat('anonymous_access') && ($_GET['key'] ?? false)){
+				//skip
+			}else{
+				parent::userRequired();
+			}
+			
 		}
-		$user_cond = $this->auser ? ['auser_id=?', $this->auser->id] : ['user_id=?', $this->app->user->id];
-		$this->user_cond = GW_DB::prepare_query($user_cond);		
+		
+		$user_cond = $this->auser ? ['auser_id=?', $this->auser->id] :  ($this->app->user ? ['user_id=?', $this->app->user->id] : '1=0');
+		
+		if($this->feat('anonymous_access') && ($_GET['key'] ?? false)){
+			$user_cond = $this->app->user || $this->auser ? $user_cond : "1=1";
+			$user_cond = "(".GW_DB::prepare_query($user_cond)." OR ".GW_DB::prepare_query(['secret=?', $_GET['key']]).")";
+		}
+		
+		
+		
+		$this->user_cond = GW_DB::prepare_query($user_cond);	
+		
+		//d::dumpas($this->user_cond);
 	}
 	
 	function buildUri($path, $args = []) {

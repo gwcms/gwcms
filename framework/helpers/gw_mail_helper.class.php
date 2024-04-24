@@ -126,7 +126,7 @@ class GW_Mail_Helper
 			public function isTrustedPhpFunction($function_name, $compiler){ 
 				
 				
-				if(in_array($function_name, ['number_format', 'str_replace'])) 
+				if(in_array($function_name, ['number_format', 'str_replace','count'])) 
 					return true; 
 				
 				if(GW::$context->app->user && GW::$context->app->user->isRoot()){

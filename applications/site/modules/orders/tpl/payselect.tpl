@@ -30,7 +30,7 @@
 		
 		<table class='paytbl'>
 		{foreach $mergepay.methods as $method}
-			{$link=$app->buildUri('direct/orders/orders', [id=>$order->id,act=>doOrderPay,type=>$method->gateway,method=>$method->key])}
+			{$link=$app->buildUri('direct/orders/orders', [id=>$order->id,act=>doOrderPay,type=>$method->gateway,method=>$method->key], ['carry_params'=>1])}
 			<tr >
 				<td style='padding-right:25px;text-align:right'>	
 					<a  type="button" href="{$link}">	   

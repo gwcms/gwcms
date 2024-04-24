@@ -68,7 +68,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			'exp'                              => time() + (60 * 10), 
 		];
 		
-		if($user->email)
+		if($user && $user->email)
 			$payment_data['checkout_email'] = $user->email;
 			
 		
@@ -83,7 +83,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 
 
 		
-		if($this->app->user && $this->app->user->isRoot() || $_SERVER['REMOTE_ADDR']=='90.131.42.149'){
+		if($this->app->user && $this->app->user->isRoot() || $_SERVER['REMOTE_ADDR']=='90.131.42.149' || $_SERVER['REMOTE_ADDR']=='88.223.24.240'){
 			
 			$payment_data = $this->rootConfirmJson($payment_data);
 			if(!$payment_data)

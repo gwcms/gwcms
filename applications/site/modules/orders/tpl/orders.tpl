@@ -270,9 +270,10 @@
 
 						{if $m->auser}
 							{$currentcartid=$m->auser->get('ext/cart_id')}
-						{else}
+						{elseif $app->user}
 							{$currentcartid = $app->user->get('ext/cart_id')}
 						{/if}
+						
 						{if $order->payment_status!=7 && $currentcartid != $order->id && $order->get('extra/bt_confirm_cnt') < 1}
 							<a href="{$m->buildUri(false, [act=>doOpenOrder,id=>$order->id])} " class="dropdown-item" title="{GW::ln('/m/VIEWS/doOpenOrder')}">
 								<i class="fa fa-shopping-cart"></i> {GW::ln('/m/VIEWS/doOpenOrder_short')}
