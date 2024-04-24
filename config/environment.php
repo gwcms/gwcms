@@ -34,7 +34,7 @@ function initEnviroment($environmentid)
 			
 
 			GW::s("APP_BACKGROUND_REQ_TYPE", 'localhost_base'); // can be force_http or localhost_base (past one requires valid SITE_LOCAL_URL)
-			GW::s("SITE_LOCAL_URL",'http://localhost/sms/');
+			GW::s("SITE_LOCAL_URL",'http://gwcms/');
 
 			GW::s("SITE_URL",'https://cms.gw.lt/');
 			
