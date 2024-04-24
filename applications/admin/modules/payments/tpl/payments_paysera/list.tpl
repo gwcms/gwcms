@@ -23,7 +23,7 @@
 	
 	{$do_toolbar_buttons[] = search}		
 	
-	{$dl_actions=[edit,delete]}
+	{$dl_actions=[edit,delete,ext_actions]}
 	
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[invertactive,dialogremove]}

@@ -87,10 +87,12 @@ class pay_paysera_module_ext extends GW_Module_Extension
 
 	function doPayseraAccept()
 	{
+		$this->log($_SERVER['REQUEST_URI']);
+		
 		ob_start();
 		
 		$cfg = $this->getPayseraCfg();	
-		$order = $this->getOrder();
+		$order = $this->getOrder(true);
 		
 		try {
 			$response = WebToPay::checkResponse($_GET, [
@@ -156,6 +158,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		$logvals = array_intersect_key($response, GW_Paysera_Log::singleton()->getColumns());	
 		$logvals['action'] = $_GET['action'];
 		$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
+		$log_entry->orderid = $_GET['orderid'];
 		$log_entry->insert();			
 		
 		$data = $response;
@@ -163,7 +166,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 
 
 		$p = explode('-',$data['orderid']);
-		$id = $p[1];
+		$id = $_GET['orderid'];
 		
 
 		if ($data['type'] !== 'macro') {
@@ -181,7 +184,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		if($action=='notify')
 		{	
 			$args = [
-			    'id'=>$id,
+			    'id'=>$order->id,
 			    'rcv_amount'=>$log_entry->amount / 100,
 			    'log_entry_id'=>$log_entry->id,
 			    'pay_type'=>'paysera'
@@ -229,5 +232,27 @@ class pay_paysera_module_ext extends GW_Module_Extension
 
 		$this->redirectAfterPaymentAccept($order);
 	}
+	
+	
+	
+	function doPayseraRetryProcess()
+	{
+		$log_entry = GW_Paysera_Log::singleton()->find($_GET['id']);
+		$order = GW_Order_Group::singleton()->find(['id=?', $log_entry->orderid]);	
+		
+		$args = [
+			    'id'=>$order->id,
+			    'rcv_amount'=>$log_entry->amount / 100,
+			    'pay_type'=>'paysera',
+			    'log_entry_id'=>$log_entry->id
+			];
+		
+		$markaspayd = $this->markAsPaydSystem($args);	
+			
+		//$log->processed = $log->processed+1;
+		//$log->updateChanged();
+		
+		d::dumpas(['packet'=>$log_entry, 'mark_as_payd'=>$markaspayd]);
+	}	
 	
 }

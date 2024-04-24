@@ -45,8 +45,8 @@ class Module_Orders extends GW_Public_Module
 	}	
 	
 	
-	
-	function getOrder()
+	//is payseros ateina nebepagauna
+	function getOrder($allowwithkey=false)
 	{
 		$id = $_GET['id'] ?? false;
 		
@@ -55,9 +55,8 @@ class Module_Orders extends GW_Public_Module
 		
 		$order= false;;
 		
-		$allowwithsecret=true;
 			
-		if($allowwithsecret && isset($_GET['key'])){
+		if($allowwithkey && isset($_GET['key'])){
 			$order = GW_Order_Group::singleton()->find(['id=? AND secret=?', $id, $_GET['key']]);
 		}elseif($this->app->user){
 			
@@ -744,7 +743,7 @@ class Module_Orders extends GW_Public_Module
 		exit;	
 	}
 	
-	function doInitCart()
+	function doInitCart($create=false)
 	{
 		if(GW::$globals['site_cart'] ?? FALSE)
 			return GW::$globals['site_cart'];
@@ -758,7 +757,7 @@ class Module_Orders extends GW_Public_Module
 			if(!$this->app->user)
 				return false;
 
-			$cart = $this->app->user->getCart(true);
+			$cart = $this->app->user->getCart($create);
 		}	
 		
 		
