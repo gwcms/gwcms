@@ -16,7 +16,7 @@ class GW_Anonymous_User extends GW_Data_Object
 	{
 		$cartid = $this->get('keyval/cart_id');
 		if($cartid)
-			$cart = GW_Order_Group::singleton()->find(['id=? AND payment_status!=7 AND open=1', $cartid]);
+			$cart = GW_Order_Group::singleton()->find(['id=? AND payment_status!=7 AND open=1 AND user_id=0', $cartid]);
 	
 		
 		

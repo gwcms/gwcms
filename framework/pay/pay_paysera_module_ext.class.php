@@ -30,16 +30,16 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		//if($user->id == 9)
 		//	$args->payprice= 0.01;		
 		
-		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->email=='paytest@gw.lt' || $args->order->city == 'paytest' || $user->city=="paytest" || $user->id==9;
+		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->email=='paytest@gw.lt' || $args->order->city == 'paytest' || ($user && ($user->city=="paytest" || $user->id==9));
 				
 		$data = array(
 		    'projectid' => $cfg->paysera_project_id,
 		    'sign_password' => $cfg->paysera_sign_password,
 		    'orderid' => $args->orderid.($test?'-TEST'.date('His'):"-".date('His')), //ausrinei kad veiktu "-".rand(0,9) 2021-01-12
 		    'paytext' => $args->paytext,
-		    'p_firstname' => $user->name,
-		    'p_lastname' => $user->surname,
-		    'p_email' => $user->email ? $user->email : $args->order->email,
+		    'p_firstname' => $user && $user->name,
+		    'p_lastname' => $user && $user->surname,
+		    'p_email' => $user && $user->email ? $user->email : $args->order->email,
 		    'amount' => $args->payprice * 100,
 		    'currency' => $cfg->default_currency_code,
 		    'country' => 'LT',
@@ -54,7 +54,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		}
 		
 		
-		if($this->app->user && $this->app->user->isRoot()){
+		if(($this->app->user && $this->app->user->isRoot()) || $args->order->email=='debug@gw.lt' ){
 						
 			$data = $this->rootConfirmJson($data);
 			if(!$data)

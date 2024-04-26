@@ -27,7 +27,6 @@ class Module_Orders extends GW_Public_Module
 		
 		$this->app->carry_params['anonymous'] = 1;
 		$this->app->carry_params['key'] = 1;
-		
 
 		
 		$this->tpl_vars['breadcrumbs_attach'][] =  [
@@ -65,7 +64,7 @@ class Module_Orders extends GW_Public_Module
 			}else{
 				$order = $this->app->user->getCart();
 			}
-		}elseif($this->feat('anonymous_access') && ($_GET['anonymous']??false) && !$this->app->user){
+		}elseif($this->feat('anonymous_access') && ($_GET['anonymous']??false || $_GET['key']??false) && !$this->app->user){
 			
 			if(!$this->auser)
 				$this->auser = $this->app->initAnonymousUser();
@@ -392,11 +391,12 @@ class Module_Orders extends GW_Public_Module
 	
 	function doCompletePay()
 	{
-		$order = $this->getOrder();
+		$order = $this->getOrder(true);
 		
 
 		
 		$jumpargs = ['orderid'=>$order->id,'id'=>$order->id];
+		
 		
 		if($order->payment_status==7){
 			$this->setMessage(GW::ln('/m/PAYMENT_COMPLETE'));
@@ -430,13 +430,16 @@ class Module_Orders extends GW_Public_Module
 	
 	function doCancelOrder()
 	{
+		$this->userRequired();
 		$order = $this->getOrder();
-				
 		
-		if($this->app->user->get('ext/cart_id') == $order->id){
+		if($this->auser && $this->auser->get('keyval/cart_id') == $order->id){
+			$this->auser->set('ext/cart_id', '');
+		}elseif($this->app->user && $this->app->user->get('ext/cart_id') == $order->id){
 			$this->app->user->set('ext/cart_id', '');
-			$order->open = 0;
 		}
+		
+		$order->open = 0;
 		
 		$order->fireEvent('BEFORE_CHANGES');
 		
@@ -576,8 +579,8 @@ class Module_Orders extends GW_Public_Module
 	{
 		$this->userRequired();
 		$cart = $this->getOrder();
-				
 		
+				
 		if(!$cart->open){
 			$this->setError(GW::ln('/m/CART_IS_CLOSED'));
 			return $this->app->jump();
@@ -750,18 +753,17 @@ class Module_Orders extends GW_Public_Module
 		
 		
 				
-		if($this->feat('anonymous_access') && !$this->app->user){
-			if($this->auser)
-				$cart = $this->auser->getCart(false);
-		}else{
-			if(!$this->app->user)
-				return false;
-
+		if($this->feat('anonymous_access') && !$this->app->user && $this->auser){
+			$cart = $this->auser->getCart($create);
+		}elseif($this->app->user){
 			$cart = $this->app->user->getCart($create);
+		}else{
+			$cart = false;
 		}	
 		
-		
-		
+		if(!$cart)
+			$cart = $this->getOrder();
+				
 		if(!$cart)
 			return new GW_Order_Group;
 		
@@ -838,6 +840,13 @@ class Module_Orders extends GW_Public_Module
 		$order->placed_time = date('Y-m-d H:i:s');
 		$order->need_invoice = $_POST['order']['need_invoice'] ? 1 : 0;
 		
+		
+
+		$this->app->carry_params['orderid']=1;
+		$this->app->carry_params['id']=1;
+		
+		
+		
 			
 		if($order->validate()){
 			$order->status = 2;
@@ -851,7 +860,7 @@ class Module_Orders extends GW_Public_Module
 				$this->setError($error);			
 			
 			$order->save();
-			$this->app->jump(false, ['step'=>2]);
+			$this->app->jump(false, ['step'=>2], ['carry_params'=>1]);
 		}		
 		
 		
@@ -863,7 +872,7 @@ class Module_Orders extends GW_Public_Module
 		
 
 		///d::dumpas($this);
-		$this->app->jump(false, ['step'=>3]);
+		$this->app->jump(false, ['step'=>3], ['carry_params'=>1]);
 	}	
 	
 	
@@ -873,7 +882,7 @@ class Module_Orders extends GW_Public_Module
 		$this->userRequired();
 		$order = $this->doInitCart();
 				
-		
+
 		if(!$this->expirityChecks($order))
 			$this->app->jump();//should return back
 	
@@ -1263,8 +1272,10 @@ class Module_Orders extends GW_Public_Module
 		if(isset($_POST['discountcode']) && $this->feat('discountcode'))
 			$this->applyDiscountCode($order);
 		
+		$this->app->carry_params['orderid']=1;
+		$this->app->carry_params['id']=1;
 		
-		$this->app->jump(false, ['step'=>$_POST['step']]);
+		$this->app->jump(false, ['step'=>$_POST['step']], ['carry_params'=>1]);
 	}
 
 
@@ -1500,6 +1511,9 @@ class Module_Orders extends GW_Public_Module
 		$this->setOrUpdateDedoSalivery();
 		
 		
+		$this->app->carry_params['orderid']=1;
+		$this->app->carry_params['id']=1;
+
 		if($this->order->validate()){
 			$this->order->status = 2;
 			
@@ -1512,7 +1526,7 @@ class Module_Orders extends GW_Public_Module
 				$this->setError($error);			
 			
 			$this->order->save();
-			$this->app->jump(false, ['step'=>2]);
+			$this->app->jump(false, ['step'=>2], ['carry_params'=>1]);
 		}		
 		
 		
@@ -1521,7 +1535,7 @@ class Module_Orders extends GW_Public_Module
 		
 
 		///d::dumpas($this);
-		$this->app->jump(false, ['step'=>3]);
+		$this->app->jump(false, ['step'=>3], ['carry_params'=>1]);
 	}
 
 
@@ -1726,7 +1740,7 @@ class Module_Orders extends GW_Public_Module
 	
 	function userRequired() {
 		
-		if($this->feat('anonymous_access') && ($_GET['anonymous']??false) && !$this->app->user){
+		if($this->feat('anonymous_access') && (($_GET['anonymous']??false) || ($_GET['key']??false)) && !$this->app->user){
 			$this->auser = $this->app->initAnonymousUser();
 			
 		}else{
@@ -1741,7 +1755,7 @@ class Module_Orders extends GW_Public_Module
 		$user_cond = $this->auser ? ['auser_id=?', $this->auser->id] :  ($this->app->user ? ['user_id=?', $this->app->user->id] : '1=0');
 		
 		if($this->feat('anonymous_access') && ($_GET['key'] ?? false)){
-			$user_cond = $this->app->user || $this->auser ? $user_cond : "1=1";
+			$user_cond = $this->app->user || $this->auser ? $user_cond : "1=0";
 			$user_cond = "(".GW_DB::prepare_query($user_cond)." OR ".GW_DB::prepare_query(['secret=?', $_GET['key']]).")";
 		}
 		

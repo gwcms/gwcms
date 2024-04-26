@@ -12,28 +12,39 @@
      <div class="col-md-8 g-mb-30">
        <!-- Shipping details -->
 
-       	
-<div  class="row" id="notLoggedInOptions" style="{if $select_newuser_or_existing}display:none{/if}">
-	<div class="col-md-6">	{$return=$app->buildUri('direct/orders/orders', [act=>doTransferToRealUser,id=>$order->id])}
-		<button class="btn btn-block u-btn-orange g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2" onclick="location.href='{$app->buildUri('direct/users/users/login',['RETURN_TO'=>$return])}'">{GW::ln('/m/I_HAVE_ACCOUNT')}</button>
-	</div>
-	<div class="col-md-6">
-		<button class="btn btn-block u-btn-indigo g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2" onclick="console.log('test');iamNewUser()">{GW::ln('/m/I_AM_NEW')}</button>
-	</div>
-</div>
+ <center>       
+	{$return=$app->buildUri('direct/orders/orders', [act=>doTransferToRealUser,id=>$order->id])}
+		<button class="btn u-btn-orange g-font-size-13 text-uppercase g-py-15 g-px-35 mb-4" type="button" 
+			data-next-step="#step2" onclick="location.href='{$app->buildUri('direct/users/users/login',['RETURN_TO'=>$return])}'">
+			{GW::ln('/m/I_HAVE_ACCOUNT')}</button>
+</center>    
+
+       
+<div class="d-flex justify-content-center text-center g-mb-30">
+                  <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>
+                  <span class="align-self-center g-color-gray-dark-v5 mx-4">ARBA</span>
+                  <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>
+                </div>
+			
 		
-  <div id="deliveryForm" style="{if !$select_newuser_or_existing}display:none{/if}">
+	
+		
+  <div id="deliveryForm" >
 
-      
-
+		<center>
+		<div class="col-md-6">	
+			{call input field="email" type=email required=1 note=GW::ln('/M/USERS/REGISTER_EMAIL_NOTE')}
+		</div>
+		</center>
 
 		<div class="row"  id="orderDetails">      
 						
 				
-			<div class="col-md-12">
-				{call input field="email" type=email required=1 note=GW::ln('/M/USERS/REGISTER_EMAIL_NOTE')}
+			<div class="col-md-6">
+				
 			</div>
 
+			{*
 			<div class="col-md-6">
 				{call input field="name" required=1}	
 			</div>
@@ -105,13 +116,17 @@
 			</div>	
 			*}
 			
+			
+			<br><br>
+			
+			
 			<input  class="btn btn-block u-btn-primary g-font-size-13 text-uppercase g-py-15 mb-4" type="submit" value="{GW::ln('/m/PROCEED2PAYMENT')}">
 		
 
 		</div>		
 		
 
-
+	
 
      
 			

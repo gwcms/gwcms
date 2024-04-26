@@ -538,16 +538,20 @@ class Module_Shop extends GW_Public_Module
 			$auser = $this->app->initAnonymousUser();
 			$cart = $auser->getCart(true);
 			
-			
+
 		}else{
 			$auser = false;
 			$this->userRequired();
 			$cart = $this->app->user->getCart(true);
-			
-			
 		}
 		
 		
+			//if($_SERVER['REMOTE_ADDR']=='84.15.236.87'){
+			//	d::dumpas($cart);
+			//}	
+		//$data = $this->rootConfirmJson($cart->toArray());
+		//if(!$data)
+		//	return false;
 		
 		
 		
@@ -609,8 +613,11 @@ class Module_Shop extends GW_Public_Module
 		
 		if($this->feat('jump2cartafteradd')){
 			$args=[];
-			if($auser)
-				$args['anonymous']=1;
+			if($auser){
+				$args['key']=$cart->secret;
+				$args['orderid']=$cart->id;
+				$args['id']=$cart->id;
+			}
 			
 			//if($auser)
 			//	$args['key']=$cart->secret;			

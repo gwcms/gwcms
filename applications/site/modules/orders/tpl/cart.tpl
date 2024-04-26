@@ -62,7 +62,7 @@
 	{$step=intval($step)}
      <!-- Checkout Form -->
       <div class="container g-pt-100 g-pb-70">
-        <form id="cartList" method="post"> 
+        <form id="cartList" method="post" action="{$smarty.server.REQUEST_URI}"> 
 		
           <div class="g-mb-100">
             <!-- Step Titles -->
