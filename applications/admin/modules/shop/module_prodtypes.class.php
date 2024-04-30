@@ -14,7 +14,7 @@ class Module_prodtypes extends Module_GenericClassificator
 		
 		$opts = [];
 		foreach($fields as $field)
-			if($field->type=='optional')
+			if($field->type=='optional' || ($field->type=='extended'))
 				$opts[$field->fieldname] = $field->title;	
 		
 			

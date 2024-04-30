@@ -75,7 +75,7 @@
 	 
 	<a href="{$ln}/direct/orders/orders?id={$cart->id}&ciid={$citem->id}&act=doCartItemRemove" class="u-basket__product-remove" >&times;</a>
 	
-	  <a href="{$ln}/direct/orders/orders?id={$citem->id}&act=doCartItemRemove" class="u-basket__product-remove" >&times;</a>
+	{*<a href="{$ln}/direct/orders/orders?id={$citem->id}&act=doCartItemRemove" class="u-basket__product-remove" >&times;</a>*}
 	{*<button type="button" class="u-basket__product-remove" onclick="window.location='{$ln}/direct/orders/orders/?id={$citem->id}&act=doCartItemRemove'; return false">&times;</button>*}
 	
       </div>

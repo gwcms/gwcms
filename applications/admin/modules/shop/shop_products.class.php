@@ -13,7 +13,7 @@ class Shop_Products extends GW_Composite_Data_Object
 	public $composite_map = [
 		'typeObj' => ['gw_composite_linked', ['object'=>'Shop_ProdTypes','relation_field'=>'type']],
 		'parent' => ['gw_composite_linked', ['object'=>'Shop_Products','relation_field'=>'parent_id']],
-		'image' => ['gw_image', ['dimensions_resize'=>'800x600', 'dimensions_min'=> '100x100']],
+		'image' => ['gw_image', ['dimensions_resize'=>'1600x1600', 'dimensions_min'=> '100x100']],
 	];	
 
 	

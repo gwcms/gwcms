@@ -17,7 +17,8 @@
 	
 	
 	
-	{$dl_actions=[invert_active,move,edit,delete]}
+	{$dl_actions=[invert_active,move,edit,ext_actions]} 
+	
 	{$dl_output_filters=[
 		insert_time=>short_time, 
 		update_time=>short_time]}

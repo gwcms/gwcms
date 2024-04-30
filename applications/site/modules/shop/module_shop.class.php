@@ -337,6 +337,8 @@ class Module_Shop extends GW_Public_Module
 		
 		
 		
+		$this->tpl_name = 'p_'.($this->config->product_tpl?:'default');
+		
 		
 	}
 	
@@ -655,7 +657,7 @@ class Module_Shop extends GW_Public_Module
 			return in_array($this->config->shop_orders_viewers_group, $this->app->user->group_ids);		
 	}
 	
-	function getOrders($item)
+	function getOrders($item, $subitems=false)
 	{
 		/*
 			'obj_type'=>'shop_products',
@@ -669,13 +671,32 @@ class Module_Shop extends GW_Public_Module
 			];			
 			$params['order']="payment_status DESC, pay_time DESC";
 		
+		$ids = [$item->id] ;
+		
+		if($subitems){
+			$ids = array_merge($ids, $subitems);
+		}
+		
 		$list = GW_Order_Item::singleton()->findAll(
-			['obj_type="shop_products" AND obj_id=? AND processed=0', $item->id], $params
+			'obj_type="shop_products" AND processed=0 AND aa.payment_status=7 AND pay_test=0 AND '.GW_DB::inCondition('obj_id', $ids), $params
 		);
 		
 
 		
 		return $list;
+	}
+	
+	function getAmountReceived($item, $subitems){
+		$ois = $this->getOrders($item, $subitems);
+		
+		
+		//d::dumpas($ois);
+		
+		$sum = 0;
+		foreach($ois as $oi)
+			$sum+=$oi->total;
+		
+		return $sum;
 	}
 	
 }

@@ -54,7 +54,7 @@
 
 {call e field=site_list_types type=multiselect_ajax options=[grid,list,table,listbigrow] options_fix=1 sorting=1 value_format=json1}
 {call e field=site_itemspp type=multiselect_ajax options=[12,24,32,64,100,200,300] options_fix=1  value_format=json1}
-
+{call e field=product_tpl type=select options=[default,cover] options_fix=1  value_format=json1}
 
 
 {call e field=shop_orders_viewers_group type=select_ajax modpath="users/groups" preload=1 options=[]}
