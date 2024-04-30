@@ -380,12 +380,17 @@ class GW_Mail_Helper
 		return $status;
 	}
 	
-	static function sendSms($opts)
+	static function sendSms(&$opts)
 	{
 		$path="datasources/sms";
 
 		self::processTpl($opts);
 		//d::dumpas($opts);
+		
+		//kad galetu pasiziuret teksta pries siunciant
+		if(isset($opts['dryrun'])){
+			return false;
+		}
 		
 		$req = ["number"=>$opts['to'], 'msg'=>$opts['body'], "act"=>'doInsertNew', "json"=>1,'packets'=>1];
 		if($opts['scheduled'] ?? false)

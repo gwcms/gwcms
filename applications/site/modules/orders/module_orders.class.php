@@ -45,7 +45,7 @@ class Module_Orders extends GW_Public_Module
 	
 	
 	//is payseros ateina nebepagauna
-	function getOrder($allowwithkey=false)
+	function getOrder($allowwithkey=false, $opts=[])
 	{
 		$id = $_GET['id'] ?? false;
 		
@@ -76,7 +76,7 @@ class Module_Orders extends GW_Public_Module
 			}			
 		}
 				
-		if(!$order){
+		if(!$order && !isset($opts['noerror'])){
 			//d::dumpas("/m/ORDER_NOT_AVAIL_OR_NO_ACCESS");
 			return $this->setError("/m/ORDER_NOT_AVAIL_OR_NO_ACCESS");
 		}
@@ -748,6 +748,7 @@ class Module_Orders extends GW_Public_Module
 	
 	function doInitCart($create=false)
 	{
+		
 		if(GW::$globals['site_cart'] ?? FALSE)
 			return GW::$globals['site_cart'];
 		
@@ -762,7 +763,7 @@ class Module_Orders extends GW_Public_Module
 		}	
 		
 		if(!$cart)
-			$cart = $this->getOrder();
+			$cart = $this->getOrder(false, ['noerror'=>1]);
 				
 		if(!$cart)
 			return new GW_Order_Group;
