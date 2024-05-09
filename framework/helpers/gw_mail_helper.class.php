@@ -401,10 +401,9 @@ class GW_Mail_Helper
 		
 
 		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
-		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;					
+		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
 
-
-		$respo = GW::$context->app->innerRequest("datasources/sms", $req);		
+		$respo = GW::$context->app->innerRequest("datasources/sms", $req,[],['app'=>'admin']);		
 		//d::dumpas($respo);
 		return $respo;
 	}	

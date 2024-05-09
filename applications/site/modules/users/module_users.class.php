@@ -57,6 +57,7 @@ class Module_Users extends GW_Public_Module
 	{
 		$fields = $this->getFieldsConfig();
 		
+			
 		foreach($fields['required'] as $field => $x)
 		{
 			
@@ -74,8 +75,7 @@ class Module_Users extends GW_Public_Module
 	
 	function doCheckProfileMissingInfo()
 	{
-		//return false;
-		
+				
 		//prisijunges administruojantis vartotojas
 		if(isset($_SESSION['site_auth']['admin_user_id']))
 			return false;
@@ -111,7 +111,100 @@ class Module_Users extends GW_Public_Module
 		    'username'=>isset($_COOKIE['login_0']) ? $_COOKIE['login_0'] : false,
 		    'auto'=>isset($_GET['auto']) ? $_GET['auto'] : false,
 		];
+		
+
+		if($tmp = $this->cfg->site_logintpl){
+			$this->tpl_name = 'login_'.$this->cfg->site_logintpl;
+		}
 	}
+	
+	function doSendSMScode()
+	{
+		
+		//$temmplateid = $this->config->doSendMailPayReminder_tpl;
+		$templateid = 1;
+			
+		$tpl = GW_SMS_Templates::singleton()->find($templateid);
+		
+		
+		GW_Temp_Data::singleton()->cleanup();
+		$LAST_REQUEST = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR']);
+			
+			
+		if($LAST_REQUEST){
+			$this->setError('Bit more to wait before resend');
+			return false;
+		}
+		
+		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'],  '1', '1 minute');
+	
+		$phonenumber = $_POST['phone'];
+		$code = GW_String_Helper::getRandString(6, '0123456789');
+		
+		
+		
+		
+		
+		$this->app->sess('usercode', $code);
+		$this->app->sess('userphone', $phonenumber);
+		
+		$opts=[];
+		$opts['tpl'] = $tpl;
+		$opts['to'] = $phonenumber;
+		$opts['ln'] = $this->app->ln;
+
+
+		$opts['vars']=['CODE'=>$code];
+
+		//d::dumpas($contractlink);
+			
+			
+			
+		$resp = GW_Mail_Helper::sendSMS($opts);	
+		if($resp['result']['text']=='Sms message created'){
+			$this->setMessage(GW::ln('/m/SMS_CODE_SENT'));
+		}
+		
+		
+		
+		
+		$this->app->jump('direct/users/users/verifyphone?phone='.$phonenumber);
+	}
+	
+	function viewVerifyPhone()
+	{
+		
+		
+	}
+	
+	function doVerifyCode()
+	{
+		
+		
+		if($_POST['code'] == $this->app->sess('usercode')){
+			
+			$phone = $this->app->sess('userphone');
+			
+			if( $user = GW_Customer::singleton()->find(['username=?', $phone]) ){ 
+					
+				//do nothing
+			}else{
+				$user = new GW_Customer;
+				$user->phone = $phone;
+				$user->username = $phone;
+				$user->active = 1;
+				$user->insert();
+			}
+			
+			$this->app->auth->login($user);
+			
+			$this->doAfterLogin();
+			$this->testIfJumpRequest();
+		}else{
+			$this->setError("Wrong code");
+		}
+	}
+	
 	
 	function initCountryOpt()
 	{

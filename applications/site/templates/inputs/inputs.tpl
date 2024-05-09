@@ -49,7 +49,13 @@
 		{$required=1}
 	{/if}
 		      
-	
+	{if $options_fix}
+		{$tmp=[]}
+		{foreach $options as $opt}
+			{$tmp[$opt]=$opt}
+		{/foreach}
+		{$options=$tmp}
+	{/if}	
 	
 	
 					

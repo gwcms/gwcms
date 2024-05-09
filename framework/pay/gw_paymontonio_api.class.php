@@ -86,6 +86,16 @@ class GW_PayMontonio_Api
 	}
 	
 	
+	function getPaymentDetails($ref)
+	{
+		$resp = $this->request('https://api.payments.montonio.com/pis/v2/merchants/payments?merchant_reference='.$ref);
+		$resp = json_decode($resp, true);
+		$decoded = $this->decodeToken($resp['payment_token']);
+
+		return $decoded;
+
+	}	
+	
 /*
  * payment data example
  * 

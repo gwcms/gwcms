@@ -7,3 +7,4 @@
 {call e field=access_key_sandbox}
 {call e field=secret_key_sandbox}
 
+{call e field=version default=1}

@@ -25,6 +25,7 @@ class GW_BarCode128_Tool
 		
 		set_include_path(GW::s('DIR/PEAR'));
 		require_once GW::s('DIR/PEAR').'Image/Barcode.php';
-		Image_Barcode::draw($_REQUEST['code'], 'code128', 'png');
+		$imbc = new Image_Barcode;
+		$imbc->draw($_REQUEST['code'], 'code128', 'png');
 	}
 }

@@ -403,6 +403,8 @@ class Module_Orders extends GW_Public_Module
 			
 			if($tmp=$this->app->sess('after_order_'.$order->id)){
 				Navigator::jump($tmp['after_pay']);
+				
+				$this->app->sess('after_order_'.$order->id, false);
 			}
 		}else{
 			$jumpargs['paywait'] = 1;

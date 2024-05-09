@@ -82,7 +82,9 @@ GW::s('OFFICE_IP_ADDR', '84.15.236.87');
 
 if(isset($_SERVER['REMOTE_ADDR'])){
 	
-	if($_SERVER['REMOTE_ADDR']==GW::s('OFFICE_IP_ADDR')){
+	
+	
+	if($_SERVER['REMOTE_ADDR']==GW::s('OFFICE_IP_ADDR') || $_SERVER['REMOTE_ADDR']=='127.0.0.1'){
 		GW::s('DEVELOPER_PRESENT',1);
 	}	
 }

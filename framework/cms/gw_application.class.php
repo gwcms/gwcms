@@ -868,7 +868,7 @@ class GW_Application
 		if(!$res){
 			$res=['response_format_error'=>1,'raw_response'=>$raw];
 			
-			if($this->user->isRoot()){
+			if( ($this->user && $this->user->isRoot()) || GW::s('DEVELOPER_PRESENT') ){
 				$this->setError("<pre>Error inner request \n". json_encode(
 					[
 						'endpoint'=>$path,

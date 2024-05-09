@@ -11,6 +11,11 @@ class gw_paymontonio_log extends gw_payuniversal_log
 		switch($name){
 			case 'title':
 				$pay_inf = $this->data_array;
+				
+				//api v2
+				if(isset($pay_inf['uuid']))
+					return  $pay_inf['paymentProviderName'].' | '.$pay_inf['payment_status'].' | '.$pay_inf['grandTotal'].' | '.$pay_inf['senderIban'];
+				
 				return  $pay_inf['payment_method_name'].' | '.$pay_inf['status'].' | '.$pay_inf['amount'].' | '.$pay_inf['customer_iban'];
 				
 			break;
