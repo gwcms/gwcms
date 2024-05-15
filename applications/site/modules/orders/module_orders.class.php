@@ -626,7 +626,7 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		
-
+				
 		
 		
 		$list = GW_Order_Group::singleton()->findAll([$this->user_cond.' AND active=?',$active],['order'=>'update_time DESC']);
