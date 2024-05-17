@@ -136,8 +136,8 @@ class GW_Module
 		if(isset($_GET['nopview']))
 			return false;
 		
-		//if(isset($this->list_params['pview']) && $this->list_params['pview'])
-		//	$this->list_config['pview'] = GW_Adm_Page_View::singleton()->createNewObject($this->list_params['pview'], true);
+		if(isset($this->list_params['pview']) && $this->list_params['pview'])
+			$this->list_config['pview'] = GW_Adm_Page_View::singleton()->createNewObject($this->list_params['pview'], true);
 	}
 	
 	function doSetListParams()
