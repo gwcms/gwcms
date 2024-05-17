@@ -40,10 +40,14 @@ class Module_Sms extends GW_Common_Module
 		$api_key = $this->config->api_key;
 		$host = $this->config->host;
 		
+		if($this->config->route)
+			$addarg.="&route_id={$this->config->route}";
+			
+			
 		$context = stream_context_create(array('http' => array('ignore_errors' => true)));
 		$resp = file_Get_contents($url = "http://{$host}/service/mis/public/sendsms?uid={$uid}&api_key={$api_key}&to=$to&msg=".urlencode($msg).$addarg, false, $context);
 		
-		//d::dumpas([$http_response_header, $url, $resp]);
+//		/d::dumpas([$http_response_header, $url, $resp]);
 		
 		$resp = json_decode($resp,true);
 		

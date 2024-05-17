@@ -234,7 +234,8 @@ class Module_Orders extends GW_Public_Module
 	
 	function markAsPaydSystem($args)
 	{
-		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		$url=Navigator::backgroundRequest($urlreq='admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		return $urlreq;
 	}
 	
 	function doOrderPayRoot()
@@ -626,7 +627,7 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		
-				
+
 		
 		
 		$list = GW_Order_Group::singleton()->findAll([$this->user_cond.' AND active=?',$active],['order'=>'update_time DESC']);

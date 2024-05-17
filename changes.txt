@@ -58,7 +58,6 @@ compatability with php82
 	chmod -R a+rwX vendor/dompdf/dompdf/lib/fonts/ pasirodo nori buti writable direktorija
 
 
-4.2
+4.11
 	montonio v2
 	php7.4 /var/www/gw/composer.phar require firebase/php-jwt
-	anoninminiai kr

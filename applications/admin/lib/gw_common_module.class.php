@@ -82,16 +82,19 @@ class GW_Common_Module extends GW_Module
 		
 		$this->app->carry_params['searchreplace']=1;
 		$this->app->carry_params['filterhide']=1;
+		$this->app->carry_params['clean']=1;
+		$this->app->carry_params['nopview'] = 1;		
 		
 		$this->initModCfg();
-		$this->app->carry_params['clean']=1;
+		
 		$this->initErrorHandler();
 		
 		
 		if($this->allowed_ids = GW_Permissions::getTempReadAccess(implode('/',$this->module_path)) ){
 			$this->filters['id'] = $this->allowed_ids;
 		}
-				
+			
+		
 	}
 
 	function initModCfgEx($modp)
@@ -1150,6 +1153,10 @@ class GW_Common_Module extends GW_Module
 
 	function setPageView($pview)
 	{
+				
+		if(isset($_GET['nopview']))
+			return false;
+		
 		$this->list_params['pview'] = $pview->id;
 		$this->list_config['pview'] = $pview;
 		//jump to first page
@@ -3113,7 +3120,10 @@ class GW_Common_Module extends GW_Module
 			$inf['before'] = $item->get($field);
 			$inf['after'] = $answers['value'];
 			$changeinf[] = $inf;
-		
+			
+			
+			$item->fireEvent('BEFORE_CHANGES');
+			
 			$item->set($field, $answers['value']);
 			
 			if(isset($_GET['confirm'])){
