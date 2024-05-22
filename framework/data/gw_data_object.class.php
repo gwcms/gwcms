@@ -113,6 +113,10 @@ class GW_Data_Object
 	 */
 	function set($key, $val)
 	{
+		
+		if($this->loaded && $this->changetrack_max ?? false)
+			$this->fireEvent('BEFORE_CHANGES');
+		
 		if(strpos($key, '/')!==false)
 		{			
 			$keys=explode('/', $key);
@@ -676,7 +680,7 @@ class GW_Data_Object
 
 
 		$this->fireEvent(['BEFORE_UPDATE', 'BEFORE_SAVE'], $context);
-		
+				
 		if(isset($params['onlychanged']))
 		{
 			$field_names = array_keys($this->changed_fields);

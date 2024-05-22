@@ -96,6 +96,9 @@ class GW_Extension_ChangeTrack
 		
 	function trackChangesStart()
 	{
+		if($this->track_started)
+			return false;
+		
 		$this->parent->copyOriginal();
 		$this->additional_changes = [];
 		$this->track_started = true;
@@ -132,6 +135,7 @@ class GW_Extension_ChangeTrack
 			return false;
 			
 		$changes = $this->getChanges();
+		
 				
 		if($changes){
 			$new=[];
@@ -169,6 +173,7 @@ class GW_Extension_ChangeTrack
 		}
 		
 		//resetchanges
+		$this->track_started = false;
 		$this->trackChangesStart();
 	}
 	

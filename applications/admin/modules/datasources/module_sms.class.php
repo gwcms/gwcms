@@ -115,9 +115,7 @@ class Module_Sms extends GW_Common_Module
 		//status - 6  fail
 		//status - 0 in queue
 		$curtime = date('Y-m-d H:i:s');
-		$list = GW_Outg_SMS::singleton()->findAll(['(send_time IS NULL OR send_time < ?) AND retry < 2 AND (status=6 OR status=0) AND insert_time + INTERVAL 3 DAY > NOW()', $curtime]);
-		//$picksql = GW::db()->last_query;
-		
+		$list = GW_Outg_SMS::singleton()->findAll(['send_time < ? AND retry < 2 AND (status=6 OR status=0) AND insert_time + INTERVAL 3 DAY > NOW()', $curtime]);
 		$found = count($list);
 		$succ = 0;
 		
@@ -130,10 +128,6 @@ class Module_Sms extends GW_Common_Module
 		}
 		
 		$this->setMessage($stat = "Found $found, resend success: $succ");
-		
-		
-		//if($this->app->user->isRoot())
-		//	d::ldump($picksql);
 		
 		$this->config->last_retry_status = $stat.', '.date('Y-m-d H:i:s');
 	}

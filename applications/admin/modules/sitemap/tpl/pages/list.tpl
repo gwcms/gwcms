@@ -65,8 +65,16 @@
 			{/foreach}		
 	{/function}
 	
+	{function dl_cell_site_id}
+		{if isset($options.site_id[$item->site_id])}
+			{$options.site_id[$item->site_id]}
+		{else}
+			{$item->site_id}
+		{/if}
+	{/function}
+	
 
-	{$dl_smart_fields=[title,in_menu,ico,icon]}
+	{$dl_smart_fields=[title,in_menu,ico,icon,site_id]}
 	
 	
 	

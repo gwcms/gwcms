@@ -18,7 +18,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		if(isset($_GET['site_id']))
 		{
 			$this->filters['site_id']=$_GET['site_id'];
-		}elseif(GW::s('MULTISITE')){
+		}elseif(GW::s('MULTISITE') && !($this->list_params['search'] ?? false)){
+			
+			
 			$this->filters['site_id'] = $this->app->site->id;
 		}
 		
@@ -553,6 +555,8 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$cfg['fields']['title'] = 'Lof';
 		$cfg['fields']['in_menu'] = 'Lof';
 		
+
+		
 		if(!GW::s('MULTISITE')){
 			unset($cfg['fields']['multisite']);
 			unset($cfg['fields']['site_id']);
@@ -580,6 +584,9 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		if(($this->list_params['search'] ?? false) || ($this->list_params['filters'] ?? false) && !in_array('path', $this->list_config['dl_fields'])){
 			$this->list_config['dl_fields'][]='path';
 		}
+		
+		if(($this->list_params['search'] ?? false))
+			$this->list_config['dl_fields'][]='site_id';
 	}
 	
 	

@@ -42,6 +42,7 @@ class Module_Answers_Itax extends GW_Module_Extension
 			'discount_amount'=>['type'=>'number'],
 			'journal_balanceable_id' => $iSel+['source_args' => ['group'=>'supliers']], //is vartotojo $item->set('ext/itax_suplier_id')
 			'tax_amount' => ['type'=>'number','hidden_note'=>'perduodama i general_journal'], //i
+			'reverse_vat'=>['type'=>'bool', 'required'=>1],
 			'confirm'=>['type'=>'bool', 'required'=>1],
 			'save2defaults'=>['type'=>'bool', 'required'=>1],
 		
