@@ -43,7 +43,6 @@ class GW_PayMontonio_Api
 	
 	function __construct($cfg) 
 	{
-		
 		$this->access_key = $cfg->access_key;
 		$this->secret_key = $cfg->secret_key;
 		$this->sandbox = $cfg->sandbox;
@@ -53,15 +52,11 @@ class GW_PayMontonio_Api
 			$this->secret_key = $cfg->secret_key_sandbox;			
 		}
 		
-		
 		$this->getAccess();
 	}
 	
 	function request($url)
 	{
-
-    
-
 		$opts = [
 		    'http'=>[
 			'method'=>"GET",
@@ -73,7 +68,6 @@ class GW_PayMontonio_Api
 
 		// Open the file using the HTTP headers set above
 		return file_get_contents($url, false, $context);
-
 	}
 	
 	
