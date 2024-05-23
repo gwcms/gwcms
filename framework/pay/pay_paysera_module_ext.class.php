@@ -8,15 +8,41 @@ class pay_paysera_module_ext extends GW_Module_Extension
 	function getPayseraCfg()
 	{
 		$cfg = new GW_Config("payments__payments_paysera/");	
-		$cfg->preload('');
-		return $cfg;
+		$rows = $cfg->preload('');
+		
+		GW_Array_Helper::restruct2MultilevelArray($rows);
+
+		return (object)$rows['payments__payments_paysera'];
 	}
+	
+	
+	function checkSellerCfg($order, &$cfg)
+	{
+		
+
+		
+		if($order->seller_id){
+			
+			list($project_id, $secret_key) = explode('|',$order->seller->get('keyval/paysera_config'));
+			$cfg->paysera_project_id = $project_id;
+			$cfg->paysera_sign_password = $secret_key;
+			
+			//d::dumpas($cfg);
+		}
+				
+	}	
 	
 	function doPayseraPay($args) 
 	{
 		//$this->userRequired();
 
 		$cfg = $this->getPayseraCfg();
+		
+		//d::ldump($args->order->toArray());
+		
+		$this->checkSellerCfg($args->order, $cfg);
+		
+		
 		
 		if(isset($args->user)){
 			$user = $args->user;
@@ -47,6 +73,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$args->order->id}&id={$args->order->id}&key={$args->order->secret}",
 		    'callbackurl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=notify&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
 		    'test' => $test,
+		    'seller_id'=>$args->order->seller_id
 		);
 		    
 		if($args->method ?? false){
@@ -93,6 +120,11 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 		$cfg = $this->getPayseraCfg();	
 		$order = $this->getOrder(true);
+		$this->checkSellerCfg($order, $cfg);
+		
+		
+		$this->log(['seller_id'=>$order->seller_id, 'loadconfig_for_project'=>$cfg->paysera_project_id]);
+		
 		
 		try {
 			$response = WebToPay::checkResponse($_GET, [

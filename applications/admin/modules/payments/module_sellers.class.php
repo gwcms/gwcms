@@ -1,9 +1,8 @@
-
 <?php
 
 
 
-class Module_Sellers extends Module_Events_Common
+class Module_Sellers extends GW_Common_Module
 {	
 
 	use Module_Import_Export_Trait;
@@ -46,6 +45,7 @@ class Module_Sellers extends Module_Events_Common
 		$cfg['fields']['insert_time'] = "lof";
 		$cfg['fields']['update_time'] = "lof";
 		$cfg['fields']['keyval/montonio_config'] = "L";	
+		$cfg['fields']['keyval/paysera_config'] = "L";	
 		
 		//nerodys formoje
 		$cfg['fields']['points_sngl'] = "lof";
@@ -75,6 +75,7 @@ class Module_Sellers extends Module_Events_Common
 		$cfg['inputs']['user_id']=['type'=>'select_ajax', 'modpath'=>"users/usr", 'empty_option'=>1, 'options'=>[], 'preload'=>1];	
 		
 		$cfg['inputs']['keyval/montonio_config']=['type'=>'splittext', 'splitchar'=>'|', 'parts'=>2, 'width'=>'49%','hidden_note'=>'1st - access_key, 2nd - secret key'];	
+		$cfg['inputs']['keyval/paysera_config']=['type'=>'splittext', 'splitchar'=>'|', 'parts'=>2, 'width'=>'49%','hidden_note'=>'1st - access_key, 2nd - secret key'];	
 		
 		
 
@@ -88,7 +89,7 @@ class Module_Sellers extends Module_Events_Common
 	function getOptionsCfg()
 	{
 		return [
-		    'title_func'=>[TS_Organisers::singleton(),'titleInOptions'],
+		    //'title_func'=>[TS_Organisers::singleton(),'titleInOptions'],
 		    'search_fields'=>['title','short']
 		];
 	}	

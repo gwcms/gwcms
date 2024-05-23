@@ -43,6 +43,7 @@ class GW_PayMontonio_Api
 	
 	function __construct($cfg) 
 	{
+		
 		$this->access_key = $cfg->access_key;
 		$this->secret_key = $cfg->secret_key;
 		$this->sandbox = $cfg->sandbox;
