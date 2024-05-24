@@ -513,7 +513,7 @@ class GW_Application
 		}else{
 			$this->ln = in_array($ln, $langs) || in_array($ln, GW::s('i18nExt')) ? $ln : $langs[0];
 		}	
-
+		
 		$_SESSION['GW']['cms_ln'] = $this->ln;
 
 

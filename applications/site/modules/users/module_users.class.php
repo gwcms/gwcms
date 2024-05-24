@@ -31,7 +31,9 @@ class Module_Users extends GW_Public_Module
 		
 			unset($_GET['url']);
 			unset($_GET['RETURN_TO']);
-			$this->app->jump($this->app->path, $_GET);
+			
+			if(!$_POST)
+				$this->app->jump($this->app->path, $_GET);
 		}
 	
 		
