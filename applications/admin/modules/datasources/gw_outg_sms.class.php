@@ -1,5 +1,4 @@
 <?php
-
 class GW_Outg_SMS extends GW_Data_Object
 {
 
@@ -8,3 +7,4 @@ class GW_Outg_SMS extends GW_Data_Object
 
 
 }
+

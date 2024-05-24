@@ -129,50 +129,9 @@
 	</div>
 	<!-- End Product Info -->
 
-{if $item->gettt('keyval/crowdfunding_deadline')}
-	{*<li class="">*}
-	{if $item->parent_id}
-		{$parent=$item->get(parent)}
-	{else}
-		{$parent=$item}
-	{/if}
-	{$amount = $m->getAmountReceived($item, array_keys($modifications))}
+
 	
-	{$goal=$item->gettt('keyval/crowdfunding_goal')}
-	{if $goal}
-		{$progress=$amount/$goal*100}
-	{/if}
-{$future = strtotime($item->gettt('keyval/crowdfunding_deadline'))}
-{$timeleft = $future-time()}
-{$daysleft = round((($timeleft/24)/60)/60)}
-<!-- Progress Bar -->
 
-               <div class="clearfix text-uppercase g-color-danger g-font-size-11">
-
-                  Surinkta: <span class="g-font-weight-600 g-color-primary">{$amount} Eur</span>
-                </div>
-
-                <div class="js-hr-progress-bar progress g-height-20 rounded-0 g-overflow-visible g-bg-gray-dark-v2 g-px-6 g-mt-5 g-mb-10">
-                  <div class="js-hr-progress-bar-indicator progress-bar g-pos-rel g-relative-centered--y g-height-6 g-bg-primary" 
-		       role="progressbar" style="width: {$progress}%;" aria-valuenow="8789576" aria-valuemin="0" aria-valuemax="15500000">
-                    <div class="text-center u-progress__pointer-v2 g-font-size-10 g-color-gray-dark-v1 g-bg-primary g-mb-20">$8 789 576</div>
-                  </div>
-                </div>
-                <!-- End Progress Bar -->
-
-                <div class="clearfix text-uppercase g-color-danger g-font-size-11">
-			{*
-                  <em class="float-right g-font-style-normal g-font-weight-600">Tikslas:
-                    <span class="g-color-primary">Stovykla+kelionės blietai arba akreditacijos</span></em>
-		    *}
-                  Liko laiko: <span class="g-font-weight-600 g-color-primary">{$daysleft}</span> Dienos
-                </div>
-		<br>
-	{*</li>*}
-{/if}	
-	
-	<div class='row'>
-		<div class='col-md-6'>
 	<div class="g-mb-30">
 		<!-- List -->
 		<ul class="list-unstyled g-color-text">
@@ -222,21 +181,10 @@
 					
 				</li>
 			{/if}
-			</ul>
-			</div>
-				</div>	
-	</div>
-				
-	<div class="g-mb-30">
-		<!-- List -->
-		<ul class="list-unstyled g-color-text">				
 			
 			{if $m->feat('add2cart_top')}
 				{call action_buttons}
 			{/if}
-			
-		
-			
 			
 
 			{foreach $m->mod_fields as $field}
@@ -250,8 +198,7 @@
 		</ul>
 			
 		<!-- End List -->
-
-	</div>		
+	</div>	   
 			
 	<!-- Price -->
 	<div class="g-mb-30">
@@ -429,10 +376,6 @@
         <!-- End Products -->
 </div>
 <!-- End Products -->
-
-
-
-
 
 
 {if $m->canSeeOrders()}

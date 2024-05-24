@@ -21,6 +21,8 @@ class GW_Service_Application extends GW_Application
 		$dir =& GW::s('DIR');
 		$dir['AUTOLOAD'][] = __DIR__;
 		
+		//include __DIR__.'/config/main.php';
+		
 		$this->handler = new $class_name(Array('path_arr'=>$this->path_arr));
 		$this->handler->app = $this;
 		$this->handler->name = $service_name;
