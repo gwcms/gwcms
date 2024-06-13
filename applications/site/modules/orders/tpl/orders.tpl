@@ -14,6 +14,7 @@
 
 
 {function orderactions}
+	
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
 		
 		{if count($pay_methods) > 1 || $m->feat('mergepaymethods')}
@@ -59,7 +60,7 @@
 
 
 	{if $order->downloadable && ($order->payment_status==7 || $order->amount_total==0)}
-		<a class="gwUrlMod btn u-btn-primary btn-md rounded-0" href="#!" data-args='{ "act":"doDownload", "id":"{$order->id}" }'><i class="fa fa-download"></i> {GW::ln('/m/DOWNLOAD')}</a>
+		<a class="gwUrlMod btn u-btn-primary btn-md rounded-0" href="#!" data-args='{ "act":"doDownload", "id":"{$order->id}", "key": "{$order->secret}" }'><i class="fa fa-download"></i> {GW::ln('/m/DOWNLOAD')}</a>
 	{/if}
 	
 
@@ -320,7 +321,7 @@
 				{$citems=$order->items}
 				
 				
-				{if !$smarty.get.paywait}
+				{if !$smarty.get.paywait || !$smarty.get.id}
 					{$buttons = !$smarty.get.payselect && ($order->payment_status!=7 || $order->downloadable)}
 				{/if}
 				
