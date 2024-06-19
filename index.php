@@ -19,7 +19,7 @@ if(isset($GLOBALS['netbeansinitrequest']))
 	GW_Debug_Helper::openInNetBeans();
 	
 	
-if(GW::s('BOT_SEND_TO_MIRROR'))
+if(GW::s('BOT_SEND_TO_MIRROR_STATS'))
 	GW_Bot_Detect::stats();
 /*
 echo "<!--err:".error_reporting()."-->";
