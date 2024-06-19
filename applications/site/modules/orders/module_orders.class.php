@@ -1888,7 +1888,24 @@ class Module_Orders extends GW_Public_Module
 		if(count($statuses)==1){
 			$order->fireEvent('BEFORE_CHANGES');
 			$order->status = $item->status;
-			$item->updateChanged();
+			
+			if($order->changed_fields['status'] ?? false){
+		
+				if($this->config->statuschange_email_tpl){
+					$lang = $order->user->use_lang ?: $order->use_lang;
+					$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderStatusChangeNotifyUser&cron=1");	
+
+					if($this->app->user->isRoot()){
+						$this->setMessage("Bg call for mail notification: $url");
+					}
+				}else{
+					if($this->app->user->isRoot())
+						$this->setMessageEx(['text'=>'No notification email', 'type'=>GW_MSG_WARN]);
+				}								
+				
+				
+			}
+			$order->updateChanged();
 		}
 		
 		

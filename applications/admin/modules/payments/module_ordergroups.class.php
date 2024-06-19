@@ -223,6 +223,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['EMAIL'] = isset($payconfirm->p_email) ? $payconfirm->p_email : $item->email;
 		$v['ITEMS'] = [];
 		$v['ORDERID'] = $item->id;
+		$v['ORDER_STATUS'] = $item->status;
 		$v['SECRET'] = $item->secret;
 		$v['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
 		$v['PAY_LINK'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['act'=>'doOrderPay','id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
@@ -541,35 +542,11 @@ class Module_OrderGroups extends GW_Common_Module
 	}
 	
 	
-	function doOrderPaydNotifyUser()
-	{		
-		$template_id = $this->config->confirm_email_tpl;
-		
-		
-		$order = $this->getDataObjectById();
-		
-		
+	
+	function doOrderNotifyCustomer($order, $template_id)
+	{
 		
 		list($invtpl, $vars) = $this->initInvoiceVars($order,['ORDER_DETAILS_HTML'=>1]);
-		
-		if(isset($_GET['confirm']))
-			unset($_GET['preview']);		
-		
-		if(!isset($_GET['preview'])){
-		
-			//2kartus kad nesiusti laisko
-			if($order->mail_accept && !isset($_GET['confirm']) ){	
-
-				$this->setError("Already sent");
-				$this->jump();
-
-			}else{
-
-				$order->set('mail_accept',1);
-				$order->updateChanged();
-			}
-		}
-		
 		//$response = [];
 		
 		//$orderlink = 'https://natos.lt/lt/direct/products/orders/list?id='.$order->id;
@@ -639,7 +616,43 @@ class Module_OrderGroups extends GW_Common_Module
 		}else{
 			$this->setMessage($msg);
 			$this->jump();
-		}
+		}		
+	}
+	
+	function doOrderPaydNotifyUser()
+	{		
+		$template_id = $this->config->confirm_email_tpl;
+		
+		$order = $this->getDataObjectById();
+		
+		
+		if(isset($_GET['confirm']))
+			unset($_GET['preview']);		
+		
+		if(!isset($_GET['preview'])){
+		
+			//2kartus kad nesiusti laisko
+			if($order->mail_accept && !isset($_GET['confirm']) ){	
+
+				$this->setError("Already sent");
+				$this->jump();
+
+			}else{
+
+				$order->set('mail_accept',1);
+				$order->updateChanged();
+			}
+		}		
+		
+		
+		$this->doOrderNotifyCustomer($order, $template_id);
+	}
+	
+	function doOrderStatusChangeNotifyUser()
+	{
+		$template_id = $this->config->statuschange_email_tpl;
+		$order = $this->getDataObjectById();
+		$this->doOrderNotifyCustomer($order, $template_id);
 	}
 	
 	

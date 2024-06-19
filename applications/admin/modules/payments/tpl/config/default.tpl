@@ -23,6 +23,8 @@
 
 
 {call e field="confirm_email_tpl" type=select_ajax modpath="emails/email_templates" preload=1  options=[]  source_args=[byid=>1] after_input_f="editadd"}
+{call e field="statuschange_email_tpl" type=select_ajax modpath="emails/email_templates" preload=1  options=[]  source_args=[byid=>1] after_input_f="editadd"}
+
 {call e field="confirm_email_bcc" type=text}
 {call e field="default_currency_code"}
 
