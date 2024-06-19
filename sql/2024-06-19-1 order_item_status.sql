@@ -1,0 +1,1 @@
+ALTER TABLE `gw_order_item` ADD `status` TINYINT NOT NULL AFTER `update_time`;
