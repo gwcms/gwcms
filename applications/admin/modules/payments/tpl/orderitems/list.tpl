@@ -67,7 +67,7 @@
 		{/if}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type,status]}
 
 
 	{function dl_cell_obj_id}
@@ -118,6 +118,14 @@
 	{function dl_cell_vat_group}
 		{$item->vat_title}
 	{/function}	
+	{function dl_cell_status}
+		{if $item->status}
+			{GW::ln("/M/orders/status/`$item->status`")}
+		{else}
+			-
+		{/if}
+	{/function}	
+	
 	
 
 	{capture append=footer_hidden}	

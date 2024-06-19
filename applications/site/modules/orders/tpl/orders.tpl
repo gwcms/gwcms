@@ -282,7 +282,7 @@
 						{/if}
 						<div class="dropdown-divider"></div>
 						{if (($app->user && $app->user->isRoot()) || $m->can_do_test_pay) && $order->payment_status!=7}
-						<a href="{$m->buildUri(false, [act=>doOrderPayRoot,id=>$order->id])}" class="dropdown-item">
+						<a href="{$m->buildUri(false, [act=>doOrderPayRoot,id=>$order->id,key=>$order->secret])}" class="dropdown-item">
 							<i class="fa fa-credit-card g-mr-2"></i>
 							TEST pay!
 						</a>

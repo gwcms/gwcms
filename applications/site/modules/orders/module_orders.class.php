@@ -1036,8 +1036,8 @@ class Module_Orders extends GW_Public_Module
 			
 		}
 		
-
 		
+
 		$ship_price = min($options);
 		
 		//d::dumpas($options);
@@ -1052,7 +1052,25 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		list($executerid, $priceid) = explode('_', $selected_executor);
-		$exec_price = $exec_prices[$executerid]->price;
+		$exec_price = ($exec_prices[$executerid] ?? false) ? $exec_prices[$executerid]->price : 0;
+		
+		
+		
+		if($this->app->user->is_admin && !$executerid){
+			$this->setMessage("Admin message: executor was not picked");
+		}
+		
+		if($this->app->user && $this->app->user->isRoot()){
+			d::ldump([
+			    'ship_prices'=>$options,
+			    'exec_prices'=>$exec_prices,
+			    'min_ship_price'=>$ship_price,
+			    'executorid_picket_by_min'=>$executerid,
+			    'priceid'=>$priceid,
+			    
+			],['hidden'=>1]);
+		}
+		
 		
 		$order->extra = ['executerid'=>$executerid, 'shippriceid'=>$priceid];
 		
@@ -1804,6 +1822,80 @@ class Module_Orders extends GW_Public_Module
 		}
 		
 		$this->app->jump('direct/orders/orders/cart');
+	}
+	
+	function viewStatusChange()
+	{
+		if(!isset($_GET['executor_id'])){
+			$this->setError('Bad link');
+			$this->app->jump('/');
+		}
+		
+		$order = $this->getOrder(true);
+		
+		if(!$order){
+			$this->setError('Bad link2');
+			d::dumpas('Bad link2');
+			$this->app->jump('/');
+		}		
+		
+		
+		
+		
+		$list = [];
+		
+		foreach($order->items as $item){
+			if($_GET['executor_id'] && $item->executor_id == $_GET['executor_id']){
+				$item->tmporder = $order;
+				$list[] = $item;
+
+			}
+		}
+		
+		
+		$this->tpl_vars['list'] = $list;;
+	}
+	
+	function doStatusChange()
+	{
+		
+		$order = $this->getOrder(true);
+		
+		if(!$order){
+			$this->setError('Bad link2');
+			$this->app->jump('/');
+		}
+		
+		
+		$list = [];
+		
+		$statuses= [];
+		
+		foreach($order->items as $item){
+			if($_GET['executor_id'] && $item->executor_id == $_GET['executor_id']){
+				
+				$item->fireEvent('BEFORE_CHANGES');
+				$item->status = $_POST['item']['status/'.$item->id];
+				
+				
+				$item->updateChanged();
+				
+
+			}
+			$statuses[$item->status] = 1;
+		}
+		
+		if(count($statuses)==1){
+			$order->fireEvent('BEFORE_CHANGES');
+			$order->status = $item->status;
+			$item->updateChanged();
+		}
+		
+		
+		$this->tpl_vars['list'] = $list;;	
+		$this->setMessage(GW::ln('/m/STATUS_SAVE_OK'));
+		Navigator::jump($_SERVER['REQUEST_URI']);
+		
 	}
 	
 }

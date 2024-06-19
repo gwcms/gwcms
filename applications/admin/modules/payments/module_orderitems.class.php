@@ -117,6 +117,13 @@ class Module_OrderItems  extends GW_Common_Module
 			
 		}
 		
+		$cols=$this->model->getColumns();
+		
+		if($cols['status'] ?? false){
+			$cfg['fields']['status'] = 'Lof';	
+		}
+		
+		
 
 		
 		$cfg['filters']['vat_group'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/vatgroups'];

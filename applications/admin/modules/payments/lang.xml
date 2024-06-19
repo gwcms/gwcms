@@ -222,8 +222,8 @@
       <en>Physical Delivery</en>
     </i>
     <i id="status">
-      <lt>Užsakymo būklė</lt>
-      <en>Order status</en>
+      <lt>Būklė</lt>
+      <en>Status</en>
     </i>
     <i id="obj_type">
       <lt>Prekių grupė</lt>
