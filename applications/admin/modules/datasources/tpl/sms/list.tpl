@@ -7,11 +7,15 @@
 	{$do_toolbar_buttons[] = search}
 	
 	
-	{function name=do_toolbar_buttons_config} 
+	{function name=do_toolbar_buttons_modactions} 
+		{*
 		{toolbar_button title=GW::l('/A/VIEWS/config') iconclass='gwico-Vertical-Settings-Mixer' href=$m->buildUri(config)}
+		*}
+		{toolbar_button title=GW::l('/A/VIEWS/doSendQueue') iconclass='gwico-cog' href=$m->buildUri(false, [act=>doSendQueue])}
+
 	{/function}	
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2,modactions]}		
 	
 	{$dl_actions=['edit','send']}
 	

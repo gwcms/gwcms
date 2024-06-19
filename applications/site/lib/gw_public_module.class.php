@@ -785,15 +785,17 @@ class GW_Public_Module {
 	
 	function askConfirm($str)
 	{
-		$confirmurl = $this->app->buildUri(false, $_GET+['confirm'=>1]);
-		$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::ln('/g/CONFIRM')."</a>";
+		$confirmurl = $this->buildUri($this->view_name, $_GET+['confirm'=>1]);
+		$refreshurl = $_SERVER['REQUEST_URI'];
 		
-		if($this->app->user && $this->app->user->isRoot()){
-			$reloadurl =  $this->app->buildUri(false);
-			$str.="<br /><a class='btn btn-primary' href='$reloadurl'><i class='fa fa-refresh'></i></a>";
+		
+		if(isset($_POST) && $_POST){
+			$str.="<br>".Navigator::postLink($confirmurl, GW::l('/g/CONFIRM'), $_POST,['aclass'=>'btn btn-primary']);
+		}else{
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>".GW::l('/g/CONFIRM')."</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";
 		}
 		
-		$this->app->setMessage(['text'=>$str, 'type'=>4]);			
+		$this->setMessageEx(['text'=>$str, 'type'=>4]);			
 	}
 	
 	function confirm($str)

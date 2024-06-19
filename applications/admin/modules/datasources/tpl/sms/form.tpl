@@ -4,6 +4,11 @@
 {call e field=number default=$tmpdef}
 {call e field=msg type=smsmessage  note="<i class='input_note'></i>" height=80px}
 
+{if $app->user->isRoot()}
+	{call e field=retry}
+{/if}
+
+
 
 
 
