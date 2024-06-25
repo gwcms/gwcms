@@ -99,7 +99,7 @@
 {/function}
 
 {function crowd_funding_block}
-	{if $item->gettt('keyval/crowdfunding_deadline')}
+	{if $item->gettt('keyval/crowdfunding_deadline') && $item->gettt(type)==11}
 		{*<li class="">*}
 		{if $item->parent_id}
 			{$parent=$item->get(parent)}
