@@ -463,6 +463,10 @@ class Module_Orders extends GW_Public_Module
 		
 		
 		$this->tpl_vars['item'] = $order;
+		
+		if(GW::s('PROJECT_NAME')=='artistdb')
+			$this->tpl_name = "paybanktransfer_artistdb";
+		
 	}
 	
 	function viewOtherPayee()
