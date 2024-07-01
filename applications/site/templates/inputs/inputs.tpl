@@ -107,7 +107,7 @@
 					       {if $value==$key}checked="checked"{/if} 
 					       {if $readonly}readonly disabled{/if}
 					       {if $required}required="1"{/if} 
-					       class="form-check-input mr-1"
+					       class="form-check-input mr-1 {if $required}required{/if} "
 					       >{$opttitle}
 				</label>
 				</div>
@@ -118,9 +118,13 @@
 			{if $onchangeFunc}
 				{capture append=footer_hidden}
 				<script type="text/javascript">
-					$('input[type=radio][name="{$input_name}"]').change(function() {
-						{$onchangeFunc}(this.value, this);
-					});
+					$(function(){
+						$('input[type=radio][name="{$input_name}"]').change(function() {
+							{$onchangeFunc}(this.value, this);
+						})
+						{$onchangeFunc}($('input[type=radio][name="{$input_name}"]:checked').val(), false);
+					})
+					
 				</script>
 				{/capture}
 
