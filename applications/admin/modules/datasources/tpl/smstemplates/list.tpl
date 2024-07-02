@@ -3,9 +3,6 @@
 
 {block name="init"}
 
-	
-	
-
 	{if $m->admin}
 		{$display_fields.user_id=1}
 	{/if}	
@@ -32,13 +29,19 @@
 	
 	{$do_toolbar_buttons[] = dialogconf}	
 	
-	{$dl_actions=[messagetpl,edit,delete]}
+	{$dl_actions=[edit]}
+	{if $m->write_permission}
+		{$dl_actions[]=messagetpl}
+		{$dl_actions[]=delete}
+	{/if}
         
         {function dl_actions_messagetpl}
-			{list_item_action_m url=[false, [act=>doSend,id=>$item->id]] iconclass="fa fa-envelope-o" title="Siųsti"}
+		{list_item_action_m url=[false, [act=>doSend,id=>$item->id]] iconclass="fa fa-envelope-o" title="Siųsti"}
         {/function}
 	
 	
 	
-	{$dl_order_enabled_fields=array_keys($display_fields)}        
+	{$dl_order_enabled_fields=array_keys($display_fields)}    
+	
+	
 {/block}

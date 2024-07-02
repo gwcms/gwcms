@@ -2832,8 +2832,12 @@ class GW_Common_Module extends GW_Module
 	
 	function doClone3()
 	{		
+		
 		$item = $this->getDataObjectById();
 		$origitem = $item;
+		
+		if(!$this->write_permission)
+			return $this->setError('No write permission');
 		
 		$vals= $item->toArray();
 

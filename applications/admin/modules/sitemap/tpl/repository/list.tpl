@@ -6,23 +6,31 @@
 	{$dl_inline_edit=1}
 
 
-
-	{$do_toolbar_buttons = [upload]}	
+	{if $m->write_permission}
+		{$do_toolbar_buttons = [upload]}	
+	{/if}
+	
 	{$do_toolbar_buttons[] = addfolder}	
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[dialogconf,print,uploadzip]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
+	{if $this->write_permission}
+		{$do_toolbar_buttons_hidden[] = uploadzip}
+	{/if}
 	{$do_toolbar_buttons[] = search}
 	{$dl_filters = []}
 	
 	
 	
 	{function name=do_toolbar_buttons_addfolder} 
+		{if $this->write_permission}
 		{toolbar_button title=GW::l('/A/VIEWS/doMkDir') iconclass='fa fa-plus-circle' 
-			href=$m->buildUri(false,[act=>doMkDir]) query_param=["foldername", "Enter folder name"]}	
+			href=$m->buildUri(false,[act=>doMkDir]) query_param=["foldername", "Enter folder name"]}
+		{/if}
 	{/function}	
 	
-	
-	{include file="`$m->tpl_dir`/upload_inlist.tpl"}
+	{if $m->write_permission}
+		{include file="`$m->tpl_dir`/upload_inlist.tpl"}
+	{/if}
 		
 	
 	{function dl_cell_ico}

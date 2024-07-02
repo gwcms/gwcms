@@ -132,7 +132,7 @@ Leisti pasirinkti kur saugoti ar taikyti:
 	<select id="saveto" name="pageviewid" class="selectpicker">
 		<option value="">Taikyti neišsaugant</option>
 		
-		{if !$m->readonly}
+		{if !$m->readonly && $m->write_permission}
 		{foreach $page_views as $pview}
 			<option value="{$pview->id}" {if $current_page_view_id == $pview->id}selected="selected"{/if}>{GW::l('/g/PAGE_VIEWS')}: {$pview->title}</option>
 		{/foreach}

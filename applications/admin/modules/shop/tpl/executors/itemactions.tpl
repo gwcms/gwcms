@@ -16,7 +16,7 @@
 {dl_actions_delete shift_button=1}
 
 
-
-{list_item_action_m url=["`$item->id`", [act=>doClone3, id=>$item->id]] iconclass="fa fa-files-o text-mint" caption="Sukurti kopiją su elementais"}
-
+{if $m->write_permission}
+	{list_item_action_m url=["`$item->id`", [act=>doClone3, id=>$item->id]] iconclass="fa fa-files-o text-mint" caption="Sukurti kopiją su elementais"}
+{/if}
 	

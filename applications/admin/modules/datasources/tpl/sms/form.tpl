@@ -17,7 +17,11 @@
 {/function}
 
 {if $item->status != 7}
-	{$submit_buttons=[save,send]}
+	{if $m->write_permission}
+		{$submit_buttons=[save,send]}
+	{else}
+		{$submit_buttons=[save]}
+	{/if}
 {else}
 	{$submit_buttons=[save,apply,cancel]}
 {/if}
