@@ -92,7 +92,7 @@ class Module_OrderGroups_DumbAccounting extends GW_Module_Extension
 			$opts = [
 			    'subject'=>GW::s('PROJECT_NAME').' Mėnesinis įplaukų eksportas '.$range, 
 			    'body'=>'Informacija prisegta rinkmenoje:  '.$filename.' ('.GW_File_Helper::cFileSize(strlen($filecontents)).')',
-			    'to'=>$answers['mail']
+			    'to'=>explode(';',$answers['mail'])
 			];
 		
 			$opts['attachments'] = [$filename => $filecontents];

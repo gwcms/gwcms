@@ -782,7 +782,7 @@ class Module_Orders extends GW_Public_Module
 		if($items)
 		foreach($items as $item){
 			
-			if($item->expires && strpos($item->expires, "0000-00-00")===false ){
+			if($cart->open && $item->expires && strpos($item->expires, "0000-00-00")===false ){
 				
 				if($item->expires_secs < 0){
 					$this->setError($item->title.'  - '.GW::ln('/m/CART_ITEM_EXPIRED'));

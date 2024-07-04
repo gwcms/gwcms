@@ -124,8 +124,10 @@ class GW_Order_Item extends GW_Composite_Data_Object
 				
 				$percents=$this->getVatGroupsPerc();
 				
+				//d::dumpas($percents);
+				
 				if(isset($percents[$this->vat_group]) && $percents[$this->vat_group]);
-					return $this->total * $percents[$this->vat_group] / 100;
+					return round($this->total - $this->total/((100+$percents[$this->vat_group])/100), 2);
 					
 				return '-';
 				
