@@ -88,6 +88,8 @@ class GW_Image_Manipulation
 		if ($this->type == 'png' || $this->type == 'gif') {
 			$trnprt_indx = imagecolortransparent($this->im);
 
+			
+			
 			// If we have a specific transparent color
 			//2024-06-25 pastebeta klaida  Uncaught ValueError: imagecolorsforindex(): Argument #2 ($color) is out of range in 
 			//meta 255
@@ -99,6 +101,8 @@ class GW_Image_Manipulation
 				// Allocate the same color in the new image resource
 				$trnprt_indx = imagecolorallocate($image_resized, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
 				
+				
+
 				// Completely fill the background of the new image with allocated color.
 				imagefill($image_resized, 0, 0, $trnprt_indx);
 

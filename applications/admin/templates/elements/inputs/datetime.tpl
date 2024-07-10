@@ -7,9 +7,11 @@
 {if $value=="0000-00-00"}
 	{$value=""}
 {else} 
-	{$value=explode(' ',$value)}
-	{$value.1 = explode(':',$value.1)}
-	{$value="{$value.0} {$value.1.0}:{$value.1.1}"}
+	{$tmp=explode(' ',$value)}
+	{if count($tmp) > 1}
+		{$tmp.1 = explode(':',$tmp.1)}
+		{$value="{$tmp.0} {$tmp.1.0}:{$tmp.1.1}"}	
+	{/if}
 {/if}
 
 
