@@ -137,7 +137,8 @@
 		<ul class="list-unstyled g-color-text">
 			
 			{if $modifications}
-				{$opts = [''=>$oitem->modif_title]}
+				
+				{$opts = [''=>GW::ln('/m/SELECT_MOD')]}
 				{$disabled=[]}
 				{foreach $modifications as $mod}
 					{$opts[$mod->id]="{$mod->modif_title} {if !$m->feat(infinite_qty)}| {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}"}

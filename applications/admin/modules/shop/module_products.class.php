@@ -373,13 +373,20 @@ class Module_Products extends GW_Common_Module
 		
 		$template_id = $product->modval("executor_after_buy_email_tpl");
 		
-		if(!$template_id)
+		if(!$template_id){
+			$this->setError("No executor mail templateid not configured");
 			return false;
+		}
+			
 		
-		if(!$item->executor_id)
+		if(!$item->executor_id){
+			$this->setError("No executor assigned");
 			return false;
+		}
 		
 		$executor = Shop_Executors::singleton()->find($item->executor_id);
+		
+		$item->order->setSecretIfNotSet();
 		
 		$vars['ordereditem'] = $item;
 		$vars['product'] = $product;
@@ -389,7 +396,9 @@ class Module_Products extends GW_Common_Module
 		$vars['buyer'] = $item->order->user;
 		$vars['executor'] = $executor;
 		$vars['EXECUTION_FILE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['act'=>'doRetrieveExecFile','id'=>$item->order->id,'ordered_item_id'=>$item->id,'key'=>$item->order->secret],['app'=>"site"]);
-		$vars['STATUS_CHANGE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders/statuschange', ['id'=>$item->order->id,'key'=>$item->order->secret],['app'=>"site"]);
+		$vars['STATUS_CHANGE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders/statuschange', 
+			['id'=>$item->order->id,'key'=>$item->order->secret, 'executor_id'=>$item->executor_id],
+			['app'=>"site"]);
 			
 		
 		$to = $executor->email;
@@ -416,7 +425,7 @@ class Module_Products extends GW_Common_Module
 		$status = GW_Mail_Helper::sendMail($opts);
 		
 		
-		
+		//d::Dumpas($opts);
 		
 		$item->set('keyval/email_executor',$status);
 		
