@@ -395,13 +395,19 @@ class Module_Products extends GW_Common_Module
 		$vars['order'] = $item->order;
 		$vars['buyer'] = $item->order->user;
 		$vars['executor'] = $executor;
-		$vars['EXECUTION_FILE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['act'=>'doRetrieveExecFile','id'=>$item->order->id,'ordered_item_id'=>$item->id,'key'=>$item->order->secret],['app'=>"site"]);
-		$vars['STATUS_CHANGE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders/statuschange', 
+		$vars['EXECUTION_FILE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', 
+			['act'=>'doRetrieveExecFile','id'=>$item->order->id,'ordered_item_id'=>$item->id,'key'=>$item->order->secret],['app'=>"site"]);
+		
+		
+		$tmp = $this->app->buildURI('direct/orders/orders/statuschange', 
 			['id'=>$item->order->id,'key'=>$item->order->secret, 'executor_id'=>$item->executor_id],
 			['app'=>"site"]);
+		$vars['STATUS_CHANGE_URL'] = GW::s('SITE_URL').trim($tmp,'/'); //workaround kad nuimt pradzioje /
 			
 		
 		$to = $executor->email;
+		
+		
 		
 		
 		$opts = [

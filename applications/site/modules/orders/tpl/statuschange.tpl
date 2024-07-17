@@ -10,6 +10,7 @@
               </header>
 
               <!-- Form -->
+	      {*site url idejau nes ateina su // pradzioje, arba ten sutvarkyt shop/module_products.class.php doAfterBuyExecutorEmail*}
               <form id="addParcel" class="g-py-15" role="form" action="{$smarty.server.REQUEST_URI}" method="post"  >
 		      <input type="hidden" name="act" value="doStatusChange" />
 		
