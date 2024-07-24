@@ -62,6 +62,7 @@ class GW_Img_Tool
 			
 			initEnviroment(GW_ENV_PROD);
 			header('Location: '.GW::s("SITE_URL").$_SERVER['REQUEST_URI']);
+			exit;
 		}
 
 		//pdf converter still have issues with webp

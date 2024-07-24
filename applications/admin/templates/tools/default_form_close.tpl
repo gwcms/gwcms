@@ -25,7 +25,7 @@
 				<td style="border: 1px solid white;background-color:#f9f9f9">
 
 
-					<iframe id="comments" style="width:100%;height:250px;" src="{$app->buildURI("datasources/comments/list?obj_type={$item->model->table}&obj_id={$item->id}&clean=2")}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+					<iframe id="comments" style="width:100%;height:250px;" src="{$app->buildURI("datasources/comments/list?obj_type={$item->table}&obj_id={$item->id}&clean=2")}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
 
 					<script type="text/javascript">
 						require(['gwcms'],function(){
