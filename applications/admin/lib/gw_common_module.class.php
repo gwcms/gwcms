@@ -95,7 +95,28 @@ class GW_Common_Module extends GW_Module
 		}
 			
 		
+		if(isset($_GET['dragdropmove'])){
+			$this->list_params['paging_enabled']=false;	
+			$backurl = $this->buildUri(false);
+
+			$this->setMessage("Use drag drop rows to change list order. <a href='{$backurl}' class='btn btn-sm btn-default'>Press this button to exit drag&drop ordering mode</a>");			
+		}
+		
 	}
+	
+	function doDragDropMove()
+	{
+		/*
+		 * implement narrowing by your clasificator in your module extending this function 
+		$form = ['fields'=>['country'=>['type'=>'select', 'options'=>$this->getCountryOpt(), 'required'=>1]],'cols'=>1];
+
+		
+		if(!($answers=$this->prompt($form, $form)))	
+			return false;
+		*/
+		
+		$this->jump(false, ['dragdropmove'=>1]);
+	}	
 
 	function initModCfgEx($modp)
 	{
@@ -3407,7 +3428,7 @@ class GW_Common_Module extends GW_Module
 		
 		if(!$this->write_permission){
 			$this->setError("Please ensure you have write permission");
-			$this->jump(false);
+			return $this->jump(false);
 		}
 		
 		$positions = json_decode($_POST['positions'], true);
