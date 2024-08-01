@@ -47,13 +47,7 @@
 		</a>
 {/function}	
 
-{function name=dl_output_filters_dynfieldoptions}
-	
-		{$class=$dynfieldopts[$field]}
-		{$obj=$options[$class][$item->$field]}
-		<span title="id: {$obj->id}">{$obj->title}</span>
-		
-{/function}	
+
 
 
 {function dl_cell_mod}
@@ -126,6 +120,7 @@
 {foreach $dynfieldopts as $field => $class}
 	{$dl_output_filters[$field]=dynfieldoptions}
 {/foreach}
+
 
 		
 	{$dl_checklist_enabled=1}

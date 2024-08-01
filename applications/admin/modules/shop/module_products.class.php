@@ -5,6 +5,7 @@ class Module_Products extends GW_Common_Module
 {
 	use Module_Import_Export_Trait;
 
+
 	/**
 	 * @var GW_Product
 	 */
@@ -57,6 +58,9 @@ class Module_Products extends GW_Common_Module
 	{
 		GW_Composite_Data_Object::prepareLinkedObjects($list, 'typeObj');
 		
+		
+		
+		//perziuret nes atsirado an common_modukle initDynFieldsList metodas
 		$sources=[];
 		$dynfieldsopts = [];
 		
@@ -377,7 +381,7 @@ class Module_Products extends GW_Common_Module
 			$this->setError("No executor mail templateid not configured");
 			return false;
 		}
-			
+		
 		
 		if(!$item->executor_id){
 			$this->setError("No executor assigned");
@@ -397,7 +401,7 @@ class Module_Products extends GW_Common_Module
 		$vars['executor'] = $executor;
 		$vars['EXECUTION_FILE_URL'] = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', 
 			['act'=>'doRetrieveExecFile','id'=>$item->order->id,'ordered_item_id'=>$item->id,'key'=>$item->order->secret],['app'=>"site"]);
-		
+			
 		
 		$tmp = $this->app->buildURI('direct/orders/orders/statuschange', 
 			['id'=>$item->order->id,'key'=>$item->order->secret, 'executor_id'=>$item->executor_id],

@@ -6,6 +6,12 @@
 	{$dl_actions=[invert_active,edit,delete]}
 {/block}
 
+{if $m->dynamic_fields}
+	{foreach $dynfieldopts as $field => $class}
+		{$dl_output_filters[$field]=dynfieldoptions}
+	{/foreach}
+{/if}
+
 {$dl_smart_fields=array_flip($dl_smart_fields|default:[])}
 {if $smarty.get.print_view}
 	{$dl_checklist_enabled=0}

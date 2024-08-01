@@ -17,6 +17,7 @@
 	
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2,modactions]}		
 	
+	{$dl_actions=['edit','send']}
 	
 	{$dl_actions=[edit]}
 	

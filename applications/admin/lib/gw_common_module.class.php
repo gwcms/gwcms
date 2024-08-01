@@ -47,6 +47,8 @@ class GW_Common_Module extends GW_Module
 	public $canCreateNew = null;
 	public $canAccessIfOwner=true;
 	public $write_permission = false;
+	public $dynamic_fields = false;
+	
 
 	/**
 	 * to use this function you must store in $this->model GW_Data_Object type object
@@ -93,17 +95,20 @@ class GW_Common_Module extends GW_Module
 		if($this->allowed_ids = GW_Permissions::getTempReadAccess(implode('/',$this->module_path)) ){
 			$this->filters['id'] = $this->allowed_ids;
 		}
-			
+		
 		
 		if(isset($_GET['dragdropmove'])){
 			$this->list_params['paging_enabled']=false;	
 			$backurl = $this->buildUri(false);
-
+			
 			$this->setMessage("Use drag drop rows to change list order. <a href='{$backurl}' class='btn btn-sm btn-default'>Press this button to exit drag&drop ordering mode</a>");			
 		}
-		
+		if($this->dynamic_fields){
+			$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
+			
+		}		
 	}
-	
+
 	function doDragDropMove()
 	{
 		/*
@@ -2568,7 +2573,10 @@ class GW_Common_Module extends GW_Module
 				//changetrack extension
 				if($this->isListEnabledField("changetrack")){	
 					$this->tpl_vars['dl_output_filters']['changetrack'] = 'changetrack';
-				}	
+				}
+				
+				if($this->dynamic_fields)
+					$this->initDynFieldsList($context);
 			break;
 		}
 		
@@ -2576,8 +2584,7 @@ class GW_Common_Module extends GW_Module
 		parent::eventHandler($event, $context);
 	}
 	
-	
-	
+
 	function doWriteLock()
 	{
 		if(!$this->app->user->isRoot())
@@ -3428,7 +3435,7 @@ class GW_Common_Module extends GW_Module
 		
 		if(!$this->write_permission){
 			$this->setError("Please ensure you have write permission");
-			return $this->jump(false);
+			$this->jump(false);
 		}
 		
 		$positions = json_decode($_POST['positions'], true);
@@ -3698,5 +3705,89 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars['relations'][ $cfg['modpath'] ] = $cfg;
 	}
 	
+	
+	function initDynFieldsList($list)
+	{		
+		$sources=[];
+		$dynfieldsopts = [];
+		
+		foreach($this->mod_fields as $field){
+			if($field->inp_type=="select_ajax"){
+				$sources[$field->modpath][] = $field->fieldname;
+			}	
+			
+			$this->dynamicFieldTitles[$field->fieldname] = $field->title;
+		}
+		
+		foreach($sources as $modpath => $fields){
+			
+			$model = $this->mod_fields[ $fields[0] ]->modelFromModpath();
+			
+			foreach($fields as $field)
+				$dynfieldsopts[$field] = $model;
+		}
+				
+		
+		
+		$ids = array_keys($list);
+		
+		$dynopts = [];
+		
+		foreach($list as $item){
+			foreach($dynfieldsopts as $field => $class)
+				if($item->$field)
+					$dynopts[$class][$item->$field]=1;
+		}
+		
+		foreach($dynopts as $class => $ids){
+			$ids = array_keys($ids);
+			$this->options[$class] = $class::singleton()->findAll(GW_DB::inCondition ('id', $ids),['key_field'=>'id']);
+		}
+				
+		$this->tpl_vars['dynfieldopts']=$dynfieldsopts;		
+	}
+	
+	
+	function addDynamicField(&$fields_config, $input)
+	{
+		$field=[
+			'field'=>$input->get('fieldname'),
+			'type'=>$input->get('inp_type'),
+			'note'=>$input->get('note'),
+			'title'=>$input->get('title'),
+			'placeholder'=>$input->placeholder,
+			'hidden_note'=>$input->hidden_note,
+			'i18n'=>$input->get('i18n'),
+			'colspan'=>1
+		];
+
+		if($input->type == 'extended')
+			$field['field']="keyval/{$input->get('fieldname')}";
+
+
+		$opts = $input->get('config');
+
+		if($input->get('inp_type') == 'select_ajax'){
+			$opts['preload'] = 1;
+			$opts['modpath'] = $input->get('modpath');
+			$opts['after_input_f'] = 'editadd';
+		}
+
+		if(is_array($opts))
+			$field = array_merge($field, $opts);
+
+
+		$fields_config['fields'][$input->get('fieldname')] = $field;		
+	}
+	
+	function addDynamicFieldsConfig(&$fields_config, $item)
+	{
+		
+		foreach ($this->mod_fields as $input){
+			
+			$this->addDynamicField($fields_config, $input);
+		}		
+	}
+		
 	
 }

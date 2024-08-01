@@ -73,38 +73,14 @@ inbound_flight_details
 {/if}
 
 
+
 {foreach $m->mod_fields as $input}
 	{if $input->type==optional && !isset($dynfields[$input->fieldname])}
 		{continue}
 	{/if}
 	
 	
-	{$field=[
-		field=>$input->get(fieldname),
-		type=>$input->get(inp_type),
-		note=>$input->get(note),
-		title=>$input->get(title),
-		placeholder=>$input->placeholder,
-		hidden_note=>$input->hidden_note,
-		i18n=>$input->get(i18n),
-		colspan=>1
-	]}
-	
-	{if $input->type==extended}
-		{$field.field="keyval/{$input->get(fieldname)}"}
-	{/if}	
-	
-	{$opts=$input->get('config')}		
-	{if $input->get(inp_type)=='select_ajax'}
-		{$opts.preload=1}
-		{$opts.modpath=$input->get('modpath')}
-		{$opts.after_input_f=editadd}
-	{/if}	
-	{if is_array($opts)}
-		{$field = array_merge($field, $opts)}
-	{/if}
-	
-	{$fields_config.fields[$input->get(fieldname)] = $field}
+	{$m->addDynamicField($fields_config, $input)}
 	
 {/foreach}
 
