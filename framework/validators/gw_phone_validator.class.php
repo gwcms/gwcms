@@ -37,4 +37,22 @@ class GW_Phone_Validator extends GW_String_Validator
 		if (!preg_match('/^([+]?)( ?)([0-9]+)(( ?)([0-9]+))*$/', $value))
 			return $this->setErrorMessage($this->getParam('error_illegal_phone_format')) && false;
 	}
+	
+	function validate($phonenr)
+	{
+
+
+		try {
+		    $number = Brick\PhoneNumber\PhoneNumber::parse($phonenr);
+
+
+		    return [$number->isValidNumber(), $number->getRegionCode()];
+		}
+		catch (Brick\PhoneNumber\PhoneNumberParseException $e) {
+			return [false, $e->getMessage()];
+		}
+
+
+		
+	}
 }

@@ -2,6 +2,7 @@
 
 class GW_Validator
 {
+	use Singleton;
 
 	var $error_messages = Array();
 	var $validation_object = false;
@@ -10,7 +11,7 @@ class GW_Validator
 	    'error_message' => '/G/VALIDATION/REQUIRED'
 	);
 
-	function __construct($validation_object, $params = Array())
+	function __construct($validation_object=false, $params = Array())
 	{
 		$this->validation_object = $validation_object;
 		$this->setParams($params);

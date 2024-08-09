@@ -1,4 +1,6 @@
 {include "default_open.tpl"}
+{include "inputs/inputs.tpl"}
+
 
 {function user_login_form}
 
@@ -9,20 +11,15 @@
               </header>
 
               <!-- Form -->
-              <form id="smsCodeForm" class="g-py-15" role="form" action="{$smarty.server.REQUEST_URI}" method="post">
+              <form id="smsCodeForm" class="g-py-15" role="form" action="{$smarty.server.REQUEST_URI}" method="post"  onsubmit="if(!numberisvalid)return false;" >
 		      <input type="hidden" name="act" value="do:sendSmsCode" />
                 <div class="mb-4">
-                  <div class="input-group g-rounded-left-3">
-                    <span class="input-group-prepend g-width-45">
-                      <span class="input-group-text justify-content-center w-100 g-bg-transparent g-brd-gray-light-v3 g-color-gray-dark-v5">
-                        <span class="material-symbols-outlined">phone_android</span>
-                      </span>
-                    </span>
-                    <input name="phone" 
-			   class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v3 g-rounded-left-0 g-rounded-right-3 g-py-15 g-px-15" 
-			   type="phone" 
-			   placeholder="{GW::ln('/m/YOUR_PHONE_NUMBER')}" 
-			   value="{$smarty.get.phone}"  required="1">
+
+
+			  
+		{input type=intphone field="phone" value=$smarty.get.phone  input_name_pattern="%s" limit_country=json_decode(mb_strtolower($m->cfg->phone_limit_country))
+			validactions='if(valid){ numberisvalid=true; $("#submitbutton").removeAttr("disabled"); }else{ numberisvalid=false; $("#submitbutton").attr("disabled","disabled"); }'}
+
                   </div>
                 </div>
 		  
@@ -30,7 +27,7 @@
 
                
                <div class="mb-5">
-                  <button class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-12 g-px-25" type="button" onclick="$('#smsCodeForm').submit()">{GW::ln('/m/SEND_SMS_CODE')}</button>
+                  <button id="submitbutton" disabled='disabled' class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-12 g-px-25" type="button" onclick="$('#smsCodeForm').submit()">{GW::ln('/m/SEND_SMS_CODE')}</button>
                 </div>
 {/function}
 

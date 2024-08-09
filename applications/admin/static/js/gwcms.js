@@ -54,7 +54,14 @@ var GW = {
 		var s = timeinsecs - m * 60;
 		var str = (m ? m + ' m ' : '') + (m < 3 ? s + ' s' : '');
 		return str;
-	}
+	},
+	array_flip: function(o){
+	    var newObj = {} 
+	    Object.keys(o).forEach((el,i)=>{
+		newObj[o[el]]=el;
+	    });
+	    return newObj;
+	}		
 }
 
 /*USED*/

@@ -214,7 +214,14 @@ var GW = {
 		setInterval(function(){ 
 			$('#formStupidBot').val( $('#formStupidBot').val()-1+2  );
 		}, 1000);
-	}
+	},
+	array_flip: function(o){
+	    var newObj = {} 
+	    Object.keys(o).forEach((el,i)=>{
+		newObj[o[el]]=el;
+	    });
+	    return newObj;
+	}	
 }
 
 var gwcms = () => GW;

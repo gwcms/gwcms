@@ -1,7 +1,7 @@
 {include file="default_form_open.tpl"}
 
 {if isset($m->filters.number)}{$tmpdef=$m->filters.number}{/if}
-{call e field=number default=$tmpdef}
+{call e field=number type=phone default=$tmpdef}
 {call e field=msg type=smsmessage  note="<i class='input_note'></i>" height=80px}
 
 {if $app->user->isRoot()}

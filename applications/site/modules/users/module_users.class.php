@@ -140,10 +140,23 @@ class Module_Users extends GW_Public_Module
 		
 		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'],  '1', '1 minute');
 	
-		$phonenumber = $_POST['phone'];
+		$phonenumber = preg_replace('/[^0-9]/','',$_POST['phone']);
+		
+		
 		$code = GW_String_Helper::getRandString(6, '0123456789');
 		
 		
+		$valid = GW_Phone_Validator::singleton()->validate('+'.$phonenumber);
+		
+		if(!$valid[0])
+			return $this->setError($valid[1]);
+		
+		$country_by_phone = $valid[1];
+		$allowed_countries = json_decode(mb_strtolower($this->cfg->phone_limit_country));
+		$allowed_countries = array_flip($allowed_countries);
+		
+		if(!isset($allowed_countries[$allowed_countries]))
+			return $this->setError(GW::ln('/m/COUNTRY_NOT_SUPPORTED'));
 		
 		
 		
@@ -187,7 +200,7 @@ class Module_Users extends GW_Public_Module
 			
 			$phone = $this->app->sess('userphone');
 			
-			if( $user = GW_Customer::singleton()->find(['username=?', $phone]) ){ 
+			if( $user = GW_Customer::singleton()->find(['username=? AND active=1', $phone]) ){ 
 					
 				//do nothing
 			}else{
