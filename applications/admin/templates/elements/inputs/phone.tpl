@@ -74,7 +74,7 @@
 
 		<style>
 
-			ul {
+			.iti ul {
 			    top: 100% !important;
 			    transform: translateY(0%) !important;
 			}
@@ -84,7 +84,7 @@
 			    display: inline-block;
 			}
 
-			input[type=tel] {
+			.iti input[type=tel] {
 			    padding-right: 6px;
 			    padding-left: 52px;
 			    margin-left: 0;
