@@ -9,7 +9,8 @@
 	type="tel"
 	class="form-control has-danger {if $required} required{/if} {if $addclass} {$addclass}{/if}"
 	id="{$id}" 
-	value="{$value|escape}" 
+	value="{if $value}+{/if}{$value|escape}" 
+	{if $value}data-initial="+{$value}"{/if}
 	{if $required}required="1"{/if} 
 	{if $placeholder}placeholder="{$placeholder|escape}"{/if}
 
@@ -24,17 +25,19 @@
 {if $m->error_fields.$field}<span class="glyphicon glyphicon-remove form-control-feedback"></span>{/if}
 			
 {if !$input_international_phone_loaded}
+	
+	{$asssets=GW::s("STATIC_EXTERNAL_ASSETS")} {*{$app->sys_base}vendor*}
+		<link href="{$asssets}international-telephone-input-master/international-telephone-input.css" media="all" rel="stylesheet" type="text/css" />
 
-		<link href="{$app->sys_base}vendor/international-telephone-input-master/international-telephone-input.css" media="all" rel="stylesheet" type="text/css" />
-
-		<script src="{$app->sys_base}vendor/international-telephone-input-master/international-telephone-input.js" type="text/javascript"></script>
+		<script src="{$asssets}international-telephone-input-master/international-telephone-input.js" type="text/javascript"></script>
 		<script>
 				
+				
+		{if $app->ln == 'lt'}intlTelInput.preferredCountries= ["lt"]{/if}
+			
 	{if $limit_country}
 			allowed_countries = {json_encode($limit_country)};
 			
-			intlTelInput.preferredCountries= ["lt"]
-	
 			allowed_countries = GW.array_flip(allowed_countries)
 			console.log(allowed_countries)
 			var tmp =intlTelInput.countries;
@@ -55,7 +58,9 @@
 			}
 			
 			$(function(){
-				$('.input[type=tel]').keyup();
+				$('input[type=tel]').each(function(){					
+					this.dispatchEvent(new CustomEvent("keyup", {  }));
+				})
 			})
 		</script>
 

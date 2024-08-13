@@ -38,7 +38,7 @@
 
 {if $fields.fields.phone}	
 	<div class="col-md-6">
-	{input field="phone" required=$fields.required.phone}
+		{input field="phone" type=intphone required=$fields.required.phone limit_country=json_decode(mb_strtolower($m->cfg->phone_limit_country))}
 	</div>
 {/if}						
 

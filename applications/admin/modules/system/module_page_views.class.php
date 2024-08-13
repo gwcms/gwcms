@@ -16,9 +16,11 @@ class Module_Page_Views extends GW_Common_Module
 		$this->app->carry_params['path']=1;
 		
 		
-		$this->modid = $this->app->path_arr['1']['data_object_id'] ?? false;
+	
+		$this->modid = ($this->app->path_arr['1']['path_clean'] !='system/page_views' && isset($this->app->path_arr['1']['data_object_id'])) ? $this->app->path_arr['1']['data_object_id'] : false;
 		
-		$page = GW_ADM_Page::singleton()->find(['id=?', $this->modid]);
+		$page = $this->modid ?  GW_ADM_Page::singleton()->find(['id=?', $this->modid]) : false;
+		
 				
 		if($page){
 			$_GET['path'] = $page->path;
@@ -33,7 +35,7 @@ class Module_Page_Views extends GW_Common_Module
 		if(isset($_GET['path'])){
 			$inf = $this->app->getModulePathInfo($_GET['path']);
 			$pc = array_values($inf['path_clean']);
-			
+						
 			$this->filterpaths=[
 				implode('/',$inf['path']),
 				implode('/',$inf['path_clean']),

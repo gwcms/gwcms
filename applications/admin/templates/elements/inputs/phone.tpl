@@ -28,16 +28,16 @@
 			
 {if !$input_international_phone_loaded}
 
-		<link href="{$app->sys_base}vendor/international-telephone-input-master/international-telephone-input.css" media="all" rel="stylesheet" type="text/css" />
-
-		<script src="{$app->sys_base}vendor/international-telephone-input-master/international-telephone-input.js" type="text/javascript"></script>
+		{$asssets=GW::s("STATIC_EXTERNAL_ASSETS")} {*{$app->sys_base}vendor*}
+		<link href="{$asssets}international-telephone-input-master/international-telephone-input.css" media="all" rel="stylesheet" type="text/css" />
+		<script src="{$asssets}international-telephone-input-master/international-telephone-input.js" type="text/javascript"></script>
+		
 		<script>
 			
-		intlTelInput.preferredCountries= ["lt"]
+		{if $app->ln == 'lt'}intlTelInput.preferredCountries= ["lt"]{/if}
+			
 		{if $limit_country}
 				allowed_countries = {json_encode($limit_country)};
-
-				
 
 				allowed_countries = GW.array_flip(allowed_countries)
 				console.log(allowed_countries)
@@ -63,7 +63,10 @@
 			
 			require(['gwcms'], function(){
 				intlTelInputInit(document.querySelectorAll('input[type=tel]'));
-				$('.input[type=tel]').keyup();
+				
+				$('input[type=tel]').each(function(){					
+					this.dispatchEvent(new CustomEvent("keyup", {  }));
+				})
 			})
 		</script>
 

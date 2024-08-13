@@ -89,7 +89,8 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 	}	
 }
 
-
+/*bendrinio naudojimo*/
+GW::s("STATIC_EXTERNAL_ASSETS", "//serv133.voro.lt/html/");
 
 //define('',4); /* then 8, 16, 32, etc... */
 

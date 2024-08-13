@@ -4,7 +4,7 @@
 
 
 {call e field=title i18n=4 i18n_expand=1}
-{call e field=answer type=textarea height=70px i18n=4 i18n_expand=1}
+{call e field=answer type=htmlarea height=400px i18n=4 i18n_expand=1}
 {call e field=active type=bool}
 
 
