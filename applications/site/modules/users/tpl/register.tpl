@@ -15,12 +15,11 @@
 	<div class="col-lg-6" style="float:none;margin:auto;">
 {/if}
 			
-            <div class="text-center  mb-30">
-              <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/ALREADY_HAVE_ACCOUNT_Q')}
-                <a class="g-font-weight-600" href="{$ln}/direct/users/users/login">{GW::ln('/M/USERS/VIEWS/login')}</a></p>
-            </div>
-		<br />	    
-			
+
+
+		{include "`$m->tpl_dir`/login_or_register.tpl" login=0}
+
+
             <div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
 		    {include "`$m->tpl_dir`/register_form.tpl"}
             </div>

@@ -9,7 +9,7 @@
 	{if $required}required="required"{/if} 
 	name="{$input_name}" 
 	type="tel" 
-	value="{$value|escape}" 
+	value="{if $value && strpos($value,'+')===false}+{/if}{$value|escape}" 
 	onchange="this.value=$.trim(this.value);" 
 	{if $readonly}readonly{/if}
 	{if $maxlength}maxlength="{$maxlength}"{/if} 

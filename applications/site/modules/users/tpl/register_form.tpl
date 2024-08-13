@@ -4,9 +4,9 @@
                 <h1 class="h4 g-color-black g-font-weight-400">{GW::ln('/m/REGISTER_FORM_HEADING')}</h1>
               </header>
 
-	      
-	      {GW::ln('/m/REGISTER_NOTES')}
-	      
+	      {if GW::ln('/m/REGISTER_NOTES') !="&nbsp;"}
+		{GW::ln('/m/REGISTER_NOTES')}
+	      {/if}
               <!-- Form -->
               <form id="regForm" class="g-py-15" action="{$smarty.server.REQUEST_URI}" method="post">
 		<input type="hidden" name="act" value="do:register" />		      
@@ -23,16 +23,16 @@
 			</div>		
 
 		  
-                <div class="row justify-content-md-center">	
+                <div class="row justify-content-center">	
 		{if $m->cfg->get(login_with_fb)}
-                  <div class="col-6">
+                  <div class="col-md-6">
                     <a href="{$app->buildURI('direct/users/fblogin/redirect')}" class="btn btn-block u-btn-facebook g-font-size-12 text-uppercase g-py-12 g-px-25 mr-2" type="button" >
                       <i class="mr-1 fa fa-facebook"></i>
                       Facebook
                     </a>
                   </div>
 		  {/if}
-                  <div class="col-6">
+                  <div class="col-md-6">
                     <a href="{$app->buildURI('direct/users/gglogin/redirect')}" class="btn btn-block u-btn-lightred g-font-size-12 text-uppercase g-py-12 g-px-25 ml-2" type="button">
                       <i class="mr-1 fa fa-google"></i>
                       Google

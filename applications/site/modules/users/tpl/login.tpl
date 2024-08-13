@@ -1,10 +1,8 @@
 {include "default_open.tpl"}
 
 {function user_login_form}
-            <div class="text-center">
-              <p class="g-color-gray-dark-v5 mb-10">{GW::ln('/m/DONT_HAVE_ACCOUNT')}
-                <a class="g-font-weight-600" href="{$ln}/direct/users/users/register">{GW::ln('/m/VIEWS/register')}</a></p>
-            </div>	
+	 {include "`$m->tpl_dir`/login_or_register.tpl" login=1}
+       
 	
 	<div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
               <header class="text-center mb-4">
@@ -88,7 +86,7 @@
                   <div class="d-inline-block align-self-center g-width-50 g-height-1 g-bg-gray-light-v1"></div>
                 </div>
 
-                <div class="row no-gutters">
+                <div class="row  justify-content-md-center">
 				
 		{if $m->cfg->get(login_with_fb)}
                   <div class="col-6">
