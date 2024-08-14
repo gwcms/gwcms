@@ -9,7 +9,7 @@
 	type="tel"
 	class="form-control has-danger {if $required} required{/if} {if $addclass} {$addclass}{/if}"
 	id="{$id}" 
-	value="{if $value && strpos($value,'+')===false}+{/if}{$value|escape}" 
+	value="{if $value!=0}{if $value && strpos($value,'+')===false}+{/if}{$value|escape}{/if}" 
 	{if $required}required="1"{/if} 
 	{if $placeholder}placeholder="{$placeholder|escape}"{/if}
 
