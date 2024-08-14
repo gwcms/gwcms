@@ -347,4 +347,35 @@ class FH
 
 		return $input_name_pattern;
 	}	
+	
+	/*
+	IN FAQ jquery implementation done
+	static function fancyboxWrapImg($html, $groupid)
+	{
+		//data-fancybox-group="FAQ"
+		
+		$wrap_img_with_link = function($matches) use ($groupid) {
+		    // The entire <img> tag
+		    $imgTag = $matches[0];
+		    $src = $matches[1];
+		    $thumbsrc=html_entity_decode($src);
+		    $src = Navigator::buildURI($thumbsrc, ['size'=>null]);
+
+		    // The replacement <a> tag wrapping the <img> tag
+		    return '<a href="'.$src.'" class="fancyboxe"  data-thumb="'.$thumbsrc.'" data-fancybox="'.$groupid.'">' . $imgTag . '</a>';
+		};
+
+		// Regular expression to match <img> tags
+		$pattern = '/<img\b[^>]*\bsrc=["\']([^"\']+)["\'][^>]*>/i';
+
+
+		// Use preg_replace_callback to replace <img> tags with the wrapped version
+		$result = preg_replace_callback($pattern, $wrap_img_with_link, $html);
+
+		// Output the result
+		echo $result;		
+	}
+
+	 */
+
 }

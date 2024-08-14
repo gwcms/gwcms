@@ -413,7 +413,7 @@ class Module_Users extends GW_Public_Module
 				$_SESSION['email_registered'] = $item->email;
 				
 				$this->setMessage(GW::ln('/M/users/REGISTER_NEED_VERIFY', ['v'=>['EMAIL'=>$item->email]]));
-				
+				$this->testIfJumpRequest();
 				$this->app->jump('/');
 								
 			}else{
@@ -426,6 +426,7 @@ class Module_Users extends GW_Public_Module
 				
 				
 				$this->setMessage(GW::ln('/M/users/USER_REGISTER_SUCCESS', ['v'=>['EMAIL'=>$item->email]]));
+				$this->testIfJumpRequest();
 				
 				
 				
@@ -477,6 +478,8 @@ class Module_Users extends GW_Public_Module
 		$item->prepareSave();
 		
 		
+		unset($_SESSION['3rdAuthUser']);
+		
 		if($item->validate())
 		{		
 			$item->insert();	
@@ -484,6 +487,8 @@ class Module_Users extends GW_Public_Module
 			$this->app->auth->login($item);
 			
 			$this->setMessage('/M/users/USER_REGISTER_SUCCESS');
+			$this->testIfJumpRequest();
+			
 			$this->app->jump('/');
 		}else{
 			$this->setItemErrors($item);
@@ -563,7 +568,7 @@ class Module_Users extends GW_Public_Module
 	}
 	
 	function testIfJumpRequest()
-	{		
+	{				
 		// userRequired() - public module
 		if($tmp = $this->app->sess('navigate_after_auth')){
 			$this->app->sess('navigate_after_auth', null);
@@ -1213,12 +1218,6 @@ class Module_Users extends GW_Public_Module
 				session_write_close();
 				
 				
-				if($this->app->sess('after_auth_nav')){
-					$uri = $this->app->sess('after_auth_nav');
-					$this->app->sess('after_auth_nav', "");
-					header("Location: ".$uri);
-					exit;				
-				}	
 				
 				
 				

@@ -104,7 +104,7 @@ class GW_Common_Module extends GW_Module
 			$this->setMessage("Use drag drop rows to change list order. <a href='{$backurl}' class='btn btn-sm btn-default'>Press this button to exit drag&drop ordering mode</a>");			
 		}
 		if($this->dynamic_fields){
-			$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
+			$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', strtolower(get_class($this->model))],['key_field'=>'fieldname']);
 			
 		}		
 	}

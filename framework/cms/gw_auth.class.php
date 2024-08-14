@@ -123,8 +123,10 @@ class GW_Auth
 
 		if ($user->banned == 1)
 			return $this->setError('/G/GENERAL/USER_BANNED');
-		if ($user->active == 0)
+		if ($user->active == 0){
+			$this->logout();
 			return $this->setError('/G/GENERAL/USER_INNACTIVE');
+		}
 		
 		
 		if($user)
