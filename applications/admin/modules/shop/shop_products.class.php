@@ -38,8 +38,10 @@ class Shop_Products extends GW_Composite_Data_Object
 				return $this->extensions['keyval'];
 			break;
 			case 'discount_display':
-				$dif = $this->oldprice - $this->price;
-				return $dif  ? round(($dif / $this->oldprice)*100).'%' : '';
+				if((float)$this->oldprice){
+					$dif = $this->oldprice - $this->price;
+					return $dif  ? round(($dif / $this->oldprice)*100).'%' : '';
+				}
 			break;
 		}
 		

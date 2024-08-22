@@ -210,7 +210,11 @@
 
 				<span class="g-color-black">
 				{if $item->min_price != $item->max_price} 
-					{$item->min_price} &#8212; {$item->max_price} &euro;
+					{if GW::s('PROJECT_NAME') == 'drpaulclayton'}
+						{GW::ln('/m/TO_SEE_PRICE_PICK_MOD')}
+					{else}
+						{$item->min_price} &#8212; {$item->max_price} &euro;
+					{/if}
 				{else}
 					{$item->min_price}  &euro;
 				{/if}				
@@ -231,8 +235,9 @@
 				<div style="background-color:#eee">
 					<ul>
 					{foreach $scheme as $qty => $price}
-
-					<li>Buy {$qty} times, unit price: {$price}&euro; <small>(savings from: {($item->price-$price)*$qty}&euro;)</small></li>
+						{$savings=($item->price-$price)*$qty}
+						{*Buy $qty times, unit price: $price€ <small>(savings from: $savings€)</small>*}
+					<li>{GW::ln('/m/PRICESCHEME_BUY', [v=>[qty=>$qty, price=>$price, savings=>$savings]])}</li>
 					{/foreach}
 					</ul>
 				</div>

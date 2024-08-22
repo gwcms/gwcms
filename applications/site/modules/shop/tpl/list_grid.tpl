@@ -1,10 +1,12 @@
-{$cols=$cols|default:3}
+{$cols=$m->config->site_grid_items_per_row|default:3}
 {$celsz=12/$cols}
 {*
 {$imsize=[4=>"480x700",6=>"200x200"]}
 {$imsize=$imsize[$cols]}
 *}
-{$imsize="480x480"}
+{$imsize=$m->config->site_thumb_size|default:"480x480"}
+
+
 
 <div class="row g-pt-30 g-mb-50">	
 	{foreach $list as $item}
@@ -21,7 +23,7 @@
 	<figcaption class="w-100 g-bg-lightred text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5">
 		<span class="g-color-white g-font-size-11 text-uppercase g-letter-spacing-1">{GW::ln('/M/SHOP/SOLD_OUT')}</a>
 	      </figcaption>
-	      {elseif $item->oldprice}
+	      {elseif (float)$item->oldprice}
 		       <span class="u-ribbon-v1 g-width-40 g-height-40 g-color-white g-bg-primary g-font-size-13 text-center text-uppercase g-rounded-50x g-top-10 g-right-minus-10 g-px-2 g-py-10">-{$item->discount_display}</span>
 	      {/if}
 	    
@@ -54,10 +56,10 @@
 		
 		
 		<span class="d-block g-color-black g-font-size-17">
-			{if $item->oldprice}
+			{if (float)$item->oldprice}
 				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-15">{$item->oldprice} &euro;</s>
 			{/if}
-			<span class="{if $item->oldprice}g-color-red{else}g-color-black{/if}">{$item->price} &euro;</span>
+			<span class="{if (float)$item->oldprice}g-color-red{else}g-color-black{/if}">{$item->price} &euro;</span>
 		</span>
 	      </div>
 	      <!-- End Product Info -->

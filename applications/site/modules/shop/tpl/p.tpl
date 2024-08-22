@@ -228,8 +228,9 @@
 				<div style="background-color:#eee">
 					<ul>
 					{foreach $scheme as $qty => $price}
-
-					<li>Buy {$qty} times, unit price: {$price}&euro; <small>(savings from: {($item->price-$price)*$qty}&euro;)</small></li>
+						{$savings={($item->price-$price)*$qty}}
+						{*Buy $qty times, unit price: $price€ <small>(savings from: $savings€</small>)*}
+					<li>{GW::ln('/m/PRICESCHEME_BUY', [v=>[qty=>$qty, price=>$price, savings=>$savings]])}</li>
 					{/foreach}
 					</ul>
 				</div>
