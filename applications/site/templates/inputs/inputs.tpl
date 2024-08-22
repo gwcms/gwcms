@@ -118,12 +118,12 @@
 			{if $onchangeFunc}
 				{capture append=footer_hidden}
 				<script type="text/javascript">
-					$(function(){
+					//$(function(){
 						$('input[type=radio][name="{$input_name}"]').change(function() {
 							{$onchangeFunc}(this.value, this);
 						})
 						{$onchangeFunc}($('input[type=radio][name="{$input_name}"]:checked').val(), false);
-					})
+					//})
 					
 				</script>
 				{/capture}

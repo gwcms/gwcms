@@ -295,6 +295,17 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		return self::$linked_map[$field];
 	}
 	
+	//reverse to linkedObjMap
+	function getRelationFieldByIdfield($idfield)
+	{	
+		foreach($this->composite_map as $objfield => $entry)
+		{			
+			if($entry[0]=='gw_composite_linked' && strtolower($entry[1]['relation_field'])==$idfield)
+				return $objfield;
+		}
+	}	
+		
+	
 	static function prepareLinkedObjects($list, $field=false, $opts=[]) 
 	{
 		if(!$list)
@@ -378,6 +389,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 		}
 	}
 	
+
 	function getChildCounts($childClass, $ids, $extracond=false)
 	{
 		

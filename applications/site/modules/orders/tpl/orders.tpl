@@ -257,15 +257,16 @@
 
 						{if $order->active}
 							{if $order->payment_status==7}
-								{$link=$m->buildUri('prepareinvoice', [id=>$order->id])}
+								{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id])}
 							{else}
-								{$link=$m->buildUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
+								{$link=$m->buildDirectUri('prepareinvoice', [id=>$order->id,preinvoice=>1])}
 							{/if}
 							<a class="dropdown-item"  href="{$link}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> {GW::ln('/m/INVOICE')}</a>
 						{/if}
 			
 						
-						<a class="dropdown-item" href="{$m->buildUri(false,[act=>doOrderSummary,id=>$order->id,viewable=>1])}">
+						{*buildDirectUri -  is embed turi buti*}
+						<a class="dropdown-item" href="{$m->buildDirectUri(false,[act=>doOrderSummary,id=>$order->id,viewable=>1])}">
 							<i class="fa fa-print"></i> {GW::ln('/m/PRINT_ORDER_INFO')}
 						</a>
 

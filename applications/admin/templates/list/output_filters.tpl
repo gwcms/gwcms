@@ -119,3 +119,18 @@
 		<span title="id: {$obj->id}">{$obj->title}</span>
 		
 {/function}	
+
+{function name=dl_output_filters_customer}
+
+		{if $item->$field}
+			{$objfld=$item->getRelationFieldByIdfield($field)}
+			
+			
+			{if $objfld}{$title=$item->$objfld->title}{else}{$title="id:{$item->$field}"}{/if}
+
+			<a class="iframeopen" href="{$app->buildUri("customers/users/`$item->$field`/form",[clean=>2,readonly=>1])}" title="Vartotojo info - {$title}">{$title}</a>
+		{else}
+			-
+		{/if}
+
+{/function}	
