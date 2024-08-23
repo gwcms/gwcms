@@ -51,7 +51,6 @@ class Module_Sms extends GW_Common_Module
 		
 		$resp = json_decode($resp,true);
 		
-		d::dumpas($resp);
 		
 		$extra = $resp;
 		

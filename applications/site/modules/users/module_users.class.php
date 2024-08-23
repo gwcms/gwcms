@@ -152,12 +152,13 @@ class Module_Users extends GW_Public_Module
 			return $this->setError($valid[1]);
 		
 		$country_by_phone = $valid[1];
-		$allowed_countries = json_decode(mb_strtolower($this->cfg->phone_limit_country));
+		$allowed_countries = json_decode(mb_strtoupper($this->cfg->phone_limit_country));
 		$allowed_countries = array_flip($allowed_countries);
 		
-		if(!isset($allowed_countries[$allowed_countries]))
-			return $this->setError(GW::ln('/m/COUNTRY_NOT_SUPPORTED'));
+		//d::dumpas([$allowed_countries, $country_by_phone]);
 		
+		if(!isset($allowed_countries[$country_by_phone]))
+			return $this->setError(GW::ln('/m/COUNTRY_NOT_SUPPORTED'), "($country_by_phone)");
 		
 		
 		$this->app->sess('usercode', $code);
