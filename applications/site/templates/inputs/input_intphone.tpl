@@ -31,8 +31,15 @@
 		<script src="{$asssets}international-telephone-input-master/international-telephone-input.js" type="text/javascript"></script>
 		<script>
 				
-				
-		{if $app->ln == 'lt'}intlTelInput.preferredCountries= ["lt"]{/if}
+	{if $prefered_country}	
+		intlTelInput.preferredCountries= ["{strtolower($prefered_country)}"]
+	{else}
+		{if $app->ln == 'lt'}
+			intlTelInput.preferredCountries= ["lt"]
+		{else}
+			intlTelInput.preferredCountries= []
+		{/if}
+	{/if}
 			
 	{if $limit_country}
 			allowed_countries = {json_encode($limit_country)};

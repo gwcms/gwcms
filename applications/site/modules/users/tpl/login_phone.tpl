@@ -15,9 +15,22 @@
 		      <input type="hidden" name="act" value="do:sendSmsCode" />
                 <div class="mb-4">
 
-
+			{$limit_country = json_decode(mb_strtolower($m->cfg->phone_limit_country))}
+			{$geoipcountry = strtolower(geoip_country_code_by_name($smarty.server.REMOTE_ADDR))}
+			
+			  {if $app->ln == 'lt'}
+				  {$prefered_country = 'lt'}
+			  {else}
+				 
+				 {if in_array($geoipcountry, $limit_country)}
+					{$prefered_country = $geoipcountry} 
+				 {/if}
+				 
+			  {/if}
 			  
-		{input type=intphone field="phone" value=$smarty.get.phone  input_name_pattern="%s" limit_country=json_decode(mb_strtolower($m->cfg->phone_limit_country))
+			  <!-- cbyip: {$geoipcountry} limit: {json_encode($limit_country)} pref: {$prefered_country} -->
+			  
+		{input type=intphone field="phone" value=$smarty.get.phone  input_name_pattern="%s" limit_country=$limit_country
 			validactions='if(valid){ numberisvalid=true; $("#submitbutton").removeAttr("disabled"); }else{ numberisvalid=false; $("#submitbutton").attr("disabled","disabled"); }'}
 
                   </div>
