@@ -1,5 +1,17 @@
 {include "default_open.tpl"}
 
+{if $page->getContent('trackvisits')}	
+	{if $smarty.server.REMOTE_ADDR != '84.15.236.87'}
+		{$country = geoip_country_code_by_name($smarty.server.REMOTE_ADDR)}
+		{$host=gethostbyaddr($smarty.server.REMOTE_ADDR)}
+		{$body="{date('Y-m-d H:i:s')} | {$smarty.server.REMOTE_ADDR} | {$host} | {$country} | {$smarty.server.HTTP_USER_AGENT} | {$smarty.server.REQUEST_URI}\n\n"}
+
+		{$tmp=[subject=>"{$page->title}({$page->path}) visit", 'body'=>$body]}
+		{$stat = GW_Mail_Helper::sendMailAdmin($tmp)}
+	{/if}
+{/if}	
+
+
 {include file="inputs/inputs.tpl"}
 
 <br />
