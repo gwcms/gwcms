@@ -199,6 +199,13 @@ class Module_FBLogin extends GW_Public_Module
 		$req_id = $_SESSION['auth_gw_lt_req_id'];
 		$dat = file_get_contents(GW::s('GW_FB_SERVICE').'?get_response='.$req_id);
 		$dat = json_decode($dat);
+		
+		if(!$dat || isset($_GET['error'])){
+			
+			$args=['error'=>$_GET['error'], 'error_description'=>$_GET['error_description'],'error_code'=>$_GET['error_code']];
+			$this->app->jump('direct/users/users/signInOrRegister', $args);
+		}
+		
 		$dat->type='facebook';
 		$dat->picture='https://graph.facebook.com/'.$dat->id.'/picture?type=small';
 		$_SESSION['3rdAuthUser'] = $dat;
