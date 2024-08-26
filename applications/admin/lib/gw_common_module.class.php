@@ -1034,7 +1034,6 @@ class GW_Common_Module extends GW_Module
 			if(isset($this->model->extensions['keyval'])){
 				$ids = $this->model->extensionget('keyval')->search($this->list_params['search']);
 				if($ids){
-					
 					$this->buildConds(['field' => 'id', 'value' => $ids, 'ct' => 'IN'], $subcond, 'OR');
 				}
 			}

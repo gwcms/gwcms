@@ -384,7 +384,9 @@ class GW_Mail_Helper
 	{
 		$path="datasources/sms";
 
-		self::processTpl($opts);
+		
+		if(isset($opts['tpl']))
+			self::processTpl($opts);
 		//d::dumpas($opts);
 		
 		//kad galetu pasiziuret teksta pries siunciant
