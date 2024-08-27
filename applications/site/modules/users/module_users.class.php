@@ -140,7 +140,8 @@ class Module_Users extends GW_Public_Module
 		
 		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'],  '1', '1 minute');
 	
-		$phonenumber = preg_replace('/[^0-9]/','',$_POST['phone']);
+		if(isset($vals['phone']))
+			$phonenumber = preg_replace('/[^0-9]/','',$_POST['phone']);
 		
 		
 		$code = GW_String_Helper::getRandString(6, '0123456789');
@@ -361,6 +362,8 @@ class Module_Users extends GW_Public_Module
 		
 		$link3rdAuth = $vals['3rdAuthUserlink'] ?? false;
 		unset($vals['3rdAuthUserlink']);
+		
+		$vals['phone'] = preg_replace("/[^0-9]/",'',$vals['phone']);
 		
 		$item = $this->model->createNewObject($vals);
 		
@@ -918,6 +921,9 @@ class Module_Users extends GW_Public_Module
 		);	
 	
 		$item->fireEvent('BEFORE_CHANGES');
+		
+		if(isset($vals['phone']))
+			$vals['phone'] = preg_replace("/[^0-9]/",'',$vals['phone']);
 		
 		$item->setValues($vals);
 		

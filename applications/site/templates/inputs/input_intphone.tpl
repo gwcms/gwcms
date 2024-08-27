@@ -67,6 +67,11 @@
 				$('input[type=tel]').each(function(){					
 					this.dispatchEvent(new CustomEvent("keyup", {  }));
 				})
+				
+				setTimeout(function(){  $('input[type=tel]').each(function(){					
+					this.dispatchEvent(new CustomEvent("keyup", {  }));
+				})
+				  }, 1000)
 			})
 		</script>
 
