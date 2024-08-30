@@ -600,6 +600,12 @@ var gw_adm_sys = {
 			gw_adm_sys.reinitfunctions[key]();
 		}
 		
+		
+		$(".iframe-autosize:not([data-initdone='1'])").each(function(){
+			gwcms.initAutoresizeIframe($(this), { minHeight: 100, heightOffset: 0, fixedWidth:true, interval:1000})
+			$(this).attr('data-initdone',1);
+		})
+		
 		gw_adm_sys.init_iframe_open();
 		gw_checklist.init();
 	},

@@ -81,7 +81,7 @@
 
 			.iti {
 			    position: relative;
-			    display: inline-block;
+			    display: {$display|default:'inline-block'};
 			}
 
 			.iti input[type=tel] {
@@ -102,6 +102,7 @@
 			    font-family: inherit;
 			    font-size: 100%;
 			    color: inherit;
+			    display:block;
 			}
 
 			.has-danger{ border-color: #d9534f !important }

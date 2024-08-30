@@ -481,6 +481,8 @@ class GW_Common_Module extends GW_Module
 		}
 
 		$this->fireEvent('BEFORE_SAVE', $item);
+		
+		$new_item = $item->id ? false : true;
 
 		//jeigu nustatomas id naujo iraso sukurimo atveju GW_Data_Object::save() funkcija interpretuoja kad norima atlikti update veiksma
 		//jei i forma dadesime
@@ -512,6 +514,9 @@ class GW_Common_Module extends GW_Module
 		$this->setMessageEx($message);
 
 		$this->fireEvent('AFTER_SAVE', $item);
+		
+		if($new_item)
+			$this->fireEvent('AFTER_INSERT', $item);
 		
 		if(isset($tmpid))
 			$this->app->sess('last_temp_id', $tmpid);

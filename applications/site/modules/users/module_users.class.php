@@ -424,7 +424,7 @@ class Module_Users extends GW_Public_Module
 				unset($_SESSION['3rdAuthUser']);
 				$item->active=1;
 				$item->insert();
-				$this->notifyAdminNewUser($item);
+				//$this->notifyAdminNewUser($item);
 				
 				$this->app->auth->login($item);
 				
