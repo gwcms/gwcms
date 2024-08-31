@@ -209,9 +209,13 @@ class d
 		if(isset($_SERVER['SHELL'])){
 			$str = "Im in {$point1['file']} {$point1['line']}\n";
 		}else{
+			$addargs = Navigator::postLink($_SERVER['REQUEST_URI'], 'add args', $_POST);
+			
 			$str = "\nIm in: <a href='#' onclick='document.getElementById(\"debug_bl_{$GLOBALS['debug_block']}\").style.display=\"block\";this.href=\"\";return false'>" . $point1['file'] . ':' . $point1['line'] . "</a>".
-			" <a href='#' class='openfile1' data-file='{$point1['file']}' data-line='{$point1['line']}'>OpenInNetbeans</a> | <a href='".Navigator::buildURI(false,$_GET+['backtrace_addargs'=>1])."'>add args<a/>"	.
+			" <a href='#' class='openfile1' data-file='{$point1['file']}' data-line='{$point1['line']}'>OpenInNetbeans</a> | $addargs"	.
 			"<div id='debug_bl_{$GLOBALS['debug_block']}' ".($hidden?"style='display:none'":'')."><ul>$backtracestr</ul></div>";
+			
+			
 			
 			GW_Debug_Helper::openInNetBeans();
 		}
