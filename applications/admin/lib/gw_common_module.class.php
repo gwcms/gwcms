@@ -3762,7 +3762,7 @@ class GW_Common_Module extends GW_Module
 			'placeholder'=>$input->placeholder,
 			'hidden_note'=>$input->hidden_note,
 			'i18n'=>$input->get('i18n'),
-			'colspan'=>1
+			//'colspan'=>$input->size,
 		];
 
 		if($input->type == 'extended')
@@ -3780,7 +3780,6 @@ class GW_Common_Module extends GW_Module
 		if(is_array($opts))
 			$field = array_merge($field, $opts);
 
-
 		$fields_config['fields'][$input->get('fieldname')] = $field;		
 	}
 	
@@ -3793,5 +3792,16 @@ class GW_Common_Module extends GW_Module
 		}		
 	}
 		
+	function initDynFieldInputs(&$cfg)
+	{
+		$fields_config=[];
+		foreach ($this->mod_fields as $input){
+			$this->addDynamicField($fields_config, $input);
+		}	
+		foreach($fields_config['fields'] as $field => $input){
+			unset($input['field']); // grupinis vertes keitimas
+			$cfg['inputs'][$field] = $input;
+		}
+	}
 	
 }
