@@ -68,7 +68,7 @@ $(function () {
 		}		
 
 		if (event.which == 51 && event.ctrlKey) {
-			location.href = GW.app_base  + 'admin/'+GW.ln+'/admin/system/tools?act=doDebugModeToggle&uri='+encodeURIComponent(location.href)
+			location.href = GW.app_base  + 'admin/'+GW.ln+'/system/tools?act=doDebugModeToggle&app=SITE&uri='+encodeURIComponent(location.href)
 			event.preventDefault();
 		}		
 
@@ -92,8 +92,3 @@ $(function () {
 	$('body').append('<style>@media print{  .no-print, .no-print *{ display: none !important;}}</style>');
 
 })
-
-
-//aabb
-//kad si faila susinchronizuot su core reikia kad butu ant projekto pridetas i isimtis
-//config/project_specific_files.php $include_paths gal si faila perkelt i admin/assets/site_helper.js

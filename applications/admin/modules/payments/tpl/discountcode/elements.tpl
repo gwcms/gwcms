@@ -6,10 +6,10 @@
 
 {$fields_config=[
 	fields=>[
-		code=>[type=>text],
+		code=>[type=>text,required=>1],
 		percent=>[type=>number],
 		limit_amount=>[type=>number,step=>0.01],
-		note=>[],
+		note=>[required=>1],
 		active=>[type=>bool],
 		singleuse=>[type=>bool],
 		obj_type=>[type=>select, options=>$item->getTypes(), empty_option=>1, options_fix=>1],
@@ -19,6 +19,8 @@
 	]
 ]
 }
+
+
 
 {if $item->obj_type == 'shop_products'}
 	{$fields_config.fields.products=[type=>multiselect_ajax, modpath=>"shop/products", preload=>1,options=>[],value_format=>json1 ]}

@@ -62,5 +62,11 @@ class Module_DiscountCode extends GW_Common_Module
 		$cfg['inputs']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
 	
 		return $cfg;
-	}	
+	}
+
+	function __eventBeforeSave($item){
+		if(!$item->id){
+			$item->user_id = $this->app->user->id;
+		}
+	}
 }
