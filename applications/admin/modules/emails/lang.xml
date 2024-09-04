@@ -67,6 +67,9 @@
 		<i id="body_editor_height">Teksto redaktoriaus aukštis</i>
 		<i id="recipients_ids">Paskiri gavėjai</i>
 		<i id="attachments"><lt>Prisegtukai</lt><en>Attachments</en></i>
+		<i id="recipients">Gavėjai</i>
+		<i id="template_id">Šablonas</i>
+		
 	</i>
 	
     <i id="FIELDS_SHORT">

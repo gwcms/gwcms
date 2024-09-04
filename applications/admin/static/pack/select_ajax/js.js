@@ -506,7 +506,9 @@ function addEditControls(obj)
 
 	this.selected = function (context)
 	{		
-		if(context.item)
+
+		
+		if(context && context.hasOwnProperty(item))
 		{
 			var item = context.item
 			
