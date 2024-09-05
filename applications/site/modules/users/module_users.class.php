@@ -130,17 +130,20 @@ class Module_Users extends GW_Public_Module
 		
 		
 		GW_Temp_Data::singleton()->cleanup();
-		$LAST_REQUEST = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR']);
+		$expires = false;
+		$LAST_REQUEST = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'], $expires);
 			
 			
 		if($LAST_REQUEST){
-			$this->setError('Bit more to wait before resend');
+
+			
+			$this->setError('Bit more to wait before resend ('.(strtotime($expires)-time()).' secs)');
 			return false;
 		}
 		
 		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'],  '1', '1 minute');
 	
-		if(isset($vals['phone']))
+		if(isset($_POST['phone']))
 			$phonenumber = preg_replace('/[^0-9]/','',$_POST['phone']);
 		
 		
@@ -210,6 +213,7 @@ class Module_Users extends GW_Public_Module
 				$user->phone = $phone;
 				$user->username = $phone;
 				$user->active = 1;
+				$this->__doRegisterPrepareUser($user);
 				$user->insert();
 			}
 			
@@ -573,6 +577,18 @@ class Module_Users extends GW_Public_Module
 	
 	function testIfJumpRequest()
 	{				
+		//negryzdavo i siuntusi puslapi  tai gal kazkaipp nusistatydavo tas pats psl, prasitestuot zemiau uzkomentuotas kodas
+		if($this->app->sess('after_auth_nav') == $_SERVER['REQUEST_URI'] || $_SERVER['REQUEST_URI'] == $this->app->sess('navigate_after_auth'))
+			return false;
+		
+		/*
+		if(($_GET['phone'] ?? false)=='37060089089'){
+			
+			d::dumpas([$_SERVER['REQUEST_URI'],$this->app->sess('navigate_after_auth'), $this->app->sess('after_auth_nav')]);
+		}
+		 * 
+		 */	
+		
 		// userRequired() - public module
 		if($tmp = $this->app->sess('navigate_after_auth')){
 			$this->app->sess('navigate_after_auth', null);

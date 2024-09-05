@@ -38,9 +38,12 @@ class GW_Temp_Data extends GW_Data_Object
 		return $this->find(GW_DB::buidConditions(['user_id' => $user_id, 'group' => $group, 'name' => $name]));
 	}
 
-	function readValue($user_id, $group, $name)
+	function readValue($user_id, $group, $name, &$expires=false)
 	{
+		
 		$item = $this->read($user_id, $group, $name);
+		$expires = $item->expires;
+		
 		return $item ? $item->value : false;
 	}
 	
