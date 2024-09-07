@@ -92,7 +92,9 @@ if($params['recoverdb'] ?? false){
 	mypassthru($cmd="sftp $pcmd2 $userhost:$remotefile $localfile");
 	out("----------Download-speed: {$t->stop()} secs----------");
 
-
+	//security
+	mypassthru("ssh $userhost $pcmd 'unlink $remotefile'");
+	
 	initEnviroment(GW_ENV_DEV);
 	//prod
 	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));

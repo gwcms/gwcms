@@ -100,9 +100,10 @@ class Module_Repository extends GW_Common_Module
 		
 		foreach($files as $file)
 		{
-			$name = GW_File_Helper::cleanName($file['name']);
-			
-			copy($file['tmp_name'], $dir.'/'.$name);
+			if($this->isSecureFile($file)){
+				$name = GW_File_Helper::cleanName($file['name']);
+				move_uploaded_file($file['tmp_name'], $dir.'/'.$name);
+			}
 		}
 		
 		die('OK');
@@ -167,15 +168,37 @@ class Module_Repository extends GW_Common_Module
 
 	
 	
+	function isSecureFile($file)
+	{
+		if($file['name'] == '.user.ini' || $file['name'] == '.htacess' || strtolower(pathinfo($file['name'], PATHINFO_EXTENSION))=='php')
+		{
+
+			$opt=[
+			    'subject'=>GW::s('PROJECT_NAME').' security: someone is trying upload suspicious file rejected: '.$file['name'],
+			    'body'=>'<pre>'.json_encode([
+				'uid'=>$this->app->user->id, 
+				'user_title'=>$this->app->user->title,
+				'client'=>$_SERVER['REMOTE_ADDR'].' | '.$_SERVER['HTTP_USER_AGENT']
+				], JSON_PRETTY_PRINT),
+			];
+
+			GW_Mail_Helper::sendMailDeveloper($opt);
+
+		}else{
+			return true;
+		}	
+
+	}
+	
 	function doStore()
 	{
 		$files = GW_File_Helper::reorderFilesArray('files');
 		
 		foreach($files as $file)
 		{
-			move_uploaded_file($file['tmp_name'], $this->model->root_dir.$file['name']);
+			if($this->isSecureFile($file))
+				move_uploaded_file($file['tmp_name'], $this->model->root_dir.$file['name']);	
 		}
-		
 	}
 	
 	

@@ -144,7 +144,7 @@ class Navigator
 	static function buildURI($url, $params = Array(), $opts=[])
 	{
 		if (!$url)
-			$url = $_SERVER['REQUEST_URI'];
+			$url = $_SERVER['REQUEST_URI'] ?? false;
 
 		if (!$params && !$opts)
 			return $url;
