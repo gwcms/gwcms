@@ -27,6 +27,9 @@
 		  {/foreach}
 
 		  
+		  {GW::ln("/m/SIDEBAR_AFTER_PROD_TYPES_HTML")}
+		  
+		  
 		  <hr>
 		  
 		  {foreach $classificatorGroup as $classid => $classif}
