@@ -196,8 +196,9 @@ class Module_Page_Views extends GW_Common_Module
 		$cfg = parent::getListConfig();
 		
 
-
+		$cfg['fields']['calculate'] = 'Lof';
 	
+		
 		$cfg['inputs']['title']=['type'=>'text'];	
 		$cfg['inputs']['title_short']=['type'=>'text'];	
 		$cfg['inputs']['priority']=['type'=>'number'];	

@@ -18,6 +18,7 @@
 	   {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
 	   {if $confirm}{$app->fh()->gw_link_confirm()}{/if}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}"
+	   {if $shift_button} onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false}"; {/if}
 	   {if $newwindow}target="_blank"{/if}>{if $iconhtml}{$iconhtml}{/if}{if $iconclass}{if strpos($iconclass,'material ')!==false}<span class="materialico material-symbols-outlined">{str_replace(material,'',$iconclass)}</span>{else}<i class="{$iconclass}"></i>{/if}{/if} <span class='alabel'>{$title}</span>
 		
 	</a>
