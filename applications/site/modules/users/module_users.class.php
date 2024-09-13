@@ -965,15 +965,10 @@ class Module_Users extends GW_Public_Module
 			$this->setMessage(GW::ln('/m/PROFILE_WAS_UPDATED'));
 			
 			
+			$this->testIfJumpRequest();
 			
-			if(($path=$this->app->sess('jump_after_profile_save')) || ($path= ($_GET['return_to'] ?? false) ))
-			{
-				header("Location: ". $path);
-				$this->app->sess('jump_after_profile_save', false);
-				exit;
-			}else{
-				$this->app->jump('/');
-			}
+			$this->app->jump('/');
+			
 		}else{
 			$this->setErrorItem($item->content_base, 'profile');
 			$this->setItemErrors($item);
