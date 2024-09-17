@@ -417,15 +417,14 @@ class GW_Lang
 			$keyx=self::transKeyAnalise($fullkey);	
 			$keyx = implode('/',$keyx);
 			
-	
+			
 			
 			
 			if(!isset($opts['redirect'])){
 				
 				
 				$resraw=file_get_contents('https://voro.lt/service/trshare/gettr?trkey='.$keyx);
-
-
+			
 				if($resp = json_decode($resraw, true)){
 					
 					$value_store_key = 'value_'.GW_Lang::$ln;
@@ -434,22 +433,29 @@ class GW_Lang
 					$existingtr = GW_Translation::singleton()->findByFullKey($keyx);
 					
 					//d::ldump(['result_from_central'=>$resp['result'], 'existing_tr'=>$existingtr, 'result_from_central_ln'=>$result_value_ln]);
-					
-					if($resp['result'] && GW_Lang::isEmptyTranslation($result_value_ln)){
-						
+								
+					if($resp['result'] && !GW_Lang::isEmptyTranslation($result_value_ln)){
+											
 						if($existingtr){
 							$existingtr->$value_store_key = $result_value_ln;
 							$existingtr->updateChanged();
 						}else{
-							$newtr = GW_Translation::singleton()->createNewObject($resp['result']);
+							$vals = $resp['result'];
+							unset($vals['insert_time']);
+							unset($vals['update_time']);
+							
+							$newtr = GW_Translation::singleton()->createNewObject();
+							$newtr->setValues($vals);
 							$newtr->trshare = 1;
 							$newtr->save();
+							//d::Dumpas($newtr->toArray());
 						}
 						
 						$opts['redirect'] = 1;
 						self::transCacheReset($keyx[0]);;
+						return $result_value_ln;
 						
-						return GW::ln($fullkey, $opts);
+						//return GW::ln($fullkey, $opts);
 					}	
 				}else{
 					//trans share mechanism failed
