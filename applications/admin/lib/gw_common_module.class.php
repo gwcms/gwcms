@@ -3798,6 +3798,10 @@ class GW_Common_Module extends GW_Module
 		foreach ($this->mod_fields as $input){
 			$this->addDynamicField($fields_config, $input);
 		}	
+		
+		if(!isset($fields_config['fields']))
+			return false;
+			
 		foreach($fields_config['fields'] as $field => $input){
 			unset($input['field']); // grupinis vertes keitimas
 			$cfg['inputs'][$field] = $input;
