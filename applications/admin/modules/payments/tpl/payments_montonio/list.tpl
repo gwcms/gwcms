@@ -29,4 +29,17 @@
 	
 	
 	{$dl_smart_fields=[order_id]}
+	
+	{function dl_cl_actions_doMontonioRetryProcess}
+		{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+			<option value="checked_action('{$m->buildUri(false,[act=>doMontonioRetryProcessSeries])}', 1)">{GW::l('/A/VIEWS/doMontonioRetryProcess')}</option>
+		{/if}
+	{/function}	
+	
+	{if $app->user->isRoot()}
+		{$dl_cl_actions=[doMontonioRetryProcess,dialogremove]}	
+		{$dl_checklist_enabled=1}
+	{/if}
+	
+
 {/block}

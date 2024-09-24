@@ -17,6 +17,7 @@ class Module_Payments_Montonio extends GW_Common_Module
 
 		$this->addRedirRule('/^doMontonio|^viewMontonio|^montonio/i',['options','pay_montonio_module_ext']);	
 		
+		$this->item_remove_log=1;
 	}
 	
 /*	
@@ -157,6 +158,28 @@ class Module_Payments_Montonio extends GW_Common_Module
 		}
 	}
 	
+	
+	function doMontonioRetryProcessSeries()
+	{
+		$items = $this->getDataObjectByIds();
+		
+		//d::Dumpas($items);
+		
+		$cnt = 0;
+		foreach($items as $item){
+			$this->doMontonioRetryProcess($item);
+			$cnt++;
+		}
+		
+		$this->setMessage('retry process: '.$cnt);
+	}
+	
+	//del sio doMontonioRetryProcessSeries
+	function markAsPaydSystem($args)
+	{
+		$url=Navigator::backgroundRequest($urlreq='admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		return $urlreq;
+	}	
 	
 	
 }

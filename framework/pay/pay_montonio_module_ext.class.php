@@ -426,9 +426,11 @@ if (
 	}	
 	
 	
-	function doMontonioRetryProcess()
+	function doMontonioRetryProcess($log=false)
 	{
-		$log = gw_payuniversal_log::singleton()->find($_GET['id']);
+		if(!$log)
+			$log = gw_payuniversal_log::singleton()->find($_GET['id']);
+		
 		$order = GW_Order_Group::singleton()->find(['id=?', $log->order_id]);	
 		
 		$args = [
@@ -443,7 +445,8 @@ if (
 		$log->processed = 1;
 		$log->updateChanged();
 		
-		d::dumpas(['packet'=>$log, 'mark_as_payd'=>$markaspayd]);
+		if(isset($_GET['debug']))
+			d::dumpas(['packet'=>$log, 'mark_as_payd'=>$markaspayd]);
 	}
 	
 	function log($msg)

@@ -903,8 +903,6 @@ var gwcms = {
 					
 					gwcms.close_dialog2()
 					
-					console.log([url, conf]);
-					
 					var windowname=window.btoa(unescape(encodeURIComponent(conf.title)))
 					
 					window.open(gw_navigator.url(url, { clean:false }), windowname).focus();

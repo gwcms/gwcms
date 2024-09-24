@@ -3695,6 +3695,16 @@ class GW_Common_Module extends GW_Module
 
 			$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
 
+			//pagal telefona rasti sms i ids paduodame asociatyvu masyva [id1 => tel1, id2=> tel2]
+			if($cfg['map'] ?? false){
+				$counts0 = $counts;
+				$counts = [];
+				$ids_flipped = array_flip($ids);
+				
+				foreach($counts0 as $countid => $count)
+					$counts[  $ids_flipped[$countid] ]  = $count;
+			}
+
 			$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	
 			
 			//if($cfg['modpath']=='membership'){
