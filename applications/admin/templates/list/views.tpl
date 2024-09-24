@@ -14,6 +14,17 @@
 
 {$views_visible=GW_Adm_Page_View::select2Display($views,false,"")}
 {$views_drop=GW_Adm_Page_View::select2Display($views,true,"")}
+{$current_view=$m->list_config["pview"]}
+
+{foreach $views_drop as $view}
+	
+	{if $current_view->id == $view->id}
+		{$views_visible[]=$view}
+	{/if}
+	
+{/foreach}
+
+
 {$orders_visible=GW_Adm_Page_View::select2Display($views,false,"order")}
 {$orders_drop=GW_Adm_Page_View::select2Display($views,true,"order")}
 
