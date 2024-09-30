@@ -31,6 +31,7 @@ class Module_Groups extends GW_Common_Module
 		parent::init();
 		
 		
+		$this->initModCfg();
 		$this->app->carry_params=['group_id'=>1,'clean'=>1, 'type'=>1];
 		
 	}

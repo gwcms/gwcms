@@ -16,8 +16,11 @@ class GW_Article extends GW_Composite_Data_Object
 
 
 
-	function getAttachments($ln)
+	function getAttachments($ln=false)
 	{
-		return $this->extensions['attachments']->findAll(["field=?", "attachments_{$ln}"]);		
+		if($ln)
+			$ln="_$ln";
+		
+		return $this->extensions['attachments']->findAll(["field=?", "attachments{$ln}"]);		
 	}	
 }

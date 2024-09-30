@@ -28,6 +28,7 @@
 	{$do_toolbar_buttons[] = groups}	
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
+	{$do_toolbar_buttons_hidden[] = dialogconf2}	
 	
 	
 	{$dl_actions=[invert_active,edit,delete]}

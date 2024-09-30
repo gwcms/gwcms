@@ -11,11 +11,18 @@
 {call e field=active type=bool}
 
 
+
+{if $m->modconfig->attachmentsi18n}
+	{$atti18n=4}
+{/if}
+
 {call e field=attachments type=attachments 
 	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>99]
 	preview=[thumb=>'50x50']
-	i18n=4
+	i18n=$atti18n
 }
+
+
 
 {call e field=priority type=number}
 

@@ -22,9 +22,9 @@
 	
 	
 	{function name=do_toolbar_buttons_addfolder} 
-		{if $this->write_permission}
-		{toolbar_button title=GW::l('/A/VIEWS/doMkDir') iconclass='fa fa-plus-circle' 
-			href=$m->buildUri(false,[act=>doMkDir]) query_param=["foldername", "Enter folder name"]}
+		{if $m->write_permission}
+			{toolbar_button title=GW::l('/A/VIEWS/doMkDir') iconclass='fa fa-plus-circle' 
+				href=$m->buildUri(false,[act=>doMkDir]) query_param=["foldername", "Enter folder name"]}
 		{/if}
 	{/function}	
 	

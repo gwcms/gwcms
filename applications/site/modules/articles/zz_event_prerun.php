@@ -9,3 +9,4 @@ foreach($list as $syspath => $publicpath){
 }
 
 
+$this->smarty->assign('announcements_count', GW_Article::singleton()->count('active=1'));

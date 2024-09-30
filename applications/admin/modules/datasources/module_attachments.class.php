@@ -9,6 +9,10 @@ class Module_Attachments extends GW_Common_Module
 		parent::init();
 		
 		$this->list_params['paging_enabled']=1;	
+		
+		
+		if($this->app->user->isRoot())
+			$this->write_permission = true;
 	}
 	
 /*	
@@ -36,7 +40,7 @@ class Module_Attachments extends GW_Common_Module
 		    'field'=>$_GET['field']
 		];
 		
-		if($this->checkOwnerPermission($owner_vals['owner_type']))
+		if($this->checkOwnerPermissionAttachmnets($owner_vals['owner_type']))
 			$list = GW_Attachment::singleton()->findAll(GW_DB::buidConditions($owner_vals), ['order'=>'priority ASC']);
 
 		$this->tpl_vars['list'] = $list;
@@ -46,8 +50,9 @@ class Module_Attachments extends GW_Common_Module
 	}
 	
 	
-	function checkOwnerPermission($owner_type, $error = true)
+	function checkOwnerPermissionAttachmnets($owner_type, $error = true)
 	{
+		
 		if(!($res = GW_Permissions::canAccess($owner_type, $this->app->user->group_ids)))
 		{
 			$this->setError(GW::l('/G/GENERAL/ACTION_RESTRICTED').' ("'.$owner_type.'"; "'.$res.'")');
@@ -56,21 +61,12 @@ class Module_Attachments extends GW_Common_Module
 		return $res;
 	}
 	
-	
-	function canBeAccessed($item, $opts=[]) 
-	{		
-		if($item){$item->load_if_not_loaded();}
-		
-		$result = false;
-		
-		if($item)
-			$result = $this->checkOwnerPermission($item->owner_type);
-
-		if (!isset($opts['die']) || $result)
-			return $result;
-		
-		$this->jump();
+	function checkOwnerPermission($item, $opts)
+	{
+		return $this->checkOwnerPermissionAttachmnets($item->owner_type);
 	}
+	
+
 	
 	function getValidationParams($owner_type)
 	{
@@ -124,7 +120,7 @@ class Module_Attachments extends GW_Common_Module
 		
 		$owner_vals = $this->getOwnerVals();
 		
-		if(!$this->checkOwnerPermission($owner_vals['owner_type']))
+		if(!$this->checkOwnerPermissionAttachmnets($owner_vals['owner_type']))
 			return false;
 		
 		
@@ -204,7 +200,7 @@ class Module_Attachments extends GW_Common_Module
 	{
 		$owner_vals = $this->getOwnerVals();
 
-		if(!$this->checkOwnerPermission($owner_vals['owner_type']))
+		if(!$this->checkOwnerPermissionAttachmnets($owner_vals['owner_type']))
 			return false;		
 		
 		$positions = $_REQUEST['positions'];
