@@ -431,6 +431,9 @@ if (
 		if(!$log)
 			$log = gw_payuniversal_log::singleton()->find($_GET['id']);
 		
+		if($log->data_array['status']!='finalized')
+			return d::ldump("Skip $log->id. status!=finalized");
+		
 		$order = GW_Order_Group::singleton()->find(['id=?', $log->order_id]);	
 		
 		$args = [
