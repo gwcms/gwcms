@@ -19,13 +19,14 @@
 ]}
 
 {if $smarty.get.shift_key || !$item->obj_type}
-	{$fields_config.fields.obj_type=[type=>select, empty_option=>1, options_fix=>1, options=>$m->options.obj_type]}
+	{$fields_config.fields.obj_type=[type=>select, empty_option=>1, options=>$m->options.obj_type]}
 	{$fields_config.fields.obj_id=[type=>text]}
 	
 	{$fields_config.fields.context_obj_type=[type=>select, empty_option=>1, options_fix=>1, options=>$m->options.context_obj_type]}
 	{$fields_config.fields.context_obj_id=[type=>text]}
 	
 	{$fields_config.fields.deliverable=[type=>bool]}
+	{$fields_config.fields.expires=[type=>text]}
 	
 {/if}
 
@@ -80,7 +81,6 @@
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}
 {assign var="item" value=$item scope=global}
-
 
 
 

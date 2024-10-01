@@ -257,8 +257,11 @@ class Module_OrderGroups extends GW_Common_Module
 			    'type'=> $oitem->type, 
 			    'qty'=>$oitem->qty, 
 			    'unit_price'=>$oitem->unit_price, 
-			    'total'=>$oitem->total
+			    'total'=>$oitem->total,
 			];
+			
+			if($oitem->is_expired)
+				$itm['expired'] = $oitem->expires;
 			
 			if($this->feat('vat') && $oitem->vat_group){
 				$itm["vat"]=$oitem->vat_title;
@@ -775,4 +778,54 @@ class Module_OrderGroups extends GW_Common_Module
 		$this->setMessage("Atnaujinta $kiek, sistemos sumos: $gwcmssumos, statemento sumos: $statementosumos");
 		//d::dumpas();
 	}
+	
+	function doProcessExpired()
+	{
+		$time = date('Y-m-d H:i:s');
+		
+		
+		$expiredorders0 = GW_Order_Item::singleton()->findAll(['a.expires > "2000-01-01" AND a.expires < ?  AND ord.active=1', $time],[
+		    'joins'=>[['left','gw_order_group AS ord','a.group_id = ord.id']],
+		    'key_field'=>'group_id'
+		    
+		]);
+		
+		if(!$expiredorders0)
+			d::dumpas('No expired records discovered for this time');
+		
+		
+		$expire_email = GW_Mail_Template::singleton()->find(['idname=?', 'order_expired']);
+		if(!$expire_email)
+			d::dumpas('No expired order template found place template named: order_expired');
+		
+		$expiredorders = GW_Order_Group::singleton()->findAll(GW::db()->inCondition('id', array_keys($expiredorders0)));
+		
+				
+		
+		foreach($expiredorders as $order){
+			
+			
+			if(isset($_GET['confirm']))
+				unset($_GET['preview']);		
+
+			if(!isset($_GET['preview'])){
+
+				//2kartus kad nesiusti laisko
+				
+				$order->open = 0;
+				$order->active = 0;
+				$order->set("extra/expired", date('Y-m-d H:i:s'));
+				$order->updateChanged();
+				
+			}		
+
+			
+			
+
+			$this->doOrderNotifyCustomer($order, $expire_email->id);			
+			
+		}	
+		
+	}	
+	
 }

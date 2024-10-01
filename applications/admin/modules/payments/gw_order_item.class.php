@@ -105,7 +105,7 @@ class GW_Order_Item extends GW_Composite_Data_Object
 				return $this->expires && strpos($this->expires, "0000-00-00")===false;
 			break;
 			case 'is_expired':
-				return  $this->expires_enabled  && $this->expires_secs < 0;
+				return  $this->expirable  && $this->expires_secs < 0;
 			break;
 			case 'door_code';
 				return gw_ttlock_codes::singleton()->createNewObject($this->get('keyval/door_code_id'), true)->code;

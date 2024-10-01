@@ -19,11 +19,16 @@
 {function "cart_item_expirable_prop"}
 	{if $item->expirable}
 		{if $addli}<li>{/if}
-		{if $item->expires_secs > 0}
-			<span class="countdown" data-expires="{$item->expires_secs}">{GW_Math_Helper::uptime($item->expires_secs)}</span>
-		{else}
-			{GW::ln('/m/EXPIRED')}
-		{/if}
+			<span title="{GW::ln('/m/FIELDS/expires')}: {$item->expires}">
+			<i class="fa fa-clock-o"></i>
+			{if $item->expires_secs > 3600}
+				{GW_Math_Helper::uptime($item->expires_secs, 1)}
+			{elseif $item->expires_secs > 0}
+				<span class="countdown" data-expires="{$item->expires_secs}">{GW_Math_Helper::uptime($item->expires_secs)}</span>
+			{else}
+				{GW::ln('/M/orders/EXPIRED')}
+			{/if}	
+			</span>
 		{if $addli}</li>{/if}
 	{/if}
 {/function}

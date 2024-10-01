@@ -101,7 +101,7 @@ class Module_OrderItems  extends GW_Common_Module
 			'vat_group'=>'Lof',
 			'insert_time'=>'lof',
 			'update_time'=>'lof',	
-			'group_id'=>'lof',	
+			'group_id'=>'lof',
 			]
 		);
 		
@@ -113,8 +113,6 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['payment_status'] = 'Lof';	
 			$cfg['fields']['pay_time'] = 'Lof';	
 			$cfg['fields']['pay_test'] = 'Lof';	
-			
-			
 		}
 		
 		$cols=$this->model->getColumns();
@@ -123,6 +121,10 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['status'] = 'Lof';	
 		}
 		
+		
+		if($this->app->user->isRoot()){
+			$cfg['fields']['expires'] = 'Lof';
+		}
 		
 
 		
@@ -262,10 +264,13 @@ class Module_OrderItems  extends GW_Common_Module
 	{
 		$tmp = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");	
 		
+		
+		
 		foreach($tmp as $itm)
 			$this->options['obj_type'][$itm] = GW::ln('/g/CART_ITM_'.$itm);
 		
-		$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT obj_type FROM `{$this->model->table}`");
+		
+		$this->options['context_obj_type'] = GW::db()->fetch_one_column("SELECT DISTINCT context_obj_type FROM `{$this->model->table}`");
 		
 	}
 	
@@ -280,6 +285,9 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		
 		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id','invoice_line2'];
+		
+		if($vars['item']->expirable)
+			$this->tpl_vars['extra_fields'][] = 'expires';
 		
 
 		return $vars;

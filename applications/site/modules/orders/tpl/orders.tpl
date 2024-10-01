@@ -103,7 +103,7 @@
 							{$citem->invoice_line2}
 						{if $citem->link}</a>{/if}
 
-					{$citem->qty}x{$citem->unit_price} Eur 
+						{$citem->qty}x{$citem->unit_price}&nbsp;Eur 
 					{if $citem->discount}
 						<span class="g-color-lightred"><small>{GW::ln('/m/DISCOUNT')}:</small> -{$citem->discount*$citem->qty} &euro;</span>				
 					{/if}
@@ -112,11 +112,17 @@
 						{/if}
 
 					{if $citem->expirable  && $order->payment_status!=7}
-						{if $citem->expires_secs > 0}
-							<span class="countdown" data-expires="{$citem->expires_secs}">{GW_Math_Helper::uptime($citem->expires_secs)}</span>
-						{else}
-							{GW::ln('/m/EXPIRED')}
-						{/if}
+						<span title="{GW::ln('/m/FIELDS/expires')}: {$citem->expires}">
+							<i class="fa fa-clock-o"></i>
+							{if $citem->expires_secs > 3600}
+								{GW_Math_Helper::uptime($citem->expires_secs, 1)}
+							{elseif $citem->expires_secs > 0}
+
+								<span class="countdown" data-expires="{$citem->expires_secs}">{GW_Math_Helper::uptime($citem->expires_secs)}</span>
+							{else}
+								{GW::ln('/M/orders/EXPIRED')}
+							{/if}  
+						</span>
 					{/if}
 
 
