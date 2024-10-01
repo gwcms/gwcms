@@ -784,11 +784,15 @@ class Module_OrderGroups extends GW_Common_Module
 		$time = date('Y-m-d H:i:s');
 		
 		
-		$expiredorders0 = GW_Order_Item::singleton()->findAll(['a.expires > "2000-01-01" AND a.expires < ?  AND ord.active=1', $time],[
+		$expiredorders0 = GW_Order_Item::singleton()->findAll(['a.expires > "2000-01-01" AND a.expires < ?  AND ord.active=1 AND ord.payment_status=0', $time],[
 		    'joins'=>[['left','gw_order_group AS ord','a.group_id = ord.id']],
 		    'key_field'=>'group_id'
 		    
 		]);
+		
+		//d::dumpas( [array_keys($expiredorders0), GW_DB::inCondition('id', array_keys($expiredorders0)) ]);
+				
+		
 		
 		if(!$expiredorders0)
 			d::dumpas('No expired records discovered for this time');
@@ -798,9 +802,13 @@ class Module_OrderGroups extends GW_Common_Module
 		if(!$expire_email)
 			d::dumpas('No expired order template found place template named: order_expired');
 		
-		$expiredorders = GW_Order_Group::singleton()->findAll(GW::db()->inCondition('id', array_keys($expiredorders0)));
+		$expiredorders = GW_Order_Group::singleton()->findAll(GW_DB::inCondition('id', array_keys($expiredorders0)));
 		
-				
+		//d::dumpas( $expiredorders );
+		//tie kurie pries amzinybe nustojo galiot kad nesiustu
+		$recent = date('Y-m-d H:i:s', strtotime('-7 DAYS'));
+		
+		
 		
 		foreach($expiredorders as $order){
 			
@@ -815,14 +823,15 @@ class Module_OrderGroups extends GW_Common_Module
 				$order->open = 0;
 				$order->active = 0;
 				$order->set("extra/expired", date('Y-m-d H:i:s'));
-				$order->updateChanged();
 				
+				if($order->insert_time > $recent)
+					$order->set("extra/expired_mail", 1);
+				
+				$order->updateChanged();
 			}		
 
-			
-			
-
-			$this->doOrderNotifyCustomer($order, $expire_email->id);			
+			if($order->insert_time > $recent)
+				$this->doOrderNotifyCustomer($order, $expire_email->id);			
 			
 		}	
 		
