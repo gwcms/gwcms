@@ -71,7 +71,7 @@
 		<li>
 			<input type="checkbox" {if $enabled}checked{/if} />
 			<input type="hidden" name="fields[{$id}]" value="{intval($enabled)}">
-			<span>{$app->fh()->fieldTitle($id)}</span>
+			<span>{$m->fieldTitle($id)}</span>
 		</li>
 	{/foreach}
 </ul>
@@ -97,7 +97,7 @@
 					
 				</a>
 			</span>
-			<span>{$app->fh()->fieldTitle($id)}</span>
+			<span>{$m->fieldTitle($id)}</span>
 			
 		</li>
 	{/foreach}

@@ -5,8 +5,8 @@
 		<select class="order-sel" onchange="gw_adm_sys.order_change()">
 			<option value="">{GW::l('/g/EMPTY_OPTION/0')}</option>
 		{foreach $fields as $name => $labelid}
-			<option value="{$name} ASC">{$app->fh()->fieldTitle($labelid)} (123)</option>
-			<option value="{$name} DESC">{$app->fh()->fieldTitle($labelid)} (321)</option>
+			<option value="{$name} ASC">{$m->fieldTitle($labelid)} (123)</option>
+			<option value="{$name} DESC">{$m->fieldTitle($labelid)} (321)</option>
 		{/foreach}
 		</select>
 	</td>

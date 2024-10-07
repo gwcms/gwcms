@@ -1,5 +1,5 @@
 {if !$title}
-	{$title=$app->fh()->fieldTitle($name)}
+	{$title=$m->fieldTitle($name)}
 {/if}
 
 {$order=$m->calcOrder($name)}

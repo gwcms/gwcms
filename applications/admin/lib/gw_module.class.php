@@ -827,7 +827,6 @@ class GW_Module
 		
 	function fieldTitle($field)
 	{
-
 		if(isset($this->dynamicFieldTitles[$field]))
 			return $this->dynamicFieldTitles[$field];
 		
@@ -842,15 +841,13 @@ class GW_Module
 		return $title != $fkey ? $title : $field;
 	}
 	
-	function shortFieldTitle($field){
-		
-
+	function shortFieldTitle($field)
+	{
 		if(isset($this->dynamicFieldShortTitles[$field]))
 			return $this->dynamicFieldShortTitles[$field];		
 		
 		if(isset($this->dynamicFieldTitles[$field]))
 			return $this->dynamicFieldTitles[$field];	
-		
 		
 		return $this->app->FH()->shortFieldTitle($field);
 	}
