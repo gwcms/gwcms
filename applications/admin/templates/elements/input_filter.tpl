@@ -16,7 +16,7 @@
 
 
 
-{$title=$title|default:$app->fh()->fieldTitle($name)}
+{$title=$title|default:$m->fieldTitle($name)}
 {$filter_type=$data.0|default:$filter_type}
 
 

@@ -6,7 +6,7 @@
 {$input_name=sprintf($input_name_pattern,$name)}
 
 
-{$title=$title|default:$app->fh()->fieldTitle($name)}
+{$title=$title|default:$m->fieldTitle($name)}
 
 {if !$value}
 	{$value=$item->$name|default:$default}

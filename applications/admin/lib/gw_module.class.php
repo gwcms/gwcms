@@ -842,9 +842,10 @@ class GW_Module
 	}
 	
 	function shortFieldTitle($field)
-	{
+	{		
 		if(isset($this->dynamicFieldShortTitles[$field]))
-			return $this->dynamicFieldShortTitles[$field];		
+			return "<span title='".strip_tags ($this->fieldTitle($field))."'>".$this->dynamicFieldShortTitles[$field]."</span>";
+				
 		
 		if(isset($this->dynamicFieldTitles[$field]))
 			return $this->dynamicFieldTitles[$field];	

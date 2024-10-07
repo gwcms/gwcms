@@ -301,7 +301,7 @@
 
 				{foreach $dl_calc_totals as $field => $total}
 					<tr>
-						<td nowrap align="right"><i>{$app->fh()->fieldTitle($field)}</i></td>
+						<td nowrap align="right"><i>{$m->fieldTitle($field)}</i></td>
 						<td>
 							{$total}
 						</td>
