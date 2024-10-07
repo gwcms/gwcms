@@ -16,6 +16,7 @@ class GW_Adm_Page_Fields extends GW_i18n_Data_Object
 	
 	public $i18n_fields = [
 	    "title"=>1,
+	    "short_title"=>1,
 	    "placeholder"=>1,
 	    "note"=>1,
 	    "hidden_note"=>1,

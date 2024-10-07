@@ -3733,7 +3733,7 @@ class GW_Common_Module extends GW_Module
 			}	
 			
 			$this->dynamicFieldTitles[$field->fieldname] = $field->title;
-			
+
 			if($field->short_title)
 				$this->dynamicFieldShortTitles[$field->fieldname] = $field->short_title;
 		}
