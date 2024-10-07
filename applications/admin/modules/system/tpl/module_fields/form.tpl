@@ -15,6 +15,7 @@
 {call e field="fieldset" hidden_note=$editinsite}
 {call e field="fieldname" note="Unik."}
 {call e field="title" i18n=4}
+{call e field="short_title" i18n=4}
 
 {call e field="required" type=bool}
 {call e field="type" type=select options=$item->getTypes(type) options_fix=1}

@@ -3733,6 +3733,7 @@ class GW_Common_Module extends GW_Module
 			}	
 			
 			$this->dynamicFieldTitles[$field->fieldname] = $field->title;
+			$this->dynamicFieldShortTitles[$field->fieldname] = $field->short_title;
 		}
 		
 		foreach($sources as $modpath => $fields){

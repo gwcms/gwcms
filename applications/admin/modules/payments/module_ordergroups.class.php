@@ -581,18 +581,22 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		
-		if($email!='vidmantas.work@gmail.com')
+		if($email!='vidmantas.work@gmail.com'){
 			$opts['bcc'] = $this->config->confirm_email_bcc ?: GW_Mail_Helper::getAdminAddr();
+			
+			if($opts['bcc'] == '-')
+				unset($opts['bcc']);
+		}
 		
 		
 		
-		if($order->seller_id){
+		if($order->seller_id && $this->config->confirm_email_bcc!='-'){
 			$opts['bcc'] = $order->seller->email;
 		}
 		
 		$msg = GW::ln('/m/MESSAGE_SENT_TO',
 			['v'=>[
-			    'email'=>$email.', '.$opts['bcc']
+			    'email'=>$email.(isset($opts['bcc']) ? ', '.$opts['bcc'] :'')
 				]
 			]);
 		//$this->setMessage();
@@ -604,7 +608,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		if(isset($_GET['preview'])){
 			$str= '<div style="padding:20px;border:1px solid silver;background-color:white">'.
-				implode(',',$ret['to']).'<hr>'.$ret['subject'].'<hr>'.$ret['body'].
+				implode(',',$ret['to']).(isset($opts['bcc']) ? ', '.$opts['bcc'] :'').'<hr>'.$ret['subject'].'<hr>'.$ret['body'].
 			'</div>';
 			
 			$alreadysent= ($order->mail_accept?'yes':'no');
