@@ -3,6 +3,8 @@
 class gw_url_crypt_helper
 {
 
+	use Singleton;
+	
 	var $skey = "gw9654aaf468r4cb"; // you can change it
 
 	public function safe_b64encode($string)

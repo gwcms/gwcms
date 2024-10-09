@@ -70,7 +70,7 @@
 			    type="checkbox"  
 			    	id="{$id}" 
 			    value="1" {if $required}required="1"{/if} {if $value}checked="checked"{/if}
-			    {if $disabled}disabled="disabled"{/if}
+			    {if $disabled || $readonly}disabled="disabled"{/if}
 			    />
 		    
                     <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
