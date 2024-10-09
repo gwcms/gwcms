@@ -25,6 +25,9 @@ class gw_url_crypt_helper
 		return base64_decode($data);
 	}
 
+	//apt install php8.2-mcrypt
+	//service  php8.2-fpm restart
+	
 	public function encode($value)
 	{
 
