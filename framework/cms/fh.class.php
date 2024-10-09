@@ -335,7 +335,10 @@ class FH
 		return preg_replace('/[^a-z0-9]/i', '-', strtolower(gw_url_crypt_helper::convertAccentsAndSpecialToNormal($s)));
 	}
 	
-	
+	static function urlStrC($s)
+	{
+		return preg_replace('/[^a-z0-9]/i', '-', gw_url_crypt_helper::convertAccentsAndSpecialToNormal($s));
+	}	
 	
 	static function calcInputNamePattern($input_name_pattern, $type='')
 	{
