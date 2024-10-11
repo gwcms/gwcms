@@ -19,7 +19,7 @@
 
 {function "pay_select_cart"}
 	{if $m->feat('mergepaymethods')}
-		{$mergepay = $m->prepareMergedPay($order->amount_total)}
+		{$mergepay = $m->prepareMergedPay($order)}
 		
 		<div class="col-md-12">
 		<select onchange="gw_navigator.jump(location.href,{ paycountry: this.value })">

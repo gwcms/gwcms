@@ -136,7 +136,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		    'currency'      => 'EUR', // This must match the currency of the order.
 		    'methodOptions' => [
 			'paymentDescription' => $payment_data['payment_information_unstructured'],
-			'preferredCountry'   => 'LT',
+			'preferredCountry'   => strtoupper($args->country ?? 'LT'),
 			// This is the code of the bank that the customer chose at checkout.
 			// See the GET /stores/payment-methods endpoint for the list of available banks.
 			//'preferredProvider'  => 'HABALT22',

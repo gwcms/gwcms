@@ -146,9 +146,7 @@ class Module_Orders extends GW_Public_Module
 		
 		$type = $_GET['type'] ?? $pay_methods[0];
 		
-		
-		
-		
+				
 		
 		//nurasyti suma nuo kupono jei jau pereina prie mokejimo
 		if($order->amount_coupon)
@@ -176,13 +174,24 @@ class Module_Orders extends GW_Public_Module
 			$order->pay_subtype = '';
 
 			if(isset($_GET['method']) && $_GET['method']){
+				
+				
+				
 				$args->method = $_GET['method'];
+				$method = GW_Pay_Methods::singleton()->find(['`key`=? AND active=1', $args->method]);
+				
+				if(!$method)
+					d::dumpas("Unknown method $method || method might be disabled");
+				
+				$args->country = $method->country;
 				$order->pay_subtype = $args->method;
 			}
 		}
 			
 		$order->use_lang = $this->app->ln;
 		$order->updateChanged();
+		
+
 		
 		if($type=='paysera'){
 			$this->doPayseraPay($args);		
@@ -1415,12 +1424,20 @@ class Module_Orders extends GW_Public_Module
 			return $list1;
 	}
 	
-	function prepareMergedPay($amount)
+	function prepareMergedPay($order)
 	{
+		$amount = $order->amount_total;
 		$cfg = new GW_Config('payments__mergedpaymethods/');
 		$cfg->preload('');
-		$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'LT';
+		
+		if($order->country){
+			$default_country = $order->country;
+		}else{
+			$default_country = $cfg->get('default_country_'.$this->app->ln) ?: 'LT';
+		}
+		
 		$country = $_GET['paycountry'] ?? $default_country;
+		
 			
 	
 			
