@@ -9,11 +9,12 @@ class GW_User extends GW_Composite_Data_Object
 	public $validators = Array();
 	
 	public $calculate_fields = [
-	    'group_ids_cached'=>1, 
-	    'title' => 1, 
-	    'api_key' => 1, 
-	    'online' => 1, 
-	    'ext'=>1
+		'group_ids_cached'=>1, 
+		'title' => 1, 
+		'api_key' => 1, 
+		'online' => 1, 
+		'ext'=>1,
+		'i18next_lns'=>1	
 	];
 	
 	public $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1, 'ext' => 1);
@@ -290,6 +291,13 @@ class GW_User extends GW_Composite_Data_Object
 				
 			case 'group_ids_cached':
 				return $this->group_ids;
+			break;	
+			case 'i18next_lns':
+				$arr = json_decode($this->get('ext/i18next_lns'), true);
+				$arr = array_filter((array)$arr);
+				
+				return $arr ?: [];
+			break;				
 						
 		}
 	}

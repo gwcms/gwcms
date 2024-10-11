@@ -405,8 +405,11 @@ class GW_Mail_Helper
 		$token = GW_Temp_Access::singleton()->getToken(GW_USER_SYSTEM_ID, '10 minute', $path);
 		$req['temp_access'] = GW_USER_SYSTEM_ID . ',' . $token;
 
-		$respo = GW::$context->app->innerRequest("datasources/sms", $req,[],['app'=>'admin']);		
-		//d::dumpas($respo);
+		$respo = GW::$context->app->innerRequest("datasources/sms", $req,[],['app'=>'admin']);	
+		
+		//if($_SERVER['REMOTE_ADDR']=='88.223.24.240')
+		//	d::dumpas($respo);
+		
 		return $respo;
 	}	
 	

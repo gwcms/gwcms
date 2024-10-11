@@ -42,7 +42,7 @@ class GW_Temp_Data extends GW_Data_Object
 	{
 		
 		$item = $this->read($user_id, $group, $name);
-		$expires = $item->expires;
+		$expires = $item ? $item->expires : false;
 		
 		return $item ? $item->value : false;
 	}

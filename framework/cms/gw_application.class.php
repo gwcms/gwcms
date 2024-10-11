@@ -884,6 +884,8 @@ class GW_Application
 		return $res;
 	}
 
+	public $i18next_schema=[];
+	
 	function initI18nSchema()
 	{
 		$this->i18next_schema = GW::db()->fetch_assoc("SELECT `type`,`str`,`id` FROM gw_i18next_schema");
@@ -893,7 +895,7 @@ class GW_Application
 	{
 		//learn tables
 		if(!isset($this->i18next_schema[$type][$str])){
-			GW::db()->insert('gw_i18next_schema', ['type'=>$type,'str'=>$str, 'id'=>count($this->i18next_schema[$type])+1]);
+			GW::db()->insert('gw_i18next_schema', ['type'=>$type,'str'=>$str, 'id'=>count($this->i18next_schema[$type] ?? [])+1]);
 			$this->initI18nSchema();
 		}		
 		

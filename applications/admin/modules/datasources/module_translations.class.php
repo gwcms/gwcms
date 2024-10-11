@@ -357,7 +357,7 @@ class Module_Translations extends GW_Common_Module
 		$this->sys_call = false;
 				
 		$sel=['type'=>'select','options'=>$this->app->langs, 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
-		$limitinp=['type'=>'select','options'=>[100=>100,200=>200,500=>500,1=>1,10=>10,50=>50]];
+		$limitinp=['type'=>'select','options'=>[100=>100,150=>150,200=>200,500=>500,1=>1,10=>10,50=>50]];
 		$form = ['fields'=>['from'=>$sel, 'to'=>$sel, 'limit'=>$limitinp],'cols'=>4];
 		
 		
@@ -393,12 +393,28 @@ class Module_Translations extends GW_Common_Module
 		
 		$skips = 0;
 		foreach($list as $idx => $item){
-			if(trim(strip_tags($item->get("value_$from")))==''){
+			if(strip_tags($item->get("value_$from")) != $item->get("value_$from") || strpos($item->get("value_$from"), "\n")!==false){
 				
-				$this->setMessage("translation skipped {$item->module}/{$item->key}". htmlspecialchars($item->get("value_$from")));
+				$this->setMessage("TAGS translation skipped {$item->module}/{$item->key}". htmlspecialchars($item->get("value_$from")));
 				unset($list[$idx]);
 				$skips++;
 			}
+			
+			/*
+			if(strpos($item->get("value_$from"), "\n")!==false){
+				
+				$this->setMessage("NO NEW LINE translation skipped {$item->module}/{$item->key}". htmlspecialchars($item->get("value_$from")));
+				unset($list[$idx]);
+				$skips++;
+			}*/			
+			
+			if(strpos($item->get("value_$from"), "&")!==false){
+				
+				$this->setMessage("CONTAINS &amp; translation skipped {$item->module}/{$item->key}". htmlspecialchars($item->get("value_$from")));
+				unset($list[$idx]);
+				$skips++;
+			}			
+			
 		}
 		if($skips)
 		$list = array_values($list);
@@ -426,9 +442,10 @@ class Module_Translations extends GW_Common_Module
 		
 		if(!isset($resp->result))
 		{
-			$errinfo = json_encode(['$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], JSON_PRETTY_PRINT);
+			
+			$errinfo = json_encode(['test'=>'http://2.voro.lt/services/translate/testtest.html','$serviceurl'=>$serviceurl,'$opts'=>$opts,'queries'=>$title_array], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 			$this->setError("Translation request failed <pre>". htmlspecialchars($resp_raw)."</pre>");
-			$this->setError("<pre>$errinfo</pre>");
+			$this->setError("<pre>".htmlspecialchars($errinfo)."</pre>");
 			$failed = $idxmap;
 			return $failed;
 		}		
