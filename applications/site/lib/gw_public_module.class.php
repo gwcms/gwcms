@@ -334,7 +334,7 @@ class GW_Public_Module {
 	function setItemErrors($item)
 	{
 		foreach($item->errors as $field => $error)
-			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>GW::ln("/m/FIELDS/$field")]);		
+			$this->setMessage(["text"=>$error,"type"=>GW_MSG_ERR, "field"=>$field, "field_title"=>GW::ln("/m/FIELDS/$field")]);		
 	}	
 	
 	function jump($path, $args=[])
