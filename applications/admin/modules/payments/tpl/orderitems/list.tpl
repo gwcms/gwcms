@@ -22,6 +22,7 @@
 		{toolbar_button title="doCaptureObjInvoiceLines (root)" iconclass='gwico-Export text-error' href=$m->buildUri(false,[act=>doCaptureObjInvoiceLines])}	
 	{/function}
 
+	{$dl_calc_totals.qty=1}
 	
 	
 	{if !$smarty.get.clean}
@@ -36,6 +37,7 @@
 		{/if}		
 		
 		{$dl_calc_totals.total=0}
+		{$dl_calc_totals.qty=0}
 	{/if}	
 	
 	

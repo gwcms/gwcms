@@ -7,7 +7,7 @@ class GW_SMS_Templates extends GW_i18n_Data_Object
 	public $default_order='id DESC';	
 	
 	public $validators = [
-	    'message'=>['gw_string', ['required'=>1]]
+	    'body'=>['gw_string', ['required'=>1]]
 	];
 	
 	
