@@ -8,7 +8,7 @@
 			.gw_switch_ln{ cursor: pointer; }
 		</style>
 
-		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
+		<link type="text/css" href="{GW::s("STATIC_EXTERNAL_ASSETS")}/flags/oneimgcss/flags.css" rel="stylesheet" />
 		
 		<script>
 				function tooglei18nCol(ln_code)
@@ -41,7 +41,7 @@
 		{if $ln_code=='en'}{$flag_code='gb'}{else}{$flag_code=$ln_code}{/if}
 		<td>
 			<span class="gw_switch_ln" href="#" onclick="tooglei18nCol('{$ln_code}');return false">
-				<img src="{$app_root}static/img/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> <span class="toggle_i18n_{$ln_code}">{GW::ln("/g/LANG/`$ln_code`")}</span>
+				<img src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/oneimgcss/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> <span class="toggle_i18n_{$ln_code}">{GW::ln("/g/LANG/`$ln_code`")}</span>
 			</span>
 		</td>	
 	{/foreach}

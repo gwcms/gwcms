@@ -89,7 +89,7 @@ instead of {include "elements/input.tpl" name=
 	
 
 	{if !isset($GLOBALS.form_18n_init_done)}
-		<link type="text/css" href="{$app_root}static/css/flags.css" rel="stylesheet" />
+		<link type="text/css" href="{GW::s("STATIC_EXTERNAL_ASSETS")}/flags/oneimgcss/flags.css" rel="stylesheet" />
 		
 		{$GLOBALS.form_18n_init_done=1}
 		<script type="text/javascript">
@@ -108,7 +108,7 @@ instead of {include "elements/input.tpl" name=
 		{if $ln_code=='en'}{$flag_code='gb'}{else}{$flag_code=$ln_code}{/if}
 
 		<span class="gwform_sw_ln" href="#" onclick="tooglei18nCol('{$ln_code}');return false">
-				<img src="{$app_root}static/img/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> {if $show_ln_code_title}<span class="toggle_i18n_{$ln_code}" title="{GW::l("/g/LANG/`$ln_code`")}">{$ln_code}</span>{/if}
+				<img src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/oneimgcss/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> {if $show_ln_code_title}<span class="toggle_i18n_{$ln_code}" title="{GW::l("/g/LANG/`$ln_code`")}">{$ln_code}</span>{/if}
 		</span>
 	{/function}
 {/if}

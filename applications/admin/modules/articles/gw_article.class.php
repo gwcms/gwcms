@@ -1,7 +1,7 @@
 <?php
 
 
-class GW_Article extends GW_Composite_Data_Object
+class GW_Article extends GW_i18n_Data_Object
 {
 	var $table = 'gw_articles';
 	public $default_order = 'priority DESC, insert_time DESC';
@@ -13,7 +13,11 @@ class GW_Article extends GW_Composite_Data_Object
 	
 	public $ownerkey = 'articles/articles';
 	public $extensions = ['attachments'=>1];
-
+	public $i18n_fields = [
+	    'title'=>1,
+	    'short'=>1,
+	    'text'=>1,
+	];	
 
 
 	function getAttachments($ln=false)

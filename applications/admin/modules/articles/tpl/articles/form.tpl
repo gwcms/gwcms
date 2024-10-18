@@ -4,10 +4,10 @@
 {call e field="group_id" type="select_ajax" modpath="articles/groups"  options=[] after_input_f="editadd" preload=1}
 
 {call e field=image  type=image title=GW::l('/g/IMAGE')}
-{call e field=title}
-{call e field=short type=textarea height=70px}
+{call e field=title i18n=4}
+{call e field=short type=textarea height=70px  i18n=4}
 
-{call e field=text type=htmlarea layout=wide}
+{call e field=text type=htmlarea layout=wide  i18n=4}
 {call e field=active type=bool}
 
 
