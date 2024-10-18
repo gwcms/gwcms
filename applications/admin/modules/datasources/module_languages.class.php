@@ -14,67 +14,30 @@ class Module_Languages extends GW_Common_Module
 		
 	}
 	
-	function viewOptions()
-	{
-		
-		//$cond = GW_DB::buidConditions($this->filters);
-		if(isset($_GET['native']))
-		{
-			$opts = $this->model->getOptionsNative();
-		}else{
-			$opts = $this->model->getOptions();
-		}
-		
-		
-		
-				
-		echo json_encode($opts);
-		exit;
-	}			
-	
-	
-	function viewSearch()
-	{
-		$i0 = $this->model;
-		$cond="";
-		
-		if(isset($_GET['q'])){
-			$search = "'%".GW_DB::escape($_GET['q'])."%'";
 
-			//OR title_ru LIKE $search
-			$cond = "(`name` LIKE $search OR `native_name` LIKE $search )";
-		}elseif(isset($_POST['ids'])){
-			$ids = json_decode($_POST['ids'], true);
-			if(!is_array($ids))
-				$ids = [$ids];
-			
-			$ids = array_map('intval', $ids);
-			$cond = GW_DB::inCondition('id', $ids);
+
+		
+	function getOptionsCfg()
+	{		
+		$opts = [
+			'title_func'=>function($item){ return isset($_GET['native']) ? $item->native_name:$item->name .' ('.$item->get('code').')';  },
+			'search_fields'=>['iso639_1','name','native_name']			
+		];	
+		
+
+		
+		if(isset($_GET['byCode'])){
+			$opts['idx_field'] = 'iso639_1';
 		}
 		
+		if(isset($_GET['byTranslCode'])){
+			$opts['idx_field'] = 'trcode';
+		}
 		
-		$page_by = 30;
-		$page = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] - 1 : 0;
-		$params['offset'] = $page_by * $page;
-		$params['limit'] = $page_by;
-	
+		return $opts;	
+	}			
 		
-		$list0 = $i0->findAll($cond, $params);
 		
-		$list=[];
-		
-		foreach($list0 as $item)
-			$list[]=['id'=>$item->id, "title"=>$item->get("name").'('.$item->get('native_name').')'];
-		
-		$res['items'] = $list;
-		
-		$info = $this->model->lastRequestInfo();
-		$res['total_count'] = $info['item_count'];
-				
-		echo json_encode($res);
-		exit;
-	}
-	
 	function viewForm()
 	{
 		//if idkey present instead of id
@@ -91,6 +54,35 @@ class Module_Languages extends GW_Common_Module
 		return parent::viewForm();
 	}	
 	
+	
+	
+	function doAddExtLanguage()
+	{
+		
+		$sel=['type'=>'select','options'=>$this->app->langs, 'empty_option'=>1, 'options_fix'=>1, 'required'=>1];
+		$limitinp=['type'=>'select','options'=>[100=>100,150=>150,200=>200,500=>500,1=>1,10=>10,50=>50]];
+		$form = ['fields'=>['from'=>$sel, 'to'=>$sel, 'limit'=>$limitinp],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/SELECT_SOURCE_DEST_LANG'))))
+			return false;	
+		
+		
+		$code = "xx";
+		
+		$sql[] ="ALTER TABLE `gw_translations` ADD `value_$code` TEXT NOT NULL COMMENT 'addExtLanguage' AFTER `value_en`;";
+		
+		$sql[] = "CREATE TABLE `gw_i18n_$code` (
+  `_type` smallint NOT NULL,
+  `_id` bigint NOT NULL,
+  `_field` smallint NOT NULL,
+  `_value` text CHARACTER SET utf8mb3 COLLATE utf8mb3_lithuanian_ci NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_lithuanian_ci;";
+		
+		
+	
+	}	
 	
 /*	
 	function __eventAfterList(&$list)

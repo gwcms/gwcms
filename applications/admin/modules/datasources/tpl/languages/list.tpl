@@ -3,18 +3,27 @@
 
 {block name="init"}
 
+	{function name=do_toolbar_buttons_modact} 		
+		{*
+		{toolbar_button 
+			title="Add system language"
+			href=$m->buildUri(false, [act=>doGetFlags])}
+		*}
+	{/function}	
 	
-	{$display_fields=[iso639_1=>1,name=>1,native_name=>1,popularity=>1]}
+		
 	
-	{$dl_fields=$m->getDisplayFields($display_fields)}
-	{$do_toolbar_buttons[] = dialogconf}	
-	{$do_toolbar_buttons[] = search}
+	
+	{$do_toolbar_buttons[] = hidden}
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,modact]}	
+	{*
+	{$dlgCfg2MWdth=300}
+	{$do_toolbar_buttons[] = dialogconf2}			
+	*}
+	{$do_toolbar_buttons[] = search}	
 	
 	{$dl_actions=[edit,delete]}
 	
-	{$dl_filters=[iso639_1=>1,name=>1,native_name=>1, insert_time=>1, active=>[type=>select, options=>GW::l('/g/ACTIVE_OPT')]]}
-	
-	
-	{gw_unassign var=$display_fields.image} 	
-	{$dl_order_enabled_fields=array_keys($display_fields)}
+
+
 {/block}

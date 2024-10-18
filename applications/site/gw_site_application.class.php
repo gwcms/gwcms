@@ -33,6 +33,9 @@ class GW_Site_Application extends GW_Application
 		}
 		
 		
+		//d::dumpas(gw::s("LANGS"));
+		
+		$this->initLangNames(gw::s("LANGS"));
 	}
 	
 	function init()

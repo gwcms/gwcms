@@ -288,6 +288,14 @@ class GW_Application
 		//$this->lang = GW::l('/g/');
 	}
 	
+	function initLangNames($codes)
+	{
+		$lns = GW_Data_Language::singleton()->getAssoc(['trcode', 'native_name'], GW_DB::inConditionStr('trcode', $codes));
+		//d::ldump([$codes, $lns, GW::db()->last_query]);
+		gw::s("LANG_NAMES", $lns);;		
+	}
+	
+	
 	function setCurrentLang($ln)
 	{
 		$this->ln = $ln;

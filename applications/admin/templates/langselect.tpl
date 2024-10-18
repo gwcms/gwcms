@@ -1,13 +1,14 @@
 <!--Language selector-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 {if count(GW::s('ADMIN/LANGS')) > 1}
 <li class="dropdown langselector" style="">
 	<a class="lang-selector dropdown-toggle" href="#" data-toggle="dropdown">
 		<span class="lang-selected">
 			
-			<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln}.png" alt="{GW::l("/g/LANG/`$ln`")}" title="{GW::l("/g/LANG/`$ln`")}" style="max-height:24px;max-width:24px">
+			<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln}.png" alt="{GW::s("LANG_NAMES/{$ln}")}" title="{GW::s("LANG_NAMES/{$ln}")}" style="max-height:24px;max-width:24px">
 			<span class="lang-id">{strtoupper($ln)}</span>
-			<span class="lang-name">{GW::l("/g/LANG/`$ln`")}</span>
+			<span class="lang-name">{GW::s("LANG_NAMES/{$ln}")}</span>
 		</span>
 	</a>
 
@@ -20,9 +21,9 @@
 			<li>
 				{*https://www.iconfinder.com/iconsets/195-flat-flag-psd-icons*}
 				<a href="{$app_base}{$ln_code}" class="{if $ln_code == $ln}active{/if}">
-					<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln_code}.png" alt="{GW::l("/g/LANG/`$ln_code`")}" style="max-height:24px;max-width:24px">
+					<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln_code}.png" alt="{GW::s("LANG_NAMES/{$ln_code}")}" style="max-height:24px;max-width:24px">
 					<span class="lang-id">{strtoupper($ln_code)}</span>
-					<span class="lang-name">{GW::l("/g/LANG/`$ln_code`")}</span>
+					<span class="lang-name">{GW::s("LANG_NAMES/{$ln_code}")}</span>
 				</a>
 			</li>
 		{/foreach}
@@ -44,9 +45,9 @@
 					<a href="{$app->buildUri("users/profile",[act=>doSetI18nExtState,ln=>$ln_code,state=>$swstate])}">
 						
 						
-						<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln_code}.png" alt="{GW::l("/g/LANG/`$ln_code`")}" style="max-height:16px;max-width:16px">
+						<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln_code}.png" alt="{GW::s("LANG_NAMES/{$ln_code}")}" style="max-height:16px;max-width:16px">
 						<span class="lang-id">{strtoupper($ln_code)}</span>
-						<span class="lang-name"><i class="fa {$ico}" aria-hidden="true"></i> {GW::l("/g/LANG/`$ln_code`")}</span>
+						<span class="lang-name"><i class="fa {$ico}" aria-hidden="true"></i> {GW::s("LANG_NAMES/{$ln_code}")}</span>
 					</a>
 				</li>
 			{/foreach}

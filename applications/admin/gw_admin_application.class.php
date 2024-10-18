@@ -132,7 +132,10 @@ class GW_Admin_Application extends GW_Application
 			$this->initI18nSchema();
 			
 			$this->langs = array_merge($this->langs, array_keys($this->i18next));
-		}	
+		}
+		
+		
+		$this->initLangNames(array_merge(GW::s('i18nExt'), GW::s('ADMIN/LANGS')));
 	}
 	
 	function init()
@@ -199,8 +202,8 @@ class GW_Admin_Application extends GW_Application
 			return;
 		
 		if(!GW::s('MULTISITE')){
-			if(GW::getInstance('GW_Config')->get('sys/project_url')!=Navigator::getBase(true))
-				GW::getInstance('GW_Config')->set('sys/project_url', Navigator::getBase(true));		
+		if(GW::getInstance('GW_Config')->get('sys/project_url')!=Navigator::getBase(true))
+			GW::getInstance('GW_Config')->set('sys/project_url', Navigator::getBase(true));		
 		}
 		//start system process
 		if(GW::getInstance('GW_Config')->get('sys/autostart_system_process_env'.GW::s('PROJECT_ENVIRONMENT')) && GW_App_System::startIfNotStarted())
