@@ -116,6 +116,30 @@ class GW_Application
 		}
 	}
 	
+	function initDBcfg($app_name)
+	{
+		
+			
+		$dbcfg = new GW_Config();
+		$cfgrows=$dbcfg->preload($app_name);
+		
+		foreach($cfgrows as $cfgkey => $val){
+			
+			if($val)
+				GW::s($cfgkey, GW::json_or_plain($val));
+		}
+		
+		$cfgrows=$dbcfg->preload('ALLAPP');
+		
+		foreach($cfgrows as $cfgkey => $val){
+			if($val)
+				GW::s(str_replace('ALLAPP/','',$cfgkey), GW::json_or_plain($val));
+		}
+
+		
+			
+	}
+	
 
 	function initAuth()
 	{
@@ -317,6 +341,7 @@ class GW_Application
 				
 		$this->initSession(); // debug or not to debug?
 		$this->initDB();
+		$this->initDBcfg($this->app_name);
 
 		$this->initSite();
 		$this->initTimeZone();

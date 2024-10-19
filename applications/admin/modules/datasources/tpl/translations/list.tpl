@@ -12,6 +12,11 @@
 		{if $app->user->isRoot() && GW::s('PROJECT_ENVIRONMENT') != $smarty.const.GW_ENV_DEV}
 			{toolbar_button title=doSendToDev iconclass='gwico-Export' href=$m->buildUri(false,[act=>doSendToDev])}	
 		{/if}
+		
+		
+		
+		{toolbar_button title=GW::l('/m/VIEWS/doAddExtLanguage') iconclass='gwico-Export' href=$m->buildUri(false,[act=>doAddExtLanguage])}	
+				
 	{/function}	
 	
 	{$do_toolbar_buttons[] = hidden}

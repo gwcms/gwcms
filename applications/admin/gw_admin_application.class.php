@@ -118,7 +118,7 @@ class GW_Admin_Application extends GW_Application
 	function initLang() {
 		parent::initLang();
 		$this->langs = GW::s('ADMIN/LANGS');
-				
+		
 		if(GW::s('i18nExt') && $this->user && $this->user->id==GW_USER_SYSTEM_ID){
 			
 			$this->i18next = array_flip(GW::s('i18nExt'));			
@@ -133,7 +133,7 @@ class GW_Admin_Application extends GW_Application
 			
 			$this->langs = array_merge($this->langs, array_keys($this->i18next));
 		}
-		
+				
 		
 		$this->initLangNames(array_merge(GW::s('i18nExt'), GW::s('ADMIN/LANGS')));
 	}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xml>
   <i id="VIEWS">
+	  <i id="doAddExtLanguage">Pridėti išplėstinę kalbą</i>
     <i id="synchronizefromxml">Synchronize from xml's</i>
     <i id="doSeriesTranslate">Versti automatiškai su google vertėju</i>
     <i id="crop">Apkirpti paveikslėlį</i>

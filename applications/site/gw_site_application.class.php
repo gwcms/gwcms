@@ -12,7 +12,7 @@ class GW_Site_Application extends GW_Application
 	public $page;
 	
 	
-	
+
 	function initLang()
 	{
 		parent::initLang();

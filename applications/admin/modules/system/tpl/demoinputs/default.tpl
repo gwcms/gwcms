@@ -161,14 +161,7 @@
 	urlArgsAddFunc="setUpCompositionPartSearchArgs()"
 *}
 
-{call e field="demo_search_ajax"
-	type=select_ajax 
-	maximumSelectionLength=1
-	options=[]
-	preload=1
-	datasource=$app->buildUri('datasources/languages/search') 
-	emptyoption=1
-}
+{call e field="languages_by_code" type=multiselect_ajax sorting=1 modpath="datasources/languages" source_args=[byTranslCode=>1]  value_format=json1}
 	
 {call e field=demo_code_smarty type=code_smarty  height="100px"}
 {call e field=demo_code_json type=code_json  height="100px" layout=wide}

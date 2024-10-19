@@ -25,7 +25,7 @@ class Module_Translations extends GW_Common_Module
 			$this->app->jump();
 		}
 		
-		$this->options['module'] = GW_Array_Helper::buildOpts(GW_Translation::singleton()->getDistinctVals('module'));		
+		$this->options['module'] = GW_Array_Helper::buildOpts(GW_Translation::singleton()->getDistinctVals('module'));	
 	}
 	
 
@@ -634,6 +634,47 @@ class Module_Translations extends GW_Common_Module
 		}
 	
 	
+	}
+	
+	
+	function doAddExtLanguage()
+	{
+		$i18nlns = GW_Config::singleton()->get("ALLAPP/i18nExt");
+		$i18nlns = GW::json_or_plain($i18nlns);
+
+		
+		$sel=['type'=>'select_ajax','options'=>[], 'empty_option'=>1, 'modpath'=>'datasources/languages', 'source_args'=>['byTranslCode'=>1], 'required'=>1];
+
+		$form = ['fields'=>['trcode'=>$sel],'cols'=>1];
+		
+		
+		if(!($answers=$this->prompt($form, "Pick Language, check if it have flag images")))
+			return false;	
+		
+		
+		$code = $answers['trcode'];
+		
+		$sql[] ="ALTER TABLE `gw_translations` ADD `value_$code` TEXT NOT NULL COMMENT 'addExtLanguage' AFTER `value_en`;";
+		
+		$sql[] = "CREATE TABLE `gw_i18n_$code` (
+  `_type` smallint NOT NULL,
+  `_id` bigint NOT NULL,
+  `_field` smallint NOT NULL,
+  `_value` text CHARACTER SET utf8mb3 COLLATE utf8mb3_lithuanian_ci NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_lithuanian_ci;";
+		
+		$sql[] = "ALTER TABLE `gw_i18n_$code` ADD UNIQUE KEY `type` (`_type`,`_id`,`_field`);";
+		
+		
+		foreach($sql as $q){
+			GW::db()->query($q, true);
+			d::ldump([$q, GW::db()->error]);
+		}
+		$i18nlns[] = $code;
+		$i18nlns = array_unique($i18nlns);
+		
+		GW_Config::singleton()->set("ALLAPP/i18nExt", json_encode($i18nlns));
 	}
 	
 /*	

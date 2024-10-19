@@ -232,6 +232,14 @@ class GW
 		return $var;
 	}
 	
+	static function json_or_plain($str)
+	{
+		if(is_string($str) && ((substr($str, 0,1)=='{' && substr($str, -1)=='}') || substr($str, 0,1)=='[' && substr($str, -1)==']')) 
+			return json_decode($str, true);
+		
+		return $str;
+	}
+	
 	static function globals($var_name, $value = Null)
 	{
 		$var = & self::$globals;

@@ -8,7 +8,7 @@ class Module_Cfg extends GW_Common_Module
 	
 	function init()
 	{
-		$this->model = new GW_Config('sys/');
+		$this->model = new GW_Config('');
 		
 		parent::init();
 	}
