@@ -3701,10 +3701,12 @@ class GW_Common_Module extends GW_Module
 			if($cfg['map'] ?? false){
 				$counts0 = $counts;
 				$counts = [];
-				$ids_flipped = array_flip($ids);
+				
+				$ids_flipped = array_flip(array_filter($ids));
 				
 				foreach($counts0 as $countid => $count)
-					$counts[  $ids_flipped[$countid] ]  = $count;
+					if(isset($ids_flipped[$countid]))
+						$counts[  $ids_flipped[$countid] ]  = $count;
 			}
 
 			$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	

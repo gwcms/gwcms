@@ -868,7 +868,7 @@ class GW_Public_Module {
 			
 		$str =  $this->smarty->fetch($tpl_name);
 		
-		$this->setMessage($str);
+		$this->app->setMessage(['text'=>$str, 'type'=>GW_MSG_WARN]);
 	}
 	
 	function rootConfirmJson($array)
