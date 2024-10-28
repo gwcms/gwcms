@@ -71,6 +71,10 @@ class Module_Classificators  extends GW_Common_Module
 		}
 		
 		
+		if(isset($_GET['byKey'])){
+			$opts['idx_field'] = 'key';
+		}
+		
 		
 		return $opts;	
 	}

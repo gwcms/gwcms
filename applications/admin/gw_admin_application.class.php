@@ -176,9 +176,14 @@ class GW_Admin_Application extends GW_Application
 							$item['actions'] = $this->buildUri($item['path'].'/itemactions',['id'=>$id, 'RETURN_TO'=>$_SERVER['REQUEST_URI']]);
 						}
 					}
+					
+					if($tmp = $page->get("info/iconclass"))
+						$item['iconclass'] = $tmp;
 				}else{
 					$item['title'] = GW::l('/A/VIEWS/'.$item['name']);
 				}
+				
+				
 			}
 				
 			if(!isset($item['title_clean']))
@@ -187,6 +192,8 @@ class GW_Admin_Application extends GW_Application
 			
 			$list[$i]=$item;
 		}
+		
+		//d::dumpas($list);
 		
 		return $list;
 	}

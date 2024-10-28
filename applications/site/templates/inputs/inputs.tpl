@@ -146,14 +146,6 @@
 			{/foreach}
 			</div>			
 					
-		{elseif $type=='textarea'}
-			<textarea name="{$input_name}" type="{$type}" class="form-control" id="{$id}" 
-			       {if $required}required="1"{/if} 
-			       {if $placeholder}placeholder="{$placeholder|escape}"{/if}
-			       style="{if $width}width:'{$width}'{/if}"
-			       {if $rows}rows="{$rows}"{/if}
-			       {foreach $tag_params as $attr => $value}{$attr}="{$value|escape}" {/foreach}
-			       >{$value|escape}</textarea>
 		{else}
 			{include file="inputs/input_`$type`.tpl"}
 		{/if}
