@@ -43,3 +43,11 @@ class GW_Module_Extension
 		return isset($this->mod->$name) || isset($this->$name);
 	}
 }
+
+
+/*
+ * 
+possible infinite loop, throws out of memory
+can be solved with chatgpt:
+php generic module have magic method __call if not found within module for example participants, it looks for method by begining if method is like mail2participants, from predefined plugins it loads mail2participants where is stored method mail2participants and can call back to root module also with magic method __call $this->root->$method($args), but it can happen infinite loop if extension really dont have method mail2participants, so i would like to identify, maybe i could use counter or call history? can you write infinit loop breaker?
+ */

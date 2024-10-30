@@ -390,6 +390,19 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$query = $_GET['rcv_amount'] ?? false;
 		
+		if($query === false){
+			$form = ['fields'=>['rcv_amount'=>['type'=>'text', 'required'=>1]],'cols'=>1];
+		
+				
+		
+			if(!($answers=$this->prompt($form, 'Nurodykite gautą sumą (siekiant išvengti klaidos)', ['method'=>'post'])))
+				return false;	
+
+			$_GET['rcv_amount'] = $query = $answers["rcv_amount"];
+		}
+		
+		
+		
 		
 		if($this->app->user->isRoot() && $query==777){
 			$this->setMessageEx(['text'=>'No payment already accepted verification for root user (testing purposes)', 'type'=>GW_MSG_INFO]);
@@ -412,7 +425,7 @@ class Module_OrderGroups extends GW_Common_Module
 		}
 		
 		
-
+		
 		
 		$item->fireEvent('BEFORE_CHANGES');
 		
@@ -421,6 +434,8 @@ class Module_OrderGroups extends GW_Common_Module
 		//$item->updateChanged();		
 		
 		$this->doMarkAsPaydSystem($item);
+		
+		//d::dumpas($item);
 		
 		$this->setMessage('/m/PAYMENT_APPROVED');
 	}
@@ -452,7 +467,7 @@ class Module_OrderGroups extends GW_Common_Module
 			
 			
 		if($rcv_amount != $order->amount_total){
-			$order->status = "WrongAmount exp: $cart->amount_total rcv: $rcv_amount";
+			$order->status = "WrongAmount exp: $order->amount_total rcv: $rcv_amount";
 			$order->payment_status = 8;
 		}else{
 			$order->payment_status = 7;
