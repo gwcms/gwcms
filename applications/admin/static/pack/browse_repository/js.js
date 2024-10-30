@@ -123,6 +123,7 @@ BrowseRepository.prototype.init = function () {
 	
 	this.url = this.container.data('url')
 	this.loadDir(this.container);
+	this.abspath = "";
 	console.log("BrowseRepository init");
 	
 	
@@ -137,17 +138,16 @@ BrowseRepository.prototype.init = function () {
 	    
 	    if(that.type == 'image'){
 		    
-		    
 		    if($('#width').val() && $('#height').val()){
 			var size=$('#width').val()+'x'+$('#height').val()
-			var fileUrl = gw_navigator.url($('.selectedFile').attr('src'), { size: size });
+			var fileUrl = that.abspath+gw_navigator.url($('.selectedFile').attr('src'), { size: size });
 		    }else{
-			var fileUrl = gw_navigator.url($('.selectedFile').attr('src'), { size: false });
+			var fileUrl = that.abspath+gw_navigator.url($('.selectedFile').attr('src'), { size: false });
 		    }
 		    
 		    //alert("Plotis: "+$('#width').val()+"\nAukštis: "+$('#height').val()+"\nFileurl:"+fileUrl)
 	    }else{
-		    var fileUrl = '/repository'+$('#filename').val();
+		    var fileUrl = that.abspath+'/repository'+$('#filename').val();
 	    }
 		    
 	    

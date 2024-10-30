@@ -14,7 +14,7 @@
 {if $item->plain}
 	{call e field=body type=textarea height=100px}
 {else}
-	{call e field=body type=htmlarea layout=wide}
+	{call e field=body type=htmlarea layout=wide abspath=1}
 {/if}
 
 

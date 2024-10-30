@@ -54,7 +54,7 @@
 	{$bodyInpType=code_smarty}
 {/if}
 
-{call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote layout=wide height=$item->body_editor_height|default:"200px"}	
+{call e field=body type=$bodyInpType i18n=4 rowclass="bodyinputs" hidden_note=$tmpnote layout=wide height=$item->body_editor_height|default:"200px" abspath=1}	
 
 
 

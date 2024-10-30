@@ -23,6 +23,8 @@
 	{$ck_options.contentsCss = '/applications/admin/static/css/ck_default.css'}
 {/if}
 
+{*jei per meilams siusti dadeti SITE_URL *}
+
 <script>
 //var CKEDITOR_BASEPATH = '/vendor/ckeditor1/';	
 	
@@ -53,7 +55,7 @@ require(["ckeditor"], function() {
 		config.autoGrow_bottomSpace = 50;
 		config.extraPlugins += ',autogrow';
 	{/if}
-	config.filebrowserBrowseUrl = '/admin/{$app->ln}/sitemap/repository/fileselect';
+	config.filebrowserBrowseUrl = '/admin/{$app->ln}/sitemap/repository/fileselect{if $abspath}?abspath=1{/if}';
 	//config.filebrowserUploadUrl = '/admin/{$app->ln}/sitemap/repository/upload';	
 	 
 	{if $ck_set==minimum}

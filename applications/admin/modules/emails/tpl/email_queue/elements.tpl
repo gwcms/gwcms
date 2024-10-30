@@ -13,7 +13,7 @@
 		{if $item->plain}
 			{call e field=$field type=textarea height=100px}
 		{else}
-			{call e field=$field type=htmlarea layout=wide}
+			{call e field=$field type=htmlarea layout=wide abspath=1}
 		{/if}
 	
 	{elseif $field=="plain"}

@@ -48,6 +48,10 @@
 		       var br = new BrowseRepository($('#gwFileBrowser'), type);
 		       br.init();
 		       
+			{if $smarty.get.abspath}
+				br.abspath = "{GW::s("SITE_URL")}";
+			{/if}
+		       
 		       
 		       if(type=="image")
 			       $('#imageOpts').addClass('imageOptsEnabled');

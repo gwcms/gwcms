@@ -10,7 +10,7 @@
 
 {$ck_options=[toolbarStartupExpanded=>false]}
 
-{call e field=subscribe_confirm_msg type=htmlarea hidden_note=GW::l('/m/subscribe_confirm_msg_note') remember_size=1 layout=wide}
+{call e field=subscribe_confirm_msg type=htmlarea abspath=1 hidden_note=GW::l('/m/subscribe_confirm_msg_note') remember_size=1 layout=wide}
 
 
 {call e field=dkim_private_key type=textarea height=60px}
