@@ -36,12 +36,12 @@ class Module_Sms extends GW_Common_Module
 		if(isset($opts['add_balance']))
 			$addarg = "&add_balance=1";
 		
-		$uid = $this->config->user_id;
-		$api_key = $this->config->api_key;
-		$host = $this->config->host;
+		$uid = $this->config->gwlt_user_id;
+		$api_key = $this->config->gwlt_api_key;
+		$host = $this->config->gwlt_host;
 		
 		if($this->config->route)
-			$addarg.="&route_id={$this->config->route}";
+			$addarg.="&route_id={$this->config->gwlt_route}";
 			
 			
 		$context = stream_context_create(array('http' => array('ignore_errors' => true)));
@@ -61,7 +61,58 @@ class Module_Sms extends GW_Common_Module
 			$err = $resp;
 			return false;
 		}
-	}	
+	}
+
+
+	function doT2SendSms()
+	{
+		// Usage Example
+	
+		//d::dumpas([$this->config->gateway, $this->config->tele2sms_apikey, $this->config->tele2sms_sender]);
+		
+		$smsApi = new Tele2SMSApi($this->config->tele2_apikey);
+
+		// Send SMS
+		$senderName = $this->config->tele2_sender;
+		$recipients = ["37060089089"];
+		$message = "Bandome siusti sms 9000";
+		$response = $smsApi->sendSMS("asdfasdfa", $recipients, $message);
+		
+		
+		
+
+		// Check SMS Status
+		$requestId = $response['requestId']; // UUID from previous response
+
+		
+		d::dumpas([$response,$requestId, $status]);		
+	}
+	
+	
+	
+	/*
+		1 - Message ready to be delivered.
+		2 - Message being processed.
+		3 - Message rejected.
+		4 - Recipient (phone number) rejected.
+		5 - Message expired and was not delivered.
+		6 - Message delivered successfully.
+		7 - Error while processing the message.
+	 */
+	function doT2CheckStatus(){
+		$smsApi = new Tele2SMSApi($this->config->tele2sms_apikey);
+		
+		
+		$form = ['fields'=>[ 'requestid'=>['required'=>1] ],'cols'=>1];
+		
+		if(!($answers=$this->prompt($form, "Requestid")))
+			return false;	
+		//po 5s grazina state=1, maziau nei 5 sek nieko negrazina
+		$status = $smsApi->getSMSStatus($answers['requestid']);
+		d::dumpas($status);
+	}
+	
+	
 	
 	function __eventAfterSave($item)
 	{	
@@ -81,34 +132,97 @@ class Module_Sms extends GW_Common_Module
 			$sys_call = true;
 		}
 		
-		if($this->gwSendSms($item->number, $item->msg, ['add_balance'=>1], $err, $extra)){
-			$item->status = 7;
-			$item->err = "";
-			//$item->remote_id = $extra['message']['remote_id'];
-			$item->remote_id = $extra['message']['id'];
+		
+		
+		$item->gw = $this->config->gateway;
+		
+		if($this->config->gateway=='tele2'){
+			// Send SMS
 			
-			$this->setmessage("Message sent!");
-			$stat = "SENT";
+			$smsApi = new Tele2SMSApi($this->config->tele2_apikey);
+			$senderName = $this->config->tele2_sender;
+			$recipients = [$item->number];
+			$message = $item->msg;
+			$response = $smsApi->sendSMS($senderName, $recipients, $message);
+
+			//ALTER TABLE `gw_outg_sms` CHANGE `remote_id` `remote_id` VARCHAR(40) NOT NULL;
+			$item->remote_id = $response['requestId'];
+			
+			if($item->remote_id){
+				$item->status = 7;
+			}else{
+				$item->status = 6;
+				$item->err = json_encode($response);
+			}
 		}else{
-			$item->status = 6;
-			$item->err = json_encode($err);
-			$this->setError("Message failed!");
-			$stat = "FAILED (".json_encode($err).")";
+		
+			if($this->gwSendSms($item->number, $item->msg, ['add_balance'=>1], $err, $extra)){
+				$item->status = 7;
+				$item->err = "";
+				//$item->remote_id = $extra['message']['remote_id'];
+				$item->remote_id = $extra['message']['id'];
+
+				$this->setmessage("Message sent!");
+				$stat = "SENT";
+			}else{
+				$item->status = 6;
+				$item->err = json_encode($err);
+				$this->setError("Message failed!");
+				$stat = "FAILED (".json_encode($err).")";
+			}
+			
+			$item->enc = $extra['message']['encoding'];
+			$item->parts = $extra['message']['parts_count'];
+			$item->weight = $extra['message']['credit'];
+			//$this->setError(json_encode($extra['message']));	
+			
+			$this->config->last_response = json_encode($extra);
+			$this->config->last_send_info = date('Y-m-d H:i:s').' '.$stat.' [balance: '.$extra['balance'].']';
 		}
 		
-		$this->config->last_response = json_encode($extra);
-		$this->config->last_send_info = date('Y-m-d H:i:s').' '.$stat.' [balance: '.$extra['balance'].']';
 		
 		
-		$item->enc = $extra['message']['encoding'];
-		$item->parts = $extra['message']['parts_count'];
-		$item->weight = $extra['message']['credit'];
-		//$this->setError(json_encode($extra['message']));
+		
+
 		$item->updateChanged();
-			
-		
 		$this->notifyRowUpdated($item->id, false);
 	}
+	
+	function doRemoteStatusCheck()
+	{
+		$checked = 0;
+		
+		if($this->config->gateway=='tele2'){
+			$list  = $this->model->findAll(['gw="tele2" AND remote_status<1 AND remote_id!=""'],['limit'=>10]);
+			$smsApi = new Tele2SMSApi($this->config->tele2_apikey);
+			
+			foreach($list as $sms){
+				
+				$status = $smsApi->getSMSStatus($sms->remote_id);
+				
+				//d::dumpas([$sms, $status]);
+				
+				if( ($status['messages'][0]['receiver']??false) == $sms->number){
+					
+					$sms->remote_status = $status['messages'][0]['state'];
+					
+					if($status['messages'][0]['error'] ?? false)
+						$sms->err = $status['messages'][0]['error'];
+				}else{
+					$this->setError("Expected number: $sms->number found:".$status['messages'][0]['receiver']);
+					$sms->remote_status = -1;
+				}
+				
+				$sms->updateChanged();
+			}
+			
+			$checked = count($list);
+		}
+		
+		$this->setMessage("Checked: $checked");
+	}
+	
+	
 	
 	function doRetrySend()
 	{
@@ -143,6 +257,10 @@ class Module_Sms extends GW_Common_Module
 	function doSendQueue()
 	{
 		$this->doRetrySend();
+		$this->doRemoteStatusCheck();
+		
+		if( ($_GET['cron'] ?? false) )
+			die('done');
 	}
 	
 	function viewConfig()
