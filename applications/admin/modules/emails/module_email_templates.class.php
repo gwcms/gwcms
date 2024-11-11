@@ -117,6 +117,7 @@ class Module_Email_Templates extends GW_Common_Module
 		$cfg["fields"]["id"]="lof";
 		
 		$cfg["fields"]["title"]="Lof";
+		$cfg["fields"]["idname"]="Lof";
 		$cfg["fields"]["subject"]="Lof";
 		$cfg["fields"]["body"]="lof";
 		$cfg["fields"]["owner_type"]="Lof";

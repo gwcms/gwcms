@@ -53,6 +53,7 @@
 			     <img src="{$smarty.session.3rdAuthUser->picture}" style="border-radius: 50%;height:30px;" class="mr-1" />
 		     {/if}
                      {GW::ln('/m/LINK_WITH_X',[v=>[type=>$tmptype]])} <b class="ml-1"> {$smarty.session.3rdAuthUser->title}</b>
+		     <a href="{$app->buildUri(false,[act=>doUnset3rdAuthUser])}">[x]</a>
                     </label>
                   </div>
                 </div>						

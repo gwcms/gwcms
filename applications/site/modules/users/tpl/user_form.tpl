@@ -4,10 +4,15 @@
 
 <div class="row"> 		
 
-{if $register}
-<div class="col-md-6">
-	{input field="email" type=email required=1 note=GW::ln('/M/USERS/REGISTER_EMAIL_NOTE') help=GW::ln('/M/USERS/REGISTER_EMAIL_HELP')}
-</div>
+{if $register || !$item->email}
+	<div class="col-md-6">
+		{input field="email" type=email required=1 note=GW::ln('/M/USERS/REGISTER_EMAIL_NOTE') help=GW::ln('/M/USERS/REGISTER_EMAIL_HELP')}
+	</div>
+{else}
+	{*todo nera  PADARYTA*}
+	<div class="col-md-6">
+		{input field="email" type=read required=1 note=GW::ln('/M/USERS/REGISTER_EMAIL_NOTE') help=GW::ln('/M/USERS/REGISTER_EMAIL_HELP')}
+	</div>	
 {/if}
 
 {if $fields.fields.name}	

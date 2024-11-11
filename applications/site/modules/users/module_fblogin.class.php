@@ -1,4 +1,6 @@
 <?php
+//jei su authgw tada nukreips i gateway poto kai gaus duoemnis persius duomenis i loginauthgw
+//ten ides i sesija 3rdAuthUser ir permes i users/users/signInOrRegister
 
 class Module_FBLogin extends GW_Public_Module 
 {
@@ -36,6 +38,8 @@ class Module_FBLogin extends GW_Public_Module
 			session_write_close();
 			$auth_gw_url = GW::s('GW_FB_SERVICE')."?request_id=".$req_id."&redirect2=". urlencode($comebackurlAuthgw);
 			
+			
+			//d::dumpas('Location: '.$auth_gw_url);
 			
 			header('Location: '.$auth_gw_url);	
 			exit;
@@ -208,6 +212,8 @@ class Module_FBLogin extends GW_Public_Module
 		
 		$dat->type='facebook';
 		$dat->picture='https://graph.facebook.com/'.$dat->id.'/picture?type=small';
+		
+	
 		$_SESSION['3rdAuthUser'] = $dat;
 		
 		$this->app->jump('direct/users/users/signInOrRegister');
