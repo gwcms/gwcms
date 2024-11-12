@@ -66,7 +66,7 @@
                   <label class="form-check-inline u-check g-font-size-13 g-pl-25 mb-2">
                     <input 
 			class="g-hidden-xs-up {if $addclass} {$addclass}{/if}"
-			    name="{$input_name}" 
+			    {*name="{$input_name}" *}
 			    type="checkbox"  
 			    	
 			    value="1" {if $required}required="1"{/if} {if $value}checked="checked"{/if}
