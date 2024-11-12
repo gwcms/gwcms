@@ -68,14 +68,18 @@
 			class="g-hidden-xs-up {if $addclass} {$addclass}{/if}"
 			    name="{$input_name}" 
 			    type="checkbox"  
-			    	id="{$id}" 
+			    	
 			    value="1" {if $required}required="1"{/if} {if $value}checked="checked"{/if}
 			    {if $disabled || $readonly}disabled="disabled"{/if}
+			    onclick="$(this).next().next().val(this.checked ? 1 : 0).change();{if $onchange_function}{$onchange_function}('{$onchange_function_arg}', this.checked){/if}" 
 			    />
+		   
 		    
                     <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
                       <i class="fa" data-check-icon=""></i>
                     </span>
+		     <input  id="{$id}" type="hidden" name="{$input_name}" value="{$value|escape}" class="gwcheckboxinput" />
+		     
                     {$title} {if $note}<i>({$note})</i>{/if} {if $note_raw}{$note_raw}{/if} {if $help}<i class="fa fa-question-circle" onclick="alert('{$help|escape:javascript}')"></i>{/if} 
 		    
 		    {if $longtext}

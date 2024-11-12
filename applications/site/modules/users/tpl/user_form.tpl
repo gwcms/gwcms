@@ -150,11 +150,11 @@
 {/if}
 
 {if $fields.fields.newsletter}
-	{if $register || !$item->newsletter}
+
 	<div class="col-md-6">
 		{input field=newsletter type=checkbox title=GW::ln("/m/SUBSCRIBE_TO_NEWSLETTER")}
 	</div>
-	{/if}
+
 {/if}
 
 {if $fields.fields.image &&  !$register}

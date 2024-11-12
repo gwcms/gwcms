@@ -935,12 +935,12 @@ class Module_Users extends GW_Public_Module
 			$vals,
 			$permit_fields+['id'=>1]
 		);	
-	
+		
 		$item->fireEvent('BEFORE_CHANGES');
 		
 		if(isset($vals['phone']))
 			$vals['phone'] = preg_replace("/[^0-9]/",'',$vals['phone']);
-		
+				
 		$item->setValues($vals);
 		
 		
