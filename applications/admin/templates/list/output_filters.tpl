@@ -86,6 +86,11 @@
 	{else}{/if}
 {/function}
 
+{function name=dl_output_filters_site_id_key}
+	{$m->options.site_map_id_key[$item->site_id]}
+{/function}
+
+
 
 {function dl_output_filters_image_sm}
 	{$image=$item->$field}

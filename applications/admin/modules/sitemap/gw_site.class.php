@@ -55,5 +55,10 @@ class GW_Site extends GW_i18n_Data_Object
 		return $this->getAssoc(['id','title_'.$lang],'', ['order'=>'title_'.$lang.' ASC']);
 	}	
 	
+	function getOptionsKey()
+	{
+		return $this->getAssoc(['id','key']);
+	}		
+	
 
 }

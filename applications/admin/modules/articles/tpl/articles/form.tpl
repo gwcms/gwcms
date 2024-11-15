@@ -26,6 +26,8 @@
 
 {call e field=priority type=number}
 
+{call e field=datetime type=date}
+
 
 
 {include file="default_form_close.tpl"}

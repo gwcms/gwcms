@@ -4,6 +4,11 @@
 class Module_Articles extends GW_Common_Module
 {	
 	
+	
+	public $multisite = true;
+	
+	
+	
 	function init()
 	{	
 		parent::init();

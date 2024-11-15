@@ -3,7 +3,8 @@
 class Module_Pages extends GW_Common_Module_Tree_Data 
 {
 
-	
+	public $multisite = true;
+		
 	function init()
 	{	
 		$this->app->carry_params['site_id']=1;
@@ -15,32 +16,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$this->config->preload('');	
 		$this->tpl_vars['additfields'] = json_decode($this->config->additfields, true);
 					
-		if(isset($_GET['site_id']))
-		{
-			$this->filters['site_id']=$_GET['site_id'];
-		}elseif(GW::s('MULTISITE') && !($this->list_params['search'] ?? false)){
-			
-			
-			$this->filters['site_id'] = $this->app->site->id;
-		}
+
 		
-		
-		
-		
-		
-		if(isset($this->filters['site_id'])){
-			$this->site = GW_Site::singleton()->createNewObject($this->filters['site_id'], true);
-			$this->tpl_vars['breadcrumbs_attach'] = $this->tpl_vars['breadcrumbs_attach'] ?? [];
-			array_unshift($this->tpl_vars['breadcrumbs_attach'], [
-			    'title'=>$this->site->title, 
-			    'path'=>$this->buildUri('', ['site_id'=>$this->site->id,'pid'=>0])
-			    ]);
-		}
+
 		
 		
 		$this->app->carry_params['clean']=1;
 		
-		$this->options['site_id'] = GW_Site::singleton()->getOptions($this->app->ln);
+
 	}
 	
 	
@@ -585,8 +568,6 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$this->list_config['dl_fields'][]='path';
 		}
 		
-		if(($this->list_params['search'] ?? false))
-			$this->list_config['dl_fields'][]='site_id';
 	}
 	
 	

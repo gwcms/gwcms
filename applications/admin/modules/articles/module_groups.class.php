@@ -4,6 +4,7 @@
 class Module_Groups extends GW_Common_Module
 {	
 
+	public $multisite = true;
 /*	
 	function __eventAfterList(&$list)
 	{

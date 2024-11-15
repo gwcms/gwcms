@@ -74,11 +74,12 @@
 	{/function}
 	
 
-	{$dl_smart_fields=[title,in_menu,ico,icon,site_id]}
+	{$dl_smart_fields=[title,in_menu,ico,icon]}
 	
 	
 	
-	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}	
+	{$dl_output_filters.insert_time=short_time}
+	{$dl_output_filters.update_time=short_time}	
 	
 	
 	

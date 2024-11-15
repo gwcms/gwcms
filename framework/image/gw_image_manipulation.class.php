@@ -359,4 +359,49 @@ class GW_Image_Manipulation
 		$this->save($this->file);
 	}	
 	
+	
+	
+	static function convertToWebP($filePath) {
+	    // Check if file exists
+	    if (!file_exists($filePath)) {
+		echo "File does not exist.";
+		return false;
+	    }
+
+	    // Get image info
+	    $imageInfo = getimagesize($filePath);
+	    $mimeType = $imageInfo['mime'];
+	    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+	    // Define the output path with .webp extension
+	    $outputPath = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $filePath);
+
+	    // Load the image based on the MIME type
+	    switch ($mimeType) {
+		case 'image/jpeg':
+		    $image = imagecreatefromjpeg($filePath);
+		    break;
+		case 'image/png':
+		    $image = imagecreatefrompng($filePath);
+		    // Disable alpha blending for PNG to preserve transparency
+		    imagealphablending($image, false);
+		    imagesavealpha($image, true);
+		    break;
+		default:
+		    echo "Unsupported file type. Only JPG and PNG are supported.";
+		    return false;
+	    }
+
+	    // Convert and save the image as WebP
+	    if (imagewebp($image, $outputPath, 85)) {
+		echo "Image successfully converted to WebP: $outputPath";
+		imagedestroy($image); // Free up memory
+		return true;
+	    } else {
+		echo "Failed to save image as WebP.";
+		imagedestroy($image); // Free up memory
+		return false;
+	    }
+	}
+	
 }

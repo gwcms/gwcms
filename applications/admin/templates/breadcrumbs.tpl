@@ -40,6 +40,9 @@
 				{call breadcrumb_ico}
 				{$item.title|escape} &raquo;
 			{/if}
+			{if $item.actions}			
+				{include "tools/ajaxdropdown.tpl"}								
+			{/if}			
 			
 			{if !$item@last}&raquo;{/if}	
 		{/foreach}		

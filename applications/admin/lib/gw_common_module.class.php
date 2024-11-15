@@ -48,6 +48,7 @@ class GW_Common_Module extends GW_Module
 	public $canAccessIfOwner=true;
 	public $write_permission = false;
 	public $dynamic_fields = false;
+	public $multisite = false;
 	
 
 	/**
@@ -106,7 +107,10 @@ class GW_Common_Module extends GW_Module
 		if($this->dynamic_fields){
 			$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', strtolower(get_class($this->model))],['key_field'=>'fieldname']);
 			
-		}		
+		}	
+		
+		if($this->multisite)
+			$this->initMultisite();
 	}
 
 	function doDragDropMove()
@@ -2055,6 +2059,10 @@ class GW_Common_Module extends GW_Module
 			$cfg['fields']['changetrack'] = 'L';
 		}
 		
+		
+		if(GW::s('MULTISITE') && $this->multisite)
+			$cfg['inputs']['site_id']=['type'=>'select_ajax','options'=>[],'modpath'=>'sitemap/sites','preload'=>1];
+		
 		return $cfg;
 	}
 	
@@ -2577,12 +2585,28 @@ class GW_Common_Module extends GW_Module
 			case 'AFTER_LIST':
 				
 				//changetrack extension
-				if($this->isListEnabledField("changetrack")){	
+				if($this->isListEnabledField("changetrack"))
 					$this->tpl_vars['dl_output_filters']['changetrack'] = 'changetrack';
+				
+				
+				
+				if($this->isListEnabledField("site_id")){
+					$this->tpl_vars['dl_output_filters']['site_id'] = 'site_id_key';
 				}
+								
 				
 				if($this->dynamic_fields)
 					$this->initDynFieldsList($context);
+			break;
+			
+			case 'AFTER_LIST_CONFIG':
+				
+				if($this->multisite && GW::s('MULTISITE') && ($this->list_params['search'] ?? false)){
+					$this->list_config['display_fields']['site_id'] = 1;
+					
+					if(!in_array('site_id', $this->list_config['dl_fields']))
+						$this->list_config['dl_fields'][]='site_id';
+				}
 			break;
 		}
 		
@@ -3824,5 +3848,37 @@ class GW_Common_Module extends GW_Module
 			$cfg['inputs'][$field] = $input;
 		}
 	}
+	
+	function initMultisite()
+	{
+		if(!$this->multisite)
+			return false;
+		
+		if(isset($_GET['site_id']))
+		{
+			if($_GET['site_id']!=-1)
+				$this->filters['site_id'] = $_GET['site_id'];
+			
+			
+		}elseif(GW::s('MULTISITE') && !($this->list_params['search'] ?? false)){
+			$this->filters['site_id'] = $this->app->site->id;
+		}	
+
+		$this->app->carry_params['site_id']=1;
+		
+		if(isset($this->filters['site_id'])){
+			$this->site = GW_Site::singleton()->createNewObject($this->filters['site_id'], true);
+			$this->tpl_vars['breadcrumbs_attach'] = $this->tpl_vars['breadcrumbs_attach'] ?? [];
+			array_unshift($this->tpl_vars['breadcrumbs_attach'], [
+			    'title'=>$this->site->title, 
+			    'path'=>$this->buildUri('', ['site_id'=>$this->site->id,'pid'=>0])
+			    ]);
+		}	
+		
+		$this->options['site_id'] = GW_Site::singleton()->getOptions($this->app->ln);	
+		$this->options['site_map_id_key'] = GW_Site::singleton()->getOptionsKey();		
+		
+	}
+	
 	
 }

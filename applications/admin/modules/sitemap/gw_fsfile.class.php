@@ -57,7 +57,7 @@ class GW_FSFile extends GW_Data_Object
 	
 	
 	
-	function getByPath($path)
+	public function getByPath($path)
 	{
 		$arr = [
 				'path'=> $path, 
@@ -160,13 +160,14 @@ class GW_FSFile extends GW_Data_Object
 	
 	
 	public $calculate_fields = [
-	    'path'=>1,
-	    'humansize'=>1,
-	    'extension'=>1,
-	    'subfilescount'=>1,
-	    'url'=>1,
-	    'files'=>1,
-	    'resize_url'=>1
+		'path'=>1,
+		'humansize'=>1,
+		'extension'=>1,
+		'extension_lc'=>1,
+		'subfilescount'=>1,
+		'url'=>1,
+		'files'=>1,
+		'resize_url'=>1
 	];
 
 
@@ -183,6 +184,9 @@ class GW_FSFile extends GW_Data_Object
 		
 			case 'extension':
 				return pathinfo($this->filename, PATHINFO_EXTENSION);
+			break;
+			case 'extension_lc':
+				return strtolower($this->extension);
 			break;
 		
 			case 'subfilescount':
@@ -246,8 +250,8 @@ class GW_FSFile extends GW_Data_Object
 		}
 	}
 	
-	
-	
+
+
 	
 }
 

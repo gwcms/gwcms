@@ -222,12 +222,15 @@ class Module_Repository extends GW_Common_Module
 		
 		foreach($parents as $name){
 			$path[]=$name;
-			
+			$foldepath = GW::s('DIR/REPOSITORY').implode('/', $path);
+			$iteminfo = $this->model->getByPath($foldepath);
 			
 			$breadcrumbs_attach[]=Array
 			(
-				'path'=> $this->builduri(false, ['parent'=>implode('/', $path)],['level'=>2]),
-				'title'=>$name
+				'path' => $this->builduri(false, ['parent'=>implode('/', $path)],['level'=>2]),
+				'title' => $name,
+				'actions' => $this->app->buildUri($this->app->page->path.'/itemactions',['id'=>$iteminfo['id'], 'RETURN_TO'=>$_SERVER['REQUEST_URI']]),
+				'id' => $iteminfo['id']
 			);
 		
 		}
@@ -517,4 +520,29 @@ class Module_Repository extends GW_Common_Module
 	
 	
 	
+	function doConvert2webp()
+	{
+		$item = $this->getDataObjectById();
+		
+		
+		$base = $item->path;
+		
+		
+		GW_Image_Manipulation::convertToWebP($item->path);
+		//$this->jump();
+	}
+	
+	
+	function doConvert2webpDir()
+	{
+		$item = $this->getDataObjectById();
+		
+		$base = $item->path;
+		$archivename = $item->filename;
+
+		foreach($item->files as $file){
+			GW_Image_Manipulation::convertToWebP($file);
+		}		
+		
+	}
 }
