@@ -62,3 +62,7 @@ compatability with php82
 	montonio v2
 	php7.4 /var/www/gw/composer.phar require firebase/php-jwt
 	anoninminiai kr
+
+4.5
+	failų saugukloje veiksmai su paveiksliukais, apkirpti, konvertuoti i webp, extension stulpelis, isvalyti cache
+	breadcrumbs patobulinimai, multisite infrastruktura uzloadinama prie modulio nurodzius multisite=1
