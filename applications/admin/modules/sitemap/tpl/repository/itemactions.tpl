@@ -17,6 +17,20 @@
 	{if in_array($item->extension_lc,[jpg,jpeg,png])}
 		{list_item_action_m url=[false,[act=>doConvert2webp,id=>$item->id]] iconclass="material inbox_customize" confirm=1 caption="Convert image to .WEBP"}
 	{/if}
+		
+	
+	{if $item->type==image}
+		{list_item_action_m url=["crop", [id=>$item->id]] iconclass="fa fa-crop" caption=GW::l('/m/VIEWS/crop')}
+
+		{*action_addclass="ajax-link"*}
+		{list_item_action_m url=[false,[act=>doRotate,id=>$item->id]]  caption=GW::l('/m/ROTATE_CLOCKWISE') iconclass="fa fa-rotate-right"}	
+	{/if}
+	
+	{if $item->extension==pdf}
+		{list_item_action_m url=[false,[act=>doPdfToImage,id=>$item->id]]  caption="pdf to image" iconclass="fa fa-cog"}	
+	{/if}	
+	
+	
 {/if}
 
 

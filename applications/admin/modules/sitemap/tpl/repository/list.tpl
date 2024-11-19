@@ -12,7 +12,7 @@
 	
 	{$do_toolbar_buttons[] = addfolder}	
 	{$do_toolbar_buttons[] = hidden}
-	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
+	{$do_toolbar_buttons_hidden=[dialogconf,print,dialogconf2]}	
 	{if $this->write_permission}
 		{$do_toolbar_buttons_hidden[] = uploadzip}
 	{/if}
@@ -37,8 +37,13 @@
 		{if $item->isdir==1}
 			<i class="fa fa-folder-o dragable dropable"  data-id="{$item->relpath}"></i>
 		{else}
-			{if $item->type=='image'}
-				<img class="dragable file" data-file="{$file}" src="{$app->sys_base}tools/img_resize?file={urlencode($item->relpath)}&dirid=repository&size=30x24&method=crop" title="{$dir} {$filename}" alt="{$filename}"  data-id="{$item->relpath}" />
+			{if $item->extension=='svg'}
+				{$dim=explode('x',$icosize)}
+				<img src='{$item->url}' style="width:{$dim.0}px;max-height:{$dim.1}px;">
+			{elseif $item->type=='image'}
+				<a title="{$item->filename}" href="{$item->url}" data-fancybox-group="repositima" class="fancybox-thumbs">
+					<img  class="dragable file" data-file="{$file}" src="{$app->sys_base}tools/img_resize?file={urlencode($item->relpath)}&dirid=repository&size={$icosize}&method=crop&update_time={$item->timestamp}" title="{$dir} {$filename}" alt="{$filename}"  data-id="{$item->relpath}" />
+				</a>
 			{else}
 				<i class="dragable {Mime_Type_Helper::icon($item->path)}" data-id="{$item->rel_path}"></i>
 			{/if}
@@ -135,8 +140,53 @@
 			.dl_cell_ico i{ font-size: 24px; margin-top: 1px;margin-bottom: 1px; }
 			.dl_cell_ico{ padding: 0px 5px 0 5px !important;vertical-align:middle; }
 		</style>
+
 		
-		
+	
+	{*<script type="text/javascript" src="{$app->sys_base}vendor/fancybox/lib/jquery-1.10.1.min.js"></script>*}
+
+	<!-- Add fancyBox main JS and CSS files -->
+
+		<link rel="stylesheet" type="text/css" href="{$app_root}static/vendor/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+		<!-- Add Thumbnail helper (this is optional) -->
+		<link rel="stylesheet" type="text/css" href="{$app_root}static/vendor/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+
+
+
+			<script type="text/javascript">
+
+				function initFancy()
+				{
+						$('.fancybox-thumbs').fancybox({
+								prevEffect: 'fade',
+								nextEffect: 'fade',
+								closeBtn: false,
+								arrows: true,
+								nextClick: true,
+								helpers: {
+										thumbs: {
+												width: 50,
+												height: 50
+										}
+								},
+								caption: function (instance, item) {
+								     // Display image title
+								     return $(this).attr('title');
+								 }									
+						});
+						//$('.fancybox').fancybox();	
+				}
+
+				//this will allow open dialog in root window, if this window is iframed
+				require(['gwcms'], function(){   
+					require(['vendor/fancybox/lib/jquery.mousewheel-3.0.6.pack', 'vendor/fancybox/source/jquery.fancybox'], function(){ 
+						require(['vendor/fancybox/source/helpers/jquery.fancybox-thumbs'], function(){ initFancy() })
+					})	
+				});
+
+			</script>
+			{assign var=gwcms_fancybox_initdone value=1 scope=global}
+
 
 	{/capture}	
 

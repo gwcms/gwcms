@@ -66,6 +66,7 @@ class GW_FSFile extends GW_Data_Object
 				'insert_time'=> date('Y-m-d H:i:s', filectime($path)),
 				'update_time'=> date('Y-m-d H:i:s', filemtime($path)),
 				'size'=> filesize($path),
+				'extension'=> pathinfo($path, PATHINFO_EXTENSION),
 				//'humansize' => GW_File_Helper::cFileSize(filesize($path)),
 				'mime'=> Mime_Type_Helper::getByFilename($path)
 		];
@@ -109,12 +110,16 @@ class GW_FSFile extends GW_Data_Object
 	
 	function createTempTable()
 	{
+		
+		$this->getDB()->query("DROP TABLE IF EXISTS `reposfilelist`;");
+		
 		$sql="
 		CREATE TEMPORARY TABLE `reposfilelist` (
 		`id` varchar(500) NOT NULL,
 		`relpath` varchar(500) NOT NULL,
 		`filename` varchar(200) NOT NULL,
 		`size` bigint(20) NOT NULL,
+		`extension` varchar(20) NOT NULL,		
 		`isdir` tinyint(4) NOT NULL,
 		`type` varchar(50) NOT NULL,
 		`subtype` varchar(25) NOT NULL,
@@ -129,7 +134,7 @@ class GW_FSFile extends GW_Data_Object
 	
 	function getColumns($type="all")
 	{
-		$list = ['relpath', 'filename','isdir','insert_time','update_time','size','type'];
+		$list = ['relpath', 'filename','isdir','insert_time','update_time','size','type','extension'];
 		return array_flip($list);
 	}	
 		
@@ -167,7 +172,8 @@ class GW_FSFile extends GW_Data_Object
 		'subfilescount'=>1,
 		'url'=>1,
 		'files'=>1,
-		'resize_url'=>1
+		'resize_url'=>1,
+		'timestamp'=>1
 	];
 
 
@@ -206,6 +212,10 @@ class GW_FSFile extends GW_Data_Object
 			case 'resize_url':
 				//size=widthxheight&method=crop
 				return "/tools/img_resize?file=".urlencode($this->relpath)."&dirid=repository";
+			break;
+		
+			case 'timestamp':
+				return filemtime($this->path);
 			break;
 			//case 'ext':
 			//	return new IPMC_Competition_Extended($this->id);

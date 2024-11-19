@@ -299,6 +299,8 @@
 	    <lt>Svetainės medis+</lt>
 	    <en>Site tree</en>
     </i>
+   <i id="crop">Apkirpti paveikslėlį</i>
+   <i id="doRotate">Pasukti</i>
   </i>
   <i id="PREVIEW_SHIFTKEY">
     <lt>Press using shift or ctrl key for headless version</lt>
@@ -427,4 +429,8 @@
     
   <i id="i18n_EXT_ADD_LN">Additional language setup: input language copy from in_menu presence. !Warning in "to" field specify only new language.</i>
   <i id="EMPTY_IMAGE_DIMENSION_NOTE">Galima nenurodyti (ištrinti) auščio ir pločio nustatymą - tada bus naudojama originalus pav. dydis (turėkite omenyje kad itin dideli paveikslėliai sulėtina svetainę)</i>
+  <i id="ROTATE_CLOCKWISE">
+    <en>Rotate clockwise</en>
+    <lt>Pasukti (pagal l. rodykl.)</lt>
+  </i>  
 </xml>
