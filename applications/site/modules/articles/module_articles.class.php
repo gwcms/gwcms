@@ -16,10 +16,6 @@ class Module_Articles extends GW_Public_Module
 		
 		
 		$this->tpl_vars['item_url']= $this->app->buildUri(GW::s('PATH_TRANS/articles/articles').'/item');	
-		
-		
-	
-				
 	}
 
 
@@ -31,6 +27,9 @@ class Module_Articles extends GW_Public_Module
 		//$list=$this->model->findAll(Array('active=1 AND lang=?',$this->app->ln));
 		
 		$cond = 'active=1';
+		
+		if(GW::s('MULTISITE'))
+			$cond = GW_DB::mergeConditions($cond, "site_id=".$this->app->site->id);
 		
 		if($groupids = $this->app->page->getContent('group_id')){
 			$groupids = json_decode($groupids, true);
@@ -68,21 +67,24 @@ class Module_Articles extends GW_Public_Module
 		}
 		
 		///d::dumpas('what a heck');
+		$this->tpl_vars['fancybox']=1;
 	}
 	
 	
 
 	function viewShortList()
 	{		
-		$list=$this->model->findAll(Array('active=1 AND lang=?',$this->app->ln), Array('limit'=>3));
-
+		$cond = Array('active=1 AND lang=?',$this->app->ln);
+		
+		if(GW::s('MULTISITE'))
+			$cond = GW_DB::mergeConditions($cond, "site_id=".$this->app->site->id);		
+		
+		$list=$this->model->findAll($cond, Array('limit'=>3));
 		$this->smarty->assign('list', $list);
 	}
 
 	function viewItem()
 	{
-			
-		
 		$this->viewDefault();
 	}
 	
@@ -91,7 +93,7 @@ class Module_Articles extends GW_Public_Module
 	{
 		
 
-		$list=$this->model->findAll('group_id=21 AND active=1', ['limit'=>4,'order'=>'insert_time DESC']);
+		$list=$this->model->findAll('group_id=21 AND active=1', ['limit'=>4,'order'=>'priority DESC, insert_time DESC']);
 		
 		$this->tpl_vars['list'] = $list;
 	}
@@ -104,6 +106,25 @@ class Module_Articles extends GW_Public_Module
 		
 		
 		$this->tpl_vars['list'] = $list;
+	}
+	
+	function doGetIndexArticles($opts=[])
+	{
+		$cond = 'active=1';
+		
+		
+		$page = GW_Page::singleton()->getByPath($this->args['pagepath']);
+
+		
+		if(GW::s('MULTISITE'))
+			$cond = GW_DB::mergeConditions($cond, "site_id=".$this->app->site->id);				
+		
+		$ln = $this->app->ln;
+		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id";
+			
+		$list = $this->model->findAll($cond, $qopts);
+		
+		return ['list'=>$list, 'itemurl'=>$this->app->buildUri($page->path,['id'=>''])];
 	}
 
 

@@ -65,4 +65,4 @@ compatability with php82
 
 4.5
 	failų saugukloje veiksmai su paveiksliukais, apkirpti, konvertuoti i webp, extension stulpelis, isvalyti cache
-	breadcrumbs patobulinimai, multisite infrastruktura uzloadinama prie modulio nurodzius multisite=1
+	breadcrumbs patobulinimai, multisite infrastruktura uzloadinama prie modulio nurodzius multisite=1, straipsniai ir svetaines struktura pirmieji multisite moduliai
