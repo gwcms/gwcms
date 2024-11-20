@@ -117,7 +117,10 @@ class Module_Articles extends GW_Public_Module
 
 		
 		if(GW::s('MULTISITE'))
-			$cond = GW_DB::mergeConditions($cond, "site_id=".$this->app->site->id);				
+			$cond = GW_DB::mergeConditions($cond, "site_id=".$this->app->site->id);		
+
+		if($this->args['group_id'])
+			$cond = GW_DB::mergeConditions($cond, "group_id=".(int)$this->args['group_id']);				
 		
 		$ln = $this->app->ln;
 		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id";
