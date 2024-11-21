@@ -3880,5 +3880,27 @@ class GW_Common_Module extends GW_Module
 		
 	}
 	
+	function setItemImageFromUrl($item, $url) 
+	{
+		//this allso should be set in background jobs once per day
+		GW_File_Helper::unlinkOldTempFiles(GW::s('DIR/TEMP'),'24 hour');
+		
+		$file = tempnam(GW::s('DIR/TEMP'), 'TMP_');
+
+		file_put_contents($file, file_get_contents($url));
+		$this->setMessage("temp file was used: $file");
+
+		$image = Array
+		    (
+		    'new_file' => $file,
+		    'size' => filesize($file),
+		    'original_filename' => basename($url),
+		);
+
+		$item->set('image', $image);
+		$item->validate();
+		
+		return $item;
+	}
 	
 }

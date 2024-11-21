@@ -27,4 +27,10 @@ class GW_Article extends GW_i18n_Data_Object
 		
 		return $this->extensions['attachments']->findAll(["field=?", "attachments{$ln}"]);		
 	}	
+	
+	function getAttachmentByLtTitle($title){
+		if($attachment = $this->extensions['attachments']->getByTitle($title,'lt')){
+			return $attachment->image;
+		}
+	}
 }

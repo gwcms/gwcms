@@ -82,7 +82,7 @@ class GW_Extension_Attachments
 	
 	function getByTitle($title, $ln='lt')
 	{
-		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}",$this->parent->id, $this->parent->ownerkey, $title]);
+		return GW_Attachment::singleton()->find(["owner_id=? AND owner_type=? AND title_{$ln}=?",$this->parent->id, $this->parent->ownerkey, $title]);
 	}
 	
 	function findAll($extra_conds = false, $opts=[])
@@ -118,6 +118,10 @@ class GW_Extension_Attachments
 				
 		
 		list($type,$subtype) = explode('/', Mime_Type_Helper::getByFilename($filename));
+		//png; charset=binary
+		$subtype=explode(';', $subtype);
+		$subtype=$subtype[0];
+		
 		
 		$values['content_cat'] = $type == 'image' && in_array($subtype, ['png','jpeg','gif']) ? 'image':'file';
 		$values['content_type'] = $subtype;		

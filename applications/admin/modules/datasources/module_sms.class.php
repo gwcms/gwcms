@@ -134,9 +134,31 @@ class Module_Sms extends GW_Common_Module
 		
 		
 		
+		$valid = GW_Phone_Validator::singleton()->validate('+'.$item->number);
+		
+		if($valid[0]){
+			$item->country = $valid[1];
+		}
+		
+		$pickedgateway = $this->config->gateway;
+		
 		$item->gw = $this->config->gateway;
 		
-		if($this->config->gateway=='tele2'){
+		if($pickedgateway=='router'){
+			$expression = $this->config->route_pick_expresion;
+			
+			//labway
+			//sms['country'] == 'LT' ? 'tele2' : 'gwlt'
+			//sms['number'] == '37060089089' ? 'tele2' : 'gwlt'
+				
+			$pickedgateway = GW_Expression_Helper::singleton()->evaluate($expression, ['sms'=>$item->toArray()]);
+			$item->gw = $pickedgateway;
+		}
+		
+		//country arba gw gali pasikeisti
+		$item->updateChanged();
+		
+		if($pickedgateway=='tele2'){
 			// Send SMS
 			
 			$smsApi = new Tele2SMSApi($this->config->tele2_apikey);

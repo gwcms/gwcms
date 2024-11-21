@@ -123,9 +123,19 @@ class Module_Articles extends GW_Public_Module
 			$cond = GW_DB::mergeConditions($cond, "group_id=".(int)$this->args['group_id']);				
 		
 		$ln = $this->app->ln;
+		
+		
+		$cols = $this->model->getColumns();
+		
+		
 		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id";
 			
+		if(isset($cols['external_link']))
+			$qopts['select'].=", external_link";
+		
+		
 		$list = $this->model->findAll($cond, $qopts);
+		
 		
 		return ['list'=>$list, 'itemurl'=>$this->app->buildUri($page->path,['id'=>''])];
 	}
