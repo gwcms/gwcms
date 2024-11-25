@@ -117,7 +117,11 @@ class Module_Modules extends GW_Common_Module
 		$opts = [
 			'title_func'=>function($item){ return ($item->parent_id?'&nbsp;&nbsp;':'').$item->path;  },
 			'search_fields'=>['path','info'],
-			'list_process'=>function(&$list){ GW_ADM_Sitemap_Helper::arrayToTree($list); },
+			'list_process'=>function(&$list){ 
+				if(!isset($_REQUEST['ids']))
+					GW_ADM_Sitemap_Helper::arrayToTree($list); 
+				
+			},
 			'page_by'=>1000, //kad suveiktu array to tree
 			
 		];	

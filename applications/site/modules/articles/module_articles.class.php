@@ -125,7 +125,7 @@ class Module_Articles extends GW_Public_Module
 		$ln = $this->app->ln;
 		
 		
-		$cols = $this->model->getColumns();
+		$cols = GW_Article::singleton()->getColumns();
 		
 		
 		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id";
@@ -134,7 +134,29 @@ class Module_Articles extends GW_Public_Module
 			$qopts['select'].=", external_link";
 		
 		
-		$list = $this->model->findAll($cond, $qopts);
+		
+		
+		if($this->args['select'] ?? false){
+			$validated_cols = array_intersect_key(array_flip($this->args['select']), $cols);
+			
+			$qopts['select'].=", ".implode(',', array_keys($validated_cols));
+		}
+		
+		if($this->args['order'] ?? false){
+			list($col, $order) = explode(' ', $this->args['order']);
+			
+			if(!isset($cols[$col]))
+			    die("Col $col not avail");
+			
+			if($order!='ASC' && $order!='DESC')
+				die("WRONG ORD ONLY ASC|DESC");
+			
+			$qopts['order'] = "$col $order";
+		}
+		//order
+		
+		$list = GW_Article::singleton()->findAll($cond, $qopts);
+
 		
 		
 		return ['list'=>$list, 'itemurl'=>$this->app->buildUri($page->path,['id'=>''])];

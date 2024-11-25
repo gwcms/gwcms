@@ -21,7 +21,7 @@
 {call e field="type" type=select options=$item->getTypes(type) options_fix=1}
 {call e field="inp_type" type=select options=$m->getInputTypes() empty_option=1 options_fix=1 rowclass=inptype}
 
-{call e field="modpath" type=select_ajax modpath="system/modules" source_args=[byPath=>1]  rowclass=selajax hidden_note="kitokio veikimo be preload, nerodo vertes, reiktu paziuret ilgiau kad atstatyti"}
+{call e field="modpath" type=select_ajax modpath="system/modules" source_args=[byPath=>1] preload=1 options=[] rowclass=selajax hidden_note="kitokio veikimo be preload, nerodo vertes, reiktu paziuret ilgiau kad atstatyti"}
 
 
 {call e field=size type=number default=2}
