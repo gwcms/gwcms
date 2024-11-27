@@ -78,7 +78,7 @@ class Module_Shop extends GW_Public_Module
 	{
 		
 		$this->model = Shop_Products::singleton();
-		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=? AND active=1', $this->model->table]);
+		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=? AND active=1 AND public=1', $this->model->table]);
 		
 		$types = Shop_ProdTypes::singleton()->findAll('count>0 AND active=1',['key_field'=>'id']);
 		$class_types = Shop_Classificator_Types::singleton()->findAll(false, ['key_field'=>'id']);
@@ -272,6 +272,8 @@ class Module_Shop extends GW_Public_Module
 		
 		$item=$this->getDataObjectById();
 		
+		
+		
 		if(!$item)
 		{
 			$this->setError("Item not found");
@@ -301,31 +303,62 @@ class Module_Shop extends GW_Public_Module
 			
 			
 			$modifications = $item->findAll(['active=1 AND parent_id=?',$item->id],['key_field'=>'id','order'=>'priority DESC']);
+			
+			
+			$get_price_range = function($modifications){
+				$minprice = 99999999;
+				$maxprice = 0;
+				foreach($modifications as $mod){
+					$minprice = min($mod->price, $minprice);
+					$maxprice = max($mod->price, $maxprice);
+				}
 
-			$minprice = 99999999;
-			$maxprice = 0;
-			foreach($modifications as $mod){
-				$minprice = min($mod->price, $minprice);
-				$maxprice = max($mod->price, $maxprice);
-			}
-			
-			if($minprice==99999999){
-				$minprice = 0;
-			}
+				if($minprice==99999999){
+					$minprice = 0;
+				}				
+				return [$minprice, $maxprice];
+			};
+
+
 			
 			
-			$this->tpl_vars['modifications_pricerange'] = [$minprice, $maxprice];
+			
 			
 			$this->tpl_vars['modifications'] = $modifications;
+			$this->tpl_vars['modifications_pricerange'] = $get_price_range($modifications);
 			
 	
 			if($_GET['modid'] ?? false){
 				$amod = $modifications[$_GET['modid']] ?? false;
 				$oitem = $item;
 				$item = $amod;
+				
+				
+				$modifications_subs =  $item->findAll(['active=1 AND parent_id=?',$item->id],['key_field'=>'id','order'=>'priority DESC']);
+				$this->tpl_vars['modifications_subs'] = $modifications_subs;
+				
+				$this->tpl_vars['modifications_pricerange'] = $get_price_range($modifications_subs);
+			
+			}
+			
+			//d::dumpas([$minprice, $maxprice]);
+
+			
+			if($_GET['smodid'] ?? false){
+				
+				
+				$amod = $modifications_subs[$_GET['smodid']] ?? false;
+				
+				
+				
+				
+				
+				//d::dumpas($amod);
+				$oitem = $item;
+				$item = $amod;
 			}
 
-
+			
 			
 			$this->tpl_vars['active_mod'] = $amod ?? false;
 		}

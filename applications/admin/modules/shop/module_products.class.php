@@ -156,12 +156,15 @@ class Module_Products extends GW_Common_Module
 		$mod = $this->model->createNewObject();
 		$mod->parent_id = $item->id;
 		$mod->title = "Modification of ".$item->title;
+		//$mod->modif_title = "";
+		
+		//d::dumpas($mod);
 		$mod->insert();
 		//d::dumpas($mod);
 		$this->setMessage("Mofication was created");
 		
 		
-		Navigator::jump($this->buildUri("$mod->id/form"));
+		Navigator::jump($this->buildUri("$mod->id/form", ['parent_id'=>$item->id]));
 	}
 	
 	function __eventBeforeListParams(&$params)

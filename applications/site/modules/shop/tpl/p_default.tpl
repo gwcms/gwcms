@@ -46,7 +46,7 @@
 		
 	<div class="row g-mx-minus-5 g-mb-20 g-mt-10">
 		
-		{if $modifications && !$smarty.get.modid}
+		{if ($modifications && !$smarty.get.modid)  || ($modifications_subs && !$smarty.get.smodid)}
 				<div class="col g-px-5 g-mb-10">
 
 					<button class="btn btn-block u-btn-darkgray g-font-size-12 text-uppercase g-py-15 g-px-25 " disabled="disabled" style="cursor: not-allowed">
@@ -147,8 +147,13 @@
 					{/if}
 				{/foreach}
 				
-				<li> 
-					{if $m->config->modification_display==list}
+				
+					{$moddisplay=$item->moddisplay}
+					{if !$moddisplay}
+						{$moddisplay=$m->config->modification_display}
+					{/if}
+					
+					{if $moddisplay==list}
 						{foreach $modifications as $mod}
 							<li>
 								<a 
@@ -160,7 +165,7 @@
 									 
 								   {if $mod->qty > 0 || $m->canSeeOrders()}
 									    href="#" 
-									onclick="gw_navigator.jump(false,{ modid:{$mod->id} });return false"
+									onclick="gw_navigator.jump(false,{ modid:{$mod->id}, smodid:null });return false"
 								   {else}
 									   {$addclass[]="text-muted"}
 								   {/if}
@@ -172,15 +177,70 @@
 						{/foreach}
 							
 							
-					{elseif $m->config->modification_display==select}	
+					{elseif $moddisplay==select}	
 
 						{include "inputs/input_select.tpl" name="modif" value=$smarty.get.modid options=$opts  
 						onchange="gw_navigator.jump(false,{ modid:this.value })"}
+					{elseif $moddisplay==icons}	
+						{foreach $modifications as $mod}
+						
+						
+							 <a 
+									 {$addclass=[]}
+									 
+							           {if $smarty.get.modid==$mod->id}
+									   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
+								   {/if}
+									 
+								   {if $mod->qty > 0 || $m->canSeeOrders()}
+									    href="#" 
+									onclick="gw_navigator.jump(false,{ modid:{$mod->id}, smodid:null });return false"
+								   {else}
+									   {$addclass[]="text-muted"}
+								   {/if}
+								   class="modification_select {implode(' ',$addclass)}"
+								   >
+									{$img = $mod->image}
+									{if $img}
+										<img src="{$app_base}tools/img/{$img->key}&v={$img->v}" style="width:50px">
+										{$mod->modif_title}
+									{else}
+										{$mod->modif_title} 
+									{/if}
+								
+								</a>
+						{/foreach}
+						
+						
 					{/if}
 					
 					
 					
-				</li>
+				
+				
+				{if $modifications_subs}
+					<br>
+					{foreach $modifications_subs as $smod}
+						<a  
+									 {$addclass=[]}
+									 
+							           {if $smarty.get.smodid==$smod->id}
+									   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
+								   {/if}
+									 
+								   {if $smod->qty > 0 || $m->canSeeOrders()}
+									    href="#" 
+									onclick="gw_navigator.jump(false,{ smodid:{$smod->id} });return false"
+								   {else}
+									   {$addclass[]="text-muted"}
+								   {/if}
+								   class="smodification_select {implode(' ',$addclass)}"
+								   >
+									{$smod->modif_title} {if !$m->feat(infinite_qty)} | {GW::ln('/m/QTY_REMAIN')}: {$smod->qty}{/if}
+								</a>
+					{/foreach}
+				{/if}				
+				
 			{/if}
 			
 			{if $m->feat('add2cart_top')}
@@ -206,17 +266,17 @@
 		<h2 class="g-color-gray-dark-v5 g-font-weight-400 g-font-size-12 text-uppercase mb-2">{GW::ln('/M/SHOP/PRICE')}</h2>
 
 		
-		{if $item->mod_count && !$active_mod}
+		{if ($item->mod_count && !$active_mod) || ($modifications_subs && !$smarty.get.smodid)}
 
 				<span class="g-color-black">
-				{if $item->min_price != $item->max_price} 
+				{if $modifications_pricerange.0 != $modifications_pricerange.1} 
 					{if GW::s('PROJECT_NAME') == 'drpaulclayton'}
 						{GW::ln('/m/TO_SEE_PRICE_PICK_MOD')}
 					{else}
-						{$item->min_price} &#8212; {$item->max_price} &euro;
+						{$modifications_pricerange.0} &#8212; {$modifications_pricerange.1} &euro;
 					{/if}
 				{else}
-					{$item->min_price}  &euro;
+					{$modifications_pricerange.0}  &euro;
 				{/if}				
 				</span>
 		{else}
@@ -453,7 +513,7 @@
        <style>
 	       .modification_select{ display:block; padding: 2px 10px; border:1px solid silver; margin-bottom:2px;}
 	        .modification_selected{ background-color: darkorchid; color: white }
-		
+		.smodification_select{ display:inline-block; padding:2px 10px; border:1px solid silver; margin-bottom:2px;}
 	</style>
 {/capture} 
 

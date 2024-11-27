@@ -1,0 +1,1 @@
+ALTER TABLE `gw_adm_page_fields` ADD `public` TINYINT NOT NULL AFTER `active`, ADD `selectcfg` TEXT NOT NULL AFTER `public`;

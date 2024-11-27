@@ -144,9 +144,10 @@ class Shop_Products extends GW_Composite_Data_Object
 			return parent::__get($key);
 		}
 		
-		if($key=='image' || $this->isCompositeField($key)){
+		if($key=='image' || $this->isCompositeField($key)){			
 			if(parent::__get($key))
 				return parent::__get($key);
+				
 		}
 		
 		if(strpos($key, 'keyval/')===0){
@@ -166,8 +167,10 @@ class Shop_Products extends GW_Composite_Data_Object
 			return $tmp;
 		}
 		
+		//buvo $this->get('parent')->get($key);	
+		//kai triju lygiu ivedziau tada kad is trecio lygio dasigautu iki pirmo per du persokimus
 		
-		return $this->get('parent')->get($key);		
+		return $this->get('parent')->gettt($key);		
 	}
 	
 	

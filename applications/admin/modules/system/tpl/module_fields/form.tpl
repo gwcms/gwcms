@@ -33,7 +33,9 @@
 {call e field="i18n" type=bool}
 
 {call e field="active" type=bool}
+{call e field="public" type=bool}
 
+{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,i18n,size] options_fix=1}
 
 
 <script>
@@ -53,5 +55,41 @@
 	})
 </script>
 
+
+
+
+<script>
+	function selectRow(name)
+	{
+		return $('#gw_input_item__'+name+'__, .field_'+name);
+	}
+	
+	require(['gwcms'], function(){
+		$('#item__selectcfg______').change(function(){			
+			
+			$(this).find('option').each(function(){
+				
+				var value = $(this).val()
+				selectRow(value).toggle($(this).is(":selected"))	
+			})
+			
+			if($('#item__type__').val()=='infotext'){
+				selectRow('note').show();
+			}
+			
+			
+		}).change()	
+		
+		$('#item__type__').change(function(){			
+			
+			var enable_options = ['radio','select','checkbox'].indexOf($(this).val())!=-1
+			
+			$('#gw_input_item__options_src__').toggle(enable_options);
+			
+			
+			
+		}).change()
+	})
+</script>
 
 {include file="default_form_close.tpl"}
