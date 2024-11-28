@@ -123,7 +123,7 @@ class GW_Extension_Attachments
 		$subtype=$subtype[0];
 		
 		
-		$values['content_cat'] = $type == 'image' && in_array($subtype, ['png','jpeg','gif']) ? 'image':'file';
+		$values['content_cat'] = $type == 'image' && in_array($subtype, ['png','jpeg','gif','webp']) ? 'image':'file';
 		$values['content_type'] = $subtype;		
 
 		$item = GW_Attachment::singleton()->createNewObject($values);

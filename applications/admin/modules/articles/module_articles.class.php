@@ -66,21 +66,37 @@ class Module_Articles extends GW_Common_Module
 		//d::dumpas($item);
 	}
 	
-	function __eventAfterInsert($item)
+	
+	
+	
+	//issaugoti saito ikonele press releases
+	function __eventAfterSave($item)
 	{
-		if($this->__fetchexternallinkinfo){
-			
+		if(!$item->getAttachmentByLtTitle('icon')){
+			if(!$this->__fetchexternallinkinfo)
+				$this->__fetchexternallinkinfo = GW_Misc_Helper::fetchMetaTags($item->external_link);
+
 			$url = $this->__fetchexternallinkinfo['icon'];
-			
-			$file = tempnam(GW::s('DIR/TEMP'), 'TMP_');
+			$file = tempnam(GW::s('DIR/TEMP'), 'TMP_').'.ico';
+			$filename = basename($url);
 			
 			file_put_contents($file, file_get_contents($url));
-		
-			$id = $item->extensions['attachments']->storeAttachment("attachments", $file, ['title'=>"icon"], basename($url));	
-		}
+			
+			list($type, $tmp) = explode(';', Mime_Type_Helper::getByFilename($file));
+			
+			if($type=='image/vnd.microsoft.icon'){
 				
-		$item->extensions['attachments']->removeDuplicates();
+				GW_Image_Manipulation::imagick2Webp2($file);
+				$new = Mime_Type_Helper::getByFilename($file);
+				$this->setMessage("convert from $type to $new");
+			}
+
+			$id = $item->extensions['attachments']->storeAttachment("attachments", $file, ['title_lt'=>"icon"], $filename);
+			$item->extensions['attachments']->removeDuplicates();
+		}
+		
 	}
+	
 	
 	function __eventAfterForm($item)
 	{

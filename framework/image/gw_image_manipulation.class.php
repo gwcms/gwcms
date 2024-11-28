@@ -404,4 +404,42 @@ class GW_Image_Manipulation
 	    }
 	}
 	
+	
+	//sudo apt install php-imagemagick
+	static function imagick2Webp($filepath)
+	{
+		if (!extension_loaded('imagick')) {
+		    die('Imagick extension is not installed');
+		}
+
+		try {
+		    // Load the .ico file
+		    $icon = new Imagick($filepath);
+		    $icon->setImageFormat('webp'); // Convert to webp
+
+		    // Save the webp file
+		    $icon->writeImage($filepath);
+		    
+		   
+		    return true;
+		} catch (Exception $e) {
+			
+		    return $e;
+		}		
+	}
+	
+	//sudo apt install imagemagick
+	static function imagick2Webp2(&$file)
+	{
+		$status = GW_Image_Manipulation::imagick2Webp($file); 
+
+		if($status!==true){
+			GW::$context->app->setError($status->getMessage());
+		}else{
+			$newFilename = preg_replace('/\.ico$/i', '.webp', $file);
+			$out = shell_exec($cmd="convert '$file' '$newFilename'");
+			$file = $newFilename;
+			GW::$context->app->setmessage("ico convert using cli imagick $cmd : $out");
+		}		
+	}
 }
