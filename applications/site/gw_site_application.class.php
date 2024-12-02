@@ -114,23 +114,45 @@ class GW_Site_Application extends GW_Application
 
 	function jumpToFirstPage()
 	{
-		if(GW::s('GW_LANG_SEL_BY_GEOIP'))
-		{
-			$this->geoIpLang();
-		}
-		
-		
-		
 		$this->_jmpFrst(0);
 	}
 	
-	function geoIpLang()
+	function defaultLnPick($avail_lns)
+	{
+		if(GW::s('GW_LANG_SEL_BY_GEOIP'))
+		{
+			return $this->geoIpLang($avail_lns);
+		}
+		
+		return $avail_lns[0];
+	}	
+	
+	function geoIpLang($avail_lns)
 	{
 		if(function_exists('geoip_country_code_by_name')){
 			$country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
-			if($country!="LT"){
-				$this->ln = "en";
+			
+			if(isset($_GET['debug_lang_pick']) && $_GET['debug_lang_pick']!="1"){
+				$country=$_GET['debug_lang_pick'];
 			}
+				
+
+			if($this->site && $this->site->ln_by_geoip_map){
+				$map = json_decode($this->site->ln_by_geoip_map, true);
+			}else{
+				$map = GW::s('ln_by_geoip_map');
+			}
+			
+			if($map){
+				$rez = isset($map[$country]) && in_array($map[$country], $avail_lns) ? $map[$country] : $map['default'];
+			}else{
+				$rez = $avail_lns[0];
+			}		
+			
+			if(isset($_GET['debug_lang_pick']))
+				d::dumpas(['map'=>$map,'avail_lns'=>$avail_lns,'geoip_country'=>$country, 'result'=>$rez]);
+			
+			return $rez;
 		}
 	}
 
