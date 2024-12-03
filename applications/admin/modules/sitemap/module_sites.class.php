@@ -28,7 +28,8 @@ class Module_Sites extends GW_Common_Module
 		
 		//d::dumpas();
 		
-		$cfg = array('fields' => []);
+		
+		$cfg = parent::getListConfig();
 		
 		
 						
@@ -37,19 +38,11 @@ class Module_Sites extends GW_Common_Module
 		
 		$cfg["fields"]["id"]="Lof";
 
-		$cfg["fields"]["title"]="Lof";
-		$cfg["fields"]["hosts"]="Lof";
-		$cfg["fields"]["key"]="Lof";
-		//$cfg["fields"]["admin_host"]="Lof";
-					
-		
+		$cfg["fields"]["title"]="Lof";				
 		
 		$cfg["fields"]['relations']='L';		
-		$cfg["fields"]['update_time'] = 'lof';
-		$cfg["fields"]['langs'] = 'Lof';
-		$cfg["fields"]['priority'] = 'lof';
-		$cfg["fields"]['timezone'] = 'Lof';
-		$cfg["fields"]['favico'] = 'Lof';
+
+		
 		
 		
 		$cfg['inputs']['langs']=[
@@ -65,6 +58,9 @@ class Module_Sites extends GW_Common_Module
 		
 		$cfg['inputs']['timezone'] = ['type'=>'select_ajax', 'options'=>DateTimeZone::listIdentifiers(), 'empty_option'=>1, 'options_fix'=>1];
 		$cfg['inputs']['favico'] = ['type'=>'image', 'hidden_note'=>"Min. rez. {$this->model->composite_map['favico'][1]['dimensions_min']}"];
+		
+		$cfg['inputs']['ln_by_geoip_map'] = ['type'=>'code_json', 'hidden_note'=>'Exmpl: {"LT":"lt","DE":"de","default":"en"}', 'hidden_note_copy'=>1, "height"=>"50px"];
+		
 		
 		$this->tpl_vars['dl_output_filters']['favico'] = 'image_sm';
 

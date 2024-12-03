@@ -346,10 +346,9 @@ class GW_Application
 		$this->initSite();
 		$this->initTimeZone();
 		
-		
-		$this->requestInfo();		
+		$this->requestInfo();	
 		$this->initAuth();
-
+		
 		$this->initLang();
 			
 	
@@ -542,9 +541,9 @@ class GW_Application
 		
 		if(GW::s('MULTISITE'))
 		{
-			$this->ln = in_array($ln, $this->site->langs) ? $ln : $this->site->langs[0];	
+			$this->ln = in_array($ln, $this->site->langs) ? $ln : $this->defaultLnPick($this->site->langs);	
 		}else{
-			$this->ln = in_array($ln, $langs) || in_array($ln, GW::s('i18nExt')) ? $ln : $langs[0];
+			$this->ln = in_array($ln, $langs) || in_array($ln, GW::s('i18nExt')) ? $ln : $this->defaultLnPick($langs);
 		}	
 		
 		$_SESSION['GW']['cms_ln'] = $this->ln;
@@ -553,6 +552,11 @@ class GW_Application
 		//jeigu $last_item['data_object_id'] tai nustatyt $_GET['id']
 		if (isset($data_object_id) && $data_object_id)
 			$_GET['id'] = $data_object_id;
+	}
+	
+	function defaultLnPick($avail_lns)
+	{
+		return $avail_lns[0];
 	}
 
 	function getModulePathInfo($path)

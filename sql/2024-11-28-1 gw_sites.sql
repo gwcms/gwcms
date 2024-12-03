@@ -1,0 +1,1 @@
+ALTER TABLE `gw_sites` ADD `ln_by_geoip_map` VARCHAR(500) NOT NULL AFTER `hosts`;
