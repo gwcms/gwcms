@@ -213,7 +213,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['COMPANY_VAT_ID'] = $item->vat_code;
 		$v['COMPANY_ADDR'] = $item->company_addr;
 		
-		$v['INVOICE_NUM'] = GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX').'-'.$item->id;
+		$v['INVOICE_NUM'] = trim(GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')).'-'.$item->id;
 		$v['DATE'] = explode(' ',$item->pay_time)[0];
 		
 		if($v['DATE']=='0000-00-00')

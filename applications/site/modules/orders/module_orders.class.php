@@ -751,7 +751,7 @@ class Module_Orders extends GW_Public_Module
 		if(isset($_REQUEST['download'])){
 			header("Content-Type: application/x-download");	
 			$prfx = isset($_GET['preinvoice'])?'pre':'';
-			$filename=GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX').$order->id.'_'.$prfx.'invoice.pdf';
+			$filename=trim(GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')).$order->id.'_'.$prfx.'invoice.pdf';
 			header('Content-Disposition: attachment; filename="'.$filename.'";');
 			header("Accept-Ranges: bytes");
 		}else{		
