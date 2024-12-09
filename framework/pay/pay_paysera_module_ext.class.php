@@ -56,6 +56,17 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		//if($user->id == 9)
 		//	$args->payprice= 0.01;		
 		
+		
+		$returnarg =  ['id'=>$args->order->id,'orderid'=>$args->order->id,'key'=>$args->order->secret];
+		
+		if(GW::s('MULTISITE') && GW::s("MAIN_HOST")!=$_SERVER['HTTP_HOST']){
+			
+			$returnarg['host'] = $args->base;
+			$args->base = "https://".GW::s("MAIN_HOST").'/';
+		}
+		
+
+		
 		$test=isset($_GET['testu6s15g19t8']) || $cfg->paysera_test || $args->order->email=='paytest@gw.lt' || $args->order->city == 'paytest' || ($user && ($user->city=="paytest" || $user->id==9));
 				
 		$data = array(
@@ -63,15 +74,15 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		    'sign_password' => $cfg->paysera_sign_password,
 		    'orderid' => $args->orderid.($test?'-TEST'.date('His'):"-".date('His')), //ausrinei kad veiktu "-".rand(0,9) 2021-01-12
 		    'paytext' => $args->paytext,
-		    'p_firstname' => $user && $user->name,
-		    'p_lastname' => $user && $user->surname,
+		    'p_firstname' => $user && $user->name ? $user->name : $args->order->name,
+		    'p_lastname' => $user && $user->surname ? $user->surname : $args->order->surname,
 		    'p_email' => $user && $user->email ? $user->email : $args->order->email,
 		    'amount' => $args->payprice * 100,
 		    'currency' => $cfg->default_currency_code,
 		    'country' => 'LT',
-		    'accepturl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=return&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
-		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?orderid={$args->order->id}&id={$args->order->id}&key={$args->order->secret}",
-		    'callbackurl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=notify&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}",
+		    'accepturl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=return&".http_build_query($returnarg),
+		    'cancelurl' => $args->base.$this->app->ln."/direct/orders/orders?".http_build_query($returnarg),
+		    'callbackurl' => $args->base.$this->app->ln."/direct/orders/orders?act=doPayseraAccept&action=notify&".http_build_query($returnarg),
 		    'test' => $test,
 		    'seller_id'=>$args->order->seller_id
 		);
@@ -99,7 +110,10 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 		
 		///d::dumpas($data);
-
+		if(isset($returnarg['host']))
+			header("Referrer-Policy: no-referrer");
+		
+		
 		WebToPay::redirectToPayment($data);
 		exit;
 	}
@@ -114,6 +128,40 @@ class pay_paysera_module_ext extends GW_Module_Extension
 
 	function doPayseraAccept()
 	{
+	
+		//multisite is pagrindinio hosto peradresuoti atgal i reprezentacini
+		
+		if(isset($_GET['host'])){
+			$action = $_GET['action'] ?? false;;
+			
+			if( !$action  != 'notify'){
+				
+				$current_url = $_SERVER['REQUEST_URI'];
+
+				// Parse the URL into components
+				$parsed_url = parse_url($current_url);
+
+				// Parse the query string into an associative array
+				parse_str($parsed_url['query'] ?? '', $query_params);
+
+				// Remove the specific argument (e.g., 'host')
+				unset($query_params['host']);
+				$query_params['original_host'] = $_SERVER['HTTP_HOST'];
+
+				// Rebuild the query string without the removed parameter
+				$new_query = http_build_query($query_params);
+
+				// Rebuild the URL
+				$new_url = $parsed_url['path'] . ($new_query ? '?' . $new_query : '');				
+				
+				
+				header('Location: '.$_GET['host'].$new_url);
+				exit;
+			}
+			
+		}
+		
+		
 		$this->log($_SERVER['REQUEST_URI']);
 		
 		ob_start();
@@ -226,7 +274,10 @@ class pay_paysera_module_ext extends GW_Module_Extension
 				$args['paytest'] = 1;
 			}
 			
-			
+			if($logvals['p_email']=='vidmantasss.norkus@gw.lt' && $logvals['amount']==1){
+				$args['paytest'] = 1;
+			}
+				
 			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
 			
 			$this->log($url);

@@ -285,8 +285,12 @@ class GW
 	
 	static function multiSiteSolve($cfg)
 	{
-		if(!isset($_SERVER['HTTP_HOST']))
+		if(!isset($_SERVER['HTTP_HOST'])){
+			GW::s('MULTISITE_SID', GW::s('MULTISITE_DEFAULT'));
+			GW::s('MULTISITE_VARS', $cfg[GW::s('MULTISITE_DEFAULT')]);
+			
 			return false;
+		}
 		
 		foreach($cfg as $siteid => $scfg){
 			foreach($scfg['hosts'] as $host => $env){
@@ -295,6 +299,7 @@ class GW
 					GW::s('MULTISITE_VARS', $scfg);
 				}
 			}
-		}			
+		}
+		
 	}
 }
