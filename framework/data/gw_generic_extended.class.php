@@ -171,6 +171,11 @@ class GW_Generic_Extended
 		$this->_cache = [];
 	}
 	
+	function getCached()
+	{
+		return $this->_cache;
+	}	
+	
 	function getAll($extra_cond=false)
 	{
 		$db = $this->getDB();

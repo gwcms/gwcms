@@ -264,7 +264,21 @@ class GW_Public_Module {
 			$path = $this->module_path[0] . ($path ? '/' : '') . $path;
 		}
 		
+
+		
 		return $this->app->buildURI('direct/' . $path, $getparams, $params);
+	}
+	
+	function buildUriX($relpath, $getparms=[], $params=[])
+	{
+
+		
+		if(($this->app->path_arr[0]['name'] ?? false) =='direct'  )
+			return $this->buildDirectUri ($relpath, $getparms, $params);
+		
+	
+		return $this->buildUri($relpath, $getparms, $params);
+		
 	}
 
 	function getViewPath($view) {
