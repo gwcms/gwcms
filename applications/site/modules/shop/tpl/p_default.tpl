@@ -100,6 +100,7 @@
 
 {if $app->user && $app->user->isRoot()}
 	{d::ldump($item->content_base, ['hidden'=>1])}
+	Dev {include "gw/ajaxdropdown.tpl" modpath="shop/products"}
 {/if}
 
 <!-- Product Description -->
@@ -124,11 +125,11 @@
 <div class="g-px-40--lg">
 	<!-- Product Info -->
 	<div class="g-mb-30">
-		<h1 class="g-font-weight-300 mb-4">{$item->title}{if $item->subtitle}<br>{$item->subtite}{/if}</h1>
+		<h1 class="g-font-weight-300 mb-4">{$item->title} 			
+			{if $item->subtitle}<br>{$item->subtite}{/if}</h1>
 			{*<p>Description</p>*}
 	</div>
 	<!-- End Product Info -->
-
 
 	
 

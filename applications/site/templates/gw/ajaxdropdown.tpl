@@ -1,7 +1,7 @@
 
 <div class="btn-group dropright gwcmsAction" style="display: inline">
 
-	<i class="fa fa-bars   gwcms-ajax-dd" data-toggle="dropdown" data-url="{$app->buildUri("{$modpath}/itemactions",['id'=>$item->id],[app=>admin])}"></i>	
+	<i class="fa fa-bars   gwcms-ajax-dd" data-toggle="dropdown" data-url="{$app->buildUri("{$modpath}/itemactions",['id'=>$item->id,frontend=>1],[app=>admin])}"></i>	
 	    <ul class="dropdown-menu dropdown-menu-right">
 		<li><i class="fa fa-spinner fa-pulse"></i></li>
 	    </ul>
