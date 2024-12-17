@@ -105,12 +105,13 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 				]);
 			}
 			
-			if(!file_exists($fp)){
+			if(!file_exists($fp) || !filesize($fp)){
 				$url = str_replace('{IMGID}', GW_Http_Agent::urlencode($file), $source);
 				//d::dumpas($url);
 				$data = file_get_contents($url);
 				//@mkdir(dirname($storepath), 0777, true);
-				file_put_contents($fp, $data);
+				if($data)
+					file_put_contents($fp, $data);
 				//d::dumpas($storepath);
 			}
 		}

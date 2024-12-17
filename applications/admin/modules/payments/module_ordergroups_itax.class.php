@@ -124,8 +124,8 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 		if(!$data['country_code'])
 			$data['country_code'] = 'LT';		
 		
-		$data['email'] = $order->email;
-		$data['phone'] = $order->phone;
+		$data['email'] = $order->email ?: $order->user->email;
+		$data['phone'] = $order->phone ?: $order->user->phone;
 		
 		//$data['code'] = $usercode;
 		
@@ -138,6 +138,8 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 			$this->setMessage('Add client request[DEV]: <pre>'. json_encode($data, JSON_PRETTY_PRINT).'</pre>');
 			//return false;
 		}else{
+			
+			//d::dumpas([$clientname, $data]);
 			//production
 			$resp = $this->itax->addClient($clientname, $data);
 		}
@@ -150,7 +152,7 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 			$order->set('extra/itax_client_id', $itaxclient->id);
 			$order->set('extra/itax_status_ex/client', 7);
 		}else{
-			$this->setError('Create failed: '.json_encode(['url'=>$this->itax->last_url, $resp], JSON_UNESCAPED_SLASHES));
+			$this->setError('Create failed: <pre>'.json_encode(['url'=>$this->itax->last_url, $resp], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).'</pre>');
 			$order->set('extra/itax_status_ex/client', 6);
 		}
 		
