@@ -52,11 +52,11 @@
                 <br>
 		{if $item->get('extra/bt_confirm_cnt')}
 			<p class="text-primary">{GW::ln('/m/BANK_TRANSFER_CONFIRM_ALREADY_SENT')}: {$item->get('extra/bt_confirm')} </p>
-                        <form id='banktransferconfirm_form' method="post" action="{$smarty.server.REQUEST_URI}">
-			<input name="act" type="hidden" value="doSaveBankTransferConfirm"/>
-                        {call input type=hidden field="pay_user_msg" value="as ikeliau pavedimo kopija"}
-			<button class="btn btn-primary"><i class='fa fa-envelope-o'></i> {GW::ln('/m/I_WILL_PAY')}</button>	
-		</form>
+				<form  method="post" action="{$smarty.server.REQUEST_URI}">
+					<input name="act" type="hidden" value="doSaveBankTransferConfirm"/>
+					{call input type=hidden field="pay_user_msg" value="as ikeliau pavedimo kopija"}
+					<button class="btn btn-primary"><i class='fa fa-envelope-o'></i> {GW::ln('/m/I_WILL_PAY')}</button>	
+				</form>
 			<button class='btn btn-primary' onclick="$(this).hide();$('#banktransferconfirm_form').fadeIn();">
 				<i class="fa fa-repeat"></i>
 			</button>
@@ -82,7 +82,7 @@
 	.contactsTable th{ text-align: right;padding-right: 30px; }	
 </style>
 <div style='text-align:right'>
-  <form id='banktransferconfirm_form' method="post" action="{$smarty.server.REQUEST_URI}">
+  <form  method="post" action="{$smarty.server.REQUEST_URI}">
 			<input name="act" type="hidden" value="doSaveBankTransferConfirm"/>
                         {call input type=hidden field="pay_user_msg" value="{GW::ln('/m/I_JUST_TOOK_PAYMENT_DETAILS')}"}
 			<button class="btn btn-warning"> {GW::ln('/m/I_WILL_PAY')}</button>	
