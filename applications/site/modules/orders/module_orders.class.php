@@ -927,7 +927,7 @@ class Module_Orders extends GW_Public_Module
 			if(method_exists($this, $method)){
 				$this->$method($order);
 			}else{
-				$this->setError("Please check admin panel. Pick delivery algorithm");
+				$this->setError("Please check admin panel. Pick delivery algorithm `{$this->config->delivery_algo}`");
 			}
 		}
 		$this->tpl_vars['item'] = $order;
@@ -941,6 +941,11 @@ class Module_Orders extends GW_Public_Module
 		
 	}
 	
+	function deliveryViewUniversal($order)
+	{
+		return $this->deliveryViewNatos($order);
+	}
+	
 	function deliveryViewNatos($order)
 	{
 		$erritem = $this->getErrorItem('delivery');
@@ -951,7 +956,7 @@ class Module_Orders extends GW_Public_Module
 
 
 			if(!$order->name || !$order->email)
-			if($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id])){
+			if($this->app->user && ($last = GW_Order_Group::singleton()->find(['user_id=? AND reuse_addr=1', $this->app->user->id]))){
 
 				$fields = 'email,name,surname,company,phone,country,region,city,address_l1,postcode,company_code,vat_code,company_addr';
 				$fields = explode(',',$fields);

@@ -269,6 +269,7 @@
 
 {if $app->user && $app->user->isRoot()}
 	{d::ldump($item->content_base, ['hidden'=>1])}
+	Dev {include "gw/ajaxdropdown.tpl" modpath="shop/products"}
 {/if}
 
 <!-- Product Description -->

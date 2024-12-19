@@ -54,6 +54,14 @@ class Module_Delivery extends GW_Common_Module
 		
 	}
 	
+	function doCalculateDeliveryUniversal($order)
+	{
+			
+		$amount_shipping = 0;
+		echo json_encode(['amount_shipping'=>$amount_shipping]);
+		exit;
+	}	
+	
 	function doCalculateDeliveryNatos($order)
 	{
 		$opts_low = self::__getDeliveryOptionsNatos("lo_");

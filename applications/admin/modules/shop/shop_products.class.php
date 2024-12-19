@@ -4,11 +4,8 @@
 class Shop_Products extends GW_Composite_Data_Object
 {
 	public $calculate_fields = [
-	    'keyval'=>1, //product extension
 	    'discount_display'=>1,
-	];
-	public $ignore_fields = [
-	    'keyval' => 1
+	    'invoice_line'=>1,
 	];	
 	public $composite_map = [
 		'typeObj' => ['gw_composite_linked', ['object'=>'Shop_ProdTypes','relation_field'=>'type']],
@@ -34,18 +31,16 @@ class Shop_Products extends GW_Composite_Data_Object
 	{
 		switch ($key) {
 
-			case 'keyval':
-				return $this->extensions['keyval'];
-			break;
 			case 'discount_display':
 				if((float)$this->oldprice){
 					$dif = $this->oldprice - $this->price;
 					return $dif  ? round(($dif / $this->oldprice)*100).'%' : '';
 				}
 			break;
+			case 'invoice_line':
+				return $this->invoice_line_over ? $this->invoice_line_over : $this->title;
+			break;	
 		}
-		
-
 	}
 	
 	

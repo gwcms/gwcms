@@ -100,7 +100,10 @@
 
 {if $app->user && $app->user->isRoot()}
 	{d::ldump($item->content_base, ['hidden'=>1])}
-	Dev {include "gw/ajaxdropdown.tpl" modpath="shop/products"}
+	
+{/if}
+{if $app->user && ($app->user->isRoot() || $app->user->username==admin)}
+<span style='color:orange'>ADM {include "gw/ajaxdropdown.tpl" modpath="shop/products"}</span>
 {/if}
 
 <!-- Product Description -->
