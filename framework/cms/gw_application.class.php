@@ -94,7 +94,15 @@ class GW_Application
 				return true;
 			}
 			
-			$this->site = GW_Site::singleton()->find('hosts="*"');				
+			$this->site = GW_Site::singleton()->find('hosts="*"');	
+			
+			
+			//default site
+			//todo: implement pick default: GW_Site::singleton()->find("default=1");
+			if(!$this->site){
+				$this->site = GW_Site::singleton()->find("id=1");
+			}
+
 		}
 	}
 	
@@ -337,6 +345,7 @@ class GW_Application
 
 	function init()
 	{
+		
 		$this->loadConfig();
 				
 		$this->initSession(); // debug or not to debug?
@@ -344,9 +353,11 @@ class GW_Application
 		$this->initDBcfg($this->app_name);
 
 		$this->initSite();
+		
 		$this->initTimeZone();
 		
 		$this->requestInfo();	
+		
 		$this->initAuth();
 		
 		$this->initLang();
@@ -539,9 +550,11 @@ class GW_Application
 
 		$langs = $this->app_name == 'ADMIN' ? GW::s('ADMIN/LANGS') : GW::s('LANGS');
 		
-		if(GW::s('MULTISITE'))
+		
+		
+		if(GW::s('MULTISITE') && $this->site)
 		{
-			$this->ln = in_array($ln, $this->site->langs) ? $ln : $this->defaultLnPick($this->site->langs);	
+			$this->ln = $ln && in_array($ln, (array)$this->site->langs) ? $ln : $this->defaultLnPick($this->site->langs);	
 		}else{
 			$this->ln = in_array($ln, $langs) || in_array($ln, GW::s('i18nExt')) ? $ln : $this->defaultLnPick($langs);
 		}	
