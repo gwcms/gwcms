@@ -80,9 +80,11 @@ inbound_flight_details
 	{/if}
 	
 	
-	{$m->addDynamicField($fields_config, $input)}
+	{$m->addDynamicField($fields_config, $input, [colspan=>1])}
 	
 {/foreach}
+
+
 
 {include "tools/form_components.tpl"}
 {assign var="fields_config" value=$fields_config scope=global}

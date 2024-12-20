@@ -63,5 +63,6 @@
 {call e field=shop_orders_viewers_group type=select_ajax modpath="users/groups" preload=1 options=[]}
 
 {call e field="vatgroup" type=select_ajax modpath="payments/vatgroups" preload=1 options=[] empty_option=1 hidden_note="default VAT group. in case for specific producs differs use vatgroup feature to enable input in product form" }
+{call e field="notify_admin_template_id" type=select_ajax modpath="emails/email_templates" preload=1 options=[] source_args=[byid=>1]}
 
 {include "default_form_close.tpl"}

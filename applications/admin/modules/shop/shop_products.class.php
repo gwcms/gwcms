@@ -102,7 +102,12 @@ class Shop_Products extends GW_Composite_Data_Object
 		if($this->modval("executor_after_buy_email_tpl") ){
 			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyExecutorEmail&id='.$orderitem->id);
 			$resp['after_buy_executor_email_act'] = $url;
-		}		
+		}
+		if($this->modval("notify_admin") ){
+			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyAdminEmail&id='.$orderitem->id);
+			$resp['after_buy_admin_email_act'] = $url;
+		}
+		
 		return $resp;
 	}
 	
@@ -171,7 +176,9 @@ class Shop_Products extends GW_Composite_Data_Object
 	
 	function modval($key)
 	{	
-		return $this->$key || !$this->parent_id ? $this->$key : $this->get('parent')->$key;
+		//d::ldump([$this->id, 'key'=>$key, 'val'=>$this->$key, 'parent_id'=>$this->parent_id, ]);
+		//per 3 lygius praejo testatavu
+		return $this->$key || !$this->parent_id ? $this->$key : $this->parent->modval($key);
 	}
 	
 	

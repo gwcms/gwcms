@@ -5,7 +5,7 @@ class Module_Products extends GW_Common_Module
 {
 	use Module_Import_Export_Trait;
 
-
+	public $dynamic_fields = true;
 	/**
 	 * @var GW_Product
 	 */
@@ -44,7 +44,7 @@ class Module_Products extends GW_Common_Module
 		}
 		
 		
-		$this->app->carry_params['clean'] = 1;
+		$this->app->carry_params['skipsearch'] = 1;
 		$this->app->carry_params['parent_id'] = 1;
 		$this->app->carry_params['mods'] = 1;
 		
@@ -306,6 +306,76 @@ class Module_Products extends GW_Common_Module
 			return true;
 	}
 	
+	
+	function doAfterBuyAdminEmail()
+	{
+		$item = GW_Order_Item::singleton()->find(['id=?', $_GET['id']]);
+		$product = $item->obj;	
+		$template_id = $this->config->notify_admin_template_id;
+		
+		if(!$template_id){
+			$this->setError("No notify admin mail templateid not configured");
+			return false;
+		}
+		
+		
+		$item->order->setSecretIfNotSet();
+		
+		$vars['ordereditem'] = $item;
+		$vars['product'] = $product;
+		$vars['SITE_DOMAIN'] = parse_url(GW::s('SITE_URL'), PHP_URL_HOST);
+		$vars['CLIENT_TITLE'] = $item->order->user->title;
+		$vars['order'] = $item->order;
+		$vars['buyer'] = $item->order->user;
+			
+		
+		$tmp = $this->app->buildURI('direct/orders/orders/statuschange', 
+			['id'=>$item->order->id,'key'=>$item->order->secret, 'executor_id'=>$item->executor_id],
+			['app'=>"site"]);
+		$vars['STATUS_CHANGE_URL'] = GW::s('SITE_URL').trim($tmp,'/'); //workaround kad nuimt pradzioje /
+			
+		
+		
+		
+		$to = $product->modval('notify_admin');
+		
+		//d::dumpas(GW_Mail_Template::singleton()->find($template_id));
+		
+		$opts = [
+		    'to'=>$to,
+		    'tpl'=>GW_Mail_Template::singleton()->find($template_id),
+		    'vars'=>$vars,
+		    //'attachments'=>[$filename=>$pdf]
+		];
+		
+
+		$file_link = GW::s('SITE_URL');
+		
+		
+		
+		$msg = GW::ln('/g/MESSAGE_SENT_TO',['v'=>['email'=>$to]]);
+		//$this->setMessage();\
+		
+		
+		//$opts['dryrun'] = 1;
+		
+		$status = GW_Mail_Helper::sendMail($opts);
+		
+		
+		//d::Dumpas($opts);
+		
+		$item->set('keyval/email_admin',$status);
+		
+			
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode(['resp'=>$msg]);
+			exit;
+		}else{
+			$this->setMessage($msg);
+			$this->jump();
+		}
+	}
 	
 	
 	function doAfterBuyEmail()

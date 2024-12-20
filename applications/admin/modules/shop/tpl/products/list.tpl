@@ -51,7 +51,7 @@
 
 
 {function dl_cell_mod}
-	{$url=$m->buildUri(false,[parent_id=>$item->id,mods=>1,clean=>2])}
+	{$url=$m->buildUri(false,[parent_id=>$item->id,mods=>1,clean=>2,skipsearch=>1])}
 	{*iconclass="fa fa-globe"*}
 	{if $item->mod_count}
 		{list_item_action_m href=$url action_addclass="iframe-under-tr" title="Modifications" caption="Mod({$item->mod_count})"}

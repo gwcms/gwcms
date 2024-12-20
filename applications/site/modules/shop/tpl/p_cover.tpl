@@ -145,51 +145,112 @@
 {function modifications_block}
 	<ul class="list-unstyled g-color-text">
 
-	{if $modifications}
-		{$opts = [''=>$oitem->modif_title]}
-		{$disabled=[]}
-		{foreach $modifications as $mod}
-			{$opts[$mod->id]="{$mod->modif_title} {if !$m->feat(infinite_qty)}| {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}"}
-			{if !$mod->qty}
-				{$disabled[$mod->id]=$mod->id}
-			{/if}
-		{/foreach}
+		{if $modifications}
 
-		<li> 
-			{if $m->config->modification_display==list}
-				{foreach $modifications as $mod}
-					<li>
-						<a 
-							 {$addclass=[]}
+			{$opts = [''=>GW::ln('/m/SELECT_MOD')]}
+			{$disabled=[]}
+			{foreach $modifications as $mod}
+				{$opts[$mod->id]="{$mod->modif_title} {if !$m->feat(infinite_qty)}| {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}"}
+				{if !$mod->qty}
+					{$disabled[$mod->id]=$mod->id}
+				{/if}
+			{/foreach}
 
-						   {if $smarty.get.modid==$mod->id}
-							   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
-						   {/if}
 
-						   {if $mod->qty > 0 || $m->canSeeOrders()}
-							    href="#" 
-							onclick="gw_navigator.jump(false,{ modid:{$mod->id} });return false"
-						   {else}
-							   {$addclass[]="text-muted"}
-						   {/if}
-						   class="modification_select {implode(' ',$addclass)}"
-						   >
-							{$mod->modif_title} {if !$m->feat(infinite_qty)} | {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}
-						</a>
-					</li>
+				{$moddisplay=$item->moddisplay}
+				{if !$moddisplay}
+					{$moddisplay=$m->config->modification_display}
+				{/if}
+
+				{if $moddisplay==list}
+					{foreach $modifications as $mod}
+						<li>
+							<a 
+								 {$addclass=[]}
+
+							   {if $smarty.get.modid==$mod->id}
+								   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
+							   {/if}
+
+							   {if $mod->qty > 0 || $m->canSeeOrders()}
+								    href="#" 
+								onclick="gw_navigator.jump(false,{ modid:{$mod->id}, smodid:null });return false"
+							   {else}
+								   {$addclass[]="text-muted"}
+							   {/if}
+							   class="modification_select {implode(' ',$addclass)}"
+							   >
+								{$mod->modif_title} {if !$m->feat(infinite_qty)} | {GW::ln('/m/QTY_REMAIN')}: {$mod->qty}{/if}
+							</a>
+						</li>
+					{/foreach}
+
+
+				{elseif $moddisplay==select}	
+
+					{include "inputs/input_select.tpl" name="modif" value=$smarty.get.modid options=$opts  
+					onchange="gw_navigator.jump(false,{ modid:this.value })"}
+				{elseif $moddisplay==icons}	
+					{foreach $modifications as $mod}
+
+
+						 <a 
+								 {$addclass=[]}
+
+							   {if $smarty.get.modid==$mod->id}
+								   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
+							   {/if}
+
+							   {if $mod->qty > 0 || $m->canSeeOrders()}
+								    href="#" 
+								onclick="gw_navigator.jump(false,{ modid:{$mod->id}, smodid:null });return false"
+							   {else}
+								   {$addclass[]="text-muted"}
+							   {/if}
+							   class="modification_select {implode(' ',$addclass)}"
+							   >
+								{$img = $mod->image}
+								{if $img}
+									<img src="{$app_base}tools/img/{$img->key}&v={$img->v}" style="width:50px">
+									{$mod->modif_title}
+								{else}
+									{$mod->modif_title} 
+								{/if}
+
+							</a>
+					{/foreach}
+
+
+				{/if}
+
+
+
+
+
+			{if $modifications_subs}
+				<br>
+				{foreach $modifications_subs as $smod}
+					<a  
+								 {$addclass=[]}
+
+							   {if $smarty.get.smodid==$smod->id}
+								   {$addclass[]="u-btn-primary"}{*"modification_selected"*}
+							   {/if}
+
+							   {if $smod->qty > 0 || $m->canSeeOrders()}
+								    href="#" 
+								onclick="gw_navigator.jump(false,{ smodid:{$smod->id} });return false"
+							   {else}
+								   {$addclass[]="text-muted"}
+							   {/if}
+							   class="smodification_select {implode(' ',$addclass)}"
+							   >
+								{$smod->modif_title} {if !$m->feat(infinite_qty)} | {GW::ln('/m/QTY_REMAIN')}: {$smod->qty}{/if}
+							</a>
 				{/foreach}
+			{/if}				
 
-
-			{elseif $m->config->modification_display==select}	
-
-				{include "inputs/input_select.tpl" name="modif" value=$smarty.get.modid options=$opts  
-				onchange="gw_navigator.jump(false,{ modid:this.value })"}
-			{/if}
-
-
-
-		</li>
-	{/if}
+		{/if}
 	</ul>
 {/function}
 
@@ -272,9 +333,8 @@
 {/if}
 
 {if $app->user && ($app->user->isRoot() || $app->user->username==admin)}
-	<span style='color:orange'>ADM {include "gw/ajaxdropdown.tpl" modpath="shop/products"}</span>
+<span style='color:orange'>ADM {include "gw/ajaxdropdown.tpl" modpath="shop/products"}</span>
 {/if}
-
 <!-- Product Description -->
 <div class="container g-pt-20 g-pb-100">
         <div class="row">
@@ -537,7 +597,9 @@
        <style>
 	       .modification_select{ display:block; padding: 2px 10px; border:1px solid silver; margin-bottom:2px;}
 	        .modification_selected{ background-color: darkorchid; color: white }
-		
+
+		.smodification_select{ display:inline-block; padding:2px 10px; border:1px solid silver; margin-bottom:2px;}
+	
 	</style>
 {/capture} 
 

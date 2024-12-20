@@ -1030,7 +1030,7 @@ class GW_Common_Module extends GW_Module
 			$search[] = $filt;
 		
 		
-		if(isset($this->list_params['search']) && $this->list_params['search'])
+		if(isset($this->list_params['search']) && $this->list_params['search'] && !isset($_GET['skipsearch']))
 		{
 			
 			$is_utf8 = mb_detect_encoding($this->list_params['search']) != 'ASCII';
@@ -3793,9 +3793,9 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	
-	function addDynamicField(&$fields_config, $input)
+	function addDynamicField(&$fields_config, $input, $defaults=[])
 	{
-		$field=[
+		$field = $defaults + [
 			'field'=>$input->get('fieldname'),
 			'type'=>$input->get('inp_type'),
 			'note'=>$input->get('note'),
@@ -3805,6 +3805,8 @@ class GW_Common_Module extends GW_Module
 			'i18n'=>$input->get('i18n'),
 			//'colspan'=>$input->size,
 		];
+		
+		
 
 		if($input->type == 'extended')
 			$field['field']="keyval/{$input->get('fieldname')}";
@@ -3824,12 +3826,12 @@ class GW_Common_Module extends GW_Module
 		$fields_config['fields'][$input->get('fieldname')] = $field;		
 	}
 	
-	function addDynamicFieldsConfig(&$fields_config, $item)
+	function addDynamicFieldsConfig(&$fields_config, $item, $defaults)
 	{
 		
 		foreach ($this->mod_fields as $input){
 			
-			$this->addDynamicField($fields_config, $input);
+			$this->addDynamicField($fields_config, $input, $defaults);
 		}		
 	}
 		
