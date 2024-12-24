@@ -1,6 +1,6 @@
 {if $app->user->isRoot()}
 
-	{call e field=gateway type=select options=["gwlt","tele2","router"] options_fix=1 required=1 empty_option=1}
+	{call e field=gateway type=select options=GW::l('/m/OPTIONS/smsgateway') options_fix=1 required=1 empty_option=1}
 
 	
 	

@@ -83,6 +83,13 @@
   </i>
   <i id="SEARCH_TRANSKEY">Ieškoti vertimo</i>
   <i id="EDIT_TRANSKEY">Redaguoti vertimą</i>
+  <i id="OPTIONS">
+	  <i id="smsgateway">
+		  <i id="gwlt">gwlt</i>
+		  <i id="tele2">tele2</i>
+		  <i id="router">router</i>
+	  </i>
+	  </i>
   <i id="MAP">
     <i id="title">
       <en>Data sources</en>

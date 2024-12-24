@@ -53,5 +53,5 @@
 
 {block name="after_list"}
 	<br />
-	<small style="color:silver" >Last send info: {$m->config->last_send_info}</small>
+	<small style="color:silver" >Last send info: {$m->config->last_send_info|escape}</small>
 {/block}

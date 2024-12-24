@@ -140,23 +140,28 @@ class Module_Sms extends GW_Common_Module
 			$item->country = $valid[1];
 		}
 		
-		$pickedgateway = $this->config->gateway;
+		if($item->gw && $item->gw !='router'){
+			$pickedgateway = $item->gw;
+		}else{
 		
-		$item->gw = $this->config->gateway;
+			$pickedgateway = $this->config->gateway;
 		
-		if($pickedgateway=='router'){
-			$expression = $this->config->route_pick_expresion;
-			
-			//labway
-			//sms['country'] == 'LT' ? 'tele2' : 'gwlt'
-			//sms['number'] == '37060089089' ? 'tele2' : 'gwlt'
-				
-			$pickedgateway = GW_Expression_Helper::singleton()->evaluate($expression, ['sms'=>$item->toArray()]);
-			$item->gw = $pickedgateway;
+			$item->gw = $this->config->gateway;
+		
+			if($pickedgateway=='router'){
+				$expression = $this->config->route_pick_expresion;
+
+				//labway
+				//sms['country'] == 'LT' ? 'tele2' : 'gwlt'
+				//sms['number'] == '37060089089' ? 'tele2' : 'gwlt'
+
+				$pickedgateway = GW_Expression_Helper::singleton()->evaluate($expression, ['sms'=>$item->toArray()]);
+				$item->gw = $pickedgateway;
+			}
+
+			//country arba gw gali pasikeisti
+			$item->updateChanged();
 		}
-		
-		//country arba gw gali pasikeisti
-		$item->updateChanged();
 		
 		if($pickedgateway=='tele2'){
 			// Send SMS

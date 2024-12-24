@@ -4,6 +4,10 @@
 {call e field=number type=phone default=$tmpdef}
 {call e field=msg type=smsmessage  note="<i class='input_note'></i>" height=80px}
 
+{if $m->config->gateway=="router"}
+	{call e field=gw type=select options=GW::l('/m/OPTIONS/smsgateway') options_fix=1 required=1 empty_option=1 hidden_note="empty - router will pick"}
+{/if}
+
 {if $app->user->isRoot()}
 	{call e field=retry}
 {/if}
