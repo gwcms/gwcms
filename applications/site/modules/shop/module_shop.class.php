@@ -330,14 +330,16 @@ class Module_Shop extends GW_Public_Module
 	
 			if($_GET['modid'] ?? false){
 				$amod = $modifications[$_GET['modid']] ?? false;
-				$oitem = $item;
-				$item = $amod;
-				
-				
-				$modifications_subs =  $item->findAll(['active=1 AND parent_id=?',$item->id],['key_field'=>'id','order'=>'priority DESC']);
-				$this->tpl_vars['modifications_subs'] = $modifications_subs;
-				
-				$this->tpl_vars['modifications_pricerange'] = $get_price_range($modifications_subs);
+				if($amod){
+					$oitem = $item;
+					$item = $amod;
+
+
+					$modifications_subs =  $item->findAll(['active=1 AND parent_id=?',$item->id],['key_field'=>'id','order'=>'priority DESC']);
+					$this->tpl_vars['modifications_subs'] = $modifications_subs;
+
+					$this->tpl_vars['modifications_pricerange'] = $get_price_range($modifications_subs);
+				}
 			
 			}
 			
