@@ -3826,7 +3826,7 @@ class GW_Common_Module extends GW_Module
 		$fields_config['fields'][$input->get('fieldname')] = $field;		
 	}
 	
-	function addDynamicFieldsConfig(&$fields_config, $item, $defaults)
+	function addDynamicFieldsConfig(&$fields_config, $item, $defaults=[])
 	{
 		
 		foreach ($this->mod_fields as $input){
