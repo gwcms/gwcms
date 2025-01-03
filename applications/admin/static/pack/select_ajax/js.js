@@ -371,7 +371,7 @@ function initSelect2Inputs1()
 	
 function initSelect2Inputs(){
 	
-	if(typeof gw_adm_sys === 'undefined') {
+	if(GW.app_name!='admin') {
 		initSelect2Inputs1();
 	}else{
 		require(['vendor/select2/js'], function () { initSelect2Inputs1() });			
