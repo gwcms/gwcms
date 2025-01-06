@@ -72,7 +72,7 @@ class Module_Articles extends GW_Common_Module
 	//issaugoti saito ikonele press releases
 	function __eventAfterSave($item)
 	{
-		if(!$item->getAttachmentByLtTitle('icon')){
+		if($item->external_link && !$item->getAttachmentByLtTitle('icon')){
 			if(!$this->__fetchexternallinkinfo)
 				$this->__fetchexternallinkinfo = GW_Misc_Helper::fetchMetaTags($item->external_link);
 
