@@ -10,11 +10,16 @@
 
 <div class="row g-pt-30 g-mb-50">	
 	{foreach $list as $item}
+		{if $item->exitlink}
+			{$link=$app->buildUri($item->exitlink,[from_product_id=>$item->id])}
+		{else}
+			{$link=$app->buildUri("direct/shop/shop/p/{FH::urlStr($item->title)}",[id=>$item->id])}
+		{/if}
 		
 		
 		
 	  <div class="col-6 col-lg-{$celsz} g-mb-30">
-		  <a class="u-link-v5 g-color-black g-color-primary--hover" href="{$app->buildUri("direct/shop/shop/p/{FH::urlStr($item->title)}",[id=>$item->id])}">
+		  <a class="u-link-v5 g-color-black g-color-primary--hover" href="{$link}">
 	    <!-- Product -->
 	    <figure class="g-pos-rel g-mb-20">
 		    {call name="product_image" product=$item size=$imsize crop=1}

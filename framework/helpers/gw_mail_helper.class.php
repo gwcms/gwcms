@@ -73,7 +73,7 @@ class GW_Mail_Helper
 			$mail->Username = $cfg->mail_smtp_user;
 			$mail->Password = $cfg->mail_smtp_pass;	
 			
-			if(strpos($cfg->mail_smtp_user, '@gmail.com')!==false){
+			if($cfg->mail_smtp_ssl || strpos($cfg->mail_smtp_user, '@gmail.com')!==false){
 				$mail->SMTPSecure = "ssl";
 			}
 		}

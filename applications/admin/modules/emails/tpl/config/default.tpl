@@ -20,6 +20,8 @@
 {call e field=mail_smtp_user type=text}
 {call e field=mail_smtp_pass type=password}
 {call e field=mail_smtp_port type=number}
+{call e field=mail_smtp_ssl type=bool}
+
 	</table>
 {/capture}
 
