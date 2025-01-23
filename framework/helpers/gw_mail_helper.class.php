@@ -223,6 +223,10 @@ class GW_Mail_Helper
 		
 		$ln = $opts['ln'] ?? GW::$context->app->ln;
 		
+		if(!$tpl->get("ln_enabled", $ln)){
+			$ln = "en";
+		}
+		
 		self::__fSubjBody(true, $opts, $tpl, $ln, $vars);
 		self::__fSubjBody(false, $opts, $tpl, $ln, $vars);
 		

@@ -33,6 +33,20 @@ class Navigator
 
 		return $base;
 	}
+	
+	static public function __getInnerAbsBase()
+	{
+		if (GW::s('APP_BACKGROUND_REQ_TYPE') == 'localhost_base') {
+			$base = GW::s("SITE_LOCAL_URL");
+		} elseif (GW::s('APP_BACKGROUND_REQ_TYPE') == 'force_http') {
+			$base = Navigator::getBase(true);
+			$base = str_replace('https://', 'http://', $base);
+		} else {
+			$base = Navigator::getBase(true);
+		}
+
+		return $base;
+	}
 
 	static private function __getRelBase()
 	{

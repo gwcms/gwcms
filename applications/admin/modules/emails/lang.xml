@@ -142,6 +142,9 @@
 		]]></i>		
 		
 	</i>
+	<i id="NOLNENABLED_DEFAULT_LN">
+		In case if asked language will be not enabled then English will be picked, all versions can use translation system if Interpreter (Smarty code) selected
+	</i>
 	
 	<i id="OPT">
 		<i id="lang">

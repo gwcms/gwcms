@@ -178,6 +178,7 @@ class Module_Users extends GW_Public_Module
 			
 			
 		$resp = GW_Mail_Helper::sendSMS($opts);	
+		
 		if($resp['result']['text']=='Sms message created'){
 			$this->setMessage(GW::ln('/m/SMS_CODE_SENT'));
 		}

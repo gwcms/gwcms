@@ -7,7 +7,7 @@
 </style>
 
 
-{call e field=ln_enabled type=bool  i18n_expand=1 default=1 onchange="lnenabler(ln,state,this)" i18n=3}
+{call e field=ln_enabled type=bool  i18n_expand=1 default=1 onchange="lnenabler(ln,state,this)" i18n=3 hidden_note=GW::l('/m/NOLNENABLED_DEFAULT_LN')}
 
 <script>
 	function lnenabler(ln, state, obj)

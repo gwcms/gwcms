@@ -406,7 +406,7 @@ class GW_Application
 			
 
 		return
-			(isset($params['absolute']) ? Navigator::__getAbsBase() : '') .
+			(isset($params['absolute']) ? ( isset($params['inner']) ? Navigator::__getInnerAbsBase() :  Navigator::__getAbsBase()) : '') .
 			(isset($params['app']) ? ($params['app'] == strtolower(GW::s('DEFAULT_APPLICATION')) ? '/' : '/'.$params['app'].'/') : $this->app_base). 
 			$ln .
 			($path ? '/' : '') . $path .
@@ -871,7 +871,7 @@ class GW_Application
 		$get_args['GWSESSID']=session_id();
 		$get_args['sys_call'] = 1;
 		$get_args['json'] = 1;
-		$params = ['absolute'=>1];
+		$params = ['absolute'=>1, 'inner'=>1];
 		
 		if(isset($reqopts['app'])){
 			$params['app'] = $reqopts['app'];
@@ -883,6 +883,14 @@ class GW_Application
 			$get_args['temp_access'] = $reqopts['user'] . ',' . $token;	
 		}
 		
+		if (GW::s('APP_BACKGROUND_REQ_TYPE') == 'localhost_base') {
+			$base = GW::s("SITE_LOCAL_URL");
+		} elseif (GW::s('APP_BACKGROUND_REQ_TYPE') == 'force_http') {
+			$base = Navigator::getBase(true);
+			$base = str_replace('https://', 'http://', $base);
+		} else {
+			$base = Navigator::getBase(true);
+		}
 		
 		$path = $this->buildUri($path, $get_args, $params);
 		//d::dumpas($_SESSION);
