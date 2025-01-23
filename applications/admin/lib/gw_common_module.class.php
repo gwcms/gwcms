@@ -3814,7 +3814,7 @@ class GW_Common_Module extends GW_Module
 
 		$opts = $input->get('config');
 
-		if($input->get('inp_type') == 'select_ajax'){
+		if($input->get('inp_type') == 'select_ajax' || $input->get('inp_type') == 'multiselect_ajax'){
 			$opts['preload'] = 1;
 			$opts['modpath'] = $input->get('modpath');
 			$opts['after_input_f'] = 'editadd';
