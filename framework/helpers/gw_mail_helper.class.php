@@ -223,7 +223,8 @@ class GW_Mail_Helper
 		
 		$ln = $opts['ln'] ?? GW::$context->app->ln;
 		
-		if(!$tpl->get("ln_enabled", $ln)){
+		
+		if(!isset($opts['sms']) && !$tpl->get("ln_enabled", $ln)){
 			$ln = "en";
 		}
 		
@@ -388,6 +389,7 @@ class GW_Mail_Helper
 	{
 		$path="datasources/sms";
 
+		$opts['sms']=1;
 		
 		if(isset($opts['tpl']))
 			self::processTpl($opts);
