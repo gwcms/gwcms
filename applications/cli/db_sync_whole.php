@@ -20,9 +20,9 @@ function parseParams()
 	return $params;
 }
 
-function mypassthru($cmd)
+function mypassthru($cmd, $hiddenstrings=[])
 {
-	echo $cmd."\n";
+	echo str_replace($hiddenstrings, '*UNDISCLOSED*', $cmd)."\n";
 	passthru($cmd);
 }
 function out($str){
@@ -43,7 +43,8 @@ if($params['recoverdb'] ?? false){
 	list($proddbuser, $proddbpass, $prodhost, $proddatabase, $prodport) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
 	
 	$backupfolder = $params['recoverdb'];
-	$localfile = "/mnt/back1/sysbackup/natosltserver/backups/$backupfolder/$proddatabase.gz";
+	$localfile = "/mnt/back1/sysbackup/natosltserver/backups/$backupfolder/$proddatabase.gz.enc";
+	
 	
 	out("Recovery file: $localfile");
 	
@@ -102,7 +103,15 @@ if($params['recoverdb'] ?? false){
 }
 
 $t = new GW_Timer;
-mypassthru("zcat $localfile | mysql -u $dbuser -p{$dbpass} $database");
+
+if(strpos($localfile, '.enc')!==false){
+	$encstr=file_get_contents('https://serv133.voro.lt/extrasec/backupencstr.php');
+	mypassthru("openssl enc -aes-256-cbc -d -in '$localfile' -k '$encstr' | zcat | mysql -u $dbuser -p{$dbpass} $database", [$encstr,$dbpass]);
+}else{
+	mypassthru("zcat $localfile | mysql -u $dbuser -p{$dbpass} $database");
+}
+
+
 out("----------Import-speed: {$t->stop()} secs----------");
 
 

@@ -712,8 +712,6 @@ class Module_Tools extends GW_Common_Module
 		initEnviroment(GW_ENV_PROD);
 		list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
 
-		d::dumpas($database);
-		
 		
 		$options=glob("/mnt/back1/sysbackup/natosltserver/backups/*/$database.gz.enc");
 		$recoveryopt = [];
