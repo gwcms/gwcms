@@ -715,7 +715,7 @@ class Module_Tools extends GW_Common_Module
 		
 		
 		
-		$options=glob("/mnt/back1/sysbackup/natosltserver/backups/*/$database.gz");
+		$options=glob("/mnt/back1/sysbackup/natosltserver/backups/*/$database.gz.enc");
 		$recoveryopt = [];
 		$recovertime = [];
 		foreach($options as $filename){
