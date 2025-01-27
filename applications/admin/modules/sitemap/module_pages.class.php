@@ -570,6 +570,12 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 	}
 	
+	function __eventAfterList()
+	{
+		$this->options['template_id'] = $this->getTemplateList();
+	
+	}
+	
 	
 
 	

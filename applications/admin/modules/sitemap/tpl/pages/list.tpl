@@ -73,8 +73,17 @@
 		{/if}
 	{/function}
 	
+	{function dl_cell_template_id}
+		{if $item->template_id}
+			{if isset($m->options.template_id[$item->template_id])}
 
-	{$dl_smart_fields=[title,in_menu,ico,icon]}
+				{call "dl_output_filters_expand_truncate" val=$m->options.template_id[$item->template_id] expand_truncate_size=20}
+			{else}id:{$item->template_id}{/if}
+		{/if}
+	{/function}
+	
+
+	{$dl_smart_fields=[title,in_menu,ico,icon,template_id]}
 	
 	
 	
