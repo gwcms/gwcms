@@ -438,6 +438,8 @@ class Module_OrderGroups extends GW_Common_Module
 		//d::dumpas($item);
 		
 		$this->setMessage('/m/PAYMENT_APPROVED');
+		$this->jumpAfterSave();
+		
 	}
 
 	

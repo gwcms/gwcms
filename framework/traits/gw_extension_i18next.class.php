@@ -55,11 +55,14 @@ class GW_Extension_i18next
 		
 		$tableid = $this->schemaQuery('type', $p->table);
 		
+		$langs = $p->i18next_langs;
 			
 		
+		if(GW::$context->app->app_name=='SITE')
+			$langs = array_intersect([GW::$context->app->ln], $p->i18next_langs);
+
 		
-		
-		foreach($p->i18next_langs as $extln){
+		foreach($langs as $extln){
 			foreach($p->i18n_fields as $field => $x){
 				
 				//skip field contains ext/short_description 
