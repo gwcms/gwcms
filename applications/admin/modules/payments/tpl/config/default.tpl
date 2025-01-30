@@ -43,6 +43,7 @@
 	{call e field=rivile_monthlyreport_email}
 	{call e field=rivile_service_id_map type=textarea hidden_note="obj_type|shop_subscribers|5000 - 1 kintamojo tipoas palyginimui 2 - kintamojo verte siuo atveju - abonentu modulio eilute, 3 - kodas perduodamas rivilei, 4 - komentaras sau kintamojo tipai - obj_type,obj_id "}
 	{call e field=rivile_default_service_code}
+	{call e field=rivile_balans_sask_id hidden_note="RS: 271 TF:2714"}
 {/if}
 
 {include "default_form_close.tpl"}

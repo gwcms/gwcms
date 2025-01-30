@@ -6,6 +6,8 @@
 {block name="init"}	
         
 	{$do_toolbar_buttons[] = hidden}
+	
+	{$do_toolbar_buttons[] = search}	
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,divider,print]}        
 
 	{$dl_actions=[timematch,invert_active,edit,delete,clone]}
