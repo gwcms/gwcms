@@ -103,16 +103,20 @@
 	{/if}
 {/function}
 
+{function dl_relation_display}
+	{if isset($counts[$key][$item->id])}
+		{$filterfield='id'}
+
+		{*kai ne pagal id laukeli*}
+		{if isset($cfg.map)}{$filterfield=$cfg.map.0}{/if}
+
+		{list_item_action_m href="{$cfg.url}{$item->$filterfield}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]}"}
+	{/if}
+{/function}
+
 {function dl_output_filters_relations}
 	{foreach $relations as $key => $cfg}
-		{if isset($counts[$key][$item->id])}
-			{$filterfield='id'}
-			
-			{*kai ne pagal id laukeli*}
-			{if isset($cfg.map)}{$filterfield=$cfg.map.0}{/if}
-				
-			{list_item_action_m href="{$cfg.url}{$item->$filterfield}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]}"}
-		{/if}
+		{dl_relation_display}
 	{/foreach}
 {/function}	
 
