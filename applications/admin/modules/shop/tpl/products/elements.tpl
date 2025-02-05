@@ -84,6 +84,11 @@ inbound_flight_details
 	
 {/foreach}
 
+{if isset($m->columns.seller_id)}
+	{$fields_config.fields.seller_id = $m->list_config.inputs.seller_id}
+{/if}
+
+
 
 
 {include "tools/form_components.tpl"}

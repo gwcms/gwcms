@@ -138,6 +138,8 @@ class Module_Products extends GW_Common_Module
 			$cfg['fields']["modif_title"] = "L";
 		}
 		
+		$cfg['inputs']['seller_id']=['type'=>'select_ajax', 'modpath'=>"payments/sellers", 'empty_option'=>1,'options'=>[],'preload'=>1];		
+		
 		
 		$cfg['fields']["vat_group"] = $this->feat('vatgroups') ? "Lof": 'lof';
 		
