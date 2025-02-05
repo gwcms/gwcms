@@ -15,8 +15,8 @@
 	{function name=do_toolbar_buttons_modactions} 
 		{toolbar_button title="Manage one country, drag drop move" iconclass='fa fa-cog' href=$m->buildUri(false,[act=>doManageCountry])}	
 	{/function}		
-	
-	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2,dialogconf,modactions]}	
+		
+	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2,dialogconf,exportdata,importdata,modactions]}	
 
 	{$dlgCfg2MWdth=300}
 	

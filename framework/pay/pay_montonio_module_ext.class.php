@@ -75,9 +75,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			$payment_data['checkout_email'] = $user->email;
 			
 		
-		if($args->paytype=='montonio_cc'){
-			$payment_data['preselected_aspsp'] = "CARD";
-		}
+
 		
 		if($args->method ?? false){
 			$payment_data['preselected_aspsp'] = $args->method;
@@ -147,8 +145,21 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			$payload['payment']['methodOptions']['preferredProvider'] = $payment_data['preselected_aspsp'];
 		
 		
+		
+		if($args->paytype=='montonio_cc'){
+			$payload['payment']['method'] = "cardPayments";
+			unset($payload['payment']['methodOptions']['preferredProvider']);
+			
+			
+			if($args->method == 'wallet'){
+				//google pay / apple pay
+				$payload['payment']['methodOptions']['preferredMethod'] = 'wallet';
+			}else{
+				$payload['payment']['methodOptions']['preferredMethod'] = 'card';
+			}
+		}		
 
-
+		
 		
 		if($this->app->user && $this->app->user->isRoot() || $_SERVER['REMOTE_ADDR']=='90.131.42.149' || $_SERVER['REMOTE_ADDR']=='88.223.24.240'){
 			

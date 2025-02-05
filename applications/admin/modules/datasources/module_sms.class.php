@@ -88,6 +88,12 @@ class Module_Sms extends GW_Common_Module
 		d::dumpas([$response,$requestId, $status]);		
 	}
 	
+	function doBulkgateSendSms()
+	{
+		
+		
+	}
+	
 	
 	
 	/*
@@ -180,6 +186,17 @@ class Module_Sms extends GW_Common_Module
 			}else{
 				$item->status = 6;
 				$item->err = json_encode($response);
+			}
+		}elseif($pickedgateway=='bulkgate'){
+			$sms = new BulkGateSMSApi($this->config->bulkgate_user_id, $this->config->bulkgate_api_key);
+			$response = $sms->sendSMS("+{$item->number}", $item->msg, $this->config->bulkgate_sender);
+			if(isset($response['data']['sms_id']))
+			{
+				$item->status = 7;
+				$item->remote_id = $response['data']['sms_id'];
+			}else{
+				$item->status = 6;
+				$item->err = $response['error'];
 			}
 		}else{
 		

@@ -20,6 +20,14 @@
 
 	{/if}	
 
+	{if $item->gateway=="bulkgate" || $item->gateway=="router"}
+
+		{call e field=bulkgate_sender}
+		{call e field=bulkgate_user_id}
+		{call e field=bulkgate_api_key type=password}
+
+
+	{/if}
 {/if}
 
 

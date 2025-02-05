@@ -5,6 +5,7 @@
 
 class Module_mergedpaymethods extends GW_Common_Module
 {	
+	use Module_Import_Export_Trait;
 	
 	function init()
 	{	
