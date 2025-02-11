@@ -297,7 +297,7 @@
 		
 		{if $dl_calc_totals}
 			<table class="gwTable mar-top mar-btm gwExtraInfo clear">
-				<tr><th colspan="2" class="th_h3 th_single">Totals</th></tr>
+				<tr><th colspan="2" class="th_h3 th_single">{GW::l("/g/TOTALS")}</th></tr>
 
 				{foreach $dl_calc_totals as $field => $total}
 					<tr>
