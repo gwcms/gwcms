@@ -191,9 +191,11 @@ class GW_Extension_ChangeTrack
 		$isChangeTrack2 = function() use (&$itm, &$field){
 			if($itm->change_track2[$field] ?? false)
 				return true;
-			if(preg_match('/^([a-zA-Z0-9_]+)_[a-z]{2}$/', $field, $matches) === 1)
+			
+			if(preg_match('/^([a-zA-Z0-9_\/]+)_[a-z]{2}$/', $field, $matches) === 1){
 				if($itm->change_track2[$matches[1]] ?? false)
 					return true;
+			}
 		};
 		//
 		
@@ -206,19 +208,23 @@ class GW_Extension_ChangeTrack
 			
 			$new = $itm->get($field);
 			$old = $itm->_original->get($field);
+						
+			$changes[$field]=['new'=>$new, 'old'=>$old];
 			
-			if ($isChangeTrack2()) {
-				$changes[$field]=['diff'=> GW_String_Helper::createDiff($new, $old) ];
-			}else{
-				$changes[$field]=['new'=>$new, 'old'=>$old];
-			}
 				
-			
 		}
 		
 		if($this->additional_changes)
 			$changes = array_merge($changes, $this->additional_changes);
 		
+		
+		foreach($changes as $field => $chages){
+			if ($isChangeTrack2()) {
+				$changes[$field]=['diff'=> GW_String_Helper::createDiff($chages['new'], $chages['old']) ];
+				unset($changes[$field]['new']);
+				unset($changes[$field]['old']);
+			}
+		}
 		
 		
 		return $changes;
@@ -232,7 +238,6 @@ class GW_Extension_ChangeTrack
 			return false;
 			
 		$changes = $this->getChanges();
-		
 		
 				
 		if($changes){

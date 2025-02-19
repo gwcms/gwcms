@@ -190,7 +190,7 @@
 
 		<span class='changetrack'>
 
-			<a title="{$title} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[field=>$field,ln=>$ch_track_ln,clean=>2])}">
+			<a title="{strip_tags($title)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[field=>$field,ln=>$ch_track_ln,clean=>2])}">
 				<i class='fa fa-pencil'></i> 
 				{if $ch_track_ln}<span class='ln'>{$ch_track_ln}</span>:{/if}{$change_track_cnt[$field]}
 			</a>

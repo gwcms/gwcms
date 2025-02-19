@@ -20,10 +20,22 @@ class Module_Classificators  extends GW_Common_Module
 			if($classtype=GW_Classificator_Types::singleton()->find(['`key`=?', $_GET['type']])){
 				$_GET['type']=$classtype->id;
 			}
+			if(!$classtype){
+				
+				$new = GW_Classificator_Types::singleton()->createNewObject(['key'=>$_GET['type']]);
+				
+				//$sitelangs = GW::s('LANGS');
+				//foreach($sitelangs  as $ln)
+				//	$new->set("title_{$ln}", $_GET['type']);
+				$new->title = $_GET['type'];
+				
+				$new->insert();
+				$_GET['type'] = $new->id;
+		}
 		}
 		
 		
-		if( ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
+		if( $this->app->path_arr[1]['path_clean']=='datasources/classificator_types' &&  ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
 			$_GET['type'] = $tmp;
 		}			
 		
@@ -130,6 +142,18 @@ class Module_Classificators  extends GW_Common_Module
 		$cfg['inputs']['type']=['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'datasources/classificator_types'];
 		//$cfg['inputs']['aka']=['type'=>'text'];	
 
+		
+		if(isset($this->filters['type'])){
+			unset($cfg['fields']['type']);
+		}		
+				
+		
 		return $cfg;
+	}
+	
+	function __eventBeforeInsert($item)
+	{
+		if(!$item->user_id)
+			$item->user_id = $this->app->user->id;
 	}
 }

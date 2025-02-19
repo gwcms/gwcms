@@ -197,13 +197,23 @@
         <i id="info">
           <i id="model">GW_Classificators</i>
 	  <i id="iconclass">fa fa-server</i>
+	  <i id="itemactions">1</i>
         </i>
       </i>
+      <i id="classificatorsext">
+        <i id="title">Klassificatoriai2</i>
+        <i id="info">
+          <i id="model">GW_ClassificatorsExt</i>
+	  <i id="iconclass">fa fa-server</i>
+	  <i id="itemactions">1</i>
+        </i>
+      </i>      
       <i id="classificator_types">
         <i id="title">Klasifikatorių tipai</i>
         <i id="info">
           <i id="model">GW_Classificator_Types</i>
 	  <i id="iconclass">fa fa-certificate</i>
+	  <i id="itemactions">1</i>
         </i>
       </i>
       <i id="config">
