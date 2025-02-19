@@ -1,7 +1,7 @@
 <?php
 
 
-class Module_Classificators  extends GW_Common_Module
+class Module_ClassificatorsExt  extends GW_Common_Module
 {	
 	public $import_add_filters=true;
 	use Module_Import_Export_Trait;
@@ -13,6 +13,7 @@ class Module_Classificators  extends GW_Common_Module
 		//$this->options['classtypeskey'] = 
 		
 		$this->app->carry_params['clean']=1;
+		$this->app->carry_params['pick']=1;
 		$this->app->carry_params['type']=1;
 		
 		
@@ -31,13 +32,14 @@ class Module_Classificators  extends GW_Common_Module
 				
 				$new->insert();
 				$_GET['type'] = $new->id;
-		}
+			}
 		}
 		
+
 		
-		if( $this->app->path_arr[1]['path_clean']=='datasources/classificator_types' &&  ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
-			$_GET['type'] = $tmp;
-		}			
+		//if( $this->app->path_arr[1]['path_clean']=='datasources/classificator_types' &&  ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
+		//	$_GET['type'] = $tmp;
+		//}			
 		
 		if(isset($_GET['type'])){
 			$this->filters['type'] = $_GET['type'];
@@ -51,6 +53,8 @@ class Module_Classificators  extends GW_Common_Module
 			
 			$this->filters['type'] = $group->id;
 		}	
+		
+		//d::dumpas($this->filters['type']);
 	}
 	
 	function getGroupByKey()
@@ -82,10 +86,6 @@ class Module_Classificators  extends GW_Common_Module
 			$opts['condition_add']=GW_DB::prepare_query(GW_DB::buidConditions(['type' => $this->filters['type'] ]));
 		}
 		
-		
-		if(isset($_GET['byKey'])){
-			$opts['idx_field'] = 'key';
-		}
 		
 		
 		return $opts;	
@@ -141,13 +141,12 @@ class Module_Classificators  extends GW_Common_Module
 		$cfg['inputs']['key']=['type'=>'text'];	
 		$cfg['inputs']['type']=['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'datasources/classificator_types'];
 		//$cfg['inputs']['aka']=['type'=>'text'];	
-
 		
 		if(isset($this->filters['type'])){
 			unset($cfg['fields']['type']);
 		}		
-				
 		
+
 		return $cfg;
 	}
 	
@@ -155,5 +154,5 @@ class Module_Classificators  extends GW_Common_Module
 	{
 		if(!$item->user_id)
 			$item->user_id = $this->app->user->id;
-}
+	}
 }

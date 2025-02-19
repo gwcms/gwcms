@@ -1,9 +1,9 @@
 <?php
 
 
-class GW_Classificators extends GW_i18n_Data_Object
+class GW_ClassificatorsExt extends GW_i18n_Data_Object
 {
-	public $i18n_fields = ['title'=>1];
+	public $i18n_fields = ['title'=>1,'text'=>1];
 	public $default_order = 'type ASC, priority ASC';
 	public $order_limit_fields=['type'];	
 	public $calculate_fields = [
