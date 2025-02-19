@@ -709,10 +709,13 @@ class Module_Orders extends GW_Public_Module
 	{
 		$this->userRequired();
 		$order = $this->getOrder(true);
-		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID]);	
+		$response = $this->app->innerRequest("payments/ordergroups/invoicevars",['id'=>$order->id],[],['app'=>'admin','user'=>GW_USER_SYSTEM_ID, 'ln'=>$this->app->ln]);	
 		
 		//if(isset($_GET['debug']))
 		//	d::ldump($response);
+		
+		if(isset($response['response_format_error']))
+			d::dumpas($response['raw_response']);
 				
 		$vars = $response['vars'];
 		

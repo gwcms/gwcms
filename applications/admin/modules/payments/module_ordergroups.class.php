@@ -170,15 +170,22 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->jump();
 		}
 		
+		$ln = $opts['ln'] ?? false;
+		
+		if(!$ln)
+			$ln = $this->app->ln;
+		
 		
 		
 				
 		//Since 2022 it is provided universal template for all languages
-		if($tpl->get("ln_enabled_".$this->app->ln)){
-			$tpl_code = $tpl->get("body_".$this->app->ln);
+		if($tpl->get("ln_enabled_$ln")){
+			$tpl_code = $tpl->get("body_$ln");
+		}elseif($tpl->get("ln_enabled_lt")){
+			$tpl_code = $tpl->get("body_lt");
 		}else{
 			//default language
-			$tpl_code = $tpl->get("body_lt");
+			$tpl_code = $tpl->get("body_en");
 		}
 		
 		
@@ -206,7 +213,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		$v['PRICE'] = $item->amount_total;
-		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], 'lt');
+		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], $ln);
 
 		$v['COMPANY'] = $item->company;
 		$v['COMPANY_ID'] = $item->company_code;
@@ -306,7 +313,13 @@ class Module_OrderGroups extends GW_Common_Module
 	function viewInvoiceVars()
 	{
 		$item = $this->getDataObjectById();
-		list($tpl_code, $v) = $this->initInvoiceVars($item);
+		
+		$opts= [];
+		if($_GET['ln']??false)
+			$opts['ln']=$_GET['ln'];
+		
+		
+		list($tpl_code, $v) = $this->initInvoiceVars($item, $opts);
 			
 		
 		die(json_encode(['tpl'=>$tpl_code, 'vars'=>$v], JSON_PRETTY_PRINT));
