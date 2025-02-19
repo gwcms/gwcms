@@ -1,0 +1,1 @@
+ALTER TABLE `gw_change_track` ADD `diff` TEXT NOT NULL AFTER `user_id`;

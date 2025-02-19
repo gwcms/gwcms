@@ -10,8 +10,11 @@ class GW_Todo_Item extends GW_Data_Object
 	var $default_order = 'state ASC, priority DESC';	
 
 	public $ownerkey = 'todo/items';
-	public $extensions = ['attachments'=>1];
+	public $extensions = ['attachments'=>1, 'changetrack'=>1];
 	
+	public $change_track2 = ["description"=>1];
+	
+		
 
 	
 	function calculateField($key)

@@ -121,6 +121,13 @@
 	{$add_site_css=1}
 	{$input_name_pattern="item[input_data][%s]"}
 	{$ck_set='medium'}
+	
+	{$vars=[]}
+	{foreach $item->getInputs() as $input}
+		{$fieldname=$input->get(name)}
+		{$vars[$fieldname]=$item->getContent($fieldname)}
+	{/foreach}
+	
 	{foreach $item->getInputs() as $input}
 		{$fieldname=$input->get(name)}
 		{$title = $input->get(title)}
@@ -139,6 +146,10 @@
 		{/if}
 
 		{$opts=array_merge($opts,(array)$input->get(params))}
+		
+		
+		{$opts=$m->injectVars($opts, $vars)}
+		
 		{$tmpval=$item->getContent($input->get('name'))}
 		
 		{if strpos($input->get('type'),'multiselect_ajax')!==false}

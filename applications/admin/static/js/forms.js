@@ -76,6 +76,7 @@ gw_forms = {
 		}
 		
 		//fix rotated label position
+		/*
 		$('.rotate-lbl').parent().keydown(function(){
 			if($(this).data('lastheight') != $(this).height())
 			{
@@ -83,7 +84,7 @@ gw_forms = {
 				$(this).data('lastheight', $(this).height());
 			}
 		});
-		
+		*/
 
 		$("body").keydown(function (event) {
 			

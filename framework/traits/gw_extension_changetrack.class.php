@@ -81,6 +81,56 @@ class GW_Extension_ChangeTrack
 			$item->extensions['changetrack']->prepare_count = $result[$item->id] ?? 0;
 	}
 	
+	
+	function prepareCountByField()
+	{
+		$changes = GW_Change_Track::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);;
+		$change_count = [];
+		
+		foreach($changes as $change)
+		{
+			$new = $change->new;
+			if($new){
+				foreach($new as $field => $val)
+					$change_count[$field] = ($change_count[$field] ?? 0) + 1;
+			}
+			$diff = $change->diff;
+			if($diff){
+				foreach($diff as $field => $val)
+					$change_count[$field] = ($change_count[$field] ?? 0) + 1;
+			}			
+			
+		}
+		
+		return $change_count;
+	}
+	
+	function getChangesByField($field)
+	{
+		$changes0 = GW_Change_Track::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);;
+		$changes=[];
+		
+		foreach($changes0 as $change)
+		{
+			$new = $change->new;
+			
+			if(isset($new->$field)){
+				$old = $change->old;
+				
+				$changes[] = [$change, $new->$field, $old->$field];
+			}
+			
+			$diff = $change->diff;
+			
+			if(isset($diff->$field))
+				$changes[] = [$change, $diff->$field];
+					
+			
+		}
+		
+		return $changes;		
+	}
+	
 	public $prepare_count=null;
 	
 	function count()
@@ -113,6 +163,8 @@ class GW_Extension_ChangeTrack
 		
 		
 		
+		//
+		
 		foreach(array_keys($itm->getColumns()) as $field){
 			if($field=='update_time' || isset($itm->ignored_change_track[$field]))
 				continue;
@@ -120,14 +172,27 @@ class GW_Extension_ChangeTrack
 			if($itm->_original->get($field) == $itm->get($field))
 				continue;
 			
-			$changes[$field]=['new'=>$itm->get($field), 'old'=>$itm->_original->get($field)];
+			$new = $itm->get($field);
+			$old = $itm->_original->get($field);
+			
+			if ($itm->change_track2[$field] ?? false) {
+				$changes[$field]=['diff'=> GW_String_Helper::createDiff($new, $old) ];
+			}else{
+				$changes[$field]=['new'=>$new, 'old'=>$old];
+			}
+				
+			
 		}
 		
 		if($this->additional_changes)
 			$changes = array_merge($changes, $this->additional_changes);
 		
+		
+		
 		return $changes;
 	}
+	
+	
 
 	function storeChanges()
 	{
@@ -136,15 +201,21 @@ class GW_Extension_ChangeTrack
 			
 		$changes = $this->getChanges();
 		
+		
 				
 		if($changes){
 			$new=[];
 			$old=[];
+			$diff=[];
 			
 			foreach($changes as $field => $change)
 			{
-				$new[$field] = $change['new'];
-				$old[$field] = $change['old'];
+				if(isset($change['diff'])){
+					$diff[$field] = $change['diff'];
+				}else{
+					$new[$field] = $change['new'];
+					$old[$field] = $change['old'];					
+				}
 			}
 			$keyfields = [
 				'owner_type'=>$this->parent->ownerkey,
@@ -161,13 +232,16 @@ class GW_Extension_ChangeTrack
 			}
 			//pasalinti po undo likusius veiksmus
 			
-			
-			
-			$itm->setValues($keyfields+[
+			$vals = $keyfields+[
 				'new'=>$new,
 				'old'=>$old,
 				'last'=>1
-			]);
+			];
+			
+			if($diff)
+				$vals['diff'] = $diff;
+			
+			$itm->setValues($vals);
 			
 			$itm->insert();
 		}

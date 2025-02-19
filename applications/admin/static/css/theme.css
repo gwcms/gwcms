@@ -7947,25 +7947,19 @@ a.badge:hover{
 
 
 .rotate-lbl {
-	transform: rotate(-90deg);
-	height: 0;
-	display:block;
+	writing-mode: vertical-rl;
+	text-orientation: mixed;
 	white-space: nowrap;
-	width: 1.5em;	
-	position: relative;
-	left: -8px;
-	width: 10px !important;
+	padding: 10px 0px 2px 2px  !important; /* Ensure enough space */
+	transform: rotate(180deg);
+	
 }
 
 
 .codeedit{
 	width: 98%;
 }
-.withrotatedlab{
-	float:left;
-	margin-left: 1.6em !important;
-	width: calc(100% - 1.6em) !important;;
-}
+
 
 .genderma{ color:navy }
 .genderfe{ color:pink }
@@ -8042,3 +8036,4 @@ a.badge:hover{
 .changetrack, .changetrack i, .changetrack a{ color:orange !important; }
 .changetrack .ln{ color:gray; text-transform:uppercase }
 .changetrack a:hover{ background-color: silver }
+.changetrack{  }

@@ -87,28 +87,16 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function getListConfig()
 	{
+		$cfg = parent::getListConfig();
+		
+		$cfg['fields']['last_comment'] = 'Lo';
+		$cfg['fields']['comments'] = 'f';
+		$cfg['fields']['attachments'] = 'Lo';
+		$cfg['fields']['info'] = 'L';
+		$cfg['fields']['week'] = 'lf';
 
-		$cfg = array('fields' => [
-			'id' => 'Lof', 
-			'project_id' => 'Lof', 
-			'user_create' => 'Lof', 
-			'user_exec' => 'Lof', 
-			'job_type' => 'Lof', 
-			'title' => 'Lof', 
-			'description' => 'Lof', 
-			'state' => 'Lof', 
-			'priority' => 'Lof', 
-			'deadline' => 'Lof', 
-			'time_have' => 'Lof', 
-			'insert_time' => 'Lof', 
-			'update_time' => 'Lof',
-			'last_comment' =>'Lo',
-			'comments'=>'f',
-			'attachments'=>'L',
-			'info'=>'L',
-			'week'=>'lf'
-			]
-		);
+		
+		
 		
 		$cfg['filters']['project_id'] = ['type'=>'multiselect','options'=>$this->options['project_id']];
 		

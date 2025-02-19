@@ -19,4 +19,5 @@ class Module_TplVars extends GW_Common_Module
 	{
 		$this->viewList();
 	}
+	
 }

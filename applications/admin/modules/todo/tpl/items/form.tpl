@@ -1,4 +1,8 @@
-{include file="default_form_open.tpl" changes_track=1 auto_save=1 form_width="100%"}
+{include file="default_form_open.tpl" changes_track=1  form_width="100%"}
+
+{* poto kai ideta buvo pokyciu registras isemiau  auto_save=1  (sumazinti pokyciu registro perkrova)*}
+
+
 
 <style>
 .input_label_td { width:120px; }
@@ -50,7 +54,7 @@
 	
 {/if}
 
-{call e field=description type=$bodyInpType rowclass="bodyinputs" hidden_note=$tmpnote layout=wide notr=1 height=$tmpheight}	
+{call e field=description type=$bodyInpType rowclass="bodyinputs" hidden_note=$tmpnote layout=wide nonllabel=1 height=$tmpheight}	
 
 
 {*

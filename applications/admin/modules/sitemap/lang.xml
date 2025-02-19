@@ -154,6 +154,7 @@
       <en>Unique name, lowercase without spaces [a-z0-9_]</en>
     </i>    
     <i id="display_cond"><![CDATA[ https://symfony.com/doc/current/components/expression_language/syntax.html variables user,date,other params from $app ]]></i>
+    <i id="params">Advanced: use other tplvar as variable for example {source_args=>#group_id#} while other tpl_var is named group_id, still this is advandced, cause you will have to apply changes for this to work</i>
   </i>
   <i id="VAR_TYPE_OPT">
     <i id="text">

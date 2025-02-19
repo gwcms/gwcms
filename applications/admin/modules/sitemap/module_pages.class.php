@@ -843,4 +843,27 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		}
 	}	
 	
+	
+	function injectVars($params, $vars)
+	{
+		$paramsjson= json_encode($params);
+		
+		if(strpos($paramsjson,'#')===false)
+			return $params;
+		
+		
+		///todo antru etapu escapint string vertes tam tikrus simbolius pavyzdziui eilutes perkelima, arba dvigubas kabutes
+		//$escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+		//$replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+		//$result = str_replace($escapers, $replacements, $value);		
+		
+		foreach($vars as $field => $val){
+			$paramsjson = str_replace("#{$field}#", $val, $paramsjson);
+		}
+		
+		//d::ldump($paramsjson);
+		
+		return json_decode($paramsjson, true);
+	}
+	
 }

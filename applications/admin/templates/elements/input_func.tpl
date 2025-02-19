@@ -6,8 +6,9 @@
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
 	
-	<{if $rotatedlabel}span{else}td{/if} id="{$id}_inputLabel" class="{if $rotatedlabel}rotate-lbl {/if}input_label_td {if $m->error_fields.$name}gwErrorLabel has-error{/if} {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass} {$rowclass}" 
-		 {if $layout=='wide'}colspan="2" {else}width="{$width_title}"{/if} {if $nowrap} nowrap{/if} style="{if $labelright}text-align:right;{/if}{if $height}top:{$height-5}px{/if}" >
+	<td id="{$id}_inputLabel" class="input_label_td {if $rotatedlabel}rotate-lbl {/if} {if $m->error_fields.$name}gwErrorLabel has-error{/if}  {if $impischanged}gwinput-label-modified{/if} {if $layout=='wide'}inp_lab_wide{/if} {$inputContainClass} {$rowclass}" 
+		 width="{$width_title}" {if $nowrap} nowrap{/if} style="{if $labelright}text-align:right;{/if}" >
+		
 		{*<span style="white-space:nowrap;"> 2024-01 pasalinta pagal formos atsakymai, blokuoja persikelima i kita eil*}
 			{if !$hidden_note}
 				{if GW::l("/m/FIELD_NOTE/{$name}",[asis=>1])!==null}
@@ -27,14 +28,13 @@
                     {if $i18n || $item->i18n_fields.$name}<span title="International expand" class="i18n_tag {if $i18n_expand}i18n_tag_active{/if}"><i class="fa fa-flag i18n_link"></i></span>{/if}
 		{*</span>*}
 
-		{if $note}<br /><small class="input_note">{$note}</small>{/if}	
+		{if $note}{if !$nonllabel}<br />{/if}<small class="input_note">{$note}</small>{/if}	
 		
 		{if $impischanged}
 			{$tmp=$item->getOriginal($name)}
 			<i class="fa fa-floppy-o text-warning" title="{if $tmp && (is_string($tmp) || is_numeric($tmp))}Orig.: {$tmp|escape}{/if}"></i>{else}
 		{/if}
-		
-	</{if $rotatedlabel}span{else}td{/if}>	
+	</td>	
 {/function}
 
 {function name=input_content}
@@ -48,13 +48,13 @@
 			</td>
 		{/foreach}
 	{else}
-		<td class="input_td {$inputContainClass} {$rowclass}" width="{$width_input}" {if $colspan}colspan="{$colspan}"{elseif $layout=='wide'}colspan="2"{/if} style="{if $nopading}padding:0{/if};" 
+		<td class="input_td {$inputContainClass} {$rowclass}" width="{$width_input}" {if $colspan}colspan="{$colspan}"{/if} style="{if $nopading}padding:0{/if};" 
 			{if $layout=='inline' && $hidden_note}title="{$hidden_note}"{/if}>
 			
 			
 			{if $rotatedlabel}
 				{call "input_label"}
-				{$class="`$class` withrotatedlab"}
+				{$class="`$class` "}
 			{/if}			
 			
 			{if $after_input_f}
@@ -104,6 +104,8 @@
 			<img src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/oneimgcss/blank.gif" class="flag flag-{$flag_code}" alt="{$ln_code}" /> {if $show_ln_code_title}<span class="toggle_i18n_{$ln_code}" title="{GW::l("/g/LANG/`$ln_code`")}">{$ln_code}</span>{/if}
 	</span>
 {/function}
+
+
 
 {function name=e}
 	{$name=$field}
@@ -180,6 +182,39 @@
             {$langs=array_keys($langs)}
 
     {/if}
+    
+    
+    
+    {if $i18n || $change_track_cnt[$field]}
+	{function change_track_cnt}
+
+		<span class='changetrack'>
+
+			<a title="{$title} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[field=>$field,ln=>$ch_track_ln,clean=>2])}">
+				<i class='fa fa-pencil'></i> 
+				{if $ch_track_ln}<span class='ln'>{$ch_track_ln}</span>:{/if}{$change_track_cnt[$field]}
+			</a>
+		</span>
+	{/function}	    
+    
+	{capture assign=note}
+		{$note}
+		
+		{if $i18n}
+			{foreach $langs as $ch_track_ln}
+				{$tmp = "{$field}_{$ch_track_ln}"}
+				{if $change_track_cnt[$tmp]}
+					{call change_track_cnt field=$tmp}
+				{/if}
+			{/foreach}
+			
+			
+		{else}
+			{call change_track_cnt}
+		{/if}
+	{/capture}    
+    {/if}
+    
 
 
 
@@ -197,11 +232,15 @@
 
         {call input_content}	
     {elseif $layout=='wide'}
-            <tr class="{$rowclass}">
-                    {call input_label}
-            </tr>
+ 
             <tr id="gw_input_{$id}"  class="{$rowclass}">
-                    {call input_content}
+		    <td colspan="2">
+			    <table style="width:100%">
+				    <tr>
+		    {call input_label  rotatedlabel=1 width_title="1%"}
+                    {call input_content width_input="99%"}
+					</tr>
+		    </table>
             </tr>
     {elseif $layout=='inline'}
             {call input_content}

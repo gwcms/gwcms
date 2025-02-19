@@ -2608,12 +2608,34 @@ class GW_Common_Module extends GW_Module
 						$this->list_config['dl_fields'][]='site_id';
 				}
 			break;
+			
+			case 'AFTER_FORM':
+				$item = $context;
+				if( isset($item) && $item && isset($item->extensions['changetrack'])){
+					$this->tpl_vars['change_track_cnt'] = $item->extensions['changetrack']->prepareCountByField();
+					
+					
+				}
+			break;
 		}
 		
 		
 		parent::eventHandler($event, $context);
 	}
 	
+	
+	function viewVersions()
+	{
+		
+		$item = $this->getDataObjectById();
+		
+		$changes = $item->extensions['changetrack']->getChangesByField($_GET['field']);
+		
+		$this->tpl_vars['changes'] = $changes;
+		
+		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/versions";
+		
+	}
 
 	function doWriteLock()
 	{
