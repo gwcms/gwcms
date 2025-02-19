@@ -945,6 +945,14 @@ class GW_Data_Object
 
 		foreach ($this->content_base as $field => $item)
 			$list[$field] = $this->get($field);
+		
+		
+		if(isset($this->extensions['keyval'])){
+			$keyvaldump = $this->extensions['keyval']->obj->getAll();
+			
+			foreach($keyvaldump as $field => $value)
+				$list["keyval/$field"] = $value;
+		}
 
 		return $list;
 	}

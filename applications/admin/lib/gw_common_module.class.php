@@ -2628,6 +2628,7 @@ class GW_Common_Module extends GW_Module
 	{
 		
 		$item = $this->getDataObjectById();
+		$this->tpl_vars['item'] = $item;
 		
 		$changes = $item->extensions['changetrack']->getChangesByField($_GET['field']);
 		
@@ -2635,6 +2636,25 @@ class GW_Common_Module extends GW_Module
 		
 		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/versions";
 		
+	}
+	
+	function viewVersion()
+	{
+		$item = $this->getDataObjectById();
+		$field = $_GET['field'];
+		$this->tpl_vars['item'] = $item;
+		
+		list($pastversion, $changesitm) = $item->extensions['changetrack']->getRevertedContent($field, $_GET['changeid']);
+		$this->tpl_vars['changesitm'] = $changesitm;
+		$this->tpl_vars['changes_user'] = GW_User::singleton()->find($changesitm->user_id);
+			
+		$this->tpl_vars['pastversion'] = $pastversion;
+		$this->tpl_vars['headversion'] = $item->get($field);
+		
+		$this->tpl_vars['field'] = $_GET['field'];
+		
+		
+		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/version";
 	}
 
 	function doWriteLock()

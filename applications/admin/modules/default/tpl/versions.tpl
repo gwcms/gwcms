@@ -12,9 +12,10 @@
 	</tr>
 	
 {foreach $changes as $key => $meta}
-	<tr>
+	{$change= $meta.0}
+	<tr {if $smarty.get.changeid==$change->id}class='lastvisited'{/if}>
 	
-		{$change= $meta.0}
+		
 		
 		<td>
 			{$change->id}
@@ -32,7 +33,10 @@
 		<td>{$change->user_id}</td>
 		<td>
 			{if $meta.1 && !$meta.2}
-				<i class="fa fa-eye"></i>
+				
+				<a href='{$m->buildUri("{$item->id}/version",[changeid=>$change->id,field=>$smarty.get.field,ln=>$smarty.get.ln,clean=>2])}'>
+					<i class="fa fa-eye"></i>
+				</a>
 			{/if}
 		</td>
 		
@@ -40,3 +44,7 @@
 {/foreach}
 
 </table>
+
+<style>
+	.lastvisited{ color: #fffacd; }
+</style>

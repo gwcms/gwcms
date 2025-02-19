@@ -20,6 +20,12 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 	];
 	
 	
+	public $ownerkey = 'emails/email_templates';	
+	public $extensions = ['changetrack'=>1];
+	
+	public $change_track2 = ["body"=>1];	
+	
+	
 	function validate()
 	{
 		parent::validate();

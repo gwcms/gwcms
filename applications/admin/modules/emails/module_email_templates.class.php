@@ -108,9 +108,11 @@ class Module_Email_Templates extends GW_Common_Module
 		
 		//d::dumpas();
 		
-		$cfg = array('fields' => []);
+		$cfg = parent::getListConfig();
 		
-		
+
+		foreach($cfg["fields"] as $field => $sett)
+			$cfg["fields"][$field]='lof';
 
 		
 		
@@ -119,12 +121,10 @@ class Module_Email_Templates extends GW_Common_Module
 		$cfg["fields"]["title"]="Lof";
 		$cfg["fields"]["idname"]="Lof";
 		$cfg["fields"]["subject"]="Lof";
-		$cfg["fields"]["body"]="lof";
 		$cfg["fields"]["owner_type"]="Lof";
 		$cfg["fields"]["owner_field"]="Lof";
 		
 		$cfg["fields"]["ln_enabled"]="lof";
-		$cfg["fields"]["body"]="lof";
 		$cfg["fields"]["body"]="lof";
 		
 		$cfg["fields"]['insert_time'] = 'lof';

@@ -131,6 +131,30 @@ class GW_Extension_ChangeTrack
 		return $changes;		
 	}
 	
+	
+	function getRevertedContent($field, $changeid)
+	{
+		$list = $this->getChangesByField($field);
+		
+		$itm = $this->parent;
+		
+		$content = $head = $itm->get($field);
+		
+		foreach($list as $changesmeta){
+			
+			$diff = $changesmeta[1];
+			$changesitm = $changesmeta[0];
+			
+			$content = GW_String_helper::applyDiff($diff, $content);
+			
+			if($changeid == $changesitm->id)
+				break;
+		}
+		
+		return [$content, $changesitm];
+	}
+	
+	
 	public $prepare_count=null;
 	
 	function count()
@@ -155,14 +179,22 @@ class GW_Extension_ChangeTrack
 	}
 	
 	public $additional_changes=[];
-		
+	
+
+	
 	function getChanges()
 	{
 		$changes=[];
 		$itm = $this->parent;
 		
 		
-		
+		$isChangeTrack2 = function() use (&$itm, &$field){
+			if($itm->change_track2[$field] ?? false)
+				return true;
+			if(preg_match('/^([a-zA-Z0-9_]+)_[a-z]{2}$/', $field, $matches) === 1)
+				if($itm->change_track2[$matches[1]] ?? false)
+					return true;
+		};
 		//
 		
 		foreach(array_keys($itm->getColumns()) as $field){
@@ -175,7 +207,7 @@ class GW_Extension_ChangeTrack
 			$new = $itm->get($field);
 			$old = $itm->_original->get($field);
 			
-			if ($itm->change_track2[$field] ?? false) {
+			if ($isChangeTrack2()) {
 				$changes[$field]=['diff'=> GW_String_Helper::createDiff($new, $old) ];
 			}else{
 				$changes[$field]=['new'=>$new, 'old'=>$old];
