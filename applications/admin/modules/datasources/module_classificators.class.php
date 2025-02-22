@@ -31,7 +31,7 @@ class Module_Classificators  extends GW_Common_Module
 				
 				$new->insert();
 				$_GET['type'] = $new->id;
-		}
+			}
 		}
 		
 		

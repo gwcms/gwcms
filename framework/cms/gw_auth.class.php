@@ -179,7 +179,10 @@ class GW_Auth
 		//store some login info
 		$inf = GW_Request_Helper::visitorInfo();
 		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
-		GW_DB_Logger::msg($msg, 'user', 'login', $user->id, $inf['browser']);
+		
+		$id = GW_Uni_Schema::getIdxByStr('ua', $inf['browser']);
+		
+		GW_DB_Logger::msg($msg, 'user', 'login', $user->id, $id);
 
 		return $user;
 	}

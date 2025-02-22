@@ -9,9 +9,6 @@ GW_Bot_Detect::process();
 GW::request();
 
 
-
-
-
 GW_Debug_Helper::show_debug_info();
 
 

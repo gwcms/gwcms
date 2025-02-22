@@ -81,15 +81,17 @@ class GW_Bot_Detect
 		if(isset($_GET['bottest']))
 			d::dumpas([$user_agent, $speed]);
 		
-		$aff = self::increase2("request_by_user_agent", GW_DB::prepare_query(['date=? AND user_agent=?',$date,$user_agent]),'cnt',1,'speed', $speed);;
+		$user_agent_id = GW_Uni_Schema::getIdxByStr('ua', $user_agent);
+		
+		$aff = self::increase2("request_by_user_agent", GW_DB::prepare_query(['date=? AND user_agent=?',$date,$user_agent_id]),'cnt',1,'speed', $speed);;
 		
 		
 		if(!$aff)
-			GW::db()->insert("request_by_user_agent", ['date'=>$date,'user_agent'=>$user_agent, 'cnt'=>1]);
+			GW::db()->insert("request_by_user_agent", ['date'=>$date,'user_agent'=>$user_agent_id, 'cnt'=>1]);
 		
 		if($speed>3){
 			
-			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent, 'speed'=>$speed]);
+			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent_id, 'speed'=>$speed]);
 		}
 	}
 }
