@@ -321,6 +321,7 @@ function initSelect2Inputs1()
 
 
 		obj.change(function(){
+			
 
 			if(!$(this).data('init-done')){					
 				$(this).data('init-done', 1)
@@ -337,10 +338,32 @@ function initSelect2Inputs1()
 				}
 			}
 		}
-		).change();			
+		).change();	
+	
+		
 	}
 
 	obj.change(function(){
+		
+		var multiselect = obj.data('maximumselectionlength') != '1';
+		
+		if(multiselect){
+			console.log(JSON.stringify([, $(this).attr('name'), $(this).attr('id')]));
+			
+			if(obj.val()==null){
+				var name = $(this).attr('name');
+				name = name.replace(/\[\]([^\[\]]*)$/, '$1')
+				$('<input>')
+			   .attr('type', 'hidden')
+			   .attr('name', name)
+			   .attr('id', $(this).attr('id')+'__dumy_empty_val')
+			   .val('')
+			   .appendTo(obj.parent());
+			}else{
+				obj.parent().find('#'+$(this).attr('id')+'__dumy_empty_val').remove();
+			}
+		}
+		
 		$(this).data('value', JSON.stringify($(this).val()));
 
 		//console.log('aaa-'+obj.val());

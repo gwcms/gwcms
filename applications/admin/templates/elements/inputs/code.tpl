@@ -9,6 +9,8 @@
 {/if}
 
 <script src="{$app->sys_base}vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+{*<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/src-min-noconflict/ace.js"></script>*}
+ 
 <script>
 	require(['gwcms'], function(){
 		var {$id}editor = ace.edit("{$id}_aceeditor");
@@ -65,7 +67,29 @@
 				{$id}editor.resize() ;
 				{$id}editor.renderer.updateFull() ;
 			}
-		{/if}	 		
+		{/if}
+		
+
+		var modified = 'ace-changed'; // css class
+		{$id}editor.on('change', function(e) {
+			var activeLine = e.start.row;
+			if (e.action == "insert") {
+				while (activeLine < (e.end.row+1)) {
+					{$id}editor.session.removeGutterDecoration(activeLine, modified);
+					{$id}editor.session.addGutterDecoration(activeLine, modified);
+					activeLine++;
+				}
+			} else if (e.action == "remove") {
+				while (activeLine < (e.end.row+1)) {
+					{$id}editor.session.removeGutterDecoration(activeLine, modified);
+					activeLine++;
+				}
+				{$id}editor.session.addGutterDecoration(e.start.row, modified);
+			}
+		});		
+
+		
+		
 		
 	})
 </script>
@@ -73,5 +97,8 @@
 <style>
 #{$id}_aceeditor{
 	margin:0;
+}
+.ace-changed {
+	border-left: #FCAF3E 3px solid;
 }
 </style>

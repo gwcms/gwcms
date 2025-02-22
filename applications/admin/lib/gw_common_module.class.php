@@ -797,6 +797,12 @@ class GW_Common_Module extends GW_Module
 			$this->jump();
 	}	
 	
+	function canInvertActive($item)
+	{
+		return true;
+	}
+	
+	
 	/**
 	 * common action do:invert_active 
 	 * to forbid executing 
@@ -815,7 +821,7 @@ class GW_Common_Module extends GW_Module
 		
 		$item->fireEvent('BEFORE_CHANGES');
 
-		if (!$item->invertActive())
+		if ($this->canInvertActive($item) && !$item->invertActive())
 			return $this->setError('/g/GENERAL/ACTION_FAIL');
 
 		$this->fireEvent("AFTER_INVERT_ACTIVE", $item);

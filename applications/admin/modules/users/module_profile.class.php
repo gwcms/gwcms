@@ -172,7 +172,7 @@ class Module_Profile extends GW_Module
 
 		$report = $webPush->sendOneNotification($subscription, json_encode($data));
 		
-		d::ldump($report);
+		d::ldump([$report, 'success'=>$report->isSuccess()]);
 		exit;
 		
 	}

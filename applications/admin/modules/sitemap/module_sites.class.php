@@ -40,7 +40,9 @@ class Module_Sites extends GW_Common_Module
 
 		$cfg["fields"]["title"]="Lof";				
 		
-		$cfg["fields"]['relations']='L';		
+		$cfg["fields"]['relations']='L';
+		$cfg["fields"]['favico']='L';
+		
 
 		
 		
