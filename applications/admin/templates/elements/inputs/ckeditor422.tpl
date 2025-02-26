@@ -50,6 +50,9 @@ require(["ckeditor422"], function() {
 	
 	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',':'') + 'codemirror,filebrowser,resize';
 	
+	config.removePlugins =  'forms';
+	//config.removeButtons = 'Source,AutoFormat,CommentSelectedRange,UncommentSelectedRange,SearchCode';
+	
 	config.protectedSource = [];
 	{literal}config.protectedSource.push( /\{[\s\S]*?\}/g );{/literal}
 	

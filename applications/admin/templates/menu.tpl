@@ -50,10 +50,10 @@
 									<a href="{$link}">
 										{call "menudisplayicon"}
 										<span class="menu-title">{$item->get(title,$ln)}</span>
-										{if count($childs) >1 || $active}<i class="arrow"></i>{/if}
+										{if count($childs) >1}<i class="arrow"></i>{/if}
 									</a>
 
-									{if count($childs) > 1 || $active}
+									{if count($childs) > 1}
 										{if $active}<!--active-->{/if}
 										<ul class="collapse {if $active}in{/if}">
 											{foreach from=$childs item=sitem}
