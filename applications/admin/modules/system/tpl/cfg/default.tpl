@@ -32,7 +32,7 @@ moved to emails module
 		<tr>
 			<td>
 				<table style="width:100%">
-					{call e field="sys/html2pdf_type" type=select options=[dompdf,remote,remotechrome] options_fix=1}
+					{call e field="sys/html2pdf_type" type=select options=[dompdf,remote,remotechrome,wkhtmltopdf] options_fix=1}
 				</table>
 			</td>	
 			<td>

@@ -35,11 +35,29 @@ class GW_html2pdf_Helper
 		//d::dumpas($cfg->html2pdf_type);
 			
 		if($cfg->html2pdf_type=='dompdf' || $cfg->html2pdf_type==''){
+			$html = "<style>*{ font-family: DejaVu Sans !important;  }</style>" . $html;
+			
 			return self::convertDompdf($html, $stream, $opts);
 		}elseif($cfg->html2pdf_type=='remote'){
 			return self::remoteconvert($html, $stream, $opts);
 		}elseif($cfg->html2pdf_type=='remotechrome'){
 			return self::remoteConvertChromeHeadless($html, $stream, $opts);
+		}elseif($cfg->html2pdf_type=='wkhtmltopdf'){
+			
+			$tmpname = tempnam(GW::s('DIR/TEMP'), 'convert2pdf');
+			
+			$html = "<meta charset='utf-8'>".$html;
+			
+			file_put_contents($tmpname.'.html', $html);
+			//--margin-bottom 1 --margin-left 10 --margin-right 10 --margin-top 1
+			shell_exec('wkhtmltopdf  '.$tmpname.'.html '.$tmpname.'.pdf');
+			
+			$pdf = file_get_contents($tmpname.'.pdf');
+			
+			unlink($tmpname.'.pdf');
+			unlink($tmpname.'.html');
+			
+			return $pdf;
 		}
 	}
 	

@@ -27,6 +27,7 @@ var require_config = {
 		browser: "js/jq/browser",
 		iframeautoheight: "js/jq/jquery.iframe-auto-height.plugin",
 		ckeditor:'/vendor/ckeditor1/ckeditor',
+		ckeditor422:'/vendor/ckeditor422/ckeditor',
 		moment: '/applications/admin/static/pack/daterange/moment.min'
 
 	}
