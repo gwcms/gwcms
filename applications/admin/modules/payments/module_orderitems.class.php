@@ -79,6 +79,8 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$this->mod_fields = GW_Adm_Page_Fields::singleton()->findAll(['parent=?', $this->model->table],['key_field'=>'fieldname']);
 		$this->item_remove_log=1;
+		
+		$this->sellers_enabled = GW_Permissions::canAccess('payments/sellers',true, $this->app->user->group_ids, false);
 	}
 	
 
@@ -102,6 +104,8 @@ class Module_OrderItems  extends GW_Common_Module
 			'insert_time'=>'lof',
 			'update_time'=>'lof',	
 			'group_id'=>'lof',
+			'company'=>'lof',
+			'surname'=>'lof'
 			]
 		);
 		
@@ -114,6 +118,7 @@ class Module_OrderItems  extends GW_Common_Module
 			$cfg['fields']['pay_time'] = 'Lof';	
 			$cfg['fields']['pay_test'] = 'Lof';	
 		}
+		$cfg['fields']['buyer_details'] = 'L';	
 		
 		$cols=$this->model->getColumns();
 		
@@ -133,6 +138,15 @@ class Module_OrderItems  extends GW_Common_Module
 		$cfg['filters']['pay_time'] = ['type'=>'daterange', 'ct'=>['DATERANGE'=>'RANGE']];
 		
 		
+		$ocols = GW_Order_Group::singleton()->getColumns();
+		
+		
+		if($this->sellers_enabled){
+			$cfg['fields']['seller_id'] = 'Lof';
+			
+			$this->options['seller_id'] = GW_Pay_Sellers::singleton()->getOptionsShort();
+		}
+		
 		if($this->feat('discountcode')){
 			$cfg['fields']['coupon_codes'] = 'L';
 		}
@@ -151,8 +165,14 @@ class Module_OrderItems  extends GW_Common_Module
 
 		if(!$this->cartgroup_id)
 		{
-			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test";
+			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test, aa.company, aa.company_code, aa.surname";
+			
+			if($this->sellers_enabled)
+				$order_fields.=", aa.seller_id";
+			
 			$params['select']='a.*, '.$order_fields;
+			
+
 			$params['joins']=[
 			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
 			];	

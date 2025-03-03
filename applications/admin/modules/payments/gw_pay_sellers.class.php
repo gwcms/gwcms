@@ -30,7 +30,16 @@ class GW_Pay_Sellers extends GW_Composite_Data_Object
 			
 		return $this->getAssoc(['id','title'], $cond);
 	}
+	
+	function getOptionsShort($cond=false)
+	{		
+		//if($lang==false)
+		//	$lang = $this->getDefaultLn();
+			
+		return $this->getAssoc(['id','short'], $cond);
+	}	
 
+	
 
 
 	function titleInOptions($item)

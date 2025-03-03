@@ -261,6 +261,10 @@
       <lt>Pardavėjas</lt>
       <en>Seller</en>
     </i>
+    <i id="buyer_details">
+      <lt>Pirkėjo rekvizitai</lt>
+      <en>Buyer details</en>
+    </i>
     <i id="create_order_id">Pirkimo užsakymas</i>
     <i id="last_use_order_id">Paskutinis panaudojimo užsakymas</i>
     <i id="used_amount">Panaudota suma</i>

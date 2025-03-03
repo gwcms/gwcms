@@ -69,7 +69,7 @@
 		{/if}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type,status]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type,status,seller_id,buyer_details]}
 
 
 	{function dl_cell_obj_id}
@@ -128,7 +128,22 @@
 		{/if}
 	{/function}	
 	
+	{function dl_cell_seller_id}
+		{if $item->seller_id}
+			{$options.seller_id[$item->seller_id]}
+		{else}
+			-
+		{/if}
+	{/function}	
 	
+	{function dl_cell_buyer_details}
+
+		{if $item->company_code}
+			{$item->company} {$item->company_code} {$item->company_code}
+		{else}
+			{call dl_cell_user_title} 
+		{/if}
+	{/function}
 
 	{capture append=footer_hidden}	
 		
