@@ -13,9 +13,10 @@
 
 
 	{list_item_action_m url=[false, [act=>doFillSeries,field=>$smarty.get.field]] iconclass="fa fa-arrows" caption=GW::l('/A/VIEWS/doFillSeries')}
-	
-	{list_item_action_m href="javascript:gwcms.addFilters('{$smarty.get.field}');" iconclass="fa fa-search" caption=GW::l('/A/VIEWS/doFilterByColumn')}
-{/if}
+{/if}	
+
+{list_item_action_m href="javascript:gwcms.addFilters('{$smarty.get.field}');" iconclass="fa fa-search" caption=GW::l('/A/VIEWS/doFilterByColumn')}
+
 
 
 
