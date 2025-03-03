@@ -589,7 +589,30 @@ class Module_Shop extends GW_Public_Module
 		//$data = $this->rootConfirmJson($cart->toArray());
 		//if(!$data)
 		//	return false;
+		//	
+		////// KITAS SELLERIS-------------------------------------------
 		
+		if($cart->items && ($cart->seller_id || $item->seller_id) && $cart->seller_id!=$item->seller_id->seller_id){
+			$caption = GW::ln('/M/ORDERS/VIEWS/doCloseOrder');
+			$url = $this->app->buildUri('direct/orders/orders', ['act'=>"doCloseOrder",'id'=>$cart->id]);
+		
+			$closebtn = "<a href=\"$url\" class=\"btn u-btn-brown btn-xs rounded-0\">
+						      <i class=\"fa fa-times\"></i> $caption
+						      </a>";
+			//"Jūsų krepšelyje yra prekių/paslaugų iš kito pardavėjo. Jūs galite 1. $closebtn - galėsite per <b>Mano užsakymai</b> pasirinkti 'pildyti toliau' arba 2. Užbaigti su ankstesnio krepšelio pildymu ir sugrįšti čia vėliau"
+			$this->setPlainMessage(GW::ln("/g/SELLER_DIFFER1").$closebtn.GW::ln("/g/SELLER_DIFFER2"), GW_MSG_WARN);
+			
+			$args = $_GET;
+			unset($args['act']);
+			$this->app->jump(false, $args);
+			return false;
+		}
+		
+		if($item->seller_id){
+			$cart->seller_id = $item->seller_id;
+			$cart->updateChanged();
+		}
+		////// KITAS SELLERIS-------------------------------------------
 		
 		
 	
