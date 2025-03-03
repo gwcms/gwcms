@@ -56,8 +56,12 @@
 			       {for $i=1 to 5}
 				       {$date = "{$year}-{GW_String_Helper::zero($month)}-01"}
 					       {$title="{GW::l("/G/date/MONTHS/{intval($month)}")}"}
-
-				    '{$year} {$title}':["{$date}","{date('Y-m-d',strtotime("last day of {$date}"))}"],	   
+						       
+						       {$enddate=date('Y-m-d',strtotime("last day of {$date}"))}
+							{if $datetimefiltp1d}
+								  {$enddate=date('Y-m-d',strtotime("{$enddate} +1 day"))}								
+							{/if}
+				    '{$year} {$title}':["{$date}","{$enddate}"],	   
 
 				    {if $month==1}
 					    {$year=$year-1}

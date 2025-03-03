@@ -86,7 +86,7 @@ class Module_OrderItems  extends GW_Common_Module
 
 	
 	
-	
+	public $extra_cols=[ 'name'=>1,'surname'=>1, 'company'=>1,  'company_code'=>1  ];	
 	
 	function getListConfig()
 	{
@@ -105,7 +105,9 @@ class Module_OrderItems  extends GW_Common_Module
 			'update_time'=>'lof',	
 			'group_id'=>'lof',
 			'company'=>'lof',
-			'surname'=>'lof'
+			'surname'=>'lof',
+			'name'=>'lof',
+			'company_code'=>'lof'
 			]
 		);
 		
@@ -135,7 +137,7 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$cfg['filters']['vat_group'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/vatgroups'];
 		$cfg['filters']['obj_type'] = ['type'=>'select','options'=>$this->options['obj_type']];
-		$cfg['filters']['pay_time'] = ['type'=>'daterange', 'ct'=>['DATERANGE'=>'RANGE']];
+		$cfg['filters']['pay_time'] = ['type'=>'daterange', 'datetimefiltp1d'=>1, 'ct'=>['DATERANGE'=>'RANGE']];
 		
 		
 		$ocols = GW_Order_Group::singleton()->getColumns();
@@ -165,16 +167,17 @@ class Module_OrderItems  extends GW_Common_Module
 
 		if(!$this->cartgroup_id)
 		{
-			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test, aa.company, aa.company_code, aa.surname";
+			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test, aa.company, aa.company_code";
 			
 			if($this->sellers_enabled)
 				$order_fields.=", aa.seller_id";
 			
-			$params['select']='a.*, '.$order_fields;
+			$params['select']='a.*, usr.name, usr.surname, '.$order_fields;
 			
 
 			$params['joins']=[
 			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
+			    ['left','gw_users AS usr','a.user_id = usr.id'],
 			];	
 		}
 		$params['conditions'] = $params['conditions'] ?? '';

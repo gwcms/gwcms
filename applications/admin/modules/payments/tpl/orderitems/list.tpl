@@ -139,7 +139,7 @@
 	{function dl_cell_buyer_details}
 
 		{if $item->company_code}
-			{$item->company} {$item->company_code} {$item->company_code}
+			{$item->company} {$item->company_code}
 		{else}
 			{call dl_cell_user_title} 
 		{/if}
