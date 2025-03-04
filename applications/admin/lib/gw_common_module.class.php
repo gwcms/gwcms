@@ -1329,6 +1329,8 @@ class GW_Common_Module extends GW_Module
 		$list = $this->model->findAll($cond, $params);
 		
 		
+		
+		
 		if($this->model->is_db_based){
 			$last_querty=$this->model->getDB()->last_query;
 		}

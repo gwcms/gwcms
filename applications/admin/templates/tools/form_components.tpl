@@ -8,9 +8,9 @@
 		{$tmpval=null}
 	{/if}
 
-	{if !$smarty.get.form_ajax}
+	{*if !$smarty.get.form_ajax}
 		{$notr=true}
-	{/if}
+	{/if*}
 	
 	{call e value=$tmpval}
 
