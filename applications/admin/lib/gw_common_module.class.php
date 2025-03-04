@@ -832,12 +832,12 @@ class GW_Common_Module extends GW_Module
 
 	
 	
-	function buildCond($field, $compare_type, $value, $encap_val=true, $encap_fld=true)
+	function buildCond($field, $compare_type, $value, $encap_val=true, $encap_fld=true, $opts=[])
 	{
 		$encapChr = $encap_val ? "'" : '';
 		
 		$cond =  $field. ' ';
-		if($encap_fld && isset($this->field_alias[$field])){
+		if($encap_fld && !isset($opts['no_alias']) && isset($this->field_alias[$field])){
 			$field = $this->field_alias[$field]; //get orig field
 			$encap_fld = false;
 		}
@@ -2139,13 +2139,23 @@ class GW_Common_Module extends GW_Module
 	function __overrideFilterExObject($object, $field, $searchInFields, $value, $compare_type)
 	{
 		$cond = [];
+		$opts =[];
+
+		if($object!=get_class($this->model))
+			$opts['no_alias']=1;
+		
 		foreach($searchInFields as $fieldname){
-			$cond[] = $this->buildCond($fieldname, $compare_type, $value);
+			$cond[] = $this->buildCond($fieldname, $compare_type, $value, true, true, $opts);
 		}
 		
 		$cond = '('.implode(' OR ', $cond).')';
 		
-		$ids = $object::singleton()->findAll($cond,['select'=>'id','return_simple'=>1,'key_field'=>'id']);
+		$ids = $object::singleton()->findAll($cond,['select'=>'id','return_simple'=>1,'key_field'=>'id','soft_error'=>1]);
+		
+		
+		if(!$ids && $object::singleton()->errors)
+			foreach($object::singleton()->errors as $err)
+				$this->setError($err);
 		
 		if($ids)
 			return GW_DB::inCondition($field, array_keys($ids));

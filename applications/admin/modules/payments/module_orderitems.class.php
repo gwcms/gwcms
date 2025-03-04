@@ -167,17 +167,17 @@ class Module_OrderItems  extends GW_Common_Module
 
 		if(!$this->cartgroup_id)
 		{
-			$order_fields = "aa.user_id, aa.payment_status, aa.pay_time, aa.pay_test, aa.company, aa.company_code";
+			$order_fields = "ord.user_id, ord.payment_status, ord.pay_time, ord.pay_test, ord.company, ord.company_code";
 			
 			if($this->sellers_enabled)
-				$order_fields.=", aa.seller_id";
+				$order_fields.=", ord.seller_id";
 			
 			$params['select']='a.*, usr.name, usr.surname, '.$order_fields;
 			
 
 			$params['joins']=[
-			    ['left','gw_order_group AS aa','a.group_id = aa.id'],
-			    ['left','gw_users AS usr','a.user_id = usr.id'],
+			    ['left','gw_order_group AS ord','a.group_id = ord.id'],
+			    ['left','gw_users AS usr','ord.user_id = usr.id'],
 			];	
 		}
 		$params['conditions'] = $params['conditions'] ?? '';
@@ -213,7 +213,7 @@ class Module_OrderItems  extends GW_Common_Module
 	
 	function overrideFilterUser_title($value, $compare_type)
 	{	
-		$x=$this->__overrideFilterExObject("GW_User", "user_id", ["name","surname",'email'], $value, $compare_type);
+		$x=$this->__overrideFilterExObject("GW_User", "ord.`user_id`", ["name","surname",'email'], $value, $compare_type);
 		
 		return $x;
 	}	
