@@ -107,8 +107,10 @@ class d
 			case 'print_r':
 				$tmp = $x;
 				
-				if(is_array($tmp) || is_object($tmp))
-					self::escapeArray($tmp);
+				if(!isset($opts['noescape'])){
+					if(is_array($tmp) || is_object($tmp))
+						self::escapeArray($tmp);
+				}
 				
 				print_r($tmp);
 			break;

@@ -78,7 +78,7 @@ if(isset($_SERVER['HTTP_HOST'])){
 		$sync->fileDiffLink($list['exp'],['dir'=>0]);
 		
 		$sync->fileDiffLink($list['imp'],['dir'=>1]);
-		d::ldump($list);
+		d::ldump($list, ['noescape'=>1]);
 		
 		$eCp = count($list['exp']['copy']);
 		$eRm = count($list['exp']['remove']);
