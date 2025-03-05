@@ -105,12 +105,19 @@ class d
 
 		switch($output){
 			case 'print_r':
-				print_r($x);
+				$tmp = $x;
+				
+				if(is_array($tmp) || is_object($tmp))
+					self::escapeArray($tmp);
+				
+				print_r($tmp);
 			break;
 			case 'var_dump':
 				var_dump($x);
 			break;		
 		}
+		
+		echo "<script>console.log(".json_encode($x, JSON_HEX_APOS | JSON_HEX_QUOT).");</script>";
 		
 		
 		echo $add;
@@ -258,6 +265,17 @@ class d
 		return json_encode($array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
 
+	static function escapeArray(&$array) {
+	    foreach ($array as $key => &$value) {
+		if (is_string($value)) {
+			 $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+		    
+		} elseif(is_array($value) || is_object($value)) {
+		   self::escapeArray($value); // Recursively process sub-arrays
+		}
+	    }
+	}	
+	
 	static function htmlNice($html)
 	{
 		$dom = new DOMDocument();

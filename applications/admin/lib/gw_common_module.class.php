@@ -2596,7 +2596,7 @@ class GW_Common_Module extends GW_Module
 					$this->recoveryEmail($context);
 				
 				if($this->item_remove_log ?? false)
-					$this->recoveryLog($context);
+					$this->recoveryLog($context, $this->app->user ?? false);
 						
 			break;
 			
