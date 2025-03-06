@@ -86,7 +86,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		$secs_since_last_request =time() - strtotime($this->modconfig->last_request);
 		if($this->modconfig->unlocked && ($secs_since_last_request > 500)){
-			$this->lgr->msg('Locking uid:'.$app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
+			$this->lgr->msg('Locking uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 		
 			GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
 			
@@ -107,7 +107,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if($cnt=GW::db()->affected())
 			$this->setMessage("Decrypt cnt: $cnt");
 		
-		$this->lgr->msg('Unlocking uid:'.$app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
+		$this->lgr->msg('Unlocking uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 		
 		$this->modconfig->unlocked = 1;
 	}
