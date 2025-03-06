@@ -66,9 +66,11 @@
 
 {block name="after_list"}
 	<br />
+	{if $m->modconfig->unlocked}
 	<small style="color:silver" >Auto hide <span id='minutes_seconds_remaining'></span></small>
 	
 	<script>
+		
 		{literal}
 		require(['gwcms'], function(){
 		    let timeRemaining = 10 * 60; // 10 minutes in seconds
@@ -96,4 +98,5 @@
 		});	
 		{/literal}
 	</script>
+	{/if}
 {/block}
