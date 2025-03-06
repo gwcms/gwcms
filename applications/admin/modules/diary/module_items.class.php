@@ -98,7 +98,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			
 			$this->modconfig->unlocked = 0;
 		}else{
-			d::dumpas([$this->modconfig->unlocked, 'secs_since_last_req'=>$secs_since_last_request]);
+			$this->lgr->msg([$this->modconfig->unlocked, 'secs_since_last_req'=>$secs_since_last_request]);
 		}
 			
 		die('test');
