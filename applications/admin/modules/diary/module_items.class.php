@@ -90,6 +90,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		$secs_since_last_request =time() - strtotime($this->modconfig->last_request);
 		if($this->modconfig->unlocked && ($secs_since_last_request > 500)){
+			$this->lgr->msg('locking');
 		
 			GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
 			
@@ -98,7 +99,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			d::dumpas([$this->modconfig->unlocked, 'secs_since_last_req'=>$secs_since_last_request]);
 		}
 			
-		
+		die('test');
 	}
 	
 	function doUnlock()
