@@ -80,9 +80,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	function doMigrate()
 	{
 		
-		$crpytkey = file_get_contents(base64_decode($this->modcfg->safestorage_url));
+		$crpytkey = file_get_contents($url=base64_decode($this->modcfg->safestorage_url));
 		
-		d::dumpas($crpytkey);
+		d::dumpas([$url,$crpytkey]);
 		
 		$q = GW_DB::prepare_query(["UPDATE my_diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE text_crpt IS NULL", $crpytkey]);
 		GW::db()->query($q);
