@@ -15,7 +15,7 @@ GW::s('DB/INIT_SQLS',"SET SESSION sql_mode = '';"); // automatycaly turned to st
 
 $hostname = trim(file_get_contents("/etc/hostname"));
 
-echo "HN $hostname;"
+echo "HN $hostname;";
 
 function initEnviroment($environmentid)
 {
