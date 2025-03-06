@@ -56,6 +56,36 @@
 {/block}
 
 
-{block "after_list"}
+{block name="after_list"}
+	<br />
+	<small style="color:silver" >Auto hide <span id='minutes_seconds_remaining'></span></small>
+	
+	<script>
+		{literal}
+		require(['gwcms'], function(){
+		    let timeRemaining = 10 * 60; // 10 minutes in seconds
 
+		    function updateTimer() {
+			let minutes = Math.floor(timeRemaining / 60);
+			let seconds = timeRemaining % 60;
+
+			// Format seconds to always have two digits
+			let formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+			$('#minutes_seconds_remaining').text(formattedTime);
+
+			if (timeRemaining <= 0) {
+			    clearInterval(countdown);
+			    location.reload();
+			} else {
+			    timeRemaining--;
+			}
+		    }
+
+		    // Initial update and start interval
+		    updateTimer();
+		    let countdown = setInterval(updateTimer, 1000);
+		});	
+		{/literal}
+	</script>
 {/block}

@@ -17,7 +17,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 		$this->initModCfg();
 		
-		$this->modconfig->last_request = date('Y-m-d H:i:s');
+		
+		if(isset($_GET['cron']))
+			$this->modconfig->last_request = date('Y-m-d H:i:s');
 		
 	}
 
@@ -78,7 +80,17 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function doAutoLock()
 	{
-		//
+		if($this->modconfig->unlocked && (time() - $this->modconfig->last_request > 500)){
+		
+			GW::db()->query("UPDATE diary_entries SET text='hidden'");
+			$this->modconfig->unlocked = 0;
+		}
+			
+		
+	}
+	
+	function doUnlock()
+	{
 		
 	}
 	
