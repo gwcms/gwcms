@@ -79,17 +79,21 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 	}
 	
+	function __getSecret()
+	{
+		$secret = file_get_contents($url=base64_decode($this->modconfig->safestorage_url));
+		
+		if(!$secret || strpos($secret,'404 not found')!==false){
+			die('Crypt service not available');
+		}
+		return $secret;
+	}
+	
 	function doMigrate()
 	{
 		
-		$crpytkey = file_get_contents($url=base64_decode($this->modconfig->safestorage_url));
-		
-		if(!$crpytkey || strpos($crpytkey,'404 not found')!==false){
-			die('Crypt service not available');
-		}
-		
-		d::dumpas([$url,$crpytkey]);
-		
+		$crpytkey = $this->__getSecret();
+				
 		$q = GW_DB::prepare_query(["UPDATE my_diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE text_crpt IS NULL", $crpytkey]);
 		GW::db()->query($q);
 		
