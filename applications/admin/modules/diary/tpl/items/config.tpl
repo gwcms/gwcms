@@ -6,4 +6,4 @@
 
 {call e field="safestorage_url"}
 {call e field="last_request" type=read}
-{call e field="unlocked" type=read}
+{call e field="unlocked" type=bool}

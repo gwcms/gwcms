@@ -41,6 +41,7 @@
 	
 	
 	{$do_toolbar_buttons[] = hidden}	
+	{$do_toolbar_buttons[] = unhide}	
 	{$do_toolbar_buttons[] = search}
 	
 	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2]}	
@@ -49,7 +50,14 @@
 	
 	{$dl_filters=[text=>1, time=>1]}
 	
+	{function name=do_toolbar_buttons_unhide}
+		{*{toolbar_button title=Encrypt iconclass='fa fa-lock' href=$m->buildUri(false,[act=>doEncrypt,pw=>'']) query_param="Enter encryption key"}*}
 
+		{if $m->modconfig->unlocked}
+			{toolbar_button title="Unlock" iconclass='fa fa-unlock' href=$m->buildUri(false, [act=>doUnlock])}
+		{/if}
+		{*{list_item_action_m url=[false,[id=>$item->id,act=>doSwitchSim,simid=>'']] query_param="Enter sim id 0-`$tmp`" caption="Sw" title="Switch sim"}*}
+	{/function}	
 
 	
 	{*$order_enabled_fields=[text,insert_time,update_time]*}
