@@ -58,7 +58,7 @@ function initEnviroment($environmentid)
 $env_host_map = ['wdmpc'=>GW_ENV_DEV, 'whatever'=>GW_ENV_TEST, 'odroidXU4'=>GW_ENV_PROD];
 GW::s('PROJECT_ENVIRONMENT', $env_host_map[$hostname]?? GW_ENV_DEV);
 
-echo "HN $hostname; env: ".GW::s('PROJECT_ENVIRONMENT').';';
+//echo "HN $hostname; env: ".GW::s('PROJECT_ENVIRONMENT').';';
 
 initEnviroment(GW::s('PROJECT_ENVIRONMENT'));
 
