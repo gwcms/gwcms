@@ -76,14 +76,21 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if($cnt=GW::db()->affected())
 			$this->setMessage("Crypt stored cnt: $cnt");
 		
+		
 	}
+	
+	
 	
 	function doAutoLock()
 	{
-		if($this->modconfig->unlocked && (time() - $this->modconfig->last_request > 500)){
+		$secs_since_last_request =time() - $this->modconfig->last_request;
+		if($this->modconfig->unlocked && ($secs_since_last_request > 500)){
 		
-			GW::db()->query("UPDATE diary_entries SET text='hidden'");
+			GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
+			
 			$this->modconfig->unlocked = 0;
+		}else{
+			d::dumpas([$this->modconfig->unlocked, 'secs_since_last_req'=>$secs_since_last_request]);
 		}
 			
 		
@@ -91,7 +98,15 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function doUnlock()
 	{
+		$crpytkey = $this->__getSecret();
 		
+		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text = AES_DECRYPT(text_crptt, ?) WHERE text='hidden'", $crpytkey]);
+		GW::db()->query($q);
+		if($cnt=GW::db()->affected())
+			$this->setMessage("Decrypt cnt: $cnt");
+		
+		
+		$this->modconfig->unlocked = 1;
 	}
 	
 	function __getSecret()
