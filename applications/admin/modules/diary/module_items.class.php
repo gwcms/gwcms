@@ -13,6 +13,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->list_params['paging_enabled']=1;
 		
 		
+		
+		d::dumpas($this->module_path);
 		$this->modcfg = $this->initModCfg();
 		
 		$this->modcfg->last_request = date('Y-m-d H:i:s');
