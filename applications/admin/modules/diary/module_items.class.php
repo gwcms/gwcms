@@ -97,6 +97,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE text_crpt IS NULL", $crpytkey]);
 		GW::db()->query($q);
 		
+		d::dumpas([$q, GW::db()->affected()]);
 		
 	}
 
