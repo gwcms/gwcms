@@ -40,8 +40,10 @@
 	
 	
 	
-	{$do_toolbar_buttons[] = dialogconf}	
-	{$do_toolbar_buttons[] = search}	
+	{$do_toolbar_buttons[] = hidden}	
+	{$do_toolbar_buttons[] = search}
+	
+	{$do_toolbar_buttons_hidden=[dialogconf,dialogconf2]}	
 	
 	{$dl_actions=[edit,delete]}
 	

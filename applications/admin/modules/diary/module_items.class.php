@@ -11,6 +11,12 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		parent::init();
 		$this->filters['active']=1;
 		$this->list_params['paging_enabled']=1;
+		
+		
+		$this->modcfg = $this->initModCfg();
+		
+		$this->modcfg->last_request = date('Y-m-d H:i:s');
+		
 	}
 
 	
@@ -51,5 +57,37 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		exit;
 	}	
 	
+	
+	
+	function doAutoClear()
+	{
+		
+	}
+
+	function __eventAfterSave($item)
+	{
+		
+		$this->doMigrate();
+		
+	}
+	
+	function doAutoLock()
+	{
+		//
+		
+	}
+	
+	function doMigrate()
+	{
+		
+		$crpytkey = file_get_contents(base64_decode($this->modcfg->safestorage_url));
+		
+		d::dumpas($crpytkey);
+		
+		$q = GW_DB::prepare_query(["UPDATE my_diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE text_crpt IS NULL", $crpytkey]);
+		GW::db()->query($q);
+		
+		
+	}
 
 }
