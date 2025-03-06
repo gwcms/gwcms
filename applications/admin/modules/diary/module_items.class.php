@@ -15,10 +15,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		
 	
-		$this->modcfg = $this->initModCfgEx($this->module_path);
-			d::dumpas($this->modcfg);
+		$this->initModCfg();
 		
-		$this->modcfg->last_request = date('Y-m-d H:i:s');
+		$this->modconfig->last_request = date('Y-m-d H:i:s');
 		
 	}
 
@@ -83,7 +82,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	function doMigrate()
 	{
 		
-		$crpytkey = file_get_contents($url=base64_decode($this->modcfg->safestorage_url));
+		$crpytkey = file_get_contents($url=base64_decode($this->modconfig->safestorage_url));
 		
 		d::dumpas([$url,$crpytkey]);
 		
