@@ -67,9 +67,12 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	}
 
 	function __eventAfterSave($item)
-	{
-		
-		$this->doMigrate();
+	{	
+		$crpytkey = $this->__getSecret();
+		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE id=?", $crpytkey, $item->id]);
+		GW::db()->query($q);
+		if($cnt=GW::db()->affected())
+			$this->setMessage("Crypt stored cnt: $cnt");
 		
 	}
 	
@@ -96,7 +99,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text_crpt = AES_ENCRYPT(text, ?) WHERE LENGTH(text_crpt) = 0", $crpytkey]);
 		GW::db()->query($q);
-		
+		if($cnt=GW::db()->affected())
+			$this->setMessage("Crypt stored cnt: $cnt");		
 	}
 
 }
