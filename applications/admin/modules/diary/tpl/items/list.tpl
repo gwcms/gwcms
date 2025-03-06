@@ -67,34 +67,42 @@
 {block name="after_list"}
 	<br />
 	{if $m->modconfig->unlocked}
-	<small style="color:silver" >Auto hide <span id='minutes_seconds_remaining'></span></small>
+		<small style="color:silver" >Auto hide in <span id='minutes_seconds_remaining_ah'></span>
+		<small style="color:silver" >Auto reload in <span id='minutes_seconds_remaining_ar'></span>
+	</small>
 	
 	<script>
 		
 		{literal}
 		require(['gwcms'], function(){
-		    let timeRemaining = 10 * 60; // 10 minutes in seconds
+			let timeRemainingAH = 10 * 60; // 10 minutes in seconds
+			let timeRemainingReload = 30 * 60; // 30 minutes in seconds (10 min + 20 min)
 
-		    function updateTimer() {
-			let minutes = Math.floor(timeRemaining / 60);
-			let seconds = timeRemaining % 60;
+			function updateTimer() {
+			    let minutesAH = Math.floor(timeRemainingAH / 60);
+			    let secondsAH = timeRemainingAH % 60;
+			    let minutesReload = Math.floor(timeRemainingReload / 60);
+			    let secondsReload = timeRemainingReload % 60;
 
-			// Format seconds to always have two digits
-			let formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+			    // Format seconds to always have two digits
+			    let formattedTimeAH = `${minutesAH}:${secondsAH.toString().padStart(2, '0')}`;
+			    let formattedTimeReload = `${minutesReload}:${secondsReload.toString().padStart(2, '0')}`;
 
-			$('#minutes_seconds_remaining').text(formattedTime);
+			    $('#minutes_seconds_remaining_ah').text(formattedTimeAH);
+			    $('#minutes_seconds_remaining_ar').text(formattedTimeReload);
 
-			if (timeRemaining <= 0) {
-			    clearInterval(countdown);
-			    location.reload();
-			} else {
-			    timeRemaining--;
+			    if (timeRemainingReload <= 0) {
+				clearInterval(countdown);
+				location.reload();
+			    } else {
+				if (timeRemainingAH > 0) timeRemainingAH--;
+				timeRemainingReload--;
+			    }
 			}
-		    }
 
-		    // Initial update and start interval
-		    updateTimer();
-		    let countdown = setInterval(updateTimer, 1000);
+			// Initial update and start interval
+			updateTimer();
+			let countdown = setInterval(updateTimer, 1000);
 		});	
 		{/literal}
 	</script>
