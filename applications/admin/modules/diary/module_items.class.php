@@ -14,9 +14,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		
 		
-		
-		$this->modcfg = $this->initModCfg();
-		d::dumpas($this->modcfg);
+	
+		$this->modcfg = $this->initModCfgEx($this->module_path);
+			d::dumpas($this->modcfg);
 		
 		$this->modcfg->last_request = date('Y-m-d H:i:s');
 		
