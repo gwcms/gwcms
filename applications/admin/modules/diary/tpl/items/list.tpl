@@ -67,8 +67,10 @@
 {block name="after_list"}
 	<br />
 	{if $m->modconfig->unlocked}
-		<small style="color:silver" >Auto hide in <span id='minutes_seconds_remaining_ah'></span>
-		<small style="color:silver" >Auto reload in <span id='minutes_seconds_remaining_ar'></span>
+		<small style="color:silver" >
+		Auto hide in <span id='minutes_seconds_remaining_ah'></span><br>
+		Auto reload in <span id='minutes_seconds_remaining_ar'></span>
+		</small>
 	</small>
 	
 	<script>
