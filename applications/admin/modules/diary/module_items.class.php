@@ -100,7 +100,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	{
 		$crpytkey = $this->__getSecret();
 		
-		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text = AES_DECRYPT(text_crptt, ?) WHERE text='hidden'", $crpytkey]);
+		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text = AES_DECRYPT(text_crpt, ?) WHERE text='hidden'", $crpytkey]);
 		GW::db()->query($q);
 		if($cnt=GW::db()->affected())
 			$this->setMessage("Decrypt cnt: $cnt");
