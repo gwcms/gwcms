@@ -21,7 +21,8 @@ function initEnviroment($environmentid)
 {
 	switch($environmentid){
 		case GW_ENV_DEV:
-			include $GLOBALS['dir']['ROOT'].'config/db.php';
+			if(file_exists($f = $GLOBALS['dir']['ROOT'].'config/db.php'))
+			include $f;
 			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
 			
 
