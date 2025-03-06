@@ -19,7 +19,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		
 		if(!isset($_GET['cron'])){
-			d::dumpas('last_request update');
+			//d::dumpas('last_request update');
 			$this->modconfig->last_request = date('Y-m-d H:i:s');
 		}
 		
