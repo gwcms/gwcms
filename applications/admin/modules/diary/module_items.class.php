@@ -111,6 +111,8 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->lgr->msg('Unlocking uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 		
 		$this->modconfig->unlocked = 1;
+		
+		$this->jump();
 	}
 	
 	function __getSecret()
