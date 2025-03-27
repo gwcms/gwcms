@@ -114,18 +114,21 @@ class GW_Linksniai_Helper
 	* @param string $vardas lietuviškas vardas arba pavardė
 	* @return string
 	*/
-	static function sanitizeName ( $vardas ) 
+	static function sanitizeName($vardas) 
 	{
-		$vard = mb_eregi_replace('[^a-ž]', ' ', $vardas);
-		$vard = mb_eregi_replace('\s+', ' ', $vardas);
-		$vard = trim($vardas);
-		
-		
-		//pasalinta kad galetu veikti 
-		//$vardas = mb_convert_case($vardas, MB_CASE_TITLE);
-		
-		return $vardas;
-	
+		// Replace all non-Lithuanian letters with a space
+		$vard = preg_replace('/[^a-ž]/iu', ' ', $vardas);
+
+		// Replace multiple spaces with a single space
+		$vard = preg_replace('/\s+/u', ' ', $vard);
+
+		// Trim spaces
+		$vard = trim($vard);
+
+		// Convert to title case (if needed)
+		// $vard = mb_convert_case($vard, MB_CASE_TITLE, "UTF-8");
+
+		return $vard;
 	}
 	
 	static function arbalse($raide)

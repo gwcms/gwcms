@@ -22,13 +22,42 @@ TODO:
 
 
 
-play_playoff_algo =>  play_offs_algo
-play_number_of_groups => play_rr_number_of_groups
-play_teams_per_group => play_rr_teams_per_group
-play_number_of_teams_exits => play_offs_team_count
-play_fight_positions =>play_offs_fight_positions
-play_limit_lose => play_offs_limit_lose
-play_match_point => play_offs_match_point
-
-
 php7.4 /var/www/gw/gwcms/composer.phar require yetanotherape/diff-match-patch
+
+
+
+apt install php8.4-mysqli
+apt install php8.4-soap
+apt-get install php8.4-fpm
+apt-get install php8.4-xml
+apt-get install php8.4-intl
+apt-get install php8.4-gd
+apt-get install php8.4-curl
+apt-get install php8.4-mcrypt
+apt install php8.4-zip
+
+
+
+sftp://root@2.voro.lt/etc/php/8.4/fpm/pool.d/robotikosstudija.conf
+
+[robotikosstudija]
+user = www-data
+group = www-data
+
+listen = /run/php/php8.4-robotikosstudija.sock
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0660
+
+pm = dynamic
+pm.max_children = 10
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+
+chdir = /var/www/mano.robotikosstudija.lt
+
+;php_admin_value[disable_functions] = exec,shell_exec,system,passthru,popen,proc_open,eval,phpinfo,show_source
+php_admin_value[open_basedir] = /var/www/mano.robotikosstudija.lt:/tmp:/var/www/common/environment
+php_admin_value[upload_tmp_dir] = /tmp
+php_admin_value[session.save_path] = /tmp
