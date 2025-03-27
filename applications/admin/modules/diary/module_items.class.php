@@ -78,7 +78,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if($cnt=GW::db()->affected())
 			$this->setMessage("Crypt stored cnt: $cnt");
 		
-		$this->lgr->msg('Encrpt id:'.$item->id.' uid:'.$app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
+		$this->lgr->msg('Encrpt id:'.$item->id.' uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 	}
 	
 	
