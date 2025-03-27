@@ -1,4 +1,4 @@
-{include file="default_form_open.tpl"  changes_track=1 auto_save=1 form_width="100%"}
+{include file="default_form_open.tpl"  changes_track=1 form_width="100%"}
 {$width_title="100px"}
 
 {call e field=parent_id type=select options=$item->getParentOpt() default=$smarty.get.pid}
