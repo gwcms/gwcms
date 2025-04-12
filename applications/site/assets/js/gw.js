@@ -237,15 +237,22 @@ function rootgwcms() {
 }
 
 var gw_navigator = {
-	implode_url: function (url)
-	{
-		if (url.query)
-			for (var key in url.query)
-				if (url.query[key] === null)
-					delete url.query[key];
+	implode_url: function (url) {
+		if (url.query) {
+			for (var key in url.query) {
+				if (url.query[key] === null) delete url.query[key];
+			}
+		}
 
+		const queryStr = url.query
+			? '?' + Object.entries(url.query).map(
+				([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)
+			).join('&')
+			: '';
 
-		return (url.base ? url.base : GW.url.base) + (url.query ? '?' + $.param(url.query) : '') + (url.anchor ? '#' + url.anchor : '')
+		const anchorStr = url.anchor ? '#' + encodeURIComponent(url.anchor) : '';
+
+		return (url.base ? url.base : GW.url.base) + queryStr + anchorStr;
 	},
 	explode_url: function (url) {
 
@@ -266,15 +273,16 @@ var gw_navigator = {
 		return unescape(str.replace('+', ' '));
 	},
 	explode_args: function (args) {
-		if (!args)
-			return {};
+		if (!args) return {};
 
 		args = args.split('&');
-		var arr = {}, tmp, i
+		var arr = {}, tmp, i;
 
 		for (i in args) {
 			tmp = args[i].split('=');
-			arr[gw_navigator.unescape(tmp[0])] = tmp[1] ? gw_navigator.unescape(tmp[1]) : false;
+			const key = decodeURIComponent(tmp[0]);
+			const value = tmp[1] !== undefined ? decodeURIComponent(tmp[1].replace(/\+/g, ' ')) : '';
+			arr[key] = value;
 		}
 		return arr;
 	},
@@ -286,14 +294,14 @@ var gw_navigator = {
 		if (typeof params == 'object')
 		{
 			url = gw_navigator.explode_url(url);
-
+			
 			if (params.baseadd) {
 				url.base += params.baseadd
 				delete params.baseadd;
 			}
 
 			$.extend(url.query, params);
-
+			
 			url = gw_navigator.implode_url(url);
 		}
 

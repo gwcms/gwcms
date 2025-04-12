@@ -104,13 +104,16 @@
 {/function}
 
 {function dl_relation_display}
+	{if !$cfg}
+		{$cfg=$relations[$key]}
+	{/if}	
 	{if isset($counts[$key][$item->id])}
 		{$filterfield='id'}
 
 		{*kai ne pagal id laukeli*}
 		{if isset($cfg.map)}{$filterfield=$cfg.map.0}{/if}
-
-		{list_item_action_m href="{$cfg.url}{$item->$filterfield}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]}"}
+		
+		{list_item_action_m href="{str_replace(['%ID%', '%25ID%25'],$item->$filterfield,$cfg.url)}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]}"}
 	{/if}
 {/function}
 

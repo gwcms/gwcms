@@ -141,10 +141,17 @@ class Module_Email_Templates extends GW_Common_Module
 	function getOptionsCfg()
 	{
 		$opts = [
-		    'title_func'=>function($o){ return $o->id.'. '.$o->admin_title; },
-		    'search_fields'=>['id', 'admin_title'],
-		];	
-				    
+			'title_func'=>function($o){ return $o->id.'. '.$o->admin_title; },
+			'search_fields'=>['id', 'admin_title'],
+		];
+		 
+		$opts['condition_add']='1=1';    
+		
+		    
+		if(isset($_GET['owner_type']))
+			$opts['condition_add'] .= GW_DB::prepare_query([' AND  owner_type=?', $_GET['owner_type']]);
+		if(isset($_GET['owner_field']))
+			$opts['condition_add'] .= GW_DB::prepare_query([' AND  owner_field=?', $_GET['owner_field']]);
 		
 		return $opts;	
 	}
@@ -248,5 +255,22 @@ class Module_Email_Templates extends GW_Common_Module
 		$this->setMessage("Mail test sent to '{$_GET['email']}'");
 		$this->jump();
 	}
+	
+	function viewItemJson()
+	{
+		$item = $this->getDataObjectById();
+		
+		echo json_encode($item->toArray());
+		exit;
+	}
+	
+	function __eventBeforeSave0($item)
+	{
+
+		//visi pabargo ivedinet idname, gal ir nebutina is admin title sudaryt
+		if(!$item->idname && $item->admin_title){
+			$item->idname = FH::urlStr($item->admin_title).'_'.date('Ymd_His');
+		}	
+	}	
 	
 }

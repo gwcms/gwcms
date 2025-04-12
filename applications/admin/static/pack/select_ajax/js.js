@@ -513,7 +513,7 @@ function addEditControls(obj)
 	this.name = obj.data('name');					
 	this.addBtn = obj.find('.addBtn');
 	this.editBtn = obj.find('.editBtn');
-
+	this.copyBnt = obj.find('.copyBnt');
 	this.valueIdsBtn = obj.find('.valueIdsBtn');
 	this.valueRowsBtn = obj.find('.valueRowsBtn');
 
@@ -575,6 +575,12 @@ function addEditControls(obj)
 
 		var url = gw_navigator.url(src, { id: id })
 		rootgwcms().open_dialog2({ url: url, iframe:1, title:title, close_callback: closecallback })
+	})
+	
+	this.copyBnt.click(function(e){	
+		gwcms.showMessages([{ type:0, text: ctrl.inputctrl.val(), title:"Value copied to clipboard" }])
+		
+		GW.copy_to_clipboard(ctrl.inputctrl.val());
 	})
 
 

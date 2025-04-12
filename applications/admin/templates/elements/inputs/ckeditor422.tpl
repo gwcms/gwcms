@@ -77,6 +77,10 @@ require(["ckeditor422"], function() {
 	{/if}
 	 
 	 config.entities = false;
+	 config.basicEntities = false;
+	 config.entities_greek = false;
+	 config.entities_latin = false;
+
 	 config.autoParagraph = false;
 	 config.coreStyles_bold = { element: 'b', overrides: 'strong' };
 	 
@@ -114,6 +118,18 @@ require(["ckeditor422"], function() {
 			})
 		})
 		
+		
+		//nenukeliautu kode esantis >
+		ev.editor.on('getData', function (evt) {
+			//protected1 isimam
+			 evt.data.dataValue = evt.data.dataValue.replace(/<span[^>]*data-protected="([^"]+)"[^>]*>(.*?)<\/span>/g,
+					function (match, code, innerContent) {
+					    return innerContent; // Remove span but keep content
+					}
+				);
+			evt.data.dataValue = evt.data.dataValue.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+	});
+	
 	});
 	
 })

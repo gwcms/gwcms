@@ -58,6 +58,11 @@
 			
 		{/if}
 	{/if}
+	
+	{if $app->user->isRoot()}
+		<button class="btn btn-sm copyBnt" type="button"><i class="fa fa-clipboard" aria-hidden="true"></i></button>	
+		
+	{/if}	
 
 </span>
 			

@@ -3719,16 +3719,17 @@ class GW_Common_Module extends GW_Module
 	
 	
 	function __prepareRelation(&$cfg)
-	{
-		if(!isset($cfg['url']) && isset($cfg['modpath'])){
+	{		
+		if(!isset($cfg['url']) || !isset($cfg['modpath']) || !isset($cfg['title'])){
 			$relationgetarg = $cfg['relarg'] ?? 'user_id';
-			$cfg['url'] = $this->app->buildUri($cfg['modpath'],['clean'=>2,$relationgetarg=>'']);
+			$cfg['url'] = $cfg['url'] ?? $this->app->buildUri($cfg['modpath'],['clean'=>2,$relationgetarg=>'%ID%']);
 
 			if(!isset($cfg['title']) && isset($cfg['modpath'])){
 				$cfg['title'] = $this->getTitleFromPath($cfg['modpath']);
 			}
+			
+			
 		}
-		
 	}
 	
 	function prepareRelations($list)

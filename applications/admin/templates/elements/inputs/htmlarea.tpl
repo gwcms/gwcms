@@ -66,7 +66,7 @@ require(["ckeditor"], function() {
 	 config.entities = false;
 	 config.autoParagraph = false;
 	 config.coreStyles_bold = { element: 'b', overrides: 'strong' };
-	 
+	 config.removePlugins = 'format,autosave';
 	 //https://docs.ckeditor.com/ckeditor4/latest/guide/dev_file_browser_api.html
 
 	if(config.enterMode=='CKEDITOR.ENTER_BR')

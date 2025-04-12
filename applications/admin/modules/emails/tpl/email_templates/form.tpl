@@ -48,6 +48,7 @@
 	{$ck_set='minimum'}
 	{$ck_options.height=$item->body_editor_height|default:"200px"}
 	{$bodyInpType=htmlarea}
+	{$bodyInpType=ckeditor422}
 {elseif $item->body_editor == 1}
 	{$bodyInpType=textarea}
 {elseif $item->body_editor == 2}
