@@ -422,6 +422,7 @@
     <i id="doFilterByColumn">Filtruoti</i>
     <i id="doDragMoveSorting">Drag &amp; drop vertės rikiavimas</i>
     <i id="doFillSeries">Užpildyti serija</i>
+    <i id="doCopyColValues">Stulpelio vertės</i>
     <i id="doExportListAsSheet">Eksportuoti į xlsx</i>
   </i>
   <i id="NO_ITEMS">

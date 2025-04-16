@@ -3331,11 +3331,10 @@ class GW_Common_Module extends GW_Module
 			$inf['before'] = $item->get($field);
 			$inf['after'] = $offset;
 			$changeinf[] = $inf;
-		
+			$item->fireEvent('BEFORE_CHANGES');
 			$item->set($field, $offset);
 			$offset+=$increment;
 
-			
 			if(isset($_GET['confirm'])){
 				$item->updateChanged();
 			}			
@@ -3357,7 +3356,84 @@ class GW_Common_Module extends GW_Module
 			$this->jump(false, ['field'=>$field]);
 		}
 		
-	}	
+	}
+
+	function doCopyColValues()
+	{
+		if(!$this->write_permission){
+			$this->setError("Please ensure you have write permission");
+			$this->jump(false);
+		}
+		
+		$fields = $this->__getListFields();
+		
+		
+		$cfg = $this->getListConfig();
+
+		$field = $_GET['field'] ?? false;
+		
+		$vars = $this->viewList();
+		$list = $vars['list'];	
+		$changeinf = [];		
+		
+		$str = "";
+		foreach($list as $item){
+			$str .= $item->get($field)."\n";
+		}
+		
+		$str = trim($str, "\n");
+
+		
+		$form['fields']=[];		
+		$form['fields']['colvals'] = ['type'=>'textarea','required'=>1,'value'=>$str, 'height'=>'500px','width'=>"100%"];
+		$opts = ['method'=>'post'];
+		
+		if(!($answers=$this->prompt($form, GW::l('/g/VIEWS/doCopyColValues').' <b style="color:blue">'.($field ? $this->fieldTitle($field) :'').'</b>' , $opts)))
+			return false;			
+		
+		$newvals = explode("\n", $answers["colvals"]);
+		
+		if(count($list) != count($newvals))
+			$this->setError("List count: ".count($list)." and values count:".count($newvals)." does not match");
+		//$item->fireEvent('BEFORE_CHANGES');
+		
+
+		$i=0;
+		foreach($list as $item){
+		
+			$inf = [];
+			$inf['id'] = $item->id;
+			$inf['title'] = $item->title;
+			$inf['before'] = $item->get($field);
+			$inf['after'] = $newvals[$i];
+			$changeinf[] = $inf;
+			$item->fireEvent('BEFORE_CHANGES');
+			$item->set($field, $newvals[$i]);
+
+			if(isset($_GET['confirm'])){
+				$item->updateChanged();
+			}
+			$i++;
+		}
+	
+		
+		if(!isset($_GET['confirm'])){
+			$str = GW_Data_to_Html_Table_Helper::doTable($changeinf);
+			
+			$this->askConfirm($str);
+		}else{	
+			$this->setMessage("action performed on ".count($vars['list'])." items");
+			
+			
+
+			unset($_GET['item']['value']);
+			$repeaturl = $this->buildUri(false, array_merge($_GET,['confirm'=>null]));
+			$addstr="<br/><a class='btn btn-primary' href='$repeaturl'>".GW::l('/g/REPEAT').' '.GW::l('/g/ACTION').': '. GW::l('/g/VIEWS/doMultiSetValue')."</a> <small>(Add filter to show non empty rows)</small>";
+			$this->setMessageEx(['text'=>$addstr, 'type'=>4]);
+			$this->jump(false, ['field'=>$field]);
+		}
+				
+	}
 	
 	
 	function doDragMoveSorting()
