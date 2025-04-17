@@ -569,6 +569,10 @@ class Module_Shop extends GW_Public_Module
 		
 		$item = Shop_Products::singleton()->find(['id=? AND active=1', $cartvals['id']]);
 		
+		if(!$item){
+			$this->setError("Item not available");
+			$this->app->jump();
+		}
 				
 		
 		if($this->feat('anonymous_cart') && !$this->app->user){

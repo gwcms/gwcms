@@ -580,14 +580,93 @@ class Module_Orders extends GW_Public_Module
 		 */
 		
 		
-		$permitfields =  array_flip(['email','name','surname','phone','city','company','company_code','vat_code','company_addr']);
+		$permitfields =  array_flip(['email','name','surname','phone','city','company','company_code','vat_code','company_addr','keyval/sabis','keyval/sabis_contact_phone']);
 		$this->filterPermitFields($vals,$permitfields);
 		
 		$order->setValues($vals);
 		$order->update();
+		
+		
+		if($this->feat('sabis') && $order->get('keyval/sabis')){
+			$this->doSabis($order);
+		}
+		
 		$this->app->jump(false, $_GET);
 		
+		
+		
 		//
+	}
+	
+	function doSabis($order)
+	{
+		$test = $this->config->sabis_test;
+		$idpwd = $test ? $this->config->sabis_test_clientid_secret : $this->config->sabis_clientid_secret;
+		list($client_id, $client_secret) = explode('|', $idpwd);
+		$sabisapi = new sabis_api($client_id, $client_secret, $test);
+		
+
+		if($tmp=$order->get('keyval/sabis_uid')){
+			$this->setError("Jau įregistruota SABIS sistemoje");
+			
+			
+			
+			//$response = $sabisapi->deleteInvoice($tmp);
+			//d::dumpas([$response, $sabisapi->debug]);
+			//d::escapeArray($response);
+			//$this->setMessage("<pre>Delete existing ($tmp): <br>".print_r([$response, $sabisapi->debug], true).'</pre>');
+			
+			
+			
+			//$response = $sabisapi->getInvoice($tmp);
+			//d::dumpas([$response, $sabisapi->debug]);
+			//d::escapeArray($response);
+			//$this->setMessage("<pre>Show existing ($tmp): <br>".print_r($response, true).'</pre>');
+			
+			
+			
+			
+		}
+		
+		
+		$params = $order->toArray();
+		$params['supplier_xml']=$this->config->sabis_supplier;
+
+		$params['id'] = 'TST12/'.$params['id'];
+		
+		foreach($order->items as $oi){
+			$params['items'][] = $oi->toArray();
+		}
+		
+		//d::dumpas($params);
+
+		$response = $sabisapi->newInvoice($params);
+
+		if($sabisapi->errors){
+			foreach($sabisapi->errors as $err){
+				$this->setError( '<strong>'.$err['code'] .'</strong> '. $err['errorText']);
+			}
+		}else{
+			if(isset($response['invoiceUID'])){
+				$order->set('keyval/sabis_uid', $response['invoiceUID']);
+				$this->setMessage("Sąskaita buvo sėkmingai įkelta į SABIS sistemą");
+			}
+		}
+			
+		if($test){
+			
+			if(!$response || $sabisapi->errors){
+				
+				$this->setMessage('<pre>'.print_r(d::escapeArray($sabisapi->debug), true).'</pre>');
+			}
+			
+			//$this->setMessage('<pre>'.print_r($order->toArray(), true).'</pre>');
+			//$this->setMessage('<pre>'.print_r($response_arr, true).'</pre>');
+			
+		}
+		
+		$this->setMessage('<pre>response: '.print_r($response, true).'</pre>');
+					
 	}
 	
 

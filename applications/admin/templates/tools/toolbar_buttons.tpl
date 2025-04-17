@@ -124,7 +124,10 @@
 {/function}	
 {function name=do_toolbar_buttons_exportdata}	
 	{toolbar_button title=GW::l('/A/VIEWS/exportdata') iconclass='material output' href=$m->buildUri(exportdata)}
-	
+{/function}
+
+{function name=do_toolbar_buttons_log}
+	{toolbar_button onclick="gwcms.open_rtlogview('{$m->getLogFileName()}');" title="Log" iconclass="gwico-Console"}
 {/function}
 
 {function name=do_toolbar_buttons_edit} 

@@ -522,7 +522,7 @@ class GW_Site_Application extends GW_Application
 	{
 		//d::dumpas('testas');
 		if(GW_Lang::$developLnResList){
-			d::ldump(GW_Lang::$developLnResList);
+			d::ldump(GW_Lang::$developLnResList,['noescape'=>1]);
 			
 			
 			//d::ldump(GW::db()->query_times);

@@ -449,7 +449,7 @@ class GW_Public_Module {
 			return $result;
 
 		$this->setError('/G/GENERAL/ACTION_RESTRICTED');
-		$this->jump();
+		$this->app->jump('/');
 	}	
 	
 	

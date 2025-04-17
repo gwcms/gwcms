@@ -210,6 +210,17 @@
 	</div>
 {/if}
 
+{if GW::s('PROJECT_NAME') ==  'events_ltf_lt'}
+
+	<div class="col-md-6">
+		{input field="antidoping" type="image" required=1  
+			endpoint="users/users" allowpdf=1 note=GW::ln('/m/FIELD_NOTES/antidoping')
+			help=GW::ln('/m/FIELD_NOTES/upload_image_or_pdf')
+		}	
+	</div>	
+	
+{/if}
+
 
 
 {if $register && $smarty.session.3rdAuthUser}

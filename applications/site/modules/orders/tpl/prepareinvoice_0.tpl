@@ -29,7 +29,7 @@
 
 
 		<div class="col-md-4">
-			{call input field="phone"  default=$app->user->phone}	
+			{call input field="phone"  default=$app->user->phone type=intphone}	
 		</div>
 
 
@@ -57,6 +57,14 @@
 			{call input field="company_addr" default=$app->user->company_addr}
 		</div>			
 	</div>
+		{if $m->feat('sabis')}
+	<div class='row'>
+		<div class="col-md-3">
+			{call input field="keyval/sabis" type=checkbox}
+		</div>				
+		
+	</div>		
+		{/if}
 
 		<button class="btn btn-primary"><i class='fa fa-floppy-o'></i> {GW::ln('/g/UPDATE')}</button>
 
