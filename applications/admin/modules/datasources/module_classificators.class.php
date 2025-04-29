@@ -35,10 +35,15 @@ class Module_Classificators  extends GW_Common_Module
 		}
 		
 		
-		if( $this->app->path_arr[1]['path_clean']=='datasources/classificator_types' &&  ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
-			$_GET['type'] = $tmp;
-		}			
+		//if(  &&  ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
+
 		
+		
+		if($this->app->path_arr[1]['path_clean']=='datasources/classificator_types')
+			if( ($tmp=$this->app->path_arr[1]['data_object_id']??false) ){
+				$_GET['type'] = $tmp;
+			}			
+
 		if(isset($_GET['type'])){
 			$this->filters['type'] = $_GET['type'];
 		}
