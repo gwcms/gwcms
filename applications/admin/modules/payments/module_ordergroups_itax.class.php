@@ -58,10 +58,10 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 	
 	function doItaxCreateClient($order)
 	{
-		if($order->company){
+		if($order->company && $order->company != '-'){
 			$clientname = $order->company;
 		}else{
-			$clientname = $order->name ? $order->name." ".$order ->surname : $order->user->name.' '.$order->user->surname;
+			$clientname = $order->name ? $order->name." ".$order->surname : $order->user->name.' '.$order->user->surname;
 		}
 		$email = $order->email ?: $order->user->email;
 		
@@ -76,7 +76,6 @@ class Module_OrderGroups_Itax extends GW_Module_Extension
 		
 		$search_existing = $existingby_code ? $existingby_code : $this->itax->searchClient(['email'=>$email]);
 		
-		//d::dumpas($search_existing);
 		
 		if($existingby_code || (isset($search_existing->response[0]->name) && $search_existing->response[0]->name == $clientname)){
 				

@@ -22,13 +22,25 @@ class GW_Bot_Detect
 			(
 				stripos($ua, 'bot')!==false  ||
 				stripos($ua, 'spider')!==false || 
-				stripos($ua, 'scrap')!==false
+				stripos($ua, 'scrap')!==false ||
+				stripos($ua, 'crawler')!==false 
+				
 			) && 
 			(
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || 
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD
 			)
 		){
+			
+			
+			//nebeatlaiko smurto 2025-04-04 2025-04-25 naujas serveriukas
+			//
+			if (date('w') == 6) {
+				header("HTTP/1.1 503 Service Unavailable");
+				header('Status: 503 Service Temporarily Unavailable');			
+				header("Retry-After: 3600");
+				exit("Site is temporarily unavailable for indexing. Please try again later.");
+			}			
 			
 			if(rand(0,10)==5)
 				GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
