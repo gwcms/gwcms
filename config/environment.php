@@ -26,7 +26,7 @@ function initEnviroment($environmentid)
 			GW::s('PROJECT_FAVICO_ARGS', GW::s('PROJECT_FAVICO_ARGS').'&color=ff6600');
 			
 
-			GW::$globals['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/FETCH_HEAD'));
+			GW::$globals['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'.git/HEAD'));
 		break;
 	
 		case GW_ENV_PROD:
@@ -55,7 +55,7 @@ function initEnviroment($environmentid)
 	
 }
 
-$env_host_map = ['wdmpc'=>GW_ENV_DEV, 'whatever'=>GW_ENV_TEST, 'odroidXU4'=>GW_ENV_PROD];
+$env_host_map = ['wdmpc'=>GW_ENV_DEV, 'whatever'=>GW_ENV_TEST, 'server.t20'=>GW_ENV_PROD];
 GW::s('PROJECT_ENVIRONMENT', $env_host_map[$hostname]?? GW_ENV_DEV);
 
 //echo "HN $hostname; env: ".GW::s('PROJECT_ENVIRONMENT').';';
