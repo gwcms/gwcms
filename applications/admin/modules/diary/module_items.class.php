@@ -84,6 +84,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	function doLock($jump=true)
 	{
 		GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
+		$this->modconfig->unlocked = 0;
 		
 		if($jump){
 			$this->jump();
@@ -96,9 +97,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if($this->modconfig->unlocked && ($secs_since_last_request > 500)){
 			$this->lgr->msg('Locking uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 		
-			$this->doLock(false);
-			
-			$this->modconfig->unlocked = 0;
+			$this->doLock(false);			
 		}else{
 			//$this->lgr->msg([$this->modconfig->unlocked, 'secs_since_last_req'=>$secs_since_last_request]);
 		}
