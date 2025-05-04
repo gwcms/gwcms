@@ -1,7 +1,7 @@
 <?php
 
 
-die('aaa');
+
 include __DIR__.'/init_basic.php';
 
 GW_Bot_Detect::process();
