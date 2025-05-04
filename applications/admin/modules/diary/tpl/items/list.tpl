@@ -55,9 +55,12 @@
 
 		{if !$m->modconfig->unlocked}
 			{toolbar_button title="Unlock" iconclass='fa fa-unlock' href=$m->buildUri(false, [act=>doUnlock])}
+		{else}
+			{toolbar_button title="Lock" iconclass='fa fa-lock' href=$m->buildUri(false, [act=>doLock])}
 		{/if}
 		{*{list_item_action_m url=[false,[id=>$item->id,act=>doSwitchSim,simid=>'']] query_param="Enter sim id 0-`$tmp`" caption="Sw" title="Switch sim"}*}
 	{/function}	
+
 
 	
 	{*$order_enabled_fields=[text,insert_time,update_time]*}

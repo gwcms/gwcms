@@ -81,7 +81,14 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->lgr->msg('Encrpt id:'.$item->id.' uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 	}
 	
-	
+	function doLock($jump=true)
+	{
+		GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
+		
+		if($jump){
+			$this->jump();
+		}
+	}
 	
 	function doAutoLock()
 	{
@@ -89,7 +96,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		if($this->modconfig->unlocked && ($secs_since_last_request > 500)){
 			$this->lgr->msg('Locking uid:'.$this->app->user->id.' ip: '.$_SERVER['REMOTE_ADDR']);
 		
-			GW::db()->query("UPDATE diary_entries SET text='hidden' WHERE text!='hidden'");
+			$this->doLock(false);
 			
 			$this->modconfig->unlocked = 0;
 		}else{
@@ -101,6 +108,19 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function doUnlock()
 	{
+		$sel=[];
+		$form = ['fields'=>['pin'=>['type'=>'password', 'required'=>1]],'cols'=>4];
+		
+		
+		if(!($answers=$this->prompt($form, GW::l('/m/PROVIDE_PIN_PLEASE'), ['method'=>'post'])))
+			return false;	
+		
+		if($answers['pin']!=base64_decode($this->modconfig->decode_pin)){
+			$this->setError("Pin error");
+			return $this->jump();
+		}
+		
+		
 		$crpytkey = $this->__getSecret();
 		
 		$q = GW_DB::prepare_query(["UPDATE diary_entries SET text = AES_DECRYPT(text_crpt, ?) WHERE text='hidden'", $crpytkey]);

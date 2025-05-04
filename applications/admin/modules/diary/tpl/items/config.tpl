@@ -5,5 +5,6 @@
 
 
 {call e field="safestorage_url"}
+{call e field="decode_pin"}
 {call e field="last_request" type=read}
 {call e field="unlocked" type=bool}
