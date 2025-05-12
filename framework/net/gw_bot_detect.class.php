@@ -2,6 +2,16 @@
 
 class GW_Bot_Detect
 {
+	
+	static function isBot()
+	{
+		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
+		
+		return stripos($ua, 'bot')!==false  ||
+				stripos($ua, 'spider')!==false || 
+				stripos($ua, 'scrap')!==false;
+	}	
+	
 	static function process(){
 
 		if( (GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST) || GW::s('SHADOW_SYS') ){
@@ -18,14 +28,7 @@ class GW_Bot_Detect
 			
 		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
 		if(
-			GW::s('BOT_SEND_TO_MIRROR') && 
-			(
-				stripos($ua, 'bot')!==false  ||
-				stripos($ua, 'spider')!==false || 
-				stripos($ua, 'scrap')!==false ||
-				stripos($ua, 'crawler')!==false 
-				
-			) && 
+			GW::s('BOT_SEND_TO_MIRROR') && self:: isBot() && 
 			(
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || 
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD

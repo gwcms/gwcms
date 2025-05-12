@@ -15,12 +15,19 @@
 
 	<!--Language selector menu-->
 	<ul class="head-list dropdown-menu">
+		{$xpld=explode('/',$smarty.server.REQUEST_URI,4)}
+		{if $xpld[1]==admin}
+			{$x=array_shift($xpld)}
+		{/if}
+		{$x=array_shift($xpld)}{$x=array_shift($xpld)}
+		{$path=implode('/', $xpld)}
 		
 		{foreach GW::s('ADMIN/LANGS') as $ln_code}
+			
 
 			<li>
 				{*https://www.iconfinder.com/iconsets/195-flat-flag-psd-icons*}
-				<a href="{$app_base}{$ln_code}" class="{if $ln_code == $ln}active{/if}">
+				<a href="{$app_base}{$ln_code}/{$path}" class="{if $ln_code == $ln}active{/if}">
 					<img class="lang-flag" src="{GW::s("STATIC_EXTERNAL_ASSETS")}flags/png/{$ln_code}.png" alt="{GW::s("LANG_NAMES/{$ln_code}")}" style="max-height:24px;max-width:24px">
 					<span class="lang-id">{strtoupper($ln_code)}</span>
 					<span class="lang-name">{GW::s("LANG_NAMES/{$ln_code}")}</span>
