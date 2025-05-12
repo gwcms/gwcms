@@ -419,8 +419,13 @@ class GW_Debug_Helper
 			
 			if($nosend)
 			{
-				self::outputToScreen($e);	
-				echo implode(' | ',$nosend);
+				if(GW_Bot_Detect::isBot())
+				{
+					die('ad5f1s6f5gb41fg65ngh4f6d4gre');
+				}else{
+					self::outputToScreen($e);	
+					echo implode(' | ',$nosend);
+				}
 				//echo $body;
 			}else{
 				if(GW::s('DEVELOPER_PRESENT'))
@@ -436,9 +441,14 @@ class GW_Debug_Helper
 			}
 			
 		}else{
-			echo "error report turned off<br/>\n";
+			if(GW_Bot_Detect::isBot())
+				{
+					die('ad5f1s6f5gb41fg65ngh4fa16s5d1fasd21f65st1hb6s5f21b3s2f6d4gre');
+				}else{
+					echo "error report turned off<br/>\n";
 			
-			self::outputToScreen($e);			
+					self::outputToScreen($e);
+				}
 		}		
 	}
 	

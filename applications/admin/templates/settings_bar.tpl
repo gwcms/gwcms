@@ -28,7 +28,7 @@
 	{$GLOBALS.pgsett.$key=$smarty.get.$key|default:$default}
 	<span class="settlab">{$title}:</span> 
 		
-		<input onchange="gw_navigator.jump(false,{ '{$key}':this.value })"  style="width:80px">
+		<input onchange="gw_navigator.jump(false,{ '{$key}':this.value })" value='{$GLOBALS.pgsett.$key}' style="width:80px">
 	
 	&nbsp;&nbsp;&nbsp;
 {/function}

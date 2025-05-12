@@ -4,13 +4,22 @@
 class Itax 
 {
 	private $apikey;
-	const ENDPOINT = 'https://www.itax.lt/api/v1/';
-	public $last_request_header;
-	public $last_request_body;
+	private $end1 = 'https://www.itax.lt/api/v1/';
+	private $end2 = 'https://www.itax.lt/api/v2/';
 	
-	function __construct($apikey)
+	function getEndpoint()
 	{
-		$this->apikey = $apikey;
+		return ($this->v2 ? $this->end2 : $this->end1);
+	}	
+	
+	public $last_request;
+	public $v2=true;
+	
+	function __construct()
+	{
+		$this->initConfig();
+		$this->apikey = $this->config->itax_apikey_v2;
+		$this->v2 = true;
 	}
 	
 	function initConfig()
@@ -23,18 +32,27 @@ class Itax
 	
 	function insert($groupname,$model, $data)
 	{
-		$url = self::ENDPOINT.$groupname . (isset($data['id'])?'/'.$data['id']:'');
+		$url = $this->getEndpoint().$groupname . (isset($data['id'])?'/'.$data['id']:'');
 		$result = $this->apiCall(isset($data['id']) ? "PUT" : "POST", $url, [$model=>$data]);		
 		return $result;
 	}
 	
 	function update($what='purchases', $id, $data)
 	{
-		$url = self::ENDPOINT.$what . ($id?'/'.$id:'');
+		$url = $this->getEndpoint().$what . ($id?'/'.$id:'');
 		
 		//nc -l localhost -p 12345
 		//$url = str_replace('https://www.itax.lt','http://localhost:12345', $url);
 		
+		
+		$header=[
+				"cache-control: no-cache",
+				"content-type: application/json",
+			];
+		
+		if(!$this->v2)
+			$header[]='Authorization: Token token="' . $this->apikey . '"';
+			
 		
 		$curl = curl_init();
 		curl_setopt_array($curl, [
@@ -47,12 +65,14 @@ class Itax
 			CURLOPT_CUSTOMREQUEST => "PUT",
 			CURLOPT_POSTFIELDS => json_encode($data),
 			CURLINFO_HEADER_OUT => true,
-			CURLOPT_HTTPHEADER => [
-				'Authorization: Token token="' . $this->apikey . '"',
-				"cache-control: no-cache",
-				"content-type: application/json",
-			],
+			CURLOPT_HTTPHEADER => $header,
 		]);
+		
+		if(!$this->v2){
+			list($username, $password) = explode('|', $this->apikey);
+			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+		}
 		
 		$data = curl_exec($curl);
 
@@ -109,7 +129,20 @@ class Itax
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
-		$headers[] = 'Authorization: Token token="' . $this->apikey . '"';
+		
+		if($this->v2){
+			list($username, $password) = explode('|', $this->apikey);
+
+			$headers[] = 'Content-Type: application/json; charset=utf-8';
+			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+		}else{
+			$headers[] = 'Authorization: Token token="' . $this->apikey . '"';
+		}
+		
+		
+		
+		
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -122,19 +155,34 @@ class Itax
 		$header = substr($rdata, 0, $header_size);
 		$rdata = substr($rdata, $header_size);
 
-		$this->last_request_header = $header;
-		$this->last_request_body = $rdata;
+		
 		$information = curl_getinfo($curl);
 		$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	
+		$header_info = curl_getinfo($curl,CURLINFO_HEADER_OUT);	
+		
+		$this->last_request=[
+			'headers' => $header_info,
+			'body' => $data,
+			'response_header'=>$header,
+			'response_body'=>$rdata,
+			'response_code'=>$httpcode,
+		];
+		    
 		
 
-		$header_info = curl_getinfo($curl,CURLINFO_HEADER_OUT);		
+	
+		
+		//d::ldump(['request_header'=>$header_info, 'response_header'=>$header, 'response_data'=>$data]);
+		
 		
 		if($data['_DEBUG'] ?? false)
 			d::ldump(['request_header'=>$header_info, 'response_header'=>$header, 'request_data'=>$data, 'response_data'=>$rdata]);
 
-
 		curl_close($curl);
+		
+		
+		//$this->debugRequestResponse();
 
 		return json_decode($rdata);
 	}
@@ -202,6 +250,11 @@ class Itax
 		return $postdata;
 	}
 	
+	function debugRequestResponse()
+	{
+		d::dumpas($this->last_request);		
+	}
+	
 	function saveInvoice($data, $opts=[])
 	{
 		$itwasposted = false;
@@ -246,8 +299,13 @@ class Itax
 		}
 		
 		
-		$url = self::ENDPOINT.'invoices' . (isset($data['id'])?'/'.$data['id']:'');
+		$url = $this->getEndpoint().'invoices' . (isset($data['id'])?'/'.$data['id']:'');
 		$result = $this->apiCall(isset($data['id']) ? "PUT" : "POST", $url, $postdata);	
+		
+		if(isset($_GET['shift_key']))
+		{
+			$this->debugRequestResponse();
+		}
 		
 		
 		if($itwasposted){
@@ -291,16 +349,17 @@ class Itax
 					"description" => $data['description']
 				]
 			],
-			'is_paid' => isset($data['is_paid']) && $data['is_paid'],
+			//'is_paid' => isset($data['is_paid']) && $data['is_paid'],
 			'all_tags'=> isset($data['all_tags']) ? $data['all_tags'] : [],
 			'footer_message'=> isset($data['footer_message']) ? $data['footer_message'] : ''
 		]];
 		
 		$pitm =& $postdata['purchase']['purch_inv_lines_attributes'][0];
 		
+		//teztour su discount amount eina
 		if(isset($data['discount_amount'])){
 			$pitm['discount_amount'] = $data['discount_amount'];
-			$pitm['amount'] -= (float)$pitm['discount_amount'];
+			$pitm['amount'] -= $pitm['discount_amount'];
 			$pitm['total_amount'] = $pitm['amount'] + $pitm['vat_amount'];
 		}
 		
@@ -325,7 +384,7 @@ class Itax
 		
 		//d::dumpas($postdata);
 		
-		$url = self::ENDPOINT.'purchases' . ($update_id?'/'.$update_id:'');
+		$url = $this->getEndpoint().'purchases' . ($update_id?'/'.$update_id:'');
 		
 		$result = $this->apiCall($update_id ? "PUT" : "POST", $url, $postdata);
 		
@@ -399,7 +458,7 @@ class Itax
 					"description" => $data['description']
 				]
 			],
-			'is_paid' => isset($data['is_paid']) && $data['is_paid'],
+			//'is_paid' => isset($data['is_paid']) && $data['is_paid'],// nuo v2 nebeleidzia
 			'all_tags'=> isset($data['all_tags']) ? $data['all_tags'] : [],
 			'footer_message'=> isset($data['footer_message']) ? $data['footer_message'] : ''
 		]];
@@ -409,7 +468,7 @@ class Itax
 		//teztour su discount amount eina
 		if(isset($data['discount_amount'])){
 			$pitm['discount_amount'] = $data['discount_amount'];
-			$pitm['amount'] -= (float)$pitm['discount_amount'];
+			$pitm['amount'] -= $pitm['discount_amount'];
 			$pitm['total_amount'] = $pitm['amount'] + $pitm['vat_amount'];
 		}
 		
@@ -434,7 +493,7 @@ class Itax
 		
 		//d::dumpas($postdata);
 		
-		$url = self::ENDPOINT.'purchases' . (isset($data['id'])?'/'.$data['id']:'');
+		$url = $this->getEndpoint().'purchases' . (isset($data['id'])?'/'.$data['id']:'');
 		
 		$result = $this->apiCall(isset($data['id']) ? "PUT" : "POST", $url, $postdata);
 		
@@ -446,6 +505,20 @@ class Itax
 		return $result;
 	}
 		
+	
+	function getBussinesGroupIdByCountryCode($cc)
+	{
+		$eu = explode(',',"BE,EL,LT,PT,BG,ES,LU,RO,CZ,FR,HU,SI,DK,HR,MT,SK,DE,IT,NL,FI,EE,CY,AT,SE,IE,LV,PL,UK");
+		if($cc == "LT"){
+			$vatid = $this->config->get('itax_vat_business_group_id_lt');
+		}elseif(in_array($cc, $eu)){
+			$vatid = $this->config->get('itax_vat_business_group_id_eu');
+		}else{
+			$vatid = $this->config->get('itax_vat_business_group_id_world');
+		}
+
+		return $vatid;		
+	}
 	
 	
 	function saveClient($name, $data=[])
@@ -464,17 +537,8 @@ class Itax
 			$cc = $data['vat_business_group_id_by_country_code'];
 			unset($data['vat_business_group_id_by_country_code']);
 			
-			$eu = explode(',',"BE,EL,LT,PT,BG,ES,LU,RO,CZ,FR,HU,SI,DK,HR,MT,SK,DE,IT,NL,FI,EE,CY,AT,SE,IE,LV,PL,UK");
-			if($cc == "LT"){
-				$vatid = $this->config->get('itax_vat_business_group_id_lt');
-			}elseif(in_array($cc, $eu)){
-				$vatid = $this->config->get('itax_vat_business_group_id_eu');
-			}else{
-				$vatid = $this->config->get('itax_vat_business_group_id_world');
-			}
-				
-			$data['vat_business_group_id'] = $vatid;
-		}		
+			$data['vat_business_group_id'] = $this->getBussinesGroupIdByCountryCode($cc);
+		}
 		
 		
 		
@@ -488,10 +552,13 @@ class Itax
 		
 		
 
-		$url = self::ENDPOINT.'clients' . ( isset($data['id']) ?'/'.$data['id']:'');
-		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $postdata);		
+		$url = $this->getEndpoint().'clients' . ( isset($data['id']) ?'/'.$data['id']:'');
+		$method = isset($data['id']) ? "PUT":"POST";
+		$result = $this->apiCall($method, $url, $postdata);		
 	
 		$result->postdata = $postdata;
+		$result->posturl = $url;
+		$result->postmethod = $method;
 		/*
 		POST https://www.itax.lt/api/v1/clients
 		{  
@@ -506,67 +573,9 @@ class Itax
 		return $result;
 	}
 	
-	
-	function saveGeneralJournal($general_joural)
-	{
-		
-		/*
-		 * test 
-		$attribs=[	
-			'date' => "2023-10-11",
-			'journable_type' => "Suplier",
-			'journable_id' => "168067",
-			'journal_balanceable_type' => "Suplier",
-			'journal_balanceable_id' => "30379",
-			'amount' => "61",
-			'currency' => "EUR",
-			'_destroy' => "false",
-			//'id' => "",
-			'due_date' => "2023-10-15",
-			'reference_number' => "",
-			'description' => "",
-			'document_number' => ""
-		];		
-
-			$data = [];
-
-
-		$general_joural['number']= "BZ+201111111";
-		$general_joural['name'] = "vardas+pabarde+GPM";
-		$general_joural['period_closing'] = "";
-		$general_joural['fc_closing'] = "";
-		$general_joural['department_id'] = "";
-		$general_joural['project_id'] = "";
-		$general_joural['posted'] = true;
-		$general_joural['general_journal_lines_attributes'] = [$attribs];
-		 
-		 */
-
-		$data['general_journal'] = $general_joural;
-		$data['_DEBUG'] = 1;
-		
-		
-		$url = self::ENDPOINT.'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
-		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $data);
-	
-		$result->postdata = $data;
-		/*
-		POST https://www.itax.lt/api/v1/clients
-		{  
-		   "client":{  
-		      "name":"Testas",
-		      "default_currency":"EUR",
-		      "payment_term":30,
-		      "all_tags":["Svarbu", "GPM"]
-		   }
-		}
-		 */	
-		return $result;		
-	}
-	
 	function searchClient($search=[])
 	{		
-		$result = $this->apiCall("GET", self::ENDPOINT.'clients?'. http_build_query($search));
+		$result = $this->apiCall("GET", $this->getEndpoint().'clients?'. http_build_query($search));
 		
 		
 		return $result;
@@ -576,7 +585,7 @@ class Itax
 	
 	function searchPurchase($invoice_num, $options=[])
 	{
-		$res = $this->apiCall("GET", self::ENDPOINT.'purchases?'. http_build_query(['number'=>$invoice_num]));
+		$res = $this->apiCall("GET", $this->getEndpoint().'purchases?'. http_build_query(['number'=>$invoice_num]));
 		
 		$this->searchPurchase_tagfiltered=0;
 		
@@ -615,24 +624,27 @@ class Itax
 	{
 		//pagai invoice numeri -- ['number'=>$invoice_num];
 		
-		$res = $this->apiCall("GET", self::ENDPOINT.'purchases?'. http_build_query($opts));
+		$res = $this->apiCall("GET", $this->getEndpoint().'purchases?'. http_build_query($opts));
 				
 		return $res;	
 	}	
+	
+	
+
 	
 	
 	function searchInvoice($opts=[])
 	{
 		$q = $opts ? '?'.http_build_query($opts):'';
 		
-		$result = $this->apiCall("GET", self::ENDPOINT.'invoices'. $q);
+		$result = $this->apiCall("GET", $this->getEndpoint().'invoices'. $q);
 		
 		return $result;		
 	}
 	
 	function searchInvoiceByClientIDandFooter($client_id,$footer_string)
 	{
-		$result = $this->apiCall("GET", self::ENDPOINT.'invoices?'. http_build_query(['client_id'=>$client_id]));
+		$result = $this->apiCall("GET", $this->getEndpoint().'invoices?'. http_build_query(['client_id'=>$client_id]));
 		
 		foreach($result->response as $res)
 		{
@@ -647,12 +659,12 @@ class Itax
 	
 	function getClientGroups()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'client_groups');
+		return $this->apiCall("GET", $this->getEndpoint().'client_groups');
 	}
 	
 	function getDepartments()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'departments');
+		return $this->apiCall("GET", $this->getEndpoint().'departments');
 	}
 	
 	function getProjects($opts=[])
@@ -661,22 +673,27 @@ class Itax
 		
 		
 		
-		return $this->apiCall("GET", self::ENDPOINT.'projects'.$q);
+		return $this->apiCall("GET", $this->getEndpoint().'projects'.$q);
 	}
 	
 	function getTags()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'tags');
+		return $this->apiCall("GET", $this->getEndpoint().'tags');
 	}
 	
 	function getSupliers()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'supliers');
+		$args=[];
+		//$args['_DEBUG'] = 1;
+		//$args['per_page'] = '2000';
+		//$args['page'] = '2';
+		
+		return $this->apiCall("GET", $this->getEndpoint().'supliers', $args);
 	}
 	
 	function searchAny($groupname, $search=[])
 	{		
-		$result = $this->apiCall("GET", self::ENDPOINT.$groupname.'?'. http_build_query($search));
+		$result = $this->apiCall("GET", $this->getEndpoint().$groupname.'?'. http_build_query($search));
 		
 		return $result;
 	}
@@ -684,36 +701,43 @@ class Itax
 	
 	function getSalesTaxes()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'sales_taxes');
+		return $this->apiCall("GET", $this->getEndpoint().'sales_taxes');
 	}
 	
 	function getProducts($opts=[])
 	{
 		$q = $opts ? '?'.http_build_query($opts):'';
 		
-		return $this->apiCall("GET", self::ENDPOINT.'products'.$q);
+		return $this->apiCall("GET", $this->getEndpoint().'products'.$q);
 	}
 	
 	function getAny($name,$opts=[])
 	{
 		$q = $opts ? '?'.http_build_query($opts):'';
 		
-		return $this->apiCall("GET", self::ENDPOINT.$name.$q);
+		if($name=='salestaxes'){
+			$name="sales_taxes";
+		}
+		
+		
+		return $this->apiCall("GET", $this->getEndpoint().$name.$q);
 	}	
 	
 	
 	function getLocations()
 	{
-		return $this->apiCall("GET", self::ENDPOINT.'locations');
+		return $this->apiCall("GET", $this->getEndpoint().'locations');
 	}
 	
 	function getClients($opts=[])
 	{
 		$q = $opts ? '?'.http_build_query($opts):'';
 		
-		return $this->apiCall("GET", self::ENDPOINT.'clients'.$q);
+		return $this->apiCall("GET", $this->getEndpoint().'clients'.$q);
 	}	
 	
+	
+
 	
 	function getOptionsCached($args)
 	{
@@ -721,36 +745,12 @@ class Itax
 		$resp = [];
 		
 		$table = 'itax_lists_cache';
-		$groupname = $args['listname'];$groupname = $args['listname'];
+		$groupname = $args['listname'];$groupname = strtolower($args['listname']);
 		$groupcond = GW_DB::prepare_query(['`group`=?', $groupname]);
 		
 		
-		if(isset($args['ids']))
+		$renewCached = function() use (&$groupname, &$table, &$groupcond, &$resp)
 		{
-			$ids = json_decode($args['ids'], true);
-			$ids = (array)$ids;
-			
-			$opts = $this->db->fetch_assoc("SELECT id, name FROM `$table` WHERE ".$groupcond." AND ".GW_DB::inCondition('id', $ids));
-			
-			foreach($ids as $id){
-				if(!isset($opts[$id]))
-					$opts[$id] = "$id:id  - nerasta/nepasiekiama/ištrinta?";
-			}
-			
-			return ['options' => $opts];
-		}
-		
-		
-		//$resp['minus5min'] = date('Y-m-d H:i:s', strtotime('-'.$args['cachetime']));
-		//$resp['lastupdate'] = $last_update;
-		
-		
-		
-		if(date('Y-m-d H:i:s', strtotime('-'.$args['cachetime'])) > $last_update ){
-		
-			
-			//return $table;
-
 			$options = $this->getOptions($groupname);
 			$this->db->query("DELETE FROM `$table` WHERE $groupcond");
 
@@ -768,12 +768,52 @@ class Itax
 
 			$this->db->multi_insert($table,$rows);
 
-			
+
 			if($rows){//jei nieko negauta tai neisaugot last_update
 				$this->config->set('last_update/'.$args['listname'], date('Y-m-d H:i:s'));
 			}
+
+			$resp['cache_updated'] = 1;		
+		};
+		
+		
+		if(isset($args['ids']))
+		{
+			$ids = json_decode($args['ids'], true);
+			$ids = (array)$ids;
 			
-			$resp['cache_updated'] = 1;
+			// TEST IF RENEW---------------------------------------------
+			$opts = $this->db->fetch_assoc("SELECT id, name FROM `$table` WHERE ".$groupcond." AND ".GW_DB::inCondition('id', $ids));
+			
+			$renew = false;
+			
+			foreach($ids as $id){
+				if(!isset($opts[$id]))
+					$renew = true;
+			}
+			
+			if($renew)
+				$renewCached();
+			//END TEST IF RENEW---------------------------------------------
+			
+			$opts = $this->db->fetch_assoc("SELECT id, name FROM `$table` WHERE ".$groupcond." AND ".GW_DB::inCondition('id', $ids));
+			
+			foreach($ids as $id){
+				if(!isset($opts[$id]))
+					$opts[$id] = "$id:id  - nerasta/nepasiekiama/ištrinta?";
+			}
+			
+			return ['options' => $opts];
+		}
+		
+		
+		//$resp['minus5min'] = date('Y-m-d H:i:s', strtotime('-'.$args['cachetime']));
+		//$resp['lastupdate'] = $last_update;
+		
+		
+		
+		if(($args['renew']??false) || date('Y-m-d H:i:s', strtotime('-'.$args['cachetime'])) > $last_update ){
+			$renewCached();
 		}
 		
 		
@@ -808,15 +848,28 @@ class Itax
 	function getOptions($obj)
 	{
 		
-		if(method_exists($this, "get{$obj}")){
-			$response = $this->{"get".$obj}();
-		}else{
-			$response = $this->getAny($obj);
-		}
+		//if(method_exists($this, "get{$obj}")){
+		//	$response = $this->{"get".$obj}();
 		
+		$response = $this->getAny($obj, ['page'=>1]);
+			
 		$opts = [];
 		foreach($response->response as $row)
 			$opts[$row->id] = $row->name;
+		
+		
+		if((int)$response->pagination->pages > 1){
+			
+			for($page=2;$page<=(int)$response->pagination->pages;$page++){
+			
+				$response = $this->getAny($obj, ['page'=>$page]);
+				
+				foreach($response->response as $row)
+					$opts[$row->id] = $row->name;	
+			
+			}
+			
+		}
 		
 		return $opts;
 	}
@@ -878,7 +931,7 @@ class Itax
 		
 		$q = $opts ? '?'.http_build_query($opts):'';
 		
-		$result = $this->apiCall("GET", self::ENDPOINT.$objType. $q);
+		$result = $this->apiCall("GET", $this->getEndpoint().$objType. $q);
 		
 		//d::dumpas($result);
 		
@@ -927,7 +980,7 @@ class Itax
 			
 		}
 		
-		return $this->apiCall("DELETE", self::ENDPOINT.$objType.'/'.$id);
+		return $this->apiCall("DELETE", $this->getEndpoint().$objType.'/'.$id);
 	}
 	
 }
