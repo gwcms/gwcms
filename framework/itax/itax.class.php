@@ -983,4 +983,62 @@ class Itax
 		return $this->apiCall("DELETE", $this->getEndpoint().$objType.'/'.$id);
 	}
 	
+	
+	function saveGeneralJournal($general_joural)
+	{
+		
+		/*
+		 * test 
+		$attribs=[	
+			'date' => "2023-10-11",
+			'journable_type' => "Suplier",
+			'journable_id' => "168067",
+			'journal_balanceable_type' => "Suplier",
+			'journal_balanceable_id' => "30379",
+			'amount' => "61",
+			'currency' => "EUR",
+			'_destroy' => "false",
+			//'id' => "",
+			'due_date' => "2023-10-15",
+			'reference_number' => "",
+			'description' => "",
+			'document_number' => ""
+		];		
+
+			$data = [];
+
+
+		$general_joural['number']= "BZ+201111111";
+		$general_joural['name'] = "vardas+pabarde+GPM";
+		$general_joural['period_closing'] = "";
+		$general_joural['fc_closing'] = "";
+		$general_joural['department_id'] = "";
+		$general_joural['project_id'] = "";
+		$general_joural['posted'] = true;
+		$general_joural['general_journal_lines_attributes'] = [$attribs];
+		 
+		 */
+
+		$data['general_journal'] = $general_joural;
+		$data['_DEBUG'] = 1;
+		
+		
+		$url = self::ENDPOINT.'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
+		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $data);
+	
+		$result->postdata = $data;
+		/*
+		POST https://www.itax.lt/api/v1/clients
+		{  
+		   "client":{  
+		      "name":"Testas",
+		      "default_currency":"EUR",
+		      "payment_term":30,
+		      "all_tags":["Svarbu", "GPM"]
+}
+		}
+		 */	
+		return $result;		
+	}	
+	
 }
