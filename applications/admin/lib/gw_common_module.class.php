@@ -843,6 +843,8 @@ class GW_Common_Module extends GW_Module
 		}
 			
 		$cond = ($encap_fld ? GW_DB::escapeField($field, 'a') : $field). ' ';
+		
+		//d::ldump(['field'=>$field, 'compare_type'=>$compare_type, 'value'=>$value, 'opts'=>$opts]);
 				
 		switch ($compare_type) {
 			case 'LT':
@@ -854,12 +856,13 @@ class GW_Common_Module extends GW_Module
 			case 'NEQ':
 				$cond .= "!= $encapChr" . $value . "$encapChr";
 				break;
-			case 'INSTR':
-				$value = explode(",", $value);		
-				
 			case 'DATERANGE':
 				$value = explode(" - ", $value);	
-				return $cond." >= '{$value[0]}.' AND ".$cond." <= '{$value[1]}'";
+				return $cond." >= '{$value[0]}.' AND ".$cond." <= '{$value[1]}'";			
+			case 'INSTR':
+				$value = explode(",", $value);
+				
+				//specialiai break nededame kad pereitu i sekanti 'IN' case
 			case 'IN':
 				if(is_array($value))
 					$cond .= "IN ('" . implode("','", GW_DB::escape($value)) . "')";

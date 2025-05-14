@@ -798,6 +798,7 @@
 <![CDATA[>]]>
     </i>
     <i id="NEQ">≠</i>
+    <i id="INSTR">Value1,value2,...</i>
   </i>
   <i id="ITEM_CHANGE_INTERUPED">
     <lt>Duomenys pakeisti po formos atidarymo, įrašymas nutrauktas siekiant apsisaugoti nuo duomenų praradimo</lt>
