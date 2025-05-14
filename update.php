@@ -1,5 +1,6 @@
 <?php
 
+set_time_limit(300);
 
 include "init_basic.php";
 GW::s('MODULE_OR_CORE_DIR', __DIR__);

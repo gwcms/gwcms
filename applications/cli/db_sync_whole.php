@@ -86,7 +86,7 @@ if($params['recoverdb'] ?? false){
 	}
 
 	$t = new GW_Timer;
-	mypassthru("ssh $userhost $pcmd 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
+	mypassthru("ssh $userhost $pcmd 'cd /tmp && mysqldump --force --opt --add-drop-database $extra --host=$host --port=$port --user=$dbuser -p{$dbpass} $database  | gzip > $remotefile'");
 	out("----------Export-speed: {$t->stop()} secs----------");
 
 	$t = new GW_Timer;

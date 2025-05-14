@@ -71,7 +71,7 @@ class Image_Barcode_code128 extends Image_Barcode
 	 * the image along with the barcode text and display it to the beholder.
 	 *
 	 */
-	function draw($text, $imgtype = 'png')
+	function draw($text, $type = 'int25', $imgtype = 'png', $bSendToBrowser = true)
 	{
 
 		// We start with the Code128 Start Code character.  We
