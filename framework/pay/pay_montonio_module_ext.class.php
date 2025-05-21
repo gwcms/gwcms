@@ -54,6 +54,10 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		if($cfg->sandbox)
 			$return_args.="&sandbox=1";
 		
+		
+		$availcountries = ['lt'=>'lt', 'ee'=>'et', 'lv'=>'lv', 'pl'=>'pl'];
+		$ln = isset($availcountries[$this->app->ln]) ? $availcountries[$this->app->ln] : 'en';
+		
 		$payment_data = [
 			'amount'                           => $args->payprice,
 			'currency'                         => 'EUR',
@@ -63,7 +67,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			'merchant_notification_url'        => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=notify".$return_args,
 			'payment_information_unstructured' => $args->paytext,
 			//'preselected_aspsp'                => 'LHVBEE22',
-			'preselected_locale'               => 'lt',
+			'preselected_locale'               => $ln,
 			//'checkout_email'                   => 'vidmantas.work@gmail.com',
 			'exp'                              => time() + (60 * 10), 
 		];
