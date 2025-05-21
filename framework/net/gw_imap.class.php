@@ -272,28 +272,43 @@ class GW_Imap
 			$lastuid = $message->uid;
 			
 			$steps++;
+			
+			
 			$match = false;
-			
-			
 
 			foreach($rules as $ruleid => $rule)
 			{
-				if(isset($rule['subject'])){
-					if($rule['subject'][0]=='/'){
-						//pregmatch search
-						if($match = preg_match($rule['subject'], $message->subject) )
-							break;
-					}else{
-						//strpos search
-						if($match = strpos($message->subject, $rule['subject'])!==false)
-							break;
-						
+				$matches = [];
+				
+				foreach($rule as $type => $ruleval){
+					
+					switch($type){
+						case 'subject':
+							
+							if($ruleval[0]=='/'){
+								//pregmatch search
+								if($match0 = preg_match($ruleval, $message->subject) )
+									$matches[$type]=$match0;
+							}else{
+								//strpos search
+								if($match0 = strpos($message->subject, $ruleval)!==false)
+									$matches[$type]=$match0;
+
+							}							
+							
+						break;
+						case 'from':
+							if( $match0 = preg_match($ruleval, $message->from) )
+								$matches[$type]=$match0;
+						break;
 					}
 				}
-
-				if(isset($rule['from']))
-					if( $match = preg_match($rule['from'], $message->from) )
-						break;					
+				
+				
+				if(count($rule) == count($matches)){	
+					$match = true;
+					break;
+				}
 			}
 			
 			if(isset($_GET['verbose']))
@@ -301,7 +316,7 @@ class GW_Imap
 				    'mailid'=>$mailid, 
 				    'subject'=>$message->subject, 
 				    'from'=>$message->from, 
-				    'match'=>$match
+				    'matches'=>$matches
 				]));			
 
 			

@@ -1,5 +1,7 @@
 {include "default_open.tpl"}
 
+{$file=$item->file}
+{$filename=pathinfo($file->original_filename)}
 
 {if $item->content_cat=='image'}
 	{$thumbn_sz=800x600}
@@ -8,9 +10,9 @@
 {elseif $item->attachment->extension=='svg'}
 	<img src='{$app->sys_base}tools/download/{$item->attachment->key}?view=1' style="max-width: 600px;max-height:600px;">
 {elseif strpos($item->content_type,'pdf')!==false}
-	{$file=$item->file}
 	
-	{$filename=pathinfo($file->original_filename)}
+	
+	
 	{$title=$filename.filename|truncate:40}
 	{if $filename.extension}
 		{$title="`$title`.`$filename.extension`"}
@@ -24,10 +26,15 @@
 {elseif in_array($item->attachment->getType(),['mp3'])}
 	{$file=$item->attachment}
 	<audio id='audio' controls ><source src='{$app->sys_base}tools/download/{$file->key}?view=1' type='audio/mpeg'>Your browser does not support the audio element.</audio>
+{elseif in_array($filename.extension,[txt,json,dat])}
+	<textarea style='width:100%;height:80vh'>{$item->file->getContents()|escape}</textarea>
+{elseif in_array($filename.extension,[csv])}
+	<pre style='width:100%;height:80vh'>{$item->file->getContents()|escape}</pre>
 {else}
 	Unsupported type, contact vidmantas.norkus@gw.lt to implement
 	{d::ldump($item->toArray())}
 	{d::ldump($item->attachment->toArray())}
+	{d::ldump($filename)}
 
 {/if}
 
