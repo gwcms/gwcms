@@ -1,6 +1,6 @@
 {function breadcrumb_ico}
 	{if $item.iconclass}
-		{if strpos($item.iconclass,'material')!==false}<span class="materialico material-symbols-outlined">{str_replace(["material-","material"],'',$item.iconclass)}</span>
+		{if strpos($item.iconclass,'material')!==false}<span class="materialico material-symbols-outlined" translate="no">{str_replace(["material-","material"],'',$item.iconclass)}</span>
 	{else}<i class="{$item.iconclass}"></i>{/if}{/if}
 	
 {/function}

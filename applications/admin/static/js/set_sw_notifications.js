@@ -349,16 +349,16 @@ var GW_SW = {
 		if (!is_enabled_push && !can_enable_push) {
 			//GW_SW.log('Notifications cant run');
 			$('#subscribe_btn').css('color', 'red')
-			$('#subscribe_btn').html('<span class="material-symbols-outlined">notifications_off</span>')
+			$('#subscribe_btn').html('<span class="material-symbols-outlined"  translate="no">notifications_off</span>')
 		}else if(is_enabled_push && can_enable_push) {
 
-			$('#subscribe_btn').html('<span class="material-symbols-outlined">notifications</span>')
+			$('#subscribe_btn').html('<span class="material-symbols-outlined"  translate="no">notifications</span>')
 
 			$('#subscribe_btn').css('color', 'inherit');
 			GW_SW.log('Notifications ready');
 		}else if(!is_enabled_push && can_enable_push) {
 
-			$('#subscribe_btn').html('<span class="material-symbols-outlined">notifications_off</span>')
+			$('#subscribe_btn').html('<span class="material-symbols-outlined"  translate="no">notifications_off</span>')
 
 			$('#subscribe_btn').css('color', 'inherit');
 		}

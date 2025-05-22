@@ -15,7 +15,7 @@
                   <div class="input-group g-rounded-left-3">
                     <span class="input-group-prepend g-width-45">
                       <span class="input-group-text justify-content-center w-100 g-bg-transparent g-brd-gray-light-v3 g-color-gray-dark-v5">
-                        <span class="material-symbols-outlined">phone_android</span>
+                        <span class="material-symbols-outlined"  translate="no">phone_android</span>
                       </span>
                     </span>
                     <input name="phone" 

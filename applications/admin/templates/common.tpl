@@ -19,7 +19,7 @@
 	   {if $confirm}{$app->fh()->gw_link_confirm()}{/if}
 	   {if $onclick}onclick="{$onclick};return false"{/if} href="{$href|default:'#'}"
 	   {if $shift_button} onclick="if(event.shiftKey){ location.href=gw_navigator.url(this.href,{ 'shift_key':1 });return false}"; {/if}
-	   {if $newwindow}target="_blank"{/if}>{if $iconhtml}{$iconhtml}{/if}{if $iconclass}{if strpos($iconclass,'material ')!==false}<span style="font-size:20px !important" class="materialico material-symbols-outlined">{str_replace(material,'',$iconclass)}</span>{else}<i class="{$iconclass}"></i>{/if}{/if} <span class='alabel'>{$title}</span>
+{if $newwindow}target="_blank"{/if}>{if $iconhtml}{$iconhtml}{/if}{if $iconclass}{if strpos($iconclass,'material ')!==false}<span style="font-size:20px !important" class="materialico material-symbols-outlined" translate="no">{str_replace(material,'',$iconclass)}</span>{else}<i class="{$iconclass}"></i>{/if}{/if} <span class='alabel'>{$title}</span>
 		
 	</a>
 

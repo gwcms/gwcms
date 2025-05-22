@@ -9,7 +9,7 @@
 		notifications
 		</span>
 		*}
-		<span class="material-symbols-outlined">
+		<span class="material-symbols-outlined"  translate="no">
 		notifications_off
 		</span>
 	</a>
