@@ -280,7 +280,9 @@ class GW_Imap
 			{
 				$matches = [];
 				
-				foreach($rule as $type => $ruleval){
+					
+				
+				foreach($rule['inbox'] as $type => $ruleval){
 					
 					switch($type){
 						case 'subject':
@@ -305,7 +307,7 @@ class GW_Imap
 				}
 				
 				
-				if(count($rule) == count($matches)){	
+				if(count($rule['inbox']) == count($matches)){	
 					$match = true;
 					break;
 				}
@@ -357,6 +359,8 @@ class GW_Imap
 
 		sFinish:
 
+
+		//d::dumpas(['messages'=>$list, 'steps'=>$steps, 'lastuid'=>$lastuid]);	
 
 		return ['messages'=>$list, 'steps'=>$steps, 'lastuid'=>$lastuid];
 	}

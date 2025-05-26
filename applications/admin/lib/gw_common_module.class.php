@@ -1124,7 +1124,7 @@ class GW_Common_Module extends GW_Module
 			if(isset($this->list_config['pview']) && $this->list_config['pview'] instanceof GW_Adm_Page_View && $this->list_config['pview']->order){
 				$this->list_params['order'] = $this->list_config['pview']->order;
 			
-			}elseif (method_exists($this->model, 'getDefaultOrderBy')){
+			}elseif ($this->model && method_exists($this->model, 'getDefaultOrderBy')){
 				$this->list_params['order'] = $this->model->getDefaultOrderBy();
 			}
 		}

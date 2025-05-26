@@ -284,7 +284,16 @@
 					<i id="model">GW_Mail_Periodic</i>
 					<i id="iconclass">fa fa-clock-o</i>
 				</i>			
-			</i>			
+			</i>
+			<i id="inbox">
+				<i id="title">Inbox</i>
+				<i id="info">
+					<i id="model">gw_mail_inbox</i>
+
+					<i id="itemactions">1</i>
+					<i id="iconclass">material-storefront</i>
+				</i>
+			</i>						
 																																																																			
 		</i>
 	</i>
