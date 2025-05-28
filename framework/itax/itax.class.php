@@ -437,6 +437,30 @@ class Itax
 			}		
 		}
 		
+		
+		
+		if(isset($data['invoice_lines'])){
+			$invoicelines = $data['invoice_lines'];
+		}else{
+			$invoicelines = [
+					[
+						"product_id" => $data['product_id'],
+						"price" => $data['unit_price'],
+						"qty" => $data['quantity'],
+						"amount" => $data['price'],
+						"sales_tax_id" => $data['tax_id'],
+						"vat_amount" => $data['vat_amount'] ?? 0,
+						"total_amount" => $data['price'],
+						"description" => $data['description']
+					]
+				];
+			
+			if(isset($data['reverse_vat'])){
+				$invoicelines[0]['reverse_vat'] = 1;
+			}
+		}
+		
+		
 		//veikia su ryanair ir wizzair
 		$postdata = ['purchase'=>[
 			"date"=>$data['date'],
@@ -446,22 +470,17 @@ class Itax
 			"due_date" => isset($data['due_date']) ? $data['due_date'] : $data['date'],
 			"currency" => $data['currency'],
 			'department_id' => $data['department_id'],
-			"purch_inv_lines_attributes"=>[
-				[
-					"product_id" => $data['product_id'],
-					"price" => $data['unit_price'],
-					"qty" => $data['quantity'],
-					"amount" => $data['price'],
-					"sales_tax_id" => $data['tax_id'],
-					"vat_amount" => $data['vat_amount'] ?? 0,
-					"total_amount" => $data['price'],
-					"description" => $data['description']
-				]
-			],
+			"purch_inv_lines_attributes"=>$invoicelines,
 			//'is_paid' => isset($data['is_paid']) && $data['is_paid'],// nuo v2 nebeleidzia
 			'all_tags'=> isset($data['all_tags']) ? $data['all_tags'] : [],
 			'footer_message'=> isset($data['footer_message']) ? $data['footer_message'] : ''
 		]];
+		
+		
+		if(isset($data['location_id']))
+			$postdata['purchase']["location_id"] = $data['location_id'];		
+				
+		
 		
 		$pitm =& $postdata['purchase']['purch_inv_lines_attributes'][0];
 		

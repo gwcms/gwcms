@@ -37,6 +37,7 @@
 }
 
 {call e field=data type=code_json height="100px"}
+{call e field=processed type=bool}
 
 {capture append="footer_hidden"}
 <style>
@@ -44,4 +45,5 @@
 </style>
 {/capture}
 
-{include file="default_form_close.tpl"}
+{assign var="comments" value=1 scope=global}
+{include file="default_form_close.tpl" comments=1}

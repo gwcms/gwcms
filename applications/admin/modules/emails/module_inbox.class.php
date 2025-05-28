@@ -453,26 +453,29 @@ class Module_Inbox extends GW_Common_Module
 
 		$ruleid = $item->ruleid;
 		
-		$item->save();
-		
-		if(!$ruleid){
-			$this->setError("RuleID $method not avail");
-			goto sFinish;
-		}
+		$rules = $this->getRules();
 		
 		
 		
-		$method = "process$ruleid";
-		if(method_exists($this, $method)){
-			$this->$method($item);
-		}else{
-			$this->setError("RuleID $method not avail");
-		}
 		
-
+		if(isset($rules[$ruleid]['modpath'])){
 			
+			$url = 'admin/lt/'.$rules[$ruleid]['modpath']. '?'.http_build_query(['act'=>'doProcessMessage', 'id'=>$item->id]);
+			
+						
+			if(isset($_GET['shift_key'])){
+				header("Location: /$url&debug=1");
+				exit;
+			}else{
+				$url=Navigator::backgroundRequest($url);
+			}
+						
+			$this->setMessage("Passed request to $url");
+		}else{
+			$this->setError("Rule <b>$ruleid</b> is not available");
+		}
 		
-		$item->save();
+		
 		
 		/*
 		if($item->changed_fields)
