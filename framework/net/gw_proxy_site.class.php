@@ -19,8 +19,7 @@ class GW_Proxy_Site {
 
 	static function redirect($mirrorhost) 
 	{
-
-		$cnt=(int)file_get_contents($f=GW::s('DIR/TEMP').'botcount'.date('Y-m-d'));
+		$cnt=(int)(file_exists($f=GW::s('DIR/TEMP').'botcount'.date('Y-m-d')) ? file_get_contents($f) : 0);
 		file_put_contents($f, $cnt+1);
 		
 		/* Set it true for debugging. */

@@ -9,7 +9,9 @@ class GW_Bot_Detect
 		
 		return stripos($ua, 'bot')!==false  ||
 				stripos($ua, 'spider')!==false || 
-				stripos($ua, 'scrap')!==false;
+				stripos($ua, 'scrap')!==false ||
+				stripos($ua, 'crawler')!==false
+			;
 	}	
 	
 	static function process(){
