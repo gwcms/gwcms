@@ -486,7 +486,7 @@ class Itax
 		
 		//teztour su discount amount eina
 		if(isset($data['discount_amount'])){
-			$pitm['discount_amount'] = $data['discount_amount'];
+			$pitm['discount_amount'] = (float)$data['discount_amount'];
 			$pitm['amount'] -= $pitm['discount_amount'];
 			$pitm['total_amount'] = $pitm['amount'] + $pitm['vat_amount'];
 		}
@@ -1042,7 +1042,7 @@ class Itax
 		$data['_DEBUG'] = 1;
 		
 		
-		$url = self::ENDPOINT.'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
+		$url = $this->getEndpoint().'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
 		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $data);
 	
 		$result->postdata = $data;
