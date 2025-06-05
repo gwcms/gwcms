@@ -97,5 +97,31 @@ class GW_Misc_Helper {
 
 		return $result;
 	}
+	
+	
+	static function extractNameSurname($input) {
+		// Remove multiple spaces and trim the input
+		$input = preg_replace('/\s+/', ' ', trim($input));
+
+		// Split the input into parts (name and surname)
+		$parts = explode(' ', $input);
+
+		// If there's only one part, return as is
+		if (count($parts) == 1) {
+		    return $input;
+		}
+
+		// Extract the surname (last part) and the rest as names
+		$surname = array_pop($parts);
+		$names = implode(' ', $parts);
+
+		// Return the result as "surname names"
+		return [$names, $surname];
+	}	
+	
+	static function extractSurname($input) {
+		$tmp = self::extractNameSurname($input);
+		return is_array($tmp[1]) ? $tmp[1] : $tmp;
+	}		
 
 }

@@ -5,7 +5,9 @@ class Mime_Type_Helper
 
 	static function getByFilename($filename)
 	{
-
+		if(!file_exists($filename))
+			return false;
+		
 		$mime_types = array(
 		    'txt' => 'text/plain',
 		    'htm' => 'text/html',
