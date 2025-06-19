@@ -66,6 +66,15 @@ require(["ckeditor"], function() {
 	 config.entities = false;
 	 config.autoParagraph = false;
 	 config.coreStyles_bold = { element: 'b', overrides: 'strong' };
+	 
+	config.stylesSet = [
+	    { name: 'Top Border', element: 'td', attributes: { 'style': 'border-top: 1px solid black;' } },
+	    { name: 'Bottom Border', element: 'td', attributes: { 'style': 'border-bottom: 1px solid black;' } },
+	    { name: 'Left Border', element: 'td', attributes: { 'style': 'border-left: 1px solid black;' } },
+	    { name: 'Right Border', element: 'td', attributes: { 'style': 'border-right: 1px solid black;' } }
+	    // Add more as needed
+	];
+
 	 config.removePlugins = 'format,autosave';
 	 //https://docs.ckeditor.com/ckeditor4/latest/guide/dev_file_browser_api.html
 
