@@ -50,7 +50,11 @@
 				<div class="col g-px-5 g-mb-10">
 
 					<button class="btn btn-block u-btn-darkgray g-font-size-12 text-uppercase g-py-15 g-px-25 " disabled="disabled" style="cursor: not-allowed">
-						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+						{if $item->free}
+							{GW::ln('/m/TAKE_FOR_FREE')}
+						{else}
+							{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+						{/if}
 					</button>
 				</div>	
 					<br/>
@@ -75,9 +79,13 @@
 			{else}
 
 				<div class="col g-px-5 g-mb-10">
-
+					
 					<button class="btn btn-block u-btn-primary g-font-size-12 text-uppercase g-py-15 g-px-25">
-						{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+						{if $item->free}
+							{GW::ln('/m/TAKE_FOR_FREE')}
+						{else}
+							{GW::ln('/M/SHOP/ADD_TO')} {GW::ln('/M/SHOP/CART',[l=>gal,c=>1])} <i class="align-middle ml-2 icon-finance-100 u-line-icon-pro"></i>
+						{/if}
 					</button>
 				</div>
 			{/if}
@@ -273,7 +281,9 @@
 		{if ($item->mod_count && !$active_mod) || ($modifications_subs && !$smarty.get.smodid)}
 
 				<span class="g-color-black">
-				{if $modifications_pricerange.0 != $modifications_pricerange.1} 
+				{if $item->free}
+					{GW::ln('/m/FREE')}
+				{elseif $modifications_pricerange.0 != $modifications_pricerange.1} 
 					{if GW::s('PROJECT_NAME') == 'drpaulclayton'}
 						{GW::ln('/m/TO_SEE_PRICE_PICK_MOD')}
 					{else}
@@ -284,12 +294,14 @@
 				{/if}				
 				</span>
 		{else}
-		
-			{if $item->oldprice > 0}
-				<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-16">{$item->oldprice} &euro;</s>
+			{if $item->free}
+				<span class="g-color-red g-font-weight-500 g-font-size-30 mr-2">{GW::ln('/m/FREE')}</span>
+			{else}
+				{if $item->oldprice > 0}
+					<s class="g-color-gray-dark-v4 g-font-weight-500 g-font-size-16">{$item->oldprice} &euro;</s>
+				{/if}
+				<span class="{if $item->oldprice > 0}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
 			{/if}
-			<span class="{if $item->oldprice > 0}g-color-red{else}g-color-black{/if} g-font-weight-500 g-font-size-30 mr-2">{$item->price} &euro;</span>
-
 
 
 

@@ -618,11 +618,22 @@ class Module_Shop extends GW_Public_Module
 		}
 		////// KITAS SELLERIS-------------------------------------------
 		
-		
+		if($item->free)
+		{
+			$cart = GW_Order_Group::singleton()->createNewObject(['user_id'=>$this->app->user->id]);
+			$cart->open = 0;
+			$cart->payment_status = 0;
+			$cart->active = 1;
+			$cart->insert();			
+		}
 	
 				
+		
 		$payprice = $item->calcPrice($cartvals['qty']);
 		
+		if($item->free){
+			$payprice = 0;
+		}
 
 		//nebepridet pakartotinai
 		$cartitem = $cart->getItem(Shop_Products::singleton()->createNewObject($cartvals['id'])) ?: new GW_Order_Item;
@@ -668,6 +679,7 @@ class Module_Shop extends GW_Public_Module
 		if($item->parent_id){
 			$vals['context_obj_type'] = 'shop_products';
 			$vals['context_obj_id'] = $item->parent_id;
+			$vals['invoice_line2'] = $item->title; //nes is admin kitaip title prideda
 		}
 		
 		$cartitem->setValues($vals);
@@ -689,11 +701,30 @@ class Module_Shop extends GW_Public_Module
 			$this->app->jump('direct/orders/orders/cart', $args);
 		}else{
 		
-			$this->setMessage([
+			if($item->free){
+				
+				$this->setMessage([
+			    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/FREE_RESERVATION_APPROVED'),
+			    'type'=>0,
+			    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_ORDER'), 'url'=>$this->app->buildUri('direct/orders/orders', ['id'=>$cart->id])]]
+				]);	
+				
+				$args = ['id'=>$cart->id];		
+				$args['paytest']=1;
+				$args['rcv_amount'] = 0;
+
+
+				$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));				
+				
+			}else{
+				$this->setMessage([
 			    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/ADDED_TO').' '.GW::ln('/M/SHOP/CART', ['l'=>'gal','c'=>1]),
 			    'type'=>0,
 			    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_CART'), 'url'=>$this->app->buildUri('direct/orders/orders/cart')]]
-				]);
+				]);				
+			}
+			
+			
 		
 
 			//d::dumpas('aaa');
