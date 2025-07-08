@@ -234,6 +234,10 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			case 'AFTER_SAVE':
 				$this->saveCompositeItems($context_data);
 			break;
+			case 'AFTER_CONSTRUCT':
+				$this->ignore_fields['delete_composite']=1;
+			break;
+			
 		}
 
 		parent::EventHandler($event, $context_data);
