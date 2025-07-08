@@ -1,2 +1,2 @@
 
-{include file="{$smarty.current_dir}/inputmask.tpl" mask="'mask': '99:99'" type=text}
+{include file="{$smarty.current_dir}/inputmask.tpl" mask="'mask': '{$mask|default:'99:99'}'" type=text}

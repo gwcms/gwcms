@@ -214,6 +214,7 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], $ln);
+		$v['PAYD'] = $item->payd;
 
 		$v['COMPANY'] = $item->company;
 		$v['COMPANY_ID'] = $item->company_code;

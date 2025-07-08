@@ -190,6 +190,17 @@ class GW_Generic_Extended
 		return $rez;
 	}
 	
+	function preloadMultiObj($objids)
+	{
+		$db = $this->getDB();
+		$own_tbl_cond = $this->own_table ? "own_table = '".GW_DB::escape($this->own_table)."' AND " : '';
+		
+	
+		$rez = $db->fetch_assoc(["SELECT owner_id,`key`,`value` FROM {$this->table} WHERE $own_tbl_cond ".GW_DB::inCondition('owner_id', $objids), $this->owner_id]);
+		
+		return $rez;
+	}
+	
 	function findOwner($cond)
 	{
 		$db = $this->getDB();
