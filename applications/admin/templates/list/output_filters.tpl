@@ -130,10 +130,21 @@
 
 	
 {function name=dl_output_filters_dynfieldoptions}
-	
-		{$class=$dynfieldopts[$field]}
-		{$obj=$options[$class][$item->$field]}
-		<span title="id: {$obj->id}">{$obj->title}</span>
+	{$class=$dynfieldopts[$field]}
+	{if $item->$field}
+		{if is_numeric($item->$field)}			
+			{$obj=$options[$class][$item->$field]}
+			<span title="id: {$obj->id}">{$obj->title}</span>
+		{else}
+			{$ids=json_decode($item->$field)}
+			{if is_array($ids)}
+				{foreach $ids as $id}
+					{$obj=$options[$class][$id]}
+					<span title="id: {$obj->id}">{$obj->title}</span>
+				{/foreach}
+			{/if}
+		{/if}
+	{/if}
 		
 {/function}	
 

@@ -108,8 +108,11 @@ class Module_Module_Fields extends GW_Common_Module
 		switch($item->inp_type){
 			
 			case 'date':
-				$type = "timestamp";
+				$type = "date";
 			break;
+			case 'datetime':
+				$type = "timestamp";
+			break;		
 			case 'bool':
 				$type = "tinyint";
 			break;

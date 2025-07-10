@@ -3894,9 +3894,10 @@ class GW_Common_Module extends GW_Module
 		$dynfieldsopts = [];
 		
 		foreach($this->mod_fields as $field){
-			if($field->inp_type=="select_ajax"){
+			if($field->inp_type=="select_ajax" || $field->inp_type=="multiselect_ajax"){
 				$sources[$field->modpath][] = $field->fieldname;
-			}	
+			}
+			
 			
 			$this->dynamicFieldTitles[$field->fieldname] = $field->title;
 
@@ -3920,9 +3921,22 @@ class GW_Common_Module extends GW_Module
 		
 		foreach($list as $item){
 			foreach($dynfieldsopts as $field => $class)
-				if($item->$field)
-					$dynopts[$class][$item->$field]=1;
+				if($item->$field){
+					if(!is_numeric($item->$field)){ //multiselect_ajax bus ir su json_encode koger
+						$ids = json_decode($item->$field);
+						if(is_array($ids))
+							foreach($ids as $id)
+								$dynopts[$class][$id]=1;
+					}else{
+						$dynopts[$class][$item->$field]=1;
+					}
+					
+				}
 		}
+		
+		
+		
+		
 		
 		foreach($dynopts as $class => $ids){
 			$ids = array_keys($ids);

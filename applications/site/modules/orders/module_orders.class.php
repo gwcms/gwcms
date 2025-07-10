@@ -191,7 +191,7 @@ class Module_Orders extends GW_Public_Module
 		$order->use_lang = $this->app->ln;
 		$order->updateChanged();
 		
-		
+
 		
 		if($type=='paysera'){
 			$this->doPayseraPay($args);		

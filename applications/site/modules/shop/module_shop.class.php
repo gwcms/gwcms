@@ -626,9 +626,9 @@ class Module_Shop extends GW_Public_Module
 			$cart->active = 1;
 			$cart->insert();			
 		}
+		
 	
 				
-		
 		$payprice = $item->calcPrice($cartvals['qty']);
 		
 		if($item->free){
@@ -703,7 +703,7 @@ class Module_Shop extends GW_Public_Module
 		
 			if($item->free){
 				
-				$this->setMessage([
+			$this->setMessage([
 			    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/FREE_RESERVATION_APPROVED'),
 			    'type'=>0,
 			    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_ORDER'), 'url'=>$this->app->buildUri('direct/orders/orders', ['id'=>$cart->id])]]
@@ -721,10 +721,10 @@ class Module_Shop extends GW_Public_Module
 			    'text'=>'<b>'.$item->title.'</b> '.GW::ln('/M/SHOP/ADDED_TO').' '.GW::ln('/M/SHOP/CART', ['l'=>'gal','c'=>1]),
 			    'type'=>0,
 			    'buttons'=>[['title'=>'<i class="fa fa-shopping-cart"></i> '.GW::ln('/m/VIEW_CART'), 'url'=>$this->app->buildUri('direct/orders/orders/cart')]]
-				]);				
+				]);
 			}
-			
-			
+		
+
 		
 
 			//d::dumpas('aaa');
