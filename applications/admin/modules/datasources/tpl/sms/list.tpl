@@ -17,13 +17,16 @@
 	
 	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2,modactions]}		
 	
-	{$dl_actions=['edit','send']}
+
 	
 	{$dl_actions=[edit]}
 	
 	{if $m->write_permission}
 		{$dl_actions[]=send}
+		{$dl_actions[]=ext_actions}
 	{/if}
+	
+	
 	
 	{function name=dl_actions_send}
 		{if $item->status==7}
