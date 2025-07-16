@@ -3,6 +3,8 @@
 class BulkGateSMSApi {
 
 	private $apiUrl = "https://portal.bulkgate.com/api/1.0/simple/transactional";
+	//private $apiUrl = "http://1.voro.lt/portalhotfix.php";
+	
 	private $appId;
 	private $appToken;
 
