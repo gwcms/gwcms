@@ -139,6 +139,44 @@
 {/function}		
 
 
+{function name=display_site}
+	{$image=$site->favico}
+	{if $image}
+		<img src='{$app->sys_base}tools/imga/{$image->id}?size=20x20'> 
+	{else}
+		<i style='font-size:20px;color:silver' class='fa fa-sitemap'></i>
+	{/if}
+	
+	<span class="alabel">{$site->title}</span>
+{/function}
+
+{function name=do_toolbar_buttons_sitespicker}
+	{$current=$options.sites[$m->filters.site_id]}
+		<div class="btn-group">
+
+		<a type="button" data-toggle="dropdown" class="gwtoolbarbtn btn btn-default btn-active-dark dropdown-toggle dropdown-toggle-icon" aria-expanded="false">
+		    <i class="fa fa-angle-down"></i> 
+		    
+		  	
+		    {if $current}
+			   {call display_site site=$current} 
+		    {else}
+			     <i style='font-size:20px;color:silver' class='fa fa-sitemap'></i>
+	            {/if}
+		</a>
+		<ul class="dropdown-menu">
+			
+		{foreach $options.sites as $id => $site}
+		<li>
+			<a class="gwtoolbarbtn " href="/admin/lt/articles/articles?site_id={$site->id}">
+				{call display_site}
+			</a>
+		</li>
+		{/foreach}			
+		</ul>
+	    </div>	
+{/function}	
+
 
 {function name=do_display_toolbar_buttons}
 	{if $do_toolbar_buttons}

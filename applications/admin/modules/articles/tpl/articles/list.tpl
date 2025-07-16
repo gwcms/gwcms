@@ -1,4 +1,4 @@
-{extends file="default_list.tpl"}
+	{extends file="default_list.tpl"}
 
 
 {block name="init"}
@@ -32,6 +32,9 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[dialogconf,print]}	
 	{$do_toolbar_buttons_hidden[] = dialogconf2}	
+	
+	{$do_toolbar_buttons[]=sitespicker}	
+	
 	{$do_toolbar_buttons[] = search}	
 	
 	
@@ -41,5 +44,14 @@
 	
 {$dl_checklist_enabled=1}
 {$dl_cl_actions=[dialogremove]}	
+
+
+
+
+
+
+
+
+
 
 {/block}

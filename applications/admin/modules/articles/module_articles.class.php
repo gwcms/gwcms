@@ -40,6 +40,9 @@ class Module_Articles extends GW_Common_Module
 	function __eventAfterList(&$list)
 	{
 		
+		
+		
+		
 	}
 
 	

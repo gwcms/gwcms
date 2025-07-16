@@ -4032,6 +4032,7 @@ class GW_Common_Module extends GW_Module
 		}	
 		
 		$this->options['site_id'] = GW_Site::singleton()->getOptions($this->app->ln);	
+		$this->options['sites'] = GW_Site::singleton()->findAll('active=1',['key_field'=>'id']);
 		$this->options['site_map_id_key'] = GW_Site::singleton()->getOptionsKey();		
 		
 	}
