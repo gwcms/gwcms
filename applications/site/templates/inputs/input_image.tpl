@@ -22,10 +22,10 @@
 	{$thumbsize=[120,120]}
 {/if}
 
-{if !$minres}
+{if !$minres && $item}
 	{$minres=$item->getImageMinSize($field)}
 {/if}
-{if !$maxres}
+{if !$maxres && $item}
 	{$maxres=$item->getImageMaxSize($field)}
 {/if}	
 {if !$extra_params}
