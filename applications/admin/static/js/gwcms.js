@@ -177,6 +177,19 @@ var gw_navigator = {
 
 		document.body.appendChild(form);
 		form.submit();
+	},
+	
+	serializeForm: function(baseurl,form){
+		var formvals=$(form).serializeArray();
+		console.log(formvals);
+		
+		var args = {};
+		for(var k in formvals){
+			args[formvals[k]['name']] = formvals[k]['value'];
+		}
+		
+		//console.log()
+		return gw_navigator.url(baseurl, args);
 	}
 }
 

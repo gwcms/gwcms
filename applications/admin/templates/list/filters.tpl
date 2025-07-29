@@ -42,6 +42,9 @@
 		
 		{if $m->list_params.filters}
 			<a class="btn btn-default iframeopen float-right" href="{$m->buildUri(false,[act=>doCreatePageView,clean=>2])}"><i class="fa fa-floppy-o" title="{GW::l('/g/CREATE_NEW_VIEW')}"></i></a>
+			<a class="btn btn-default float-right" onclick="copyTextToClipboard(gw_navigator.serializeForm('{$m->buildUri(false,[],[absolute=>1])}','#gwFiltersForm'));return false" href="#">
+				<i class="fa fa-share-alt" aria-hidden="true" title="Sukurti nuorodą dalinimuisi"></i></a>			
+			
 		{/if}
 		<br>
 </div>
