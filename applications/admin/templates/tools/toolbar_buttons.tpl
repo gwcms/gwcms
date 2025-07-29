@@ -168,7 +168,7 @@
 			
 		{foreach $options.sites as $id => $site}
 		<li>
-			<a class="gwtoolbarbtn " href="/admin/lt/articles/articles?site_id={$site->id}">
+			<a class="gwtoolbarbtn " href="{$m->buildUri(false, [site_id=>$site->id])}">
 				{call display_site}
 			</a>
 		</li>

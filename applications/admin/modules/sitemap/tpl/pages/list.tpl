@@ -21,7 +21,10 @@
 	
 	
 	
-	{$do_toolbar_buttons[] = hidden}	
+	{$do_toolbar_buttons[] = hidden}
+	
+	{$do_toolbar_buttons[]=sitespicker}	
+		
 	{$do_toolbar_buttons[] = search}
 	{$do_toolbar_buttons_hidden=[dialogconf,importexport,tree,print,fixpaths]}	
 	

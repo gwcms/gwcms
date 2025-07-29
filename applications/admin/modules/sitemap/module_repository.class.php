@@ -36,7 +36,8 @@ class Module_Repository extends GW_Common_Module {
 		return in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']);
 	}
 
-	function viewFilesList() {
+	function viewFilesList() 
+	{
 		$dir = $_GET['dir'];
 		$dir = str_replace('../', '', $dir);
 		$root = GW::s('DIR/REPOSITORY');
