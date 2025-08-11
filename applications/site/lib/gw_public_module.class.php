@@ -532,6 +532,7 @@ class GW_Public_Module {
 		
 		//d::ldump($_FILES);
 		//d::dumpas($item);
+		$proclog = [];
 
 		foreach ($_FILES as $name => $data) {
 			//leisti pdf uploadint
@@ -549,7 +550,8 @@ class GW_Public_Module {
 				
 
 				copy($data['tmp_name'], $newpdf);
-				$out = shell_exec($cmd = "convert -density 150 $newpdf $newim");
+				$out = shell_exec($cmd = "convert -density 150 $newpdf $newim 2>&1");
+				$proclog[] = $out;
 				
 				file_put_contents($log, $cmd."\n\n".$out);
 				
@@ -576,7 +578,12 @@ class GW_Public_Module {
 					}
 				}
 				
-				die(json_encode(['error' => implode(', ', $item->errors)]));
+				$inf = ['error' => implode(', ', $item->errors)];
+				
+				if($this->isDebugMode())
+					$inf['processlog']=$proclog;
+					
+				die(json_encode($inf));
 			} else {
 				$item->save();	
 
@@ -932,5 +939,10 @@ class GW_Public_Module {
 			}
 		}
 	}	
+	
+	function isDebugMode()
+	{
+		return GW::s('DEVELOPER_PRESENT') && $this->app->sess('debug');
+	}
 	
 }
