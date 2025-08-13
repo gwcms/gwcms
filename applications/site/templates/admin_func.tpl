@@ -1,4 +1,4 @@
-{if ($app->user && $app->user->is_admin) || GW::$devel_debug || GW::s('DEVELOPER_PRESENT')}
+{if ($app->user && $app->user->is_admin) || GW::$devel_debug || GW::s('DEVELOPER_PRESENT')}	
         <style>
                 .lnresulthighl{ background-color: brown !important; color: white !important; }
                 .transover{ background-color: blue !important; }

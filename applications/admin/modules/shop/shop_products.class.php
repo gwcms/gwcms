@@ -94,17 +94,18 @@ class Shop_Products extends GW_Composite_Data_Object
 		
 		$resp = ['qty_prev'=>$qty_before, 'qty_after'=>$this->qty];
 		
+		$ln = $order->use_lang ?: 'lt';
 		//$this->modval("after_buy_email_tpl")
 		if($this->modval("after_buy_email_tpl") ){
-			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyEmail&id='.$orderitem->id);
+			$url=Navigator::backgroundRequest('admin/'.$ln.'/shop/products?act=doAfterBuyEmail&id='.$orderitem->id);
 			$resp['after_buy_email_act'] = $url;
 		}
 		if($this->modval("executor_after_buy_email_tpl") ){
-			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyExecutorEmail&id='.$orderitem->id);
+			$url=Navigator::backgroundRequest('admin/'.$ln.'/shop/products?act=doAfterBuyExecutorEmail&id='.$orderitem->id);
 			$resp['after_buy_executor_email_act'] = $url;
 		}
 		if($this->modval("notify_admin") ){
-			$url=Navigator::backgroundRequest('admin/'.$order->use_lang.'/shop/products?act=doAfterBuyAdminEmail&id='.$orderitem->id);
+			$url=Navigator::backgroundRequest('admin/'.$ln.'/shop/products?act=doAfterBuyAdminEmail&id='.$orderitem->id);
 			$resp['after_buy_admin_email_act'] = $url;
 		}
 		
