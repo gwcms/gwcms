@@ -12,7 +12,7 @@
 		{if $title}title="{$title|escape}"{/if}
 		>{if $iconclass}
 			{if strpos($iconclass,'material')!==false}<span class="materialico material-symbols-outlined"  translate="no">{str_replace(["material-","material"],'',$iconclass)}</span>
-			{else}<i class="{$iconclass}"></i>{/if}{/if}{if $caption}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
+			{else}<i class="{$iconclass}"></i>{/if}{/if}{if $caption || $caption==="0"}<span {if $smallcap}class="gwactcapsmall"{/if}>{$caption}</span>{/if}</a>
 	{if $addlitag}</li>{/if}
 {/function}
 
