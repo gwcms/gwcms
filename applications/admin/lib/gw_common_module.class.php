@@ -3217,9 +3217,10 @@ class GW_Common_Module extends GW_Module
 		$form['fields']['value'] = $cfg['inputs'][ $field ] ?? ['type'=>'text'];
 		$form['fields']['value']['required']=1;
 			
+		$form['fields']['value']['hidden_note'] = "būtina užpildyti / jei norėtumėte nuimti vertę naudokyte spec, kodą #empty#";
 		
 		
-		if(!($answers=$this->prompt($form, GW::l('/g/COLUMN_SET_VALUE').' '.($field ? $this->fieldTitle($field) :'') )))
+		if(!($answers=$this->prompt($form, GW::l('/g/COLUMN_SET_VALUE').($field ? $this->fieldTitle($field) :'') )))
 			return false;			
 		
 		
@@ -3234,7 +3235,11 @@ class GW_Common_Module extends GW_Module
 		
 		$changeinf = [];
 		
-		$list = $vars['list'];		
+		$list = $vars['list'];	
+		
+		
+		if($answers['value']==="#empty#")
+				$answers['value']="";
 		
 		
 		$changeinf = [];

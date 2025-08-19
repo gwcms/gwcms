@@ -35,7 +35,7 @@
 {call e field="active" type=bool}
 {call e field="public" type=bool}
 
-{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,i18n,size] options_fix=1}
+{call e field="selectcfg" type=multiselect options=[hidden_note,note,placeholder,i18n,size] options_fix=1 value_format=json1}
 
 
 <script>

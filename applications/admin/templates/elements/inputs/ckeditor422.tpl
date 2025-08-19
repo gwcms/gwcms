@@ -80,6 +80,14 @@ require(["ckeditor422"], function() {
 	 config.basicEntities = false;
 	 config.entities_greek = false;
 	 config.entities_latin = false;
+	 
+	{*nes stiliaus taga isima*}
+	 
+	 
+	{if $abspath} {*99% kad bus el laiskam ar pan tada leist head style ir tt elemetus*}
+		config.allowedContent = true;
+		config.fullPage = true;
+	{/if}
 
 	 config.autoParagraph = false;
 	 config.coreStyles_bold = { element: 'b', overrides: 'strong' };

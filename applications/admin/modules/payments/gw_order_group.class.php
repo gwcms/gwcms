@@ -62,6 +62,7 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		//$this->amount_total = $this->amount_items + $this->amount_shipping;
 		$this->amount_total = $this->amount_shipping + $this->amount_items - $this->amount_coupon;
 		$this->amount_discount = $discount_total;
+		
 
 		$this->itmcnt = count($this->items);
 		$this->updateChanged();

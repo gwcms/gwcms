@@ -27,7 +27,7 @@
 	
 	{$fields_config.fields.deliverable=[type=>bool]}
 	{$fields_config.fields.expires=[type=>text]}
-	
+	{$fields_config.fields.discount=[type=>text]}
 {/if}
 
 {if $smarty.get.shift_key && $app->user->isRoot()}

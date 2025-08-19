@@ -130,6 +130,9 @@ class Module_OrderGroups_Mails extends GW_Module_Extension
 		if($failed)
 			$this->setErrors("Nepavyko išsiųsti: ". htmlspecialchars(implode('; ', $failed)));
 		
+		
+		Navigator::backgroundRequest('admin/lt/emails/email_queue?act=doSendQueue');
+		
 		$this->jump();
 	}
 	

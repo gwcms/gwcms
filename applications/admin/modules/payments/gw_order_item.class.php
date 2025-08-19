@@ -63,6 +63,13 @@ class GW_Order_Item extends GW_Composite_Data_Object
 				if(!$this->invoice_line2)
 					$this->invoice_line2 = $this->invoice_line;
 			break;
+			case 'AFTER_SAVE':
+			
+				if($this->order instanceof GW_Order_Group) {
+					$this->order->fireEvent('BEFORE_CHANGES');
+					$this->order->updateTotal();
+				}
+			break;
 			
 
 		}
