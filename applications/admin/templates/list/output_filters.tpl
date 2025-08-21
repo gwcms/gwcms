@@ -113,7 +113,7 @@
 		{*kai ne pagal id laukeli*}
 		{if isset($cfg.map)}{$filterfield=$cfg.map.0}{/if}
 		
-		{list_item_action_m href="{str_replace(['%ID%', '%25ID%25'],$item->$filterfield,$cfg.url)}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]|default:0}"}
+		{list_item_action_m href="{str_replace(['%ITEMID%', '%25ITEMID%25'],$item->id, str_replace(['%ID%', '%25ID%25'],$item->$filterfield,$cfg.url))}" action_addclass="badge {$cfg.bg|default:'bg-bro'} iframe-under-tr" title="{$cfg.title}" caption="{$counts[$key][$item->id]|default:0}"}
 	{/if}
 {/function}
 

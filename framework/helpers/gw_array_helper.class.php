@@ -382,4 +382,23 @@ class GW_Array_Helper
 
 		return $return;
 	}
+	
+	// 1=>a 2=>a 3=>b to flip into a=>[1,2] 3=>b
+	
+	//https://chatgpt.com/share/68a734d7-1d7c-800d-a1a6-24fdfdfbbbfa
+	static function array_grouped_flip(array $input): array {
+	    $flipped = [];
+	    foreach ($input as $key => $value) {
+		if (!isset($flipped[$value])) {
+		    $flipped[$value] = $key;
+		} else {
+		    // If first entry is a single value, convert it to array
+		    if (!is_array($flipped[$value])) {
+			$flipped[$value] = [$flipped[$value]];
+		    }
+		    $flipped[$value][] = $key;
+		}
+	    }
+	    return $flipped;
+	}	
 }

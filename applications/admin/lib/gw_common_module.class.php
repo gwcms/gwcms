@@ -3851,6 +3851,8 @@ class GW_Common_Module extends GW_Module
 		return $title;
 	}	
 	
+	
+		
 	function addRelCount(&$ids, $cfg)
 	{
 		if(!isset($cfg['nocount'])){
@@ -3858,24 +3860,48 @@ class GW_Common_Module extends GW_Module
 
 			$obj = $this->getModelFromPath($cfg['modpath']);
 
-			$cond = GW_DB::prepare_query(GW_DB::inCondition($cfg['field'], $ids));
+			$ids = array_filter($ids);
+			if(!$ids)
+				return false;
+			
+			//email kai tikrina tada yra tekstinis laukas jau
+			
+			$cond = GW_DB::prepare_query(GW_DB::inConditionstr($cfg['field'], $ids));
 			
 			if($cfg['andcond'] ?? false){
 				$cond .= " AND ".$cfg['andcond']; 
 			}
 
 			$counts = $obj::singleton()->countGrouped($cfg['field'], $cond);
+			
+			//d::ldump($cond);
 
 			//pagal telefona rasti sms i ids paduodame asociatyvu masyva [id1 => tel1, id2=> tel2]
 			if($cfg['map'] ?? false){
 				$counts0 = $counts;
 				$counts = [];
 				
-				$ids_flipped = array_flip(array_filter($ids));
+				
+				foreach($ids as $id)
+				
+				
+				//$ids_flipped = array_flip(array_filter($ids));
+				$ids_flipped = GW_Array_Helper::array_grouped_flip($ids);
+				
+				//d::ldump([$ids,$ids_flipped, GW_Array_Helper::array_grouped_flip($ids), $counts0]);
 				
 				foreach($counts0 as $countid => $count)
-					if(isset($ids_flipped[$countid]))
-						$counts[  $ids_flipped[$countid] ]  = $count;
+					if(isset($ids_flipped[$countid])){
+						if(is_array($ids_flipped[$countid])){
+							
+							foreach($ids_flipped[$countid] as $id){
+								$counts[ $id ]  = $count;
+							}
+						}else{
+							//d::ldump
+							$counts[  $ids_flipped[$countid] ]  = $count;
+						}
+					}
 			}
 
 			$this->tpl_vars['counts'][ $cfg['modpath'] ] = $counts;	
