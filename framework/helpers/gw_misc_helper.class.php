@@ -121,7 +121,8 @@ class GW_Misc_Helper {
 	
 	static function extractSurname($input) {
 		$tmp = self::extractNameSurname($input);
-		return is_array($tmp[1]) ? $tmp[1] : $tmp;
+		
+		return is_array($tmp) ? $tmp[1] : $tmp;
 	}		
 
 }
