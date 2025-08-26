@@ -11,6 +11,9 @@ class Diary_Entry extends GW_Composite_Data_Object
 	var $calculate_fields = Array('child_count'=>1, 'path'=>'getPath', 'title'=>1);
 	var $default_order = 'type DESC, time DESC';		
 	
+	public $ownerkey = 'todo/items';
+	public $extensions = ['attachments'=>1];	
+	
 	function config()
 	{
 		static $cache;

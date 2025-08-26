@@ -25,4 +25,12 @@
 
 
 
+{call e field=attachments 
+	type=attachments 
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
+	preview=[thumb=>'50x50']
+}
+
+
+
 {include file="default_form_close.tpl"}
