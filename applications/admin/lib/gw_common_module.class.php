@@ -2771,7 +2771,9 @@ class GW_Common_Module extends GW_Module
 		
 		if($method=='get'){
 			$src =& $_GET;
-		}else{
+		}elseif($method=='any'){
+			$src =& $_REQUEST;
+		}elseif($method=='post'){
 			$src =& $_POST;
 		}
 		

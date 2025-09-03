@@ -30,6 +30,12 @@
 			parent.window.$('#gwDialogConfiFrm').css('width',"100%")
 		</script>
 	
+		
+		
 
-
+copyfriendly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		headversion:
+		<textarea>{$headversion|escape}</textarea>
+		pasversion
+		<textarea>{$pastversion|escape}</textarea>
 

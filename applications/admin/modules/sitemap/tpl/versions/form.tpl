@@ -28,6 +28,13 @@
 			parent.window.$('.modal-dialog').css('width',"95%")
 			parent.window.$('#gwDialogConfiFrm').css('width',"100%")
 		</script>
+		
+		
+		copyfriendly<br>
+		headversion:
+		<textarea>{$headversion|escape}</textarea>
+		pasversion
+		<textarea>{$pastversion|escape}</textarea>
 	
 {else}
 	{include file="default_form_open.tpl"}
