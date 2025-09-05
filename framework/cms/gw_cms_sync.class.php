@@ -174,6 +174,18 @@ class GW_CMS_Sync
 		return $result;
 	}
 
+	
+	function getWhitelisted()
+	{
+		if(!GW::s('SYNC_MODULE')){
+			include GW::s('DIR/ROOT').'config/project_specific_files.php';
+			
+			return explode("\n", trim($include_paths));
+		}else{
+			return [];
+		}
+	}
+	
 	function filterProjectSpecific(&$filesarr, $direction=true)
 	{
 		$t= new GW_Timer;	
@@ -184,7 +196,12 @@ class GW_CMS_Sync
 		
 		$module = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE').'_module' : "project";
 		
+		$include_paths="";
 		include $dir."config/{$module}_specific_files.php";
+		
+		
+
+		
 
 		$paths=explode("\n", trim($paths));
 		
@@ -199,23 +216,20 @@ class GW_CMS_Sync
 				}
 		}	
 		
-		
-		
-		//force include
-		if(isset($include_paths)){
-			$include_paths=explode("\n", trim($include_paths));
-			
-			
-			foreach($filterarr_orig as $idx => $file)
-			{
-				foreach($include_paths as $pattern)
-					if(fnmatch($pattern, $file)){
-						$filesarr[$idx]=$filterarr_orig[$idx];
 
-					}
-			}	
-		}
-		
+		//whitelist include
+		$include_paths=explode("\n", trim($include_paths));
+		$include_paths = array_merge($include_paths, self::getWhitelisted());
+		$include_paths = array_unique($include_paths);
+
+		foreach($filterarr_orig as $idx => $file)
+		{
+			foreach($include_paths as $pattern)
+				if(fnmatch($pattern, $file)){
+					$filesarr[$idx]=$filterarr_orig[$idx];
+
+				}
+		}	
 		
 		echo "filterProjectSpecific: ".$t->stop(5)." secs\n";
 	}
