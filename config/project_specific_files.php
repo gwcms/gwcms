@@ -26,13 +26,22 @@ composer.*
 
 
 
+//whitelisted
+
 $include_paths = "
-applications/site/templates/common_module/*
+applications/site/modules/shop/*
+applications/site/modules/orders/*
+applications/site/modules/newsletter/*.php
+applications/site/modules/faq/*.php
+applications/site/modules/articles/*.php
+applications/site/modules/forms/*.php
+applications/site/modules/users/*
 applications/site/templates/inputs/*
-applications/site/templates/admin_func.tpl
+applications/site/templates/gw/*
+applications/site/templates/common_module/*
 applications/site/assets/js/gw.js
 applications/site/assets/js/admin.js
-applications/site/templates/messages.tpl
+applications/site/templates/admin_func.tpl
 vendor/smarty4/*
 ";
 //inc
