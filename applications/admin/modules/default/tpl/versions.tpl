@@ -25,10 +25,10 @@
 		</td>
 		
 		<td>
-			{$meta.1}
+			{$meta.1|truncate:200}
 		</td>
 		<td>
-			{$meta.2}
+			{$meta.2|truncate:200}
 		</td>
 		<td>{$change->user_id}</td>
 		<td>
