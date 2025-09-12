@@ -197,15 +197,14 @@ class GW_CMS_Sync
 		$module = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE').'_module' : "project";
 		
 		$include_paths="";
-		include $dir."config/{$module}_specific_files.php";
+		include $includef=$dir."config/{$module}_specific_files.php";
 		
-		
-
-		
-
+	
 		$paths=explode("\n", trim($paths));
 		
 		$filterarr_orig=$filesarr;
+		
+		//d::dumpas([$includef, $paths]);
 
 		foreach($filesarr as $idx => $file)
 		{
@@ -216,10 +215,11 @@ class GW_CMS_Sync
 				}
 		}	
 		
-
 		//whitelist include
 		$include_paths=explode("\n", trim($include_paths));
+		
 		$include_paths = array_merge($include_paths, self::getWhitelisted());
+		
 		$include_paths = array_unique($include_paths);
 
 		foreach($filterarr_orig as $idx => $file)

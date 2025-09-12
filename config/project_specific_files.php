@@ -43,6 +43,9 @@ applications/site/assets/js/gw.js
 applications/site/assets/js/admin.js
 applications/site/templates/admin_func.tpl
 vendor/smarty4/*
+vendor/ckeditor422/*
 ";
+
 //inc
+//
 
