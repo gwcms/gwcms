@@ -29,7 +29,15 @@
 		{GW_Bot_Detect::getProcSpeed(1)} {GW_Bot_Detect::getProcSpeed(5)} {GW_Bot_Detect::getProcSpeed(10)} 
 	{/if}
 		
-	
+	{if $app->sess['debug']}
+		| <a style="color:red" href="{$app->buildUri("system/tools")}">DEBUG MODE</a>
+	{/if}
+	{if $app->sess['jumpdebug']}
+		| <a style="color:orange" href="{$app->buildUri("system/tools")}">JUMPDEBUG</a>
+	{/if}
+	{if GW::s('DEVELOPER_PRESENT')}
+		| <a style="background-color:khaki"}"  href="{$app->buildUri("system/tools")}">DEV</a>
+	{/if}
 </p>
 
 

@@ -112,8 +112,9 @@
 
     {if !$hideifempty || isset($value) || $item->$name}
 
+	    {if $m}
     {$title=$title|default:$m->fieldTitle($name)}
-
+		{/if}
 
     {*copy to {function e0}*}
 

@@ -83,7 +83,7 @@ class Module_Tools extends GW_Common_Module
 	
 	function doDebugModeToggle()
 	{
-		if($_GET['app'] ?? false=="SITE")
+		if(($_GET['app'] ?? false)=="SITE")
 		{
 			$var  =& $_SESSION['SITE']['debug'];
 		}else{
@@ -99,8 +99,30 @@ class Module_Tools extends GW_Common_Module
 			exit;
 		}
 		
-		$this->jump();
+		$this->jump(false, [], ['skipjumpdebug'=>1]);
 	}
+	
+	function doJumpDebugModeToggle()
+	{
+		if(($_GET['app'] ?? false)=="SITE")
+		{
+			$var  =& $_SESSION['SITE']['jumpdebug'];
+		}else{
+			$var  =& $this->app->sess['jumpdebug'];
+		}
+		
+		$var=(int)$var;
+		$var=($var+1) % 2;
+		
+		
+		if(isset($_GET['uri'])){
+			header("Location: ".$_GET['uri']);
+			exit;
+		}
+		
+		$this->jump(false, [], ['skipjumpdebug'=>1]);
+	}	
+	
 	
 	
 	

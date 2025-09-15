@@ -10,8 +10,12 @@
 
 
 {function toolbar_button}
+	{if isset($pressed)}
+		{if $pressed}{$btnnormal=primary}{$iconclass="material check_box"}{else}{$btnnormal=default}{$iconclass="material check_box_outline_blank"}{/if}
+	{/if}
+	
 	<a class="{if $indropdown}gwtoolbarbtn{else}gwtoolbarbtn btn btn-{$btnnormal|default:'default'} btn-active-{$btnactive|default:'primary'}{/if} {$btnclass}" 
-	   {if $toggle}data-toggle="button" aria-pressed="false"{/if} 
+	   {if $toggle}data-toggle="button" aria-pressed="{if $pressed}true{else}false{/if}"{/if} 
 	   {*2018-10 outdate if $query_param}onclick="var ss=window.prompt('{$query_param}');if(ss)location.href=this.href+ss;return false;"{/if*}
 	   {if $query_param}onclick="var ss=window.prompt('{$query_param.1}');if(ss)location.href=gw_navigator.url(this.href, { '{$query_param.0}': ss  });return false;"{/if}
 	   {*dar gali but toks: this.href=gw_navigator.url*}

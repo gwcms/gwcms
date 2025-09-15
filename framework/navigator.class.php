@@ -307,7 +307,7 @@ class Navigator
 	
 	static function postLink($url, $title, $args,$opts=[])
 	{
-		$GLOBALS['postlinkformidx'] = ($GLOBALS['postlinkform'] ?? 0) +1;
+		$GLOBALS['postlinkformidx'] = ($GLOBALS['postlinkformidx'] ?? 0) +1;
 		
 		$str = "<form id='postlinkform".$GLOBALS['postlinkformidx']."' action='$url' method='post' style='display:none'>";
 		$postkeys = GW_Array_Helper::arrayFlattenSep('/:/', $args);
@@ -333,7 +333,8 @@ class Navigator
 		foreach($newpostkeys as $key => $value){
 			$str.='<input type="hidden" name="'.htmlspecialchars($key).'" value="'.htmlspecialchars($value).'">';
 		}
-		
+		//debug
+		//$str.="<input type='submit' value='submit".$GLOBALS['postlinkformidx']."'>";
 		
 		$str.='</form><a class="'.($opts['aclass']??'').'" href="'.$url.'" onclick="document.querySelector(\'#postlinkform'.$GLOBALS['postlinkformidx'].'\').submit();return false;">'.$title.'</a>';
 		return $str;

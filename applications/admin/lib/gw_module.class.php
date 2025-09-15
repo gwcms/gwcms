@@ -447,7 +447,7 @@ class GW_Module
 		ob_end_clean();
 	}
 	
-	function jump($path=false, $params=[])
+	function jump($path=false, $params=[], $opts=[])
 	{
 		if (isset($_REQUEST['RETURN_TO']) && ($tmp = $_REQUEST['RETURN_TO']))
 			return die(header('Location: ' . $tmp));
@@ -488,15 +488,16 @@ class GW_Module
 		
 		
 		
+		/*
 		if($debug = ($this->app->sess['debug'] ?? false)){
 			$url = $this->app->jump($path, $params, ['return_url'=>1]);
 			
 			d::ldump("<span style='color:red'>Youre in debug mode so jump disabled click manualy jump link here: <a href='$url'>$url</a></span>");
 			
 			return false;
-		}
+		}*/
 		
-		$this->app->jump($path, $params);
+		$this->app->jump($path, $params, $opts);
 	}
 	
 	function doSetFilters()

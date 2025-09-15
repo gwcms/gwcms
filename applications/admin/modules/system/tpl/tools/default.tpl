@@ -1,8 +1,13 @@
 {include file="common.tpl"}
-		
+	{function name=do_toolbar_buttons_systemact} 		
+		{toolbar_button title="Install" iconclass="material install_desktop"  href=$m->buildUri(false,[act=>doInstall]) }	
+		{toolbar_button title="Compatability & Info" iconclass="material collapse_all"  href=$m->buildUri(compatability) }			
+	{/function}		
 {$dlgCfg2MWdth=300}
-{$do_toolbar_buttons_hidden=[dialogconf2]}		
+{$do_toolbar_buttons_hidden=[dialogconf2,systemact]}		
 {$do_toolbar_buttons[]=hidden}
+
+
 	
 {include file="default_open.tpl"}
 
@@ -14,14 +19,24 @@
 	.btn{ margin-bottom: 2px }
 </style>
 
-<a class="btn btn-default" href="{$m->buildUri(false,[act=>doInstall])}"><i class="fa fa-cog"></i> Install</a>
-
-{if $app->sess['debug']}{$state="on"}{else}{$state="off"}{/if}
-<a class="btn btn-default" href="{$m->buildUri(false,[act=>doDebugModeToggle])}"><i class="fa fa-cog"></i> Debug mode {$state}</a>
 
 
-<a class="btn btn-default" href="{$m->buildUri(compatability)}"><i class="fa fa-cog"></i> Compatability & Info</a>
-<br/>
+{*
+ADMIN
+{toolbar_button title="Debug mode"  href=$m->buildUri(false,[act=>doDebugModeToggle,app=>ADMIN]) pressed=$app->sess.debug}	
+{toolbar_button title="JumpDebug"  href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>ADMIN]) pressed=$app->sess.jumpdebug}	
+
+<br>
+
+SITE
+{toolbar_button title="Debug"  href=$m->buildUri(false,[act=>doDebugModeToggle,app=>SITE]) pressed=$smarty.session.SITE.debug}	
+{toolbar_button title="JumpDebug" href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>SITE]) pressed=$smarty.session.SITE.jumpdebug}	
+
+<br>
+*}
+
+
+
 
 <a class="btn btn-default" href="{$m->buildUri(false,[act=>doimportSqlUpdates])}"><i class="fa fa-cog"></i> 
 	Import SQL Updates {if $lastupdates}Last update time: <b>{$lastupdates}</b>{/if}

@@ -423,10 +423,23 @@ class GW_Application
 
 	function jump($path = false, $params = Array(), $opts=[])
 	{		
+		
 		if (!is_array($params))
 			backtrace();
 		
+		
+		
 		$url=self::buildUri($path, $params, ['carry_params' => 1]);
+		
+		
+		if($this->sess('jumpdebug') && GW::s('DEVELOPER_PRESENT') && !isset($opts['skipjumpdebug']))
+		{
+			//$bt=d::fbacktrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),-1);
+			$thisurl=$_SERVER['REQUEST_URI'];
+			
+			if(!isset($_GET['jumpconfirm']))
+				d::dumpas($this->askConfirm("Confirm redirect  <br>From: $thisurl <br>To: $url".($_POST?'<br>Post data: '.json_encode($_POST):''), 'jumpconfirm'));
+		}
 		
 		//d::dumpas($url);
 		if($opts['return_url'] ?? false)
@@ -971,4 +984,26 @@ class GW_Application
 			'host'=> $_SERVER['HTTP_HOST'],
 		]);
 	}
+	
+	function isDebugMode()
+	{
+		return GW::s('DEVELOPER_PRESENT') && $this->sess('debug');
+	}	
+	
+
+	function askConfirm($str, $confirmkey="confirm")
+	{
+		$confirmurl = navigator::buildURI(false,[$confirmkey=>1]);
+		$refreshurl = $_SERVER['REQUEST_URI'];
+		
+		
+		if(isset($_POST) && $_POST){
+			$str.="<br>".Navigator::postLink($confirmurl, 'CONFIRM', $_POST,['aclass'=>'btn btn-primary']);
+		}else{
+			$str.="<br /><a class='btn btn-primary' href='$confirmurl'>CONFIRM</a> <a style='float:right;margin-right:10px;' href='$refreshurl'><i class='fa fa-undo'></i></a>";
+		}
+
+		
+		return $str;	
+	}	
 }

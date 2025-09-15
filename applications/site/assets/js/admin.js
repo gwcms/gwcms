@@ -577,9 +577,14 @@ $(function () {
 		"[CTRL] + [3] - debug(dev)"
 	];
 	var helpboxstyle = "background-color:brown;color:white;position:absolute;top:0px;left:0px;display:inline;padding:2px;border-radius:2px;font-size:9px;z-index:99999;";
-	$('body').append('<a class="no-print" style="'+helpboxstyle+'" onclick=\'alert("'+helpstring.join('\\n')+'");return false\' href="#">ADM?</a>');
+	
+	
+	var debug=GW.hasOwnProperty('debugmode')?'|DEBUG':'';
+	
+	$('body').append('<a class="no-print" style="'+helpboxstyle+'" onclick=\'alert("'+helpstring.join('\\n')+'");return false\' href="#">ADM?'+debug+'</a>');
 	$('body').append('<style>@media print{  .no-print, .no-print *{ display: none !important;}}</style>');
 	gw_adm_sys.initDropdowns();
+	
 })
 
 

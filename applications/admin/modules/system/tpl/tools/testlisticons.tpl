@@ -74,13 +74,27 @@
 		{/capture}
 
 
+		{*
 		<div class="testicoc">
 		{foreach $list as $itm}
 				{toolbar_button toggle=1 title=$itm iconclass=$itm size=2}
 		{/foreach}
 		</div>
-
-
+		*}
+		
+		DISCOUNTINUED USE MATERIAL
+		
+		{toolbar_button title="Builder" iconclass='material add_box' href=$m->buildUri(form,[builder=>1])}	
+		{literal}
+			{toolbar_button title="Builder" iconclass='material add_box' href=$m->buildUri(form,[builder=>1])}	
+		{/literal}
+		
+		<br>
+		
+		{toolbar_button title="JumpDebug" iconclass='material add_box'  href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>ADMIN]) pressed=$app->sess.jumpdebug}	
+		{literal}
+			{toolbar_button title="JumpDebug" iconclass='material add_box'  href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>ADMIN]) pressed=$app->sess.jumpdebug}	
+		{/literal}
 
 	</div>
 		
