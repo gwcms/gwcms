@@ -38,17 +38,18 @@ class diff_helper{
 
     // initialise the sequences and comparison start and end positions
     $start = 0;
-    if ($compareCharacters){
-      $sequence1 = $string1;
-      $sequence2 = $string2;
-      $end1 = strlen($string1) - 1;
-      $end2 = strlen($string2) - 1;
-    }else{
-      $sequence1 = preg_split('/\R/', $string1);
-      $sequence2 = preg_split('/\R/', $string2);
-      $end1 = count($sequence1) - 1;
-      $end2 = count($sequence2) - 1;
-    }
+	if ($compareCharacters){
+	  // Išskaidom UTF-8 tekstą į atskirus simbolius
+	  $sequence1 = preg_split('//u', $string1, -1, PREG_SPLIT_NO_EMPTY);
+	  $sequence2 = preg_split('//u', $string2, -1, PREG_SPLIT_NO_EMPTY);
+	  $end1 = count($sequence1) - 1;
+	  $end2 = count($sequence2) - 1;
+	}else{
+	  $sequence1 = preg_split('/\R/u', $string1);
+	  $sequence2 = preg_split('/\R/u', $string2);
+	  $end1 = count($sequence1) - 1;
+	  $end2 = count($sequence2) - 1;
+	}
 
     // skip any common prefix
     while ($start <= $end1 && $start <= $end2
