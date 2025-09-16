@@ -17,7 +17,8 @@
 		       server_time:'{"F d, Y H:i:s"|date}', 
 		       user_id:"{$app->user->id}",
 		       pageid: "{$app->page->id}",
-		       pagepid: "{$app->page->parent_id}"
+		       pagepid: "{$app->page->parent_id}",
+		       assets_root: "{$assets}",
 	       {if $app->isDebugMode()}, debugmode:1{/if}
        });
 	</script>

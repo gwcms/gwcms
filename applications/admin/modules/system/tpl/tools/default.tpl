@@ -21,7 +21,7 @@
 
 
 
-{*
+
 ADMIN
 {toolbar_button title="Debug mode"  href=$m->buildUri(false,[act=>doDebugModeToggle,app=>ADMIN]) pressed=$app->sess.debug}	
 {toolbar_button title="JumpDebug"  href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>ADMIN]) pressed=$app->sess.jumpdebug}	
@@ -33,7 +33,7 @@ SITE
 {toolbar_button title="JumpDebug" href=$m->buildUri(false,[act=>doJumpDebugModeToggle,app=>SITE]) pressed=$smarty.session.SITE.jumpdebug}	
 
 <br>
-*}
+
 
 
 
