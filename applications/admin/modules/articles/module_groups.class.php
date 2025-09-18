@@ -5,6 +5,7 @@ class Module_Groups extends GW_Common_Module
 {	
 
 	public $multisite = true;
+	public $dynamic_fields = true;		
 /*	
 	function __eventAfterList(&$list)
 	{

@@ -8,6 +8,7 @@ class Module_Articles extends GW_Public_Module
 	function init()
 	{
 		parent::init();
+		$this->initModCfg();
 		$this->model = new GW_Article();
 		
 		
@@ -39,13 +40,26 @@ class Module_Articles extends GW_Public_Module
 			$cond = GW_DB::mergeConditions($cond, GW_DB::prepare_query(['group_id=?', $_GET['group']]));
 		}
 		
-		
-
+		if($groupids = $this->app->page->getContent('subgroup')){
+			$groupids = json_decode($groupids, true);
+			$cond = GW_DB::mergeConditions($cond, GW_DB::inCondition('subgroup', $groupids));
+			
+		}elseif(isset($_GET['subgroup'])){
+			$cond = GW_DB::mergeConditions($cond, GW_DB::prepare_query(['subgroup=?', $_GET['subgroup']]));
+		}		
+		//d::ldump($cond);
 		
 		$list=$this->model->findAll($cond);
 
 		
-		$this->tpl_vars['groups'] = GW_Articles_Group::singleton()->getOptions(true);
+		
+		$this->tpl_vars['groups'] = GW_Articles_Group::singleton()->getOptions(true, $this->app->ln);
+		
+		if($this->modconfig->use_short_title){
+			$this->tpl_vars['groups'] = GW_Articles_Group::singleton()->getOptionsShort(true, $this->app->ln);
+		}else{
+			$this->tpl_vars['groups'] = GW_Articles_Group::singleton()->getOptions(true, $this->app->ln);
+		}
 		
 		
 		$this->smarty->assign('list', $list);
@@ -128,7 +142,7 @@ class Module_Articles extends GW_Public_Module
 		$cols = GW_Article::singleton()->getColumns();
 		
 		
-		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id";
+		$qopts['select'] = "id,title_{$ln}, short_{$ln}, datetime,group_id,subgroup";
 			
 		if(isset($cols['external_link']))
 			$qopts['select'].=", external_link";
@@ -155,11 +169,25 @@ class Module_Articles extends GW_Public_Module
 		}
 		//order
 		
+		
+		
 		$list = GW_Article::singleton()->findAll($cond, $qopts);
-
+		
+		$subgroupids = [];
+		foreach($list as $item)
+			if($item->subgroup)
+				$subgroupids[] = $item->subgroup;
+		
+	
+		if($subgroupids)
+			$subgroups = GW_Articles_Group::singleton()->findAll(GW_DB::inCondition ('id', $subgroupids), ['key_field'=>'id']);
 		
 		
-		return ['list'=>$list, 'itemurl'=>$this->app->buildUri($page->path,['id'=>''])];
+		//d::dumpas([$subgroupids, $subgroups]);
+		
+		
+		
+		return ['list'=>$list, 'sgroup'=>$subgroups, 'itemurl'=>$this->app->buildUri($page->path,['id'=>''])];
 	}
 
 

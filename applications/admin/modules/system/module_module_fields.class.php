@@ -158,28 +158,48 @@ class Module_Module_Fields extends GW_Common_Module
 		
 		$after = "";
 		
+		
+		
+		$modifyTable = function ($fieldname, $m) use (&$fieldsInfo, &$tbl,$type,$null, $default, $comment, $after, $item) {
+			if(!isset($fieldsInfo[$fieldname])){
+				$method="ADD";
+				$after = array_key_last($fieldsInfo);
+				$after="AFTER  `$after`";
+			}else{
+				if(!$this->allowChange($fieldsInfo, $fieldname)){
+					return false;
+				}			
 
-		
-		
-		if(!isset($fieldsInfo[$item->fieldname])){
-			$method="ADD";
-			$after = array_key_last($fieldsInfo);
-			$after="AFTER  `$after`";
-		}else{
-			if(!$this->allowChange($fieldsInfo, $fieldname)){
-				return false;
-			}			
-			
-			$method="CHANGE `$fieldname`";
-		}
+				$method="CHANGE `$fieldname`";
+			}
+
+			$tbl = $m->getTable($item);
+			$sql = "ALTER TABLE  `$tbl` $method  `$fieldname` $type $null $default $comment  $after ;";		
+
+			GW::db()->query($sql, true);	
+			$m->setMessage($sql);
+		};
 	
-		$tbl = $this->getTable($item);
-		$sql = "ALTER TABLE  `$tbl` $method  `$fieldname` $type $null $default $comment  $after ;";		
+		
+		if($item->i18n){
+			
+			//$this->app->langs su isplestinemis, isplestiniu mes nenorime cia
+			$langs = GW::s('ADMIN/LANGS');
+			
+			
+			foreach($langs as $ln){
+				$modifyTable("{$fieldname}_{$ln}", $this);
+			}
+		}else{
+			$modifyTable($fieldname, $this);
+		}
 
-		GW::db()->query($sql, true);
+		
+		
+		
 		//d::dumpas($sql);
 		
-		$this->setMessage($sql);
+		
 		return true;
 	}
 	

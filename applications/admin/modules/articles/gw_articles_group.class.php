@@ -1,16 +1,28 @@
 <?php
 
 
-class GW_Articles_Group extends GW_Data_Object
+class GW_Articles_Group extends GW_i18n_Data_Object
 {
-	var $table = 'gw_articles_groups';
+	public $table = 'gw_articles_groups';
 	
+	public $i18n_fields = [
+	    'title'=>1,
+	];		
 	
-	function getOptions($active=true)
+	function getOptions($active=true, $ln)
 	{
 		$cond = $active ? 'active!=0' : '';
 		
-		return $this->getAssoc(['id','title'], $cond);
+		return $this->getAssoc(['id',"title_{$ln}"], $cond);
 	}	
+	
+	function getOptionsShort($active=true, $ln)
+	{
+		$cond = $active ? 'active!=0' : '';
+		
+		return $this->getAssoc(['id',"short_title_{$ln}"], $cond);
+	}	
+	
+		
 	
 }

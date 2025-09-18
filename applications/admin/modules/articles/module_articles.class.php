@@ -15,7 +15,10 @@ class Module_Articles extends GW_Common_Module
 		
 		$this->list_params['paging_enabled']=1;	
 		
-		$this->options['group_id'] = GW_Articles_Group::singleton()->getOptions(false);
+	
+		$f = $this->modconfig->use_short_title? 'getOptionsShort':'getOptions';
+		$this->options['group_id'] = GW_Articles_Group::singleton()->$f(false, $this->app->ln);
+		
 						
 	}
 	
@@ -80,22 +83,25 @@ class Module_Articles extends GW_Common_Module
 				$this->__fetchexternallinkinfo = GW_Misc_Helper::fetchMetaTags($item->external_link);
 
 			$url = $this->__fetchexternallinkinfo['icon'];
-			$file = tempnam(GW::s('DIR/TEMP'), 'TMP_').'.ico';
-			$filename = basename($url);
+			if($url){
 			
-			file_put_contents($file, file_get_contents($url));
-			
-			list($type, $tmp) = explode(';', Mime_Type_Helper::getByFilename($file));
-			
-			if($type=='image/vnd.microsoft.icon'){
-				
-				GW_Image_Manipulation::imagick2Webp2($file);
-				$new = Mime_Type_Helper::getByFilename($file);
-				$this->setMessage("convert from $type to $new");
-			}
+				$file = tempnam(GW::s('DIR/TEMP'), 'TMP_').'.ico';
+				$filename = basename($url);
 
-			$id = $item->extensions['attachments']->storeAttachment("attachments", $file, ['title_lt'=>"icon"], $filename);
-			$item->extensions['attachments']->removeDuplicates();
+				file_put_contents($file, file_get_contents($url));
+
+				list($type, $tmp) = explode(';', Mime_Type_Helper::getByFilename($file));
+
+				if($type=='image/vnd.microsoft.icon'){
+
+					GW_Image_Manipulation::imagick2Webp2($file);
+					$new = Mime_Type_Helper::getByFilename($file);
+					$this->setMessage("convert from $type to $new");
+				}
+
+				$id = $item->extensions['attachments']->storeAttachment("attachments", $file, ['title_lt'=>"icon"], $filename);
+				$item->extensions['attachments']->removeDuplicates();
+			}
 		}
 		
 	}

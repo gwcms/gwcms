@@ -3993,6 +3993,10 @@ class GW_Common_Module extends GW_Module
 			//'colspan'=>$input->size,
 		];
 		
+		if($field['i18n'] >0 && $field['i18n'] < 3){
+			//nes boold padaryta buvo
+			$field['i18n']=3;
+		}
 		
 
 		if($input->type == 'extended')

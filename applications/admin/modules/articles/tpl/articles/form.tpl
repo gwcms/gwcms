@@ -41,6 +41,7 @@
 {$m->addDynamicFieldsConfig($fields_config, $item)}
 
 
+
 {include "tools/form_components.tpl"}
 {call "build_form_normal"}
 {*isplestiniai laukai*}

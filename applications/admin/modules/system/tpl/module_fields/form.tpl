@@ -13,13 +13,13 @@
 
 
 {call e field="fieldset" hidden_note=$editinsite}
-{call e field="fieldname" note="Unik."}
-{call e field="title" i18n=4}
+{call e field="fieldname" note="Unik."  required=1}
+{call e field="title" i18n=4  required=1}
 {call e field="short_title" i18n=4}
 
 {call e field="required" type=bool}
 {call e field="type" type=select options=$item->getTypes(type) options_fix=1}
-{call e field="inp_type" type=select options=$m->getInputTypes() empty_option=1 options_fix=1 rowclass=inptype}
+{call e field="inp_type" type=select options=$m->getInputTypes() empty_option=1 options_fix=1 rowclass=inptype required=1}
 
 {call e field="modpath" type=select_ajax modpath="system/modules" source_args=[byPath=>1] preload=1 options=[] rowclass=selajax hidden_note="kitokio veikimo be preload, nerodo vertes, reiktu paziuret ilgiau kad atstatyti"}
 
