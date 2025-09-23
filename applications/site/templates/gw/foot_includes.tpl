@@ -18,7 +18,10 @@
 		       user_id:"{$app->user->id}",
 		       pageid: "{$app->page->id}",
 		       pagepid: "{$app->page->parent_id}",
-		       assets_root: "{$assets}",
+		       assets_root: "{$assets}"
+	       {foreach $js_vars as $key => $val}
+		       , {$key}: "{addslashes($val)}"
+	       {/foreach}		       
 	       {if $app->isDebugMode()}, debugmode:1{/if}
        });
 	</script>
