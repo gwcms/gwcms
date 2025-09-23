@@ -20,6 +20,9 @@ class GW_Site extends GW_i18n_Data_Object
 		'favico' => Array('gw_image', Array('dimensions_resize'=>'500x500', 'dimensions_min'=> '32x32')),
 	);
 	
+	
+	public $extensions = ['keyval'=>1, 'changetrack'=>1];	
+	public $keyval_use_generic_table = 1;
 
 
 	function calculateField($key)

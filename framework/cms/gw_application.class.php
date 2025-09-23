@@ -429,7 +429,7 @@ class GW_Application
 		
 		
 		
-		$url=self::buildUri($path, $params, ['carry_params' => 1]);
+		$url = $opts['url'] ?? self::buildUri($path, $params, ['carry_params' => 1]);
 		
 		
 		if($this->sess('jumpdebug') && GW::s('DEVELOPER_PRESENT') && !isset($opts['skipjumpdebug']))

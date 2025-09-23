@@ -468,7 +468,7 @@ class GW_Site_Application extends GW_Application
 		$this->preRun();
 		
 		
-		if(!$this->page->id)
+		if(!$this->page->id  && !$this->checkShortUrl())
 			$this->jumpToFirstPage();
 			
 		$this->userzoneAccess();
@@ -590,6 +590,25 @@ class GW_Site_Application extends GW_Application
 		foreach($this->path_arr as $arr){
 			if(isset($arr['data_object_id']))
 				$this->path_data_objects[$arr['name']] = $arr['data_object_id'];
+		}
+	}
+	
+	
+	function checkShortUrl()
+	{
+		
+		if(($tmp=$this->site->get('keyval/short_url'))){
+			$list = explode("\n", $tmp);
+			foreach($list as $row)
+			{
+				$tmp = explode('|', $row);
+				
+				if(count($tmp)==2 && $tmp[0]==$_SERVER['REQUEST_URI']){
+					
+					$this->jump(false, [], ['url'=>$tmp[1]]);
+					exit;
+				}
+			}
 		}
 	}
 	

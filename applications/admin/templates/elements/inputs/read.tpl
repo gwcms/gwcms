@@ -19,8 +19,9 @@
 	{if $is_link}
 		<a href="{$value|escape}" title="{$value|escape}" target="_blank">{$value|escape|truncate:40}</a>
 	{else}
-		{if is_object($value)}
-			{json_encode($value, $smarty.const.JSON_PRETTY_PRINT)}
+		{if is_object($value) || is_array($value)}
+			{call e0 type=array}
+			
 		{else}
 			{$value}
 		{/if}
