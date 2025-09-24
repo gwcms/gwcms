@@ -64,9 +64,11 @@ class Module_Sites extends GW_Common_Module
 		
 		$cfg['inputs']['ln_by_geoip_map'] = ['type'=>'code_json', 'hidden_note'=>'Exmpl: {"LT":"lt","DE":"de","default":"en"}', 'hidden_note_copy'=>1, "height"=>"50px"];
 		$cfg['inputs']['keyval/short_url'] = [
-		    'type'=>'textarea', 'hidden_note'=>'pvz:<br>/promo1|/lt/a/straipsnai/15/promo1<br>/promo2|https://isorine.nuoroda.com/x/y/promo2', 
+		    'type'=>'jstree', 'hidden_note'=>'pvz:<br>/promo1|/lt/a/straipsnai/15/promo1<br>/promo2|https://isorine.nuoroda.com/x/y/promo2', 
 		    'hidden_note_copy'=>1, 
 		    "height"=>"50px"];
+		
+		
 		
 		
 		$this->tpl_vars['dl_output_filters']['favico'] = 'image_sm';

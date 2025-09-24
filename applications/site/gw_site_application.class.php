@@ -598,16 +598,25 @@ class GW_Site_Application extends GW_Application
 	{
 		
 		if(($tmp=$this->site->get('keyval/short_url'))){
-			$list = explode("\n", $tmp);
-			foreach($list as $row)
-			{
-				$tmp = explode('|', $row);
+			$tmp = json_decode($tmp, true);
+			$ask = $_SERVER['REQUEST_URI'];
+			
+			d::ldump([$tmp, $ask]);
+			
+			if(isset($tmp[$ask])){
 				
-				if(count($tmp)==2 && $tmp[0]==$_SERVER['REQUEST_URI']){
-					
-					$this->jump(false, [], ['url'=>$tmp[1]]);
+				$redirect = $tmp[$_SERVER['REQUEST_URI']];
+				
+				
+				
+				if(strpos($redirect, 'http')!==0){
+					header("Location: ".$redirect);
 					exit;
 				}
+					
+				
+				$this->jump(false, [], ['url'=> $redirect]);
+				exit;
 			}
 		}
 	}
