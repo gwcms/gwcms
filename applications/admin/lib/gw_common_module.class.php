@@ -4097,4 +4097,14 @@ class GW_Common_Module extends GW_Module
 		return $item;
 	}
 	
+	
+	function addItemComment($item, $comment)
+	{
+		$c=GW_Comments::singleton()->createNewObject();
+		$c->obj_type= $item->table;
+		$c->obj_id = $item->id;
+		$c->user_id = $this->app->user->id;
+		$c->comment = $comment;
+		$c->insert();
+	}
 }

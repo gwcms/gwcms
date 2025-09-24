@@ -15,7 +15,7 @@
 		obj_type=>[type=>select, options=>$item->getTypes(), empty_option=>1, options_fix=>1],
 		valid_from=>[type=>date],
 		expires=>[type=>date,title=>GW::l('/m/FIELDS/discount_expires')],
-		user_id=>['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users']
+		user_id=>['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users', empty_option=>1, 'hidden_note'=>'Parinkite vartotoją kuriam ši nuolaida būtu prieinama']
 	]
 ]
 }
@@ -34,7 +34,9 @@
 {else}
 	{$fields_config.fields.used_amount=[type=>read]}
 	{$fields_config.fields.used=[type=>read]}
+	{*
 	{$fields_config.fields.user_id.readonly=true}
+	*}
 {/if}
 
 

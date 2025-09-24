@@ -64,9 +64,13 @@ class Module_DiscountCode extends GW_Common_Module
 		return $cfg;
 	}
 
-	function __eventBeforeSave($item){
-		if(!$item->id){
-			$item->user_id = $this->app->user->id;
-		}
+	function __eventAfterInsert($item){
+		//kad pažymėti kas sukurė
+		$this->addItemComment($item, "Sukūriau");
+	}
+	
+	function __eventAfterForm()
+	{
+		$this->tpl_vars['comments']=1;
 	}
 }

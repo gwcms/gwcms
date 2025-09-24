@@ -293,7 +293,9 @@
 	{/if}
 	{if $value_format}
 		{if $value_format=="json1"}
-			{$value=json_decode($value, true)}	
+			{if !is_array($value) && !is_object($value)}
+				{$value=json_decode($value, true)}	
+			{/if}
 		{else}
 			{d::ldump("Format `$value_format` not implemented")}
 		{/if}

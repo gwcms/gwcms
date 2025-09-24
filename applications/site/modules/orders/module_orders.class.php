@@ -1222,13 +1222,12 @@ class Module_Orders extends GW_Public_Module
 			$curdate = date('Y-m-d');
 			//nuolaidu kuponai
 			$dc = Shop_DiscountCode::singleton()->find([
-			    'code=? AND active=1 AND user_id=0 AND used=0 AND products!="" AND valid_from<=? AND expires>=?', $discode, $curdate, $curdate
+			    'code=? AND active=1 AND user_id=0 AND used=0 AND valid_from<=? AND expires>=?', $discode, $curdate, $curdate
 			]);
-			
-		
+				
 			
 			if($dc){
-				$discount_productids = array_flip($dc->product_ids);
+				$discount_productids = array_flip((array)$dc->product_ids);
 				
 				//gauti produktu sarasa
 				foreach($order->items as $oi)
