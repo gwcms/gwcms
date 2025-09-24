@@ -50,3 +50,17 @@
 	{/foreach}
 	<!-- /SYS INCLUDES -->
 {/if}	
+
+{if $doc_ready_js}
+    <script>
+      $(document).on('ready', function () {
+
+	{foreach $doc_ready_js as $block}
+		{$block};
+	{/foreach}
+	
+      });
+ 	
+ 
+    </script>
+{/if}

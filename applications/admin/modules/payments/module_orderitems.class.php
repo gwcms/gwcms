@@ -307,7 +307,7 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->initObjTypes();
 		
 		
-		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id','invoice_line2'];
+		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id','invoice_line2','group_id'];
 		
 		if($vars['item']->expirable)
 			$this->tpl_vars['extra_fields'][] = 'expires';

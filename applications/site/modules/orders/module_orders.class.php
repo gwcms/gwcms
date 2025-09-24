@@ -632,7 +632,7 @@ class Module_Orders extends GW_Public_Module
 		$params = $order->toArray();
 		$params['supplier_xml']=$this->config->sabis_supplier;
 
-		$params['id'] = 'TST12/'.$params['id'];
+		$params['id'] = GW::ln("/G/application/PAYMENT_BANKTRANSFER_DETAILS_PREFIX").'/'.$params['id'];
 		
 		foreach($order->items as $oi){
 			$params['items'][] = $oi->toArray();

@@ -50,9 +50,10 @@
 	{foreach $list as $item}
 		{$total=0}
 		{$date=explode(' ',$item->insert_time)}
+		{$pdate=explode(' ',$item->pay_time)}
 		<tr>
 		<th>{$item->id}</th>
-		<th>{$date[0]}</th>	
+		<th><span title="apmokėjimo laikas | krepš sukūrimo laikas: {$date[0]}">{$pdate[0]}</span></th>	
 		<th>
 			{if $smarty.get.nuasmenintas}
 				userid:{$item->user->id}
