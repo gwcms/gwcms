@@ -38,7 +38,9 @@
 {include file="elements/input_select_mailtemplate.tpl" field=demo_select_mailtemplate}
 {call e field=demo_htmlarea type=htmlarea height="100px"}
 {call e field=demo_textarea type=textarea  height="100px"}
-{call e field=demo_readonlyarray type=array value=[testdata=>[get=>$smarty.get,server=>$smarty.server]]}
+
+{call e field=demo_readonlyarray type=array value=[get=>$smarty.get,server=>$smarty.server] levels=0}
+{call e field=demo_writearray type=jstree}
 
 
 {call e field=demo_attachments 

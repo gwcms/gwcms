@@ -162,7 +162,7 @@
   $(function(){
     
     // default collapsed (expand_levels:0)
-    $('#tree{$idx}').arrayTree({json_encode($value)}, { expand_levels: 1 });
+    $('#tree{$idx}').arrayTree({json_encode($value)}, { expand_levels: {($levels|default:1)-1} });
 
     $('#expandAll{$idx}').on('click', function(){ $('#tree{$idx}').data('arrayTree').expandAll(); });
     $('#collapseAll{$idx}').on('click', function(){ $('#tree{$idx}').data('arrayTree').collapseAll(); });

@@ -8,7 +8,7 @@
 		
 	{if $m->includes}
 		<!-- SYS INCLUDES -->
-		{foreach $m->includes as $include}
+		{foreach $m->includes as $key => $include}
 			{if $include.0=='js'}
 				<script type="text/javascript" src="{$include.1}"></script>
 			{elseif $include.0=='css'}
@@ -19,12 +19,13 @@
 							$( document.createElement('link') ).attr({
 								href: '{$include.1}',
 								type: 'text/css',
-								rel: 'stylesheet'
+								rel: 'stylesheet',
+								"data-debug": '{$key}'
 							}).appendTo('head');						
 					    });
 					</script>
 				{else}
-					<link rel="stylesheet" type="text/css" href="{$include.1}" />
+					<link rel="stylesheet" type="text/css" href="{$include.1}" data-debug="{$key}" />
 				{/if}
 				
 				

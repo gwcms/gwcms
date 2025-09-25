@@ -1,5 +1,5 @@
 
-{$GLOBALS.arrayObjectContainer=$GLOBALS.jstreeContainer+1}
+{$GLOBALS.jstreeContainer=$GLOBALS.jstreeContainer+1}
 {$idx=$GLOBALS.jstreeContainer}
 
 <div class="jstreeContainer">
@@ -8,14 +8,13 @@
 
   <style>
     
-    #jstree{$idx} { border: 1px solid #ccc; padding: 10px; border-radius: 6px; }
-  </style>
-</head>
+{$m->addIncludes("jstree_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 
 {$m->addIncludes("upload_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 	
 	{capture append=footer_hidden}
 	<style>
+		 #jstree{$idx} { border: 1px solid #ccc; padding: 10px; border-radius: 6px; }
 		.jstree{ background-color: white; padding: 10px; border: 1px solid silver; border-radius: 10px; display:inline-block }
 		.gwTreeViewTbl td{ vertical-align: top;}
 		
@@ -26,7 +25,7 @@
 	{/capture}
 
 
-  <div id="jstree{$idx}"></div>
+  <div id="jstree{$idx}" ></div>
   <textarea 	name="{$input_name}"  name="json" id="jsonArea{$idx}" style="display:none;width:100%;height:300px">{json_encode((array)json_decode($value))}</textarea>
 
 
@@ -115,7 +114,7 @@ function treeToJson(node) {
 }
 
 function buildJson() {
-  const tree = $('#jstree').jstree(true);
+  const tree = $('#jstree{$idx}').jstree(true);
   const roots = tree.get_node('#').children;
   const result = { };
   roots.forEach(id => {
@@ -151,7 +150,7 @@ function buildJson() {
 	var nodekey = prompt('Please provide node key');
 	var nodeval = prompt('Please provide node value');
 	
-	var tree = $('#jstree').jstree(true);
+	var tree = $('#jstree{$idx}').jstree(true);
 		tree.create_node('#', { 
 		  "text": nodekey+': '+nodeval, 
 		  data: { key: nodekey, value: nodeval },
