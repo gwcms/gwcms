@@ -597,7 +597,7 @@ class GW_Site_Application extends GW_Application
 	function checkShortUrl()
 	{
 		
-		if(($tmp=$this->site->get('keyval/short_url'))){
+		if($this->site && ($tmp=$this->site->get('keyval/short_url'))){
 			$tmp = json_decode($tmp, true);
 			$ask = $_SERVER['REQUEST_URI'];
 			
