@@ -18,6 +18,13 @@
 			{$val}
 		{/if}
 {/function}
+{function name=dl_output_filters_expand_truncate_20}
+	{call dl_output_filters_expand_truncate expand_truncate_size=20}
+{/function}
+
+{function name=dl_output_filters_expand_truncate_10}
+	{call dl_output_filters_expand_truncate expand_truncate_size=10}
+{/function}
 
 
 

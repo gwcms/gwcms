@@ -35,6 +35,7 @@ apt-get install php8.4-gd
 apt-get install php8.4-curl
 apt-get install php8.4-mcrypt
 apt install php8.4-zip
+apt install php8.4-mbstring
 
 
 
