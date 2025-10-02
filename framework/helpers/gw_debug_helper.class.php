@@ -350,6 +350,7 @@ class GW_Debug_Helper
 		
 		$data["errorid"] = date('YmdHis');
 		
+		
 		//jei bus fatalas memory limitas tai max iki cia daeis, reiketu isvesti memory limito errora anksciau
 		
 		$data['type_name'] = array_search($e['type'], get_defined_constants());
@@ -384,9 +385,9 @@ class GW_Debug_Helper
 
 		
 		$data['backtrace'] = debug_backtrace();
+		$e['errorid'] = $data["errorid"]; //collect optimisation
+
 		
-
-
 		
 		
 		if(GW::s('REPORT_ERRORS') && ($e['type'] == E_ERROR || $e['type']==E_USER_ERROR ) ){  // fatal
@@ -405,7 +406,7 @@ class GW_Debug_Helper
 				$nosend[]="root user && frontend request";	
 			
 			//$nosend = false;
-				
+			
 			
 			if($nosend){
 				$data['debug']="ITS ".implode(' AND ',$nosend)." SO mail will be not sent\nMail subj: $subj, Mail recip: $reci";
@@ -415,6 +416,19 @@ class GW_Debug_Helper
 				    'code'=>0, 
 				    'message'=>0,
 				]]);	
+			
+			
+				
+			$collectfile = GW::s('DIR/TEMP').'error_coll_'.md5($e['file']).'_'.$e['line'];
+			if(file_exists($collectfile)){
+				$nosend[]='error is collected into collectfile';
+				
+				
+				
+				self::cleanUpErrorCollects();
+			}
+			
+			self::collectError($collectfile, $body, $e);
 			
 			
 			if($nosend)
@@ -427,12 +441,14 @@ class GW_Debug_Helper
 					echo implode(' | ',$nosend);
 				}
 				//echo $body;
-			}else{
+			}else{				
 				if(GW::s('DEVELOPER_PRESENT'))
 					self::outputToScreen($e);
 				
 				$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=>$body, 'noAdminCopy'=>1, 'noStoreDB'=>1];
 				GW_Mail_Helper::sendMail($opts);
+				
+				//self::collectError($collectfile, $body);
 			}
 			
 			if(isset($e['error'])){
@@ -512,5 +528,77 @@ class GW_Debug_Helper
 		$file = self::envRootSwitch($file);
 		
 		return "http://localhost/gw/tools/netbeanopen/nb_open.php?file=".$file.'&line='.$line;;
+	}
+	
+	
+	static function collectError($collectfile, $body, $e)
+	{
+		$meta = $collectfile.'.meta';
+		
+		$metadat = file_exists($meta) ? (array)json_decode(file_get_contents($meta)) : [];
+		
+		$metadat['count'] = ($metadat['count'] ?? 0) + 1;
+		$metadat['file'] = $e['file'];
+		$metadat['line'] = $e['line'];
+		if($metadat['count'] == 1)
+			$metadat['created'] =  time();		
+		
+		$noerroidbody =  str_replace($e['errorid'], '---', $body);
+		
+		if($metadat['last'] == $noerroidbody)
+			$body = 'same as last '.date('Y-m-d H:i:s');
+		
+		$metadat['last'] = $noerroidbody;
+		
+		file_put_contents($meta, json_encode($metadat));
+		file_put_contents($collectfile, $body."<hr>", FILE_APPEND);
+	}
+	
+	
+	
+	//reiktu idet i periodinius darbus
+	static function cleanUpErrorCollects(){
+		
+		$files = glob(GW::s('DIR/TEMP').'error_coll_*'); // get all files in directory
+		$oneHourAgo = time() - 3600;
+
+		foreach ($files as $file) {
+			if(strpos($file, '.meta')!==false)
+				continue;
+			
+		    if (is_file($file)) {
+			
+			
+			$metadat = (array)json_decode(file_get_contents($file.'.meta'));
+			$fileCreationTime = $metadat['created'];
+			
+			if ($fileCreationTime < $oneHourAgo) {
+				
+				$counter = (int)$metadat['count'];
+				
+				if($counter > 1){
+					echo "flushing errors: $counter | ";
+					$reci = GW::s('REPORT_ERRORS');
+					$subj = "Collect flush under project: ".GW::s('PROJECT_NAME').' env: '.
+						GW::s('PROJECT_ENVIRONMENT')." | COUNT: $counter | FILE: {$metadat['file']} | LINE: {$metadat['line']} | START : ".date('Y-m-d H:i',$metadat['created']);
+
+					$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=> file_get_contents($file), 'noAdminCopy'=>1, 'noStoreDB'=>1];
+					GW_Mail_Helper::sendMail($opts);
+				}
+				
+				unlink($file); // delete the file
+				unlink($file.'.meta');
+				
+				//dev
+				//d::ldump(['flush',$file,  time()-$fileCreationTime, $metadat]);
+			 
+			}else{
+				//dev
+				//d::ldump(['skip flush',$file,  time()-$fileCreationTime, $metadat]);
+			}
+		    }
+		}		
+		
+		
 	}
 }
