@@ -105,7 +105,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		die('test');
 	}
 	
-	function doUnlock()
+	function doUnlock($nojump=false)
 	{
 		$sel=[];
 		$form = ['fields'=>['pin'=>['type'=>'password', 'required'=>1]],'cols'=>4];
@@ -131,7 +131,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		$this->modconfig->unlocked = 1;
 		
-		$this->jump();
+		
+		if(!$nojump)
+			$this->jump();
 	}
 	
 	function __getSecret()
@@ -155,4 +157,12 @@ class Module_Items extends GW_Common_Module_Tree_Data
 			$this->setMessage("Crypt stored cnt: $cnt");		
 	}
 
+	
+	function __eventBeforeList()
+	{
+		if(!$this->modconfig->unlocked)
+		{
+			$this->doUnlock(true);
+		}
+	}
 }
