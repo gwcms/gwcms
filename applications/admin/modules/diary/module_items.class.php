@@ -159,9 +159,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 
 	
 	function __eventAfterList()
-	{
-		d::ldump($this->modconfig->unlocked);
-		
+	{		
 		if(!$this->modconfig->unlocked)
 		{
 			$this->doUnlock(true);
