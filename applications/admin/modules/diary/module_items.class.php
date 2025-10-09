@@ -131,7 +131,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		$this->modconfig->unlocked = 1;
 		
-		
+		sleep(1);
 		if(!$nojump)
 			$this->jump();
 	}
