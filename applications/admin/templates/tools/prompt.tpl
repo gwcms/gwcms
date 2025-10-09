@@ -37,7 +37,7 @@
 
 <script>
 	const form = document.getElementById('promptform');
-	const firstInput = form.querySelector('input, textarea, select, [contenteditable="true"]');
+	const firstInput = form.querySelector('input:not([type="hidden"]), textarea, select');
 	console.log(firstInput); // Logs the first found element
 
 	if (firstInput) firstInput.focus();
