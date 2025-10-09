@@ -105,7 +105,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		die('test');
 	}
 	
-	function doUnlock($nojump=false)
+	function doUnlock()
 	{
 		$sel=[];
 		$form = ['fields'=>['pin'=>['type'=>'password', 'required'=>1]],'cols'=>4];
@@ -132,11 +132,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		$this->modconfig->unlocked = 1;
 		
 		
-		if(!$nojump){
-			d::dumpas($nojump);
-			sleep(1);
-			$this->jump();
-		}
+		$this->jump();
 	}
 	
 	function __getSecret()
@@ -163,9 +159,9 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function __eventAfterList()
 	{		
-		if(!$this->modconfig->unlocked && ($_GET['act']??false)!='doUnlock')
+		if(!$this->modconfig->unlocked)
 		{
-			$this->doUnlock(true);
+			$this->doUnlock();
 		}
 	}
 	
