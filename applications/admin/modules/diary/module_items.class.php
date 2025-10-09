@@ -160,9 +160,13 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function __eventBeforeList()
 	{
+		d::dumpas($this->modconfig->unlocked);
+		
 		if(!$this->modconfig->unlocked)
 		{
 			$this->doUnlock(true);
 		}
 	}
+	
+	
 }
