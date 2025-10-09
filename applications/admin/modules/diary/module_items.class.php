@@ -160,7 +160,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 	
 	function __eventAfterList()
 	{		
-		if(!$this->modconfig->unlocked)
+		if(!$this->modconfig->unlocked && ($_GET['act']??false)!='doUnlock')
 		{
 			$this->doUnlock(true);
 		}
