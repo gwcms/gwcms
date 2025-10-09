@@ -133,6 +133,7 @@ class Module_Items extends GW_Common_Module_Tree_Data
 		
 		
 		if(!$nojump){
+			d::dumpas($nojump);
 			sleep(1);
 			$this->jump();
 		}
