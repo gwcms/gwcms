@@ -35,3 +35,10 @@
 	.promptform .inp_select_ajax{ min-width: 150px; }
 </style>
 
+<script>
+	const form = document.getElementById('promptform');
+	const firstInput = form.querySelector('input, textarea, select, [contenteditable="true"]');
+	console.log(firstInput); // Logs the first found element
+
+	if (firstInput) firstInput.focus();
+</script>
