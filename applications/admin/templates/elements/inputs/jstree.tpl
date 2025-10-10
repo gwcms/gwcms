@@ -4,9 +4,6 @@
 
 <div class="jstreeContainer">
 	
-	
-
-  <style>
     
 {$m->addIncludes("jstree_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 

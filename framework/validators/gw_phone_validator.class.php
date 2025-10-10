@@ -55,4 +55,19 @@ class GW_Phone_Validator extends GW_String_Validator
 
 		
 	}
+	
+	static function checkTarget($phonenr, &$countrycode=false, &$errmsg=false)
+	{
+		try {
+			$number = Brick\PhoneNumber\PhoneNumber::parse($phonenr);
+						
+			$countrycode = $number->getRegionCode();
+			return $number->isValidNumber();
+			
+		}catch (Brick\PhoneNumber\PhoneNumberParseException $e) {
+			$errmsg = $e->getMessage();
+			return false;
+		}
+	}
+	
 }

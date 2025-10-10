@@ -478,9 +478,9 @@ class GW_DB
 				$query .= $key . '=VALUES(' . $key . '), ';
 
 			$query = substr($query, 0, -2);
-		} 
+		}
 		
-		
+
 
 		$this->query($query, $nodie);
 
