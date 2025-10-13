@@ -23,7 +23,7 @@
 
 
   <div id="jstree{$idx}" ></div>
-  <textarea 	name="{$input_name}"  name="json" id="jsonArea{$idx}" style="display:none;width:100%;height:300px">{json_encode((array)json_decode($value))}</textarea>
+  <textarea 	name="{$input_name}"  name="json" id="jsonArea{$idx}" style="display:none;width:100%;height:300px">{if !is_array($value) && !is_object($value)}{json_encode((array)json_decode($value))}{else}{json_encode($value)}{/if}</textarea>
 
 
 

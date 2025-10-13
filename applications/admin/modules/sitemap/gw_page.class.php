@@ -207,10 +207,8 @@ class GW_Page extends GW_i18n_Data_Object
 	}
 	
 	
-	function getContent($key=null, $ln=false)
+	function __getContent($key=null, $ln=false)
 	{
-		
-
 		if(!isset($this->cache['input_data'])){
 			$c =& $this->cache['input_data'];
 			
@@ -242,6 +240,23 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		return $cache[$key] ?? null;
 	}
+	
+	function getContent($key=null, $ln=false)
+	{
+		
+		$val = $this->__getContent($key, $ln);
+		
+		//if(GW::$context->app->user && GW::$context->app->user->isRoot()){
+				
+		if(GW::s('DEVELOPER_PRESENT') && GW::$context->app->app_name == 'SITE'){
+			return "<div class='ckedit' data-siteid='".$this->site_id."' data-app='{$context->app->name}' data-pageid='{$this->id}' data-contentkey='{$key}' data-ln='{$ln}'>".$val."</div>";
+		}
+		
+		return $val;
+	}
+		
+				
+		
 	
 	function exportContent($opts=[])
 	{

@@ -11,7 +11,7 @@
 	{literal}{}{/literal}
 {/capture}
 
-{call e field=params type=code_json height=100px nopading=1 default=$defaultparams hidden_note=GW::l('/m/FIELD_NOTE/params')}  
+{call e field=params type=jstree height=100px nopading=1 default=$defaultparams hidden_note=GW::l('/m/FIELD_NOTE/params')}  
 {*{call e field=params type=textarea height="100px"}*}
 
 {*include file="elements/input.tpl" name=params type=textarea height="100px" default="{ldelim}{rdelim}"*}

@@ -1,4 +1,3 @@
-User-agent: GPTBot
 User-agent: YandexBot
 User-agent: SemrushBot
 Disallow: /
