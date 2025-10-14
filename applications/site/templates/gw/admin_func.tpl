@@ -127,6 +127,9 @@
 									editor.destroy();
 
 									inlineEditNotification(' Content saved! ');
+									
+									console.log('TODO: reiktu patikrint ar tikrai pavyko savinimas tik tada perkrauti');
+									location.reload();
 								})
 								.catch(err => {
 									console.error('Save error:', err);
