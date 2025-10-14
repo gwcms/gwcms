@@ -664,6 +664,7 @@ class GW_Common_Module extends GW_Module
 		if(! $this->canBeAccessed($item, ['access'=>GW_PERM_WRITE, 'nodie'=>1])){
 			$this->tpl_vars['readonly'] = true;
 		}
+		
 						
 		return ['update' => $item->get('id'), 'item' => $item];
 	}

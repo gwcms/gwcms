@@ -35,6 +35,49 @@
 <script>
 //var CKEDITOR_BASEPATH = '/vendor/ckeditor1/';	
 	
+function initProtected(id)	
+{
+	CKEDITOR.instances[id].on('instanceReady', function (ev) {
+
+
+		ev.editor.on('change', function() { 
+			this.updateElement();
+			$(CKEDITOR.instances[id].element.$).change()
+		});
+		
+		//anoying ctr+s shortcut always fails, ctrl+1
+		$('.cke_wysiwyg_frame').each(function(o){
+			this.contentWindow.document.addEventListener('keydown', e => {
+				
+				$("body").get(0).dispatchEvent(
+				  new KeyboardEvent('keydown', e)
+				);
+			
+				//prevent default for ctrl+s
+				if(e.which == 83 && (e.ctrlKey || e.metaKey)){
+					e.preventDefault();
+				}			
+			
+			
+			})
+		})
+		
+		
+		//nenukeliautu kode esantis >
+		ev.editor.on('getData', function (evt) {
+			//protected1 isimam
+			 evt.data.dataValue = evt.data.dataValue.replace(/<span[^>]*data-protected="([^"]+)"[^>]*>(.*?)<\/span>/g,
+					function (match, code, innerContent) {
+					    return innerContent; // Remove span but keep content
+					}
+				);
+			evt.data.dataValue = evt.data.dataValue.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+		});
+	
+	});
+}
+	
+	
 require(["ckeditor422"], function() {
 	
 	CKEDITOR.timestamp = null;//neveikia extra pluginsai
@@ -99,46 +142,8 @@ require(["ckeditor422"], function() {
 	
 	CKEDITOR.replace( '{$id}', config); 
  
- 
-	CKEDITOR.instances['{$id}'].on('instanceReady', function (ev) {
-
-		//$(CKEDITOR.instances['{$input_name}'].element.$).attr('id',"{$id}")
-
-		ev.editor.on('change', function() { 
-			this.updateElement();
-			$(CKEDITOR.instances['{$id}'].element.$).change()
-		});
-		
-		//anoying ctr+s shortcut always fails, ctrl+1
-		$('.cke_wysiwyg_frame').each(function(o){
-			this.contentWindow.document.addEventListener('keydown', e => {
-				
-				$("body").get(0).dispatchEvent(
-				  new KeyboardEvent('keydown', e)
-				);
-			
-				//prevent default for ctrl+s
-				if(e.which == 83 && (e.ctrlKey || e.metaKey)){
-					e.preventDefault();
-				}			
-			
-			
-			})
-		})
-		
-		
-		//nenukeliautu kode esantis >
-		ev.editor.on('getData', function (evt) {
-			//protected1 isimam
-			 evt.data.dataValue = evt.data.dataValue.replace(/<span[^>]*data-protected="([^"]+)"[^>]*>(.*?)<\/span>/g,
-					function (match, code, innerContent) {
-					    return innerContent; // Remove span but keep content
-					}
-				);
-			evt.data.dataValue = evt.data.dataValue.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
-	});
-	
-	});
+        
+	initProtected('{$id}');
 	
 })
 

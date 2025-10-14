@@ -162,6 +162,10 @@
 		{if $m->config->get("user/{$app->user->id}/editor")==2}
 			{$tmptype=code_smarty}	
 		{/if}
+		{if $tmptype==htmlarea}
+			{$tmptype=ckeditor422}
+		{/if}
+		
 		{if $m->config->get("user/{$app->user->id}/editor_height")}
 			{$ck_options.height=$m->config->get("user/{$app->user->id}/editor_height")}
 			{$opts.height=$ck_options.height}

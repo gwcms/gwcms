@@ -272,9 +272,40 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		
 		
+		if(!$host)
+			$host = GW::s('SITE_URL');
+				
+		
 		header("Location: $host/".$this->app->ln.'/'.$item->path.($args ? '?'. http_build_query($args): ""));
 	}
 	
+	
+	function viewForm()
+	{
+		$data = parent::viewForm();
+		if(isset($_GET['json'])){
+			$item = $data['item'];
+			$vals = $item->toArray();
+			
+			foreach($item->getInputs() as $input){
+				
+				$name = $input->get('name');
+				
+				if(isset($_GET['inpname']) &&  $_GET['inpname']!=$name){
+					continue;
+				}
+				
+				$inpdata = $input->toArray();
+				
+				$inpdata['value'] = $item->getContent($name); 
+				$vals['input_data'][$name] = $inpdata;
+			}
+			
+			die(json_encode($vals, JSON_PRETTY_PRINT));
+		}		
+		
+		return $data;
+	}
 	
 	function doFixUniqPathId()
 	{
