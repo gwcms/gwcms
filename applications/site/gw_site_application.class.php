@@ -601,7 +601,7 @@ class GW_Site_Application extends GW_Application
 			$tmp = json_decode($tmp, true);
 			$ask = $_SERVER['REQUEST_URI'];
 			
-			d::ldump([$tmp, $ask]);
+			//d::ldump([$tmp, $ask]);
 			
 			if(isset($tmp[$ask])){
 				

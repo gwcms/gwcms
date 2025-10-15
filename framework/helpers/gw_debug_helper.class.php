@@ -545,7 +545,7 @@ class GW_Debug_Helper
 		
 		$noerroidbody =  str_replace($e['errorid'], '---', $body);
 		
-		if($metadat['last'] == $noerroidbody)
+		if(($metadat['last']??null) == $noerroidbody)
 			$body = 'same as last '.date('Y-m-d H:i:s');
 		
 		$metadat['last'] = $noerroidbody;

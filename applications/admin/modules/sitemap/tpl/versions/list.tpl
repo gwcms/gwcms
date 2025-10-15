@@ -26,9 +26,9 @@
 	
 	{function dl_cell_diff}
 		{if $item->content==diffc}
-			{htmlspecialchars($item->uncompressDiff())}
+			{htmlspecialchars($item->uncompressDiff())|truncate:80}
 		{else}
-			{htmlspecialchars($item->diff)}
+			{htmlspecialchars($item->diff)|truncate:80}
 		{/if}
 		
 	{/function}

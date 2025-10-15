@@ -248,13 +248,15 @@ class GW_Page extends GW_i18n_Data_Object
 		
 		//if(GW::$context->app->user && GW::$context->app->user->isRoot()){
 				
-		if(GW::s('DEVELOPER_PRESENT') && GW::$context->app->app_name == 'SITE'){
-			return "<div class='ckedit' data-siteid='".$this->site_id."' data-app='{$context->app->name}' data-pageid='{$this->id}' data-contentkey='{$key}' data-ln='{$ln}'>".$val."</div>";
+		if(GW::s('DEVELOPER_PRESENT') && GW::$context->app->app_name == 'SITE' && !is_numeric($val) && self::__is_html($val)){
+			return "<div class='ckedit' data-siteid='".$this->site_id."' data-app='".GW::$context->app->app_name."' data-pageid='{$this->id}' data-contentkey='{$key}' data-ln='{$ln}'>".$val."</div>";
 		}
 		
 		return $val;
 	}
-		
+	static function __is_html($string) {
+	    return $string != strip_tags($string) || $string != html_entity_decode($string);
+	}		
 				
 		
 	

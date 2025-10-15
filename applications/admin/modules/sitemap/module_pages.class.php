@@ -196,7 +196,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 
 			case 'BEFORE_SAVE':
 				$item = $context;
-
+	
 				if ($item->id && isset($item->changed_fields['parent_id']) || isset($item->changed_fields['pathname']))
 					$this->afterParentIdChanges($item);
 				
