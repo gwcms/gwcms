@@ -41,6 +41,7 @@ applications/site/templates/gw/*
 applications/site/templates/common_module/*
 applications/site/assets/js/gw.js
 applications/site/assets/js/admin.js
+applications/site/assets/css/admin.css
 vendor/smarty4/*
 vendor/ckeditor422/*
 ";

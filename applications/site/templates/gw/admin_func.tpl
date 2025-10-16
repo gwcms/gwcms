@@ -16,8 +16,11 @@
 
 
 	<script src="/vendor/ckeditor422/ckeditor.js"></script>
+	{*TODO:::   perkelt js i ckedit_inline.js, padaryt redirecta i login jei is admin gaunamas need autj - igyvendint  *}
 	{literal}
 
+		
+		
 		<script>
 			function starInlineEditing(el){
 				console.log(el);
@@ -27,12 +30,33 @@
 					fetch('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form?json=1&inpname=' + dataKey)
 						.then(res => res.text())
 						.then(response => {
-							var pagedata = JSON.parse(response)
-							var inpdata = pagedata['input_data'][dataKey];
-							
-							el.data_parent_id = pagedata.parent_id;
+							try{
+								var pagedata = JSON.parse(response)
 
-							startEdit(el, inpdata['value'], inpdata['multilang']);
+								console.log(pagedata);
+								
+
+
+								var inpdata = pagedata['input_data'][dataKey];
+
+								el.data_parent_id = pagedata.parent_id;
+
+								startEdit(el, inpdata['value'], inpdata['multilang']);
+							}catch(err){
+								console.log(err)
+								
+								
+								if (confirm("Admin authorisation required. Do you want to open the admin window?")) {
+								    // Open a new window with specific size
+								    window.open(
+									"/admin",           // URL to open
+									"AdminWindow",      // Window name
+									"width=500,height=500" // Window features
+								    );
+								}								
+							
+								//GW.open_dialog2({ url: '/admin', iframe:1, title:"Login is required" })
+							}
 							//inlineEditNotification(el, ' response received! ');
 						})
 				}
@@ -128,7 +152,7 @@
 						removePlugins: 'maximize,resize',
 
 						toolbar: [
-							{name: 'document', items: ['CustomSave', '-', 'Source']},
+							{name: 'document', items: ['CustomSave', 'EditInAdmin', '-', 'Source']},
 							{name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
 							{name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent']},
 							{name: 'links', items: ['Link', 'Unlink']},
@@ -201,6 +225,15 @@
 							//inlineEditNotification(' Content saved! ');
 						}
 					});
+					
+					editor.addCommand('EditInAdminCmd', {
+						exec: function (editor) {
+							var dataId = el.dataset.pageid || '';
+							location.href = '/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form';
+						}
+					});					
+					
+					
 
 					// Add custom Save button with icon
 					editor.ui.addButton('CustomSave', {
@@ -210,7 +243,12 @@
 						icon: '   https://cdn-icons-png.flaticon.com/512/489/489707.png' // floppy disk icon
 					});
 
-
+					editor.ui.addButton('EditInAdmin', {
+						label: 'Edit in admin',
+						command: 'EditInAdminCmd',
+						toolbar: 'document',
+						icon: 'https://cdn-icons-png.flaticon.com/512/1548/1548672.png' // floppy disk icon
+					});
 					// Listen for ESC key to cancel editing
 					editor.on('contentDom', function () {
 						editor.document.on('keydown', function (event) {
