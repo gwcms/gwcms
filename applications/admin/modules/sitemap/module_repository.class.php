@@ -33,7 +33,7 @@ class Module_Repository extends GW_Common_Module {
 	}
 
 	function isImage($filename) {
-		return in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']);
+		return in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif','webp']);
 	}
 
 	function viewFilesList() 

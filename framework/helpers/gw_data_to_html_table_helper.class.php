@@ -45,7 +45,7 @@ class GW_Data_to_Html_Table_Helper
 				$val = is_array($val) ? implode(", \n", $val) :  $val;
 				
 				if($escape)
-					$val =  htmlspecialchars($val);
+					$val =  htmlspecialchars((string)$val);
 				
 				if(isset($merge[$field][$i])){
 					$rowspan="rowspan='".($merge[$field][$i]+1)."'";

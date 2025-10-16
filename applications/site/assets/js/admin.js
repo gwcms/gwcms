@@ -716,10 +716,12 @@ function startEdit(el, content, multilang, index) {
 
 		toolbar: [
 			{name: 'document', items: ['CustomSave', 'EditInAdmin', '-', 'Source']},
-			{name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
-			{name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent']},
-			{name: 'links', items: ['Link', 'Unlink']},
-			{name: 'insert', items: ['Image', 'Table']}
+			{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+			{ name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
+			{ name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+			{ name: 'colors', items: ['TextColor', 'BGColor'] },
+			{ name: 'links', items: ['Link', 'Unlink'] },
+			{ name: 'insert', items: ['Image', 'Table'] }
 		]
 	};
 	config.protectedSource = [];
@@ -859,6 +861,9 @@ document.querySelectorAll('.ckedit').forEach((el, index) => {
 		}
 
 		if (!e.shiftKey)
+			return;
+		
+		if (el.getAttribute('contenteditable') === 'true') 
 			return;
 
 		e.preventDefault();

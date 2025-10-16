@@ -23,7 +23,7 @@
 	
 	<!-- =============== MODULE MAP START =================== -->
 	<i id="MAP">
-		<i id="title">Support</i>
+		<i id="title">Klientų aptarnavimas</i>
 		<i id="info">
 			
 			<i id="icon"><![CDATA[<i class="fa fa-life-ring"></i>]]></i>
@@ -31,7 +31,7 @@
 		
 		<i id="childs">
 			<i id="messages">
-				<i id="title">Messages</i>
+				<i id="title">Užklausos</i>
 				<i id="info">
 					<i id="model">GW_Support_Message</i>
 				</i>			
