@@ -2,12 +2,12 @@
 ---------------------------CKEDIT inline------------------------------------------------------------------------------
 */
 .ckedit {
-	border: 2px dashed transparent;
+	border: 1px dashed transparent;
 	padding: 4px;
 	transition: border-color 0.2s;
 }
 .ckedit:hover {
-	border-color: brown;
+	border-color: orange;
 }
 .ckedit:focus-within {
 	border-color: green;

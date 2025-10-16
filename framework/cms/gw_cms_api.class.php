@@ -45,6 +45,7 @@ class GW_Cms_Api
 		$this->lang = $lang;
 
 		$this->http = new GW_Http_Agent();
+		//$this->http->debug = 1;
 
 		$this->base = GW::s("PROJECT_ADDRESS"); //for local access
 	}
@@ -55,7 +56,8 @@ class GW_Cms_Api
 		$get_params['act'] = 'do:' . $action;
 
 		$r = $this->http->getContents($this->base . $this->lang . "/" . $path . '?' . http_build_query($get_params));
-
+		
+		
 		//dump($this->http->flushDebugInfo());
 
 		return $r;
@@ -69,6 +71,7 @@ class GW_Cms_Api
 		$get_params['GW_CMS_API_AUTH'] = "$this->username:$this->api_key";
 		
 		$base = $this->base . $this->lang;
+		//$this->http->debug = 1;
 		
 		$r = $this->http->getContents($url =  ($this->base?"$base/":''). $path . '?' . http_build_query($get_params), $headers, $post);
 

@@ -2475,10 +2475,21 @@ class GW_Common_Module extends GW_Module
 			
 			if(isset($opts['search_fields'])){
 				foreach($opts['search_fields'] as $field){
-					if(strpos($field, '`')===false && strpos($field, '.')===false)
-						$field = "`$field`";
 					
-					$condarr[] = "$field LIKE $search";
+					
+					if(isset($i0->i18n_fields[$field])){
+					
+						foreach(GW::s('LANGS') as $ln)
+						{
+							$condarr[]="`{$field}_{$ln}` LIKE $search";
+						}
+					}else{
+
+						if(strpos($field, '`')===false && strpos($field, '.')===false)
+							$field = "`$field`";
+
+						$condarr[] = "$field LIKE $search";
+					}
 				}
 				
 				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
@@ -4108,4 +4119,10 @@ class GW_Common_Module extends GW_Module
 		$c->comment = $comment;
 		$c->insert();
 	}
+	
+	
+	function isDebugMode()
+	{
+		return GW::s('DEVELOPER_PRESENT') && $this->app->sess('debug');
+	}	
 }

@@ -455,7 +455,15 @@ class Itax
 					]
 				];
 			
-			if(isset($data['reverse_vat'])){
+			
+			//bandymas
+			//if(isset($data['tags'])  && $data['tags']){
+			//	$invoicelines[0]['tags'] = $data['tags'];
+			//}
+			
+			//d::dumpas(self::__convertTags($data['tags']));
+			
+			if(isset($data['reverse_vat']) && $data['reverse_vat']=='1'){
 				$invoicelines[0]['reverse_vat'] = 1;
 			}
 		}
@@ -1041,9 +1049,14 @@ class Itax
 		$data['general_journal'] = $general_joural;
 		$data['_DEBUG'] = 1;
 		
+		//d::ldump([$data ,$general_joural]);
+		
 		
 		$url = $this->getEndpoint().'general_journals' . ( isset($data['id']) ?'/'.$data['id']:'');
 		$result = $this->apiCall(isset($data['id']) ? "PUT":"POST", $url, $data);
+		
+		//d::dumpas(['result'=>$result]);
+		
 	
 		$result->postdata = $data;
 		/*
@@ -1060,4 +1073,17 @@ class Itax
 		return $result;		
 	}	
 	
+	
+	function getTagNames($ids)
+	{
+		$resp = Menuturas_Api::singleton()->request('itax/itax/optionsajax', ['group'=>'tags', 'ids'=>json_encode($ids)], [], []);
+		
+		$resp = json_decode($resp, true);
+		
+		$rez = [];
+		foreach((array)$resp['items'] as $row)
+			$rez[] = $row['title'];
+		
+		return $rez;
+	}
 }

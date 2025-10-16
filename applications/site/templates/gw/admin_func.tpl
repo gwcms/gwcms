@@ -13,18 +13,8 @@
 		var gw_ln = "{$app->ln}";
         </script>
         <script src="{$app_root}assets/js/admin.js?v={$GLOBALS.version_short}"></script>
-
-
+	<link href="{$app_root}assets/css/admin.css?v={$GLOBALS.version_short}" rel="stylesheet" />
 	<script src="/vendor/ckeditor422/ckeditor.js"></script>
-	{*TODO:::   perkelt js i ckedit_inline.js, padaryt redirecta i login jei is admin gaunamas need autj - igyvendint  *}
-	{literal}
-
-		
-		
-		<style>
-
-		</style>
-	{/literal}
 
 
 {/if}
