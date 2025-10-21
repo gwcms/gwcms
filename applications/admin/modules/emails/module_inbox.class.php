@@ -87,7 +87,8 @@ class Module_Inbox extends GW_Common_Module
 		if($_GET['last'] ?? false)
 			$last = $_GET['last'];
 		
-		$start = $mail->getIdByUid($last);
+		$start = $mail->getIdByUid($last) +1; //+1 2025-06-16 atkreipiau demesi kad paskutine zinute skanuoja kelis kartus
+		
 		$options['start'] = $start ? $start : 1;
 		
 		

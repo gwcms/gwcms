@@ -31,12 +31,12 @@
 
 {call e field=attachments 
 	type=attachments 
-	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>5]
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>99]
 	preview=[thumb=>'50x50']
 	readonly=$tmpreadonly
 }
 
-{call e field=data type=code_json height="100px"}
+{call e field=data type=jstree height="100px"}
 {call e field=processed type=bool}
 
 {capture append="footer_hidden"}

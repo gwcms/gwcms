@@ -7,7 +7,6 @@
     
 {$m->addIncludes("jstree_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 
-{$m->addIncludes("upload_input/css", 'css', "`$app_root`static/vendor/jstree/dist/themes/default/style.min.css")}
 	
 	{capture append=footer_hidden}
 	<style>
@@ -17,7 +16,7 @@
 		
 		
 		    .jstreeContainer{ position: relative; height: auto; }
-			.controls{ margin-bottom:10px; float:right; position:absolute; top:0;right:0; }
+			.controls{ margin-bottom:10px; float:right; position:absolute; top:0;right:0; cursor:pointer }
 	</style>
 	{/capture}
 

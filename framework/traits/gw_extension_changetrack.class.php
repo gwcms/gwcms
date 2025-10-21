@@ -203,15 +203,13 @@ class GW_Extension_ChangeTrack
 			if($field=='update_time' || isset($itm->ignored_change_track[$field]))
 				continue;
 			
-			if($itm->_original->get($field) == $itm->get($field))
+			if($itm->_original->getStoreVal($field) == $itm->getStoreVal($field))
 				continue;
 			
-			$new = $itm->get($field);
-			$old = $itm->_original->get($field);
-						
-			$changes[$field]=['new'=>$new, 'old'=>$old];
-			
-				
+			$new = $itm->getStoreVal($field);
+			$old = $itm->_original->getStoreVal($field);
+
+			$changes[$field]=['new'=>$new, 'old'=>$old];	
 		}
 		
 		if($this->additional_changes)

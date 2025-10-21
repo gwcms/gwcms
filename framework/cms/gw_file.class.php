@@ -214,6 +214,21 @@ class GW_File extends GW_Data_Object implements GW_Composite_Slave
 	
 	function getContents()
 	{
+		
+		
+		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV && !file_exists($this->getFilename())){	
+			
+			$local = GW::s('DEPLOY_DIR');
+			initEnviroment(GW_ENV_PROD);
+			$remote = GW::s('DEPLOY_DIR');
+			$SSH_USERHOST = GW::s('SSH_USERHOST');
+			
+			$remotefn = str_replace($local, $remote, $this->getFilename());
+			
+			d::dumpas('RETRIEVE FILE scp '.$SSH_USERHOST.':'.$remotefn.' '.$this->getFilename());
+		}		
+		
+		
 		return file_get_contents($this->getFilename());
 	}
 }
