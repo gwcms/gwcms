@@ -38,4 +38,29 @@ class GW_CSV_Helper
 		}
 	}
 	
+	
+	static function csvToArray($filename, $delimiter = ",") {
+	    if (!file_exists($filename) || !is_readable($filename)) {
+		return false;
+	    }
+
+	    $header = null;
+	    $data = [];
+
+	    if (($handle = fopen($filename, "r")) !== false) {
+		while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+		    if (!$header) {
+			// First row becomes header keys
+			$header = $row;
+		    } else {
+			// Combine header with row values
+			$data[] = array_combine($header, $row);
+		    }
+		}
+		fclose($handle);
+	    }
+
+	    return $data;
+	}	
+	
 }

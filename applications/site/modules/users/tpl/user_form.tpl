@@ -210,7 +210,7 @@
 	</div>
 {/if}
 
-{if GW::s('PROJECT_NAME') ==  'events_ltf_lt' &&  !$register}
+{if GW::s('PROJECT_NAME') ==  'events_ltf_lt' && !$register}
 
 	<div class="col-md-6">
 		{input field="antidoping" type="image" required=1  
