@@ -104,7 +104,7 @@ class GW_Data_Object
 			return $this->$func($key, $store, false);			
 		}
 
-		return $this->content_base[$key];
+		return $this->content_base[$key] ?? null;
 	}
 
 	/**

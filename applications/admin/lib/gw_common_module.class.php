@@ -3093,7 +3093,7 @@ class GW_Common_Module extends GW_Module
 		
 		$data = $this->getItemRecoveryData($item);
 				
-		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Recovery line:");	
+		$this->lgr->msg(($user ? "Delete item user: {$user->id}. {$user->title}." : '') .($recoveryReason?' ('.$recoveryReason.')':'')." Restore with doRecoverFromRecoveryLine:");	
 		$this->lgr->msg(json_encode($data));		
 	}	
 	
@@ -3102,10 +3102,13 @@ class GW_Common_Module extends GW_Module
 	function recoverData($data)
 	{
 		
-		d::ldump('todo: implement');
-		d::dumpas($data);
 		
-		$this->setMessage($msg = "Import done, cnt: ".count($entries).", speed: {$t->stop()}");
+		$item = $this->model->createNewObject();
+		$item->setValues($data['item_data']);
+		$item->insert();
+		
+		
+		$this->setMessage($msg = "Import done, cnt: 1");
 	}
 	
 	function doRecoverFromRecoveryLine()
