@@ -203,6 +203,7 @@
 		
 		<br />
 		<small style="color:silver">Max upload size: {$max_upload_size}</small>
+		<small style="color:silver">Max execution time: {ini_get('max_execution_time')}</small>
 		
 		
 	{/block}	

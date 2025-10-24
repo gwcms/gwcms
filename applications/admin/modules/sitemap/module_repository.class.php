@@ -26,6 +26,8 @@ class Module_Repository extends GW_Common_Module {
 
 		//d::dumpas($this->app);
 		$this->initModCfg();
+		
+		ini_set('max_execution_time', 1800);
 	}
 
 	function viewFileSelect() {
