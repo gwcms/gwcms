@@ -4,6 +4,7 @@
 
 include __DIR__.'/init_basic.php';
 
+GW_Bot_Detect::botRedirect();
 GW_Bot_Detect::process();
 
 GW::request();
