@@ -14,6 +14,16 @@ class GW_Bot_Detect
 			;
 	}	
 	
+	static function botRedirect()
+	{
+		if (self::isBot() && date('w') == 6) {
+			header("HTTP/1.1 503 Service Unavailable");
+			header('Status: 503 Service Temporarily Unavailable');			
+			header("Retry-After: 3600");
+			exit("Site is temporarily unavailable for indexing. Please try again later.");
+		}		
+	}
+	
 	static function process(){
 
 		if( (GW::s('BOT_SEND_TO_MIRROR') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST) || GW::s('SHADOW_SYS') ){
@@ -30,7 +40,7 @@ class GW_Bot_Detect
 			
 		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
 		if(
-			GW::s('BOT_SEND_TO_MIRROR') && self:: isBot() && 
+			GW::s('BOT_SEND_TO_MIRROR') && self::isBot() && 
 			(
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || 
 				GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD
@@ -40,12 +50,7 @@ class GW_Bot_Detect
 			
 			//nebeatlaiko smurto 2025-04-04 2025-04-25 naujas serveriukas
 			//
-			if (date('w') == 6) {
-				header("HTTP/1.1 503 Service Unavailable");
-				header('Status: 503 Service Temporarily Unavailable');			
-				header("Retry-After: 3600");
-				exit("Site is temporarily unavailable for indexing. Please try again later.");
-			}			
+			self::botRedirect();		
 			
 			if(rand(0,10)==5)
 				GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
