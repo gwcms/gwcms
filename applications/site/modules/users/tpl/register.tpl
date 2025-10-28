@@ -26,7 +26,7 @@
 
             <div class="text-center">
               <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/ALREADY_HAVE_ACCOUNT_Q')}
-                <a class="g-font-weight-600" href="{$ln}/direct/users/users/login">{GW::ln('/M/USERS/VIEWS/login')}</a></p>
+                <a class="g-font-weight-600" rel="nofollow" href="{$ln}/direct/users/users/login">{GW::ln('/M/USERS/VIEWS/login')}</a></p>
             </div>
 	    
 	    

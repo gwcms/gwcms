@@ -639,7 +639,7 @@ class GW_Public_Module {
 		}
 		
 		
-		
+		header('X-Robots-Tag: noindex, nofollow');
 		$this->app->jump('direct/users/users/login');				
 	}
 	

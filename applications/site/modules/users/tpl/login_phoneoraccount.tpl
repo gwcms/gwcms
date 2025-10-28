@@ -10,7 +10,7 @@
 
 	  <div class="text-center">
               <p class="g-color-gray-dark-v5 mb-0">{GW::ln('/m/DONT_HAVE_ACCOUNT')}
-                <a class="g-font-weight-600" href="{$ln}/direct/users/users/register">{GW::ln('/m/VIEWS/register')}</a></p>
+                <a class="g-font-weight-600" rel="nofollow" href="{$ln}/direct/users/users/register">{GW::ln('/m/VIEWS/register')}</a></p>
             </div>  
 	    <br><br>		
 		
@@ -81,7 +81,7 @@
                     </label>
                   </div>
                   <div class="col align-self-center text-right">
-                    <a class="g-font-size-13" href="{$ln}/direct/users/users/passreset">{GW::ln('/m/FORGOT_PASSWORD')}</a>
+                    <a class="g-font-size-13" rel="nofollow" href="{$ln}/direct/users/users/passreset">{GW::ln('/m/FORGOT_PASSWORD')}</a>
                   </div>
                 </div>
 

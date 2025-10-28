@@ -44,13 +44,13 @@
 					{$aclass="d-block align-middle active u-link-v5 g-color-text g-color-primary--hover g-bg-gray-light-v5--hover g-color-primary--parent-active g-bg-gray-light-v5--active rounded g-pa-3"}
 					{if !$app->user}
 						<li class="g-py-3">
-						  <a class="{$aclass}" href="{$ln}/direct/users/users/login">
+						  <a class="{$aclass}" rel="nofollow"  href="{$ln}/direct/users/users/login">
 							  <span class="u-icon-v1 g-color-gray-dark-v5 mr-2"><i class="fa fa-sign-in" style="display:inline-block;line-height: 30px;"></i></span>
 							  {GW::ln('/M/USERS/VIEWS/login')}
 						  </a>
 						</li>
 						<li class="g-py-3">
-						  <a class="{$aclass}" href="{$ln}/direct/users/users/register">
+						  <a class="{$aclass}" rel="nofollow" href="{$ln}/direct/users/users/register">
 						    <span class="u-icon-v1 g-color-gray-dark-v5 mr-2"><i class="icon-user-follow" style="display:inline-block;line-height: 30px;"></i></span> 
 							{GW::ln('/M/USERS/VIEWS/register')}
 						  </a>

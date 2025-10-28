@@ -509,7 +509,9 @@ class Module_Shop extends GW_Public_Module
 	{		
 		if(!$this->app->user){
 			$this->setMessage(GW::ln('/m/NEED_AUTHORISE_TO_ACCESS_WISHLIST'));
-			$this->app->jump('direct/users/users/login',['after_auth_nav' => $_SERVER['REQUEST_URI']]);
+			//$this->app->jump('direct/users/users/login',['after_auth_nav' => $_SERVER['REQUEST_URI']]);
+			
+			$this->userRequired();
 		}
 		
 		if(!isset(GW::$globals['GW_SHOP_wishlist']))

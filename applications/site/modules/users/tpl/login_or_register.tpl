@@ -11,12 +11,12 @@
 			 data-target="nav-1-1-primary-hor-fill" 
 			data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-white g-mb-20">
                       <li class="nav-item">
-                        <a class="nav-link {if $login==0}active{/if}"  href="{$ln}/direct/users/users/register" >
+                        <a class="nav-link {if $login==0}active{/if}" rel="nofollow"  href="{$ln}/direct/users/users/register" >
 				<b>{GW::ln('/m/VIEWS/register')}</b>
 				<br><small>{GW::ln('/m/DONT_HAVE_ACCOUNT')}</small></a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link {if $login==1}active{/if}"  href="{$ln}/direct/users/users/login" >
+                        <a class="nav-link {if $login==1}active{/if}"  rel="nofollow" href="{$ln}/direct/users/users/login" >
 				
 				<b>{GW::ln('/M/USERS/VIEWS/login')}</b>
 				<br>

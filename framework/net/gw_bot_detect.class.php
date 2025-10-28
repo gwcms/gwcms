@@ -15,13 +15,24 @@ class GW_Bot_Detect
 	}	
 	
 	static function botRedirect()
-	{
-		if (self::isBot() && date('w') == 6) {
+	{		
+		
+		if (self::isBot() && date('w') == trim(file_get_contents('/var/www/common/no_botwday'))) {
 			header("HTTP/1.1 503 Service Unavailable");
 			header('Status: 503 Service Temporarily Unavailable');			
 			header("Retry-After: 3600");
 			exit("Site is temporarily unavailable for indexing. Please try again later.");
 		}		
+		
+		
+		//infinite loop stop
+		if(self::isBot() && isset($_GET['after_auth_nav']))
+		{
+			header("HTTP/1.1 404 Not Found");
+			exit("Site is temporarily unavailable for indexing. Please try again later.");
+		}
+		
+				
 	}
 	
 	static function process(){

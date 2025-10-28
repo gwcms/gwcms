@@ -15,10 +15,10 @@
        	
 <div  class="row" id="notLoggedInOptions" style="{if $select_newuser_or_existing}display:none{/if}">
 	<div class="col-md-6">
-		<button class="btn btn-block u-btn-orange g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2" onclick="location.href='{$app->buildUri('direct/users/users/login',['RETURN_TO'=>$smarty.server.REQUEST_URI])}'">{GW::ln('/m/I_HAVE_ACCOUNT')}</button>
+		<button class="btn btn-block u-btn-orange g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2"  rel="nofollow" onclick="location.href='{$app->buildUri('direct/users/users/login',['RETURN_TO'=>$smarty.server.REQUEST_URI])}'">{GW::ln('/m/I_HAVE_ACCOUNT')}</button>
 	</div>
 	<div class="col-md-6">
-		<button class="btn btn-block u-btn-indigo g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2" onclick="console.log('test');iamNewUser()">{GW::ln('/m/I_AM_NEW')}</button>
+		<button class="btn btn-block u-btn-indigo g-font-size-13 text-uppercase g-py-15 mb-4" type="button" data-next-step="#step2" rel="nofollow" onclick="console.log('test');iamNewUser()">{GW::ln('/m/I_AM_NEW')}</button>
 	</div>
 </div>
 		
