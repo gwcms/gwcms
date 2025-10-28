@@ -15,7 +15,7 @@
 
 	{/function}	
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2,modactions]}		
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,dialogconf2,modactions,rtlog]}		
 	
 
 	

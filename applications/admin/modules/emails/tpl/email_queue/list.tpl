@@ -7,7 +7,7 @@
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
 	
-	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,sendqueue]}	
+	{$do_toolbar_buttons_hidden=[exportdata,importdata,dialogconf,print,sendqueue,rtlog]}	
 
 	{function name=do_toolbar_buttons_sendqueue}
 		{if $m->write_permission}	

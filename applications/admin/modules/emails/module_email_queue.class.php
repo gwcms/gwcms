@@ -17,7 +17,9 @@ class Module_Email_Queue extends GW_Common_Module
 		
 		
 		$this->app->carry_params['clean'] = 1;
-		$this->app->carry_params['to'] = 1;		
+		$this->app->carry_params['to'] = 1;	
+		
+		$this->initLogger();
 				
 	}
 	
