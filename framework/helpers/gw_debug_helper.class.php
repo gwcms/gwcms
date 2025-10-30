@@ -459,7 +459,10 @@ class GW_Debug_Helper
 		}else{
 			if(GW_Bot_Detect::isBot())
 				{
-					die('ad5f1s6f5gb41fg65ngh4fa16s5d1fasd21f65st1hb6s5f21b3s2f6d4gre');
+					echo('ad5f1s6f5gb41fg65ngh4fa16s5d1fasd21f65st1hb6s5f21b3s2f6d4gre1');
+					
+					if(GW::s('DEVELOPER_PRESENT'))
+						self::outputToScreen($e);
 				}else{
 					echo "error report turned off<br/>\n";
 			

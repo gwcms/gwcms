@@ -127,4 +127,22 @@ class GW_Bot_Detect
 			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent_id, 'speed'=>$speed]);
 		}
 	}
+	
+	
+	static function recaptcha()
+	{
+		session_start();
+
+		$special_domains = GW::s('SOLVE_RECAPTCHA_DOMAINS'); // domains that need captcha
+		$current_domain = $_SERVER['HTTP_HOST'] ?? '';
+
+		if (in_array($current_domain, $special_domains)) {
+		    // If not yet verified, redirect to captcha
+		    if (empty($_SESSION['human_verified'])) {
+			$_SESSION['redirect_after_captcha'] = $_SERVER['REQUEST_URI'];
+			header('Location: /humancheck.php');
+			exit;
+		    }
+		}		
+	}
 }
