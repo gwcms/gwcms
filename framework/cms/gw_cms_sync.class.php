@@ -229,7 +229,29 @@ class GW_CMS_Sync
 					$filesarr[$idx]=$filterarr_orig[$idx];
 
 				}
-		}	
+		}
+		
+		
+		//kai kurie projektai gal persistenge ir nuklydo arba liko nuosaleje pvz isjungti
+		//users modulio sinchronizacija: applications/site/modules/users/* (artistdb pavizdys)
+		//tokiu atveju overridins gwcms nustatytus whitelistus
+		
+		if(isset($super_ignore)){
+			$super_ignore=explode("\n", trim($super_ignore));
+		
+			$filterarr_orig=$filesarr;
+
+			//d::dumpas([$includef, $paths]);
+
+			foreach($filesarr as $idx => $file)
+			{
+				foreach($super_ignore as $pattern)
+					if(fnmatch($pattern, $file)){
+						unset($filesarr[$idx]);
+						echo "--(superprojspec) $file ($pattern)\n";
+					}
+			}	
+		}
 		
 		echo "filterProjectSpecific: ".$t->stop(5)." secs\n";
 	}
