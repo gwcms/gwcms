@@ -43,9 +43,9 @@
 	{/if}
 	
 	{if isset($dl_calc_totals[$field])}
-		{$dl_calc_totals[$field]=$dl_calc_totals[$field]+$item->$field}
+		
 
-		{assign var=dl_calc_totals value=$dl_calc_totals scope=global}	
+		
 	{/if}		
 	
 {/function}
@@ -70,7 +70,14 @@
 
 {function dl_list_proc_rows}
 
-	{foreach $list as $rowidx => $item}		
+	
+	
+	
+	{foreach $list as $rowidx => $item}	
+		{foreach $dl_calc_totals as $field => $x}
+			{$dl_calc_totals[$field]=$dl_calc_totals[$field]+$item->$field}
+		{/foreach}		
+		
 		{$id=$item->id}
 		{$list_row_id=$list_row_id+1}
 		
@@ -109,8 +116,11 @@
 
 			{/block} 
 		</tr>
+		
 
 	{/foreach}	
+	
+	{assign var=dl_calc_totals value=$dl_calc_totals scope=global}	
 {/function}
 
 {function dl_actions_head}
