@@ -690,21 +690,14 @@ const restoreSmarty = (html) => {
 
 function startEdit(el, content, multilang, index) {
 
-
-	changeEditBtnText(el,"Escape")
+	changeEditBtnText(el, "Escape");
 
 	const dataId = el.dataset.pageid || '';
 	const dataKey = el.dataset.contentkey || '';
-	// Assign a unique ID
-
 
 	el.setAttribute('contenteditable', 'true');
-
-
-	// Save original HTML to restore on cancel
 	el.originalHTML = el.innerHTML;
 
-	//content is replaced with unprocessed one
 	if (content)
 		el.innerHTML = content;
 
@@ -713,9 +706,8 @@ function startEdit(el, content, multilang, index) {
 		extraAllowedContent: '*(*);*{*}',
 		contentsCss: [],
 		removePlugins: 'maximize,resize',
-
 		toolbar: [
-			{name: 'document', items: ['CustomSave', 'EditInAdmin', '-', 'Source']},
+			{ name: 'document', items: ['CustomSave', 'EditInAdmin', '-', 'Source'] },
 			{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
 			{ name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
 			{ name: 'styles', items: ['Format', 'Font', 'FontSize'] },
@@ -725,149 +717,172 @@ function startEdit(el, content, multilang, index) {
 		]
 	};
 	config.protectedSource = [];
-	config.protectedSource.push( /\{[\s\S]*?\}/g );
+	config.protectedSource.push(/\{[\s\S]*?\}/g);
 
-	config.extraPlugins = 'dialog,codemirror,filebrowser,showprotected1'
+	config.extraPlugins = 'dialog,codemirror,filebrowser,showprotected1';
 
 	config.entities = false;
 	config.basicEntities = false;
 	config.entities_greek = false;
-	config.entities_latin = false;	
-	config.filebrowserBrowseUrl = '/admin/'+GW.ln+'/sitemap/repository/fileselect';
-	config.filebrowserImageBrowseUrl = config.filebrowserBrowseUrl
+	config.entities_latin = false;
 
+	config.filebrowserBrowseUrl = '/admin/' + GW.ln + '/sitemap/repository/fileselect';
+	config.filebrowserImageBrowseUrl = config.filebrowserBrowseUrl;
 
 	// Create CKEditor inline instance
 	const editor = CKEDITOR.inline(el.id, config);
-
 	initProtected(el.id);
 
-
-	//kad parodyt toolbar?
 	el.focus();
-
 	inlineEditNotification(el, 'Editing start');
-	// Register custom Save command
+
+	// --- UNSAVED CHANGES PROTECTION ---
+	let unsavedChanges = false;
+
+	function enableUnloadWarning() {
+		if (!unsavedChanges) {
+			unsavedChanges = true;
+			window.onbeforeunload = function () {
+				return "You have unsaved changes. Are you sure you want to leave?";
+			};
+		}
+	}
+
+	function clearUnloadWarning() {
+		unsavedChanges = false;
+		window.onbeforeunload = null;
+	}
+
+	editor.on('change', enableUnloadWarning);
+	editor.on('destroy', clearUnloadWarning);
+
+	// --- CUSTOM SAVE COMMAND ---
 	editor.addCommand('customSaveCmd', {
 		exec: function (editor) {
-
-			//
-			var html = editor.getData();
+			let html = editor.getData();
 			html = restoreSmarty(html);
 
-			// Prepare URL-encoded POST data
 			const formData = new URLSearchParams();
 			formData.append('act', 'do:save');
 			formData.append('item[id]', dataId);
-
-			//
 			formData.append('item[input_data][' + dataKey + (multilang ? '_' + GW.ln : '') + ']', html);
 			formData.append('item[parent_id]', el.data_parent_id);
 
-
-			fetch('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form?dialog=1', {// ← your PHP endpoint
+			fetch('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form?dialog=1', {
 				method: 'POST',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: formData.toString()
 			})
 				.then(res => res.text())
 				.then(response => {
 					console.log('Server response:', response);
+					clearUnloadWarning();
 					editor.destroy();
-
-					inlineEditNotification(el, ' Content saved! ');
-
-					console.log('TODO: reiktu patikrint ar tikrai pavyko savinimas tik tada perkrauti');
+					inlineEditNotification(el, 'Content saved!');
+					console.log('TODO: check save result before reload');
 					location.reload();
 				})
 				.catch(err => {
 					console.error('Save error:', err);
 					alert('Failed to save content!');
 				});
-
-
-			// Temporary visual feedback
-			//inlineEditNotification(' Content saved! ');
 		}
 	});
 
+	// --- EDIT IN ADMIN COMMAND ---
 	editor.addCommand('EditInAdminCmd', {
-		exec: function (editor) {
+		exec: function () {
 			var dataId = el.dataset.pageid || '';
-			location.href = '/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form';
+			window.open('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form');
 		}
-	});					
+	});
 
-
-
-	// Add custom Save button with icon
+	// --- ADD BUTTONS ---
 	editor.ui.addButton('CustomSave', {
 		label: 'Save',
 		command: 'customSaveCmd',
 		toolbar: 'document',
-		icon: '   https://cdn-icons-png.flaticon.com/512/489/489707.png' // floppy disk icon
+		icon: 'https://cdn-icons-png.flaticon.com/512/489/489707.png'
 	});
 
 	editor.ui.addButton('EditInAdmin', {
 		label: 'Edit in admin',
 		command: 'EditInAdminCmd',
 		toolbar: 'document',
-		icon: 'https://cdn-icons-png.flaticon.com/512/1548/1548672.png' // floppy disk icon
+		icon: 'https://cdn-icons-png.flaticon.com/512/1548/1548672.png'
 	});
-	// Listen for ESC key to cancel editing
+
+	// --- ESC HANDLER (cancel editing) ---
 	editor.on('contentDom', function () {
 		editor.document.on('keydown', function (event) {
 			if (event.data.getKey() === 27) { // ESC
 				event.data.preventDefault();
-				cancelInlineEditing(el);
-
+				cancelInlineEditing(el, editor, clearUnloadWarning);
 			}
 		});
 	});
 }
 
+// --- CANCEL INLINE EDITING ---
+function cancelInlineEditing(el, editor = null, clearUnloadWarning = null) {
+	if (!confirm("Discard unsaved changes?")) return;
 
+	if (!editor && CKEDITOR.instances[el.id])
+		editor = CKEDITOR.instances[el.id];
+
+	if (editor)
+		editor.destroy();
+
+	el.innerHTML = el.originalHTML;
+	el.removeAttribute('contenteditable');
+
+	if (clearUnloadWarning)
+		clearUnloadWarning();
+
+	inlineEditNotification(el, 'Editing canceled');
+}
+
+// --- INLINE EDITOR INITIALIZATION ---
 document.querySelectorAll('.ckedit').forEach((el, index) => {
 
-	  const container = document.createElement('div');
-		container.classList.add('ckedit-container');
-		el.parentNode.insertBefore(container, el);
-		container.appendChild(el);
+	const container = document.createElement('div');
+	container.classList.add('ckedit-container');
+	el.parentNode.insertBefore(container, el);
+	container.appendChild(el);
 
-		  const btn = document.createElement('button');
-		btn.textContent = 'Edit';
-		btn.className = 'edit-inline-btn';
-		container.appendChild(btn);
+	container.insertAdjacentHTML('beforeend',
+		`<div class="edit-inline-btn-contain">
+			<button class="edit-inline-btn0 edit-inline-btn">Edit</button>
+			<button class="edit-inline-btn0 edit-inline-btn-inadm">Adm</button>
+		</div>`);
 
-		el.id = 'inlineeditor_' + index;
+	el.id = 'inlineeditor_' + index;
 
+	container.querySelector('.edit-inline-btn').addEventListener('click', (e) => {
+		if (el.getAttribute('contenteditable') === 'true') {
+			cancelInlineEditing(el);
+		} else {
+			starInlineEditing(el);
+		}
+	});
 
-		btn.addEventListener('click', (e) => {
-			if (el.getAttribute('contenteditable') === 'true') {
-				cancelInlineEditing(el);
-			}else{
-				starInlineEditing(el);
-			}
-		})
+	container.querySelector('.edit-inline-btn-inadm').addEventListener('click', (e) => {
+		const elBtn = e.currentTarget;
+		const dataId = findContainer(elBtn).querySelector('.ckedit').dataset.pageid;
+		window.open('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form');
+	});
 
-	el.addEventListener('click', (e) => {						
-
+	el.addEventListener('click', (e) => {
 		const dataId = el.dataset.pageid || '';
 		const dataKey = el.dataset.contentkey || '';
 
-		if(e.ctrlKey){
-			location.href = '/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form';
-			return;
-		}
-
 		if (!e.shiftKey)
 			return;
-		
-		if (el.getAttribute('contenteditable') === 'true') 
+
+		if (el.getAttribute('contenteditable') === 'true')
 			return;
 
 		e.preventDefault();
-
 		starInlineEditing(el);
 	});
 });
