@@ -35,6 +35,9 @@
 	{if $app->sess['jumpdebug']}
 		| <a style="color:orange" href="{$app->buildUri("system/tools")}">JUMPDEBUG</a>
 	{/if}
+	{if $app->sess['confidentialmode']}
+		| <a style="background-color:violet;color:white" href="{$app->buildUri("system/tools")}">CONFIDENTIALMODE</a>
+	{/if}	
 	{if GW::s('DEVELOPER_PRESENT')}
 		| <a style="background-color:khaki"}"  href="{$app->buildUri("system/tools")}">DEV</a>
 	{/if}

@@ -64,13 +64,22 @@
 			{else}
 				{$coltitle}
 			{/if}
+			{if $m->isDebugMode()}
+				<small class="debug">{$field}</small>
+			{/if}
 		{/if}
 {/function}
 
 
 {function dl_list_proc_rows}
 
-	
+	{if $dl_calc_max}
+		{foreach $list as $rowidx => $item}	
+			{foreach $dl_calc_max as $field => $x}
+				{$dl_calc_max[$field]=max($dl_calc_max[$field], $item->$field)}
+			{/foreach}		
+		{/foreach}		
+	{/if}
 	
 	
 	{foreach $list as $rowidx => $item}	
@@ -311,7 +320,10 @@
 
 				{foreach $dl_calc_totals as $field => $total}
 					<tr>
-						<td nowrap align="right"><i>{$m->fieldTitle($field)}</i></td>
+						<td nowrap align="right">
+							<i>{$m->fieldTitle($field)}</i>
+							 {if $m->isDebugMode()}<br><small class="debug">{$field}</small>{/if}
+						</td>
 						<td>
 							{$total}
 						</td>

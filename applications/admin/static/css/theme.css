@@ -8037,3 +8037,5 @@ a.badge:hover{
 .changetrack .ln{ color:gray; text-transform:uppercase }
 .changetrack a:hover{ background-color: silver }
 .changetrack{  }
+
+.debug{ color: orange }

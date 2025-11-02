@@ -11,7 +11,7 @@
  *
  * @author wdm
  */
-class GW_Adm_Page_View extends GW_Data_Object
+class GW_Adm_Page_View extends GW_i18n_Data_Object
 {
 	public $table = 'gw_adm_page_views';
 	public $default_order = 'type ASC, priority DESC, title ASC';
@@ -28,6 +28,10 @@ class GW_Adm_Page_View extends GW_Data_Object
 		'groupby_enabled'=>1,
 		'select_enabled'=>1,
 	];
+	
+	public $encode_fields = [
+	    'config'=>'json'
+	];	
 	
 	/**
 	 * 

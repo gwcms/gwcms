@@ -44,7 +44,7 @@
 
 		{if $item->fields}
 			{$item->set(fields,json_encode(json_decode($item->fields), $smarty.const.JSON_PRETTY_PRINT))}
-			{call e field=fields type=read}
+			{call e field=fields type=jstree}
 		{/if}
 
 		{call e field=page_by type=number}	
@@ -90,7 +90,7 @@
 		{call e field=condition type=textarea height=50 rowclass="conditioninput"}
 
 		{call e field=fields_enabled type=bool}
-		{call e field=fields type=textarea height=50 rowclass="fieldsinput"}
+		{call e field=fields type=jstree rowclass="fieldsinput"}
 
 		{call e field=pageby_enabled type=bool}
 		{call e field=page_by type=number rowclass="pagebyinput"}
@@ -102,6 +102,9 @@
 {call e field=default type=bool}
 {call e field=regular type=bool}
 {call e field=dropdown type=bool}
+
+{call e field=config type=jstree}
+
 {call e field=active type=bool default=1}
 
 

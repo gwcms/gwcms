@@ -67,7 +67,7 @@
 	{$objfld=$item->linkedObjMap($field)}
 	
 	{if $item->get($objfld)}
-		{$item->get($objfld)->title}
+		{if $m->isDebugMode()}<small class="debug">{$id}.</small>{/if} {$item->get($objfld)->title}
 	{else}
 		<span title="{$id|escape}">-</span>
 	{/if}
@@ -75,7 +75,7 @@
 
 {function name=dl_output_filters_linked_obj}	
 	{if $item->get($field)}
-		{$item->get($field)->title}
+		{if $m->isDebugMode()}<small class="debug">{$id}.</small>{/if} {$item->get($field)->title}
 	{else}
 		<span title="{$id|escape}">-</span>
 	{/if}

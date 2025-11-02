@@ -51,9 +51,8 @@ class GW_Data_Object
 		elseif (!is_null($values) && count($this->primary_fields) == 1)
 			$this->set($this->primary_fields[0], $values);
 
-		if(!$this->table)
-			$this->table = strtolower(get_class($this));
-		
+
+		$this->initTable();
 		$this->initExtensions();
 		
 		if ($load)
@@ -65,6 +64,13 @@ class GW_Data_Object
 		$this->constructcomplete = true;
 		$this->calculate_fields['classname'] = 1;
 	}
+	
+	function initTable()
+	{
+		if(!$this->table)
+			$this->table = strtolower(get_class($this));		
+	}
+	
 	
 	function initExtensions()
 	{

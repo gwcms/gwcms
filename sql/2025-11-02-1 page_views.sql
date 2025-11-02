@@ -1,0 +1,1 @@
+ALTER TABLE `gw_adm_page_views` ADD `config` TEXT NOT NULL AFTER `calculate`;

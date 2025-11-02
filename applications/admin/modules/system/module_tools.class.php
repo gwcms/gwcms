@@ -123,7 +123,24 @@ class Module_Tools extends GW_Common_Module
 		$this->jump(false, [], ['skipjumpdebug'=>1]);
 	}	
 	
-	
+	function doJumpConfidentialModeToggle()
+	{
+
+		$var  =& $this->app->sess['confidentialmode'];
+
+		
+		
+		$var=(int)$var;
+		$var=($var+1) % 2;
+		
+		
+		if(isset($_GET['uri'])){
+			header("Location: ".$_GET['uri']);
+			exit;
+		}
+		
+		$this->jump(false, [], ['skipjumpdebug'=>1]);
+	}		
 	
 	
 	

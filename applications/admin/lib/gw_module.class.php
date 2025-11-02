@@ -138,6 +138,10 @@ class GW_Module
 		
 		if(isset($this->list_params['pview']) && $this->list_params['pview'])
 			$this->list_config['pview'] = GW_Adm_Page_View::singleton()->createNewObject($this->list_params['pview'], true);
+		
+			
+		if(isset($this->list_config['pview']->config['dl_calc_max']))
+			$this->tpl_vars['dl_calc_max'] = $this->list_config['pview']->config['dl_calc_max'];
 	}
 	
 	function doSetListParams()
