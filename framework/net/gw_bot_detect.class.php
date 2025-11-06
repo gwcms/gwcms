@@ -131,7 +131,12 @@ class GW_Bot_Detect
 	
 	static function recaptcha()
 	{
-		session_start();
+		if(isset($_GET['GWSESSID'])){
+			session_id($_GET['GWSESSID']);
+		}else{
+			session_start();
+		}
+
 
 		$special_domains = GW::s('SOLVE_RECAPTCHA_DOMAINS'); // domains that need captcha
 		$current_domain = $_SERVER['HTTP_HOST'] ?? '';

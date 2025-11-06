@@ -1,7 +1,13 @@
 <?php
 
-include __DIR__.'/init_basic.php';		
-session_start();
+include __DIR__.'/init_basic.php';	
+
+if(isset($_GET['GWSESSID'])){
+	session_id($_GET['GWSESSID']);
+}else{
+	session_start();
+}
+
 
 // Your secret key
 list($publickey, $secret) = GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE');
