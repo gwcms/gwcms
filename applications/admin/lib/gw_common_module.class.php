@@ -2865,7 +2865,7 @@ class GW_Common_Module extends GW_Module
 		$title_array=[$from=$item->get($field, $src)];
 		
 		//$serviceurl = "https://serv2.menuturas.lt/services/translate/test.php";
-		$serviceurl = "http://vilnele.gw.lt/services/translate/test.php";
+		$serviceurl = "http://1.voro.lt/services/translate/test.php";
 		
 		$opts = http_build_query(['from'=>$src,'to'=>$dest]);
 		$resp = GW_Http_Agent::singleton()->postRequest($serviceurl.'?'.$opts, ['queries'=>json_encode($title_array)]);
