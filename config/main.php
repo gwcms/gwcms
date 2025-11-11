@@ -75,16 +75,15 @@ define('GW_PERM_WRITE',2);
 define('GW_PERM_OPTIONS',4);
 define('GW_PERM_REMOVE',8);
 
-GW::s('OFFICE_IP_ADDR', '84.15.236.87');
+//84.15.236.87 t20  /  88.223.24.240 //u1
+GW::s('OFFICE_IP_ADDR', ['84.15.236.87','88.223.24.240']);
 
- GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
+GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
 
 
 if(isset($_SERVER['REMOTE_ADDR'])){
 	
-	
-	
-	if($_SERVER['REMOTE_ADDR']==GW::s('OFFICE_IP_ADDR') || $_SERVER['REMOTE_ADDR']=='127.0.0.1'){
+	if( in_array($_SERVER['REMOTE_ADDR'], GW::s('OFFICE_IP_ADDR')) || $_SERVER['REMOTE_ADDR']=='127.0.0.1'){
 		GW::s('DEVELOPER_PRESENT',1);
 	}	
 }

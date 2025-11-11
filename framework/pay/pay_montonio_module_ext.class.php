@@ -458,6 +458,8 @@ if (
 			    'log_entry_id'=>$log->id
 			];
 		
+		$this->setMessage("Order {$order->id} retry {$log->received_amount} Eur");
+		
 		$markaspayd = $this->markAsPaydSystem($args);	
 			
 		$log->processed = 1;

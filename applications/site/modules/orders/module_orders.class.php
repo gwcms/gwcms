@@ -244,6 +244,12 @@ class Module_Orders extends GW_Public_Module
 	function markAsPaydSystem($args)
 	{
 		$url=Navigator::backgroundRequest($urlreq='admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		
+		if($this->isDebugMode())
+		{
+			$this->setMessage($urlreq);
+		}
+		
 		return $urlreq;
 	}
 	
@@ -871,7 +877,7 @@ class Module_Orders extends GW_Public_Module
 		$items = $cart->items;
 		
 		if($items)
-		foreach($items as $item){
+		foreach($items as $idx => $item){
 			
 			if($cart->open && $item->expires && strpos($item->expires, "0000-00-00")===false ){
 				
