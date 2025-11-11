@@ -44,6 +44,7 @@ applications/site/assets/js/admin.js
 applications/site/assets/css/admin.css
 vendor/smarty4/*
 vendor/ckeditor422/*
+test/fakegeoip*
 ";
 
 //inc
