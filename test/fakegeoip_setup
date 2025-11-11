@@ -1,0 +1,79 @@
+
+
+php > $start=microtime(true);for($i=0;$i<10000;$i++)file_get_contents('http://localhost:8001/geoip.php?ip=123.123.123.123'); echo "took time: ".(microtime(true)-$start)."\n";
+
+took time: 6.2179090976715
+php > $start=microtime(true);for($i=0;$i<10000;$i++)file_get_contents('http://localhost:8000/geoip.php?ip=123.123.123.123'); echo "took time: ".(microtime(true)-$start)."\n";
+took time: 3.6479859352112
+php > $start=microtime(true);for($i=0;$i<100;$i++)shell_exec('/usr/bin/php7.4 -r "echo geoip_country_code_by_name(\'123.123.123.123\');"'); echo "took time: ".(microtime(true)-$start)."\n";
+took time: 4.73588514328
+
+php > $start=microtime(true);for($i=0;$i<10000;$i++)file_get_contents('http://127.0.0.1:8000/geoip.php?ip=123.123.123.123'); echo "took time: ".(microtime(true)-$start)."\n";
+took time: 3.3421070575714
+php > $start=microtime(true);for($i=0;$i<10000;$i++)file_get_contents('http://127.0.0.1:8001/geoip.php?ip=123.123.123.123'); echo "took time: ".(microtime(true)-$start)."\n";
+took time: 5.0576832294464
+
+
+apt install nginx
+
+istrinti defaultini saita kad su apache nesipyktu
+
+sftp://root@2.voro.lt/etc/nginx/sites-enabled/php74-var-www-services-8000
+
+server {
+    listen 127.0.0.1:8000;
+    server_name 127.0.0.1 localhost;
+
+    # deny external access
+    allow 127.0.0.1;
+    deny all;
+
+    root /var/www/services/8000_php74;
+
+    # disable access log entirely
+    access_log off;
+
+    # send error logs to /dev/null with only critical severity (minimizes logging)
+    error_log /dev/null crit;
+
+    # Do not serve files other than .php
+    location / {
+        return 404;
+    }
+
+    # PHP handler — only .php files are processed
+    location ~ ^(.+\.php)$ {
+        # prevent path traversal in script name
+        set $script_path $1;
+
+        # required fastcgi params
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$script_path;
+        fastcgi_param SCRIPT_NAME $script_path;
+
+        # pass to PHP-FPM socket (adjust if socket path differs)
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+
+        # small timeouts to avoid long-running connections
+        fastcgi_read_timeout 10s;
+        fastcgi_send_timeout 10s;
+
+        # don't log upstream errors here (already directed to /dev/null)
+        access_log off;
+    }
+
+    # Do not allow .ht* files
+    location ~ /\.ht {
+        deny all;
+        return 404;
+    }
+}
+
+
+
+
+
+
+
+service nginx reload
+
