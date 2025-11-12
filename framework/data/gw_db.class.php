@@ -394,6 +394,10 @@ class GW_DB
 	static function sql_prepare_value($val)
 	{
 		//( || is_object($val) ? json_encode($val) :
+		if ($val instanceof gwRawSQLo) {
+		    return $val->value; // pass through as-is
+		}
+		
 		return "'" . addslashes(is_array($val) ? json_encode($val) : $val). "'";
 	}
 	
@@ -937,3 +941,13 @@ class db_query_prep_helper
 		return is_numeric($curr) ? $curr : '"' . addslashes($curr) . '"';
 	}
 }
+
+
+class gwRawSQLo {
+    public $value;
+    function __construct($value) {
+        $this->value = $value;
+    }
+}
+
+function gwRawSql($expr) { return new gwRawSQLo($expr); }

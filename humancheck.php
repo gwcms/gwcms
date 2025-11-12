@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = json_decode($verify, true);
 
     if (!empty($result['success'])) {
+	    GW_Bot_Detect::markIpAsVerified($_SERVER['REMOTE_ADDR']);
+	    
         $_SESSION['human_verified'] = true;
         // Redirect back to original page or home
         $redirect = $_SESSION['redirect_after_captcha'] ?? '/';

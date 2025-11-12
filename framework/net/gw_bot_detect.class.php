@@ -106,7 +106,85 @@ class GW_Bot_Detect
 		return GW::db()->affected();
 	}
 	
+
+
+	static function ipStats() 
+	{
+		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
+		$siteid = $_SESSION['site_auth']['user_id'] ?? false;
+		
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$ipint = sprintf('%u', ip2long($ip));
+
+		$y = (int) date('Y');
+		$m = (int) date('n');
+		$d = (int) date('j');
+		$h = (int) date('G');
+
+		// 1️⃣ Check verification state first (cached by MySQL index)
+		$state = GW::db()->fetch_result("SELECT state FROM request_ip_verify WHERE ip=$ipint LIMIT 1");
+		//0 = normal, 1 = must verify, 2 = verified 3 whitelist
+
+
+		// 2️⃣ Count requests per hour (atomic)
+		$sql = "
+			INSERT INTO request_ip_stats (year, month, day, hour, ip, cnt)
+			VALUES ($y, $m, $d, $h, $ipint, 1)
+			ON DUPLICATE KEY UPDATE cnt = LAST_INSERT_ID(cnt + 1)
+		 ";
+		
+		GW::db()->query($sql);
+		$count = GW::db()->fetch_result("SELECT LAST_INSERT_ID()");
+		
+		if(GW::s('DEVELOPER_PRESENT'))
+			d::ldump($count);
+
+		// 3️⃣ If too many requests — mark as must verify
+		if ((!$adminid && !$siteid) && ($count > 1000 || $state==1)) {
+			$cc = geoip_country_code_by_name($ip);
+			if($state<1){
+				GW::db()->query("
+				    INSERT INTO request_ip_verify (ip, state, expires, country, host)
+				    VALUES ($ipint, 1, DATE_ADD(NOW(), INTERVAL 10 DAY), '" . GW_DB::escape($cc) . "', '" . GW_DB::escape(gethostbyaddr($ip)) . "')
+				    ON DUPLICATE KEY UPDATE state=1, expires=DATE_ADD(NOW(), INTERVAL 10 DAY), country=VALUES(country)
+				");
+			}
+			
+			if($state<2){
+				self::redirectIfNotVerified();
+			}
+		}
+
+		// 4️⃣ Occasional cleanup (rare, safe)
+		if (rand(0, 2000) == 1) {
+			// cleanup old stats
+			GW::db()->query("
+			    DELETE FROM request_ip_stats
+			    WHERE TIMESTAMP(CONCAT(year, '-', LPAD(month,2,'0'), '-', LPAD(day,2,'0'), ' ', LPAD(hour,2,'0'), ':00:00'))
+				  < DATE_SUB(NOW(), INTERVAL 14 DAY)
+			");
+
+			// cleanup expired verifications
+			GW::db()->query("DELETE FROM request_ip_verify WHERE expires IS NOT NULL AND expires < NOW()");
+		}
+	}
+
+	static function markIpAsVerified(string $ip, int $validForHours = 60) {
+		$ipint = sprintf('%u', ip2long($ip));
+
+		// Update state to verified (2) and set expiration
+		$expires = date('Y-m-d H:i:s', strtotime("+$validForHours hours"));
+
+		GW::db()->query("
+		INSERT INTO request_ip_verify (ip, state, expires)
+		VALUES ($ipint, 2, '$expires')
+		ON DUPLICATE KEY UPDATE state=2, expires='$expires'
+	    ");
+	}
+
 	static function stats(){
+		
+		
 		$user_agent = mb_substr(($_SERVER['HTTP_USER_AGENT'] ?? '-'), 0, 100);
 		$date= date('Y-m-d');
 		$speed = GW::$globals['proc_timer']->stop(1);
@@ -131,6 +209,8 @@ class GW_Bot_Detect
 	
 	static function recaptcha()
 	{
+		self::ipStats();
+		
 		if(isset($_GET['GWSESSID'])){
 			session_id($_GET['GWSESSID']);
 		}else{
@@ -141,13 +221,23 @@ class GW_Bot_Detect
 		$special_domains = GW::s('SOLVE_RECAPTCHA_DOMAINS'); // domains that need captcha
 		$current_domain = $_SERVER['HTTP_HOST'] ?? '';
 
-		if ( GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE') && in_array($current_domain, $special_domains)) {
+		//
+		if ( $special_domains && GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE') && in_array($current_domain, $special_domains)) {
 		    // If not yet verified, redirect to captcha
-		    if (empty($_SESSION['human_verified'])) {
+			
+		    self::redirectIfNotVerified();
+		}		
+	}
+	
+	static function redirectIfNotVerified(){
+		
+		if(!GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE'))
+			return false;
+		
+		if (empty($_SESSION['human_verified'])) {
 			$_SESSION['redirect_after_captcha'] = $_SERVER['REQUEST_URI'];
 			header('Location: /humancheck.php');
 			exit;
-		    }
-		}		
+		    }		
 	}
 }
