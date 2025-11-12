@@ -14,6 +14,7 @@ CREATE TABLE request_ip_verify (
   state TINYINT NOT NULL DEFAULT 0,        -- -1 = whitelist, 0 = normal, 1 = must verify, 2 = verified
   expires DATETIME DEFAULT NULL,
   country CHAR(2) DEFAULT NULL,
+  host VARCHAR(30) DEFAULT NULL,
   updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX (state),
   INDEX (expires)
