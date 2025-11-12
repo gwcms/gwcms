@@ -44,18 +44,7 @@ class GW_html2pdf_Helper
 			return self::remoteConvertChromeHeadless($html, $stream, $opts);
 		}elseif($cfg->html2pdf_type=='wkhtmltopdf'){
 			
-			$tmpname = tempnam(GW::s('DIR/TEMP'), 'convert2pdf');
-			
-			$html = "<meta charset='utf-8'>".$html;
-			
-			file_put_contents($tmpname.'.html', $html);
-			//--margin-bottom 1 --margin-left 10 --margin-right 10 --margin-top 1
-			shell_exec('wkhtmltopdf  '.$tmpname.'.html '.$tmpname.'.pdf');
-			
-			$pdf = file_get_contents($tmpname.'.pdf');
-			
-			unlink($tmpname.'.pdf');
-			unlink($tmpname.'.html');
+			$pdf = GW_Http_Agent::singleton()->postRequest('http://127.0.0.1/services/html2pdf/html2pdf.php', ['html'=>$html]);
 			
 			return $pdf;
 		}
