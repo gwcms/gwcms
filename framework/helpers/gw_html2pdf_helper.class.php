@@ -44,6 +44,7 @@ class GW_html2pdf_Helper
 			return self::remoteConvertChromeHeadless($html, $stream, $opts);
 		}elseif($cfg->html2pdf_type=='wkhtmltopdf'){
 			
+			$html = "<meta charset='utf-8'>".$html;
 			$pdf = GW_Http_Agent::singleton()->postRequest('http://127.0.0.1/services/html2pdf/html2pdf.php', ['html'=>$html]);
 			
 			return $pdf;
