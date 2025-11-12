@@ -1,0 +1,9 @@
+CREATE TABLE request_ip_stats (
+    year  SMALLINT UNSIGNED NOT NULL,
+    month TINYINT UNSIGNED NOT NULL,
+    day   TINYINT UNSIGNED NOT NULL,
+    hour  TINYINT UNSIGNED NOT NULL,
+    ip    INT UNSIGNED NOT NULL,
+    cnt   INT UNSIGNED NOT NULL DEFAULT 1,
+    PRIMARY KEY (year, month, day, hour, ip)
+) ENGINE=InnoDB;
