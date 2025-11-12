@@ -32,6 +32,7 @@ function out($str){
 
 $params = parseParams();
 
+$myenv = GW::s('PROJECT_ENVIRONMENT');
 
 
 if($params['recoverdb'] ?? false){
@@ -96,7 +97,7 @@ if($params['recoverdb'] ?? false){
 	//security
 	mypassthru("ssh $userhost $pcmd 'unlink $remotefile'");
 	
-	initEnviroment(GW_ENV_DEV);
+	initEnviroment($myenv);
 	//prod
 	list($dbuser, $dbpass, $host, $database, $port) = GW_DB::parse_uphd(GW::s('DB/UPHD'));
 
