@@ -110,6 +110,12 @@ class GW_Bot_Detect
 
 	static function ipStats() 
 	{
+		//tik tiems kurie neapsimeta botais gal dar i skaiciavimus dadet lenteles isbot
+		if(self::isBot())
+			return false;
+		
+		
+		
 		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
 		$siteid = $_SESSION['site_auth']['user_id'] ?? false;
 		
@@ -141,8 +147,9 @@ class GW_Bot_Detect
 
 		// 3️⃣ If too many requests — mark as must verify
 		if ((!$adminid && !$siteid) && ($count > 1000 || $state==1)) {
-			$cc = geoip_country_code_by_name($ip);
+			
 			if($state<1){
+				$cc = geoip_country_code_by_name($ip);
 				GW::db()->query("
 				    INSERT INTO request_ip_verify (ip, state, expires, country, host)
 				    VALUES ($ipint, 1, DATE_ADD(NOW(), INTERVAL 10 DAY), '" . GW_DB::escape($cc) . "', '" . GW_DB::escape(gethostbyaddr($ip)) . "')
