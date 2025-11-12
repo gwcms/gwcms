@@ -45,10 +45,7 @@ class Module_Loadstats extends GW_Common_Module
     SUM(CASE WHEN s.year = YEAR(NOW()) 
               AND s.month = MONTH(NOW()) 
               AND s.day = DAY(NOW()) THEN s.cnt ELSE 0 END) AS today_requests,
-    SUM(CASE WHEN s.year = YEAR(NOW()) 
-              AND s.month = MONTH(NOW()) 
-              AND s.day = DAY(NOW()) 
-              AND s.hour = HOUR(NOW()) THEN s.cnt ELSE 0 END) AS current_hour_requests,
+    s.cnt AS current_hour_requests,
     v.host,
     v.country
 FROM request_ip_stats s
