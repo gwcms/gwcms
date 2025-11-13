@@ -15,6 +15,7 @@
 </div>
 {/if}
 
+{$app->innerProcess('system/loadstats/footerhourly')}	
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -41,6 +42,9 @@
 	{if GW::s('DEVELOPER_PRESENT')}
 		| <a style="background-color:khaki"}"  href="{$app->buildUri("system/tools")}">DEV</a>
 	{/if}
+
+
+	
 </p>
 
 

@@ -47,9 +47,11 @@ class Module_Loadstats extends GW_Common_Module
               AND s.day = DAY(NOW()) THEN s.cnt ELSE 0 END) AS today_requests,
     s.cnt AS current_hour_requests,
     v.host,
-    v.country
+    v.country,
+    ua.str
 FROM request_ip_stats s
 LEFT JOIN request_ip_verify v ON v.ip = s.ip
+LEFT JOIN gw_uni_schema AS ua ON s.ua = ua.id
 GROUP BY s.ip
 ORDER BY total_requests DESC
 LIMIT 50;");
@@ -63,6 +65,7 @@ LIMIT 50;");
     CASE state
         WHEN 1 THEN 'failed/pending'
         WHEN 2 THEN 'succeed'
+        WHEN 2 THEN 'whitelist'
         ELSE 'unknown'
     END AS state_text,
     expires,
@@ -70,7 +73,7 @@ LIMIT 50;");
     host,
     updated
 FROM request_ip_verify
-WHERE state IN (1, 2)
+WHERE state > 0
 ORDER BY state, updated DESC;");
 		echo "<h3>Forced to verified and failed/pending or succeed</h3>";
 		echo GW_Data_to_Html_Table_Helper::doTable($rows);
@@ -111,6 +114,28 @@ LIMIT 48; -- last 48 hours");
 				    ON DUPLICATE KEY UPDATE state=0, expires=DATE_ADD(NOW(), INTERVAL 10 DAY), country=VALUES(country)
 				");
 		}
+	}
+	
+	
+	function viewfooterhourly(){
+		
+
+		$that = $this;
+		
+		$rows= GW_Temp_Data::singleton()->rwCallback([
+			    'name'=>"hourlyrequest_cache",
+			    'format'=>'serialize',
+			    'expires'=> '10 minutes'], function() use (&$that) {
+					
+			return  array_reverse($that->getHourlyRequests());
+
+		});
+		
+		$stats = [];
+		foreach($rows as $row)
+			$stats[$row['time']] = $row['total_requests'];
+		
+		$this->tpl_vars['hourly_stats'] = $stats;
 	}
 	
 }

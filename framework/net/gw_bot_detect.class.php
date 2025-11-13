@@ -114,7 +114,7 @@ class GW_Bot_Detect
 		if(self::isBot())
 			return false;
 		
-		
+		$cc = self::getCountryByIP();
 		
 		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
 		$siteid = $_SESSION['site_auth']['user_id'] ?? false;
@@ -133,9 +133,10 @@ class GW_Bot_Detect
 
 
 		// 2️⃣ Count requests per hour (atomic)
+		$ua = self::getUserAgentId();
 		$sql = "
-			INSERT INTO request_ip_stats (year, month, day, hour, ip, cnt)
-			VALUES ($y, $m, $d, $h, $ipint, 1)
+			INSERT INTO request_ip_stats (year, month, day, hour, ip, cnt, ua)
+			VALUES ($y, $m, $d, $h, $ipint, 1, $ua)
 			ON DUPLICATE KEY UPDATE cnt = LAST_INSERT_ID(cnt + 1)
 		 ";
 		
@@ -145,11 +146,14 @@ class GW_Bot_Detect
 		if(GW::s('DEVELOPER_PRESENT'))
 			d::ldump($count);
 
+		
+		$maxcount = $cc == "LT" ? 1000 : 300;
+		
 		// 3️⃣ If too many requests — mark as must verify
-		if ((!$adminid && !$siteid) && ($count > 1000 || $state==1)) {
+		if ((!$adminid && !$siteid) && ($count > $maxcount || $state==1)) {
 			
 			if($state<1){
-				$cc = geoip_country_code_by_name($ip);
+				//
 				GW::db()->query("
 				    INSERT INTO request_ip_verify (ip, state, expires, country, host)
 				    VALUES ($ipint, 1, DATE_ADD(NOW(), INTERVAL 10 DAY), '" . GW_DB::escape($cc) . "', '" . GW_DB::escape(gethostbyaddr($ip)) . "')
@@ -158,6 +162,7 @@ class GW_Bot_Detect
 			}
 			
 			if($state<2){
+				//sleep(5); //slow down bots // negerai
 				self::redirectIfNotVerified();
 			}
 		}
@@ -189,17 +194,41 @@ class GW_Bot_Detect
 	    ");
 	}
 
-	static function stats(){
+	
+	static function getUserAgentId()
+	{
+		static $uaid;
 		
+		if($uaid)
+			return $uaid;
 		
 		$user_agent = mb_substr(($_SERVER['HTTP_USER_AGENT'] ?? '-'), 0, 100);
+		$uaid = GW_Uni_Schema::getIdxByStr('ua', $user_agent);
+		
+		return $uaid;
+	}
+	
+	static function getCountryByIP()
+	{
+		static $cc;
+		
+		if($cc)
+			return $cc;
+		
+		$cc = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+		
+		return $cc;
+	}
+	
+	static function stats(){
+		
 		$date= date('Y-m-d');
 		$speed = GW::$globals['proc_timer']->stop(1);
 		
 		if(isset($_GET['bottest']))
 			d::dumpas([$user_agent, $speed]);
 		
-		$user_agent_id = GW_Uni_Schema::getIdxByStr('ua', $user_agent);
+		$user_agent_id = self::getUserAgentId();
 		
 		$aff = self::increase2("request_by_user_agent", GW_DB::prepare_query(['date=? AND user_agent=?',$date,$user_agent_id]),'cnt',1,'speed', $speed);;
 		
