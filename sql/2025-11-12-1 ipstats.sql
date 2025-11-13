@@ -19,3 +19,5 @@ CREATE TABLE request_ip_verify (
   INDEX (state),
   INDEX (expires)
 ) ENGINE=InnoDB;
+
+ALTER TABLE `request_ip_stats` ADD `ua` INT NOT NULL AFTER `cnt`;
