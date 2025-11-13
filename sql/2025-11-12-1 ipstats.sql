@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS `request_ip_verify`;
+DROP TABLE IF EXISTS `request_ip_stats`;
+DROP TABLE IF EXISTS `request_by_user_agent`;
+
 CREATE TABLE request_ip_stats (
     year  SMALLINT UNSIGNED NOT NULL,
     month TINYINT UNSIGNED NOT NULL,
@@ -47,7 +51,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `request_by_user_agent` (
   `date` date NOT NULL,
-  `user_agent` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `user_agent`  INT UNSIGNED NOT NULL,
   `cnt` smallint NOT NULL,
   `speed` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -62,3 +66,6 @@ CREATE TABLE `request_by_user_agent` (
 ALTER TABLE `request_by_user_agent`
   ADD UNIQUE KEY `unikalus` (`date`,`user_agent`) USING BTREE;
 COMMIT;
+
+
+ALTER TABLE `request_ip_verify` ADD `tag` INT NOT NULL AFTER `ua`;
