@@ -21,3 +21,44 @@ CREATE TABLE request_ip_verify (
 ) ENGINE=InnoDB;
 
 ALTER TABLE `request_ip_stats` ADD `ua` INT NOT NULL AFTER `cnt`;
+
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Nov 13, 2025 at 05:04 PM
+-- Server version: 8.0.43-0ubuntu0.24.04.2
+-- PHP Version: 8.4.14
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `badminton.lt`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_by_user_agent`
+--
+
+CREATE TABLE `request_by_user_agent` (
+  `date` date NOT NULL,
+  `user_agent` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `cnt` smallint NOT NULL,
+  `speed` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `request_by_user_agent`
+--
+ALTER TABLE `request_by_user_agent`
+  ADD UNIQUE KEY `unikalus` (`date`,`user_agent`) USING BTREE;
+COMMIT;
