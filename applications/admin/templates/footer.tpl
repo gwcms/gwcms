@@ -15,7 +15,9 @@
 </div>
 {/if}
 
-{$app->innerProcess('system/loadstats/footerhourly')}	
+{if GW::s('DEVELOPER_PRESENT') || GW::s("FEATURES/footerhourly")}
+	{$app->innerProcess('system/loadstats/footerhourly')}	
+{/if}
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

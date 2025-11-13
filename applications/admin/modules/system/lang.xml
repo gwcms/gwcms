@@ -107,6 +107,14 @@
     <i id="doPushTemp">Push changes</i>
     <i id="autotranslate">Auto translations</i>
   </i>
+  <i id="OPTIONS">
+	  <i id="bot_detect_states">
+		  <i id="0">-</i>
+		  <i id="1">Pending/failed</i>
+		  <i id="2">Verified</i>
+		  <i id="3">Whitelisted</i>
+	  </i>
+  </i>
   <i id="FIELD_NOTE">
     <i id="time_match">
 <![CDATA[<b>hh:mm:ss#interval</b> 

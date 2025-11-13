@@ -11,7 +11,12 @@ class GW_Data_to_Html_Table_Helper
 		if (!is_array($data))
 			return;
 
-		$keys = array_keys((array) current($data));
+		$keys = [];
+		foreach($data as $i => $row)
+			foreach($row as $key => $whatever)
+				$keys[$key] = 1;
+		
+		$keys = array_keys($keys);
 		
 		$str = "";
 		$str.= "<table class='gwTable'>";
@@ -41,11 +46,10 @@ class GW_Data_to_Html_Table_Helper
 		
 		foreach ($data as $i => $row) {
 			$str.="<tr><td>" . $i . "</td>";
-			foreach ($row as $field => $val){
-				$val = is_array($val) ? implode(", \n", $val) :  $val;
+			foreach ($keys  as $field){
+				$val = $row[$field] ?? false;
 				
-				if($escape)
-					$val =  htmlspecialchars((string)$val);
+				self::valformat($field, $val, $opts);				
 				
 				if(isset($merge[$field][$i])){
 					$rowspan="rowspan='".($merge[$field][$i]+1)."'";
@@ -76,23 +80,9 @@ class GW_Data_to_Html_Table_Helper
 		$str = "";
 		$str.= "<table class='gwTable'>";
 		
-		
 		foreach($data as $fieldname => $value)
 		{
-			if(is_array($value) || is_object($value))
-				$value = json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-				
-			switch($opts['valformat'][$fieldname] ?? 1){
-				case 1:
-					$value = str_replace("\n",'<br>',htmlspecialchars($value));
-				break;
-				case 2:
-					$value = htmlspecialchars($value);
-				break;
-				case 0:
-					$value=$value;
-				break;
-			}
+			self::valformat($fieldname, $value, $opts);
 			
 			$str.="<tr><th>".htmlspecialchars($fieldname)."</th><td>$value</td></tr>";
 		}
@@ -100,5 +90,38 @@ class GW_Data_to_Html_Table_Helper
 
 		$str.="</table>";
 		return $str;
-	}	
+	}
+
+	static function valformat($fieldname, &$value, $opts=[])
+	{
+		if(is_array($value) || is_object($value)){
+			
+			switch($opts['arrayformat'][$fieldname] ?? 2){
+				case 1:
+					$value = is_array($value) ? implode(", \n", $value) :  $value;
+				break;
+				case 2:
+					$value = json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+				break;			
+			}
+			
+		}
+		
+			
+
+		switch($opts['valformat'][$fieldname] ?? 1){
+			case 1:
+				$value = str_replace("\n",'<br>',htmlspecialchars($value));
+			break;
+			case 2:
+				$value = htmlspecialchars($value);
+			break;
+			case 0:
+				$value=$value;
+			break;
+			case 'trunc40':
+				$value='<span title="'.htmlspecialchars($value).'">'.htmlspecialchars(GW_String_Helper::truncate($value, 40))."</span>";
+			break;
+		}
+	}
 }

@@ -107,7 +107,12 @@ class GW_Bot_Detect
 	}
 	
 
-
+	static function ip2int($ip=false)
+	{
+		$ip = $ip ?: $_SERVER['REMOTE_ADDR'];
+		return [$ip, sprintf('%u', ip2long($ip))];
+	}
+	
 	static function ipStats() 
 	{
 		//tik tiems kurie neapsimeta botais gal dar i skaiciavimus dadet lenteles isbot
@@ -116,11 +121,15 @@ class GW_Bot_Detect
 		
 		$cc = self::getCountryByIP();
 		
+		
 		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
 		$siteid = $_SESSION['site_auth']['user_id'] ?? false;
 		
-		$ip = $_SERVER['REMOTE_ADDR'];
-		$ipint = sprintf('%u', ip2long($ip));
+		list($ip, $ipint)  = self::ip2int();
+		
+		if($ip=='127.0.0.1')
+			return false;
+		
 
 		$y = (int) date('Y');
 		$m = (int) date('n');
@@ -147,18 +156,20 @@ class GW_Bot_Detect
 		
 		$maxcount = $cc == "LT" ? 1000 : 300;
 		
-		GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
+		if($state<1)
+			GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
 		
+		//if(GW::s('DEVELOPER_PRESENT')){
+		//	d::ldump(GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN'));
+		//}
+		
+
 		// 3️⃣ If too many requests — mark as must verify
 		if ((!$adminid && !$siteid) && ($count > $maxcount || $state==1)) {
 			
 			if($state<1){
 				//
-				GW::db()->query("
-				    INSERT INTO request_ip_verify (ip, state, expires, country, host)
-				    VALUES ($ipint, 1, DATE_ADD(NOW(), INTERVAL 10 DAY), '" . GW_DB::escape($cc) . "', '" . GW_DB::escape(gethostbyaddr($ip)) . "')
-				    ON DUPLICATE KEY UPDATE state=1, expires=DATE_ADD(NOW(), INTERVAL 10 DAY), country=VALUES(country)
-				");
+				self::markIp(['state'=>1]);
 			}
 			
 			if($state<2){
@@ -173,25 +184,54 @@ class GW_Bot_Detect
 			GW::db()->query("
 			    DELETE FROM request_ip_stats
 			    WHERE TIMESTAMP(CONCAT(year, '-', LPAD(month,2,'0'), '-', LPAD(day,2,'0'), ' ', LPAD(hour,2,'0'), ':00:00'))
-				  < DATE_SUB(NOW(), INTERVAL 14 DAY)
+				  < DATE_SUB(NOW(), INTERVAL 12 HOUR)
 			");
 
 			// cleanup expired verifications
 			GW::db()->query("DELETE FROM request_ip_verify WHERE expires IS NOT NULL AND expires < NOW()");
 		}
 	}
+	
+	static function markIp($opts=[]){
+		
+		list($ip, $ipint)  = self::ip2int($opts['ip']??false);
+		
+		//xpires might be set in mysql but avoid mysql time zone diff
+		//gwRawSql("DATE_ADD(NOW(), INTERVAL 10 DAY)"), // raw SQL 
+		
+		$vals = [
+		    'ip'      => $ipint,
+		    'state'   => $opts['state'] ?? 0,
+		    'expires' =>  $opts['expires'] ?? date('Y-m-d H:i:s', strtotime("+10 DAYS")), 
+		    'country' => self::getCountryByIP($opts['ip']??false), //del keshavimo false paduot kad greiciau suveiktu jei einajam variantui
+		    'host'    => gethostbyaddr($ip),
+		];
+		
+		//jei paduodamas jau ip kad neuzpildyit neto user agent
+		if(!isset($opts['ip'])){
+			$vals['ua'] = self::getUserAgentId();
+		}
+		
+		if($opts['ua']){
+			$vals['ua'] = $opts['ua'];
+		}
+		
+		if($opts['tag'] ?? false){
+			$vals['tag'] = $opts['tag'];
+		}
+		
+		GW::db()->save('request_ip_verify', $vals);
+		
+		return $vals;
+	}
+	
 
 	static function markIpAsVerified(string $ip, int $validForHours = 60) {
 		$ipint = sprintf('%u', ip2long($ip));
 
 		// Update state to verified (2) and set expiration
 		$expires = date('Y-m-d H:i:s', strtotime("+$validForHours hours"));
-
-		GW::db()->query("
-		INSERT INTO request_ip_verify (ip, state, expires)
-		VALUES ($ipint, 2, '$expires')
-		ON DUPLICATE KEY UPDATE state=2, expires='$expires'
-	    ");
+		self::markIp(['state'=>2, 'expires'=>$expires]);
 	}
 
 	
@@ -208,8 +248,13 @@ class GW_Bot_Detect
 		return $uaid;
 	}
 	
-	static function getCountryByIP()
+	static function getCountryByIP($ip=false)
 	{
+		
+		if($ip)
+			return geoip_country_code_by_name($ip);
+		
+		//keshuotas variantas veiktu tik jei ziurima einamajam klientui
 		static $cc;
 		
 		if($cc)
@@ -243,15 +288,19 @@ class GW_Bot_Detect
 	}
 	
 	
-	static function recaptcha()
+	static function initSession()
 	{
-		self::ipStats();
-		
 		if(isset($_GET['GWSESSID'])){
 			session_id($_GET['GWSESSID']);
 		}else{
 			session_start();
-		}
+		}		
+	}
+	
+	static function recaptcha()
+	{
+		self::initSession();
+		self::ipStats();
 
 
 		$special_domains = GW::s('SOLVE_RECAPTCHA_DOMAINS'); // domains that need captcha
@@ -276,4 +325,6 @@ class GW_Bot_Detect
 			exit;
 		    }		
 	}
+	
+	
 }

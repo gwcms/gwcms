@@ -1,5 +1,7 @@
 {if $mask}{$tag_params["data-inputmask"]=$mask}{/if}
 {if $regex}{$tag_params["data-inputmask-regex"]=$regex}{/if}
+{if $alias}{$tag_params["data-inputmask-alias"]=$alias}{/if}
+
 
 	<script>
 		require(['gwcms'], function(){

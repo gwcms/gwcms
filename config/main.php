@@ -91,6 +91,9 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 /*bendrinio naudojimo*/
 GW::s("STATIC_EXTERNAL_ASSETS", "//serv133.voro.lt/html/");
 
+//beter lower on site and bigger for admin panel - large import / recalc actions
+GW::s('ADMIN/APP_MEM_LIM', "400M");
+
 //define('',4); /* then 8, 16, 32, etc... */
 
 /*

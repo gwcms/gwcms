@@ -146,6 +146,9 @@ class GW_Admin_Application extends GW_Application
 		
 		
 		$this->icon_root = $this->app_root . $this->icon_root;
+		
+		
+		ini_set("memory_limit", GW::s('ADMIN/APP_MEM_LIM'));
 	}
 	
 		

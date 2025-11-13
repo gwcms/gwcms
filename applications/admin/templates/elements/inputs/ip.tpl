@@ -1,0 +1,1 @@
+{include file="{$smarty.current_dir}/inputmask.tpl" alias=ip type=text}

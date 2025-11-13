@@ -159,6 +159,7 @@ class GW_Common_Module extends GW_Module
 	
 	function procError($errStr, $errMail)
 	{
+		d::dumpas('not suppose to');
 		//jei kaip root useris ARBA darbineje versijoje ARBA yra prisijunges kaip aukstesnis vartotojas
 		if($this->app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV || ($this->app->auth->session['switchUser'] ??false) ){
 			$this->setError($errStr);
@@ -173,6 +174,7 @@ class GW_Common_Module extends GW_Module
 	
 	function errrorHandler($errno, $errstr, $errfile, $errline)
 	{
+		d::dumpas('not suppose to');
 		if (!(error_reporting() & $errno)) {
 			// This error code is not included in error_reporting, so let it fall
 			// through to the standard PHP error handler
@@ -236,7 +238,8 @@ class GW_Common_Module extends GW_Module
 	
 	function initErrorHandler()
 	{
-		$old_error_handler = set_error_handler(array($this, 'errrorHandler'));		
+		//jug jau yra uzregistruotas sisteminis
+		//$old_error_handler = set_error_handler(array($this, 'errrorHandler'));		
 	}
 	
 	function getCurrentItemId()
