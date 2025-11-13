@@ -143,11 +143,11 @@ class GW_Bot_Detect
 		GW::db()->query($sql);
 		$count = GW::db()->fetch_result("SELECT LAST_INSERT_ID()");
 		
-		if(GW::s('DEVELOPER_PRESENT'))
-			d::ldump($count);
-
+		
 		
 		$maxcount = $cc == "LT" ? 1000 : 300;
+		
+		GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
 		
 		// 3️⃣ If too many requests — mark as must verify
 		if ((!$adminid && !$siteid) && ($count > $maxcount || $state==1)) {
