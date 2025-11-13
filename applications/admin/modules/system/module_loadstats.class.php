@@ -156,7 +156,7 @@ class Module_Loadstats extends GW_Common_Module
 			WHERE state > 0
 			ORDER BY state, updated DESC;
 		");
-				echo "<h3>Forced to verified and failed/pending or succeed</h3>";
+				echo "<h3>Forced to verify and failed/pending or succeed</h3>";
 		$this->procRows($rows);
 		$opts = ['valformat'=>['ip'=>0]];
 		echo GW_Data_to_Html_Table_Helper::doTable($rows,$opts);
