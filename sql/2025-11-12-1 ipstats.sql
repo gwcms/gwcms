@@ -7,6 +7,7 @@ CREATE TABLE request_ip_stats (
     month TINYINT UNSIGNED NOT NULL,
     day   TINYINT UNSIGNED NOT NULL,
     hour  TINYINT UNSIGNED NOT NULL,
+   `ua` INT NOT NULL,
     ip    INT UNSIGNED NOT NULL,
     cnt   INT UNSIGNED NOT NULL DEFAULT 1,
     PRIMARY KEY (year, month, day, hour, ip)
@@ -19,12 +20,13 @@ CREATE TABLE request_ip_verify (
   expires DATETIME DEFAULT NULL,
   country CHAR(2) DEFAULT NULL,
   host VARCHAR(30) DEFAULT NULL,
+  `ua` INT NOT NULL,
   updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX (state),
   INDEX (expires)
 ) ENGINE=InnoDB;
 
-ALTER TABLE `request_ip_stats` ADD `ua` INT NOT NULL AFTER `cnt`;
+
 
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
@@ -67,5 +69,3 @@ ALTER TABLE `request_by_user_agent`
   ADD UNIQUE KEY `unikalus` (`date`,`user_agent`) USING BTREE;
 COMMIT;
 
-
-ALTER TABLE `request_ip_verify` ADD `tag` INT NOT NULL AFTER `ua`;
