@@ -221,7 +221,7 @@ class Module_Loadstats extends GW_Common_Module
 				'ip'=>['type'=>'ip','default'=>$_SERVER['REMOTE_ADDR'], 'required'=>1],
 			],'cols'=>4];
 
-			if(!($answers=$this->prompt($form, "Add ip to whitelist or other state")))
+			if(!($answers=$this->prompt($form, "Examine ip")))
 				return false;	
 
 			$ip = $answers['ip'];			

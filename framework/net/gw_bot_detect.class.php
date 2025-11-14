@@ -145,8 +145,8 @@ class GW_Bot_Detect
 		$ua = self::getUserAgentId();
 		$sql = "
 			INSERT INTO request_ip_stats (year, month, day, hour, ip, cnt, ua)
-			VALUES ($y, $m, $d, $h, $ipint, 1, $ua)
-			ON DUPLICATE KEY UPDATE cnt = LAST_INSERT_ID(cnt + 1)
+			VALUES ($y, $m, $d, $h, $ipint, LAST_INSERT_ID(1), $ua)
+			ON DUPLICATE KEY UPDATE cnt = LAST_INSERT_ID(cnt + 1);
 		 ";
 		
 		GW::db()->query($sql);
@@ -169,10 +169,13 @@ class GW_Bot_Detect
 			
 			if($state<1){
 				//
+				//file_put_contents(GW::s('DIR/TEMP').'testbot_verification', $count.'|'.$state.'|'.$ipint.'|'.$_SERVER['REMOTE_ADDR']."\n", FILE_APPEND);
 				self::markIp(['state'=>1]);
 			}
 			
 			if($state<2){
+				
+				
 				//sleep(5); //slow down bots // negerai
 				self::redirectIfNotVerified();
 			}
@@ -193,6 +196,8 @@ class GW_Bot_Detect
 	}
 	
 	static function markIp($opts=[]){
+		
+		//return false;
 		
 		list($ip, $ipint)  = self::ip2int($opts['ip']??false);
 		
