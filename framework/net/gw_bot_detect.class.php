@@ -154,12 +154,12 @@ class GW_Bot_Detect
 		
 		
 		
-		$maxcount = $cc == "LT" ? 1000 : 300;
+		$maxcount = $cc == "LT" ? 1000 : 250;
 		
 		if($state<1)
 			GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
 		
-		//if(GW::s('DEVELOPER_PRESENT')){
+		//if($_SERVER['REMOTE_ADDR']=='88.223.24.240'){
 		//	d::ldump(GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN'));
 		//}
 		
