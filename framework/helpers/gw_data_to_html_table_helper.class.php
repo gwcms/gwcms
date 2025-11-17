@@ -3,6 +3,41 @@
 class GW_Data_to_Html_Table_Helper
 {
 
+	
+	static function doTablePlain($data, array $opts=[])
+	{
+		if (!is_array($data))
+			return [];
+		
+	
+		$keys = [];
+		foreach($data as $i => $row)
+			foreach($row as $key => $whatever)
+				$keys[$key] = 1;
+		
+		$keys = array_keys($keys);
+		
+		$table = [];
+		$table[] = array_values($keys);
+		
+		$merge = [];
+		
+
+		
+		foreach ($data as $i => $row) {
+			$trow = [];
+			foreach ($keys  as $field){
+				$val = $row[$field] ?? false;
+				$trow[] = $val;
+			}
+			
+			$table[] = $trow;
+		}
+
+		return $table;
+	}
+	
+	
 	static function doTable($data, array $opts=[])
 	{
 		$escape = $opts['escape'] ?? 1;
