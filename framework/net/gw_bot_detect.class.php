@@ -239,7 +239,228 @@ class GW_Bot_Detect
 		self::markIp(['state'=>2, 'expires'=>$expires]);
 	}
 
-	
+	static function normalize_ua(string $ua): array {
+		$orig = $ua;
+		$u = strtolower($ua);
+
+		// quick empty
+		if (trim($u) === '') {
+			return [
+			    'family' => 'unknown', 'family_ver' => '0',
+			    'os' => 'unknown', 'os_ver' => '0',
+			    'device' => 'other', 'inapp' => null, 'is_bot' => false
+			];
+		}
+
+		// ---- BOT / CRAWLER detection (list is non-exhaustive but broad) ----
+		$bot_signatures = [
+		    'googlebot', 'bingbot', 'yandexbot', 'baiduspider', 'duckduckbot',
+		    'facebookexternalhit', 'facebookcatalog', 'twitterbot', 'slurp',
+		    'applebot', 'linkedinbot', 'ahrefsbot', 'semrushbot', 'mj12bot',
+		    'pingdom', 'uptimerobot', 'monitoring', 'crawler', 'spider', 'bot', 'robot'
+		];
+		foreach ($bot_signatures as $b) {
+			if (strpos($u, $b) !== false) {
+				// map some bots to friendly names
+				$name = $b;
+				if (strpos($u, 'facebookexternalhit') !== false)
+					$name = 'facebookexternalhit';
+				if (strpos($u, 'googlebot') !== false)
+					$name = 'googlebot';
+				return [
+				    'family' => 'bot_' . $name,
+				    'family_ver' => '0',
+				    'os' => 'server',
+				    'os_ver' => '0',
+				    'device' => 'bot',
+				    'inapp' => null,
+				    'is_bot' => true
+				];
+			}
+		}
+
+		// ---- in-app / wrappers detection ----
+		$inapp = null;
+		if (strpos($u, 'fbav/') !== false || strpos($u, 'fban/') !== false || strpos($u, 'fb_iab') !== false || strpos($u, 'fb_') !== false)
+			$inapp = 'facebook';
+		if (strpos($u, 'gsa/') !== false || strpos($u, 'googleapp') !== false)
+			$inapp = 'gsa';
+		if (strpos($u, 'line/') !== false)
+			$inapp = 'line';
+		if (strpos($u, 'naver') !== false)
+			$inapp = 'naver';
+		if (strpos($u, 'microMessenger') !== false || strpos($u, 'wechat') !== false)
+			$inapp = 'wechat';
+		if (strpos($u, 'yahoo') !== false)
+			$inapp = 'yahoo';
+		if (strpos($u, 'instagram') !== false)
+			$inapp = 'instagram';
+		if (strpos($u, 'messenger') !== false)
+			$inapp = 'messenger';
+
+		// ---- DEVICE detection (mobile/tablet/desktop) ----
+		$device = 'desktop';
+		if (preg_match('/mobile|iphone|ipod|android .*mobile|crios\/|fennec|phone|opera mini|bb10/i', $u))
+			$device = 'mobile';
+		if (preg_match('/ipad|tablet|nexus 7|nexus 9|kindle|silk|playbook/i', $u))
+			$device = 'tablet';
+		if (strpos($u, 'tv') !== false || strpos($u, 'smarttv') !== false || strpos($u, 'googletv') !== false || strpos($u, 'appletv') !== false)
+			$device = 'tv';
+
+		// ---- OS detection ----
+		$os = 'unknown';
+		$os_ver = '0';
+		if (preg_match('/windows nt\s*([0-9\.]+)/i', $u, $m)) {
+			$os = 'windows';
+			// map nt numbers to friendly major (optional coarse)
+			$nt = $m[1];
+			// keep only major or common friendly map
+			$map = [
+			    '10.0' => '10', '6.3' => '8.1', '6.2' => '8', '6.1' => '7', '6.0' => 'vista',
+			];
+			$os_ver = $map[$nt] ?? explode('.', $nt)[0];
+		} elseif (preg_match('/android\s*([0-9\.]+)/i', $u, $m)) {
+			$os = 'android';
+			$os_ver = explode('.', $m[1])[0];
+		} elseif (preg_match('/cpu (?:iphone )?os\s*([0-9_]+)/i', $u, $m)) {
+			$os = 'ios';
+			$os_ver = str_replace('_', '.', explode('_', $m[1])[0]);
+		} elseif (preg_match('/iphone|ipad|ipod/i', $u)) {
+			$os = 'ios';
+			$os_ver = '0';
+		} elseif (preg_match('/mac os x\s*([0-9_]+)/i', $u, $m)) {
+			$os = 'macos';
+			$os_ver = str_replace('_', '.', explode('_', $m[1])[0]);
+		} elseif (preg_match('/harmonyos|huawei/i', $u)) {
+			$os = 'harmonyos';
+			$os_ver = '0';
+		} elseif (strpos($u, 'linux') !== false) {
+			$os = 'linux';
+			$os_ver = '0';
+		} elseif (strpos($u, 'cros') !== false || strpos($u, 'chrome os') !== false) {
+			$os = 'chromeos';
+			$os_ver = '0';
+		} elseif (strpos($u, 'windows phone') !== false) {
+			$os = 'windowsphone';
+			$os_ver = '0';
+		}
+
+		// ---- Browser family detection & major version extraction ----
+		// Order matters: detect vendor wrappers (SamsungBrowser, CriOS) before generic 'chrome'
+		$family = 'other';
+		$family_ver = '0';
+
+		// helper: extract major from version string like "133.0.6943.120" -> "133"
+		$get_major = function ($v) {
+			if (!$v)
+				return '0';
+			$v = trim($v);
+			$v = preg_replace('/[^0-9\.]/', '', $v);
+			$parts = explode('.', $v);
+			return $parts[0] ?? '0';
+		};
+
+		if (preg_match('/samsungbrowser\/([0-9\.]+)/i', $u, $m)) {
+			$family = 'samsung';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/edg[a|b|ios]*\/([0-9\.]+)/i', $u, $m)) {
+			$family = 'edge';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/opr\/([0-9\.]+)|opera\/([0-9\.]+)/i', $u, $m)) {
+			$v = $m[1] ?: $m[2] ?? '';
+			$family = 'opera';
+			$family_ver = $get_major($v);
+		} elseif (preg_match('/crios\/([0-9\.]+)/i', $u, $m)) {
+			$family = 'chrome_ios';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/chrome\/([0-9\.]+)/i', $u, $m) && strpos($u, 'safari') !== false) {
+			// treat as chrome if chrome/ present (many webviews)
+			$family = 'chrome';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/firefox\/([0-9\.]+)/i', $u, $m)) {
+			$family = 'firefox';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/version\/([0-9\.]+).*safari/i', $u, $m) || preg_match('/safari\/([0-9\.]+)$/i', $u, $m)) {
+			// Version/xx Safari/xxx -> use Version for major
+			$ver = $m[1] ?? '';
+			if (preg_match('/version\/([0-9\.]+)/i', $u, $m2))
+				$ver = $m2[1];
+			$family = 'safari';
+			$family_ver = $get_major($ver);
+		} elseif (preg_match('/ucbrowser\/([0-9\.]+)/i', $u, $m)) {
+			$family = 'uc';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/mozilla\/[0-9\.]+ .*rv:([0-9\.]+).*gecko/i', $u, $m)) {
+			// fallback for old Firefox-like
+			$family = 'firefox';
+			$family_ver = $get_major($m[1]);
+		} elseif (preg_match('/applewebkit\/[0-9\.]+.*chrome/i', $u) && preg_match('/safari/i', $u)) {
+			// fallback to chrome
+			if (preg_match('/chrome\/([0-9\.]+)/i', $u, $m)) {
+				$family = 'chrome';
+				$family_ver = $get_major($m[1]);
+			}
+		} else {
+			// extra tries: MSIE, Trident
+			if (preg_match('/msie\s*([0-9\.]+)/i', $u, $m) || preg_match('/trident\/.*rv:([0-9\.]+)/i', $u, $m)) {
+				$family = 'ie';
+				$family_ver = $get_major($m[1]);
+			} else {
+				// last resort detect token-based families
+				if (strpos($u, 'micromessenger') !== false) {
+					$family = 'wechat';
+					$family_ver = '0';
+				} elseif (strpos($u, 'line/') !== false) {
+					$family = 'line';
+					$family_ver = '0';
+				} elseif (strpos($u, 'telegram') !== false) {
+					$family = 'telegram';
+					$family_ver = '0';
+				} else {
+					$family = 'other';
+					$family_ver = '0';
+				}
+			}
+		}
+
+		// collapse many minor Chrome-like versions into coarse buckets (optional)
+		// e.g., keep only major number (already done) — good for reducing cardinality.
+
+		return [
+		    'family' => $family,
+		    'family_ver' => (string) $family_ver,
+		    'os' => $os,
+		    'os_ver' => (string) $os_ver,
+		    'device' => $device,
+		    'inapp' => $inapp,
+		    'is_bot' => false
+		];
+	}
+
+	static function compact_key(array $info): string {
+		// Normalization: lowercase, remove spaces
+		$parts = [];
+		$fam = $info['family'] ?? 'other';
+		$fv = $info['family_ver'] ?? '0';
+		$os = $info['os'] ?? 'unknown';
+		$ov = $info['os_ver'] ?? '0';
+		$device = $info['device'] ?? 'other';
+		$inapp = $info['inapp'] ?? '';
+
+		// collapse unknown / zero versions to just family/os
+		$famPart = ($fv && $fv !== '0') ? "{$fam}_{$fv}" : $fam;
+		$osPart = ($ov && $ov !== '0') ? "{$os}_{$ov}" : $os;
+
+		$parts[] = $famPart;
+		$parts[] = $osPart;
+		$parts[] = $device;
+		if ($inapp)
+			$parts[] = $inapp;
+
+		// join with pipe to keep keys readable and unique
+		return implode('|', $parts);
+	}
+
 	static function getUserAgentId()
 	{
 		static $uaid;
@@ -247,7 +468,12 @@ class GW_Bot_Detect
 		if($uaid)
 			return $uaid;
 		
-		$user_agent = mb_substr(($_SERVER['HTTP_USER_AGENT'] ?? '-'), 0, 100);
+
+	
+		$user_agent = self::compact_key(self::normalize_ua($_SERVER['HTTP_USER_AGENT'] ?? '-'));
+
+
+
 		$uaid = GW_Uni_Schema::getIdxByStr('ua', $user_agent);
 		
 		return $uaid;

@@ -180,7 +180,7 @@ class GW_Auth
 		$inf = GW_Request_Helper::visitorInfo();
 		$msg = "ip: {$inf['ip']}" . (isset($inf['proxy']) ? " | {$inf['proxy']}" : '') . (isset($inf['referer']) ? " | {$inf['referer']}" : '');
 		
-		$id = GW_Uni_Schema::getIdxByStr('ua', $inf['browser']);
+		$id = GW_Bot_Detect::getUserAgentId();
 		
 		GW_DB_Logger::msg($msg, 'user', 'login', $user->id, $id);
 
