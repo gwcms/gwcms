@@ -1,0 +1,1 @@
+TRUNCATE TABLE `gw_uni_schema`
