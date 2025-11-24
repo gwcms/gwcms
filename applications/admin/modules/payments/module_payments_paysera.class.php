@@ -9,7 +9,12 @@ class Module_Payments_Paysera extends GW_Common_Module
 		$this->model = GW_Paysera_Log::singleton();
 		parent::init();
 		
-		$this->list_params['paging_enabled']=1;			
+		$this->list_params['paging_enabled']=1;	
+
+
+
+		$this->addRedirRule('/^doPaysera|^viewPaysera|^paysera/i',['options','pay_paysera_module_ext']);	
+		
 	}
 	
 /*	
@@ -79,4 +84,25 @@ class Module_Payments_Paysera extends GW_Common_Module
 
 		$this->setMessage("time {$t->stop()} count: $cnt");
 	}
+	
+	function doPayseraRetryProcessSeries()
+	{
+		$items = $this->getDataObjectByIds();
+		
+		//d::Dumpas($items);
+		
+		$cnt = 0;
+		foreach($items as $item){
+		
+			$_GET['debug'] = 1;
+			$this->doPayseraRetryProcess($item->id);
+			
+			$cnt++;
+		}
+		
+		$this->setMessage('retry process: '.$cnt);
+	}	
+	
+	
 }
+

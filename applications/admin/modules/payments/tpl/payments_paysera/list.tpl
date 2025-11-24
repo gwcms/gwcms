@@ -27,4 +27,16 @@
 	
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[invertactive,dialogremove]}
+	
+	{function dl_cl_actions_doPayseraRetryProcess}
+		{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
+			<option value="checked_action('{$m->buildUri(false,[act=>doPayseraRetryProcessSeries])}', 1)">{GW::l('/A/VIEWS/doPayseraRetryProcess')}</option>
+		{/if}
+	{/function}	
+	
+	{if $app->user->isRoot()}
+		{$dl_cl_actions[]=doPayseraRetryProcess}
+	{/if}
+	
+	
 {/block}

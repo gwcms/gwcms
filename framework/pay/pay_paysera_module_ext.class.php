@@ -318,10 +318,19 @@ class pay_paysera_module_ext extends GW_Module_Extension
 	
 	
 	
-	function doPayseraRetryProcess()
+	function doPayseraRetryProcess($id = false)
 	{
-		$log_entry = GW_Paysera_Log::singleton()->find($_GET['id']);
-		$order = GW_Order_Group::singleton()->find(['id=?', $log_entry->orderid]);	
+		if(!$id)
+			$id= $_GET['id'];
+		
+		$log_entry = GW_Paysera_Log::singleton()->find($id);
+		$order = GW_Order_Group::singleton()->find(['id=?', $log_entry->orderid]);
+		
+		if($order->payment_status==7){
+			d::ldump("Skip {$order->id}");
+			return false;
+		}
+					
 		
 		$args = [
 			    'id'=>$order->id,
@@ -335,7 +344,8 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		//$log->processed = $log->processed+1;
 		//$log->updateChanged();
 		
-		d::dumpas(['packet'=>$log_entry, 'mark_as_payd'=>$markaspayd]);
+		if(isset($_GET['debug']))
+			d::ldump(['packet'=>$log_entry, 'mark_as_payd'=>$markaspayd]);
 	}	
 	
 }
