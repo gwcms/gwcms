@@ -870,5 +870,13 @@ class GW_Module
 			return false;			
 		}		
 	}
+	
+	
+	function isDebugMode()
+	{
+		return GW::s('DEVELOPER_PRESENT') && $this->app->sess('debug');
+	}	
 }
+
+
 

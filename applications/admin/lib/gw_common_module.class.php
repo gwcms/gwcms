@@ -4127,8 +4127,5 @@ class GW_Common_Module extends GW_Module
 	}
 	
 	
-	function isDebugMode()
-	{
-		return GW::s('DEVELOPER_PRESENT') && $this->app->sess('debug');
-	}	
+	
 }
