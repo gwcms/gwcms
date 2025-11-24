@@ -459,7 +459,7 @@ class GW_Bot_Detect
 
 		
 		if($famPart =='other' && $osPart=='unknown'){
-			$logfile =  . GW::s('DIR/LOGS').'user_agent_fail_identify.log';
+			$logfile =   GW::s('DIR/LOGS').'user_agent_fail_identify.log';
 			$ua = $_SERVER['HTTP_USER_AGENT'] ?? '-';
 			$output = file_put_contents($logfile, $ua."\n", FILE_APPEND);
 		}
