@@ -76,14 +76,14 @@ define('GW_PERM_OPTIONS',4);
 define('GW_PERM_REMOVE',8);
 
 //84.15.236.87 t20  /  88.223.24.240 //u1
-GW::s('OFFICE_IP_ADDR', ['84.15.236.87','88.223.24.240']);
+GW::s('OFFICE_IP_ADDR', ['84.15.236.87','88.223.24.240', '192.168.1.254', '127.0.0.1']);
 
 GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
 
 
 if(isset($_SERVER['REMOTE_ADDR'])){
 	
-	if( in_array($_SERVER['REMOTE_ADDR'], GW::s('OFFICE_IP_ADDR')) || $_SERVER['REMOTE_ADDR']=='127.0.0.1'){
+	if( in_array($_SERVER['REMOTE_ADDR'], GW::s('OFFICE_IP_ADDR'))){
 		GW::s('DEVELOPER_PRESENT',1);
 	}	
 }
@@ -93,7 +93,7 @@ GW::s("STATIC_EXTERNAL_ASSETS", "//serv133.voro.lt/html/");
 
 //beter lower on site and bigger for admin panel - large import / recalc actions
 GW::s('ADMIN/APP_MEM_LIM', "400M");
-
+GW::s('BOT_DETECT_IP_QUOTA_FOREIGN', 300);
 //define('',4); /* then 8, 16, 32, etc... */
 
 /*

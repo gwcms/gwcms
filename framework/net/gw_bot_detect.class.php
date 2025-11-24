@@ -154,7 +154,7 @@ class GW_Bot_Detect
 		
 		
 		
-		$maxcount = $cc == "LT" ? 1000 : 250;
+		$maxcount = $cc == "LT" ? 1000 : GW::s('BOT_DETECT_IP_QUOTA_FOREIGN');
 		
 		if($state<1)
 			GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
@@ -182,12 +182,12 @@ class GW_Bot_Detect
 		}
 
 		// 4️⃣ Occasional cleanup (rare, safe)
-		if (rand(0, 2000) == 1) {
+		if (rand(0, 1000) == 1) {
 			// cleanup old stats
 			GW::db()->query("
 			    DELETE FROM request_ip_stats
 			    WHERE TIMESTAMP(CONCAT(year, '-', LPAD(month,2,'0'), '-', LPAD(day,2,'0'), ' ', LPAD(hour,2,'0'), ':00:00'))
-				  < DATE_SUB(NOW(), INTERVAL 12 HOUR)
+				  < DATE_SUB(NOW(), INTERVAL 3 HOUR)
 			");
 
 			// cleanup expired verifications
