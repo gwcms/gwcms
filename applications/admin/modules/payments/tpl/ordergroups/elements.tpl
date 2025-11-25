@@ -90,10 +90,15 @@
 			{foreach $item->items as $oitem}
 				<tr>
 					<td>{$oitem->type}</td>
-					<td>{$oitem->invoice_line}</td>
+					<td>{$oitem->invoice_line2}</td>
 					<td>{$oitem->qty}</td>
 					<td>{$oitem->unit_price}</td>
 					<td>{$oitem->total}</td>
+					{if $app->user->isRoot()}
+						<td>
+							{$oitem->invoice_line}
+						</td>
+					{/if}
 				</tr>
 			{/foreach}
 		</table>
