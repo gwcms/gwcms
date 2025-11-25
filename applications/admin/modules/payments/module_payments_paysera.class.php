@@ -102,7 +102,13 @@ class Module_Payments_Paysera extends GW_Common_Module
 		
 		$this->setMessage('retry process: '.$cnt);
 	}	
-	
+	//del sio doMontonioRetryProcessSeries
+	function markAsPaydSystem($args)
+	{
+		$url=Navigator::backgroundRequest($urlreq='admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
+		return $urlreq;
+	}	
+		
 	
 }
 
