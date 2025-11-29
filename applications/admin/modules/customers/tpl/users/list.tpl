@@ -49,7 +49,7 @@ oneline example
 		{gw_link relative_path="`$item->id`/balancelog"  params=[id=>$item->id] title="BL"}
 	{/function}		
 	
-
+	{$dl_output_filters.update_time=short_time}
 	
 	
 	
