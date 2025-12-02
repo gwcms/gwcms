@@ -82,16 +82,13 @@ class GW_Image_Manipulation
 		
 
 
-
-
-
-		if ($this->type == 'png' || $this->type == 'gif') {
+		if ($this->type == 'png' || $this->type == 'gif' ||  $this->type == 'webp')  {
 			$trnprt_indx = imagecolortransparent($this->im);
 
 			// If we have a specific transparent color
 			//2024-06-25 pastebeta klaida  Uncaught ValueError: imagecolorsforindex(): Argument #2 ($color) is out of range in 
 			//meta 255
-			if ($trnprt_indx >= 0 && $trnprt_indx < 255) {
+			if ($trnprt_indx >= 0){
 				
 				// Get the original image's transparent color's RGB values
 				$trnprt_color = imagecolorsforindex($this->im, $trnprt_indx);
@@ -106,19 +103,15 @@ class GW_Image_Manipulation
 				imagecolortransparent($image_resized, $trnprt_indx);
 			}
 			// Always make a transparent background color for PNGs that don't have one allocated already
-			elseif ($this->type == 'png') {
+			elseif ($this->type == 'png' || $this->type == 'webp') {
 
-				// Turn off transparency blending (temporarily)
+				// Svarbu: prieš bet ką
 				imagealphablending($image_resized, false);
-
-				// Create a new transparent color for image
-				$color = imagecolorallocatealpha($image_resized, 0, 0, 0, 127);
-
-				// Completely fill the background of the new image with allocated color.
-				imagefill($image_resized, 0, 0, $color);
-
-				// Restore transparency blending
 				imagesavealpha($image_resized, true);
+
+				// Su alpha=127 (visiškai skaidru)
+				$transparent = imagecolorallocatealpha($image_resized, 0, 0, 0, 127);
+				imagefill($image_resized, 0, 0, $transparent);
 			}
 		} else { //jpeg
 			$bgColor = imagecolorallocate($image_resized, $bg_red, $bg_green, $bg_blue);
@@ -151,7 +144,7 @@ class GW_Image_Manipulation
 			    'ar'=>[$arw, $arh]
 			]);
 			exit;
-		}
+		}	
 
 		// copy image depending on resize method
 		switch ($method) {
