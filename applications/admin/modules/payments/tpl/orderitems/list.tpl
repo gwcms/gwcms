@@ -148,12 +148,13 @@
 	{function dl_cell_amount_calc}
 
 		{if $dl_calc_max.amount_calc}
-
-			{$percentage = round($item->amount_calc/$dl_calc_max.amount_calc,2)*100}
-
+			{$tmp=$item->amount_calc}
+			{$percentage = round($tmp/$dl_calc_max.amount_calc,2)*100}
+			{*{$tmp = $tmp*1}*}
+			
 			{*{$item->amount_calc}/{$dl_calc_max.amount_calc} = {$percentage}%*}
 			<div class="prog" style="color:black; background: linear-gradient(to right, #bcd9a0 {$percentage}%,#ffffff {$percentage}%);">
-				{round($item->amount_calc)}
+				{round($tmp)}
 			</div>
 		{else}
 			{$item->amount_calc}
