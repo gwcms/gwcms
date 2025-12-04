@@ -56,6 +56,8 @@ GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
 
 
 date_default_timezone_set('Europe/Vilnius');
+GW::s('BOT_DETECT_IP_QUOTA_FOREIGN', 300);
+
 
 include $dir['ROOT'].'config/environment.php';
 include $dir['ROOT'].'config/project.php';
@@ -93,7 +95,7 @@ GW::s("STATIC_EXTERNAL_ASSETS", "//serv133.voro.lt/html/");
 
 //beter lower on site and bigger for admin panel - large import / recalc actions
 GW::s('ADMIN/APP_MEM_LIM', "400M");
-GW::s('BOT_DETECT_IP_QUOTA_FOREIGN', 300);
+
 //define('',4); /* then 8, 16, 32, etc... */
 
 /*
