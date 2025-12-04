@@ -59,7 +59,7 @@
 	{/function}	
 	
 
-	{if $smarty.get.noactions}
+	{if $smarty.get.noactions || $m->list_config.pview->group_by}
 		{$dl_actions=[]}
 	{else}
 		{$dl_actions=[editshift,invoice]}
@@ -69,7 +69,7 @@
 		{/if}
 	{/if}
 	
-	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type,status,seller_id,buyer_details]}
+	{$dl_smart_fields=[obj_id,group_id,user_title,user_email,door_code,coupon_codes,contracts,vat_group,obj_type,status,seller_id,buyer_details,amount_calc,pay_month]}
 
 
 	{function dl_cell_obj_id}
@@ -144,6 +144,30 @@
 			{call dl_cell_user_title} 
 		{/if}
 	{/function}
+	
+	{function dl_cell_amount_calc}
+
+		{if $dl_calc_max.amount_calc}
+
+			{$percentage = round($item->amount_calc/$dl_calc_max.amount_calc,2)*100}
+
+			{*{$item->amount_calc}/{$dl_calc_max.amount_calc} = {$percentage}%*}
+			<div class="prog" style="color:black; background: linear-gradient(to right, #bcd9a0 {$percentage}%,#ffffff {$percentage}%);">
+				{round($item->amount_calc)}
+			</div>
+		{else}
+			{$item->amount_calc}
+		{/if}
+	{/function}
+	{function dl_cell_pay_month}
+		{$ymd = explode('-',$item->pay_month)}
+
+		
+		{$ymd.0}, {GW::l("/G/date/MONTHS/{intval($ymd.1)}")}
+		
+	{/function}
+	
+	
 
 	{capture append=footer_hidden}	
 		
@@ -163,3 +187,21 @@
 {/block}
 
 
+{capture append=footer_hidden}
+
+<style>
+	.gw_notactive img, .gw_notactive a{ opacity: 0.4 }
+	.gw_error_row{ color:red;opacity: 0.4 }
+
+
+
+	.prog {
+		border:1px solid silver;
+		text-align: center;
+		width: 200px;
+
+	}
+
+	{*if $m->periodObj}.dl_page_view_container{ display:none }{/if*}
+</style>
+{/capture}

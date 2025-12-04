@@ -268,6 +268,8 @@
     <i id="create_order_id">Pirkimo užsakymas</i>
     <i id="last_use_order_id">Paskutinis panaudojimo užsakymas</i>
     <i id="used_amount">Panaudota suma</i>
+    <i id="amount_calc">Mokėtina suma</i>
+    <i id="pay_month">Metai / mėnuo</i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
@@ -348,6 +350,7 @@
 <![CDATA[<i class="fa fa-comment-o"></i><i class="fa fa-eye-slash"></i>]]>
     </i>
     <i id="obj_id">Prek. id</i>
+    <i id="amount_calc"><![CDATA[<span class="material-symbols-outlined">calculate</span><span class="material-symbols-outlined">functions</span>]]></i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">

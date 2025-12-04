@@ -107,7 +107,9 @@ class Module_OrderItems  extends GW_Common_Module
 			'company'=>'lof',
 			'surname'=>'lof',
 			'name'=>'lof',
-			'company_code'=>'lof'
+			'company_code'=>'lof',
+			'pay_month'=>'lof',
+			'amount_calc'=>'lof'
 			]
 		);
 		
@@ -172,8 +174,15 @@ class Module_OrderItems  extends GW_Common_Module
 			if($this->sellers_enabled)
 				$order_fields.=", ord.seller_id";
 			
-			$params['select']='a.*, usr.name, usr.surname, '.$order_fields;
 			
+			
+			
+			if($this->list_config['pview'] && $this->list_config['pview']->select){
+				//grby fails
+				$params['select']='a.*';
+			}else{
+				$params['select']='a.*, usr.name, usr.surname, '.$order_fields;
+			}
 
 			$params['joins']=[
 			    ['left','gw_order_group AS ord','a.group_id = ord.id'],
@@ -197,7 +206,7 @@ class Module_OrderItems  extends GW_Common_Module
 			$params['conditions'].="pay_test=".(int)$params['pay_test'];
 		}
 				
-		
+		//d::dumpas($params);
 		
 		if($this->view_name=='email')
 			$params['limit']=9999999;
