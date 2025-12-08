@@ -3,7 +3,7 @@
 	{assign var=max value=max((array)$hourly_stats)}
 
 	<div class="2 pull-right pad-rgt">
-	<div style="position:relative;top:5px;width:200px;height:24px;display:flex;align-items:flex-end;gap:1px;padding:2px;cursor:pointer;"
+	<div style="position:relative;top:5px;width:40px;height:24px;display:flex;align-items:flex-end;gap:1px;padding:2px;cursor:pointer;"
 	     onclick="window.location='/admin/{$ln}/system/loadstats/testViewStats'">
 	    {foreach $hourly_stats as $hour => $count}
 		{$barHeight=round($count/$max*24)}
