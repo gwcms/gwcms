@@ -3,16 +3,24 @@
 class GW_Math_Helper
 {
 
-	static function cFileSize($bytes, $prec = 2)
-	{
-		if (!$bytes)
+	static function cFileSize($bytes) {
+		if (!$bytes) {
 			return '0';
-		$m = array('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
-		$exp = floor(log($bytes) / log(1024));
-		$prec = pow(10, $prec);
-		return (round($bytes / pow(1024, floor($exp)) * $prec) / $prec) . ' ' . $m[$exp] . 'B';
+		}
+
+		$units = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+		$exp = floor(log($bytes, 1024));
+		$value = $bytes / pow(1024, $exp);
+
+		// Count digits before decimal
+		$intDigits = strlen((string) floor($value));
+
+		// Dynamic precision: 3 - digits
+		$prec = max(0, 3 - $intDigits);
+
+		return round($value, $prec) . ' ' . $units[$exp] . 'B';
 	}
-	
+
 	//oposite to cFileSize
 	static function unitToInt($s)
 	{

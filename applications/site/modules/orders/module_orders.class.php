@@ -1780,12 +1780,21 @@ class Module_Orders extends GW_Public_Module
 		]);
 		
 		
+		
 	
 		if(!$result->filepath){
+			
+			$opts=[
+				    'subject'=>GW::s('PROJECT_NAME').' PDF DOWNLOOAD FAILED',
+				    'body'=>"<pre>".json_encode(['order_id'=>$order->id,'doBuildDownload'=>$result], JSON_PRETTY_PRINT)."</pre>"
+			];
+			
+			GW_Mail_Helper::sendMailDeveloper($opts);			
+			
 			$this->setError("Cant download pdf scores, system failure, please contact admin info@natos.lt");
 			
 			
-			if($this->app->user && $this->app->user->isRoot()){
+			if($this->app->user && ($this->app->user->isRoot() || GW::s('DEVELOPER_PRESENT')) ){
 				d::dumpas($result,['hidden'=>'root user debug reply']);
 			}
 			

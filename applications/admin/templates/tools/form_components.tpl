@@ -1,20 +1,7 @@
 {include "elements/input_func.tpl"}
 
-{function build_input}
-
-	{if $params_expand.value_from_var}
-		{$tmpval=${$params_expand.value_from_var}}
-	{else}
-		{$tmpval=null}
-	{/if}
-
-	{*if !$smarty.get.form_ajax}
-		{$notr=true}
-	{/if*}
-	
+{function build_input}	
 	{call e value=$tmpval}
-
-
 {/function}
 
 {function "build_form_normal"}
@@ -68,13 +55,11 @@
 
 
 {function "cust_inputs"}
-
 	
 	{if $fields_config.fields[$field]}
-		{call "build_input" params_expand=$fields_config.fields[$field]}
-	{elseif $m->list_config.inputs[$field]}
-		{$tmp=$m->list_config.inputs[$field]}
-		{call "build_input" params_expand=$tmp}
+		{call "e" params_expand=$fields_config.fields[$field]}
+	{elseif isset($m->list_config.inputs[$field])}			
+		{call "e" params_expand=$m->list_config.inputs[$field]}
 	{elseif isset($m->smarty->tplFunctions["gw_input_{$field}"])}
 		{call name="gw_input_{$field}"}
 	{elseif isset($GLOBALS.input_function[$field])}

@@ -19,7 +19,12 @@
 
                     {$title} 
 		    {if $m->isDebugMode()}
-				<small class="debug">{$name}</small>
+			    <small class="debug">{$name} <small class="nowrap" style="cursor:pointer" onclick="$(this).parent().next().fadeIn()">type: {$type}</small></small>
+				<div style="display:none" class="nowrap">
+				
+					{d::ldump($params_expand)}
+				</div>
+				
 		    {/if}
                     {if $hidden_note} 
                             <a  class="fa gwAddPopover add-popover" data-content="{$hidden_note|escape}"  
@@ -135,11 +140,17 @@
 	after_input - turinys pridedamas po laukeliu
 *}
 
+	{if $params_expand.value_from_var}
+		{$tmpval=${$params_expand.value_from_var}}
+	{else}
+		{$tmpval=null}
+	{/if}
+
     {if $params_expand}
             {foreach $params_expand as $k => $v}
                     {assign var=$k value=$v}
             {/foreach}
-            {$params_expand=[]}
+            
     {/if}
 
 
