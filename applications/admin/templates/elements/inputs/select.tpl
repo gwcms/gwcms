@@ -1,3 +1,5 @@
+
+
 {include file="elements/inputs/select_plain.tpl" class="`$class` selectpicker"}
 
 {*{$m->addIncludes("bs/select", 'js', "`$app_root`static/vendor/bootstrap-select/js.js")}*}

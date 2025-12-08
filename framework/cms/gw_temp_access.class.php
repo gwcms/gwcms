@@ -31,4 +31,12 @@ class GW_Temp_Access extends GW_Composite_Data_Object
 
 		return false;
 	}
+	
+	function testToken($token){
+		list($uid, $token) = explode(',', $token);
+		
+		if ($found = $this->find(['user_id=? AND token=?', $uid, $token])) {
+			return true;
+		}
+	}
 }

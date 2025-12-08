@@ -125,6 +125,15 @@ class GW_Bot_Detect
 		$adminid = $_SESSION['cms_auth']['user_id'] ?? false;
 		$siteid = $_SESSION['site_auth']['user_id'] ?? false;
 		
+		if(isset($_GET['temp_access'])){
+			//apicalll
+			//GW_Temp_Access::singleton()->testToken buvo nepasiruoses kol GW::db nepasileido
+			GW::db();
+			if(GW_Temp_Access::singleton()->testToken($_GET['temp_access'])){
+				$adminid=true; $siteid = true;
+			}
+		}
+		
 		list($ip, $ipint)  = self::ip2int();
 		
 		if($ip=='127.0.0.1')
