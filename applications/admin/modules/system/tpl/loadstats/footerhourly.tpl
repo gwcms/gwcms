@@ -3,7 +3,7 @@
 	{assign var=max value=max((array)$hourly_stats)}
 
 	<div class="2 pull-right pad-rgt">
-	<div style="position:relative;top:5px;width:100px;height:24px;display:flex;align-items:flex-end;gap:1px;padding:2px;cursor:pointer;"
+	<div style="position:relative;top:5px;width:{count($hourly_stats)*5.5}px;height:24px;display:flex;align-items:flex-end;gap:1px;padding:2px;cursor:pointer;"
 	     onclick="window.location='/admin/{$ln}/system/loadstats/testViewStats'">
 	    {foreach $hourly_stats as $hour => $count}
 		{$barHeight=round($count/$max*24)}
@@ -15,9 +15,9 @@
 	    
 	<style>
 	    .hourlystatsbar {
+		    width:4px;
 		background: limegreen;
 		background:limegreen;
-		width:{max(40/count($hourly_stats)-1, 10)}px;
 		transition: background 0.2s;
 	    }
 	    .hourlystatsbar:hover {
