@@ -389,6 +389,13 @@ class GW_Debug_Helper
 
 		
 		
+		$msg = $e['message'];
+
+		// Check known OOM patterns
+		$isOOM =
+		       strpos($msg, 'Allowed memory size') !== false
+		    || strpos($msg, 'exhausted (tried to allocate') !== false;	
+		
 		
 		if(GW::s('REPORT_ERRORS') && ($e['type'] == E_ERROR || $e['type']==E_USER_ERROR ) ){  // fatal
 
@@ -418,18 +425,20 @@ class GW_Debug_Helper
 				]]);	
 			
 			
-				
+			
 			$collectfile = GW::s('DIR/TEMP').'error_coll_'.md5($e['file']).'_'.$e['line'];
 			if(file_exists($collectfile)){
-				$nosend[]='error is collected into collectfile';
+				if($isOOM){
+					echo "skip errcollects mem limit insuff<br>";
+				}else{
+					$nosend[]='error is collected into collectfile';
 				
-				
-				
-				self::cleanUpErrorCollects();
+					self::cleanUpErrorCollects();					
+				}
 			}
 			
 			self::collectError($collectfile, $body, $e);
-			
+
 			
 			if($nosend)
 			{
@@ -579,16 +588,55 @@ class GW_Debug_Helper
 				
 				$counter = (int)$metadat['count'];
 				
-				if($counter > 1){
+				if ($counter > 1) 
+				{
+					$MAX_LEN = 1000;
+					$fp = fopen($file, 'r');
+					$preview = fread($fp, $MAX_LEN);
+					fclose($fp);
+
+						// Trim for email body
+					
+					
+					if (filesize($file) >= $MAX_LEN) {
+					    $displayBody = $preview . "\n\n[... TRIMMED ... see attachment for full content ...]";
+				
+					    
+						$zip = new ZipArchive();
+						$zipFile = $file. '.zip';
+						$zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+						$zip->addFile($file, 'errors.txt');
+						$zip->close();	
+
+						$attachment = file_get_contents($zipFile);
+						unlink($zipFile);
+					    
+					    
+					} else {
+					    $displayBody = $preview;
+					}					
+						
+
 					echo "flushing errors: $counter | ";
 					$reci = GW::s('REPORT_ERRORS');
-					$subj = "Collect flush under project: ".GW::s('PROJECT_NAME').' env: '.
-						GW::s('PROJECT_ENVIRONMENT')." | COUNT: $counter | FILE: {$metadat['file']} | LINE: {$metadat['line']} | START : ".date('Y-m-d H:i',$metadat['created']);
+					$subj = "Collect flush under project: " . GW::s('PROJECT_NAME') . ' env: ' .
+						GW::s('PROJECT_ENVIRONMENT') . " | COUNT: $counter | FILE: {$metadat['file']}...";
 
-					$opts = ['to'=>$reci, 'subject'=>$subj, 'body'=> file_get_contents($file), 'noAdminCopy'=>1, 'noStoreDB'=>1];
+					$opts = [
+					    'to' => $reci,
+					    'subject' => $subj,
+					    'body' => $displayBody,
+					    'noAdminCopy' => 1,
+					    'noStoreDB' => 1
+					];
+					
+					if(isset($attachment))
+						$opts['attachments'] = ['errors.txt.gz' => $attachment];
+
 					GW_Mail_Helper::sendMail($opts);
 				}
-				
+
 				unlink($file); // delete the file
 				unlink($file.'.meta');
 				

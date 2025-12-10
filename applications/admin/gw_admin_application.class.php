@@ -149,6 +149,9 @@ class GW_Admin_Application extends GW_Application
 		
 		
 		ini_set("memory_limit", GW::s('ADMIN/APP_MEM_LIM'));
+		
+		if(ini_get("memory_limit") != GW::s('ADMIN/APP_MEM_LIM') && $this->user && $this->user->isRoot())
+			$this->setMessage("Memory limit set does not work ASKED: ".GW::s('ADMIN/APP_MEM_LIM').'. but result: '.ini_get("memory_limit"). " \nphp-fpm config is preventing? php_admin_value[memory_limit] =...");
 	}
 	
 		
