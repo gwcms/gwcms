@@ -606,7 +606,7 @@ class GW_Debug_Helper
 						$zipFile = $file. '.zip';
 						$zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-						$zip->addFile($file, 'errors.txt');
+						$zip->addFile($file, 'errors.html');
 						$zip->close();	
 
 						$attachment = file_get_contents($zipFile);
@@ -632,7 +632,7 @@ class GW_Debug_Helper
 					];
 					
 					if(isset($attachment))
-						$opts['attachments'] = ['errors.txt.gz' => $attachment];
+						$opts['attachments'] = ['errors.html.gz' => $attachment];
 
 					GW_Mail_Helper::sendMail($opts);
 				}

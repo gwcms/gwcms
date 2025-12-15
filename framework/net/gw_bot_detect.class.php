@@ -546,13 +546,15 @@ class GW_Bot_Detect
 	
 	static function recaptcha()
 	{
-		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD)
+		list($ip, $ipint)  = self::ip2int();
+
+		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD || $ip=='127.0.0.1')
 			return false;
 		
 		self::initSession();
 		self::ipStats();
-
-
+		
+	
 		$special_domains = GW::s('SOLVE_RECAPTCHA_DOMAINS'); // domains that need captcha
 		$current_domain = $_SERVER['HTTP_HOST'] ?? '';
 
