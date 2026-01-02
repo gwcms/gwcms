@@ -766,7 +766,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			
 		if($item->isChanged() || $_GET['old_priority']!=$_GET['priority'] ){
 			
-			if(isset($item->changed_fields['parent_id'])){
+			if(isset($item->changed_fields['parent_id']) || isset($item->changed_fields['site_id'])){
 				$root = (object)['title'=>$this->options['site_id'][$item->site_id]." ROOT"];
 				$prevparento = $prevparent == -1 ? $root  :  $this->model->find(['id=?',$prevparent]);
 				$newparento = $newparent == -1 ? $root :   $this->model->find(['id=?',$newparent]);
@@ -776,7 +776,15 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 				$item->priority = $_GET['priority'];
 				$item->updateChanged();
 				$item->fixOrder();
-				$this->setMessage(["text"=>"Moved to new parent $oldparent|{$prevparento->title}  -> {$item->parent_id}|{$newparento->title}", "type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
+				
+				$infotext = "Moved to new parent $oldparent|{$prevparento->title}  -> {$item->parent_id}|{$newparento->title}";
+				//if($this->isDebugMode()){					
+				//	$infotext.= "<pre>".json_encode($item->toArray(), JSON_PRETTY_PRINT).'</pre>';
+				//}
+				
+				$this->setMessage([
+				    "text"=>$infotext, 
+					"type"=>GW_MSG_SUCC, "title"=>$item->title, "obj_id"=>$item->id,'float'=>1]);
 				
 			}else{
 				

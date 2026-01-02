@@ -150,10 +150,7 @@
             {foreach $params_expand as $k => $v}
                     {assign var=$k value=$v}
             {/foreach}
-            {if $m->isDebugMode()} {* kad neperkrauti sistemos*}
-			 {* NENUIMTI AMZINAS LOOPAS IVYKDAVO!! kai type=read ir potoatpazysta kai error*}
-		    {$params_expand=[]}
-            {/if}
+            
     {/if}
 
 
@@ -279,10 +276,6 @@
 		{foreach $params_expand as $k => $v}
 			{assign var=$k value=$v}
 		{/foreach}
-		
-		{* NENUIMTI AMZINAS LOOPAS IVYKDAVO!! kai type=read ir potoatpazysta kai error*}
-		{$params_expand=[]}
-          
 	{/if}
 	
 	{*copy to {function e}*}
