@@ -6,7 +6,10 @@ class GW_Sum_To_Text_Helper {
 	static function sum2Text($number, $lang='lt')
 	{
 		$Sum = sprintf('%01.2f', $number);
-		list($p1, $p2) = explode('.', $Sum);		
+		list($p1, $p2) = explode('.', $Sum);	
+		
+		if($lang=='cz')
+			$lang = 'cs_CZ';
 		
 		$f = new NumberFormatter($lang, NumberFormatter::SPELLOUT);
 		$spell=$f->format($p1);
