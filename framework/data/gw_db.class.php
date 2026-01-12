@@ -155,7 +155,7 @@ class GW_DB
 		try {
 			$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
 			
-			$comment = "  /* ".$ua.' | '.(GW_Bot_Detect::isBot() ? 'Bot': '-') .' '. ($_SERVER['REQUEST_URI'] ?? false) . " */";
+			$comment = "  /* ".$ua.' | '.(GW_Bot_Detect::isBot() ? 'Bot': '-') .' '.$_SERVER['REMOTE_ADDR'].' '. ($_SERVER['REQUEST_URI'] ?? false) . " */";
 			$this->result = $this->link->query($cmd.$comment);
 		} catch (Exception $e) {
 			
