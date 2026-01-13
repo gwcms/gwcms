@@ -22,7 +22,7 @@
 			    <small class="debug">{$name} <small class="nowrap" style="cursor:pointer" onclick="$(this).parent().next().fadeIn()">type: {$type}</small></small>
 				<div style="display:none" class="nowrap">
 				
-					{d::ldump($params_expand)}
+					{d::ldump($debug_params_expand)}
 				</div>
 				
 		    {/if}
@@ -150,7 +150,9 @@
             {foreach $params_expand as $k => $v}
                     {assign var=$k value=$v}
             {/foreach}
-            
+	    
+	    {if $m->isDebugMode()}{$debug_params_expand=$params_expand}{/if}
+            {$params_expand=[]} {*buttinas, jei reikia debuginimui reiktu priskirti i debug_params_expand*}
     {/if}
 
 
@@ -276,6 +278,7 @@
 		{foreach $params_expand as $k => $v}
 			{assign var=$k value=$v}
 		{/foreach}
+		{$params_expand=[]}
 	{/if}
 	
 	{*copy to {function e}*}
