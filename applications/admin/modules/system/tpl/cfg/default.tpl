@@ -105,4 +105,8 @@ openssl ec -in private_key.pem -outform DER|tail -c +8|head -c 32|base64|tr -d '
 {call e field="ALLAPP/i18nExt"  type=multiselect_ajax sorting=1 modpath="datasources/languages" source_args=[byTranslCode=>1] value_format=json1 preload=1}
 {call e field="ALLAPP/ln_by_geoip_map"  type=code_json height="60px" hidden_note='Exmpl: {"LT":"lt","DE":"de","default":"en"}' hidden_note_copy=1}
 
+{call e field="ALLAPP/BOT_DETECT_IP_QUOTA_FOREIGN"  type=number  hidden_note='Po defaultu turetu but 300, avariniu ddos atakos atveju statom 0 - bus nuo pirmos užklausos captcha'}
+
+
+
 {include file="default_form_close.tpl" submit_buttons=[save]}

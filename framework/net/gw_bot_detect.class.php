@@ -545,7 +545,7 @@ class GW_Bot_Detect
 	}
 	
 	static function recaptcha()
-	{
+	{		
 		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD)
 			return false;
 		

@@ -126,13 +126,17 @@
 			{input field="club" required=1 type=birthdate value=$item->clubObj->title readonly=$tmpreadonly note_raw=$tmp help=GW::ln('/M/USERS/RENTER_BIRTHDATE_HELP')}	
 		{else}
 			{$options.club=$options.club_long}
-			{include "inputs/select2other.tpl" field=club note_raw=$tmp}			
+			{*include "inputs/select2other.tpl" field=club note_raw=$tmp*}	
+			{gw_unassign var=$options.club[-1]}
+			{input field="club" type="select2" required=0 options=$options.club}
 		{/if}
 		</div>
 	{else}
 		<div class="col-md-6">
 			{$options.club=$options.club_long}
-			{include "inputs/select2other.tpl" field=club}
+			{*include "inputs/select2other.tpl" field=club*}
+			{gw_unassign var=$options.club[-1]}
+			{input field="club" type="select2" required=0 options=$options.club}
 		</div>	
 	{/if}
 {/if}

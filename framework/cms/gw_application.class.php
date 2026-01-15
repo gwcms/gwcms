@@ -137,14 +137,9 @@ class GW_Application
 				GW::s($cfgkey, GW::json_or_plain($val));
 		}
 		
-		$cfgrows=$dbcfg->preload('ALLAPP');
-		
-		foreach($cfgrows as $cfgkey => $val){
-			if($val)
-				GW::s(str_replace('ALLAPP/','',$cfgkey), GW::json_or_plain($val));
-		}
 
-		
+
+		//ALLAPP perkelti i GW::init()
 			
 	}
 	

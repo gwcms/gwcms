@@ -56,6 +56,8 @@ GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
 
 
 date_default_timezone_set('Europe/Vilnius');
+
+//reachable via admin panel System / Nustatymai or url admin/lt/system/cfg
 GW::s('BOT_DETECT_IP_QUOTA_FOREIGN', 300);
 
 

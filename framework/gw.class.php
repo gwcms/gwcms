@@ -131,11 +131,26 @@ class GW
 
 	static function init()
 	{
+		
 		GW::$globals['proc_timer'] = new GW_Timer;
 		self::$context = new GW_Context;
 		self::$s = new GW_Tree_Data_Elm(self::$settings);
 		self::$l = new GW_l_Object_Call;
 		self::$lgr = new GW_Logger(GW::s('DIR/LOGS') . 'system.log');
+		self::dbConfifAllAPP();
+	}
+	
+	static function dbConfifAllAPP()
+	{
+		$dbcfg = new GW_Config();
+
+		
+		$cfgrows=$dbcfg->preload('ALLAPP');
+		
+		foreach($cfgrows as $cfgkey => $val){
+			if($val)
+				GW::s(str_replace('ALLAPP/','',$cfgkey), GW::json_or_plain($val));
+		}		
 	}
 
 	
