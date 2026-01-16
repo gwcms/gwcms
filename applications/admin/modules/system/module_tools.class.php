@@ -372,6 +372,7 @@ class Module_Tools extends GW_Common_Module
 
 	
 	
+	public $doTestMaxScriptExecutionTime1 = ["info"=>"hmm.."];
 
 	function doTestMaxScriptExecutionTime1()
 	{

@@ -61,3 +61,19 @@
 	{/capture}
 {/if}
 
+{if  $dl_init_filters}
+
+	{*prie page view prideti galima i config laukeli ir iskleis*}
+	
+	{foreach $m->list_params.filters as $filt}
+		{gw_unassign var=$dl_init_filters[$filt.field]}
+	{/foreach}
+	{capture append=footer_hidden} 
+		<script> require(['gwcms'],function(){
+			{foreach $dl_init_filters as $key => $whatever}
+				gwcms.addFilters('{$key}')
+			{/foreach}
+		})			
+	</script>
+	{/capture}		
+{/if}

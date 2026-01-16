@@ -376,6 +376,57 @@
 		{if $smarty.get.field}
 			<style>.dl_cell_{$smarty.get.field} { background-color: pink }</style>
 		{/if}
+		
+				
+		{if isset($dl_merge_cells)}
+			
+			{$dl_merge_cells = explode(',', $dl_merge_cells)}
+			<script>
+				var markedCells = [];
+				function rowspanmerge(table, colidx)
+				{
+
+
+					let headerCell = null;
+
+					for (let row of table.rows) {
+
+					  const firstCell = row.cells[colidx];
+					  if(!firstCell)
+						  continue;
+
+					  if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
+					    headerCell = firstCell;
+					  } else {
+					    headerCell.rowSpan++;
+					    markedCells.push(firstCell)
+					  }
+					}			
+				}		
+
+				require(['gwcms'], function(){
+
+
+					const table = $('.gwListTable').get(0);
+
+					if(!table)
+						return false;
+
+					{foreach $dl_merge_cells as $idx}
+						rowspanmerge(table, 0);//year
+					{/foreach}
+
+					console.log();
+					for(var idx in markedCells)
+						markedCells[idx].remove()
+
+
+				})
+
+
+			</script>				
+		{/if}
+		
 	{/capture}		
 		
 		
@@ -383,4 +434,6 @@
 		{include file="default_close.tpl"}
 	{/block}	
 		
+	
+	
 {/if}

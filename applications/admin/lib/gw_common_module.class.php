@@ -1008,7 +1008,6 @@ class GW_Common_Module extends GW_Module
 		
 		$cond = isset($params['conditions']) ? $params['conditions'] : '';
 		
-		$this->initFldAliases($params);
 	
 		if ($pview && $pview->condition){
 			$cond .= ($cond ? ' AND ' : '') . $this->list_config['pview']->condition;
@@ -1020,6 +1019,13 @@ class GW_Common_Module extends GW_Module
 				$cond .= ($cond ? ' AND ' : '') . $andview->condition;
 			
 		}
+		
+		if ($pview && $pview->select){
+			$params['select'] = $params['select'] ?? '';
+			$params['select'] = ($params['select'] ? $params['select'].', ':'').$pview->select;
+		}		
+		
+		$this->initFldAliases($params);
 		
 		
 
@@ -1093,10 +1099,7 @@ class GW_Common_Module extends GW_Module
 			$params['group_by'] = $pview->group_by;
 		}		
 		
-		if ($pview && $pview->select){
-			$params['select'] = $params['select'] ?? '';
-			$params['select'] = ($params['select'] ? $params['select'].', ':'').$pview->select;
-		}
+
 
 		
 		if(isset($_GET['pview'])){
