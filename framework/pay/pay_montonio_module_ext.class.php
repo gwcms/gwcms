@@ -233,10 +233,20 @@ if (
 		$log->order_id = $pay->merchant_reference;
 		$log->data = json_encode($pay);
 		$log->received_amount = $pay->grandTotal;
-		$log->insert();	
+		$log->unique_key = 'M.'.$pay->uuid.'-'.$pay->paymentStatus;
+		
+		
+		if(gw_payuniversal_log::singleton()->find(['unique_key=?', $log->unique_key])){
+			$this->log("mokejimas neiskaitytas nes jau yra rastas paylogas $log->unique_key, gautas mokejimo paketas: ".json_encode($pay));
+			
+			GOTO sFinish;
+		}
+			
+		$log->insert();
+		
 		
 		$order = $this->getOrder(true);
-		
+				
 		if($this->app->user && $this->app->user->isRoot()){
 					
 			$this->confirm("<pre>".json_encode($pay, JSON_PRETTY_PRINT).'</pre>');
@@ -286,7 +296,8 @@ if (
 			exit;
 		
 
-		$this->redirectAfterPaymentAccept($order);
+		sFinish:
+			$this->redirectAfterPaymentAccept($order);
 	}
 	
 	
