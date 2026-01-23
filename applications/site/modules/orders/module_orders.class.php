@@ -586,22 +586,59 @@ class Module_Orders extends GW_Public_Module
 		 */
 		
 		
-		$permitfields =  array_flip(['email','name','surname','phone','city','company','company_code','vat_code','company_addr','keyval/sabis','keyval/sabis_contact_phone']);
+		$permitfields =  array_flip(['email','name','surname','phone','city','company','company_code','vat_code','company_addr','keyval/sabis','keyval/sabis_contact_phone','keyval/btransfer_or_banklink']);
 		$this->filterPermitFields($vals,$permitfields);
 		
 		$order->setValues($vals);
 		$order->update();
 		
 		
+		
+		if($order->get('keyval/btransfer_or_banklink')==2){
+			
+			$this->__addAdmFee($order);
+			
+		}		
+		
+		
 		if($this->feat('sabis') && $order->get('keyval/sabis')){
 			$this->doSabis($order);
 		}
 		
+		
 		$this->app->jump(false, $_GET);
-		
-		
-		
-		//
+	}
+	
+	
+	function __addAdmFee($order)
+	{
+		$alreadycontain = false;
+		foreach($order->items as $oi)
+			if($oi->obj_type=='shop_products' && $oi->obj_id == 164)
+				$cartitem = $oi;
+
+
+		if(!$alreadycontain){
+			$admfeeitem = Shop_Products::singleton()->find(164);
+
+			if(!$admfeeitem)
+			{
+				d::dumpas('Missing fee item please contact administration');
+			}
+
+			if(!$cartitem)
+				$cartitem = new GW_Order_Item;
+
+			$cartitem->setValues($cartvals=[
+				'obj_type'=>'shop_products',
+				'obj_id'=>164,
+				'qty'=>1,
+				'unit_price'=>$admfeeitem->price
+			]);
+
+			$cartitem->save();
+			$order->addItem($cartitem);
+		}		
 	}
 	
 	function doSabis($order)

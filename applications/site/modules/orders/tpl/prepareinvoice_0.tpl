@@ -14,6 +14,24 @@
 		<h2>{GW::ln("/m/PROVIDE_DETAILS_IF_NEEDED{$tmp}")}</h2>
 		
 		<br/>
+		
+		
+		{if $m->feat('sabis')}
+			<div class='row'>
+				<div class="col-md-12">
+					{if $item->get("keyval/btransfer_or_banklink")}{$tmp=[readonly=>1]}{else}{$tmp=[]}{/if}
+					
+					{call input field="keyval/btransfer_or_banklink" type=radio 
+					options=[1=>GW::ln('/m/PICK_SYSTEM_PAY'), 2=>GW::ln('/m/PICK_BANKTRANSFER')]
+					params_expand=$tmp
+					}
+				</div>				
+
+			</div>		
+		{/if}	
+		<hr>
+		
+		
 
 	<div class='row'>
 		<div class="col-md-4">
