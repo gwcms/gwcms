@@ -184,6 +184,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 	
 	function doMontonioAcceptV2()
 	{
+		$this->log($_SERVER['REQUEST_URI'] .'   '.$_SERVER['REMOTE_ADDR']);
 		
 		$orderid = $_GET['orderid'];
 		$order = GW_Order_Group::singleton()->find(['id=?', $orderid]);	
@@ -482,7 +483,7 @@ if (
 	
 	function log($msg)
 	{
-		file_put_contents(GW::s('DIR/LOGS').'montonio.log', $msg, FILE_APPEND);
+		file_put_contents(GW::s('DIR/LOGS').'montonio.log', date('Y-m-d H:i:s').': '.$msg."\n", FILE_APPEND);
 	}	
 	
 
