@@ -46,7 +46,7 @@ class Module_Comments extends GW_Common_Module
 				
 				$item->user_id = $this->app->user->id;
 				
-				$item->comment = str_replace("\n", "<br />", $item->comment);
+				$item->comment = str_replace("\n", "<br />", htmlspecialchars($item->comment));
 				
 			break;
 			case 'AFTER_FORM':
