@@ -69,6 +69,8 @@ class Module_ChangeTrack extends GW_Common_Module
 		}
 		
 		$cfg['fields']['username'] = 'Lo';
+		$cfg['fields']['note'] = 'Lo';
+		
 		unset($cfg['fields']['update_time']);
 
 		return $cfg;

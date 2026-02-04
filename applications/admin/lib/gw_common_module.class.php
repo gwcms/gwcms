@@ -940,17 +940,25 @@ class GW_Common_Module extends GW_Module
 			if(count($split)==2){
 				$orig = str_replace('`', '', trim($split[0]));
 				$alias = str_replace('`', '', trim($split[1]));
-				$this->field_alias[$alias] = $orig;
+				$this->field_alias[$alias] = trim($orig);
 			}
 			
 			$tbl_field = explode('.', $sel);
 			if(count($tbl_field)==2){
 				if($tbl_field[0]!='a' && $tbl_field[1]!='*'){
-					$this->field_alias[$tbl_field[1]] = $sel;
+					$this->field_alias[$tbl_field[1]] = trim($sel);
 				}
 			}
 		}
 		
+		$this->table_alias = [];
+		if(isset($params['joins']))
+			foreach($params['joins'] as $join){
+				$parts = preg_split('/ as /i', $join[1]);
+				if(count($parts) == 2)
+					$this->table_alias[$parts[1]] = $parts[0];
+			}
+			
 		$this->fireEvent('AFTER_INIT_FIELD_ALIAS', $params);	
 	}
 	
@@ -1026,7 +1034,7 @@ class GW_Common_Module extends GW_Module
 		}		
 		
 		$this->initFldAliases($params);
-		
+
 		
 
 		$search = isset($this->list_params['filters']) ? (array) $this->list_params['filters'] : [];
@@ -1100,7 +1108,7 @@ class GW_Common_Module extends GW_Module
 		}		
 		
 
-
+		
 		
 		if(isset($_GET['pview'])){
 			$params['order'] = $pview->order;
@@ -3266,6 +3274,37 @@ class GW_Common_Module extends GW_Module
 		
 		
 		$changeinf = [];
+		
+		
+		//to change related objects for example user.instrument_id
+		//have to meet 3 conditions
+		//1 -  superuser rights, and SAME alias (in this example "user") for composite_linked object and within join setup
+		//2 - in model add 
+		//public $composite_map = [
+		//'user' => ['gw_composite_linked', ['object'=>'GW_Customer','relation_field'=>'user_id']],
+		//3 - 	function __eventBeforeListParams(&$params)
+		//$params['select']='a.*, user.instrument_id .. ';
+		//$params['joins']=[.. ['left','ipmc_competitions AS cmp','a.competition_id = cmp.id'] ..
+
+		if(isset($this->field_alias[$field]))
+		{
+			if(!$this->app->user->isRoot())
+			{
+				return $this->setError("Field '$field' is from other module, feature available only for super user only");
+			}
+			
+			$field = str_replace('.', '/', $this->field_alias[$field]);
+			
+			//list($compositeobj, $compositefield) = explode('/', $field);
+			
+			
+			
+			
+			
+		}
+		
+		$multichangeid = "multi_".date('ymd_His');
+		
 		foreach($list as $item){
 			$inf = [];
 			$inf['id'] = $item->id;
@@ -3274,12 +3313,14 @@ class GW_Common_Module extends GW_Module
 			$inf['after'] = $answers['value'];
 			$changeinf[] = $inf;
 			
+
+			$item->fireEvent('BEFORE_CHANGES', $multichangeid);
 			
-			$item->fireEvent('BEFORE_CHANGES');
-			
-			$item->set($field, $answers['value']);
 			
 			if(isset($_GET['confirm'])){
+				//i related object
+				$item->set($field, $answers['value']);
+				
 				$item->updateChanged();
 			}			
 		}

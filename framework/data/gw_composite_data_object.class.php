@@ -38,6 +38,7 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 					continue;
 
 			$item->setOwnerObject($this, $field);
+			
 			$item->save();
 
 			$saved = 1;
@@ -163,6 +164,11 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 				$this->composite_changed_fields[$obj]=1;
 			
 			$obj = $this->$obj;
+			
+			if($this->carry_before_changes_context){
+				$obj->fireEvent("BEFORE_CHANGES", $this->carry_before_changes_context);
+				$this->carry_before_changes_context = null;
+			}
 				
 			return $obj->set($key, $value);
 		}	
@@ -205,6 +211,8 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 	}	
 	
 	
+	private $carry_before_changes_context = null;
+	
 	function eventHandler($event, &$context_data = [])
 	{
 		switch ($event) 
@@ -236,6 +244,10 @@ class GW_Composite_Data_Object Extends GW_Data_Object
 			break;
 			case 'AFTER_CONSTRUCT':
 				$this->ignore_fields['delete_composite']=1;
+			break;
+		
+			case 'BEFORE_CHANGES':
+				$this->carry_before_changes_context=$context_data;
 			break;
 			
 		}

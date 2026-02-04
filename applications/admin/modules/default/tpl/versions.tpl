@@ -8,6 +8,7 @@
 		<th>new / diff</th>
 		<th>prev</th>
 		<th>user</th>
+		<th>note</th>
 		<th><i class="fa fa-cog"></i></th>
 	</tr>
 	
@@ -31,6 +32,7 @@
 			{$meta.2|truncate:200}
 		</td>
 		<td>{$change->user_id}</td>
+		<td>{$change->note}</td>
 		<td>
 			{if $meta.1 && !$meta.2}
 				

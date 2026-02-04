@@ -39,8 +39,7 @@ class GW_Extension_ChangeTrack
 			break;
 			
 			case 'BEFORE_CHANGES':
-				$this->trackChangesStart();
-				
+				$this->trackChangesStart($context_data);	
 			break;
 		
 			case 'AFTER_UPDATE':
@@ -168,7 +167,7 @@ class GW_Extension_ChangeTrack
 	
 	public $track_started=false;
 		
-	function trackChangesStart()
+	function trackChangesStart($note=false)
 	{
 		if($this->track_started)
 			return false;
@@ -176,6 +175,7 @@ class GW_Extension_ChangeTrack
 		$this->parent->copyOriginal();
 		$this->additional_changes = [];
 		$this->track_started = true;
+		$this->note=$note;
 	}
 	
 	public $additional_changes=[];
@@ -210,7 +210,7 @@ class GW_Extension_ChangeTrack
 			$old = $itm->_original->getStoreVal($field);
 
 			$changes[$field]=['new'=>$new, 'old'=>$old];	
-		}
+					}
 		
 		if($this->additional_changes)
 			$changes = array_merge($changes, $this->additional_changes);
@@ -272,6 +272,9 @@ class GW_Extension_ChangeTrack
 				'old'=>$old,
 				'last'=>1
 			];
+			
+			if($this->note)
+				$vals['note'] = $this->note;			
 			
 			if($diff)
 				$vals['diff'] = $diff;

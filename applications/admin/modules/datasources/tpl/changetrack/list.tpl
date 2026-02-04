@@ -8,11 +8,11 @@
 	
 	{function dl_cell_old}
 		{*GW_Data_to_Html_Table_Helper::doTableSingleRecord($item->old)*}
-		{json_encode($item->old)}
+		{call "dl_output_filters_expand_truncate" val=json_encode($item->old) expand_truncate_size=60}
 	{/function}
 	
 	{function dl_cell_new}
-		{json_encode($item->new)}
+		{call "dl_output_filters_expand_truncate" val=json_encode($item->new) expand_truncate_size=60}
 		{*GW_Data_to_Html_Table_Helper::doTableSingleRecord($item->new)*}
 	{/function}
 
