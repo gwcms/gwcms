@@ -1,0 +1,1 @@
+ALTER TABLE `gw_change_track` ADD `note` VARCHAR(30) NOT NULL AFTER `diff`;
