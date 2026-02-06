@@ -4,7 +4,8 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 {
 
 	public $multisite = true;
-		
+	public $dynamic_fields = true;
+	
 	function init()
 	{	
 		$this->app->carry_params['site_id']=1;

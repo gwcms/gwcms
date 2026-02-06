@@ -40,25 +40,41 @@
 
 	function initBrowseRepos()
 	{
-		var funcNum = getUrlParam( 'CKEditorFuncNum' )
-		
-		try{
-		window.opener.CKEDITOR.tools.callFunction( funcNum, '', function() {
-		       var type=this.getDialog().getName() == 'image' ? 'image' : 'file';
-		       var br = new BrowseRepository($('#gwFileBrowser'), type);
-		       br.init();
-		       
-			{if $smarty.get.abspath}
-				br.abspath = "{GW::s("SITE_URL")}";
-			{/if}
-		       
-		       
-		       if(type=="image")
-			       $('#imageOpts').addClass('imageOptsEnabled');
-		});
-		}catch(err){
-			console.log('DEVELOP MODE');
-		}
+	  var funcNum = getUrlParam('CKEditorFuncNum');
+	  var browsereturn = getUrlParam('browsereturn');
+	  var type = getUrlParam('type') || 'file';
+
+	  // CKEditor mode
+	  if (funcNum) {
+	    try {
+	      window.opener.CKEDITOR.tools.callFunction(funcNum, '', function() {
+		var dialogType = this.getDialog().getName() == 'image' ? 'image' : 'file';
+		var br = new BrowseRepository($('#gwFileBrowser'), dialogType);
+		br.init();
+
+		if (getUrlParam('abspath')) br.abspath = "{GW::s("SITE_URL")}";
+		if (dialogType == "image") $('#imageOpts').addClass('imageOptsEnabled');
+	      });
+	      return;
+	    } catch (err) {
+	      console.log('DEVELOP MODE / CKEditor opener not available');
+	      // krentam į input mode, jei toks yra
+	    }
+	  }
+
+	  // Input mode
+	  if (browsereturn) {
+	    var br = new BrowseRepository($('#gwFileBrowser'), type);
+	    br.browsereturn = browsereturn;
+	    br.mode = 'input';
+	    br.init();
+
+	    if (getUrlParam('abspath')) br.abspath = "{GW::s("SITE_URL")}";
+	    if (type == "image") $('#imageOpts').addClass('imageOptsEnabled');
+	    return;
+	  }
+
+	  console.log('No CKEditorFuncNum and no browsereturn provided');
 	}
 
 	</script>

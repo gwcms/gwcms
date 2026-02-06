@@ -16,6 +16,15 @@ class GW_Page extends GW_i18n_Data_Object
 	public $calculate_fields = ['child_count'=>1, 'input_cfg'=>1];
 	public $level=0;
 	public $order_limit_fields = ['parent_id'];
+	
+	
+	
+	public $keyval_use_generic_table=1;
+	public $ownerkey = 'sitemap/pages';
+	
+	public $extensions = [
+	    'keyval'=>1,
+	];
 		
 	function getChilds($params=Array())
 	{		

@@ -4060,6 +4060,9 @@ class GW_Common_Module extends GW_Module
 			$field['i18n']=3;
 		}
 		
+		if($input->fieldset)
+			$field['tabs'] = [$input->fieldset];
+		
 
 		if($input->type == 'extended')
 			$field['field']="keyval/{$input->get('fieldname')}";

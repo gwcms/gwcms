@@ -96,6 +96,14 @@
 	{/if}		
 {/foreach}
 
+{*isplestiniai laukai*}
+{$fields_config=[cols=>1,fields=>[]]}
+{$m->addDynamicFieldsConfig($fields_config, $item)}
+
+{include "tools/form_components.tpl"}
+{call "build_form_normal"}
+{*isplestiniai laukai*}
+
 {if GW::s('MULTISITE') && $app->user->isRoot()}
 	{call e field="site_id"
 		type="select_ajax"
