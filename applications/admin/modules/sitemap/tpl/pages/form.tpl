@@ -13,13 +13,28 @@
 *}
 
 {$input_tabs=[
-	[base,brown,1],
-	[templatevars,green,1]
+	base => [brown,1],
+	templatevars=> [green,1]
 ]}	
 
 {if $additfields}
-	{$input_tabs[]=[extended,darkviolet,0]}
+	{$input_tabs.extended=[darkviolet,0]}
 {/if}
+
+
+
+{*isplestiniai laukai*}
+{$fields_config=[cols=>1,fields=>[]]}
+{$m->addDynamicFieldsConfig($fields_config, $item)}
+
+
+{foreach $fields_config.fields as $field}
+	{if $field.tabs}
+		{foreach $field.tabs as $tabid}
+			{$input_tabs[$tabid]=[false,0]}
+		{/foreach}
+	{/if}
+{/foreach}
 
 {include file="default_form_open.tpl" form_width="100%"}
 
@@ -96,9 +111,7 @@
 	{/if}		
 {/foreach}
 
-{*isplestiniai laukai*}
-{$fields_config=[cols=>1,fields=>[]]}
-{$m->addDynamicFieldsConfig($fields_config, $item)}
+
 
 {include "tools/form_components.tpl"}
 {call "build_form_normal"}

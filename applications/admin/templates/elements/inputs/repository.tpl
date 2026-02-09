@@ -22,6 +22,7 @@
 		var url = '/admin/{$ln}/sitemap/repository/fileselect'
 					+ '?browsereturn=' + encodeURIComponent('{$id}')
 				{if $filetype==image} + '&type=image'{/if}
+				{if $abspath} + '&abspath=1'{/if}
 					+ '&start=' + encodeURIComponent(currentVal);
 				window.open(
 					url,

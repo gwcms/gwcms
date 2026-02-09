@@ -21,19 +21,23 @@ add tab titles to lang.xml:
 	</i>
 
 *}
+{$inputtabcolors=[DodgerBlue,orange,olive,violet,Khaki]}
 
 
 <div class="row panel gwlistpanel inputtabspan">
 	<div class="panel-body">
 		<ul class="inptabs_sel">
 			{$showtabs=array_flip(explode(',',$smarty.get.activetabs))}
-		{foreach $input_tabs as $tabitem}
-			{$tabid=$tabitem.0}
-			{$tabcolor=$tabitem.1}
+		{foreach $input_tabs as $tabid => $tabitem}
+			{$tabcolor=$tabitem.0}
+			{if !$tabcolor}
+				{$tabcolor=array_shift($inputtabcolors)}
+			{/if}
+			
 			{if $smarty.get.activetabs}
 				{$tabdefaultshow=isset($showtabs[$tabid])}
 			{else}
-				{$tabdefaultshow=$tabitem.2}
+				{$tabdefaultshow=$tabitem.1}
 			{/if}
 			
 
