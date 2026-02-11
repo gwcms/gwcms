@@ -57,6 +57,11 @@
 				$('#gwtreeedit').show();
 				$('#gwtreeedit').data('id', id)
 			}
+			
+			var hash = window.location.hash.substring(1)
+			if(hash){
+				openEdit(hash);
+			}
 
 			$('#gwtree')
 				.on("changed.jstree", function (e, data) {

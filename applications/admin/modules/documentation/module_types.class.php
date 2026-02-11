@@ -80,6 +80,34 @@ class Module_Types extends GW_Common_Module
 		exit;
 	}
 	
+	function eventHandler($event, &$context) {
+		
+		
+		
+		switch ($event){
+			case 'BEFORE_SAVE_0':
+				$item = $context;
+								
+				if($item->iconfromrepository){
+					$item->icon = $item->iconfromrepository;
+					
+					//d::dumpas($item->icon);
+					$item->ignore_fields['iconfromrepository']=1;
+					
+				}
+			break;
+			case 'AFTER_SAVE':
+				$item = $context;
+				//d::dumpas($item->icon);
+			break;
+		}
+		
+		
+		parent::eventHandler($event, $context);
+		
+		
+	}
+	
 	
 	
 }

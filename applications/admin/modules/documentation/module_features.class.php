@@ -27,6 +27,12 @@ class Module_Features extends GW_Common_Module
 			$types_f["t".$type->id] = ['icon'=>$type->icon];
 		
 		$this->tpl_vars['jstree_types'] = $types_f;
+		
+		
+	
+		
+		if(isset($_GET['path']))
+			$this->initByPath($_GET['path']);
 	}
 
 	/*
@@ -159,5 +165,87 @@ class Module_Features extends GW_Common_Module
 		
 		die(json_encode($item->toArray()));
 	}
+	
+	
+	
+	function initByPath($path)
+	{
+		$parent = $this->getByPath($path);
+		
+			
+		
+		if(!$parent)
+		{
+			
+			/*
+			$form = ['fields'=>[
+			    'path'=>['type'=>'text', 'default'=>$path, 'required'=>1],
+			    'confirm'=>['type'=>'bool', 'required'=>1]],'cols'=>2];
+
+
+			if(!($answers=$this->prompt($form, "Fail in structure $path / Not exists yet? To create structure? tick and button click to confirm")))
+				return false;				
+			
+			if($answers['confirm']){
+				
+			}
+			*/
+			if($this->confirm("Fail in structure $path / Not exists yet? To create structure press confirm")){
+	
+				$this->createByPath($path);
+			}
+		}else{
+	
+			Navigator::jump($this->app->buildUri().'#'.$parent->id);
+		}
+		
+	}
+	
+	function getByPath($path)
+	{
+		$path = explode('/', $path);
+		$pid = -1;
+		
+		foreach($path as $pathelm){
+			
+			$parent = GW_Doc_Feature::singleton()->find(['parent_id=? AND title=?', $pid, $pathelm]);
+		
+			if(!$parent)
+				return false;
+		
+			$pid = $parent->id;
+			
+		}
+		
+		
+		return $parent;
+	}
+
+	function createByPath($path)
+	{
+		$path = explode('/', $path);
+		$pid = -1;
+		$inserts = [];
+		
+		foreach($path as $pathelm){
+			
+			$node = GW_Doc_Feature::singleton()->find(['parent_id=? AND title=?', $pid, $pathelm]);
+		
+			if(!$node){
+				$node = GW_Doc_Feature::singleton()->createNewObject(['parent_id'=>$pid, 'title'=>$pathelm,'type'=>0]);
+				$node->insert();
+				$inserts[] = $pathelm;
+			}
+		
+			$pid = $node->id;
+			
+		}
+		
+		$this->setMessage("Created structure: ".implode(" / ", $inserts));
+		
+		//$this->app->jump();
+		
+	}
+	
 
 }

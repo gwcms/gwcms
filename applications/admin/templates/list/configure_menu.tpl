@@ -24,6 +24,12 @@
 	{list_item_action_m url=[false, [act=>doMultiSetValue]] iconclass="fa fa-pencil-square" caption=GW::l('/A/VIEWS/doMultiSetValue')}
 {/if}
 
+
+{*action_addclass="iframeopen"*}
+
+{list_item_action_m href=$app->buildUri("documentation/features", ['path'=>"ModuleDocumentation/{implode('/',$m->module_path)}"]) iconclass="material help_center" 
+title=GW::l('/M/documentation/MAP/childs/features/title') caption=GW::l('/M/documentation/MAP/childs/features/title') }
+
 {if $app->user->isRoot()}
 	{*Paslėptieji veiksmai*}
 	<li id="gwlrootmenutr"><a class="gwcmsLinksInDD"  href="#" onclick="return false">

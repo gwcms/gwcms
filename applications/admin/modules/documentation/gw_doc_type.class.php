@@ -26,26 +26,18 @@ class GW_Doc_Type extends GW_Data_Object
 	
 	function validate()
 	{
-		if(!parent::validate())
-			return false;		
-			
-		/*
-		$this->set('key', preg_replace('/[^a-z-_0-9]/','_', strtolower($this->get('key')) ));
-		
-		
 		$cond=Array
 		(
-			'group_id=? AND `key`=? AND id!=?',
-			$this->get('group_id'),
-			$this->get('key'), 
+			'`title`=? AND id!=?',
+			$this->get('title'), 
 			(int)$this->get('id')
 		);
 		
 		if($duplicate = $this->find($cond))
-			$this->errors['key']='/G/VALIDATION/UNIQUE';
-		*/
-			
-		 
+			$this->errors['title']='/G/VALIDATION/UNIQUE';
+		
+		
+		return parent::validate();	
 	}
 
 

@@ -8,7 +8,7 @@
 items=$iconsdata
 *}
 {call e field=icon type=selecticon datasource=$m->buildUri(false,[act=>doGetIcons])}
-
+{call e field=iconfromrepository type=repository}
 
 {*
 {call e field=fcolor type=select options=[white=>white,black=>black,orange=>orange,yellow=>yellow,blue=>blue,green=>green,brown=>brown,red=>red]}

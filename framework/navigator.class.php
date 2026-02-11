@@ -111,7 +111,7 @@ class Navigator
 
 		//trace request uncomment lines:
 		//d::dumpas('test');
-		
+		//d::dumpas("Location jump: $uri");
 		header("Location: $uri");
 		exit;
 	}
