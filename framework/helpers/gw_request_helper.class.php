@@ -15,7 +15,9 @@ class GW_Request_Helper
 			$IP = $_SERVER['REMOTE_ADDR'];
 		} else {
 			$PROXY_IP = $IP = $_SERVER['HTTP_X_FORWARDED_FOR'];
-			$PROXYH = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+			
+			//kai dideli kiekiai blogai gaunas
+			$PROXYH = '';//gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
 			if ($PROXYH == $PROXY_IP)
 				$PROXYH = '';
@@ -24,7 +26,8 @@ class GW_Request_Helper
 			$PROXY = $_SERVER['REMOTE_ADDR'] . ($PROXYH ? '/' . $PROXYH : '');
 		}
 
-		$HOST = @gethostbyaddr($IP);
+		//kai dideli kiekiai blogai gaunas
+		$HOST = '';//@gethostbyaddr($IP);
 
 		if ($HOST == $IP)
 			$HOST = '';

@@ -218,8 +218,10 @@ class GW_Bot_Detect
 		    'state'   => $opts['state'] ?? 0,
 		    'expires' =>  $opts['expires'] ?? date('Y-m-d H:i:s', strtotime("+10 DAYS")), 
 		    'country' => self::getCountryByIP($opts['ip']??false), //del keshavimo false paduot kad greiciau suveiktu jei einajam variantui
-		    'host'    => gethostbyaddr($ip),
+		    //'host'    => gethostbyaddr($ip),
 		];
+		
+		//gethostbyaddr - galimai sukelia sistemos uzlaginimus nes pasiekia kazkokius limitus bandome be to
 		
 		//jei paduodamas jau ip kad neuzpildyit neto user agent
 		if(!isset($opts['ip'])){
