@@ -63,6 +63,8 @@ class Module_GGLogin extends GW_Public_Module
 		}else{
 			$dat->type='google';
 			$_SESSION['3rdAuthUser'] = $dat;
+		
+		
 			$this->app->jump('direct/users/users/signInOrRegister');
 		}
 	}

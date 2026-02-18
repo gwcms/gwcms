@@ -1,9 +1,13 @@
 {include "default_open.tpl"}
+{if GW::s('ECOMMERCE_ISOLATION')}
+	{include "ecommerce_iso.tpl"}
+{/if}	
+
 
 {function user_login_form}
 	 {include "`$m->tpl_dir`/login_or_register.tpl" login=1}
-       
-	
+	 
+
 	<div class="g-brd-around g-brd-gray-light-v3 g-bg-white rounded g-px-30 g-py-50 mb-4">
               <header class="text-center mb-4">
                 <h1 class="h4 g-color-black g-font-weight-400">{GW::ln('/m/LOGIN_TO_YOUR_ACCOUNT')}</h1>

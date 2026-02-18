@@ -238,6 +238,7 @@
 {/if}
 
 </div>
+
 {if $register}
 	{if $recapPublicKey}
 		<div class="row g-mb-10">
@@ -260,4 +261,4 @@
 	      </div>				
       {/if}
 {/if}			      
-<iframe id="termsandconds" src="/{$ln}/f/terms_and_conditions?clean=1" style="width:100%;height:400px;display:none"></iframe>	
+<iframe id="termsandconds" src="{if GW::s('PROJECT_NAME') == 'artistdb'}/{$ln}/sys/terms_conditions{else}/{$ln}f/terms_and_conditions?clean=1{/if}" style="width:100%;height:400px;display:none"></iframe>	

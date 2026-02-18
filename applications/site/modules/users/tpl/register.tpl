@@ -1,6 +1,8 @@
 {include "default_open.tpl"}
 
-
+{if GW::s('ECOMMERCE_ISOLATION')}
+	{include "ecommerce_iso.tpl"}
+{/if}	
 
 {capture assign=infoblock}{strip}{include "user_register_infoblock.tpl"}{/strip}{/capture}
 

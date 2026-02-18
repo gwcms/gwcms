@@ -102,32 +102,19 @@
 		
 	<i id="OPTIONS">	
 		<i id="gender">
-			<i id="F">Moteris</i>
-			<i id="M">Vyras</i>
+			<i id="F"><lt>Moteris</lt><en>Lady</en></i>
+			<i id="M"><lt>Vyras</lt><en>Gentleman</en></i>
 		</i>
-		<i id="biography_select">
-			<i id="link">Nuoroda</i>
-			<i id="text">Tekstas</i>
-			<i id="file">Failas</i>
-		</i>
-		<i id="payment_method">
-			<i id="banktransfer">Apmokėjau bankiniu pavedimu</i>
-			<i id="paysera">Paysera</i>
-			<i id="creditcard">Kreditine kortele</i>
-			<i id="paypal">Paypal</i>
-		</i>
-		
-		<i id="card_type">
-			<i id="VISA">VISA</i>
-			<i id="MASTERCARD">MASTERCARD</i>
-			<i id="MAESTRO">MAESTRO</i>
-			<i id="AMERICAN EXPRESS">AMERICAN EXPRESS</i>			
-		</i>
+
+
+
 		
 		<i id="regothers">
 			<i id="0">Registruosiu save</i>
 			<i id="1">Registruosiu kitus (klubams, sporto mokykloms)</i>
-	</i>	
+		</i>
+		</i>				
+		
 	</i>	
 	
 	
@@ -182,5 +169,5 @@
 	<i id="LOGOUT_MESSAGE">You are logged out now</i>
 	
 	<i id="REGISTER_EMAIL_NOTE">Correct email address required</i>
-	<i id="REGISTER_EMAIL_HELP">After form submited will be sent code to provided email to verify address, please double check for possible mistype</i>	
+	<i id="REGISTER_EMAIL_HELP">After form submited will be sent code to provided email to verify address, please double check for possible mistype</i>
 </xml>

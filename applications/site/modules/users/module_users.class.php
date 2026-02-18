@@ -296,6 +296,9 @@ class Module_Users extends GW_Public_Module
 		
 		$this->tpl_vars['recapPublicKey'] = GW_Config::singleton()->get('support/recapPublicKey');
 		
+		if(!$this->tpl_vars['recapPublicKey'])
+			$this->tpl_vars['recapPublicKey']=GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE')[0];
+				
 		$this->initOptions();
 	}
 	
@@ -400,7 +403,13 @@ class Module_Users extends GW_Public_Module
 		$this->__doRegisterPrepareUser($item);
 		$item->prepareSave();
 		
-		if(!$this->verifyRecaptchaV2(GW_Config::singleton()->get('support/recapPrivateKey'))){
+		$secret = GW_Config::singleton()->get('support/recapPrivateKey');
+		if(!$secret)
+			$secret=GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE')[1];
+				
+		
+		
+		if(!$this->verifyRecaptchaV2($secret)){
 			$item->errors['recaptcha'] = GW::ln('/G/validation/RECAPTCHA_FAILED');
 		}	
 		
