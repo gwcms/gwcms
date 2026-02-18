@@ -1,7 +1,6 @@
 <?php
 
 //suformuot service workeriui json
-//https://datinggirls.com/en/direct/users/messages/json
 /*
  * pvz: chat zinutes
 {

@@ -1193,11 +1193,8 @@ class Module_Users extends GW_Public_Module
 	
 	function viewSignInOrRegister() 
 	{
-
 		$remoteuser = $_SESSION['3rdAuthUser'];
 		
-		
-
 		if(! $remoteuser->id)
 		{
 			$this->setError("/M/USERS/LOGIN_FAIL");
@@ -1209,44 +1206,63 @@ class Module_Users extends GW_Public_Module
 		$field = $map[$remoteuser->type];
 
 
-		if($user=GW_Customer::singleton()->find(["($field=? OR email=? OR username=?) AND active=1 AND removed=0", $remoteuser->id, $remoteuser->email, $remoteuser->email])) 
+			
+		$loginuser = function( $user ){
+			$this->app->user = $user;
+			$this->app->auth->login($user);
+
+			$name = $user->name;
+			if($this->app->ln=='lt')
+				$name = GW_Linksniai_Helper::getLinksnis($name);
+
+			$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
+
+			$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
+
+
+			$this->testIfJumpRequest();
+
+			//kad nesilinkintu paskiau
+			unset($_SESSION['3rdAuthUser']);
+			session_write_close();
+
+
+			$this->app->jump('/');			
+		};
+				
+		if($this->cfg->permit_emailless_3rdAuthUser && !$remoteuser->email)
+		{
+			if(! ($user=GW_Customer::singleton()->find(["$field=? AND active=1 AND removed=0", $remoteuser->id]) ) )
+			{
+				$user = GW_Customer::singleton()->createNewObject();
+				$user->setValues([
+				    $field=>$remoteuser->id, 
+				    'active'=>1,
+				    'name'=>$remoteuser->name,
+				    'surname'=>$remoteuser->surname,
+				]);
+				$user->insert();
+				
+				
+			}
+				
+			$loginuser($user);
+				
+		}
+				
+				
+				
+		if(
+			$remoteuser->email &&
+			($user=GW_Customer::singleton()->find(["($field=? OR email=? OR username=?) AND active=1 AND removed=0", $remoteuser->id, $remoteuser->email, $remoteuser->email]))
+		) 
 		{
 			//$user->fbid!=$fbusr->id dadejau salyga kad atnaujintu po to kai pasidare appso pasikeitimas
 			
 			if(!$user->$field || $user->$field!=$remoteuser->id)
 				$user->saveValues([$field=>$remoteuser->id]);
 
-				$this->app->user = $user;
-				$this->app->auth->login($user);
-
-				$name = $user->name;
-				if($this->app->ln=='lt')
-					$name = GW_Linksniai_Helper::getLinksnis($name);
-				
-				$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
-				
-				
-				//d::dumpas('nublet');
-				
-				$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
-				
-				
-				$this->testIfJumpRequest();
-				
-				//kad nesilinkintu paskiau
-				unset($_SESSION['3rdAuthUser']);
-				session_write_close();
-				
-				
-				
-				
-				
-				
-				$this->app->jump('/');
-				
-				
-				
-				
+			$loginuser($user);
 		}
 		
 		if(!$remoteuser->email)
@@ -1260,6 +1276,15 @@ class Module_Users extends GW_Public_Module
 	
 		$this->tpl_vars['remoteuser'] = $remoteuser;
 	}	
+	
+	function doUnset3rdAuthUser()
+	{
+		unset($_SESSION['3rdAuthUser']);
+		
+		unset($_GET['act']);
+		unset($_GET['url']);
+		$this->app->jump($this->app->path, $_GET);
+	}
 	
 	function doSignupOrLink()
 	{
