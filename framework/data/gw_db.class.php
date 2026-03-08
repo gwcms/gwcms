@@ -943,7 +943,10 @@ class db_query_prep_helper
 	function replace($arg)
 	{
 		$curr = array_shift($this->data);
-		return is_numeric($curr) ? $curr : '"' . addslashes($curr) . '"';
+		
+		
+		//is_numeric -> ctype_digit cause it passess 112E245345 as numeric but mysql treats it as error
+		return ctype_digit($curr) ? $curr : '"' . addslashes($curr) . '"';
 	}
 }
 

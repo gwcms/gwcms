@@ -488,7 +488,11 @@ var gw_adm_sys = {
 
 $(function () {
 	$(".lnresult").mousedown(function (event) {
-		var searchmod = $(this).hasClass('transover') ? 'translations_over': 'translations';
+		
+		var isTransover = $(this).hasClass('transover') || event.which==2
+		
+		var searchmod =  isTransover ? 'translations_over': 'translations';		
+		
 		var endpoint =GW.app_base+"admin/"+GW.ln+"/datasources/"+searchmod;
 		
 		if (event.ctrlKey) {
@@ -502,11 +506,17 @@ $(function () {
 		}
 		
 		if(event.shiftKey){
-			var new_val = window.prompt("Please enter new val for "+$(this).data('key'), $(this).html());
+			var new_val = window.prompt("Please enter new"+(isTransover ? ' TRANSOVER':'')+" val for "+$(this).data('key'), $(this).html());
 			var obj = $(this);
 			
 			if(new_val != null){
-				$.post(endpoint, { act:"doSaveTrans", key:$(this).data('key'), prev_val: $(this).html(), new_val: new_val, ln: GW.ln}, function(data){
+				var payload = { act:"doSaveTrans", key:$(this).data('key'), prev_val: $(this).html(), new_val: new_val, ln: GW.ln};
+				
+				if(isTransover){
+					payload.context = GW.transover_context
+				}
+				
+				$.post(endpoint, payload, function(data){
 					if(data.hasOwnProperty('error')){
 						alert(data.error);
 					}else if(data.hasOwnProperty('status') && data.status=="ok"){
@@ -573,6 +583,7 @@ $(function () {
 	var helpstring=[
 		"[CTRL] + [Q] - Paryškinti vertimus",
 		"[CTRL]ARBA[SHIFT] + [Pelės pagr. mygt.] ant paryškinto vertimo - redaguoti vertimą",
+		"[SHIFT] + [Pelės vidurinis mygt.] ant paryškinto vertimo - redaguoti / kurti vertimo perrašymą",
 		"[CTRL] + [5] - peršokti į puslapio redagavimą - struktūra ir tekstai modulyje",
 		"[CTRL] + [3] - debug(dev)"
 	];

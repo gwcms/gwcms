@@ -72,6 +72,8 @@
 		{if $ln=='lt'}<script src="{$app->sys_base}vendor/select2/lt.min.js"></script>{/if}
 		{if $ln=='ru'}<script src="{$app->sys_base}vendor/select2/ru.min.js"></script>{/if}
 	{/if}
+	{assign var=gwcmssite_input_select2_loaded value=1 scope=global}	
+	
 	<script type="text/javascript" src="{$app->sys_base}applications/admin/static/pack/select_ajax/js.js"></script>
 	
 	

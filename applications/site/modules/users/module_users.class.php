@@ -1208,25 +1208,25 @@ class Module_Users extends GW_Public_Module
 
 			
 		$loginuser = function( $user ){
-			$this->app->user = $user;
-			$this->app->auth->login($user);
+				$this->app->user = $user;
+				$this->app->auth->login($user);
 
-			$name = $user->name;
-			if($this->app->ln=='lt')
-				$name = GW_Linksniai_Helper::getLinksnis($name);
-
-			$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
-
-			$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
-
-
-			$this->testIfJumpRequest();
-
-			//kad nesilinkintu paskiau
-			unset($_SESSION['3rdAuthUser']);
-			session_write_close();
-
-
+				$name = $user->name;
+				if($this->app->ln=='lt')
+					$name = GW_Linksniai_Helper::getLinksnis($name);
+				
+				$this->app->setMessage(GW::ln("/m/USERS/LOGIN_WELCOME",['v'=>['NAME'=>$name]]));
+				
+				$this->app->subProcessPath('users/users/noview',['act'=>'doAfterLogin']);
+				
+				
+				$this->testIfJumpRequest();
+				
+				//kad nesilinkintu paskiau
+				unset($_SESSION['3rdAuthUser']);
+				session_write_close();
+				
+				
 			$this->app->jump('/');			
 		};
 				
@@ -1319,5 +1319,59 @@ class Module_Users extends GW_Public_Module
 		}
 		
 	}	
+		
+	
+	
+	function getChildUsers()
+	{
+		$cond = GW_DB::prepare_query(['parent_user_id=?', $this->app->user->id]);
+			
+		
+		$list = GW_Customer::singleton()->findAll($cond, ['key_field'=>'id']);		
+		
+		$this->cacheChildusers = $list;
+		
+		return $list;
+	}	
+	
+	function viewAccounts()
+	{
+		$this->userRequired();
+		
+		
+		$this->tpl_vars['list'] = $this->getChildUsers();
+		
+		if($this->app->sess('original_user')){
+			$this->tpl_vars['original_user'] = GW_Customer::singleton()->find(['id=?', $this->app->sess('original_user')]);
+		}
+	}
+	
+	
+	function doLoginAs()
+	{
+		$this->userRequired();
+		
+		$customer = GW_Customer::singleton()->find(['id=?', $_GET['id']]);
+		
+		
+		if($customer->parent_user_id != $this->app->user->id)
+			return $this->setError("No access");
+		
+		
+		$this->app->sess('original_user', $this->app->user->id);
+		$this->app->sess('original_user_title', $this->app->user->title);
+		
+		GW_Auth::adminLoginToSite($customer->id, $this->app->user->id);
+		
+		$this->jump('');
+	}
+	
+	function doReturnToOriginal()
+	{
+		$this->userRequired();
+		GW_Auth::adminLoginToSite($this->app->sess('original_user'), false);
+		$this->app->sess('original_user', false);
+		$this->app->jump('/');
+	}
 		
 }

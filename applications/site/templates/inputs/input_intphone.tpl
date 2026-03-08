@@ -1,6 +1,6 @@
         
 
-<div class="iti">
+<div class="iti" style="{if $width}width:{$width}{/if}">
            
         
 

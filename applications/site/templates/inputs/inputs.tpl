@@ -62,7 +62,7 @@
 				
 	{if $type==checkbox}
 		
-	<div class="mb-3 {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}">
+	<div class="mb-3 {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if} inputContainer">
                   <label class="form-check-inline u-check g-font-size-13 g-pl-25 mb-2">
                     <input 
 			class="g-hidden-xs-up {if $addclass} {$addclass}{/if}"
@@ -93,63 +93,16 @@
                 </div>			
 			
 	{else}
-	<div class="form-group {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}" {if $type==hidden}style='display:none'{/if}>
+	<div class="form-group inputContainer {if $m->error_fields.$field}u-has-error-v1 has-feedback{/if}" {if $type==hidden}style='display:none'{/if}>
 		{if $type!=hidden && $title!==false}<label class="control-label" for="{$id}" 
 		       {if $help} data-original-title="{$help|escape:'html'}" rel="tooltip" class="btn btn-default" data-toggle="tooltip" data-placement="top" title=""{/if}
 		       >{$title} {if $required}<sup title="{GW::ln('/G/validation/REQUIRED')}">*</sup>{/if} {if $help}<i class="fa fa-question-circle primary-color"></i>{/if} {if $note}<small style="font-weight: normal;font-style: italic">{$note|escape}</small>{/if} {if $note_raw}{$note_raw}{/if} </label>{/if}
 		       
-		
+		{if $type=='radios'}
+			{$type=radio}
+		{/if}
 		{if in_array($type, ['text','email','password','url','hidden','number'])}
-			{include file="inputs/input_text.tpl"}
-		{elseif $type=='radios' || $type=='radio'}
-			<br />
-			
-			{foreach $options as $key => $opttitle}
-				<div class="form-check form-check-inline mb-0">
-				<label class="form-check-label mr-2">
-					<input type="radio" name="{$input_name}" value="{$key|escape}" 
-					       {if $value==$key}checked="checked"{/if} 
-					       {if $readonly}readonly disabled{/if}
-					       {if $required}required="1"{/if} 
-					       class="form-check-input mr-1 {if $required}required{/if} "
-					       >{$opttitle}
-				</label>
-				</div>
-				{if $newline}<br>{/if}
-				{if $separator}{$separator}{/if}
-			{/foreach}
-
-			{if $onchangeFunc}
-				{capture append=footer_hidden}
-				<script type="text/javascript">
-					//$(function(){
-						$('input[type=radio][name="{$input_name}"]').change(function() {
-							{$onchangeFunc}(this.value, this);
-						})
-						{$onchangeFunc}($('input[type=radio][name="{$input_name}"]:checked').val(), false);
-					//})
-					
-				</script>
-				{/capture}
-
-			{/if}			
-			
-		{elseif $type=='checkboxes'}
-
-			{$selected=$value}
-			{if is_array($selected)}
-				{$selected=array_flip($selected)}
-			{/if}
-			
-			<div class="row">
-			{foreach $options as $key => $opttitle}
-				<div class="{if $newline}col-md-12{else}col-md-4{/if}">
-				 <label class="checkbox-inline"><input style="opacity:1" type="checkbox" name="{$input_name}" value="{$key|escape}" {if isset($selected[$key])}checked="checked"{/if} {if $readonly}readonly disabled{/if}> {$opttitle}</label>
-				</div>
-				
-			{/foreach}
-			</div>			
-					
+			{include file="inputs/input_text.tpl"}					
 		{else}
 			{include file="inputs/input_`$type`.tpl"}
 		{/if}

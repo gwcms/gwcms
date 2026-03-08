@@ -1,5 +1,8 @@
 {include "default_open.tpl"}
 
+{if GW::s('ECOMMERCE_ISOLATION')}
+	{include "ecommerce_iso.tpl"}
+{/if}	
 
 
 
