@@ -87,7 +87,7 @@ class GW_Proxy_Site {
 		
 		$extraHeaders[] = 'Mirror-Redirect: ' . $cnt;
 		$extraHeaders[] = 'Mirror-Redirect-Domain: ' . $proxyDomain;
-		$extraHeaders[] = 'Mirror-Redirect-Client-Ip: ' . $_SERVER['REMOTE_ADDR'];
+		$extraHeaders[] = 'Mirror-Redirect-Client-Ip: ' . GW::ip();
 
 		/* Forward cookie as it came.  */
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $extraHeaders);
@@ -106,7 +106,7 @@ class GW_Proxy_Site {
 
 
 		  if($logRequests){
-		  file_put_contents(__DIR__.'/repos/'.$_SERVER['REMOTE_ADDR'].'_log.dat', json_encode($_SERVER+['time'=>date('Y-m-d h:i:s')], JSON_PRETTY_PRINT));
+		  file_put_contents(__DIR__.'/repos/'.GW::ip().'_log.dat', json_encode($_SERVER+['time'=>date('Y-m-d h:i:s')], JSON_PRETTY_PRINT));
 		  }
 		 */
 

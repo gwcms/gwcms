@@ -3,7 +3,7 @@
 GW::$error_log = new GW_Logger(GW::$dir['LOGS'].'php_error_cached.log');
 
 
-define('MASTER_REQUEST', !isset($_SERVER['REMOTE_ADDR']) ? /*cli*/1 : /*apache*/preg_match('/^127|^192\.168/',  $_SERVER['REMOTE_ADDR']) );
+define('MASTER_REQUEST', !isset(GW::ip()) ? /*cli*/1 : /*apache*/preg_match('/^127|^192\.168/',  GW::ip()) );
 
 if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_PROD && !MASTER_REQUEST){
 	define('_DEBUGING_', 0);

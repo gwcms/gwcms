@@ -129,31 +129,32 @@ class GW_Site_Application extends GW_Application
 	
 	function geoIpLang($avail_lns)
 	{
-		if(function_exists('geoip_country_code_by_name')){
-			$country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
-			
-			if(isset($_GET['debug_lang_pick']) && $_GET['debug_lang_pick']!="1"){
-				$country=$_GET['debug_lang_pick'];
-			}
-				
 
-			if($this->site && $this->site->ln_by_geoip_map){
-				$map = json_decode($this->site->ln_by_geoip_map, true);
-			}else{
-				$map = GW::s('ln_by_geoip_map');
-			}
-			
-			if($map){
-				$rez = isset($map[$country]) && in_array($map[$country], $avail_lns) ? $map[$country] : $map['default'];
-			}else{
-				$rez = $avail_lns[0];
-			}		
-			
-			if(isset($_GET['debug_lang_pick']))
-				d::dumpas(['map'=>$map,'avail_lns'=>$avail_lns,'geoip_country'=>$country, 'result'=>$rez]);
-			
-			return $rez;
+		
+		$country = GW::countryByIp(GW::ip());
+
+		if(isset($_GET['debug_lang_pick']) && $_GET['debug_lang_pick']!="1"){
+			$country=$_GET['debug_lang_pick'];
 		}
+
+
+		if($this->site && $this->site->ln_by_geoip_map){
+			$map = json_decode($this->site->ln_by_geoip_map, true);
+		}else{
+			$map = GW::s('ln_by_geoip_map');
+		}
+
+		if($map){
+			$rez = isset($map[$country]) && in_array($map[$country], $avail_lns) ? $map[$country] : $map['default'];
+		}else{
+			$rez = $avail_lns[0];
+		}		
+
+		if(isset($_GET['debug_lang_pick']))
+			d::dumpas(['map'=>$map,'avail_lns'=>$avail_lns,'geoip_country'=>$country, 'result'=>$rez]);
+
+		return $rez;
+		
 	}
 
 	function jumpToFirstChild()
@@ -569,7 +570,7 @@ class GW_Site_Application extends GW_Application
 		
 		$user->setValues([
 				'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-			    'lastip'=>$_SERVER['REMOTE_ADDR'],
+			    'lastip'=>GW::ip(),
 			'use_lang' => $this->ln
 		]);
 		$user->updateChanged();

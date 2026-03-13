@@ -229,7 +229,16 @@ class Navigator
 			GW::$context->app->sessionWriteClose();
 		}
 		
-		GW_Http_Agent::impuls($url=self::tempAccessUrl($uid ? $uid: GW_USER_SYSTEM_ID, $path, $get_args));
+		$url = self::tempAccessUrl($uid ? $uid: GW_USER_SYSTEM_ID, $path, $get_args);
+		
+		
+		if(isset($opts['debug'])){
+			//d::dumpas(file_get_contents($url));
+			
+			return [$url, file_get_contents($url)];
+		}
+		
+		GW_Http_Agent::impuls($url);
 		//file_put_contents(GW::s('DIR/LOGS').'background_requests', date('Ymd H:i:s').' '.$url."\n", FILE_APPEND);
 
 		return $url;

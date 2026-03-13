@@ -317,4 +317,34 @@ class GW
 		}
 		
 	}
+	
+	static function ip()
+	{
+		if($_SERVER['REMOTE_ADDR'] == '127.0.0.1')
+			return $_SERVER['REMOTE_ADDR'];
+		
+		
+		return GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  ? $_SERVER['HTTP_CF_CONNECTING_IP'] ?? false : $_SERVER['REMOTE_ADDR'] ?? false;
+	}
+
+	static function countryByIp($ip)
+	{
+
+		//return "EE";
+		
+		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV || $ip=='127.0.0.1'){
+			return 'LT';
+		}
+		
+		
+			
+		if(GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  ){
+			return $_SERVER['HTTP_CF_IPCOUNTRY'];
+		}			
+		
+		
+		return file_get_contents('http://127.0.0.1:8000/geoip.php?ip='.$ip);
+
+		//return shell_exec('/usr/bin/php7.4 -r "echo GW::countryByIp(\''.$ip.'\');"');
+	}	
 }

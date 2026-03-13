@@ -24,6 +24,7 @@ class GW_Page extends GW_i18n_Data_Object
 	
 	public $extensions = [
 	    'keyval'=>1,
+	    'changetrack'=>1
 	];
 		
 	function getChilds($params=Array())

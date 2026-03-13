@@ -234,7 +234,7 @@ class Module_Orders extends GW_Public_Module
 	
 	function redirectAfterPaymentAccept($order)
 	{
-		//if($_SERVER['REMOTE_ADDR']=='84.15.236.87')
+		//if(GW::ip()=='84.15.236.87')
 		//	d::dumpas($order);
 		
 		

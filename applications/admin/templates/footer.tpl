@@ -25,7 +25,7 @@
 <p class="pad-lft">
 	{GW::l('/g/SERVER_TIME')}: <span id="server_time">{'H:i:s'|date}</span> 
 	<br />
-	{GW::l('/g/YOUR_IP')}: {$smarty.server.REMOTE_ADDR} | {if GW::$globals.proc_timer}{GW::$globals.proc_timer->stop()}{/if}
+	{GW::l('/g/YOUR_IP')}: {GW::ip()} | {if GW::$globals.proc_timer}{GW::$globals.proc_timer->stop()}{/if}
 	
 	{if GW::s('BOT_SEND_TO_MIRROR')}
 		| Mirror speed 

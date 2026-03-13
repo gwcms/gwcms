@@ -49,7 +49,7 @@ class GW_Auth
 
 		//pasalinu featura kad galetu background requestus daryt
 		//request must be from same ip
-		//$sameip = (isset($this->session['ip_address']) && $this->session['ip_address'] == $_SERVER['REMOTE_ADDR']);
+		//$sameip = (isset($this->session['ip_address']) && $this->session['ip_address'] == GW::ip());
 		
 		$logedin =  ($user_id = intval($this->session["user_id"] ?? 0));
 		//d::dumpas($_GET);
@@ -170,9 +170,9 @@ class GW_Auth
 	function login($user)
 	{
 		$this->session["user_id"] = $user->get('id');
-		$this->session['ip_address'] = $_SERVER['REMOTE_ADDR'];
+		$this->session['ip_address'] = GW::ip();
 		
-		$user->onLogin($_SERVER['REMOTE_ADDR'], @$_SERVER['HTTP_USER_AGENT']);
+		$user->onLogin(GW::ip(), @$_SERVER['HTTP_USER_AGENT']);
 		
 		$this->session['last_request'] = time();
 		
@@ -238,7 +238,7 @@ class GW_Auth
 	{
 		$_SESSION[GW::s('SITE/AUTH_SESSION_KEY')] = [
 		    'user_id' => $userid, 
-		    'ip_address' => $_SERVER['REMOTE_ADDR'], 
+		    'ip_address' => GW::ip(), 
 		    'admin_user_id' => $adminid,
 		    'last_request' => time()
 		];

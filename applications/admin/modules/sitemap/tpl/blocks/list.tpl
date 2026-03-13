@@ -7,7 +7,10 @@
 
 	
 	{$dl_smart_fields=[relations,contents]}
-	{$dl_output_filters=[site_id=>options,insert_time=>short_time,update_time=>short_time]}	
+	{$dl_output_filters.site_id=options}
+	{$dl_output_filters.insert_time=short_time}
+	{$dl_output_filters.update_time=short_time}
+
 
 	
 	

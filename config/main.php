@@ -85,9 +85,9 @@ GW::s('OFFICE_IP_ADDR', ['82.135.242.67','88.223.24.240', '192.168.1.254', '127.
 GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
 
 
-if(isset($_SERVER['REMOTE_ADDR'])){
+if(GW::ip()){
 	
-	if( in_array($_SERVER['REMOTE_ADDR'], GW::s('OFFICE_IP_ADDR'))){
+	if( in_array(GW::ip(), GW::s('OFFICE_IP_ADDR'))){
 		GW::s('DEVELOPER_PRESENT',1);
 	}	
 }

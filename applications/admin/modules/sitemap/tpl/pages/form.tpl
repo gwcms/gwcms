@@ -204,7 +204,7 @@
 					{$key=explode('/', $key)}
 					{if $key.0==$fieldname}
 						
-						<a title="{$title} / {strtoupper($key.1)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[key=>$fieldname,page_id=>$item->id,ln=>$key.1,clean=>2])}">
+						<a title="{$title} / {strtoupper($key.1)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/contentversions",[key=>$fieldname,page_id=>$item->id,ln=>$key.1,clean=>2])}">
 							<span class='ln'>{$key.1}</span>:{$cnt}
 						</a>
 					{/if}
@@ -224,7 +224,7 @@
 				{$cnt=$versions["{$fieldname}/"]}
 				{if $cnt}
 					<span class='changetrack'>
-					<a  title="{$title} / {GW::l('/g/FIELDS/changetrack')}"  class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[key=>$fieldname,page_id=>$item->id,clean=>2,ln=>''])}">
+					<a  title="{$title} / {GW::l('/g/FIELDS/changetrack')}"  class='iframeopen' href="{$m->buildUri("{$item->id}/contentversions",[key=>$fieldname,page_id=>$item->id,clean=>2,ln=>''])}">
 						<i class='fa fa-pencil'></i> {$cnt}
 					</a>	
 					</span>

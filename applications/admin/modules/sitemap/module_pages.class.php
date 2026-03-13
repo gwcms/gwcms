@@ -24,7 +24,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		$this->app->carry_params['clean']=1;
 		
-
+		
 	}
 	
 	
@@ -340,6 +340,11 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	{
 		$subdata = [];
 		
+		//kai eksportuoja is kontekstinio meniu punkto
+		if(!isset($opts['export_lns_vals'])){
+			$opts['export_lns_vals'] = $this->app->langs;
+		}
+		
 		if($item->id && !$item->skip_export){
 			$vals = $item->toArray();
 			unset($vals['site_id']);
@@ -368,7 +373,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		$data['childs'][] =& $subdata;	
 			
 		
-		if($opts['export_type']=='page_only')
+		if(($opts['export_type'] ?? false)=='page_only')
 			return;	
 		
 		foreach($item->getChilds($opts) as $child)
@@ -389,7 +394,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$opts = array_merge($opts, $_GET['opts']);
 		}
 		
-		if($opts['export_type']=='only_childs')
+		if(($opts['export_type'] ?? false)=='only_childs')
 			$item->skip_export = true;
 		
 		if(isset($_GET['site_id']))
@@ -397,7 +402,14 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 		
 		$this->getAllChilds($item, $data, $opts);
 		
-		if(isset($_GET['shift_key']) || $_POST['item']['show_json'] ?? false)
+		$content = ob_get_contents();
+		ob_end_clean();
+		
+		if($content)
+			$this->setError("Export file might not work | Unexpected content catched: <pre>$content</pre>");
+		
+		
+		if(isset($_GET['shift_key']) || ($_POST['item']['show_json'] ?? false))
 		{
 			header('Content-type: text/plain');
 		}else{
@@ -475,6 +487,8 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 	
 	function doImportExportTree()
 	{
+		ob_start();
+		
 		$vals = $_POST['item'];
 		$pid = $vals['parent_id'];;
 		$act = $vals['action'];
@@ -501,12 +515,15 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			$this->doExportTree($parent, $opts);
 		}elseif($act=='import'){
 			
-			$data = file_get_contents($_FILES['importfile']['tmp_name']);
-			$data = json_decode($data);
+			$datao = file_get_contents($_FILES['importfile']['tmp_name']);
+			$data = json_decode($datao);
 			
 					
 			if(!$data){
 				$this->setError("Invalid data");
+				if($this->app->user->isRoot()){
+					$this->setError("<pre>". $datao.'</pre>');
+				}
 			}else{				
 				$this->importTree($parent, $data);
 			}

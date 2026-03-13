@@ -240,7 +240,7 @@ class GW_Debug_Helper
 	
 	static function isHTMLerror()
 	{
-		if(!($_SERVER["REMOTE_ADDR"] ?? false) || Navigator::isAjaxRequest()) //does not support in cli mode
+		if(!(GW::ip() ?? false) || Navigator::isAjaxRequest()) //does not support in cli mode
 			return false;
 		
 		return true;
@@ -335,10 +335,10 @@ class GW_Debug_Helper
 			return true;
 		}
 		
-		if(isset($_SERVER["REMOTE_ADDR"])){
+		if(GW::ip()){
 			$data = $e+[
-				    'ip'=>$_SERVER["REMOTE_ADDR"],
-				    'host_by_ip'=>gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+				    'ip'=>GW::ip(),
+				    'host_by_ip'=>gethostbyaddr(GW::ip()),
 				    'request_uri'=>Navigator::__getAbsBase().$_SERVER['REQUEST_URI']
 				];
 		}else{
@@ -380,8 +380,8 @@ class GW_Debug_Helper
 		if(isset($_SERVER['HTTP_REFERER']))
 			$data['referer'] = $_SERVER['HTTP_REFERER'];
 
-		if(function_exists('geoip_country_code_by_name') && isset($_SERVER['REMOTE_ADDR']))
-				$data['ip_country'] = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+	
+		$data['ip_country'] = GW::countryByIp(GW::ip());
 
 		
 		$data['backtrace'] = debug_backtrace();

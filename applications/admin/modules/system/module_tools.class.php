@@ -102,6 +102,30 @@ class Module_Tools extends GW_Common_Module
 		$this->jump(false, [], ['skipjumpdebug'=>1]);
 	}
 	
+	function doSwitchSite()
+	{
+		if(($_GET['app'] ?? false)=="SITE")
+		{
+			$var  =& $_SESSION['SITE']['DEBUG_SITE_ID'];
+		}else{
+			$var  =& $this->app->sess['DEBUG_SITE_ID'];
+		}
+		
+		
+		
+		
+		$var = $_GET['site_id'];
+		
+		
+		if(isset($_GET['uri'])){
+			header("Location: ".$_GET['uri']);
+			exit;
+		}
+		
+		$this->jump(false, [], ['skipjumpdebug'=>1]);
+	}	
+	
+	
 	function doJumpDebugModeToggle()
 	{
 		if(($_GET['app'] ?? false)=="SITE")
@@ -489,7 +513,7 @@ class Module_Tools extends GW_Common_Module
 	function doTestGeoip()
 	{
 		if(function_exists('geoip_country_code_by_name')){
-			$this->setPlainMessage("Feature available. Jour country ".geoip_country_code_by_name($_SERVER['REMOTE_ADDR']));
+			$this->setPlainMessage("Feature available. Jour country ".GW::countryByIp(GW::ip()));
 		}else{
 			$this->setPlainMessage("Feature not enabled. <a target='_blank' href='http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip'>More info</a>");
 		}

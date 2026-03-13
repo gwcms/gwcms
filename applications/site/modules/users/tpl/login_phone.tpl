@@ -16,7 +16,7 @@
                 <div class="mb-4">
 
 			{$limit_country = json_decode(mb_strtolower($m->cfg->phone_limit_country))}
-			{$geoipcountry = strtolower(geoip_country_code_by_name($smarty.server.REMOTE_ADDR))}
+			{$geoipcountry = strtolower(GW::countryByIp(GW::ip()))}
 			
 			  {if $app->ln == 'lt'}
 				  {$prefered_country = 'lt'}

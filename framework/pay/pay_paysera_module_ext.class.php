@@ -199,7 +199,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			
 			/*
-			if($_SERVER['REMOTE_ADDR'] == '84.15.236.87'){
+			if(GW::ip() == '84.15.236.87'){
 				d::dumpas($data);
 			}*/
 			
@@ -216,7 +216,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 				GW_Mail_Helper::sendMailDeveloper($opts);				
 			}
 			
-			$logvals=['action'=>$_GET['action'], 'orderid'=>$_GET['orderid'], 'paytext'=>$errtxt,'handler_state'=>666,'ip'=>$_SERVER['REMOTE_ADDR']];
+			$logvals=['action'=>$_GET['action'], 'orderid'=>$_GET['orderid'], 'paytext'=>$errtxt,'handler_state'=>666,'ip'=>GW::ip()];
 			$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);
 			$log_entry->insert();
 			
@@ -234,7 +234,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			//notify someone about intereestin thing
 		}
 		
-		$response['ip'] = $_SERVER['REMOTE_ADDR'];
+		$response['ip'] = GW::ip();
 		$logvals = array_intersect_key($response, GW_Paysera_Log::singleton()->getColumns());	
 		$logvals['action'] = $_GET['action'];
 		$log_entry=GW_Paysera_Log::singleton()->createNewObject($logvals);

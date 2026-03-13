@@ -128,7 +128,7 @@ class Module_Users extends GW_Public_Module
 		
 		GW_Temp_Data::singleton()->cleanup();
 		$expires = false;
-		$LAST_REQUEST = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'], $expires);
+		$LAST_REQUEST = GW_Temp_Data::singleton()->readValue(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', GW::ip(), $expires);
 			
 			
 		if($LAST_REQUEST){
@@ -138,7 +138,7 @@ class Module_Users extends GW_Public_Module
 			return false;
 		}
 		
-		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', $_SERVER['REMOTE_ADDR'],  '1', '1 minute');
+		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID, 'LAST_SMS_CODE', GW::ip(),  '1', '1 minute');
 	
 		if(isset($_POST['phone']))
 			$phonenumber = preg_replace('/[^0-9]/','',$_POST['phone']);
@@ -314,7 +314,7 @@ class Module_Users extends GW_Public_Module
 			return [];
 		}
 		
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = GW::ip();
 		// post request to server
 		$url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
 		$response = file_get_contents($url);
@@ -457,12 +457,12 @@ class Module_Users extends GW_Public_Module
 	
 	function __doRegisterPrepareUser($user)
 	{
-		$user->reg_ip = $_SERVER['REMOTE_ADDR'];
+		$user->reg_ip = GW::ip();
 
-		if(function_exists('geoip_country_code_by_name')){
-			//http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip
-			$user->reg_country = geoip_country_code_by_name($user->reg_ip);
-		}
+		
+		//http://www.beginninglinux.com/home/php/ubuntu-php-5-geo-ip
+		$user->reg_country = GW::countryByIp($user->reg_ip);
+		
 		
 		$user->use_lang = $this->app->ln;
 	}	

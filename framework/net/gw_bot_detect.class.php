@@ -10,8 +10,14 @@ class GW_Bot_Detect
 		return stripos($ua, 'bot')!==false  ||
 				stripos($ua, 'spider')!==false || 
 				stripos($ua, 'scrap')!==false ||
-				stripos($ua, 'crawler')!==false
-			;
+				stripos($ua, 'crawler')!==false ||
+				stripos($ua, 'indexer')!==false ||
+				stripos($ua, 'externalagent')!==false ||
+				stripos($ua, 'yandex')!==false
+			
+		;
+		
+
 	}	
 	
 	static function botRedirect()
@@ -63,7 +69,7 @@ class GW_Bot_Detect
 			//
 			self::botRedirect();		
 			
-			if(rand(0,10)==5)
+			if(rand(0,30)==1)
 				GW::db()->query("DELETE FROM `gw_mirror_serv_track` WHERE time < '" . date('Y-m-d H:i:s', strtotime('-10 minute')) . "'");
 			
 			//die('Temporarily off, update is in progress. Please come back later');
@@ -109,7 +115,7 @@ class GW_Bot_Detect
 
 	static function ip2int($ip=false)
 	{
-		$ip = $ip ?: $_SERVER['REMOTE_ADDR'];
+		$ip = $ip ?: GW::ip();
 		return [$ip, sprintf('%u', ip2long($ip))];
 	}
 	
@@ -165,10 +171,35 @@ class GW_Bot_Detect
 		
 		$maxcount = $cc == "LT" ? 1000 : GW::s('BOT_DETECT_IP_QUOTA_FOREIGN');
 		
+		
+		//speciali taisykle kuri pagal access.log pasimate kaip atjungti srauta pastebeti url adrese kazkokiu aplinkybiu neiprastu normalaus lankytojo
+		if(isset($_GET['redirmirror']) && $state < 2){
+			$state=1;
+		}
+		
+		if(GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD && !isset($_SERVER['HTTP_CF_CONNECTING_IP']) && GW::ip()!='127.0.0.1'){
+			header('HTTP/1.1 505 Service unavailable skip cloudflare ns ');
+			header('Status: 505 Service unavailable skip cloudflare ns');
+			exit;			
+		}
+		
+		
+		if(isset($_GET['debugbotdetect']))
+		{
+			$statehuman = [0=>'normal', 1=>'mustverify', 2=>'verified', 3=>'whitelist'];
+			d::dumpas([
+			    "state"=>$statehuman[$state] ?? "Unknown state - $state ",
+			    'countrycode'=>$cc,
+			    "maxcount"=>$maxcount,
+			    "remain_requests_until_force_captcha"=>$maxcount-$count,
+			    
+			]);
+		}
+		
 		if($state<1)
 			GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN', $maxcount-$count);
 		
-		//if($_SERVER['REMOTE_ADDR']=='88.223.24.240'){
+		//if(GW::ip()=='88.223.24.240'){
 		//	d::ldump(GW::s('BOTDET_UNVERIFIED_COUNT_REMAIN'));
 		//}
 		
@@ -178,7 +209,7 @@ class GW_Bot_Detect
 			
 			if($state<1){
 				//
-				//file_put_contents(GW::s('DIR/TEMP').'testbot_verification', $count.'|'.$state.'|'.$ipint.'|'.$_SERVER['REMOTE_ADDR']."\n", FILE_APPEND);
+				//file_put_contents(GW::s('DIR/TEMP').'testbot_verification', $count.'|'.$state.'|'.$ipint.'|'.GW::ip()."\n", FILE_APPEND);
 				self::markIp(['state'=>1]);
 			}
 			
@@ -501,7 +532,7 @@ class GW_Bot_Detect
 	{
 		
 		if($ip)
-			return geoip_country_code_by_name($ip);
+			return GW::countryByIp($ip);
 		
 		//keshuotas variantas veiktu tik jei ziurima einamajam klientui
 		static $cc;
@@ -509,7 +540,7 @@ class GW_Bot_Detect
 		if($cc)
 			return $cc;
 		
-		$cc = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+		$cc = GW::countryByIp(GW::ip());
 		
 		return $cc;
 	}
@@ -532,7 +563,7 @@ class GW_Bot_Detect
 		
 		if($speed>3){
 			
-			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$user_agent_id, 'speed'=>$speed]);
+			GW::db()->insert("request_slow", ['url'=>$_SERVER['REQUEST_URI'],'ip'=>GW::ip(),'user_agent'=>$user_agent_id, 'speed'=>$speed]);
 		}
 	}
 	
@@ -550,6 +581,10 @@ class GW_Bot_Detect
 	{		
 		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD)
 			return false;
+		
+		//if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD || GW::s('CLOUDFLARE'))
+		//	return false;
+
 		
 		self::initSession();
 		self::ipStats();

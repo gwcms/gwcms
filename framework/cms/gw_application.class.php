@@ -85,7 +85,15 @@ class GW_Application
 	function initSite()
 	{
 		if(GW::s('MULTISITE') && isset($_SERVER["HTTP_HOST"]))
-		{			
+		{		
+			
+			if($this->sess('DEBUG_SITE_ID')){
+			
+				$this->site = GW_Site::singleton()->find($this->sess('DEBUG_SITE_ID'));	
+				return true;
+			}
+			
+			
 			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $_SERVER["HTTP_HOST"]]);
 			
 			if($tmp)
@@ -93,6 +101,8 @@ class GW_Application
 				$this->site = $tmp;
 				return true;
 			}
+			
+		
 			
 			$this->site = GW_Site::singleton()->find('hosts="*"');	
 			
@@ -160,7 +170,7 @@ class GW_Application
 		    'test0a' => $this->user->id,
 		    'test0b' => GW::s('PROJECT_ENVIRONMENT'),
 		    'test1' => (!$this->user->id && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV),
-		    'test2' => $_SERVER['REMOTE_ADDR']=='127.0.0.1',
+		    'test2' => GW::ip()=='127.0.0.1',
 		    'test3' => strpos($_SERVER['HTTP_USER_AGENT'],'Mozilla/5.0 (X11; Linux x86_64)')!==false
 			]);*/
 		
@@ -173,7 +183,7 @@ class GW_Application
 		
 		if(
 			!$this->user && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV && 
-			$_SERVER['REMOTE_ADDR']=='127.0.0.1' && 
+			GW::ip()=='127.0.0.1' && 
 			strpos($_SERVER['HTTP_USER_AGENT'] ?? false,'Mozilla/5.0 (X11; Linux x86_64)')!==false &&
 			$this->app_name!='SERVICE'
 		){

@@ -145,7 +145,7 @@ class Module_Repository extends GW_Common_Module {
 			    'body' => '<pre>' . json_encode([
 				'uid' => $this->app->user->id,
 				'user_title' => $this->app->user->title,
-				'client' => $_SERVER['REMOTE_ADDR'] . ' | ' . $_SERVER['HTTP_USER_AGENT']
+				'client' => GW::ip() . ' | ' . $_SERVER['HTTP_USER_AGENT']
 				    ], JSON_PRETTY_PRINT),
 			];
 

@@ -18,7 +18,13 @@ class GW_Site_Block extends GW_Data_Object
 	    'title'=>1,
 	];
 
-
+	public $keyval_use_generic_table=1;
+	public $ownerkey = 'sitemap/blocks';
+	
+	public $extensions = [
+	    //'keyval'=>1,
+	    'changetrack'=>1
+	];
 
 	function calculateField($key)
 	{

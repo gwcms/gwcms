@@ -12,18 +12,18 @@ class GW_Request_Helper
 
 
 		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$IP = $_SERVER['REMOTE_ADDR'];
+			$IP = GW::ip();
 		} else {
 			$PROXY_IP = $IP = $_SERVER['HTTP_X_FORWARDED_FOR'];
 			
 			//kai dideli kiekiai blogai gaunas
-			$PROXYH = '';//gethostbyaddr($_SERVER['REMOTE_ADDR']);
+			$PROXYH = '';//gethostbyaddr(GW::ip());
 
 			if ($PROXYH == $PROXY_IP)
 				$PROXYH = '';
 
 			$PROXY_HOST = $PROXYH;
-			$PROXY = $_SERVER['REMOTE_ADDR'] . ($PROXYH ? '/' . $PROXYH : '');
+			$PROXY = GW::ip() . ($PROXYH ? '/' . $PROXYH : '');
 		}
 
 		//kai dideli kiekiai blogai gaunas

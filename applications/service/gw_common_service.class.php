@@ -88,7 +88,7 @@ class GW_Common_Service
 		$this->user = $usr;
 
 
-		if ($usr && !$usr->checkAllowedIp($_SERVER['REMOTE_ADDR'])) {
+		if ($usr && !$usr->checkAllowedIp(GW::ip())) {
 			$this->output(['error_code' => '/G/USER/IP_ADDRESS_NOT_ALLOWED_OR_UNCONFIGURED']);
 		}
 

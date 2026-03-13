@@ -140,7 +140,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 		$cfg = $this->initCfg();
 		
 
-		$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>$_SERVER['REMOTE_ADDR'], 'time'=>date('Y-m-d H:i:s')];
+		$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>GW::ip(), 'time'=>date('Y-m-d H:i:s')];
 		file_put_contents(GW::s('DIR/LOGS').'paypal2.log', date('H:i:s').':::'.json_encode($debug, JSON_PRETTY_PRINT), FILE_APPEND);		
 		
 		file_put_contents(GW::s('DIR/LOGS').'paypaltest_json.log', json_encode($_POST));
@@ -173,7 +173,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			//tiesiog nieko nedarom pereis prie redirect
 		}elseif($action=='callback'){
 			
-			$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>$_SERVER['REMOTE_ADDR'], 'time'=>date('Y-m-d H:i:s')];
+			$debug = ['get'=>$_GET, 'post'=>$_POST, 'remote_addr'=>GW::ip(), 'time'=>date('Y-m-d H:i:s')];
 			$this->log(json_encode($debug, JSON_PRETTY_PRINT));
 
 		

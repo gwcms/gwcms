@@ -297,7 +297,7 @@ class WebToPay {
 
         $logline = array(
             $type,
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-',
+            isset(GW::ip()) ? GW::ip() : '-',
             date('[Y-m-d H:i:s O]'),
             'v' . self::VERSION . ':',
             $msg

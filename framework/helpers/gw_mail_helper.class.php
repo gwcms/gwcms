@@ -322,7 +322,8 @@ class GW_Mail_Helper
 		if(isset($opts['preview']))
 			return $opts;
 		
-		
+			if(isset($opts['debug_echo']))	
+				echo "to: ".implode('; ', $opts['to'])." <hr>subject: ".$opts['subject']."<hr>".$opts['body'];			
 		
 		
 		if(isset($opts['draft']) && !isset($m_queue_item))
@@ -359,6 +360,9 @@ class GW_Mail_Helper
 			$opts['error'] = $e->getMessage();
 		}
 		
+		
+
+		
 		//saugoti tuo atveju jei yra sukonfiguruota kad saugoti errorus ir yra erroras
 		//arba jei neeroras bet sukonfiguruota adminkej kad saugoti visus
 		//nesaugoti jei paduodamas parametras nostoredb
@@ -377,6 +381,8 @@ class GW_Mail_Helper
 		*/
 		
 		//d::dumpas($mailer);
+		
+
 		
 		$mailer->ClearAllRecipients( );
 		$mailer->clearAttachments();//jei atskiram useriui atskiras attach		
@@ -413,7 +419,7 @@ class GW_Mail_Helper
 
 		$respo = GW::$context->app->innerRequest("datasources/sms", $req,[],['app'=>'admin']);	
 		
-		//if($_SERVER['REMOTE_ADDR']=='88.223.24.240')
+		//if(GW::ip()=='88.223.24.240')
 		//	d::dumpas($respo);
 		
 		return $respo;

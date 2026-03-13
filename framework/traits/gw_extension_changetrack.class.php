@@ -109,6 +109,7 @@ class GW_Extension_ChangeTrack
 		$changes0 = GW_Change_Track::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);;
 		$changes=[];
 		
+		
 		foreach($changes0 as $change)
 		{
 			$new = $change->new;

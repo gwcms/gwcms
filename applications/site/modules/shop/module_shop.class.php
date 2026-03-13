@@ -589,7 +589,7 @@ class Module_Shop extends GW_Public_Module
 		}
 		
 		
-			//if($_SERVER['REMOTE_ADDR']=='84.15.236.87'){
+			//if(GW::ip()=='84.15.236.87'){
 			//	d::dumpas($cart);
 			//}	
 		//$data = $this->rootConfirmJson($cart->toArray());

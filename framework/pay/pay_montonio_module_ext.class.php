@@ -165,7 +165,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 
 		
 		
-		if($this->app->user && $this->app->user->isRoot() || $_SERVER['REMOTE_ADDR']=='90.131.42.149' || $_SERVER['REMOTE_ADDR']=='88.223.24.240'){
+		if($this->app->user && $this->app->user->isRoot() || GW::ip()=='90.131.42.149' || GW::ip()=='88.223.24.240'){
 			
 			$payload = $this->rootConfirmJson($payload);
 			if(!$payload)
@@ -184,7 +184,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 	
 	function doMontonioAcceptV2()
 	{
-		$this->log($_SERVER['REQUEST_URI'] .'   '.$_SERVER['REMOTE_ADDR']);
+		$this->log($_SERVER['REQUEST_URI'] .'   '.GW::ip());
 		
 		$orderid = $_GET['orderid'];
 		$order = GW_Order_Group::singleton()->find(['id=?', $orderid]);	
@@ -203,7 +203,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		
 		
 		/*
-		if(!in_array($_SERVER['REMOTE_ADDR'], ['35.156.245.42','35.156.159.169'])){
+		if(!in_array(GW::ip(), ['35.156.245.42','35.156.159.169'])){
 			die("Montonio accept ip address whitelist problem");
 		}
 		
@@ -372,7 +372,7 @@ if (
 			$payment_data['preselected_aspsp'] = $args->method;
 		}
 		
-		if($this->app->user && $this->app->user->isRoot() || $_SERVER['REMOTE_ADDR']=='90.131.42.149'){
+		if($this->app->user && $this->app->user->isRoot() || GW::ip()=='90.131.42.149'){
 			
 			$payment_data = $this->rootConfirmJson($payment_data);
 			if(!$payment_data)

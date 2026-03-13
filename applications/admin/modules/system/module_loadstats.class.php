@@ -218,7 +218,7 @@ class Module_Loadstats extends GW_Common_Module
 		
 		if(!$ip){
 			$form = ['fields'=>[
-				'ip'=>['type'=>'ip','default'=>$_SERVER['REMOTE_ADDR'], 'required'=>1],
+				'ip'=>['type'=>'ip','default'=>GW::ip(), 'required'=>1],
 			],'cols'=>4];
 
 			if(!($answers=$this->prompt($form, "Examine ip")))
@@ -272,7 +272,7 @@ class Module_Loadstats extends GW_Common_Module
 	function doTestApproveIp()
 	{
 		$form = ['fields'=>[
-				'ip'=>['type'=>'ip','default'=>$_SERVER['REMOTE_ADDR'], 'required'=>1],
+				'ip'=>['type'=>'ip','default'=>GW::ip(), 'required'=>1],
 				'state'=>['type'=>'select', 'options'=>GW::l('/M/SYSTEM/OPTIONS/bot_detect_states'),'default'=>3]
 			],'cols'=>4];
 

@@ -15,7 +15,7 @@ list($publickey, $secret) = GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE');
 // If form submitted, verify captcha
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = $_POST['g-recaptcha-response'] ?? '';
-    $remoteip = $_SERVER['REMOTE_ADDR'];
+    $remoteip = GW::ip();
 
     $verify = file_get_contents(
         "https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}&remoteip={$remoteip}"
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = json_decode($verify, true);
 
     if (!empty($result['success'])) {
-	    GW_Bot_Detect::markIpAsVerified($_SERVER['REMOTE_ADDR']);
+	    GW_Bot_Detect::markIpAsVerified(GW::ip());
 	    
         $_SESSION['human_verified'] = true;
         // Redirect back to original page or home

@@ -6,6 +6,16 @@ GW_Bot_Detect::recaptcha();
 GW_Bot_Detect::botRedirect();
 GW_Bot_Detect::process();
 
+/*
+ * brutualus atjungimas jei eina atpazint is access.log kai srautas nera tipinis lankytojas 
+if(isset($_GET['redirmirror'])){
+	header('HTTP/1.1 504 Service Temporarily Unavailable');
+	header('Status: 504 Service Temporarily Unavailable');
+	header('Retry-After: 300');//300 seconds
+	exit;
+}
+*/
+
 GW::request();
 
 
