@@ -147,7 +147,22 @@ class GW_Common_Module extends GW_Module
 	{
 		return 'mod_' . $this->module_name . '.log';
 	}
-	
+
+	function getRecoveryLogPath()
+	{
+		return GW::s('DIR/LOGS').$this->getLogFileName();
+	}
+
+	function supportsRecoveryLog()
+	{
+		if(!$this->model || !method_exists($this->model, 'createNewObject'))
+			return false;
+
+		$item = $this->model->createNewObject();
+
+		return is_object($item) && method_exists($item, 'getRecoveryData');
+	}
+
 	function initLogger()
 	{
 		if(!$this->lgr){
@@ -708,9 +723,23 @@ class GW_Common_Module extends GW_Module
 	function common_viewDialogConfig2()
 	{
 		$this->fireEvent("BEFORE_CONFIG", $this->modconfig);
+		$this->initConfigChangeTrack($this->modconfig);
 		$this->tpl_file_name = GW::s("DIR/" . $this->app->app_name . "/TEMPLATES") . 'tools/config';
 		
 		return ['item'=>$this->modconfig];
+	}
+	
+	protected function initConfigChangeTrack($cfg)
+	{
+		$this->tpl_vars['config_change_track'] = 1;
+		$this->tpl_vars['config_change_track_prefix'] = $cfg->prefix;
+		$this->tpl_vars['change_track_cnt'] = GW_Config_Change_Track_Helper::prepareCountByPrefix($cfg->prefix);
+	}
+	
+	protected function saveConfigTracked($cfg, $vals, $opts = [])
+	{
+		GW_Config_Change_Track_Helper::trackValues($cfg, $vals, $opts);
+		$cfg->setValues($vals);
 	}
 	
 	function doSaveConfig()
@@ -730,7 +759,7 @@ class GW_Common_Module extends GW_Module
 		//$original_vals = json_decode($_REQUEST['original_values'], true);
 		//$fields = array_keys($original_vals);		
 		
-		$this->modconfig->setValues($vals);
+		$this->saveConfigTracked($this->modconfig, $vals);
 		
 		$this->fireEvent("AFTER_SAVE_CONFIG", $vals);
 		
@@ -1061,8 +1090,9 @@ class GW_Common_Module extends GW_Module
 		{
 			
 			$is_utf8 = mb_detect_encoding($this->list_params['search']) != 'ASCII';
+			$is_numeric_search = is_numeric(trim((string)$this->list_params['search']));
 			
-			$cols = $this->getModelCols($is_utf8 ? 'text':'all');	
+			$cols = $this->getModelCols(($is_utf8 || !$is_numeric_search) ? 'text':'all');	
 			$subcond = '';
 			
 			foreach ($cols as $key => $x){
@@ -2480,6 +2510,12 @@ class GW_Common_Module extends GW_Module
 		$params = [];
 		$cond = "";
 		
+		foreach(['select','joins','group_by','having','key_field','calc_found_rows','distinct'] as $optkey){
+			if(array_key_exists($optkey, $opts)){
+				$params[$optkey] = $opts[$optkey];
+			}
+		}
+		
 		
 		
 		if(isset($_GET['q'])){
@@ -2506,8 +2542,32 @@ class GW_Common_Module extends GW_Module
 					}
 				}
 				
-				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
-					$params['joins'] = $joins;
+				$search_fields_for_joins = $opts['search_fields'];
+				$existing_join_aliases = [];
+				
+				foreach($params['joins'] ?? [] as $join){
+					if(!isset($join[1]))
+						continue;
+					
+					if(preg_match('/\s+AS\s+`?([a-zA-Z0-9_]+)`?/i', $join[1], $matches)){
+						$existing_join_aliases[$matches[1]] = 1;
+					}
+				}
+				
+				$search_fields_for_joins = array_filter($search_fields_for_joins, function($field) use ($existing_join_aliases) {
+					if(strpos($field, '.') === false)
+						return false;
+					
+					list($objname) = explode('.', $field, 2);
+					
+					if($objname === 'a')
+						return false;
+					
+					return !isset($existing_join_aliases[$objname]);
+				});
+				
+				if($search_fields_for_joins && ($joins=$this->model->findJoinsForFields($search_fields_for_joins))){
+					$params['joins'] = array_merge($params['joins'] ?? [], $joins);
 				}
 				
 				$cond = '('.implode(' OR ', $condarr).')';
@@ -2526,10 +2586,6 @@ class GW_Common_Module extends GW_Module
 			}
 			
 
-			if($opts['condition'] ?? false){
-				$cond = GW_DB::mergeConditions($opts['condition'], $cond);
-			}
-			
 			if($opts['include_ids']??false){
 				$cond = GW_DB::mergeConditions($cond, GW_DB::inCondition('`a`.`id`',$opts['include_ids']), 'OR');
 			}
@@ -2540,7 +2596,13 @@ class GW_Common_Module extends GW_Module
 				$ids = [$ids];
 
 			//$ids = array_map('intval', $ids);
-			$cond = GW_DB::inConditionStr($idx_field, $ids);
+			$idx_field_for_cond = $idx_field;
+			
+			if(strpos($idx_field_for_cond, '.') === false){
+				$idx_field_for_cond = "a.`$idx_field_for_cond`";
+			}
+			
+			$cond = GW_DB::inConditionStr($idx_field_for_cond, $ids);
 		}
 		
 		
@@ -2555,6 +2617,10 @@ class GW_Common_Module extends GW_Module
 		if(isset($opts['condition_add'])){
 			$cond .= ($cond ? " AND " : ''). $opts['condition_add'];
 		}	
+		
+		if($opts['condition'] ?? false){
+			$cond = GW_DB::mergeConditions($opts['condition'], $cond);
+		}
 				
 		
 	
@@ -2582,11 +2648,22 @@ class GW_Common_Module extends GW_Module
 		$list=[];
 		
 					
-		foreach($list0 as $item)
-			$list[]=[
+		foreach($list0 as $item){
+			$entry = [
 			    'id' => $item->get($idx_field), 
 			    "title" => isset($opts['title_func']) ? $opts['title_func']($item) : $item->get("title")
 			];
+			
+			if(isset($opts['html_func'])){
+				$html = $opts['html_func']($item);
+				
+				if($html){
+					$entry['html'] = $html;
+				}
+			}
+			
+			$list[] = $entry;
+		}
 		
 		$res['items'] = $list;
 		
@@ -2680,6 +2757,17 @@ class GW_Common_Module extends GW_Module
 		$changes = $item->extensions['changetrack']->getChangesByField($_GET['field']);
 		
 		$this->tpl_vars['changes'] = $changes;
+		
+		$user_ids = [];
+		foreach((array)$changes as $meta){
+			$change = $meta[0] ?? null;
+			if($change && !empty($change->user_id))
+				$user_ids[(int)$change->user_id] = (int)$change->user_id;
+		}
+		
+		$this->tpl_vars['changes_users'] = $user_ids
+			? GW_User::singleton()->findAll(GW_DB::inCondition('id', array_values($user_ids)), ['key_field' => 'id'])
+			: [];
 		
 		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/versions";
 		
@@ -2780,6 +2868,8 @@ class GW_Common_Module extends GW_Module
 	function prompt($form, $title=false, $opts=[])
 	{
 		
+		if(isset($opts['cols']))
+			$form['cols'] = $opts['cols'];
 		
 		if($title===false){
 			$caller = '<b>'.debug_backtrace(!DEBUG_BACKTRACE_PROVIDE_OBJECT|DEBUG_BACKTRACE_IGNORE_ARGS,2)[1]['function'].'()</b>';
@@ -2852,6 +2942,7 @@ class GW_Common_Module extends GW_Module
 		$this->tpl_vars['item'] = (object)($src['item'] ?? []);
 		$this->tpl_vars['prompt_fields'] = $form;
 		$this->tpl_vars['prompt_title'] = $title;
+		$this->tpl_vars['prompt_opts'] = $opts;
 		$this->smarty->assign('m', $this);
 		$this->smarty->assign($this->tpl_vars);
 					
@@ -3115,14 +3206,158 @@ class GW_Common_Module extends GW_Module
 	
 	function recoverData($data)
 	{
-		
-		
-		$item = $this->model->createNewObject();
+		$itemClass = $data['item_class'] ?? false;
+		$model = $this->model;
+
+		if($itemClass && class_exists($itemClass) && method_exists($itemClass, 'singleton'))
+			$model = $itemClass::singleton();
+
+		$item = $model->createNewObject();
 		$item->setValues($data['item_data']);
 		$item->insert();
+
+		if(isset($data['keyval']) && isset($item->extensions['keyval']))
+			$item->extensions['keyval']->obj->storeAll($data['keyval']);
+
+		if(isset($data['subitems'])){
+			foreach($data['subitems'] as $subitemClass => $subitems){
+				if(!$subitems || !is_array($subitems))
+					continue;
+
+				$grouped = [];
+
+				foreach($subitems as $subitem){
+					if(!is_array($subitem))
+						continue;
+
+					if(isset($subitem['item_data'])){
+						$class = $subitem['item_class'] ?? $subitemClass;
+						$row = $subitem['item_data'];
+					}else{
+						$class = $subitemClass;
+						$row = $subitem;
+					}
+
+					if(!$class || !class_exists($class) || !method_exists($class, 'singleton'))
+						continue;
+
+					$grouped[$class][] = $row;
+				}
+
+				foreach($grouped as $class => $rows)
+					$class::singleton()->multiInsert($rows, true);
+			}
+		}
 		
 		
 		$this->setMessage($msg = "Import done, cnt: 1");
+	}
+
+	function getRecoveryDeleteEntries()
+	{
+		$logfile = $this->getRecoveryLogPath();
+
+		if(!is_file($logfile))
+			return [];
+
+		$lines = file($logfile, FILE_IGNORE_NEW_LINES);
+		$entries = [];
+		$total = count($lines);
+
+		for($i=0; $i<$total; $i++){
+			$line = trim($lines[$i] ?? '');
+
+			if(!$line || strpos($line, 'Delete item user: ') === false || strpos($line, 'Restore with doRecoverFromRecoveryLine:') === false)
+				continue;
+
+			$jsonLine = trim($lines[$i+1] ?? '');
+
+			if(!$jsonLine)
+				continue;
+
+			if(preg_match('/^\d{6}\s+\d{2}:\d{2}:\d{2}\s+(.*)$/', $jsonLine, $jsonMatches))
+				$jsonLine = $jsonMatches[1];
+
+			if(substr($jsonLine, 0, 1) !== '{')
+				continue;
+
+			$data = json_decode($jsonLine, true);
+
+			if(!is_array($data))
+				continue;
+
+			$stamp = substr($line, 0, 15);
+			$meta = trim(substr($line, 15));
+			$userId = false;
+			$userTitle = '';
+			$reason = '';
+
+			if(preg_match('/^Delete item user: (\d+)\.\s*(.+)$/u', $meta, $matches)){
+				$userId = (int)$matches[1];
+				$tail = preg_replace('/\s*Restore with doRecoverFromRecoveryLine:\s*$/u', '', $matches[2]);
+
+				if(preg_match('/^(.*)\s+\(([^()]*)\)\s*$/u', $tail, $tailMatches)){
+					$tail = $tailMatches[1];
+					$reason = trim($tailMatches[2]);
+				}
+
+				$userTitle = rtrim(trim($tail), '.');
+			}
+
+			$entries[] = [
+				'line_num' => $i,
+				'stamp' => $stamp,
+				'user_id' => $userId,
+				'user_title' => $userTitle,
+				'reason' => $reason,
+				'data' => $data,
+				'json' => $jsonLine,
+				'pretty_json' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+				'item_id' => $data['item_data']['id'] ?? '',
+				'item_class' => $data['item_class'] ?? '',
+			];
+		}
+
+		return array_reverse($entries);
+	}
+
+	function viewUndoDeletes()
+	{
+		if(!$this->app->user->isRoot())
+			return $this->setError("Root only permission");
+
+		if(!$this->supportsRecoveryLog())
+			return $this->setError("Recovery log is not supported by this module model");
+
+		$entries = $this->getRecoveryDeleteEntries();
+
+		$this->tpl_vars['undo_delete_entries'] = $entries;
+		$this->tpl_vars['undo_delete_logfile'] = $this->getRecoveryLogPath();
+		$this->default_tpl_file_name = GW::s("DIR/".$this->app->app_name."/MODULES")."default/tpl/undo_deletes";
+	}
+
+	function doUndoDelete()
+	{
+		if(!$this->app->user->isRoot())
+			return $this->setError("Root only permission");
+
+		if(!$this->supportsRecoveryLog())
+			return $this->setError("Recovery log is not supported by this module model");
+
+		$recoverLine = (int)($_GET['recover_line'] ?? 0);
+		$entries = $this->getRecoveryDeleteEntries();
+
+		foreach($entries as $entry){
+			if($entry['line_num'] != $recoverLine)
+				continue;
+
+			$this->recoverData($entry['data']);
+			$this->jump('undodeletes');
+			return;
+		}
+
+		$this->setError("Recovery log entry not found");
+		$this->jump('undodeletes');
 	}
 	
 	function doRecoverFromRecoveryLine()
@@ -3840,6 +4075,76 @@ class GW_Common_Module extends GW_Module
 		//d::dumpas($rows);
 		Others\Shuchkin\SimpleXLSXGen::fromArray($rows)->downloadAs(FH::urlStr(implode("_",$file_name)).'.xlsx');
 		$this->view_name = false;
+	}
+
+	function doSendListEmail()
+	{
+		$body = $this->buildListEmailHtml();
+
+		$form = ['fields'=>[
+			'to'=>['type'=>'text','placeholder'=>'@', 'required'=>1],
+			'subject'=>['type'=>'text', 'required'=>1],
+			'body'=>['type'=>'htmlarea', 'default'=>"Your text here <br><br>".$body, 'required'=>1],
+		],'cols'=>1];
+
+		if(!($answers=$this->prompt($form, 'Papildykite tekstu ir nurodykite gavėjo adresą ir temą', ['method'=>'post', 'width'=>'100%'])))
+			return false;
+
+		$opts = [
+			'to'=>$answers['to'],
+			'subject'=>$answers['subject'],
+			'body'=>$answers['body'],
+		];
+
+		$status = GW_Mail_Helper::sendMail($opts);
+
+		if($status)
+			$this->setMessage('Email sent to '.htmlspecialchars(implode(', ', (array)$opts['to'])));
+		else
+			$this->setError('Email send failed'.(isset($opts['status']) ? ': '.$opts['status'] : ''));
+
+		$this->jump();
+	}
+
+	function buildListEmailHtml()
+	{
+		$prev_act = $_GET['act'] ?? null;
+		$_GET['act'] = 'doExportListAsSheet';
+
+		$this->processView('list',['return_as_string'=>1]);
+
+		if($prev_act === null)
+			unset($_GET['act']);
+		else
+			$_GET['act'] = $prev_act;
+
+		$table = GW::$globals['capturelist'];
+
+		if(!$table || !isset($table['head']))
+			return '';
+
+		$html = '<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;">';
+		$html .= '<thead><tr>';
+
+		$fields = [];
+		foreach($table['head'] as $field => $th){
+			$fields[] = $field;
+			$html .= '<th>'.htmlspecialchars(strip_tags(html_entity_decode($th))).'</th>';
+		}
+
+		$html .= '</tr></thead><tbody>';
+		unset($table['head']);
+
+		foreach($table as $row){
+			$html .= '<tr>';
+			foreach($fields as $field)
+				$html .= '<td>'.($row[$field] ?? '').'</td>';
+			$html .= '</tr>';
+		}
+
+		$html .= '</tbody></table>';
+
+		return $html;
 	}
 	
 	

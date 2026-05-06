@@ -1,7 +1,7 @@
 {function calcElmName}{$input_name_pattern=$app->fh()->calcInputNamePattern($input_name_pattern, $type)}{sprintf($input_name_pattern,$field)}{/function}
 {function calcElmId}{str_replace(['[',']','/'],'__',$input_name)}{/function}
 
-{function input_label}
+{function input_label}	
 	{if is_object($item) && method_exists($item, 'isChangedField')}
 		{$impischanged=$item->isChangedField($name)}
 	{/if}
@@ -111,6 +111,16 @@
 
 
     {if !$hideifempty || isset($value) || $item->$name}
+	    
+	    
+
+	{if !$title}
+		{if !isset($fields_source)}
+			{$fields_source="/m/FIELDS/"}
+		{/if}
+		{$title=GW::ln("{$fields_source}{$field}")}
+	{/if}	
+    
 
 	    {if $m}
     {$title=$title|default:$m->fieldTitle($name)}

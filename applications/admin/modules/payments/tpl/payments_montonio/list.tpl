@@ -29,6 +29,7 @@
 	
 	
 	{$dl_smart_fields=[order_id]}
+	{$dl_output_filters.data=expand_truncate}
 	
 	{function dl_cl_actions_doMontonioRetryProcess}
 		{if $m->canBeAccessed($item, [access=>$smarty.const.GW_PERM_WRITE,nodie=>1])}
@@ -43,3 +44,4 @@
 	
 
 {/block}
+

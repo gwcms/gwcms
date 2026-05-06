@@ -1,11 +1,8 @@
 <?php
 
 
-class Module_Config extends GW_Common_Module
+class Module_Config extends GW_Module_Config_Common
 {	
-
-	public $default_view = 'default';
-	
 	function init()
 	{
 		$this->model = new GW_Config('gw_'.$this->module_path[0].'/');
@@ -26,7 +23,7 @@ class Module_Config extends GW_Common_Module
 		//d::dumpas($this->model->available_fields);
 	}
 	
-	function viewDefault()
+	protected function getConfigViewItem()
 	{
 		$this->initEnabledFields();
 		
@@ -42,21 +39,12 @@ class Module_Config extends GW_Common_Module
 		
 		
 		
-		return ['item'=>$item];
+		return $item;
 	}
 	
-	function doSave()
+	protected function normalizeConfigValues(&$vals)
 	{
-		$vals = $_REQUEST['item'];
 		$vals['fields_enabled'] = json_encode($vals['fields_enabled']);
-
-		
-		$this->model->setValues($vals);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setMessage('/g/SAVE_SUCCESS');		
-		
-		$this->jump();
 	}
 
 }

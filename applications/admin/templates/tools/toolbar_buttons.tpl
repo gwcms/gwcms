@@ -105,9 +105,9 @@
 {function name=do_toolbar_buttons_search}	
 	<div class="searchbox">
 		<div class="input-group custom-search-form setListParamsContainer">
-			<input type="text" id="quicksearch" class="setListParams form-control" placeholder="{GW::l('/g/QUICK_SEARCH')}" name="list_params[search]" value="{$m->list_params.search|escape}">
+			<input type="text" id="quicksearch" class="setListParams form-control" placeholder="{GW::l('/g/QUICK_SEARCH')}" name="list_params[search]" value="{$m->list_params.search|escape}" onchange="this.value=$.trim(this.value);">
 			<span class="input-group-btn">
-                                <button class="text-muted" type="button" onclick="$('#quicksearch').trigger('submit')"><i class="fa fa-search"></i></button>
+                                <button class="text-muted" type="button" onclick="$('ja').trigger('submit')"><i class="fa fa-search"></i></button>
 			</span>
 		</div>
 	</div>	

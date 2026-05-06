@@ -214,9 +214,17 @@ class GW_Mail_Helper
 		
 		//paduodamas sablonas arba sablono id
 		//betkokiu atveju $tpl pavirsta i GW_Mail_Template objekta
-		if(is_numeric($tpl))
+		if(is_numeric($tpl)){
 			$tpl = GW_Mail_Template::singleton()->find($tpl);
-			
+		
+			if(!$tpl)
+				throw new Exception('Missing template / wrong or non existing id? id:'.print_r($tpl, true));
+		}
+		
+		if(!$tpl)
+			throw new Exception('Missing template / wrong or non existing: '.print_r($tpl, true));
+		
+
 		
 		$vars =& $opts['vars'] ?? [];
 		self::initGenericVars($vars);

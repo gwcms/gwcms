@@ -1,11 +1,9 @@
 <?php
 
+use Minishlink\WebPush\VAPID;
 
-class Module_Cfg extends GW_Common_Module
+class Module_Cfg extends GW_Module_Config_Common
 {	
-
-	public $default_view = 'default';
-	
 	function init()
 	{
 		$this->model = new GW_Config('');
@@ -13,34 +11,26 @@ class Module_Cfg extends GW_Common_Module
 		parent::init();
 	}
 
-	
-	function viewDefault()
-	{
-		return ['item'=>$this->model];
-	}
-	
-	
-	
 	function __afterSave(&$vals)
 	{
 		//;
 	}
-	
-	
-	function doSave()
+
+	// Sugeneruoja naują VAPID public/private raktų porą ir išsaugo ją sistemos konfige.
+	function doGenerateVapid()
 	{
-		$vals = $_REQUEST['item'];
+		if($this->model->get('sys/VAPID_PUBLIC_KEY')){
+			return $this->setError('Not allowed to generate please remove/clear existing');
+		}
 		
-		$this->model->setValues($vals);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setPlainMessage('/g/SAVE_SUCCESS');
-		
-		
-		
-		$this->__afterSave($vals);
+		$keys = VAPID::createVapidKeys();
+
 		
 		
+		$this->model->set('sys/VAPID_PUBLIC_KEY', $keys['publicKey']);
+		$this->model->set('sys/VAPID_PRIVATE_KEY', $keys['privateKey']);
+
+		$this->setPlainMessage('VAPID keys generated');
 		$this->jump();
 	}
 

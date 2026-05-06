@@ -60,7 +60,8 @@
 	5=>GW::ln("/M/orders/status/5"),
 	6=>GW::ln("/M/orders/status/6"),
 	7=>GW::ln("/M/orders/status/7"),
-	8=>GW::ln("/M/orders/status/8")
+	8=>GW::ln("/M/orders/status/8"),
+	9=>"Refunded / Grąžinimas įvykdytas"
 ]}
 
 
@@ -128,4 +129,3 @@
 
 	.input_td{ width: 300px; }
 </style>
-

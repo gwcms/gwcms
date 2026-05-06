@@ -50,14 +50,26 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 	
 	function __getFile($file)
 	{
-		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
+		$repositories = (array)GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
+		$dirid = $_GET['dirid'] ?? '';
+
+		if(!isset($repositories[$dirid]))
+			die('dirid not specified or invalid');
+
+		if($dirid == 'chatfiles'){
+			$file = trim(str_replace('\\', '/', (string)$file), '/');
+
+			if($file === '' || strpos($file, "\0") !== false || strpos($file, '..') !== false)
+				die('invalid chat file path');
+
+			$file = preg_replace('/[^.a-z0-9_\/ -]/i', '', $file);
+			return rtrim($repositories[$dirid], '/') . '/' . $file;
+		}
+
 		//strict repositories
 		$file = preg_replace('/[^.a-z0-9_ -]/i', '', $file);
 
-		if(!isset($_GET['dirid']) && !isset($repositories[$_GET['dirid']]) )
-			die('dirid not specified or invalid');
-
-		$file = $repositories[$_GET['dirid']].'/'.$file.'.jpg';
+		$file = rtrim($repositories[$dirid], '/') . '/' . $file . '.jpg';
 		
 		return $file;
 	}
@@ -67,7 +79,9 @@ class GW_Img_Resize_Tool extends GW_Img_Tool
 		ob_clean();
 		
 		
-		$repositories = GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
+		$repositories = (array)GW::s('IMG_RESIZE_TOOL_REPOSITORIES');
+		$repositories['chatfiles'] = GW::s('DIR/REPOSITORY') . '.sys/chat_files/';
+		GW::s('IMG_RESIZE_TOOL_REPOSITORIES', $repositories);
 		
 		GW::s('DIR/SYS_IMAGES_CACHE_1', $cachedir=GW::s('DIR/SYS_REPOSITORY').'cache/images_1/');
 		

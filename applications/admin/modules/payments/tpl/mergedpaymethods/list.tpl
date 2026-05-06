@@ -23,8 +23,9 @@
 	{$do_toolbar_buttons[] = search}	
 	
 	
-	{$dl_actions=[edit,invert_active_ajax]} {*ext_actions*}
-	{$dl_output_filters=[insert_time=>short_time, update_time=>short_time]}		
+	{$dl_actions=[edit,invert_active_ajax,ext_actions]} {**}
+	{$dl_output_filters[insert_time]=short_time}
+	{$dl_output_filters[update_time]=short_time}	
 	{$dl_checklist_enabled=1}
 	{$dl_cl_actions=[invertactive,dialogremove]}	
 	

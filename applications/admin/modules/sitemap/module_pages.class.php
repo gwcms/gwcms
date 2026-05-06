@@ -267,7 +267,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			if($host=='*'){
 				$host=GW::s('SITE_URL');
 			}else{
-				$host = "http://".$host;
+				$host = "http://".$this->adjustPreviewHostByEnvironment($host);
 			}			
 		}
 		
@@ -278,6 +278,24 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 				
 		
 		header("Location: $host/".$this->app->ln.'/'.$item->path.($args ? '?'. http_build_query($args): ""));
+	}
+
+	protected function adjustPreviewHostByEnvironment($host)
+	{
+		$host = preg_replace('~^https?://~', '', trim($host));
+		$host = preg_replace('~[:/].*$~', '', $host);
+		$host = str_replace('.localhost', '', $host);
+		$host = str_replace('.1.voro.lt', '', $host);
+
+		$current_host = $_SERVER['HTTP_HOST'] ?? '';
+
+		if (strpos($current_host, '.localhost') !== false)
+			return $host . '.localhost';
+
+		if (strpos($current_host, '.1.voro.lt') !== false)
+			return $host . '.1.voro.lt';
+
+		return $host;
 	}
 	
 	
@@ -597,6 +615,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 
 		
 		$cfg['filters']['type'] = ['type'=>'select','options'=>GW::l('/m/TYPE_OPT')];
+		$cfg['filters']['template_id'] =['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'sitemap/templates'];
 
 		
 		if(isset($this->tpl_vars['additfields'])){

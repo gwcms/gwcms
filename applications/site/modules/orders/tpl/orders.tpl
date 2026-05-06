@@ -16,6 +16,10 @@
 {function orderactions}
 	
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
+		{$pay_amount=$order->amount_total}
+		{if $order->balance_amount > 0 && $order->payd_amount > 0}
+			{$pay_amount=$order->balance_amount}
+		{/if}
 		
 		{if count($pay_methods) > 1 || $m->feat('mergepaymethods')}
 			{$args=[id=>$order->id,orderid=>$order->id,payselect=>1]}
@@ -30,7 +34,10 @@
 					{GW::ln('/m/PROCEED_PAYMENT')}
 				{else}
 					{GW::ln('/m/PROCEED_DIFFERENT_PAYMENT')}
-				{/if}				
+				{/if}
+				{if $pay_amount != $order->amount_total}
+					 {$pay_amount} Eur
+				{/if}
 				
 			</a>
 					
@@ -180,6 +187,17 @@
 				<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/TOTAL')}</h4>
 				<span class="g-color-black g-font-weight-300 g-font-size-13">{$order->amount_total} &euro;</span>
 			</div>
+			
+			{if $order->payd_amount > 0 && $order->balance_amount > 0}
+				<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
+					<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">GAUTA SUMA</h4>
+					<span class="g-color-black g-font-weight-300 g-font-size-13">{$order->payd_amount} &euro;</span>
+				</div>
+				<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
+					<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">TRŪKSTAMA SUMA</h4>
+					<span class="g-color-lightred g-font-weight-300 g-font-size-13">{$order->balance_amount} &euro;</span>
+				</div>
+			{/if}
 
 
 			{if $order->deliverable}

@@ -19,12 +19,36 @@ class GW_Download_Tool
 	{
 		$this->app->initDB();
 	}
+
+	function getChatFilesFile($file)
+	{
+		$file = trim(str_replace('\\', '/', (string)$file), '/');
+
+		if($file === '' || strpos($file, "\0") !== false || strpos($file, '..') !== false)
+			die('invalid chat file path');
+
+		if(!preg_match('/^[.a-z0-9_\/ -]+$/i', $file))
+			die('invalid chat file path');
+
+		return GW::s('DIR/REPOSITORY') . '.sys/chat_files/' . $file;
+	}
 	
 	function process()
 	{
 		ob_clean();
 		
 		$params=$_GET;
+
+		if(($params['dirid'] ?? '') === 'chatfiles'){
+			$file = $this->getChatFilesFile($params['file'] ?? '');
+
+			if(!is_file($file))
+				die('File doesn\'t exist');
+
+			GW_Cache_Control::setExpires('+24 hour');
+			GW_File_Helper::output($file, $_GET['view'] ?? false, $_GET['name'] ?? false);
+		}
+
 		$item0 = new GW_File();
 		
 		$params['id'] = array_shift($this->path_arr);

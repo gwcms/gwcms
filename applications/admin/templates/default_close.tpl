@@ -67,3 +67,23 @@
 </html>
 *}
 
+
+
+{if $app->site->favico}
+	{$image=$app->site->favico}
+	<style>
+		#content-container{ background-color: transparent; }
+		
+		body::before{
+			content: "";
+			position: fixed;
+			inset: 0;
+			background: url('/applications/admin/static/img/brand_logo_background.webp') center center / min(80vw, 820px) no-repeat;
+			filter: grayscale(100%);
+			opacity: 0.1;
+			pointer-events: none;
+			z-index: -1;
+		}		
+	</style>	
+{/if}
+

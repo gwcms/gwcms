@@ -31,6 +31,19 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		}
 				
 	}	
+
+	function buildPayseraOrderId($order, $test=false)
+	{
+		$idx = 1;
+		
+		if(class_exists('GW_Order_Payment_Confirmation') && GW_Order_Payment_Confirmation::tableExists()){
+			$idx += (int)GW_Order_Payment_Confirmation::singleton()->count(['order_id=?', (int)$order->id]);
+		}else{
+			$idx += (int)GW_Paysera_Log::singleton()->count(['orderid=?', (int)$order->id]);
+		}
+		
+		return 'order-'.$order->id.'-p'.$idx.'-a'.date('YmdHis').mt_rand(100, 999).($test ? '-t' : '');
+	}
 	
 	function doPayseraPay($args) 
 	{
@@ -59,8 +72,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 		$returnarg =  ['id'=>$args->order->id,'orderid'=>$args->order->id,'key'=>$args->order->secret];
 		
-		if(GW::s('MULTISITE') && GW::s("MAIN_HOST")!=$_SERVER['HTTP_HOST']){
-			
+		if(GW::s("MAIN_HOST")){
 			$returnarg['host'] = $args->base;
 			$args->base = "https://".GW::s("MAIN_HOST").'/';
 		}
@@ -72,7 +84,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		$data = array(
 		    'projectid' => $cfg->paysera_project_id,
 		    'sign_password' => $cfg->paysera_sign_password,
-		    'orderid' => $args->orderid.($test?'-TEST'.date('His'):"-".date('His')), //ausrinei kad veiktu "-".rand(0,9) 2021-01-12
+		    'orderid' => $this->buildPayseraOrderId($args->order, $test),
 		    'paytext' => $args->paytext,
 		    'p_firstname' => $user && $user->name ? $user->name : $args->order->name,
 		    'p_lastname' => $user && $user->surname ? $user->surname : $args->order->surname,
@@ -123,18 +135,22 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		if(is_array($msg))
 			$msg= json_encode ($msg);
 		
-		file_put_contents(GW::s('DIR/TEMP').'paysera.log', date('Ymd H:i:s'). ' '.$msg."\n\n", FILE_APPEND);
+		file_put_contents(GW::s('DIR/LOGS').'paysera_ext.log', date('Ymd H:i:s'). ' '.$msg."\n\n", FILE_APPEND);
 	}
 
 	function doPayseraAccept()
 	{
-	
+		
 		//multisite is pagrindinio hosto peradresuoti atgal i reprezentacini
+		
 		
 		if(isset($_GET['host'])){
 			$action = $_GET['action'] ?? false;;
 			
-			if( !$action  != 'notify'){
+			
+			
+			
+			if( $action  != 'notify'){
 				
 				$current_url = $_SERVER['REQUEST_URI'];
 
@@ -162,7 +178,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		}
 		
 		
-		$this->log($_SERVER['REQUEST_URI']);
+		$this->log(($_GET['host']??'').$_SERVER['REQUEST_URI']);
 		
 		ob_start();
 		
@@ -221,6 +237,7 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			$log_entry->insert();
 			
 			
+			$this->log($msg="redirect after payment accetp error ocured");
 			$this->redirectAfterPaymentAccept($order);
 			///header('Location: '.$_GET['redirect_url']);
 			//$this->app->jump();
@@ -250,7 +267,8 @@ class pay_paysera_module_ext extends GW_Module_Extension
 		
 
 		if ($data['type'] !== 'macro') {
-			die('macro payments not accepted');
+			$this->log($msg="macro payments not accepted");
+			die($msg);
 		}			
 		
 		$order = $this->getOrder(true);
@@ -260,6 +278,8 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			
 			d::dumpas($msg);	
 		}
+		
+		$this->log("Normal operation action: $action");
 		//
 		if($action=='notify')
 		{	
@@ -277,23 +297,16 @@ class pay_paysera_module_ext extends GW_Module_Extension
 			if($logvals['p_email']=='vidmantasss.norkus@gw.lt' && $logvals['amount']==1){
 				$args['paytest'] = 1;
 			}
-				
+			
+			$this->log(json_encode($args,JSON_PRETTY_PRINT));
+			
 			$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
 			
-			$this->log($url);
+			$this->log("Sending inner request to mark as payd order: ".$url);
 			
 			
 			$log_entry->handler_state = 7;
 			$log_entry->update();	
-
-			
-		
-		}else{
-			//nothing
-		}
-				
-		if($_GET['action']=='notify'){
-			
 			
 			
 			$out = ob_get_contents();
@@ -308,9 +321,12 @@ class pay_paysera_module_ext extends GW_Module_Extension
 				GW_Mail_Helper::sendMailDeveloper($opts);
 			}
 			
-			die('OK');//atsakas payserai kad viskas ok
+			die('OK');//atsakas payserai kad viskas ok			
+
+		}else{
+			//nothing
 		}
-			
+				
 		
 
 		$this->redirectAfterPaymentAccept($order);

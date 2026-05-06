@@ -8,7 +8,6 @@
 	{include "`$smarty.current_dir`/itax_stat.tpl"}	
 {/if}
 	
-	{$dl_inline_edit=1}
 	{$dl_calc_totals.amount_total=0}
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons[] = search}
@@ -48,7 +47,7 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines]}
+	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
 
 	
 	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
@@ -62,6 +61,10 @@
 		</a>	
 		
 	{/function}	
+	{function dl_cell_ledger_count}
+		{$cnt=$ledger_counts[$item->id]|default:0}
+		<a class="badge badge-violet iframe-under-tr" style="background-color:violet;color:white" href="{$m->buildUri("`$item->id`/orderledger", [clean=>2,order_id=>$item->id,filters=>[order_id=>$item->id]])}" title="Order ledger">{$cnt}</a>
+	{/function}
 	{function dl_cell_item_lines}
 		{foreach $item->items as $sitem}
 			{$sitem->qty}x{$sitem->unit_price} EUR {$sitem->invoice_line2}
@@ -167,5 +170,3 @@
 	{$dl_output_filters.changetrack=changetrack}
 	
 {/block}
-
-

@@ -75,7 +75,7 @@
 	options=[]
 	preload=1
 	onchangeFunc="transkey`$name`changed"
-	datasource=$app->buildUri('datasources/translations/keysearch') 
+	datasource=$app->buildUri('datasources/translations/keysearch',[includetr=>1]) 
 	after_input=$addnew
 }
 	

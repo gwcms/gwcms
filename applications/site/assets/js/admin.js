@@ -1,3 +1,4 @@
+
 var gw_adm_sys = {
 	url: {},
 	
@@ -552,8 +553,8 @@ $(function () {
 		
 		//ctrl + 1 = pereiti i kita environmenta
 		if (event.which == 49 && event.ctrlKey) {
-			
-			location.href=(GW.app_base  + 'admin/'+GW.ln+'/system/tools?act=doSwitchEnvironment&uri='+encodeURIComponent(location.href))
+			var request_uri = location.pathname + location.search;
+			location.href=(GW.app_base  + 'admin/'+GW.ln+'/system/tools?act=doSwitchEnvironment&uri='+encodeURIComponent(request_uri))
 			
 			event.preventDefault();
 		}

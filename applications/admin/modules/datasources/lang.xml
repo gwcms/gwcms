@@ -19,6 +19,78 @@
     </i>
     <i id="trshare"><![CDATA[<i class="fa fa-link"></i>]]></i>    
     <i id="id">Id</i>
+    <i id="owner_type">
+      <en>Owner</en>
+      <lt>Objektas</lt>
+    </i>
+    <i id="owner_id">
+      <en>ID</en>
+      <lt>ID</lt>
+    </i>
+    <i id="note">
+      <en>Reason</en>
+      <lt>Priež.</lt>
+    </i>
+    <i id="transaction_id">
+      <en>Tx</en>
+      <lt>Tx</lt>
+    </i>
+    <i id="user_id">
+      <en>User</en>
+      <lt>Vart.</lt>
+    </i>
+    <i id="username">
+      <en>Username</en>
+      <lt>Naudotojas</lt>
+    </i>
+    <i id="last">
+      <en>Last</en>
+      <lt>Pask.</lt>
+    </i>
+    <i id="undone">
+      <en>Undone</en>
+      <lt>Atš.</lt>
+    </i>
+    <i id="changestable">
+      <en>Diff</en>
+      <lt>Pokytis</lt>
+    </i>
+    <i id="change">
+      <en>Change</en>
+      <lt>Pokytis</lt>
+    </i>
+    <i id="changetrack_count">
+      <en>Track</en>
+      <lt>Įrašai</lt>
+    </i>
+    <i id="action_type">
+      <en>Action</en>
+      <lt>Veiksmas</lt>
+    </i>
+    <i id="status">
+      <en>Status</en>
+      <lt>Būsena</lt>
+    </i>
+    <i id="context_obj_type">
+      <en>Context</en>
+      <lt>Kontekstas</lt>
+    </i>
+    <i id="context_obj_id">
+      <en>Ctx ID</en>
+      <lt>Ktx ID</lt>
+    </i>
+    <i id="field">
+      <en>Field</en>
+      <lt>Laukas</lt>
+    </i>
+    <i id="old">
+      <en>Old</en>
+      <lt>Sena</lt>
+    </i>
+    <i id="new">
+      <en>New</en>
+      <lt>Nauja</lt>
+    </i>
   </i>
   <i id="FIELDS">
     <i id="text">
@@ -38,6 +110,78 @@
       <lt>Aprašymas</lt>
     </i>
     <i id="trshare">Shared between multiple systems</i>
+    <i id="owner_type">
+      <en>Owner type</en>
+      <lt>Savininko tipas</lt>
+    </i>
+    <i id="owner_id">
+      <en>Owner ID</en>
+      <lt>Savininko ID</lt>
+    </i>
+    <i id="note">
+      <en>Reason</en>
+      <lt>Priežastis</lt>
+    </i>
+    <i id="transaction_id">
+      <en>Transaction ID</en>
+      <lt>Transakcijos ID</lt>
+    </i>
+    <i id="user_id">
+      <en>User ID</en>
+      <lt>Vartotojo ID</lt>
+    </i>
+    <i id="username">
+      <en>Username</en>
+      <lt>Vartotojo vardas</lt>
+    </i>
+    <i id="last">
+      <en>Last</en>
+      <lt>Paskutinis</lt>
+    </i>
+    <i id="undone">
+      <en>Undone</en>
+      <lt>Atšauktas</lt>
+    </i>
+    <i id="changestable">
+      <en>Diff</en>
+      <lt>Pokytis</lt>
+    </i>
+    <i id="change">
+      <en>Change</en>
+      <lt>Pokytis</lt>
+    </i>
+    <i id="changetrack_count">
+      <en>Change track count</en>
+      <lt>Pokyčių įrašų kiekis</lt>
+    </i>
+    <i id="action_type">
+      <en>Action type</en>
+      <lt>Veiksmo tipas</lt>
+    </i>
+    <i id="status">
+      <en>Status</en>
+      <lt>Būsena</lt>
+    </i>
+    <i id="context_obj_type">
+      <en>Context object type</en>
+      <lt>Konteksto objekto tipas</lt>
+    </i>
+    <i id="context_obj_id">
+      <en>Context object ID</en>
+      <lt>Konteksto objekto ID</lt>
+    </i>
+    <i id="field">
+      <en>Field</en>
+      <lt>Laukas</lt>
+    </i>
+    <i id="old">
+      <en>Old</en>
+      <lt>Sena</lt>
+    </i>
+    <i id="new">
+      <en>New</en>
+      <lt>Nauja</lt>
+    </i>
 	    
   </i>
   <i id="FIELD_NOTE">
@@ -171,6 +315,16 @@
         <i id="info">
           <i id="model">GW_Change_Track</i>
           <i id="iconclass">fa fa-pencil</i>
+        </i>
+      </i>
+      <i id="changetransactions">
+        <i id="title">
+          <en>Change Transactions</en>
+          <lt>Pokyčių grupės</lt>
+        </i>
+        <i id="info">
+          <i id="model">GW_Change_Transaction</i>
+          <i id="iconclass">fa fa-sitemap</i>
         </i>
       </i>
       <i id="sms">

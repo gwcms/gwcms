@@ -34,7 +34,7 @@
 		<tr><th>{GW::ln('/M/orders/PAYMENT_RECEIVER')}</th><td>{GW::ln('/g/CONTACTS_COMPANY_NAME')}</td></tr>
 		<tr><th>{GW::ln('/M/orders/COMPANY_ID')}</th><td> {GW::ln('/g/CONTACTS_COMPANY_ID')}</td></tr>
                 <tr><th>{GW::ln('/m/PAYMENT_BANKTRANSFER_DETAILS')}</th><td> {GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')}{$item->id} </td></tr>
-		<tr><th>{GW::ln('/m/PAYMENT_PAY_PRICE')}</th><td> {$item->amount_total} Eur </td></tr>
+		<tr><th>{GW::ln('/m/PAYMENT_PAY_PRICE')}</th><td> {if $item->balance_amount > 0 && $item->payd_amount > 0}{$item->balance_amount}{else}{$item->amount_total}{/if} Eur </td></tr>
 		{*<tr><th>{GW::ln('/M/orders/COMPANY_ADDRESS')}</th><td> {GW::ln('/g/CONTACTS_ADDRESS')}</td></tr>*}
 		{if GW::ln('/g/CONTACTS_IBAN') !='&nbsp;'}<tr><th>{GW::ln('/M/orders/IBAN')}</th><td> 
 					{GW::ln('/g/CONTACTS_IBAN')} 

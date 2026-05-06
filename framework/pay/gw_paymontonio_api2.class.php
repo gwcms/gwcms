@@ -75,36 +75,51 @@ class GW_PayMontonio_Api2
 		$this->getAccess();
 	}
 	
-	function request($url)
+	function getApiBase()
 	{
-
-    
+		return $this->sandbox
+			? 'https://sandbox-stargate.montonio.com/api'
+			: 'https://stargate.montonio.com/api';
+	}
+	
+	function request($url, $method='GET', $body=null, $auth=true)
+	{
+		if(strpos($url, 'http') !== 0){
+			$url = rtrim($this->getApiBase(), '/').'/'.ltrim($url, '/');
+		}
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		    'Content-Type: application/json',
-		    "Authorization: Bearer {$this->access_token}"
-		]);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
+		
+		$headers = ['Content-Type: application/json'];
+		
+		if($auth){
+			$headers[] = "Authorization: Bearer {$this->access_token}";
+		}
+		
+		if($body !== null){
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+		}
+		
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		$result = curl_exec($ch);
 		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$error = curl_error($ch);
+		$errno = curl_errno($ch);
 		curl_close($ch);
 
-		//d::dumpas(['url'=>$url, 'access_token'=>$this->access_token, 'response_status'=>$status ]);
+		if ($errno) {
+			throw new Exception("Montonio cURL error: $error");
+		}
 		
 		if ($status >= 400) {
-		    var_dump($result);
-		    // "{"statusCode":401,"message":"STORE_NOT_FOUND","error":"Unauthorized"}"
-		    exit;
+			throw new Exception("Montonio API error HTTP $status: ".$result);
 		}
 
-		
-		// 4. Decode the list of enabled payment methods
-		$data = $result;
-		//$data = json_decode($result, true);
-		return $data;
+		return $result;
 	}
 	
 	function rootConfirmJson($array)
@@ -123,11 +138,29 @@ class GW_PayMontonio_Api2
 	
 	function getBanks()
 	{
-		$resp = $this->request('https://stargate.montonio.com/api/stores/payment-methods');
+		$resp = $this->request('/stores/payment-methods');
 		
 	
 		return json_decode($resp);
 
+	}
+	
+	function createRefund($order_uuid, $amount, $refund_reference)
+	{
+		$idempotency_key = (string)$refund_reference;
+		
+		$payload = [
+			'accessKey' => $this->access_key,
+			'orderUuid' => $order_uuid,
+			'amount' => round((float)$amount, 2),
+			'refundReference' => $refund_reference,
+			'idempotencyKey' => substr($idempotency_key, 0, 250),
+			'exp' => time() + (10 * 60),
+		];
+		
+		$token = \Firebase\JWT\JWT::encode($payload, $this->secret_key, 'HS256');
+		
+		return json_decode($this->request('/refunds', 'POST', ['data' => $token]));
 	}
 	
 	
@@ -165,7 +198,7 @@ class GW_PayMontonio_Api2
 
 		// 4. Send the token to the API
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "https://stargate.montonio.com/api/orders");
+		curl_setopt($ch, CURLOPT_URL, $this->getApiBase()."/orders");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
@@ -176,12 +209,16 @@ class GW_PayMontonio_Api2
 		]);
 		$result = curl_exec($ch);
 		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$error = curl_error($ch);
+		$errno = curl_errno($ch);
 		curl_close($ch);
 
+		if($errno){
+			throw new Exception("Montonio cURL error: ".$error);
+		}
+
 		if ($status >= 400) {
-		    var_dump($result);
-		    // "{"statusCode":401,"message":"STORE_NOT_FOUND","error":"Unauthorized"}"
-		    exit;
+			throw new Exception("Montonio API error HTTP $status: ".$result);
 		}
 
 		// 5. Get the payment URL
@@ -194,10 +231,6 @@ class GW_PayMontonio_Api2
 	
 
 }
-
-
-
-
 
 
 

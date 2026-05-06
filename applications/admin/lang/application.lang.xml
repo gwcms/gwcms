@@ -424,6 +424,7 @@
     <i id="doFillSeries">Užpildyti serija</i>
     <i id="doCopyColValues">Stulpelio vertės</i>
     <i id="doExportListAsSheet">Eksportuoti į xlsx</i>
+    <i id="doSendListEmail">Siųsti sąrašą el. paštu</i>
   </i>
   <i id="NO_ITEMS">
     <en>No items</en>

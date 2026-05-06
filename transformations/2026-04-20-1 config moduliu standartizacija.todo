@@ -1,0 +1,42 @@
+Tikslas
+- Suvienodinti admin `module_config` ir config-like modulių veikimą per bendrą bazę.
+
+Kryptis
+- Naudoti `GW_Module_Config_Common`
+- Mažinti pasikartojantį `viewDefault()/doSave()/array->json/save success` kodą
+- Vienodai integruoti config changetrack
+
+Apimtis
+- `module_config.class.php` moduliai
+- config-like moduliai, pvz. `system/demoinputs`, `datasources/itax`, `payments/delivery`
+- bendras config history UI per `datasources/config`
+
+Rezultatas
+- Nauji ar tvarkomi config moduliai pagal nutylėjimą turi remtis `GW_Module_Config_Common`
+- Specialūs moduliai turi override'inti tik hookus arba specifinius flow
+
+Kada extendinti `GW_Module_Config_Common`
+- Kai modulis iš esmės yra config redagavimo modulis ir pagrindinis jo `viewDefault()` tik rodo `GW_Config`
+- Kai modulis turi standartinį `doSave()` srautą: paimti `$_REQUEST['item']`, normalizuoti reikšmes, išsaugoti, parodyti success žinutę, `jump()`
+- Kai reikia vienodai veikiančio config changetrack be papildomo rankinio kodo
+
+Kada neextendinti, o naudoti tik helperius
+- Kai modulis nėra config modulis, bet turi atskirą config sub-view, pvz. `viewConfig()/doSaveConfig()`
+- Kai pagrindinis modulis dirba su kitais modeliais, sąrašais ar veiksmų srautais, o `GW_Config` ten tik šalutinis nustatymų sluoksnis
+- Tokiu atveju pakanka naudoti `initConfigChangeTrack($cfg)` ir `saveConfigTracked($cfg, $vals)` esamame modulyje
+
+Tipiniai override taškai
+- `getConfigViewItem()` kai formai reikia ne tiesioginio `GW_Config`, o transformuoto item
+- `normalizeConfigValues(&$vals)` kai dalį laukų reikia specialiai perdirbti prieš save
+- `beforeConfigSave(&$vals)` ir `afterConfigSave(&$vals)` kai modulis turi savo eventus ar side-effectus
+- `notifyConfigSaveSuccess()` kai reikia kitokios success žinutės ar kito pranešimo API
+
+Scaffold kryptis
+- Jei naujas submodulis yra config tipo, scaffold apraše galima naudoti `config_common: 1`
+- Tokiu atveju controlleris generuojamas iš `GW_Module_Config_Common` šablono
+- Tai skirta naujiems ar standartizuojamiems config moduliams, kad nereikėtų vėl kurti rankinio `doSave/viewDefault`
+
+Baigtumo kriterijai
+- Didžioji dalis config modulių nebeturi rankinio bendro `doSave`
+- Config history veikia vienodai
+- Naujiems projektams yra aiškus migracijos receptas

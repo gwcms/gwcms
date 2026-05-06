@@ -37,6 +37,14 @@ class GW_Temp_Data extends GW_Data_Object
 	{
 		return $this->find(GW_DB::buidConditions(['user_id' => $user_id, 'group' => $group, 'name' => $name]));
 	}
+	
+	function readAndDelete($user_id, $group, $name)
+	{
+		$tmp=$this->readValue($user_id, $group, $name);
+		$cond = GW_DB::prepare_query(GW_DB::buidConditions(['user_id' => $user_id, 'group' => $group, 'name' => $name]));
+		$this->getDB()->query("DELETE FROM `$this->table` WHERE ".$cond);
+		return $tmp;
+	}
 
 	function readValue($user_id, $group, $name, &$expires=false)
 	{

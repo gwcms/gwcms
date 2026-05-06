@@ -52,8 +52,21 @@
 .bootstrap-select .btn { padding: 6px 12px 6px 12px }
 
 .cols_deactivated{ max-height:150px; overflow-y: auto; }
+.field-short-label{ color:#8a5a2b; font-style:italic; }
+.field-id-label{ color:#d2691e; display:none; }
 
 </style>
+
+{function name=field_title id=""}
+	{$long_title=$m->fieldTitle($id)}
+	{$short_title=strip_tags($m->shortFieldTitle($id))}
+	{$long_title_plain=strip_tags($long_title)}
+	{$long_title}
+	{if $short_title && $short_title != $long_title_plain}
+		<span class="field-short-label">({$short_title})</span>
+	{/if}
+	<span class="field-id-label">[{$id}]</span>
+{/function}
 
 
 
@@ -71,7 +84,7 @@
 		<li>
 			<input type="checkbox" {if $enabled}checked{/if} />
 			<input type="hidden" name="fields[{$id}]" value="{intval($enabled)}">
-			<span>{$m->fieldTitle($id)}</span>
+			<span>{field_title id=$id}</span>
 		</li>
 	{/foreach}
 </ul>
@@ -97,7 +110,7 @@
 					
 				</a>
 			</span>
-			<span>{$m->fieldTitle($id)}</span>
+			<span>{field_title id=$id}</span>
 			
 		</li>
 	{/foreach}
@@ -266,6 +279,16 @@ require(["gwcms"], function(){
 		$('#submitbtn').html(this.value ? $('#submitbtn').data('save') : $('#submitbtn').data('apply'))
 		$('#submitbtn').removeClass('btn-primary').removeClass('btn-warning').addClass(this.value ? 'btn-primary' : 'btn-warning')
 	}).change();
+
+	$(document).on('keydown keyup', function(e){
+		if(e.key === 'Shift'){
+			$('.field-id-label').toggle(e.type === 'keydown');
+		}
+	});
+
+	$(window).on('blur', function(){
+		$('.field-id-label').hide();
+	});
 
 });
 </script>

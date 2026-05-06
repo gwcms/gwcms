@@ -44,15 +44,84 @@ class Module_Payments_Montonio extends GW_Common_Module
 		return $opts;	
 	}	
 	
+	function montonioCfg()
+	{
+		$this->modconfig->preload('');
+		return (object)$this->modconfig->exportLoadedValsNoPrefix();
+	}
+	
+	function checkSellerCfg($order, &$cfg)
+	{
+		if($order->seller_id){
+			list($access_key, $secret_key) = explode('|', $order->seller->get('keyval/montonio_config'));
+			$cfg = (object)['access_key'=>$access_key, 'secret_key'=>$secret_key, 'sandbox'=>0];
+		}
+	}
 
 	
 	function doRefund()
 	{
-		
 		$paylog =  $this->getDataObjectById();
-		d::dumpas($paylog);
+		$order = $paylog->order;
 		
-		d::dumpas($response);
+		if(!$order){
+			$this->setError('Order not found for selected Montonio log');
+			$this->jump();
+		}
+		
+		$payinfo = $paylog->data_array ?: [];
+		$order_uuid = $payinfo['uuid'] ?? false;
+		
+		if(!$order_uuid){
+			$this->setError('Montonio order UUID not found in payment log');
+			$this->jump();
+		}
+		
+		if((int)$order->payment_status === 9 && (int)$order->status === 9){
+			$this->setError('Order already refunded');
+			$this->jump();
+		}
+		
+		$cfg = $this->montonioCfg();
+		$this->checkSellerCfg($order, $cfg);
+		
+		$api = new GW_PayMontonio_Api2($cfg);
+		$refund_amount = (float)($paylog->received_amount ?: $order->amount_total);
+		$refund_reference = 'refund-'.$order->id.'-'.$paylog->id.'-'.date('YmdHis');
+		
+		try{
+			$response = $api->createRefund($order_uuid, $refund_amount, $refund_reference);
+		}catch(Exception $e){
+			$this->setError($e->getMessage());
+			$this->jump();
+		}
+		
+		$comment = "Refunded via Montonio on ".date('Y-m-d H:i:s')
+			."\nAmount: ".number_format($refund_amount, 2, '.', '')." EUR"
+			."\nUUID: ".$order_uuid
+			."\nRefund reference: ".$refund_reference
+			."\nDetails: ".json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+		
+		$order->fireEvent('BEFORE_CHANGES');
+		$order->set('extra/refund/requested_at', date('Y-m-d H:i:s'));
+		$order->set('extra/refund/amount', $refund_amount);
+		$order->set('extra/refund/refund_reference', $refund_reference);
+		$order->set('extra/refund/uuid', $order_uuid);
+		$order->set('extra/refund/api_response', $response);
+		$order->set('extra/refund/pending_comment', $comment);
+		$order->updateChanged();
+		
+		$url = Navigator::backgroundRequest('admin/'.$this->app->ln.'/payments/ordergroups?'.http_build_query([
+			'id' => $order->id,
+			'act' => 'doMarkAsRefundSystem',
+			'sys_call' => 1,
+			'refund_amount' => $refund_amount,
+			'refund_reference' => $refund_reference,
+			'refund_uuid' => $order_uuid,
+		]));
+		
+		$this->setMessage("Refund started for order #{$order->id}. Bg call: ".$url);
+		$this->jumpAfterSave();
 	}
 	
 	function doUpdate()

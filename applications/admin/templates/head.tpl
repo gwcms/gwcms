@@ -101,8 +101,8 @@
 	<script src="{$app_root}static/js/require_config.js"></script>
 	
 	{$vapidpublic=GW_Config::singleton()->get('sys/VAPID_PUBLIC_KEY')}
-	{if $vapidpublic && $app->user && $app->user->isRoot()}
-		<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js"></script>
+	{if $vapidpublic && $app->user}
+		<script type="text/javascript" src="{$app_root}static/js/set_sw_notifications.js?v={GW::globals(version_short)}"></script>
 		{$vapidpublic=explode("\n",$vapidpublic)}
 		{$vapidpublic=trim($vapidpublic.0)}
 	{/if}
@@ -121,7 +121,10 @@
 				server_time:'{date("F d, Y H:i:s")}',
 				wss:{if GW::s('WSS/USER')}true{else}false{/if},
 				vapid:{if $vapidpublic}'{$vapidpublic}'{else}false{/if},
-				user_id: {if $app->user}{$app->user->id}{else}0{/if}
+				user_id: {if $app->user}{$app->user->id}{else}0{/if},
+				multisite: {if GW::s('MULTISITE')}true{else}false{/if},
+				push_main_host: '{GW::s('MAIN_HOST')}',
+				push_main_host_manage_url: '{if GW::s('MAIN_HOST')}https://{GW::s('MAIN_HOST')}/admin/{$app->ln}/users/userspushsubscriptions/managemysubscriptions{/if}'
 			});
 			gw_adm_sys.init();
 		});
@@ -140,4 +143,3 @@
     
 </head>
 	
-

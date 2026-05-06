@@ -24,7 +24,7 @@
 			</td></tr>
 		{/if}
 		<tr><th>{GW::ln('/m/PAYMENT_BANKTRANSFER_DETAILS')}</th><td> {GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')}{$item->id} </td></tr>
-		<tr><th>{GW::ln('/m/PAYMENT_PAY_PRICE')}</th><td> {$item->amount_total} Eur </td></tr>
+		<tr><th>{GW::ln('/m/PAYMENT_PAY_PRICE')}</th><td> {if $item->balance_amount > 0 && $item->payd_amount > 0}{$item->balance_amount}{else}{$item->amount_total}{/if} Eur </td></tr>
 		</table>
 	</div>
 	

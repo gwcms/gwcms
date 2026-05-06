@@ -83,18 +83,23 @@ class GW_Application
 	}
 	
 	function initSite()
-	{
+	{		
 		if(GW::s('MULTISITE') && isset($_SERVER["HTTP_HOST"]))
 		{		
-			
+			/*
 			if($this->sess('DEBUG_SITE_ID')){
 			
 				$this->site = GW_Site::singleton()->find($this->sess('DEBUG_SITE_ID'));	
 				return true;
 			}
+			 * 
+			 */
+			$host = $_SERVER["HTTP_HOST"];
+			$host = str_replace('.localhost','', $host);
+			$host = str_replace('.1.voro.lt','', $host);
+
 			
-			
-			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $_SERVER["HTTP_HOST"]]);
+			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $host ]);
 			
 			if($tmp)
 			{
@@ -363,10 +368,12 @@ class GW_Application
 		
 		$this->requestInfo();	
 		
-		$this->initAuth();
 		
 		$this->initLang();
+		$this->initAuth();
 			
+	
+
 	
 
 		$this->getPage();
@@ -389,6 +396,8 @@ class GW_Application
 	function buildUri($path = false, $getparams = Array(), $params = [])
 	{
 		$ln = isset($params['ln']) ? $params['ln'] : $this->ln;
+		
+		//d::dumpas($ln);
 
 		unset($getparams['url']);
 
@@ -416,6 +425,73 @@ class GW_Application
 			$ln .
 			($path ? '/' : '') . $path .
 			($getparams ? '?' . http_build_query($getparams) : '');
+	}
+
+	function getEnvironmentSwitcherData()
+	{
+		if (!$this->user)
+			return [];
+
+		$host = (string)($_SERVER['HTTP_HOST'] ?? '');
+		if ($host === '')
+			return [];
+
+		$host = preg_replace('/:\d+$/', '', $host);
+		$domain = preg_replace('/\.localhost$/', '', $host);
+		$domain = preg_replace('/\.1\.voro\.lt$/', '', $domain);
+
+		if ($domain === '')
+			return [];
+
+		$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+		$currentEnv = (int)GW::s('PROJECT_ENVIRONMENT');
+		$items = [
+			GW_ENV_PROD => [
+				'key' => 'PROD',
+				'title' => 'PROD',
+				'url' => 'https://' . $domain . $requestUri,
+				'enabled' => true,
+			],
+		];
+
+		if (GW::s('ENV_SWITCHER/TEST_ENABLED') !== false) {
+			$items[GW_ENV_TEST] = [
+				'key' => 'TEST',
+				'title' => 'TEST',
+				'url' => 'https://' . $domain . '.1.voro.lt' . $requestUri,
+				'enabled' => true,
+			];
+		}
+
+		if ((int)$this->user->id === 9) {
+			$items[GW_ENV_DEV] = [
+				'key' => 'DEV',
+				'title' => 'DEV',
+				'url' => 'http://' . $domain . '.localhost' . $requestUri,
+				'enabled' => true,
+			];
+		}
+
+		$order = [GW_ENV_DEV, GW_ENV_TEST, GW_ENV_PROD];
+		$ordered = [];
+		foreach ($order as $envId) {
+			if (isset($items[$envId]))
+				$ordered[$envId] = $items[$envId] + ['active' => $currentEnv === $envId];
+		}
+
+		$currentKey = 'ENV ' . $currentEnv;
+		if ($currentEnv === GW_ENV_DEV)
+			$currentKey = 'DEV';
+		elseif ($currentEnv === GW_ENV_TEST)
+			$currentKey = 'TEST';
+		elseif ($currentEnv === GW_ENV_PROD)
+			$currentKey = 'PROD';
+
+		return [
+			'current' => $currentKey,
+			'domain' => $domain,
+			'items' => $ordered,
+		];
 	}
 
 	/**
@@ -653,6 +729,56 @@ class GW_Application
 		return $module;
 	}
 
+	function constructModuleByPath($path, $opts=[])
+	{
+		$orig = [
+			'path' => $this->path,
+			'path_arr' => $this->path_arr,
+			'path_arr_parent' => $this->path_arr_parent,
+			'path_clean' => $this->path_clean,
+			'module' => $this->module ?? null,
+			'get_id' => $_GET['id'] ?? null,
+		];
+
+		try{
+			$pack = $this->requestInfoInner(explode('/', $path));
+			$this->path = $pack['path'];
+			$this->path_arr = $pack['path_arr'];
+			$this->path_arr_parent = $pack['path_arr_parent'];
+			$this->path_clean = $pack['path_clean'];
+
+			if(isset($pack['data_object_id']) && $pack['data_object_id'])
+				$_GET['id'] = $pack['data_object_id'];
+			else
+				unset($_GET['id']);
+
+			$path_info = $this->getModulePathInfo($path);
+			if(!isset($path_info['module']))
+				return false;
+
+			$module = $this->constructModule1($path_info);
+			$module->_args = [
+				'params' => $path_info['params'] ?? [],
+				'request_params' => $opts['request_params'] ?? [],
+			];
+			$module->access_level = $opts['access_level'] ?? false;
+			$module->init();
+
+			return $module;
+		}finally{
+			$this->path = $orig['path'];
+			$this->path_arr = $orig['path_arr'];
+			$this->path_arr_parent = $orig['path_arr_parent'];
+			$this->path_clean = $orig['path_clean'];
+			$this->module = $orig['module'];
+
+			if($orig['get_id'] !== null)
+				$_GET['id'] = $orig['get_id'];
+			else
+				unset($_GET['id']);
+		}
+	}
+
 	function processModule($path_info, $request_params, $access_level=false)
 	{
 		if (!isset($path_info['module']))// pvz yra users katalogas bet nera module_users.class.php, gal vidiniu moduliu tada yra
@@ -686,6 +812,8 @@ class GW_Application
 
 	function innerProcess($path)
 	{
+		$prevLangModule = GW_Lang::$module ?? null;
+		$prevModule = $this->module ?? null;
 		$path_e = explode('?', $path, 2);
 
 		if (count($path_e) > 1) {
@@ -695,7 +823,12 @@ class GW_Application
 
 		$path_info = $this->getModulePathInfo($path);
 		
-		return $this->processModule($path_info, $request_args);
+		try {
+			return $this->processModule($path_info, $request_args);
+		} finally {
+			GW_Lang::$module = $prevLangModule;
+			$this->module = $prevModule;
+		}
 	}
 	
 	
@@ -895,10 +1028,24 @@ class GW_Application
 			$params['app'] = $reqopts['app'];
 		}
 		
+		if(isset($reqopts['ln'])){
+			$params['ln'] = $reqopts['ln'];
+		}
 		
-		if($reqopts['user'] ?? false){
-			$token = GW::getInstance('gw_temp_access')->getToken($reqopts['user']);
-			$get_args['temp_access'] = $reqopts['user'] . ',' . $token;	
+		// Conclusion:
+		// Internal HTTP calls may hit bot/human verification before normal auth/bootstrap
+		// finishes, so GWSESSID alone is not a reliable bypass marker. innerRequest()
+		// therefore must attach temp_access not only when caller explicitly passes
+		// reqopts['user'], but also by default for the current logged-in user. This
+		// keeps old call sites working and prevents forgetting temp_access on future
+		// cross-app/internal requests.
+		$temp_access_user_id = (int)($reqopts['user'] ?? 0);
+		if(!$temp_access_user_id && !empty($this->user->id))
+			$temp_access_user_id = (int)$this->user->id;
+		
+		if($temp_access_user_id){
+			$token = GW::getInstance('gw_temp_access')->getToken($temp_access_user_id);
+			$get_args['temp_access'] = $temp_access_user_id . ',' . $token;	
 		}
 		
 		if (GW::s('APP_BACKGROUND_REQ_TYPE') == 'localhost_base') {

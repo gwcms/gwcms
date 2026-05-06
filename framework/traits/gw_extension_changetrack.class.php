@@ -3,6 +3,7 @@
 class GW_Extension_ChangeTrack
 {
 	private $parent;
+	public $transaction_id = null;
 	
 	function __construct($parent, $name)
 	{
@@ -29,6 +30,9 @@ class GW_Extension_ChangeTrack
 			break;
 		
 			case 'BEFORE_DELETE':
+				if($this->parent->preserve_changetrack_on_delete ?? false)
+					break;
+				
 				$items = GW_Change_Track::singleton()->findAll(['owner_id=? AND owner_type=?',$this->parent->id, $this->parent->ownerkey]);
 				foreach($items as $item)
 				{
@@ -173,13 +177,36 @@ class GW_Extension_ChangeTrack
 		if($this->track_started)
 			return false;
 		
+		$ctx = $this->normalizeTrackContext($note);
+		
 		$this->parent->copyOriginal();
 		$this->additional_changes = [];
 		$this->track_started = true;
-		$this->note=$note;
+		$this->note = $ctx['note'];
+		$this->transaction_id = $ctx['transaction_id'];
 	}
 	
 	public $additional_changes=[];
+	
+	protected function normalizeTrackContext($context)
+	{
+		$result = [
+			'note' => null,
+			'transaction_id' => null,
+		];
+		
+		if(is_array($context)){
+			$result['note'] = $context['note'] ?? null;
+			$result['transaction_id'] = $context['transaction_id'] ?? null;
+			return $result;
+		}
+		
+		if($context !== false && $context !== null && $context !== []){
+			$result['note'] = $context;
+		}
+		
+		return $result;
+	}
 	
 
 	
@@ -274,8 +301,13 @@ class GW_Extension_ChangeTrack
 				'last'=>1
 			];
 			
+			
+			
 			if($this->note)
 				$vals['note'] = $this->note;			
+			
+			if($this->transaction_id)
+				$vals['transaction_id'] = $this->transaction_id;
 			
 			if($diff)
 				$vals['diff'] = $diff;
@@ -283,10 +315,13 @@ class GW_Extension_ChangeTrack
 			$itm->setValues($vals);
 			
 			$itm->insert();
+			$this->last_change_track_id=$itm->id;
 		}
 		
 		//resetchanges
 		$this->track_started = false;
+		$this->note = null;
+		$this->transaction_id = null;
 		$this->trackChangesStart();
 	}
 	

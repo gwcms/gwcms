@@ -62,9 +62,9 @@ class GW_Page extends GW_i18n_Data_Object
 		while($path && strlen($path) > 0)
 		{
 			$ms_cnd = GW::s('MULTISITE') ? " AND (site_id=".(int)$siteid." OR multisite>0)" :'';
-			
-			if($tmp = $item0->find(["path=? $ms_cnd",$path]))
-			return $tmp;
+			$tmp = $item0->find(["path=? $ms_cnd",$path]);
+			if($tmp)
+				return $tmp;
 
 			if(!$check_parent)
 				return false;

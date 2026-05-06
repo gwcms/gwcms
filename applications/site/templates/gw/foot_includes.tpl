@@ -19,6 +19,7 @@
 		       pageid: "{$app->page->id}",
 		       pagepid: "{$app->page->parent_id}",
 		       assets_root: "{$assets}"
+			{if $app->site},site_id: "{$app->site->id}"{/if}
 	       {foreach $js_vars as $key => $val}
 		       , {$key}: "{addslashes($val)}"
 	       {/foreach}		       

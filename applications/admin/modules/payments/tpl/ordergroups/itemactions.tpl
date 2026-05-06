@@ -4,6 +4,9 @@
 
 	{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id]] iconclass="fa fa-file-o" caption=GW::l('/m/VIEWS/invoice')}
 	{list_item_action_m url=["`$item->id`/preinvoice", [id=>$item->id]] iconclass="fa fa-file-o" caption=GW::l('/m/VIEWS/preinvoice')}
+	{list_item_action_m href=$app->buildUri("payments/ordergroups/`$item->id`/orderledger",[clean=>2,order_id=>$item->id,filters=>[order_id=>$item->id]]) iconclass="fa fa-list-alt" action_addclass="iframe-under-tr" caption="Order ledger"}
+	{list_item_action_m href=$app->buildUri("datasources/changetransactions",[order_id=>$item->id,clean=>2]) iconclass="fa fa-sitemap" action_addclass="iframe-under-tr" caption=GW::l('/M/datasources/MAP/childs/changetransactions/title')|cat:" (`$item->change_transactions_count`)"}
+	{list_item_action_m url=[false,[act=>doRecalcOrderPayments,id=>$item->id]] iconclass="fa fa-refresh" caption=GW::l('/m/VIEWS/doRecalcOrderPayments')}
 
 	
 	{if $m->write_permission}
@@ -12,9 +15,17 @@
 			{list_item_action_m 
 				url=[false,[act=>doMarkAsPayd,id=>$item->id]] 
 				iconclass="fa fa-legal text-danger" 
-				query_param=[rcv_amount,GW::l('/m/ENTER_EXACT_RECEIVED_AMOUNT')]
 				caption=GW::l('/m/VIEWS/doMarkAsPayd')
 
+			}
+		{/if}
+		
+		{if $item->payment_status == 7}
+			{list_item_action_m 
+				url=[false,[act=>doMarkAsRefund,id=>$item->id]]
+				iconclass="fa fa-undo text-warning"
+				confirm=1
+				caption="Pažymėti kaip grąžintą"
 			}
 		{/if}
 
@@ -22,10 +33,10 @@
 		{list_item_action_m url=[false,[act=>doOrderPaydNotifyUser,id=>$item->id,preview=>1]] iconclass="fa fa-cog"  caption="Preview/Send confirmation email"}
 	{/if}
 
-	{if $app->user->isRoot()}
-		{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id,html=>1]] iconclass="fa fa-file-o text-danger" caption="{GW::l('/m/VIEWS/invoice')} - html (root)"}
+	{if $app->user->isRoot() || GW::s('PROJECT_ENVIRONMENT') == $smarty.const.GW_ENV_DEV}
+		{list_item_action_m url=["`$item->id`/invoice", [id=>$item->id,html=>1]] iconclass="fa fa-file-o text-danger" caption="{GW::l('/m/VIEWS/invoice')} - html (dev/root)"}
 		{if $m->write_permission}
-			{list_item_action_m url=[false,[act=>doSaveInvoice,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Gen. invoice vars(root)"}
+			{list_item_action_m url=[false,[act=>doSaveInvoice,id=>$item->id]] iconclass="fa fa-cog text-danger"  caption="Gen. invoice vars(dev/root)"}
 		{/if}
 	{/if}
 

@@ -1,10 +1,8 @@
 <?php
 
 
-class Module_Config extends GW_Common_Module
+class Module_Config extends GW_Module_Config_Common
 {	
-	public $default_view = 'default';
-	
 	public $options=[];
 	
 	function init()
@@ -24,34 +22,6 @@ class Module_Config extends GW_Common_Module
 			$this->addRedirRule('/^doItax|^viewItax/i','itax');
 			$this->addRedirRule('events','itax');
 		}		
-	}
-	
-	function viewDefault()
-	{
-				
-		return ['item'=>$this->model];
-		
-	}	
-	
-	function doSave()
-	{
-		$vals = $_REQUEST['item'];
-		
-		foreach($vals as $key => $val)
-			if(is_array($val))
-				$vals[$key] = json_encode($val);
-			
-			
-		$this->fireEvent("BEFORE_SAVE", $vals);
-		
-		$this->model->setValues($vals);
-		
-		$this->fireEvent("AFTER_SAVE", $this->model);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setPlainMessage('/g/SAVE_SUCCESS');
-		//$this->__afterSave($vals);
-		$this->jump();
 	}
 	
 	function doCronRun()

@@ -17,12 +17,12 @@
 ]
 }
 
-{if $item->gateway==montonio || $item->gateway==paysera}	
+{if ($item->gateway==montonio || $item->gateway==paysera) && $item->id}	
 	{$fields.gateway.readonly=1}	
 	{$fields.country.readonly=1}	
 	{$fields.key.readonly=1}	
 	{$fields.group.readonly=1}	
-	{$fields.title.readonly=1}	
+	{*$fields.title.readonly=1*}	
 	{$fields.logo.readonly=1}	
 	{$fields.min_amount.readonly=1}	
 	{$fields.max_amount.readonly=1}	

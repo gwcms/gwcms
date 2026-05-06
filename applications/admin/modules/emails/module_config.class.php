@@ -1,9 +1,7 @@
 <?php
 
-class Module_Config extends GW_Common_Module
+class Module_Config extends GW_Module_Config_Common
 {	
-	public $default_view = 'default';	
-	
 	function init()
 	{
 		$this->model = new GW_Config($this->module_path[0].'/');
@@ -12,9 +10,9 @@ class Module_Config extends GW_Common_Module
 	}
 
 	
-	function viewDefault()
+	protected function notifyConfigSaveSuccess()
 	{
-		return ['item'=>$this->model];
+		$this->setPlainMessage('/g/SAVE_SUCCESS');
 	}
 	
 	
@@ -25,10 +23,9 @@ class Module_Config extends GW_Common_Module
 	{
 		$vals = $_REQUEST['item'];
 		
-		$this->model->setValues($vals);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setPlainMessage('/g/SAVE_SUCCESS');
+		$this->normalizeConfigValues($vals);
+		$this->persistConfigValues($vals);
+		$this->notifyConfigSaveSuccess();
 		
 		if($_POST['submit_type']=='testemail')
 		{

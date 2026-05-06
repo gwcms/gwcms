@@ -26,6 +26,9 @@ class Module_Public_Options extends GW_Module_Extension
 					
 					
 				}
+				
+				
+				
 				if($joins=$this->model->findJoinsForFields($opts['search_fields'])){
 					$params['joins'] = $joins;
 				}
@@ -37,8 +40,12 @@ class Module_Public_Options extends GW_Module_Extension
 				$simplecond = ($opts['search_field'] ?? $this->options_search_field)." LIKE $search";
 			}
 			
+			$cond = '('.implode(' OR ', $condarr).')';
 			
-			$cond = $opts['condition'] ?? (isset($i0->i18n_fields['title']) ? $i0->buildFieldCond('title',$search) :  $simplecond);
+			if($opts['condition'] ?? false){
+				$cond = GW_DB::mergeConditions($opts['condition'], $cond);
+			}	
+			
 			
 
 		}elseif(isset($_REQUEST['ids'])){
@@ -69,6 +76,8 @@ class Module_Public_Options extends GW_Module_Extension
 		if($opts['order'] ?? false)		
 			$params['order'] = $opts['order'];
 		
+		
+
 		$list0 = $i0->findAll($cond ?? '', $params);
 	
 		if(isset($_GET['verbose'])){

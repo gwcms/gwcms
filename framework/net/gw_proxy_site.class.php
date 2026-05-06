@@ -38,7 +38,7 @@ class GW_Proxy_Site {
 			$site = trim($mirrorhost,'/');
 		}else{
 			$remoteDomain = $mirrorhost;
-			$site = "http://$mirrorhost";
+			$site = "https://$mirrorhost";
 		}
 		//d::dumpas([$remoteDomain, $site]);
 		//$remoteDomain = "test1.voro.lt:2080";

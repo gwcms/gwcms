@@ -197,6 +197,10 @@
       <lt>Data,laikas</lt>
       <en>Date, time</en>
     </i>
+    <i id="repository">
+      <lt>Failo parinkimas iš failų saugyklps</lt>
+      <en>File picker from repository</en>
+    </i>
 		<i id="icon">Ikonėlė</i>
 		<i id="display_cond">Rodymo sąlyga</i>
 		<i id="display_badge">Skaitliukas / ženklelis</i>

@@ -284,7 +284,14 @@ var gw_adm_sys = {
 	{
 		$('.setListParams').on('submit', function(){
 			var args = {act:'doSetListParams' }
-			args[$(this).attr('name')] = $(this).val()
+			var value = $(this).val();
+			
+			if(typeof value === 'string'){
+				value = $.trim(value);
+				$(this).val(value);
+			}
+			
+			args[$(this).attr('name')] = value
 			gw_navigator.jump(false, args)
 		}).keypress(function(e){
 			var keyCode = e.keyCode || e.which;
@@ -1180,11 +1187,51 @@ var gwcms = {
 			/* Clicks within the dropdown won't make
 			 it past the dropdown itself */
 
+			var adjustDropdownDirection = function($trigger){
+				var $group = $trigger.closest('.btn-group');
+				var $menu = $group.find('.dropdown-menu').first();
+				
+				if(!$group.length || !$menu.length)
+					return;
+				
+				$group.removeClass('dropup');
+				
+				var menuHeight = $menu.outerHeight();
+				
+				if(!menuHeight){
+					var $clone = $menu.clone()
+						.css({
+							display: 'block',
+							visibility: 'hidden',
+							position: 'absolute'
+						})
+						.appendTo('body');
+					
+					menuHeight = $clone.outerHeight();
+					$clone.remove();
+				}
+				
+				var rect = $trigger[0].getBoundingClientRect();
+				var viewportHeight = window.innerHeight || $(window).height();
+				var availableBelow = viewportHeight - rect.bottom;
+				var availableAbove = rect.top;
+				
+				if(availableBelow < menuHeight + 12 && availableAbove > availableBelow)
+					$group.addClass('dropup');
+			};
 
-			$('.gwcms-ajax-dd').click(function () {
+			$(document)
+				.off('show.bs.dropdown.gwcmsAction', '.gwcmsAction.btn-group')
+				.on('show.bs.dropdown.gwcmsAction', '.gwcmsAction.btn-group', function (e) {
+					adjustDropdownDirection($(this).find('[data-toggle="dropdown"]').first());
+				});
+
+			$('.gwcms-ajax-dd').off('click.gwcmsDropdown').on('click.gwcmsDropdown', function () {
 				
 				var drop = $(this).parents('.btn-group').find('.dropdown-menu');
-				var trigg = $(this)
+				var trigg = $(this);
+				
+				adjustDropdownDirection(trigg);
 		
 
 				if (trigg.data('isloaded') == 'loaded'){
@@ -1198,6 +1245,7 @@ var gwcms = {
 						//console.log('data loaded 1st time');
 						trigg.data('isloaded', 'loaded');
 						drop.html(data);
+						adjustDropdownDirection(trigg);
 						gw_adm_sys.initObjects();
 						trigg.dropdown();//fix
 					}
@@ -1783,9 +1831,11 @@ function initSearchReplace()
 
 $("body").keydown(function (event) {
 
+
 		//ctrl + 1 = pereiti i kita environmenta
 		if (event.which == 49 && event.ctrlKey) {
-			location.href = GW.app_base + GW.ln + '/system/tools?act=doSwitchEnvironment&uri='+encodeURIComponent(location.href)
+			var request_uri = location.pathname + location.search;
+			location.href = GW.app_base + GW.ln + '/system/tools?act=doSwitchEnvironment&site_id='+GW.site_id+'&uri='+encodeURIComponent(request_uri)
 			event.preventDefault();
 		}
 		

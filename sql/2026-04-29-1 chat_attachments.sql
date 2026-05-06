@@ -1,0 +1,23 @@
+CREATE TABLE `gw_chat_attachments` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `message_id` bigint NOT NULL DEFAULT '0',
+  `room_id` int NOT NULL DEFAULT '0',
+  `uploader_id` int NOT NULL DEFAULT '0',
+  `storage` enum('local','remote') NOT NULL DEFAULT 'local',
+  `kind` enum('image','file') NOT NULL DEFAULT 'file',
+  `original_filename` varchar(255) NOT NULL DEFAULT '',
+  `stored_filename` varchar(160) NOT NULL DEFAULT '',
+  `relpath` varchar(700) NOT NULL DEFAULT '',
+  `mime` varchar(160) NOT NULL DEFAULT '',
+  `size` int unsigned NOT NULL DEFAULT '0',
+  `public_url` varchar(1000) NOT NULL DEFAULT '',
+  `thumb_url` varchar(1000) NOT NULL DEFAULT '',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `insert_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `message_id` (`message_id`),
+  KEY `room_id_message_id` (`room_id`,`message_id`),
+  KEY `stored_filename` (`stored_filename`),
+  KEY `uploader_id` (`uploader_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

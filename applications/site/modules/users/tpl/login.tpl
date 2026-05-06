@@ -140,7 +140,7 @@
 {else}
 	
 	      <!-- Login -->
-      <section class="container g-pt-100 g-pb-20">
+      <section class="container">
         <div class="row justify-content-between">
           <div class="col-md-6 col-lg-5 order-lg-2 g-mb-80" style="float:none;margin:auto;">
             {call user_login_form}

@@ -903,7 +903,7 @@ class GW_Data_Object
 			return false;
 
 		$this->set($fieldname, (bool) $this->get($fieldname) ? 0 : 1);
-		$this->update(Array($fieldname));
+		$this->updateChanged(); // previously was updateing only one field, but thats might be issue if before_save other fileds will be adjusted accordiing active paramter
 
 		return true;
 	}
@@ -1413,7 +1413,11 @@ class GW_Data_Object
 		foreach($fields as $field){
 			if(strpos($field,'.')!==false){
 				
-				list($objname, $fld) = explode('.', $field);
+				list($objname, $fld) = explode('.', $field, 2);
+				
+				if($objname=='a' || !isset($this->composite_map[$objname][1]['object']) || !isset($this->composite_map[$objname][1]['relation_field']))
+					continue;
+				
 				$objname2  = $this->composite_map[$objname][1]['object'];
 				$relationf = $this->composite_map[$objname][1]['relation_field'];
 				$obj = $objname2::singleton();
@@ -1482,6 +1486,5 @@ class GW_Data_Object
 	
 	
 }
-
 
 

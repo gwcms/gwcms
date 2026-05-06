@@ -84,5 +84,33 @@ class Module_Config  extends GW_Common_Module
 		
 		return $cfg;
 	}
+	
+	function __eventAfterList(&$list)
+	{
+		$this->tpl_vars['change_track_cnt'] = GW_Config_Change_Track_Helper::prepareCountByPrefix('');
+	}
+	
+	function viewHistory()
+	{
+		$fullkey = $_GET['fullkey'];
+		$this->tpl_vars['fullkey'] = $fullkey;
+		$this->tpl_vars['headversion'] = GW_Config::singleton()->get($fullkey);
+		$this->tpl_vars['changes'] = GW_Config_Change_Track_Helper::getChangesByFullKey($fullkey);
+		$this->default_tpl_file_name = $this->module_dir . 'tpl/config/history';
+	}
+	
+	function viewVersion()
+	{
+		$fullkey = $_GET['fullkey'];
+		$this->tpl_vars['fullkey'] = $fullkey;
+		$this->tpl_vars['headversion'] = GW_Config::singleton()->get($fullkey);
+		
+		list($pastversion, $changesitm) = GW_Config_Change_Track_Helper::getRevertedContent($fullkey, $this->tpl_vars['headversion'], $_GET['changeid']);
+		
+		$this->tpl_vars['pastversion'] = $pastversion;
+		$this->tpl_vars['changesitm'] = $changesitm;
+		$this->tpl_vars['changes_user'] = GW_User::singleton()->find($changesitm->user_id);
+		$this->default_tpl_file_name = $this->module_dir . 'tpl/config/version';
+	}
 
 }

@@ -49,7 +49,7 @@ define('GW_GENERIC_ERROR', 100);
 GW::s('ADMIN/AUTH_SESSION_KEY',"cms_auth");
 GW::s('SITE/AUTH_SESSION_KEY',"site_auth");
 
-GW::s('GW_CMS_VERSION', '4.6');
+GW::s('GW_CMS_VERSION', '5.0');
 GW::s('SMARTY_ERROR_LEVEL', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 GW::s('SMARTY_ERROR_LEVEL8', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
 
@@ -80,7 +80,7 @@ define('GW_PERM_OPTIONS',4);
 define('GW_PERM_REMOVE',8);
 
 //84.15.236.87 t20  /  88.223.24.240 //u1
-GW::s('OFFICE_IP_ADDR', ['82.135.242.67','88.223.24.240', '192.168.1.254', '127.0.0.1']);
+GW::s('OFFICE_IP_ADDR', ['82.135.242.67','88.223.24.240', '192.168.1.254', '127.0.0.1','::1']);
 
 GW::s('IMAGE_THUMB_FORMAT', 'webp'); //prev version: auto
 

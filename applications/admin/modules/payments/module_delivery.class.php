@@ -1,10 +1,8 @@
 <?php
 
 
-class Module_Delivery extends GW_Common_Module
+class Module_Delivery extends GW_Module_Config_Common
 {	
-	public $default_view = 'default';
-	
 	function init()
 	{
 		$this->model = $this->config =   new GW_Config($this->module_path[0].'/');
@@ -19,30 +17,17 @@ class Module_Delivery extends GW_Common_Module
 	function viewDefault()
 	{
 		$this->tpl_file_name = $this->tpl_dir."config";
-
-		
-		
-		return ['item'=>$this->model];
+		return parent::viewDefault();
 	}
-	function doSave()
+
+	protected function beforeConfigSave(&$vals)
 	{
-		$vals = $_REQUEST['item'];
-		
-		foreach($vals as $key => $val)
-			if(is_array($val))
-				$vals[$key] = json_encode($val);
-			
-			
 		$this->fireEvent("BEFORE_SAVE", $vals);
-		
-		$this->model->setValues($vals);
-		
+	}
+
+	protected function afterConfigSave(&$vals)
+	{
 		$this->fireEvent("AFTER_SAVE", $this->model);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
-		$this->setPlainMessage('/g/SAVE_SUCCESS');
-		//$this->__afterSave($vals);
-		$this->jump();
 	}
 
 	

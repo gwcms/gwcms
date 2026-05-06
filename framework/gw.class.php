@@ -320,16 +320,18 @@ class GW
 	
 	static function ip()
 	{
-		if($_SERVER['REMOTE_ADDR'] == '127.0.0.1')
+		if(($_SERVER['REMOTE_ADDR'] ?? false) == '127.0.0.1')
 			return $_SERVER['REMOTE_ADDR'];
 		
 		
-		return GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  ? $_SERVER['HTTP_CF_CONNECTING_IP'] ?? false : $_SERVER['REMOTE_ADDR'] ?? false;
+		return GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  ? $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_ADDR'] ?? false;
 	}
 
-	static function countryByIp($ip)
+	static function countryByIp($ip=false)
 	{
-
+		if(!$ip)
+			$ip = GW::ip();
+		
 		//return "EE";
 		
 		if(GW::s('PROJECT_ENVIRONMENT')==GW_ENV_DEV || $ip=='127.0.0.1'){
@@ -338,7 +340,7 @@ class GW
 		
 		
 			
-		if(GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  ){
+		if(GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD  && isset($_SERVER['HTTP_CF_IPCOUNTRY'])){
 			return $_SERVER['HTTP_CF_IPCOUNTRY'];
 		}			
 		

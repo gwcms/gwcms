@@ -28,10 +28,20 @@
 		<div class="cls-content">
 		    <div class="cls-content-sm panel">
 		        <div class="panel-body">
+				
+				
+			{if file_exists("{GW::s('DIR/ADMIN/ROOT')}static/img/brand_logo.webp")}	
+				<img src="/applications/admin/static/img/brand_logo.webp" style="width:100%;opacity:0.85">
+			{else}
+				
 		            <div class="mar-ver pad-btm">
 		                <h3 class="h4 mar-no">{GW::l('/g/ACCOUNT_LOGIN')}</h3>
 		                <p class="text-muted">{GW::l('/g/SIGN_IN_TO_YOUR_ACCOUNT')}</p>
 		            </div>
+
+			{/if}	
+				
+				
 					
 					{include "messages.tpl"}
 					
@@ -88,7 +98,7 @@
 							</a>				
 							{/if}
 						{/if}
-
+						
 					</div>
 		            </form>
 			    

@@ -24,4 +24,16 @@ class Module_Templates extends GW_Common_Module
 		foreach($list as $item)
 			$item->tplvars_count = GW_TplVar::singleton()->count('template_id='.(int)$item->id);
 	}	
+	
+	
+	function getOptionsCfg()
+	{
+		$opts = [
+			'title_func'=>function($item){ return $item->id.'. '.$item->title. " ($item->path)";  },
+			'search_fields'=>['title','path']
+		];	
+		
+		
+		return $opts;	
+	}	
 }

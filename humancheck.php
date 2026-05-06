@@ -26,9 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	    GW_Bot_Detect::markIpAsVerified(GW::ip());
 	    
         $_SESSION['human_verified'] = true;
-        // Redirect back to original page or home
+        // Redirect back to original page or home.
         $redirect = $_SESSION['redirect_after_captcha'] ?? '/';
         unset($_SESSION['redirect_after_captcha']);
+
+        if (!$redirect || strpos($redirect, '/humancheck.php') === 0) {
+            $redirect = '/';
+        }
+
         header("Location: {$redirect}");
         exit;
     } else {

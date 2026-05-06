@@ -224,6 +224,8 @@ class Module_Email_Templates extends GW_Common_Module
 		}
 		
 	}
+
+
 	
 	//function __eventAfterForm()
 	//{
@@ -266,6 +268,17 @@ class Module_Email_Templates extends GW_Common_Module
 	
 	function __eventBeforeSave0($item)
 	{
+		
+		foreach(['lt', 'ru', 'en'] as $lang)
+		{
+			
+			$field = "body_".$lang;
+			
+			if(strpos((string)$item->$field, '{cke_temp_') !== false)
+			{
+				$item->errors[$field] = "Html contains {cke_temp, which will cause malfunction, please check template source, If you make html copy from elsewhere use source mode to copy exact html structure";
+			}
+		}		
 
 		//visi pabargo ivedinet idname, gal ir nebutina is admin title sudaryt
 		if(!$item->idname && $item->admin_title){

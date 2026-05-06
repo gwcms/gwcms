@@ -43,6 +43,41 @@ class GW_Site_Application extends GW_Application
 		
 		parent::init();
 	}
+
+	function initAuth()
+	{
+		$this->autoLoginAdminToSite();
+		
+		parent::initAuth();
+	}
+
+	function autoLoginAdminToSite()
+	{
+		if (empty($_GET['autologinadmin']))
+			return;
+		
+		$admin_session_key = GW::s('ADMIN/AUTH_SESSION_KEY') ?: 'cms_auth';
+		$admin_user_id = (int)($_SESSION[$admin_session_key]['user_id'] ?? 0);
+		
+		if (!$admin_user_id)
+			return;
+		
+		$site_session_key = GW::s('SITE/AUTH_SESSION_KEY') ?: 'site_auth';
+		$site_user_id = (int)($_SESSION[$site_session_key]['user_id'] ?? 0);
+		$site_admin_user_id = (int)($_SESSION[$site_session_key]['admin_user_id'] ?? 0);
+		
+		if ($site_user_id === $admin_user_id && $site_admin_user_id === $admin_user_id)
+			return;
+		
+		GW_Auth::adminLoginToSite($admin_user_id, $admin_user_id);
+		
+		if ($user = GW_Customer::singleton()->find(['id=?', $admin_user_id])) {
+			$this->setMessage([
+				'text' => 'You were logged into the site as '.$user->title,
+				'type' => GW_MSG_SUCC,
+			]);
+		}
+	}
 	
 	
 	
@@ -173,6 +208,15 @@ class GW_Site_Application extends GW_Application
 	{
 		//$this->preRun();
 		$this->postRun();
+		
+		if(($_GET['addhead']??false)=='manifest'){
+			header('Content-Type: application/manifest+json; charset=utf-8');
+			header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+			header('Pragma: no-cache');
+			header('Expires: 0');
+		}
+			
+		
 		$this->smarty->display($file);
 	}
 

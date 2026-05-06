@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml>
+
+    <i id="PLAIN_CHANGE_VIEW_ENABLED">
+      <en>Plain change view is enabled for performance because this page contains more than 250 records.</en>
+      <lt>Dėl našumo įjungtas supaprastintas pokyčių vaizdas, nes šiame puslapyje yra daugiau nei 250 įrašų.</lt>
+    </i>
+    <i id="HUMAN_DIFF">
+      <i id="LARGE_TEXT_CHANGE">
+        <en>Large text change</en>
+        <lt>Didelis teksto pakeitimas</lt>
+      </i>
+      <i id="TEXT_WAS_EXPANDED">
+        <en>Text was expanded</en>
+        <lt>Tekstas buvo praplėstas</lt>
+      </i>
+      <i id="TEXT_WAS_SHORTENED">
+        <en>Text was shortened</en>
+        <lt>Tekstas buvo sutrumpintas</lt>
+      </i>
+      <i id="TEXT_WAS_UPDATED">
+        <en>Text was updated</en>
+        <lt>Tekstas buvo atnaujintas</lt>
+      </i>
+      <i id="CHANGED_NEAR_POSITION">
+        <en>Changed near position $pos</en>
+        <lt>Pakeitimas ties $pos pozicija</lt>
+      </i>
+      <i id="BLOCK_SIZE">
+        <en>Block size: $old -> $new</en>
+        <lt>Bloko dydis: $old -> $new</lt>
+      </i>
+      <i id="NEW_BLOCK_STARTS_NEAR_POSITION">
+        <en>New block starts near position $pos</en>
+        <lt>Naujas blokas prasideda maždaug ties $pos pozicija</lt>
+      </i>
+      <i id="ADDED_REMOVED_CHUNKS">
+        <en>Added chunks: $added, removed chunks: $removed</en>
+        <lt>Pridėta dalių: $added, pašalinta dalių: $removed</lt>
+      </i>
+      <i id="ADDED_TEXT">
+        <en>Added: $text</en>
+        <lt>Pridėta: $text</lt>
+      </i>
+      <i id="REMOVED_TEXT">
+        <en>Removed: $text</en>
+        <lt>Pašalinta: $text</lt>
+      </i>
+      <i id="TEXT_LENGTH">
+        <en>Text length: $old -> $new</en>
+        <lt>Teksto ilgis: $old -> $new</lt>
+      </i>
+      <i id="LINES">
+        <en>Lines: $old -> $new</en>
+        <lt>Eilučių: $old -> $new</lt>
+      </i>
+      <i id="CHARACTER_CHANGE">
+        <en>Character change</en>
+        <lt>Simbolių pokytis</lt>
+      </i>
+      <i id="LINE_CHANGE">
+        <en>Line change</en>
+        <lt>Eilučių pokytis</lt>
+      </i>
+      <i id="OPEN_FULL_DIFF">
+        <en>Open full diff</en>
+        <lt>Atidaryti pilną diff</lt>
+      </i>
+    </i>
+    <i id="VERSIONS">
+      <i id="ID">
+        <en>ID</en>
+        <lt>ID</lt>
+      </i>
+      <i id="TIME">
+        <en>Time</en>
+        <lt>Laikas</lt>
+      </i>
+      <i id="NEW_DIFF">
+        <en>New / diff</en>
+        <lt>Nauja / diff</lt>
+      </i>
+      <i id="PREV">
+        <en>Previous</en>
+        <lt>Ankstesnė</lt>
+      </i>
+      <i id="USER">
+        <en>User</en>
+        <lt>Naudotojas</lt>
+      </i>
+      <i id="NOTE">
+        <en>Note</en>
+        <lt>Pastaba</lt>
+      </i>
+    </i>
+</xml>

@@ -33,6 +33,7 @@ GW::s('ADMIN/USER_CLASS', 'GW_User');
 $am = GW::s('ADMIN/HOOKS/AFTER_MENU');
 $am = is_array($am) ? $am : [];
 $am[] = "emails/widgets/progress";
+$am[] = "users/userswidgets/onlinechat";
 
 
 if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_TEST){
@@ -55,8 +56,6 @@ GW::s('ADMIN/HOOKS/AFTER_MENU', $am);
 
 //isveda klaida i ekrana
 //
-
-
 
 
 

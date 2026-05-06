@@ -33,6 +33,10 @@ class GW_Adm_Page_View extends GW_i18n_Data_Object
 	    'config'=>'json'
 	];	
 	
+	
+	public $extensions = ['keyval'=>1];	
+	public $keyval_use_generic_table = 1;	
+	
 	/**
 	 * 
 	 * @param array $paths

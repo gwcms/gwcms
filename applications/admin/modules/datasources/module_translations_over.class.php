@@ -61,6 +61,8 @@ class Module_Translations_Over extends GW_Common_Module
 		$cfg["fields"]["id"]="lof";
 		$cfg["fields"]["fullkey"]="Lof";
 		
+		$lang = $this->app->ln;
+		
 		if($this->view_name == "form" && !isset($_GET['form_ajax']))
 		{
 			$cfg["fields"]["value"]="Lof";

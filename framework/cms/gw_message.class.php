@@ -104,17 +104,22 @@ class GW_Message extends GW_Data_Object
 
 	public $push_log;
 
+	// Po naujo GW_Message įrašo paleidžia Web Push ir esamą legacy push logiką.
 	function eventHandler($event, &$context_data = [])
 	{
 		switch ($event) {
 			case 'AFTER_INSERT':
 				if ($this->level >= 10) {
-					if ($this->level >= 15){
-						
+					$data = GW_Android_Push_Notif::buildWebPushPayload($this);
+					//d::dumpas($data);
+					$this->push_log = [
+						'webpush' => GW_Android_Push_Notif::pushWeb($this->user_id, $data),
+					];
 
-						$this->push_log = GW_Android_Push_Notif::push($this->user_id);
+					if ($this->level >= 15){
+						$this->push_log['legacy'] = GW_Android_Push_Notif::push($this->user_id);
 					}else{
-						$this->push_log = GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
+						$this->push_log['legacy'] = GW_Android_Push_Notif::pushIfNotOnline($this->user_id);
 					}
 				}
 		}

@@ -29,7 +29,7 @@
 	
 	{if GW::s('BOT_SEND_TO_MIRROR')}
 		| Mirror speed 
-		{GW_Bot_Detect::getProcSpeed(1)} {GW_Bot_Detect::getProcSpeed(5)} {GW_Bot_Detect::getProcSpeed(10)} 
+		<span title="1min">{GW_Bot_Detect::getProcSpeed(1)}</span> <span title="5min">{GW_Bot_Detect::getProcSpeed(5)}</span> <span title="10min">{GW_Bot_Detect::getProcSpeed(10)}</span>
 	{/if}
 		
 	{if $app->sess['debug']}

@@ -79,7 +79,7 @@ class GW_File_Helper
 		return $name;
 	}
 
-	static function output($file, $view=false)
+	static function output($file, $view=false, $downloadName=false)
 	{
 		header('HTTP/1.0 200 OK', true, 200);
 		
@@ -88,8 +88,10 @@ class GW_File_Helper
 			header('Content-Type: '.Mime_Type_Helper::getByFilename($file));
 			
 		}else{
+			$downloadName = $downloadName ? basename(str_replace('\\', '/', (string)$downloadName)) : basename($file);
+			$downloadName = str_replace(['"', "\r", "\n"], '_', $downloadName);
 			header("Content-Type: application/x-download");
-			header('Content-Disposition: attachment; filename="' . basename($file) . '";');
+			header('Content-Disposition: attachment; filename="' . $downloadName . '";');
 		}
 		
 		

@@ -9,6 +9,7 @@
 	cols=>1,
 	fields=>[
 		obj_type=>[type=>text],
+		invoice_line2=>[type=>text],
 		unit_price=>[type=>number,step=>"0.01"],
 		qty=>[type=>number],
 		link=>[type=>text],
@@ -28,6 +29,7 @@
 	{$fields_config.fields.deliverable=[type=>bool]}
 	{$fields_config.fields.expires=[type=>text]}
 	{$fields_config.fields.discount=[type=>text]}
+	{$fields_config.fields.invoice_line2=[type=>text]}
 {/if}
 
 {if $smarty.get.shift_key && $app->user->isRoot()}

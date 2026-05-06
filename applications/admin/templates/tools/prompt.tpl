@@ -21,7 +21,7 @@
 
 {include "tools/form_components.tpl"}
 
-<table >
+<table{if $prompt_opts.width} width="{$prompt_opts.width|escape}"{/if}>
 	{call "build_form" fields_config=$prompt_fields}
 </table>
 

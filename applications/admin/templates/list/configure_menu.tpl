@@ -17,6 +17,7 @@
 
 
 {list_item_action_m href=$m->buildUri(false,[act=>doExportListAsSheet],[carry_params=>1]) caption=GW::l('/g/VIEWS/doExportListAsSheet') iconclass='fa fa-file-excel-o'}
+{list_item_action_m href=$m->buildUri(false,[act=>doSendListEmail],[carry_params=>1]) caption=GW::l('/g/VIEWS/doSendListEmail') iconclass='fa fa-envelope-o'}
 
 
 {if $m->write_permission}
@@ -42,6 +43,9 @@ title=GW::l('/M/documentation/MAP/childs/features/title') caption=GW::l('/M/docu
 	
 	{list_item_action_m url=[false, [act=>doImportJSON]] iconclass="fa fa-cog" caption="doImportJSON" action_addclass="rootactions"}
 	{list_item_action_m url=[false, [act=>doRecoverFromRecoveryLine]] iconclass="fa fa-cog" caption="doRecoverFromRecoveryLine" action_addclass="rootactions"}
+	{if $m->supportsRecoveryLog()}
+		{list_item_action_m href=$m->buildUri("undodeletes") iconclass="fa fa-history" caption="viewUndoDeletes" action_addclass="rootactions"}
+	{/if}
 	
 	
 	{list_item_action_m href=$app->buildUri("system/module_fields", ['path'=>$app->page->path]) iconclass="fa fa-pencil-square-o" 

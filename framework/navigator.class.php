@@ -31,6 +31,10 @@ class Navigator
 		if (!(!$port_in_HTTP_HOST && !empty($SERVER_PORT) && ($SERVER_PORT == 80 || $SERVER_PORT == 443)))
 			$base.= ((!empty($SERVER_PORT) && !$port_in_HTTP_HOST) ? ':' . $SERVER_PORT : '');
 
+		
+		//if(isset($_GET['debug']))
+		//	d::dumpas($base);
+		
 		return $base;
 	}
 	

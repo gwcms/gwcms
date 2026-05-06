@@ -56,8 +56,12 @@ class GW_Json_Format_Helper
 		return $result;
 	}
 
-	static function f($arr)
+	static function f($arr, $unescapeslash=false)
 	{
-		return self::format(json_encode($arr, JSON_UNESCAPED_UNICODE));
+		$esc = JSON_UNESCAPED_UNICODE;
+		if($unescapeslash)
+			$esc = $esc | JSON_UNESCAPED_SLASHES;
+		
+		return self::format(json_encode($arr, $esc));
 	}
 }

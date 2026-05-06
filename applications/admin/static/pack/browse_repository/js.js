@@ -71,7 +71,26 @@ BrowseRepository.prototype.normalizeStart = function (start)
 	if (!start.startsWith('/'))
 		start = '/' + start;
 
+	// nuimam gale /, bet ne root atveju
+	if (start.length > 1)
+		start = start.replace(/\/+$/, '');
+
 	return start;
+};
+
+BrowseRepository.prototype._scrollElIntoView = function (el)
+{
+	if (!el || !el.length)
+		return;
+
+	try
+	{
+		el.get(0).scrollIntoView({
+			block: 'center',
+			behavior: 'smooth'
+		});
+	}
+	catch (e) {}
 };
 
 BrowseRepository.prototype.expandStartPath = function (start)
@@ -79,23 +98,102 @@ BrowseRepository.prototype.expandStartPath = function (start)
 	if (!start)
 		return;
 
-	start = start.trim();
+	start = this.normalizeStart(start);
 
-	if (!start.startsWith('/'))
-		start = '/' + start;
+	if (!start)
+		return;
 
 	var parts = start.split('/').filter(Boolean);
 
 	if (!parts.length)
 		return;
 
-	var fileName = parts.pop();
-	var folders = parts;
+	var that = this;
 
-	this._expandFoldersSequential(folders, function ()
+	function tryAsFolder()
 	{
-		this._selectFileByName(fileName);
-	}.bind(this));
+		that._expandFoldersSequential(parts, function (lastFolderEl)
+		{
+			if (lastFolderEl && lastFolderEl.length)
+				that._scrollElIntoView(lastFolderEl);
+		});
+	}
+
+	function tryAsFile()
+	{
+		var fileName = parts[parts.length - 1];
+		var folders = parts.slice(0, -1);
+
+		that._expandFoldersSequential(folders, function ()
+		{
+			that._selectFileByName(fileName);
+		});
+	}
+
+	// pirmiausia bandom laikyti kaip folder path
+	this._pathLooksLikeExistingFolder(parts, function (isFolder)
+	{
+		if (isFolder)
+			tryAsFolder();
+		else
+			tryAsFile();
+	});
+};
+
+BrowseRepository.prototype._pathLooksLikeExistingFolder = function (parts, done)
+{
+	var that = this;
+	var currentFolderEl = that.container;
+	var currentDir = currentFolderEl.data('dir') || '/';
+
+	function step(i)
+	{
+		if (i >= parts.length)
+		{
+			if (typeof done === 'function')
+				done(true);
+			return;
+		}
+
+		var folderName = parts[i];
+
+		if (!currentDir.endsWith('/'))
+			currentDir += '/';
+
+		var nextDir = (currentDir === '/' ? '/' : currentDir) + folderName;
+		var nextFolderEl = that._findFolderEl(currentFolderEl, nextDir);
+
+		if (!nextFolderEl.length)
+		{
+			if (typeof done === 'function')
+				done(false);
+			return;
+		}
+
+		// jei reikia giliau ir dar neužkrauta - užkraunam
+		if (i < parts.length - 1 && !nextFolderEl.data('expanded'))
+		{
+			nextFolderEl.data('expanded', true);
+
+			var icon = nextFolderEl.find('.fa-folder-o:first');
+			icon.removeClass('fa-folder-o').addClass('fa-folder-open-o');
+
+			that.loadDir(nextFolderEl, function ()
+			{
+				currentFolderEl = nextFolderEl;
+				currentDir = nextFolderEl.data('dir') || nextDir;
+				step(i + 1);
+			});
+
+			return;
+		}
+
+		currentFolderEl = nextFolderEl;
+		currentDir = nextFolderEl.data('dir') || nextDir;
+		step(i + 1);
+	}
+
+	step(0);
 };
 
 BrowseRepository.prototype._findFolderEl = function (scopeEl, nextDir)
@@ -120,7 +218,7 @@ BrowseRepository.prototype._findFolderEl = function (scopeEl, nextDir)
 			return el;
 	}
 
-	// fallback pagal tekstą (jei folderlink rodo tik pavadinimą)
+	// fallback pagal tekstą
 	var name = d.split('/').filter(Boolean).pop();
 
 	var fallback = scopeEl.find('.folderlink').filter(function ()
@@ -140,13 +238,14 @@ BrowseRepository.prototype._expandFoldersSequential = function (folders, done)
 
 	var currentFolderEl = that.container;
 	var currentDir = currentFolderEl.data('dir') || '/';
+	var lastFolderEl = currentFolderEl;
 
 	function step(i)
 	{
 		if (i >= folders.length)
 		{
 			if (typeof done === 'function')
-				done();
+				done(lastFolderEl);
 			return;
 		}
 
@@ -156,14 +255,12 @@ BrowseRepository.prototype._expandFoldersSequential = function (folders, done)
 			currentDir += '/';
 
 		var nextDir = (currentDir === '/' ? '/' : currentDir) + folderName;
-
 		var nextFolderEl = that._findFolderEl(currentFolderEl, nextDir);
 
 		if (!nextFolderEl.length)
 		{
 			console.warn('Folder not found:', nextDir);
 
-			// debug: parodyk data-dir variantus šiame lygyje
 			try
 			{
 				var dirs = currentFolderEl.find('.folder[data-dir]').map(function ()
@@ -176,7 +273,17 @@ BrowseRepository.prototype._expandFoldersSequential = function (folders, done)
 			catch (e) {}
 
 			if (typeof done === 'function')
-				done();
+				done(lastFolderEl);
+			return;
+		}
+
+		lastFolderEl = nextFolderEl;
+
+		if (nextFolderEl.data('expanded'))
+		{
+			currentFolderEl = nextFolderEl;
+			currentDir = nextFolderEl.data('dir') || nextDir;
+			step(i + 1);
 			return;
 		}
 
@@ -229,11 +336,7 @@ BrowseRepository.prototype._selectFileByName = function (fileName)
 	$('#filename').val(file.data('file') || fileName);
 	$('.imageOptsEnabled').fadeIn();
 
-	try
-	{
-		file.get(0).scrollIntoView({ block: 'center' });
-	}
-	catch (e) {}
+	that._scrollElIntoView(file);
 };
 
 BrowseRepository.prototype.progressHandling = function (event, that)
@@ -291,7 +394,6 @@ BrowseRepository.prototype.doUpload = function ()
 		success: function (data)
 		{
 			console.log(data);
-
 			that.loadDir($('.markselecteddir').parents('.folder:first'));
 		},
 		error: function ()
@@ -355,56 +457,91 @@ BrowseRepository.prototype.init = function ()
 			fileUrl = that.abspath + '/repository' + $('#filename').val();
 		}
 
-		// INPUT MODE
+		// 1. pirmiausia bandome seną direct access būdą
 		if (that.mode === 'input' && that.browsereturn && window.opener)
 		{
-			var doc = window.opener.document;
-			var el = doc.getElementById(that.browsereturn) ||
-				doc.querySelector('[name="' + that.browsereturn.replace(/"/g, '\\"') + '"]');
-
-			if (!el)
-			{
-				alert('Input not found in opener: ' + that.browsereturn);
-				return;
-			}
-
-			el.value = fileUrl;
-
 			try
 			{
-				el.dispatchEvent(new Event('input', { bubbles: true }));
-				el.dispatchEvent(new Event('change', { bubbles: true }));
-			}
-			catch (e) {}
+				var doc = window.opener.document;
+				var el = doc.getElementById(that.browsereturn) ||
+					doc.querySelector('[name="' + that.browsereturn.replace(/"/g, '\\"') + '"]');
 
-			window.close();
-			return;
+				if (!el)
+				{
+					alert('Input not found in opener: ' + that.browsereturn);
+					return;
+				}
+
+				el.value = fileUrl;
+
+				try
+				{
+					el.dispatchEvent(new Event('input', { bubbles: true }));
+					el.dispatchEvent(new Event('change', { bubbles: true }));
+				}
+				catch (e) {}
+
+				window.close();
+				return;
+			}
+			catch (e)
+			{
+				// cross-origin fallback
+				window.opener.postMessage({
+					type: 'repository_file_selected',
+					browsereturn: that.browsereturn,
+					value: fileUrl
+				}, '*');
+
+				window.close();
+				return;
+			}
 		}
 
 		// CKEDITOR MODE
 		var funcNum = getUrlParam('CKEditorFuncNum');
-		if (funcNum && window.opener && window.opener.CKEDITOR)
+		if (funcNum && window.opener)
 		{
-			window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl, function ()
+			try
 			{
-				var dialog = this.getDialog();
-
-				if (dialog.getName() == 'image')
+				if (window.opener.CKEDITOR)
 				{
-					var element = dialog.getContentElement('info', 'txtAlt');
-					if (element)
-						element.setValue($('.selectedFile').attr('alt'));
-				}
-				else
-				{
-					var element = dialog.getContentElement('info', 'linkDisplayText');
-					if (element)
-						element.setValue($('.selectedFile').text());
-				}
-			});
+					window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl, function ()
+					{
+						var dialog = this.getDialog();
 
-			window.close();
-			return;
+						if (dialog.getName() == 'image')
+						{
+							var element = dialog.getContentElement('info', 'txtAlt');
+							if (element)
+								element.setValue($('.selectedFile').attr('alt'));
+						}
+						else
+						{
+							var element = dialog.getContentElement('info', 'linkDisplayText');
+							if (element)
+								element.setValue($('.selectedFile').text());
+						}
+					});
+
+					window.close();
+					return;
+				}
+			}
+			catch (e)
+			{
+				// cross-origin fallback
+				window.opener.postMessage({
+					type: 'ckeditor_file_selected',
+					funcNum: funcNum,
+					value: fileUrl,
+					alt: $('.selectedFile').attr('alt') || '',
+					text: $('.selectedFile').text() || ''
+				}, '*');
+
+				window.close();
+				return;
+			}
 		}
 
 		alert('No return target (neither browsereturn nor CKEditorFuncNum)');
@@ -468,16 +605,13 @@ BrowseRepository.prototype.initFolders = function ()
 	})
 	.on('dblclick', function ()
 	{
-		
-		// užtikrinam, kad failas pažymėtas
 		that.container.find('.selectedFile').removeClass('selectedFile');
 		$(this).addClass('selectedFile');
 
 		$('#filename').val($(this).data('file'));
 
-		// imituojam Select File mygtuko paspaudimą
 		$('#returnBtn').trigger('click');
-	})	
+	})
 	.attr('data-initdone', 1);
 
 	this.container.find(".addfiles:not([data-initdone='1'])").click(function ()

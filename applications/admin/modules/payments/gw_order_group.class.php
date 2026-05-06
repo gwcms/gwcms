@@ -22,6 +22,8 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'pay_subtype_human'=>1,
 		'delivery_country'=>1,
 		'payd'=>1,
+		'payment_confirmations'=>1,
+		'change_transactions_count'=>1,
 	];
 	
 	
@@ -62,10 +64,91 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		//$this->amount_total = $this->amount_items + $this->amount_shipping;
 		$this->amount_total = $this->amount_shipping + $this->amount_items - $this->amount_coupon;
 		$this->amount_discount = $discount_total;
+		$this->recalcPaymentLedger(false);
 		
 
 		$this->itmcnt = count($this->items);
 		$this->updateChanged();
+	}
+	
+	function getPaymentConfirmations()
+	{
+		if(!GW_Order_Payment_Confirmation::tableExists())
+			return [];
+		
+		return GW_Order_Payment_Confirmation::singleton()->findAll(
+			['order_id=?', $this->id],
+			['order'=>'received_at ASC, id ASC']
+		);
+	}
+	
+	function recalcPaymentLedger($update_changed=true)
+	{
+		if(!$this->id)
+			return false;
+		
+		if(!GW_Order_Payment_Confirmation::tableExists())
+			return false;
+		
+		$payments = GW_Order_Payment_Confirmation::singleton()->findAll([
+			'order_id=? AND status=?',
+			$this->id,
+			'confirmed',
+		]);
+		
+		$payd = 0;
+		$payments_total = 0;
+		$refunds_total = 0;
+		
+		foreach($payments as $payment){
+			$amount = (float)$payment->amount;
+			
+			if($payment->direction == 'refund'){
+				$payd -= $amount;
+				$refunds_total += $amount;
+			}else{
+				$payd += $amount;
+				$payments_total += $amount;
+			}
+		}
+		
+		$total = (float)$this->amount_total;
+		$balance = $total - $payd;
+		
+		if($payments_total <= 0 && $refunds_total <= 0){
+			$ledger_status = 'unpaid';
+			$payment_status = (int)$this->payment_status;
+		}elseif($payments_total > 0 && $payd <= 0 && $refunds_total >= $payments_total){
+			$ledger_status = 'refunded';
+			$payment_status = 9;
+		}elseif($payd <= 0){
+			$ledger_status = 'unpaid';
+			$payment_status = 0;
+		}elseif($balance > 0.00001){
+			$ledger_status = 'partial';
+			$payment_status = 8;
+		}elseif($balance < -0.00001){
+			$ledger_status = 'overpaid';
+			$payment_status = 7;
+		}else{
+			$ledger_status = 'paid';
+			$payment_status = 7;
+		}
+		
+		$this->payd_amount = round($payd, 2);
+		$this->balance_amount = round($balance, 2);
+		$this->ledger_status = $ledger_status;
+		$this->payment_status = $payment_status;
+		
+		if($update_changed)
+			$this->updateChanged();
+		
+		return [
+			'payd_amount' => $this->payd_amount,
+			'balance_amount' => $this->balance_amount,
+			'ledger_status' => $this->ledger_status,
+			'payment_status' => $this->payment_status,
+		];
 	}
 	
 	function addItem(GW_Order_Item $item){
@@ -169,6 +252,12 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			break;
 			case 'payd':
 				return $this->payment_status == 7;
+			break;
+			case 'payment_confirmations':
+				return $this->getPaymentConfirmations();
+			break;
+			case 'change_transactions_count':
+				return GW_Change_Transaction::singleton()->count(['order_id=?', $this->id]);
 			break;
 		}
 		

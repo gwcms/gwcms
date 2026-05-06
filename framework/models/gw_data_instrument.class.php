@@ -5,6 +5,7 @@ class GW_Data_Instrument extends GW_i18n_Data_Object
 	public $table = 'gw_data_instruments';
 	public $i18n_fields = ['title'=>1];
 		
+	public $default_order = 'priority DESC';		
 	
 	function getOptions($lang = 'lt')
 	{

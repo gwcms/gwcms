@@ -57,8 +57,11 @@ class GW_DB
 		return Array($user, $pass, $host, $database, $port);
 	}
 
-	function connect($updh, $newlink = false)
+	function connect($updh = null, $newlink = false)
 	{
+		if ($updh === null)
+			$updh = $this->uphd;
+
 		list($user, $pass, $host, $database, $port) = $updh;
 				
 		$this->link = new mysqli($host, $user, $pass, $database, $port) or $this->trigger_error();
@@ -67,6 +70,9 @@ class GW_DB
 
 		//comment next line if mysql v < 4.1
 		$this->link->query('SET names "utf8mb4"');
+		
+		$this->link->query('SET @connection_meta = "'.GW_DB::escape($this->buildConnectionMeta()).'"');
+		
 
 		if (isset($this->conf['INIT_SQLS'])) {
 			$list = explode(',', $this->conf['INIT_SQLS']);
@@ -76,6 +82,121 @@ class GW_DB
 		}
 
 		//$this->test();
+	}
+
+	protected function buildConnectionMeta()
+	{
+		if ($this->isWebRequest()) {
+			$parts = [
+				'host='.($_SERVER['HTTP_HOST'] ?? '-'),
+				'uri='.($_SERVER['REQUEST_URI'] ?? ''),
+				'ip='.GW::ip(),
+			];
+
+			if ($transport = $this->getWebTransportTag())
+				array_splice($parts, 1, 0, ['transport='.$transport]);
+
+			return implode(' | ', $parts);
+		}
+
+		$script = $this->getCliScriptName();
+		$parts = [
+			'sapi='.PHP_SAPI,
+			'pid='.(getmypid() ?: '-'),
+			'user='.$this->getProcessUser(),
+			'script='.$script,
+		];
+
+		if ($transport = $this->getCliTransportTag($script))
+			$parts[] = 'transport='.$transport;
+
+		$args = $this->getCliArgs();
+		if ($args) {
+			$parts[] = 'args='.implode(' ', $args);
+		}
+
+		return implode(' | ', $parts);
+	}
+
+	protected function getWebTransportTag()
+	{
+		if (!empty($_GET['sys_call']))
+			return 'http-background';
+
+		if (!empty($_GET['background']) || !empty($_GET['bgtaskid']))
+			return 'http-bgtask';
+
+		if (!empty($_GET['redirmirror']))
+			return 'mirror-proxy';
+
+		return 'web';
+	}
+
+	protected function getCliTransportTag($script)
+	{
+		$map = [
+			'reactphpserver.php' => 'reactphp-ws',
+			'openswoolieserver.php' => 'openswoole-ws',
+		];
+
+		return $map[basename((string)$script)] ?? '';
+	}
+
+	protected function isWebRequest()
+	{
+		if (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg')
+			return false;
+
+		return isset($_SERVER['HTTP_HOST']) || isset($_SERVER['REQUEST_URI']);
+	}
+
+	function getConnectionDebugInfo()
+	{
+		if (!$this->link)
+			return null;
+
+		return [
+			'connection_id' => (int)$this->link->thread_id,
+			'meta' => $this->buildConnectionMeta(),
+			'sapi' => PHP_SAPI,
+		];
+	}
+
+	protected function getProcessUser()
+	{
+		if (function_exists('posix_geteuid') && function_exists('posix_getpwuid')) {
+			$info = @posix_getpwuid(posix_geteuid());
+			if (!empty($info['name'])) {
+				return $info['name'];
+			}
+		}
+
+		return $_SERVER['USER'] ?? getenv('USER') ?: get_current_user() ?: '-';
+	}
+
+	protected function getCliScriptName()
+	{
+		if (!empty($_SERVER['SCRIPT_NAME'])) {
+			return $_SERVER['SCRIPT_NAME'];
+		}
+
+		$argv = $_SERVER['argv'] ?? $GLOBALS['argv'] ?? [];
+		return $argv[0] ?? '-';
+	}
+
+	protected function getCliArgs()
+	{
+		$argv = $_SERVER['argv'] ?? $GLOBALS['argv'] ?? [];
+
+		if (!$argv) {
+			return [];
+		}
+
+		array_shift($argv);
+
+		return array_map(function($arg) {
+			return is_scalar($arg) ? (string)$arg : json_encode($arg);
+		}, $argv);
 	}
 
 	function __construct($conf = Array())
@@ -152,16 +273,26 @@ class GW_DB
 		
 		
 
+		$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
+		$comment = "  /* ".$ua.' | '.(GW_Bot_Detect::isBot() ? 'Bot': '-') .' '.($_SERVER['REMOTE_ADDR']??false).' '. ($_SERVER['REQUEST_URI'] ?? false) . " */";
+
 		try {
-			$ua  = $_SERVER['HTTP_USER_AGENT'] ?? false;
-			
-			$comment = "  /* ".$ua.' | '.(GW_Bot_Detect::isBot() ? 'Bot': '-') .' '.($_SERVER['REMOTE_ADDR']??false).' '. ($_SERVER['REQUEST_URI'] ?? false) . " */";
 			$this->result = $this->link->query($cmd.$comment);
 		} catch (Exception $e) {
-			
-			$this->trigger_error($cmd, null, $nodie);
-			$this->result=false;
-			return false;
+			if ($this->shouldReconnectAfterQueryError($e)) {
+				try {
+					$this->reconnect();
+					$this->result = $this->link->query($cmd.$comment);
+				} catch (Exception $retryException) {
+					$this->trigger_error($cmd, null, $nodie);
+					$this->result=false;
+					return false;
+				}
+			} else {
+				$this->trigger_error($cmd, null, $nodie);
+				$this->result=false;
+				return false;
+			}
 		}		
 		
 		
@@ -190,6 +321,17 @@ class GW_DB
 			$trace = ob_get_clean();
 			
 			$this->query_times[] = $trace;
+		}
+
+		if (!$this->result && $this->shouldReconnectAfterQueryError()) {
+			try {
+				$this->reconnect();
+				$this->result = $this->link->query($cmd.$comment);
+			} catch (Exception $e) {
+				$this->trigger_error($cmd, null, $nodie);
+				$this->result=false;
+				return false;
+			}
 		}
 
 		$this->result || $this->trigger_error($cmd, null, $nodie);
@@ -618,21 +760,37 @@ class GW_DB
 
 	function close()
 	{
-		$this->link->close();
+		if ($this->link)
+			@$this->link->close();
 	}
 
 	function ping()
 	{
-		return $this->link->ping();
+		return $this->link ? @$this->link->ping() : false;
 	}
 
 	function check_connection()
 	{
 		if (!$this->ping()) {
-			$this->close();
-			$this->connect();
+			$this->reconnect();
 			return 1;
 		}
+	}
+
+	function reconnect()
+	{
+		$this->close();
+		$this->connect($this->uphd);
+	}
+
+	protected function shouldReconnectAfterQueryError($exception = null)
+	{
+		$errno = $this->link ? (int)$this->link->errno : 0;
+
+		if ($exception && method_exists($exception, 'getCode'))
+			$errno = (int)$exception->getCode() ?: $errno;
+
+		return in_array($errno, [2006], true);
 	}
 
 	static function prepare_query($params)

@@ -145,13 +145,25 @@ class GW_Lang
 		if ($key[0] != '/')
 			return $key;
 
-		list(, $type, $otherargs) = explode('/', $key, 3);
+		$origKey = $key;
+		$parts = explode('/', $key, 3);
+		$type = $parts[1] ?? null;
+		$otherargs = $parts[2] ?? '';
+
+		if (!$type)
+			return $origKey;
 		
 		if($type=="APP")
 		{
 			$prevapp = GW_Lang::$app;
 			
-			list($app, $key) = explode('/', $otherargs, 2);
+			$appParts = explode('/', $otherargs, 2);
+			$app = $appParts[0] ?? '';
+			$key = $appParts[1] ?? '';
+
+			if ($app === '' || $key === '')
+				return $opts['asis'] ?? false ? null : $origKey;
+
 			$key = '/'.$key;
 			
 			GW_Lang::setCurrentApp($app);
@@ -167,7 +179,13 @@ class GW_Lang
 		{
 			$prevln = GW_Lang::$ln;
 			
-			list($ln, $key) = explode('/', $otherargs, 2);
+			$lnParts = explode('/', $otherargs, 2);
+			$ln = $lnParts[0] ?? '';
+			$key = $lnParts[1] ?? '';
+
+			if ($ln === '' || $key === '')
+				return $opts['asis'] ?? false ? null : $origKey;
+
 			$key = '/'.$key;
 			
 						
@@ -187,7 +205,9 @@ class GW_Lang
 
 		switch ($type) {
 			case 'G': // /G/failopavadinimas/kelias 
-				list($fileid, $path) = explode('/', $otherargs, 2);
+				$pathParts = explode('/', $otherargs, 2);
+				$fileid = $pathParts[0] ?? '';
+				$path = $pathParts[1] ?? '';
 
 				$r = & self::readG($fileid, '', $path);
 				break;
@@ -196,7 +216,15 @@ class GW_Lang
 				self::$last_realkey = 'G/application/'. $otherargs;
 				break;
 			case 'M':
-				list($module, $path) = explode('/', $otherargs, 2);
+				$pathParts = explode('/', $otherargs, 2);
+				$module = $pathParts[0] ?? '';
+				$path = $pathParts[1] ?? '';
+
+				if ($module === '' || $path === '') {
+					$r = null;
+					break;
+				}
+
 				$r = & self::readG('', $module, $path);
 				break;
 			case 'm':
@@ -242,18 +270,32 @@ class GW_Lang
 	
 	static function transKeyAnalise($fullkey)
 	{
-		list(, $module, $key) = explode('/', $fullkey, 3);
+		$parts = explode('/', $fullkey, 3);
+		$module = $parts[1] ?? '';
+		$key = $parts[2] ?? '';
 		
 		if ($module == 'M') {
-			list($module, $key) = explode('/', $key, 2);
-			$module = 'M/' . strtolower($module);
+			$keyParts = explode('/', $key, 2);
+			$moduleKey = $keyParts[0] ?? '';
+			$key = $keyParts[1] ?? '';
+
+			if ($moduleKey === '' || $key === '')
+				return ['M', $parts[2] ?? ''];
+
+			$module = 'M/' . strtolower($moduleKey);
 		} elseif ($module == 'm') {
 			$module = 'M/' . GW_Lang::$module;
 		} elseif ($module == 'g') {
 			$module = 'G/application';
 		} elseif ($module == 'G') {
-			list($module, $key) = explode('/', $key, 2);
-			$module = 'G/' . strtolower($module);
+			$keyParts = explode('/', $key, 2);
+			$fileKey = $keyParts[0] ?? '';
+			$key = $keyParts[1] ?? '';
+
+			if ($fileKey === '' || $key === '')
+				return ['G', $parts[2] ?? ''];
+
+			$module = 'G/' . strtolower($fileKey);
 		}
 
 		return [$module, $key];
@@ -469,11 +511,31 @@ class GW_Lang
 			//} else {
 				//is lang failu
 				$fromxml = GW::l($fullkey);
-				$vr = $fromxml != $fullkey ? $fromxml : '*' . $key . '*';
+				$isfound = $fromxml != $fullkey;
 
 				
 				//5argumentas: self::$app == 'ADMIN' ? 1 : 0
-				GW_Translation::singleton()->store($module, $key, $key, GW_Lang::$ln);
+				
+				
+				if($isfound){
+					$record=[
+						'module' => $module, 
+						'key' => $key, 
+						//'value_' . $lang => $value, 
+					       // 'backend'=>$backend
+					    ];
+						
+					
+					foreach(array_intersect(GW::s('LANGS'), ['lt','en']) as $ln)
+					{
+						$record['value_'.$ln] =  GW::l("/LN/{$ln}$fullkey",['asis'=>1]);
+					}
+					
+					GW_Translation::singleton()->getDB()->save(GW_Translation::singleton()->table, $record);
+					
+				}else{
+					GW_Translation::singleton()->store($module, $key, $fromxml, GW_Lang::$ln);
+				}
 				
 				
 				

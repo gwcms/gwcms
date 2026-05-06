@@ -1,5 +1,8 @@
 <?php
 
+if(($_SERVER['REMOTE_ADDR'] ?? false) =='::1')
+	$_SERVER['REMOTE_ADDR']='127.0.0.1';
+
 $debug=Array('mem_use'=>Array(memory_get_usage(true)));
 
 

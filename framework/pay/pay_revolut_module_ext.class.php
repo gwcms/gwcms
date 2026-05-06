@@ -23,7 +23,8 @@ class pay_revolut_module_ext extends GW_Module_Extension
 		//$return_url = $args->base.$this->app->ln."/direct/orders/orders?act=doRevolutAccept&action=return".$return_args;
 		//
 		
-		$payment_data = ['amount'=>$order->amount_total*100,'currency'=>'EUR'];
+		$pay_amount = method_exists($this, 'getOrderPayAmount') ? $this->getOrderPayAmount($order) : $order->amount_total;
+		$payment_data = ['amount'=>$pay_amount*100,'currency'=>'EUR'];
 		//$payment_data['redirectUrls']=['success'=>$return_url, 'failure'=>$return_url, 'cancel'=>$return_url];
 
 			
@@ -35,7 +36,7 @@ class pay_revolut_module_ext extends GW_Module_Extension
 			
 		}		
 		
-		$key = 'pay_revolut_'.$order->id.'_'.$order->amount_total;
+		$key = 'pay_revolut_'.$order->id.'_'.$pay_amount;
 		if(false && ($tmp = $this->app->sess($key)) && ($revolog = new GW_PayRevolut_Log($tmp, true)) && $revolog->public_id){
 			
 			
@@ -99,7 +100,9 @@ class pay_revolut_module_ext extends GW_Module_Extension
 		if($resp['state']=='COMPLETED'){
 			//d::dumpas([$order->amount_total, $received_amount]);
 			
-			if($order->amount_total != $authorised_amount){
+			$expected_amount = method_exists($this, 'getOrderPayAmount') ? $this->getOrderPayAmount($order) : $order->amount_total;
+			
+			if((float)$expected_amount != (float)$authorised_amount){
 				$debugdata = ['response'=>$resp,'paylog'=>$revolog->toArray()];
 				$mail=[
 					'subject'=>'Payment error amount_total in cart does not match revolut response',

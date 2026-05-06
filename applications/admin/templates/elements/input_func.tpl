@@ -47,6 +47,9 @@
 
 {function name=input_content}
 	{$rowclass="`$rowclass` inp_{$type}"}
+	{if $smarty.get.highlightinput|default:'' == $name}
+		{$rowclass="`$rowclass` highlighted"}
+	{/if}
 
 	{if $i18n==2}
 		{foreach $langs as $ln_code}
@@ -70,7 +73,9 @@
 					{include "elements/afterinput/`$after_input_f`.tpl"}
 				{/capture}
 			{/if}
-			
+			{if $after_input_extra}
+				{$after_input="{$after_input}{$after_input_extra}"}
+			{/if}
 			{if $after_input}
 				<div class="input-group" style="width:{$btngroup_width|default:"290px"}">
 			{/if}		
@@ -198,17 +203,25 @@
             {$langs=array_keys($langs)}
 
     {/if}
+    {$change_track_field_key=$field}
+    {if $config_change_track}
+            {$change_track_field_key="`$config_change_track_prefix``$field`"}
+    {/if}
     
     
     
-    {if $i18n || $change_track_cnt[$field]}
+    {if $i18n || $change_track_cnt[$change_track_field_key]}
 	{function change_track_cnt}
 
 		<span class='changetrack'>
-
-			<a title="{strip_tags($title)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[field=>$field,ln=>$ch_track_ln,clean=>2])}">
+			{if $config_change_track}
+				{$fullkey="`$config_change_track_prefix``$field`"}
+				<a title="{strip_tags($title)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$app->buildUri("datasources/config/history",[fullkey=>$fullkey,ln=>$ch_track_ln,clean=>2])}">
+			{else}
+				<a title="{strip_tags($title)} / {GW::l('/g/FIELDS/changetrack')}" class='iframeopen' href="{$m->buildUri("{$item->id}/versions",[field=>$field,ln=>$ch_track_ln,clean=>2])}">
+			{/if}
 				<i class='fa fa-pencil'></i> 
-				{if $ch_track_ln}<span class='ln'>{$ch_track_ln}</span>:{/if}{$change_track_cnt[$field]}
+				{if $ch_track_ln}<span class='ln'>{$ch_track_ln}</span>:{/if}{$change_track_cnt[$change_track_field_key]}
 			</a>
 		</span>
 	{/function}	    
@@ -219,7 +232,11 @@
 		{if $i18n}
 			{foreach $langs as $ch_track_ln}
 				{$tmp = "{$field}_{$ch_track_ln}"}
-				{if $change_track_cnt[$tmp]}
+				{$tmp_count_key=$tmp}
+				{if $config_change_track}
+					{$tmp_count_key="`$config_change_track_prefix``$tmp`"}
+				{/if}
+				{if $change_track_cnt[$tmp_count_key]}
 					{call change_track_cnt field=$tmp}
 				{/if}
 			{/foreach}

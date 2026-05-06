@@ -123,13 +123,9 @@ require(['gwcms'], function(){
 </script>
 
 {if $app->user->isRoot()}
-	<a href="{$ln}/users/profile?act=doTestNotification">Test notification</a>
-	
-	<button id="updateserviceworker">UpdateService worker</button>
-	<button id="unregister_sw">Unregister worker</button>
+	<a href="{$app->buildUri('users/usr',[act=>doTestPushNotification])}">Test notification</a>
 	
 {/if}
 
 
 {/block}
-

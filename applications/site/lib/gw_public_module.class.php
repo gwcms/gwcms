@@ -894,13 +894,13 @@ class GW_Public_Module {
 	
 	function rootConfirmJson($array)
 	{
-		$payload = json_encode($array, JSON_PRETTY_PRINT);
+		$payload = json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
 		$form = ['fields'=>[
-			'data'=>['type'=>'code_json', 'required'=>1, 'default'=>$payload],
+			'data'=>['type'=>'code_json', 'required'=>1, 'default'=>$payload, 'unescape'=>1],
 		    ],'cols'=>4];
 
-		if(!($answers=$this->prompt($form, "Confirm redirect data")))
+		if(!($answers=$this->prompt($form, "Confirm redirect data<br><small>If you replace pay amount to 0.01, it will be accepted as test payment - root pay testing case.</small>")))
 			return false;
 
 		return json_decode($answers['data'], true);	

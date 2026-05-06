@@ -55,6 +55,31 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	
 	
+	function viewForm()
+	{
+		$vars = parent::viewForm();
+		$item = $vars['item'] ?? false;
+		
+		if($item && $item->id){
+			$params = [
+				'select' => "a.*, usr.username, TRIM(CONCAT(COALESCE(usr.name,''), ' ', COALESCE(usr.surname,''))) as usertitle",
+				'joins' => [
+					['left', 'gw_users AS usr', 'a.user_id = usr.id'],
+				],
+				'order' => 'a.id DESC',
+				'limit' => 10,
+			];
+			
+			$this->tpl_vars['order_change_transactions'] = GW_Change_Transaction::singleton()->findAll(
+				['order_id=?', (int)$item->id],
+				$params
+			);
+		}
+		
+		return $vars;
+	}
+	
+	
 	function getListConfig()
 	{
 		$cfg = parent::getListConfig();
@@ -62,6 +87,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$cfg['fields']['user_title'] = 'Lf';
 		$cfg['fields']['changetrack'] = 'L';
 		$cfg['fields']['item_lines'] = 'l';
+		$cfg['fields']['ledger_count'] = 'L';
 		
 		if($this->feat('itax')){
 			$cfg["fields"]['itax_status_ex'] = 'Lof';
@@ -75,6 +101,281 @@ class Module_OrderGroups extends GW_Common_Module
 			$cfg['filters']['seller_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'payments/sellers'];
 					
 		return $cfg;
+	}
+	
+	protected function buildPaymentTrackContext($order)
+	{
+		$user = $this->app->user;
+		$username = trim((string)($user->username ?? ''));
+		
+		if(!$username)
+			$username = trim((string)$user->title);
+		
+		if(!$username)
+			$username = 'user#'.(int)$user->id;
+		
+		$is_system = !empty($_GET['sys_call']);
+		$pay_type = trim((string)($_GET['pay_type'] ?? $order->pay_type ?? ''));
+		$action_type = $is_system ? 'automatic_payment_approval' : 'manual_payment_approval';
+		
+		if($is_system){
+			$gateway = $pay_type ?: 'system';
+			$note = "Automatic payment approval via {$gateway} by {$username}";
+		}else{
+			$note = "Manual payment approval by {$username}: funds received by bank transfer";
+		}
+
+		$entry = [
+			'action_type' => $action_type,
+			'context_obj_type' => 'gw_order_group',
+			'context_obj_id' => (int)$order->id,
+			'order_id' => (int)$order->id,
+			'user_id' => (int)$user->id,
+			'status' => 'started',
+			'note' => $note,
+			'meta' => [
+				'order_id' => (int)$order->id,
+				'user_id' => (int)$user->id,
+				'pay_type' => $pay_type,
+				'sys_call' => (int)$is_system,
+			],
+		];
+		
+		$tx = GW_Change_Transaction::singleton()->createNewObject($entry);
+		$tx->insert();
+		
+		
+		
+		return [
+			'id' => (int)$tx->id,
+			'note' => $note,
+			'transaction_id' => (int)$tx->id,
+		];
+	}
+	
+	protected function completeTrackContext($context, $status='completed', $meta=[])
+	{
+		$txid = (int)($context['id'] ?? $context['transaction_id'] ?? 0);
+		
+		if(!$txid)
+			return false;
+		
+		$tx = GW_Change_Transaction::singleton()->find(['id=?', $txid]);
+		
+		if(!$tx)
+			return false;
+		
+		$tx->status = $status;
+		
+		if($meta){
+			$current_meta = (array)$tx->meta;
+			$tx->meta = array_merge($current_meta, $meta);
+		}
+		
+		$tx->updateChanged();
+		return $tx;
+	}
+
+	protected function getLatestOrderTransaction($order)
+	{
+		if(!$order || !$order->id)
+			return false;
+
+		return GW_Change_Transaction::singleton()->find(
+			['order_id=?', (int)$order->id],
+			['order' => 'id DESC']
+		);
+	}
+
+	protected function paymentSourceLogTable($pay_type)
+	{
+		switch($pay_type){
+			case 'paysera':
+				return 'gw_paysera_log';
+			case 'paypal':
+				return 'gw_paypal_log';
+			case 'montonio':
+			case 'revolut':
+			case 'kevin':
+				return 'gw_payuniversal_log';
+		}
+		
+		return '';
+	}
+	
+	protected function createOrderPaymentConfirmation($order, $direction, $amount, $opts=[])
+	{
+		$amount = round((float)$amount, 2);
+		
+		if(!$order || !$order->id || $amount <= 0)
+			return false;
+		
+		if(!GW_Order_Payment_Confirmation::tableExists())
+			return false;
+		
+		$pay_type = trim((string)($opts['source'] ?? $_GET['pay_type'] ?? $order->pay_type ?? 'manual'));
+		$source_log_id = (int)($opts['source_log_id'] ?? $_GET['log_entry_id'] ?? $order->pay_confirm_id ?? 0);
+		$source_log_table = $opts['source_log_table'] ?? $this->paymentSourceLogTable($pay_type);
+		$received_at = $opts['received_at'] ?? $_GET['received_at'] ?? date('Y-m-d H:i:s');
+		$reference = trim((string)($opts['reference'] ?? $_GET['reference'] ?? ''));
+		
+		$unique_key = $opts['unique_key'] ?? implode(':', [
+			$pay_type ?: 'manual',
+			$direction,
+			(int)$order->id,
+			$source_log_id,
+			md5($amount.'|'.$received_at.'|'.$reference),
+		]);
+		
+		if(GW_Order_Payment_Confirmation::singleton()->find(['unique_key=?', $unique_key]))
+			return false;
+		
+		$confirmation = GW_Order_Payment_Confirmation::singleton()->createNewObject();
+		$confirmation->setValues([
+			'order_id' => (int)$order->id,
+			'direction' => $direction,
+			'status' => $opts['status'] ?? 'confirmed',
+			'source' => $pay_type ?: 'manual',
+			'source_log_table' => $source_log_table,
+			'source_log_id' => $source_log_id,
+			'unique_key' => $unique_key,
+			'amount' => $amount,
+			'currency' => $opts['currency'] ?? ($this->config->default_currency_code ?: 'EUR'),
+			'received_at' => $received_at,
+			'bank_account' => $opts['bank_account'] ?? $_GET['bank_account'] ?? '',
+			'reference' => $reference,
+			'comment' => $opts['comment'] ?? $_GET['payment_comment'] ?? '',
+			'created_by' => (int)$this->app->user->id,
+			'change_transaction_id' => (int)($opts['change_transaction_id'] ?? 0),
+			'test' => (int)($opts['test'] ?? $order->pay_test ?? isset($_GET['paytest'])),
+		]);
+		$confirmation->insert();
+		
+		return $confirmation;
+	}
+	
+	protected function getOwnBankAccountOptions()
+	{
+		$type = GW_Classificator_Types::singleton()->find(['`key`=?', 'own_bank_accounts']);
+		
+		if(!$type)
+			return [];
+		
+		return GW_Classificators::singleton()->getAssoc(
+			['key', 'title_'.$this->app->ln],
+			['`type`=? AND active=1', $type->id]
+		);
+	}
+	
+	function doMigrateOrderGroupWithLedger()
+	{
+		if(!$this->app->user->isRoot())
+			return $this->setError('Root only');
+		
+		if(!GW_Order_Payment_Confirmation::tableExists()){
+			$this->setError('Ledger table not found. Run sql/2026-04-30-2 order payment ledger.sql first.');
+			$this->jumpAfterSave();
+		}
+		
+		$cfg = new GW_Config($this->module_path[0].'/');
+		$existing = $cfg->get('migrateOrderGroupWithLedger');
+		
+		if($existing && !isset($_GET['force'])){
+			$this->setMessage('Order group ledger migration already done: '.$existing);
+			$this->jumpAfterSave();
+		}
+		
+		$db = GW::db();
+		$before = $db->fetch_row("SELECT COUNT(*) AS cnt FROM gw_order_payment_confirmation WHERE source='legacy'");
+		$before_cnt = (int)($before['cnt'] ?? 0);
+		
+		$db->query("
+			INSERT IGNORE INTO gw_order_payment_confirmation
+				(order_id, direction, status, source, source_log_table, source_log_id, unique_key, amount, currency, received_at, reference, comment, created_by, test, insert_time, update_time)
+			SELECT
+				id,
+				'payment',
+				'confirmed',
+				'legacy',
+				CASE
+					WHEN pay_type='paysera' THEN 'gw_paysera_log'
+					WHEN pay_type='paypal' THEN 'gw_paypal_log'
+					WHEN pay_type IN ('montonio','revolut','kevin') THEN 'gw_payuniversal_log'
+					ELSE ''
+				END,
+				pay_confirm_id,
+				CONCAT('legacy:payment:', id, ':', pay_confirm_id),
+				ROUND(amount_total, 2),
+				'EUR',
+				COALESCE(pay_time, update_time, insert_time, NOW()),
+				CONCAT('legacy marked as payd order #', id),
+				'Legacy ledger entry: order was marked as payd before payment ledger existed',
+				0,
+				pay_test,
+				NOW(),
+				NOW()
+			FROM gw_order_group
+			WHERE payment_status IN (7,9) AND amount_total > 0
+		");
+		
+		$db->query("
+			INSERT IGNORE INTO gw_order_payment_confirmation
+				(order_id, direction, status, source, source_log_table, source_log_id, unique_key, amount, currency, received_at, reference, comment, created_by, test, insert_time, update_time)
+			SELECT
+				id,
+				'refund',
+				'confirmed',
+				'legacy',
+				'',
+				0,
+				CONCAT('legacy:refund:', id),
+				ROUND(amount_total, 2),
+				'EUR',
+				COALESCE(update_time, pay_time, insert_time, NOW()),
+				CONCAT('legacy refunded order #', id),
+				'Backfilled from gw_order_group.payment_status=9',
+				0,
+				pay_test,
+				NOW(),
+				NOW()
+			FROM gw_order_group
+			WHERE payment_status=9 AND amount_total > 0
+		");
+		
+		$after = $db->fetch_row("SELECT COUNT(*) AS cnt FROM gw_order_payment_confirmation WHERE source='legacy'");
+		$created = (int)($after['cnt'] ?? 0) - $before_cnt;
+		
+		$status_changes = 0;
+		$order_ids = array_keys($db->fetch_assoc("SELECT DISTINCT order_id FROM gw_order_payment_confirmation WHERE source='legacy'"));
+		$orders = $order_ids
+			? GW_Order_Group::singleton()->findAll(GW_DB::inCondition('id', $order_ids))
+			: [];
+		
+		foreach($orders as $order){
+			$old_status = (int)$order->payment_status;
+			$order->recalcPaymentLedger(false);
+			
+			if((int)$order->payment_status !== $old_status)
+				$status_changes++;
+			
+			$order->updateChanged();
+		}
+		
+		$message = 'done '.date('Y-m-d').' created '.$created.' ledger records, order payment status changes: '.$status_changes;
+		$cfg->set('migrateOrderGroupWithLedger', $message);
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode([
+				'ok' => 1,
+				'created' => $created,
+				'status_changes' => $status_changes,
+				'message' => $message,
+			]);
+			exit;
+		}
+		
+		$this->setMessage('migrateOrderGroupWithLedger '.$message);
+		$this->jumpAfterSave();
 	}
 	
 	
@@ -91,6 +392,15 @@ class Module_OrderGroups extends GW_Common_Module
 		//new version with sql UPDATE gw_order_group AS g SET itmcnt = (SELECT count(*) FROM gw_order_item AS i WHERE i.group_id=g.id);
 		
 		parent::prepareCounts($list);
+		
+		if(!$list || !GW_Order_Payment_Confirmation::tableExists())
+			return false;
+		
+		$ids = array_keys($list);
+		$this->tpl_vars['ledger_counts'] = GW_Order_Payment_Confirmation::singleton()->countGrouped(
+			'order_id',
+			GW_DB::inCondition('order_id', $ids)
+		);
 	}	
 	
 	
@@ -112,6 +422,41 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		return $x;
+	}
+
+	function getOptionsCfg()
+	{
+		$addusername = !empty($_GET['addusername']);
+		
+		$opts = [
+			'joins'=>[],
+			'order'=>'a.id DESC',
+			'title_func'=>function($item) use ($addusername) {
+			
+			//d::dumpas($item);
+				$title = $item->title;
+				
+				if($addusername && $item->user_id){
+					$username = $item->username ?? '';
+					
+					
+					if($username){
+						$title .= ' - '.$username;
+					}
+				}
+				
+				return $title;
+			},
+			'search_fields'=>['a.id']
+		];
+		
+		if($addusername){
+			$opts['select'] = 'a.*, user.username as username';
+			$opts['joins'][] = ['left', 'gw_users AS user', 'a.user_id = user.id'];
+			$opts['search_fields'][] = 'user.username';
+		}
+		
+		return $opts;
 	}
 	
 	/*
@@ -203,6 +548,18 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['PHONE'] = $user->phone;
 		};
 		
+		$translateKeyval = function($key, $fallback) {
+			if(!$key){
+				return GW::ln($fallback);
+			}
+			
+			if($key[0] !== '/'){
+				$key = '/'.$key;
+			}
+			
+			return GW::ln($key);
+		};
+		
 
 			
 		$build = false;
@@ -242,6 +599,18 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['AMOUNT_DISCOUNT'] = $item->amount_discount;
 		$v['AMOUNT_COUPON'] = $item->amount_coupon;			
 		$v['AMOUNT_ITEMS'] = $item->amount_items;
+		$v['SELLER_REKVIZITAI_VATINVOICE'] = GW::ln("/M/orders/TKPC_MENUTURAS_PVM_REKVIZITAI");
+		$v['SELLER_REKVIZITAI_PREINVOICE'] = $v['SELLER_REKVIZITAI_VATINVOICE'];
+		
+		if(GW::s('PROJECT_NAME') == 'artistdb'){
+			$v['SELLER_REKVIZITAI_VATINVOICE'] = $translateKeyval(
+				$item->get('keyval/artistdbseller_vatinvoice'),
+				"/M/orders/TKPC_MENUTURAS_PVM_REKVIZITAI"
+			);
+			$v['SELLER_REKVIZITAI_PREINVOICE'] = $item->get('keyval/artistdbseller_preinvoice')
+				? $translateKeyval($item->get('keyval/artistdbseller_preinvoice'), "/M/orders/TKPC_MENUTURAS_PVM_REKVIZITAI")
+				: $v['SELLER_REKVIZITAI_VATINVOICE'];
+		}
 		
 		$orderlink = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['orderid'=>$item->id,'id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
 		$v['ORDER_LINK'] = "<a href='$orderlink'>".GW_String_Helper::truncate($orderlink,50)."</a>";
@@ -258,6 +627,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$v["VAT"]=1;
 		}
 		
+		
 		foreach($item->items as $oitem){
 			
 			$itm=[
@@ -270,6 +640,9 @@ class Module_OrderGroups extends GW_Common_Module
 			
 			if($oitem->is_expired)
 				$itm['expired'] = $oitem->expires;
+			
+			
+			//d::dumpas($oitem);
 			
 			if($this->feat('vat') && $oitem->vat_group){
 				$itm["vat"]=$oitem->vat_title;
@@ -396,24 +769,121 @@ class Module_OrderGroups extends GW_Common_Module
 		
 	}
 	
-	
-	function doMarkAsPayd()
-	{		
+	function doRecalcOrderPayments()
+	{
 		$item = $this->getDataObjectById();
+		$item->updateTotal();
 		
+		$this->setMessage('Užsakymo suma ir mokėjimų būklė perskaičiuota');
+		$this->jumpAfterSave();
+	}
+	
+	function registerManualPaymentRefund($order, $amount)
+	{
+		$amount = abs((float)$amount);
 		
-		$query = $_GET['rcv_amount'] ?? false;
-		
-		if($query === false){
-			$form = ['fields'=>['rcv_amount'=>['type'=>'text', 'required'=>1]],'cols'=>1];
-		
-				
-		
-			if(!($answers=$this->prompt($form, 'Nurodykite gautą sumą (siekiant išvengti klaidos)', ['method'=>'post'])))
-				return false;	
-
-			$_GET['rcv_amount'] = $query = $answers["rcv_amount"];
+		if($amount <= 0){
+			$this->setError('Grąžinimo suma turi būti didesnė už 0');
+			$this->jumpAfterSave();
 		}
+		
+		$track_context = $this->buildPaymentTrackContext($order);
+		$this->createOrderPaymentConfirmation($order, 'refund', $amount, [
+			'source' => 'manual',
+			'bank_account' => $_GET['bank_account'] ?? '',
+			'received_at' => $_GET['received_at'] ?? date('Y-m-d H:i:s'),
+			'reference' => $_GET['reference'] ?? '',
+			'comment' => $_GET['payment_comment'] ?? '',
+			'change_transaction_id' => (int)($track_context['transaction_id'] ?? 0),
+			'unique_key' => 'manual-refund:'.$order->id.':'.md5($amount.'|'.($_GET['received_at'] ?? '').'|'.($_GET['reference'] ?? '').'|'.microtime(true)),
+		]);
+		
+		$order->recalcPaymentLedger(false);
+		$order->updateChanged();
+		$this->completeTrackContext($track_context, 'completed', [
+			'payment_status' => (int)$order->payment_status,
+			'refund_amount' => $amount,
+		]);
+		
+		$this->setMessage('Grąžinimas užregistruotas mokėjimų žurnale');
+		$this->jumpAfterSave();
+	}
+	
+	
+		function doMarkAsPayd()
+		{		
+			$item = $this->getDataObjectById();
+			
+			
+			$query = $_GET['rcv_amount'] ?? false;
+			
+			if($query === false){
+				$bank_accounts = $this->getOwnBankAccountOptions();
+				
+				if(!GW_Order_Payment_Confirmation::tableExists()){
+					$this->setError('Ledger table not found. Run sql/2026-04-30-2 order payment ledger.sql first.');
+					$this->jumpAfterSave();
+				}
+				
+				if(!$bank_accounts){
+					$this->setError('Pirma pridėkite bent vieną opciją: Datasources / Classificator types / Mano bankinės sąskaitos.');
+					$this->jumpAfterSave();
+				}
+				
+				$prompt_title = 'Užregistruokite mokėjimą. Šiuo metu balanso suma yra '
+					.number_format((float)$item->balance_amount, 2, '.', '').' EUR';
+				
+				$form = [
+					'fields'=>[
+						'rcv_amount'=>[
+							'type'=>'text',
+							'required'=>1,
+							'default'=>'',
+							'note'=>'Teigiama suma registruoja įplauką, neigiama suma registruoja grąžinimą.',
+						],
+						'received_at'=>[
+							'type'=>'date',
+							'required'=>1,
+							'default'=>date('Y-m-d'),
+						],
+						'bank_account'=>[
+							'type'=>'select_ajax',
+							'options'=>$bank_accounts,
+							'modpath'=>'datasources/classificators',
+							'source_args'=>['group'=>'own_bank_accounts', 'byKey'=>1],
+							'after_input_f'=>'editadd',
+							'preload'=>1,
+							'empty_option'=>1,
+							'required'=>1,
+							'note'=>'Opcijos tvarkomos per Datasources / Classificator types / Mano bankinės sąskaitos.',
+						],
+						'reference'=>[
+							'type'=>'text',
+							'required'=>0,
+						],
+						'payment_comment'=>[
+							'type'=>'textarea',
+							'required'=>0,
+						],
+					],
+					'cols'=>1
+				];
+			
+					
+			
+				if(!($answers=$this->prompt($form, $prompt_title, ['method'=>'post'])))
+					return false;	
+	
+				$_GET['rcv_amount'] = $query = $answers["rcv_amount"];
+				$_GET['received_at'] = $answers['received_at'];
+				$_GET['bank_account'] = $answers['bank_account'];
+				$_GET['reference'] = $answers['reference'] ?? '';
+				$_GET['payment_comment'] = $answers['payment_comment'] ?? '';
+				$_GET['manual_ledger'] = 1;
+			}
+			
+			if((float)$query < 0)
+				return $this->registerManualPaymentRefund($item, $query);
 		
 		
 		
@@ -432,28 +902,49 @@ class Module_OrderGroups extends GW_Common_Module
 		if($this->app->user->isRoot() && $query==777){
 			$this->setMessageEx(['text'=>'No price verification for root user and code 777', 'type'=>GW_MSG_INFO]);
 			$_GET['rcv_amount'] = $item->amount_total;
-		}elseif($query != $item->amount_total){
-			$this->setError(GW::l('/m/RECEIVED_AMOUNT_DOES_NOT_MATCH'));
-			$this->app->jump();
-			return false;
-		}
-		
-		
-		
-		
-		$item->fireEvent('BEFORE_CHANGES');
+			}elseif($query != $item->amount_total && !isset($_GET['manual_ledger'])){
+				$this->setError(GW::l('/m/RECEIVED_AMOUNT_DOES_NOT_MATCH'));
+				$this->app->jump();
+				return false;
+			}
 		
 		//ta jau padaro doMarkAsPaydSystem
 		//$item->payment_status=7;
 		//$item->updateChanged();		
 		
-		$this->doMarkAsPaydSystem($item);
-		
-		//d::dumpas($item);
-		
+			$this->doMarkAsPaydSystem($item);
+			
+			$item = GW_Order_Group::singleton()->find(['id=?', $item->id]);
+			$item->recalcPaymentLedger(false);
+			
+			if((float)$item->balance_amount > 0){
+				$link = GW::s('SITE_URL').$this->app->ln.'/direct/orders/orders?'.http_build_query([
+					'orderid' => $item->id,
+					'id' => $item->id,
+					'key' => $item->secret,
+				]);
+				
+				$this->setMessageEx([
+					'type' => GW_MSG_WARN,
+					'text' => '<b>JŪS SUKŪRĖTE DALINĮ APMOKĖJIMĄ, KLIENTUI IKI PILNO APMOKĖJIMO TRŪKS '
+						.number_format((float)$item->balance_amount, 2, '.', '')
+						.' EUR.</b><br>Nusiųskite klientui nuorodą, kurioje jis galės apmokėti likutį: '
+						.'<a target="_blank" href="'.$link.'">'.$link.'</a>',
+				]);
+			}
+			
+			//d::dumpas($item);
+			
 		$this->setMessage('/m/PAYMENT_APPROVED');
 		$this->jumpAfterSave();
 		
+	}
+	
+	function doMarkAsRefund()
+	{
+		$item = $this->getDataObjectById();
+		
+		$this->doMarkAsRefundSystem($item);
 	}
 
 	
@@ -471,8 +962,8 @@ class Module_OrderGroups extends GW_Common_Module
 			$this->app->jump();
 		}	
 		
-		
-		$order->fireEvent('BEFORE_CHANGES');
+		$track_context = $this->buildPaymentTrackContext($order);
+		$order->fireEvent('BEFORE_CHANGES', $track_context);
 		
 		$log_entry_id = $_GET['log_entry_id'] ?? false;
 		$rcv_amount = $_GET['rcv_amount'] ?? false;
@@ -482,7 +973,7 @@ class Module_OrderGroups extends GW_Common_Module
 		}
 			
 			
-		if($rcv_amount != $order->amount_total && !isset($_GET['paytest']) ){
+		if($rcv_amount != $order->amount_total && !isset($_GET['paytest']) && !isset($_GET['manual_ledger']) ){
 			$order->status = "WrongAmount exp: $order->amount_total rcv: $rcv_amount";
 			$order->payment_status = 8;
 		}else{
@@ -490,26 +981,38 @@ class Module_OrderGroups extends GW_Common_Module
 			$order->status = 4;// status for delivery tracking 4 - is accepted and processing
 		}
 
-		foreach($order->items as $item){
-			$obj = $item->obj;
-			if($obj){
-				$obj->orderItemPayd($item->unit_price, $item->qty, $order, $item);
-			}
-		}
-
 		if(isset($_GET['paytest']))
 			$order->pay_test =1;	
 
 		$order->pay_confirm_id = $log_entry_id;
 		$order->pay_time = date('Y-m-d H:i:s');
+		
+		$this->createOrderPaymentConfirmation($order, 'payment', $rcv_amount ?: $order->amount_total, [
+			'change_transaction_id' => (int)($track_context['transaction_id'] ?? 0),
+			'received_at' => $order->pay_time,
+		]);
+		$order->recalcPaymentLedger(false);
+		
+		if((int)$order->payment_status === 7){
+			foreach($order->items as $item){
+				$obj = $item->obj;
+				if($obj){
+					$obj->orderItemPayd($item->unit_price, $item->qty, $order, $item, $track_context);
+				}
+			}
+		}
 
 		$order->updateChanged();
+		$this->completeTrackContext($track_context, 'completed', [
+			'payment_status' => (int)$order->payment_status,
+			'pay_time' => $order->pay_time,
+		]);
 		
 					
 		
 		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		
-		if($this->config->confirm_email_tpl){
+		if($this->config->confirm_email_tpl && (int)$order->payment_status === 7){
 			$lang = $order->user->use_lang ?: $order->use_lang;
 			$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderPaydNotifyUser&cron=1");	
 			
@@ -524,6 +1027,135 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		
 		return false;
+	}
+	
+	function addCommentToObject($obj_type, $obj_id, $comment)
+	{
+		$c = GW_Comments::singleton()->createNewObject();
+		$c->obj_type = $obj_type;
+		$c->obj_id = $obj_id;
+		$c->user_id = $this->app->user->id;
+		$c->comment = $comment;
+		$c->insert();
+	}
+	
+	function doMarkAsRefundSystem($order=false)
+	{
+		if(!$order)
+			$order = $this->getDataObjectById();
+		
+		if(!$order){
+			$this->setError('Order not found');
+			$this->app->jump();
+		}
+		
+		if($order->payment_status==9 && !isset($_GET['debugrepeat'])){
+			$this->setError('Order already refunded');
+			$this->app->jump();
+		}
+		
+		$order->fireEvent('BEFORE_CHANGES');
+		
+		$refund_item_ids = [];
+		if($_GET['refund_item_ids'] ?? false){
+			foreach(explode(',', $_GET['refund_item_ids']) as $id){
+				$id = (int)trim($id);
+				if($id){
+					$refund_item_ids[$id] = $id;
+				}
+			}
+		}
+		
+		$refund_amount = (float)($_GET['refund_amount'] ?? $order->amount_total);
+		$refund_reference = $_GET['refund_reference'] ?? '';
+		$refund_uuid = $_GET['refund_uuid'] ?? '';
+		$refund_comment = $_GET['refund_comment'] ?? $order->get('extra/refund/pending_comment');
+		
+		$order->payment_status = 9;
+		$order->status = 9;
+		$order->active = 0;
+		$order->open = 0;
+		$order->set('extra/refund/executed_at', date('Y-m-d H:i:s'));
+		$order->set('extra/refund/amount', $refund_amount);
+		$order->set('extra/refund/refund_reference', $refund_reference);
+		$order->set('extra/refund/uuid', $refund_uuid);
+		$order->set('extra/refund/pending_comment', '');
+		
+		$track_context = $this->buildPaymentTrackContext($order);
+		$this->createOrderPaymentConfirmation($order, 'refund', $refund_amount, [
+			'source' => $order->pay_type ?: 'manual',
+			'source_log_id' => (int)$order->pay_confirm_id,
+			'reference' => $refund_reference,
+			'comment' => $refund_comment,
+			'change_transaction_id' => (int)($track_context['transaction_id'] ?? 0),
+			'unique_key' => 'refund:'.$order->id.':'.($refund_uuid ?: $refund_reference ?: md5($refund_amount.'|'.date('Y-m-d H:i:s'))),
+		]);
+		
+		$refunded_cnt = 0;
+		$skipped_cnt = 0;
+		
+		foreach($order->items as $item){
+			if($refund_item_ids && !isset($refund_item_ids[$item->id])){
+				continue;
+			}
+			
+			$obj = $item->obj;
+			
+			if($obj && method_exists($obj, 'orderItemRefund')){
+				$obj->orderItemRefund($item->unit_price, $item->qty, $order, $item);
+				$refunded_cnt++;
+			}else{
+				$skipped_cnt++;
+				$msg = "Refund not completed for order item #{$item->id}: orderItemRefund() not implemented"
+					.($obj ? " in ".get_class($obj) : ', related object not found');
+				
+				$this->addCommentToObject('gw_order_item', $item->id, $msg);
+				$this->addCommentToObject('gw_order_group', $order->id, $msg);
+			}
+		}
+		
+		$order->recalcPaymentLedger(false);
+		$order->active = 0;
+		$order->open = 0;
+		$order->updateChanged();
+		$this->completeTrackContext($track_context, 'completed', [
+			'payment_status' => (int)$order->payment_status,
+			'refund_amount' => $refund_amount,
+		]);
+		
+		$summary = "Refund marked on ".date('Y-m-d H:i:s')
+			."\nAmount: ".number_format($refund_amount, 2, '.', '')." EUR"
+			.($refund_uuid ? "\nUUID: ".$refund_uuid : '')
+			.($refund_reference ? "\nRefund reference: ".$refund_reference : '')
+			."\nRefunded items: ".$refunded_cnt
+			."\nSkipped items: ".$skipped_cnt;
+		
+		if($refund_comment){
+			$summary .= "\nDetails: ".$refund_comment;
+		}
+		
+		$this->addCommentToObject('gw_order_group', $order->id, $summary);
+		
+		if(isset($_GET['sys_call'])){
+			echo json_encode(['ok'=>1, 'order_id'=>$order->id, 'refunded_items'=>$refunded_cnt, 'skipped_items'=>$skipped_cnt]);
+			exit;
+		}
+		
+		if($tx = $this->getLatestOrderTransaction($order)){
+			$link = $this->app->buildUri('datasources/changetransactions', [
+				'transaction_id' => $tx->id,
+				'clean' => 2,
+			]);
+			
+			$this->setMessageEx([
+				'text' => 'You may want to review or undo the latest transaction. '
+					.'<a class="btn btn-xs btn-default iframe-under-tr" href="'.$link.'">Open latest transaction #'.$tx->id.'</a>',
+				'type' => GW_MSG_WARN,
+			]);
+		}
+		
+		$this->setMessage("Refund completed for order #{$order->id}");
+		$this->jumpAfterSave();
 	}
 	
 	
@@ -699,6 +1331,13 @@ class Module_OrderGroups extends GW_Common_Module
 		//$this->initOrderedItems($order);
 		
 		$this->tpl_vars['order'] = $order; 
+		
+		if(method_exists($order, 'recalcPaymentLedger'))
+			$order->recalcPaymentLedger(false);
+		
+		$this->tpl_vars['payment_confirmations'] = method_exists($order, 'getPaymentConfirmations')
+			? $order->getPaymentConfirmations()
+			: [];
 			
 		if($export){
 			$this->tpl_vars['export'] = 1;

@@ -115,15 +115,45 @@ class GW_Log_Watch extends GW_Data_Object
 		return file_get_contents($fn);
 	}
 	
-	function clean()
+	function clean($keepBytes = 10240) // 10KB default
 	{
 		$fn = $this->getFilename($this->id);
-				
+
+		if (!file_exists($fn)) {
+			return false;
+		}
+
+		$size = filesize($fn);
+
+		// If file is already small, do nothing
+		if ($size <= $keepBytes) {
+			return true;
+		}
+
+		$fp = fopen($fn, 'c+'); // read + write
+		if (!$fp) {
+			return false;
+		}
+
+		// Move pointer to the position where we keep data
+		fseek($fp, -$keepBytes, SEEK_END);
+
+		// Read last part
+		$data = fread($fp, $keepBytes);
+
+		// Rewrite file with only that part
+		ftruncate($fp, 0);
+		rewind($fp);
+		fwrite($fp, $data);
+
+		fclose($fp);
+
+		// reset offset because file changed
 		$this->last_offset = 0;
 		$this->saveData();
-		
-		return file_put_contents($fn, "");
-	}	
+
+		return true;
+	}
 	
 	function findAll($conditions = NULL, $options = Array())
 	{

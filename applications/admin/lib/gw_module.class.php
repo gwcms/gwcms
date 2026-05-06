@@ -333,6 +333,11 @@ class GW_Module
 			$this->view_name = $name;
 		
 		$vars = $this->{"view{$this->view_name}"}($params);
+
+		if ($vars === 'skiptemplate') {
+			$this->ob_end();
+			return;
+		}
 						
 		if(is_array($vars))
 			foreach($vars as $varname => $var)
@@ -880,6 +885,5 @@ class GW_Module
 		return GW::s('DEVELOPER_PRESENT') && $this->app->sess('debug');
 	}	
 }
-
 
 

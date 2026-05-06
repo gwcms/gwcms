@@ -15,6 +15,92 @@ class Module_Login extends GW_Module
 	function viewLogin()
 	{		
 		$this->tpl_vars['autologin'] = GW_Auth::isAutologinEnabled();
+		
+		
+		
+
+		
+		
+		//1. esame slave site ir peradresuojame tada i main site autorizacija
+		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_DEV && GW::s("MULTISITE") && $_SERVER['HTTP_HOST'] !=GW::s('MAIN_HOST')  && !isset($_GET['avoidmainsiteauth'])){
+					
+			if(!$this->app->user){
+				$returnurl = "https://".$_SERVER['HTTP_HOST'].'/admin/'.$this->app->ln."/users/login/acceptmainsite";
+				//d::Dumpas("peradresuojame i main host ir paprasome kad grazintu atgal: ".$returnurl);
+				header('Location: https://'.GW::s('MAIN_HOST').'/admin/'.$this->app->ln.'/users/login?return_url=' . urlencode($returnurl));
+			}else{
+				// jau prisijunge tai nieko ir daryt nebereikia
+				$this->app->jump('/');
+				//$token = $this->storeToken();
+				//$uri = Navigator::buildURI($url,['mainsitetoken'=>$token]);
+			}
+		}
+		
+		
+		//2. esame mainhoste jei prisilogine iskart grazinam su tokenu jei ne tada i sessija issisaugom gryzimo adresa
+		if(isset($_GET['return_url'])){
+			
+			//jei jau prisilogines tai iskart sukurt tokena ir grazint i slavesite
+			if($this->app->user){
+				$uri = $_GET['return_url'];
+				
+				if(strpos($uri, 'acceptmainsite') !==false){
+					$this->multisiteAuthRedirect($uri);
+				}
+				
+				//d::dumpas($uri);
+				
+				header("Location: ".$uri);
+				exit;
+			}
+			
+			
+			$this->app->sess('after_auth_nav', $_GET['return_url']);
+			
+			unset($_GET['return_url']);
+			$this->app->jump();			
+		}
+		
+	
+	}
+	
+	//esame slave site tikriname gauta token
+	function viewAcceptMainsite()
+	{
+		
+		$dataraw= file_get_contents($url='https://'.GW::s('MAIN_HOST').'/admin/'.$this->app->ln.'/users/login/getbytoken?token='.$_GET['mainsitetoken'].'&temp_access='.$_GET['mainsitepass']);
+		
+		
+		
+		$data = json_decode($dataraw);
+		/*
+		d::dumpas([
+		    'inner_Request_to_main_site_response'=>$dataraw,
+		    'token'=>$_GET['mainsitetoken']
+		]);
+		 * 
+		 */
+		
+		if($user = GW_User::singleton()->find(['id=? AND username=? AND active=1', $data->id, $data->username])){
+			$this->setMessage('Authorisation approved by '.GW::s('MAIN_HOST').'. Welcome!');
+			$this->app->auth->login($user);
+			
+			$this->app->jump('/');
+		}else{
+			$this->setMessage('Authorisation rejected by '.GW::s('MAIN_HOST').' <pre>'.json_encode($dataraw).'</pre>');
+			$this->app->jump('users/login', ['avoidmainsiteauth'=>1]);
+		}
+	}
+	
+	//main site response stored token
+	function viewGetByToken()
+	{
+		//if(!in_array(GW::ip(), ['82.135.242.67','127.0.0.1']) ){ die("ip not permitted ".GW::ip());}
+		GW_Temp_Data::singleton()->cleanup();
+		$data = GW_Temp_Data::singleton()->readAndDelete(GW_USER_SYSTEM_ID, 'authtoken', $_GET['token']);
+		echo $data;
+		exit;
+	
 	}
 
 	function doLogin()
@@ -37,6 +123,8 @@ class Module_Login extends GW_Module
 			$path = false;
 			
 		}else{
+			
+			
 			$this->tpl_vars['success']=1;
 			$success=true;
 			$path = "";
@@ -68,14 +156,49 @@ class Module_Login extends GW_Module
 		
 		if(!$dialog)
 			if($this->app->sess('after_auth_nav')){
+				
+				
+				
+				
+				
 				$uri = $this->app->sess('after_auth_nav');
 				$this->app->sess('after_auth_nav', "");
+				
+				//jei esame multisite pagrindiniam hoste patikri ar redirect url yra i slave site, jei taip dadeti tokena
+				if(strpos($uri, 'acceptmainsite') !==false){
+					$this->multisiteAuthRedirect($uri);
+				}
+				
+				
+				
+				
 				header("Location: ".$uri);
 				exit;
 			}else{
 				$this->app->jump($path,$params);	
 			}
 		
+	}
+	
+	//multisiteauth isaugoti main hoste
+	function storeToken()
+	{
+		$token = GW_String_Helper::getRandString(50);
+		$data = ['id'=>$this->app->user->id, 'username'=>$this->app->user->username];
+		GW_Temp_Data::singleton()->store(GW_USER_SYSTEM_ID,'authtoken', $token, json_encode($data),  '1 minute');
+		return $token;
+	}
+	
+	function multisiteAuthRedirect($uri)
+	{
+		
+		$token = GW::getInstance('gw_temp_access')->getToken($this->app->user->id);
+		$to_avoidcaptcha = $this->app->user->id . ',' . $token;
+		
+		$token = $this->storeToken();
+		$uri = Navigator::buildURI($uri,['mainsitetoken'=>$token,'mainsitepass'=>$to_avoidcaptcha]);
+		header("Location: ".$uri);
+		exit;
 	}
 
 	function viewLogout()
@@ -161,5 +284,8 @@ class Module_Login extends GW_Module
 
 		$this->jump();
 	}	
+	
+	
+
 	
 }

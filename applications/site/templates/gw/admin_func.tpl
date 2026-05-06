@@ -1,5 +1,5 @@
 
-{if ($app->user && $app->user->is_admin) || GW::$devel_debug || GW::s('DEVELOPER_PRESENT')}	
+{if ($app->user && $app->user->is_admin) || GW::s('DEVELOPER_PRESENT')}	
         <style>
                 .lnresulthighl{
 			background-color: brown !important;
@@ -18,7 +18,7 @@
 	<script src="/vendor/ckeditor422/ckeditor.js"></script>
 
 
-{/if}
+
 
 
 {function name=display_site}
@@ -69,9 +69,11 @@
 
 	{if GW::s(MULTISITE)}
 		{*$mainurl="https://{GW::s(MAIN_HOST)}"*}
+		{*
 		{$hosts=array_flip(GW::s("MULTISITE_CFG/{GW::s(MULTISITE_DEFAULT)}/hosts"))}
 		{$mainhost=$hosts[GW::s("PROJECT_ENVIRONMENT")]}
-		{$mainurl="http://{$mainhost}"}
+		*}
+		{$mainurl=GW::s(SITE_URL)}
 	{else}
 		{$mainurl=""}
 	{/if}
@@ -79,7 +81,8 @@
 	<ul class="dropdown-menu">
 		<li><a target="_blank" href="{$mainurl}/admin/{$ln}/system/tools?act=doDebugModeToggle&app=SITE&uri={rawurlencode($smarty.server.REQUEST_URI)}">Debug rėžimas</a></li>
 		<li><a target="_blank" href="{$mainurl}/admin/{$ln}/sitemap/pages/{$app->page->id}/form?pid={$app->page->id}">adm edit {$app->page->title}</a></li>
-		<li><a target="_blank" href="{$mainurl}/admin/{$ln}/system/tools?act=doSwitchEnvironment&uri={rawurlencode($smarty.server.REQUEST_URI)}">switch ENV</a></li>
+		<li><a target="_blank" href="{$mainurl}/admin/{$ln}/system/tools?act=doSwitchEnvironment&uri={rawurlencode($smarty.server.REQUEST_URI)}">switch DEV-PROD</a></li>
+		<li><a target="_blank" href="{$mainurl}/admin/{$ln}/system/tools?act=doSwitchEnvironmentTEST&uri={rawurlencode($smarty.server.REQUEST_URI)}">switch DEV-TEST</a></li>
 		<li><a target="_blank" href="{$mainurl}/admin/lt/sitemap/blocks?filters_unset=0&act=do%3Aset_filters&filters%5Bct%5D%5Bsite_id%5D%5B%5D=IN&filters%5Bvals%5D%5Bsite_id%5D%5B%5D={$app->site->id}">Svetainės blokeliai</a></li>
 		
 		
@@ -89,3 +92,15 @@
 </div> 
 	</ul>
 </div> 
+
+
+{/if}
+
+
+{if $smarty.get.admin_func_test}
+	{d::ldump([
+		user_admin=>$app->user && $app->user->is_admin, 
+		office=>GW::s('DEVELOPER_PRESENT'),
+		ip=>GW::ip()
+	])}
+{/if}

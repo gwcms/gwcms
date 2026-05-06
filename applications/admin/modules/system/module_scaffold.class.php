@@ -53,6 +53,23 @@ class Module_Scaffold extends GW_Common_Module
 			"list":{
 				"checklist":1
 			}
+		},
+		{
+			"name":"configdemo",
+			"title":"Config Demo",
+			"model":"GW_Config_Demo",
+			"config_common":1,
+			"structure":{
+				"demo_flag":{
+					"type":"tinyint",
+					"title":"Demo flag"
+				},
+				"demo_text":{
+					"type":"varchar255",
+					"title":"Demo tekstas"
+				}
+			},
+			"in_menu":0
 		}
 	],
 	"overwrite_tables":0,
@@ -350,6 +367,7 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 		
 		$modeltpl = file_get_contents("{$tpldir}model.class.php");
 		$controllertpl = file_get_contents("{$tpldir}submodule.class.php");
+		$configcontrollertpl = file_get_contents("{$tpldir}config_common_submodule.class.php");
 		$listtpl =  file_get_contents("{$tpldir}list.tpl");
 		$elementstpl =  file_get_contents("{$tpldir}elements.tpl");
 		
@@ -400,7 +418,8 @@ ALTER TABLE `$tbl`  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 			//getDisplayConfig uzsiloadintu fieldus
 			
 			$submodclass = "Module_".ucfirst($submod);
-			$controller_tpl = str_replace('Module_Submodule', $submodclass, $controllertpl);
+			$controller_tpl_src = !empty($submodule['config_common']) ? $configcontrollertpl : $controllertpl;
+			$controller_tpl = str_replace('Module_Submodule', $submodclass, $controller_tpl_src);
 			
 			
 			file_put_contents($config['mod_dir'].$classfile($submodclass), $controller_tpl);

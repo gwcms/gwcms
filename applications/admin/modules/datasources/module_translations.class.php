@@ -4,6 +4,87 @@
 class Module_Translations extends GW_Common_Module
 {	
 	use Module_Import_Export_Trait;	
+
+	protected function buildOptionHtml($item)
+	{
+		$title = htmlspecialchars($item->fullkey(), ENT_QUOTES, 'UTF-8');
+		
+		if(!isset($_GET['includetr']) || !$_GET['includetr']){
+			return null;
+		}
+		
+		if(isset($_POST['ids']) || isset($_GET['ids'])){
+			return null;
+		}
+		
+		$lines = [];
+		
+		foreach((array)GW::s('LANGS') as $ln_code){
+			$value = trim((string)$item->get('value_'.$ln_code));
+			
+			if($value === ''){
+				continue;
+			}
+			
+			$value = GW_String_Helper::truncate($value, 90);
+			
+			$lines[] = '<br><b>'.htmlspecialchars($ln_code, ENT_QUOTES, 'UTF-8').':</b> '
+				.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'';
+		}
+		
+		if(!$lines){
+			return null;
+		}
+		
+		return $title.implode('', $lines);
+	}
+
+	protected function parseSearchWithinIds()
+	{
+		foreach(['searchwithinids', 'searchwitninids'] as $arg){
+			if(!isset($_GET[$arg])){
+				continue;
+			}
+			
+			$raw = $_GET[$arg];
+			$ids = is_array($raw) ? $raw : json_decode($raw, true);
+			
+			if(!is_array($ids)){
+				$ids = explode(',', trim((string)$raw, "[] \t\n\r\0\x0B"));
+			}
+			
+			$ids = array_values(array_filter(array_map('intval', (array)$ids)));
+			
+			return array_values(array_unique($ids));
+		}
+		
+		return [];
+	}
+
+	function getOptionsCfg()
+	{
+		$opts = [
+			'idx_field' => 'id',
+			'search_fields' => ['module', 'key', 'value'],
+			'title_func' => function($item) {
+				return $item->fullkey();
+			},
+			'html_func' => function($item) {
+				return $this->buildOptionHtml($item);
+			},
+			'order' => 'module ASC, priority ASC, `key` ASC',
+		];
+		
+		$ids = $this->parseSearchWithinIds();
+		
+		if($ids){
+			$opts['condition_add'] = GW_DB::inCondition('id', $ids);
+		}elseif(isset($_GET['searchwithinids']) || isset($_GET['searchwitninids'])){
+			$opts['condition_add'] = '1=0';
+		}
+		
+		return $opts;
+	}
 	
 	function init()
 	{	

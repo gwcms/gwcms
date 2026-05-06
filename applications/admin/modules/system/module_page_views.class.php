@@ -5,6 +5,55 @@ class Module_Page_Views extends GW_Common_Module
 {
 	public $filterpaths=false;
 	use Module_Import_Export_Trait;
+
+	function getPageViewOwnerModule($path)
+	{
+		if(!$path)
+			return false;
+
+		return $this->app->constructModuleByPath($path, ['access_level'=>$this->access_level]);
+	}
+
+	function buildPageViewCfgForm($cfg)
+	{
+		if(!is_array($cfg) || !isset($cfg['fields']) || !is_array($cfg['fields']))
+			return false;
+
+		$form = $cfg;
+
+		foreach($form['fields'] as $field => $fieldcfg){
+			if(is_numeric($field))
+				continue;
+
+			$form['fields']["keyval/$field"] = $fieldcfg;
+			unset($form['fields'][$field]);
+		}
+
+		$form['cols'] = $form['cols'] ?? 2;
+
+		return $form;
+	}
+
+	function __eventAfterForm($item)
+	{
+		$path = $item->path ?: ($_REQUEST['item']['path'] ?? $_GET['path'] ?? false);
+		if(!$path)
+			return false;
+
+		if(!($module = $this->getPageViewOwnerModule($path)))
+			return false;
+
+		if(!method_exists($module, 'getPageViewCfg'))
+			return false;
+
+		if(!($cfg = $module->getPageViewCfg($item)))
+			return false;
+
+		
+		
+		$this->tpl_vars['page_view_cfg_form'] = $this->buildPageViewCfgForm($cfg);
+		$this->tpl_vars['page_view_cfg_source_module'] = $module->module_path_clean;
+	}
 		
 	function init()
 	{

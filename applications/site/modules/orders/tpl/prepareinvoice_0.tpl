@@ -84,7 +84,7 @@
 	</div>		
 		{/if}
 
-		<button class="btn btn-primary"><i class='fa fa-floppy-o'></i> {GW::ln('/g/UPDATE')}</button>
+		<button class="btn btn-primary"><i class='fa fa-floppy-o'></i> {GW::ln('/m/UPDATE_AND_PROCEED_TO_INVOICE')}</button>
 
 
 

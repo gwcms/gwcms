@@ -3,7 +3,7 @@
 	{$invoiceargs.preinvoice=1}
 {/if}
 
-{if $app->user && $app->user->isRoot()}
+{if ($app->user && $app->user->isRoot()) || GW::s('PROJECT_ENVIRONMENT') == $smarty.const.GW_ENV_DEV}
 	
 		<div class="btn-group">
 			<a href="#" class="g-ml-5 text-uppercase dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style='color:orange'>

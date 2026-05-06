@@ -17,6 +17,7 @@ class Module_Tools extends GW_Common_Module
 	function viewDefault()
 	{
 		list($vars['lastupdates'], $vars['updatefiles']) = $this->__doImportSqlUpdates_list2update();
+		list($vars['last_transformations'], $vars['transformationfiles']) = $this->__listPendingTransformations();
 		
 		
 		$test_actions = [];
@@ -220,6 +221,36 @@ class Module_Tools extends GW_Common_Module
 			$this->__executeQuery($sqls);
 			
 			GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
+		}
+		
+		$this->jump();
+	}
+	
+	function __listPendingTransformations()
+	{
+		$last = GW::getInstance('GW_Config')->get('gwcms/last_transformations');
+		$list_files = glob(GW::s('DIR/ROOT').'transformations/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9]*.todo');
+		$updates = [];
+		
+		foreach ($list_files as $filename)
+		{
+			if (basename($filename) > $last)
+				$updates[] = $filename;
+		}
+		
+		return [$last, $updates];
+	}
+	
+	function doMarkTransformationsDone()
+	{
+		list($last, $updates) = $this->__listPendingTransformations();
+		
+		if ($updates) {
+			$lastfile = basename(end($updates));
+			GW::getInstance('GW_Config')->set('gwcms/last_transformations', $lastfile);
+			$this->setMessage("Transformations marked as seen until {$lastfile}");
+		} else {
+			$this->setMessage("No pending transformations");
 		}
 		
 		$this->jump();
@@ -679,63 +710,36 @@ class Module_Tools extends GW_Common_Module
 	}
 	
 	function doSwitchEnvironment()
-	{		
-		$replace_what = GW::s("SITE_URL");
+	{
+		$url = $_GET['uri'];
 		
-		$current_env = GW::s('PROJECT_ENVIRONMENT') ==  GW_ENV_DEV ? 'DEV':'PROD';
-		
-		
-		if(GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV)
-		{
-			$dest = GW_ENV_PROD;	
+		if(strpos($_SERVER['HTTP_HOST'], '.localhost')!==false){
+			$newurl = "https://".str_replace('.localhost','',$_SERVER["HTTP_HOST"]);
 		}else{
-			$dest = GW_ENV_DEV;
+			$newurl = "http://".$_SERVER["HTTP_HOST"].'.localhost';
 		}
 		
-		$dest_env = $dest ==  GW_ENV_DEV ? 'DEV':'PROD';
-			
-		initEnviroment($dest);
-		$replace_to = GW::s("SITE_URL");
 		
-		//if($replace_what == $replace_to)
-		//{
-		//	d::dumpas("CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
-		//}
-		//DEBUG : UNCOMMENT THIS:::
-		$base = Navigator::getBase(true);
-					
-		$url = $_GET['uri'];
-		$url = str_replace($base,'', $url);
-		
-		//$url  = str_replace("https://", "http://", $_GET['uri']);//redirect should solve return to https protocol
-		
-		
-		
-		//$newurl = str_replace($replace_what, $replace_to, $url);
-		$newurl = $replace_to . $url;
-		
-		//d::dumpas([$url, $replace_to,$newurl]);
-		
-		//d::dumpas(['current_env'=>GW::s('PROJECT_ENVIRONMENT'), "destination_env"=>$dest, 'replace_what'=>$replace_what,'replace_to'=>$replace_to,'result'=>$newurl]);
-		
-
-		if($newurl == $_GET['uri'])
-		{
-			d::ldump([
-			    'REQUEST_URI'=>$_SERVER['REQUEST_URI'], 
-			    'current_env'=>$current_env,
-			    'dest_env'=>$dest_env,
-			    'src_url'=>$_GET['uri'],
-			    'dst_url'=>$newurl,
-			]);
-			d::dumpas("Replace failed CONFIG WRONG: Replace from: $replace_what | Replace to: $replace_to");
-		}		
-		
-			
-		
-		header("Location: $newurl");
+		header("Location: {$newurl}{$url}");
 		exit;
 	}
+	
+	function doSwitchEnvironmentTEST()
+	{
+		$url = $_GET['uri'];
+		
+		$host = str_replace('.localhost', '', $_SERVER["HTTP_HOST"]);
+		
+		if(strpos($host, '.1.voro.lt')!==false){
+			$newurl = "https://".str_replace('.1.voro.lt','',$host);
+		}else{
+			$newurl = "http://".$host.'.1.voro.lt';
+		}
+		
+		
+		header("Location: {$newurl}{$url}");
+		exit;
+	}	
 	
 	function doPullProductionDB()
 	{

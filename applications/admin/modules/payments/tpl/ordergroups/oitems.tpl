@@ -87,6 +87,14 @@
 			
 			<tr><th>{GW::ln('/M/orders/ORDER_TOTAL')}</th><td>{$order->amount_total} &euro;</td></tr>
 			
+			{if $order->payd_amount > 0}
+				<tr><th>Gauta suma</th><td>{$order->payd_amount} &euro;</td></tr>
+			{/if}
+			
+			{if $order->payd_amount > 0 && $order->balance_amount > 0}
+				<tr><th>Trūkstama suma</th><td>{$order->balance_amount} &euro;</td></tr>
+			{/if}
+			
 			{if $order->deliverable}
 				<tr><th>{GW::ln('/M/orders/FIELDS/delivery_type')}</th><td>{GW::ln("/M/orders/DELIVERY_{$order->delivery_opt}")}</td></tr>
 			{/if}
@@ -150,10 +158,38 @@
 	</div>
 </div>
 
+{if $payment_confirmations}
+	<h3>Payment ledger</h3>
+	<table class="ledger" width="100%">
+		<tr>
+			<th>Data</th>
+			<th>Tipas</th>
+			<th>Šaltinis</th>
+			<th>Sąskaita</th>
+			<th>Nuoroda</th>
+			<th>Suma</th>
+			<th>Komentaras</th>
+		</tr>
+		{foreach $payment_confirmations as $payment}
+			<tr>
+				<td>{$payment->received_at}</td>
+				<td>{$payment->direction}</td>
+				<td>{$payment->source}</td>
+				<td>{$payment->bank_account}</td>
+				<td>{$payment->reference}</td>
+				<td>{if $payment->direction == 'refund'}-{/if}{$payment->amount} {$payment->currency}</td>
+				<td>{$payment->comment|escape}</td>
+			</tr>
+		{/foreach}
+	</table>
+{/if}
+
 <style>
 	#container { background-color: white }
 	table td { padding: 2px; color: black}
 	.details th{ text-align:right;padding-right:5px }
+	.ledger { border-collapse: collapse; margin-top: 10px }
+	.ledger th, .ledger td { border: 1px solid #999; padding: 4px; text-align: left }
 </style>
 {if $export}
 	</body>

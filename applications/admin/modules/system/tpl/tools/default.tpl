@@ -50,6 +50,19 @@ SITE
 </a>
 <br/>
 
+<a class="btn btn-default" href="{$m->buildUri(false,[act=>doMarkTransformationsDone])}"><i class="fa fa-random"></i>
+	Laukiancios transformacijos {if $last_transformations}Last seen: <b>{$last_transformations}</b>{/if}
+	{if $transformationfiles}<span style="color:green">Found: <b>{count($transformationfiles)}</b></span>{else}<span style="color:blue">No pending</span>{/if}
+</a>
+{if $transformationfiles}
+	<div style="margin-top:5px">
+		{foreach $transformationfiles as $file}
+			<div><code>{basename($file)}</code></div>
+		{/foreach}
+	</div>
+{/if}
+<br/>
+
 	</div>
 </div>
 

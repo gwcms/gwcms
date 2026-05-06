@@ -309,6 +309,7 @@ class Module_Sms extends GW_Common_Module
 	
 	function viewConfig()
 	{
+		$this->initConfigChangeTrack($this->config);
 		return ['item'=>$this->config];
 	}	
 	
@@ -316,7 +317,7 @@ class Module_Sms extends GW_Common_Module
 	{
 		$vals = $_REQUEST['item'];
 		
-		$this->config->setValues($vals);
+		$this->saveConfigTracked($this->config, $vals);
 		
 		//jeigu saugome tai reiskia kad validacija praejo
 		$this->setPlainMessage('/g/SAVE_SUCCESS');

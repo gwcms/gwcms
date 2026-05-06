@@ -131,6 +131,14 @@
       <en>Enable cms autologin</en>
       <lt>Automatinis prisijungimas prie sistemos</lt>
     </i>
+    <i id="chatws_enabled">
+      <en>Enable ReactPHP chat websocket</en>
+      <lt>Įjungti ReactPHP chat websocket servisą</lt>
+    </i>
+    <i id="onlinechat_widget_enabled">
+      <en>Enable admin online chat widget</en>
+      <lt>Įjungti admin online chat widgetą</lt>
+    </i>
     <i id="online">
       <en>Online</en>
       <lt>Prisijungęs</lt>
@@ -299,6 +307,13 @@
         </i>
         <i id="info">
           <i id="model">GW_Message</i>
+        </i>
+        <i id="public">1</i>
+      </i>
+      <i id="chat">
+        <i id="title">
+          <en>Chat</en>
+          <lt>Pokalbiai</lt>
         </i>
         <i id="public">1</i>
       </i>

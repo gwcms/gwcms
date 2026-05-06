@@ -1,4 +1,5 @@
 {include file="default_form_open.tpl"}
+{include file="tools/form_components.tpl"}
 
 
 {call e field=title}
@@ -103,7 +104,22 @@
 {call e field=regular type=bool}
 {call e field=dropdown type=bool}
 
-{call e field=config type=jstree}
+
+
+
+
+	{*<tr><td colspan="2"></td></tr>*}
+	<tr>
+		<td class="input_label_td">Config parameters from module</td>
+		<td class="input_td">
+			<table >
+			{call "build_form" fields_config=$page_view_cfg_form}
+			</table>
+		</td>
+	</tr>
+
+	{call e field=config type=jstree}
+
 
 {call e field=active type=bool default=1}
 

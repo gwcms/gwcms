@@ -64,10 +64,21 @@
 	  <span class="g-color-black">{GW::ln('/m/ORDER_TOTAL')}</span>
 	  <span class="g-color-black g-font-weight-300">{$order->amount_total} &euro;</span>
 	 </div>
+	
+	{if $order->payd_amount > 0 && $order->balance_amount > 0}
+		<div class="d-flex justify-content-between">
+			<span class="g-color-black">GAUTA SUMA</span>
+			<span class="g-color-black g-font-weight-300">{$order->payd_amount} &euro;</span>
+		</div>
+		<div class="d-flex justify-content-between">
+			<span class="g-color-lightred">TRŪKSTAMA SUMA</span>
+			<span class="g-color-lightred g-font-weight-300">{$order->balance_amount} &euro;</span>
+		</div>
+	{/if}
 
 	
-	
 
+	
     
   </div>
   <!-- End Summary -->

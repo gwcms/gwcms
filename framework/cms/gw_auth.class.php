@@ -234,14 +234,18 @@ class GW_Auth
 		return $this->session['switchUser'];
 	}
 	
-	static function adminLoginToSite($userid, $adminid)
+	static function adminLoginToSite($userid, $adminid=false)
 	{
 		$_SESSION[GW::s('SITE/AUTH_SESSION_KEY')] = [
 		    'user_id' => $userid, 
 		    'ip_address' => GW::ip(), 
-		    'admin_user_id' => $adminid,
+		    
 		    'last_request' => time()
 		];
+		
+		if($adminid){
+			$_SESSION[GW::s('SITE/AUTH_SESSION_KEY')]['admin_user_id'] = $adminid;
+		}
 	}
 	
 }

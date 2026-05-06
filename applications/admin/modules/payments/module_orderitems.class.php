@@ -316,7 +316,7 @@ class Module_OrderItems  extends GW_Common_Module
 		$this->initObjTypes();
 		
 		
-		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id','invoice_line2','group_id'];
+		$this->tpl_vars['extra_fields'] = ['id','insert_time','update_time','obj_type','obj_id','group_id'];
 		
 		if($vars['item']->expirable)
 			$this->tpl_vars['extra_fields'][] = 'expires';
@@ -377,6 +377,8 @@ class Module_OrderItems  extends GW_Common_Module
 		
 		$obj = $item->obj;
 		if($obj){
+			
+			//d::ldump([$item, $item->obj]);
 			
 			$markaspaydresponse = $obj->orderItemPayd($item->unit_price, $item->qty, $item->order, $item);
 			

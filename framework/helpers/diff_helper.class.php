@@ -78,7 +78,7 @@ class diff_helper{
     }
     while (count($partialDiff) > 0) $diff[] = array_pop($partialDiff);
     for ($index = $end1 + 1;
-        $index < ($compareCharacters ? strlen($sequence1) : count($sequence1));
+        $index < count($sequence1);
         $index ++){
       $diff[] = array($sequence1[$index], self::UNMODIFIED);
     }
@@ -468,6 +468,5 @@ $("body").keydown(function (event) {
 		</script>';
   }
 }
-
 
 

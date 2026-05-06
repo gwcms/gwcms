@@ -338,37 +338,40 @@ class GW_Http_Agent
 	{
 		$parts = parse_url($url);
 
+		if(!$parts || empty($parts['host']))
+			return false;
 
-		$fp = fsockopen($parts['host'], isset($parts['port']) ? $parts['port'] : 80, $errno, $errstr, 30);
+		$ip = '127.0.0.1';
+		// Seniau čia buvo naudojama gethostbyname($parts['host']),
+		// bet dabar background impulsus siunčiame tik lokaliai.
 
-		$out = "GET " . $parts['path'] . '?' . $parts['query'] . " HTTP/1.1\r\n";
-		$out.= "Host: " . $parts['host'] . "\r\n";
-		$out.= "Connection: Close\r\n\r\n";
-		fwrite($fp, $out);
-		fclose($fp);
+		$port = $parts['port'] ?? 80;
+		$path = $parts['path'] ?? '/';
+		$query = $parts['query'] ?? '';
+		$timeout = 0.3;
 
+		$request_uri = $path . ($query !== '' ? '?' . $query : '');
+
+		$errno = 0;
+		$errstr = '';
+		$fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
+
+		if(!$fp)
+			return false;
+
+		stream_set_timeout($fp, 0, 200000);
+		stream_set_blocking($fp, false);
+
+		$out = "GET " . $request_uri . " HTTP/1.1\r\n";
+		$out .= "Host: " . $parts['host'] . "\r\n";
+		$out .= "Connection: Close\r\n";
+		$out .= "User-Agent: GWCMS-BackgroundRequest/1.0\r\n";
+		$out .= "X-GW-Background: 1\r\n\r\n";
+
+		@fwrite($fp, $out);
+		@fclose($fp);
 
 		return true;
-
-		/*
-		  $post_string = http_build_query($post_params);
-		  $parts=parse_url($url);
-
-		  $fp = fsockopen($parts['host'],
-		  isset($parts['port'])?$parts['port']:80,
-		  $errno, $errstr, 30);
-
-		  $out = "POST ".$parts['path']." HTTP/1.1\r\n";
-		  $out.= "Host: ".$parts['host']."\r\n";
-		  $out.= "Content-Type: application/x-www-form-urlencoded\r\n";
-		  $out.= "Content-Length: ".strlen($post_string)."\r\n";
-		  $out.= "Connection: Close\r\n\r\n";
-		  if (isset($post_string)) $out.= $post_string;
-
-		  fwrite($fp, $out);
-		  fclose($fp);
-		 * 
-		 */
 	}
 
 	function log($msg)

@@ -24,6 +24,39 @@ class pay_montonio_module_ext extends GW_Module_Extension
 		}
 				
 	}
+
+	function buildMontonioMerchantReference($order)
+	{
+		$prefix = $order->seller_id ? $order->seller_id.'-' : '';
+		$idx = 1;
+		
+		if(class_exists('GW_Order_Payment_Confirmation') && GW_Order_Payment_Confirmation::tableExists()){
+			$idx += (int)GW_Order_Payment_Confirmation::singleton()->count(['order_id=?', (int)$order->id]);
+		}else{
+			$idx += (int)gw_payuniversal_log::singleton()->count(['method=? AND order_id=?', 'montonio', (int)$order->id]);
+		}
+		
+		return $prefix.$order->id.'-p'.$idx.'-a'.date('YmdHis').mt_rand(100, 999);
+	}
+
+	function parseMontonioMerchantReferenceOrderId($reference)
+	{
+		$reference = (string)$reference;
+		
+		if(preg_match('/^(?:\d+-)?(\d+)-p\d+(?:-a\d+)?$/', $reference, $m))
+			return (int)$m[1];
+		
+		if(preg_match('/^(\d+)$/', $reference, $m))
+			return (int)$m[1];
+		
+		if(preg_match('/^\d+-(\d+)$/', $reference, $m))
+			return (int)$m[1];
+		
+		if(preg_match('/(\d+)/', $reference, $m))
+			return (int)$m[1];
+		
+		return 0;
+	}
 	
 	function doMontonioPayV2($args) 
 	{
@@ -62,7 +95,7 @@ class pay_montonio_module_ext extends GW_Module_Extension
 			'amount'                           => $args->payprice,
 			'currency'                         => 'EUR',
 			'access_key'                       => $api->access_key,
-			'merchant_reference'               => ($args->order->seller_id ? $args->order->seller_id.'-':'').$args->order->id,
+			'merchant_reference'               => $this->buildMontonioMerchantReference($args->order),
 			'merchant_return_url'              => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=return".$return_args,
 			'merchant_notification_url'        => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=notify".$return_args,
 			'payment_information_unstructured' => $args->paytext,
@@ -231,55 +264,63 @@ if (
 		
 		$log = new gw_payuniversal_log;
 		$log->method = 'montonio';
-		$log->order_id = $pay->merchant_reference;
+		$log->order_id = $this->parseMontonioMerchantReferenceOrderId($pay->merchant_reference);
 		$log->data = json_encode($pay);
 		$log->received_amount = $pay->grandTotal;
 		$log->unique_key = 'M.'.$pay->uuid.'-'.$pay->paymentStatus;
 		
 		
-		if(gw_payuniversal_log::singleton()->find(['unique_key=?', $log->unique_key])){
-			$this->log("mokejimas neiskaitytas nes jau yra rastas paylogas $log->unique_key, gautas mokejimo paketas: ".json_encode($pay));
+		if($existing_log = gw_payuniversal_log::singleton()->find(['unique_key=?', $log->unique_key])){
+			if($existing_log->processed){
+				$this->log("mokejimas neiskaitytas nes jau yra rastas paylogas $log->unique_key, gautas mokejimo paketas: ".json_encode($pay));
+				
+				GOTO sFinish;
+			}
 			
-			GOTO sFinish;
+			$this->log("mokejimas bus apdorotas is neprocessed paylogo $existing_log->id: ".json_encode($pay));
+			$log = $existing_log;
+		}else{
+			$log->insert();
 		}
-			
-		$log->insert();
 		
 		
 		$order = $this->getOrder(true);
 				
-		if($this->app->user && $this->app->user->isRoot()){
+		if($this->app->user && $this->app->user->isRoot() && isset($_GET['debugconfirm'])){
 					
 			$this->confirm("<pre>".json_encode($pay, JSON_PRETTY_PRINT).'</pre>');
 		}
 		
 		if($pay->paymentStatus === 'PAID'){
-			
-			
-			
-			
 			if(!$order)
 				d::dumpas("MONTONIO ERROR NO ORDERID RECEIVED");
 			
-			
-			$received_amount = $pay->grandTotal;
+			$received_amount = (float)$pay->grandTotal;
+			$mark_amount = $received_amount;
+			$is_root_test_cent_payment = $this->app->user && $this->app->user->isRoot() && $received_amount == 0.01;
+				
+			if($is_root_test_cent_payment){
+				if(method_exists($order, 'recalcPaymentLedger'))
+					$order->recalcPaymentLedger(false);
+				
+				$mark_amount = (float)$order->balance_amount > 0
+					? (float)$order->balance_amount
+					: (float)$order->amount_total;
+			}
 			
 			$args = [
 			    'id'=>$order->id,
-			    'rcv_amount'=>$order->amount_total,
+			    'rcv_amount'=>$mark_amount,
 			    'pay_type'=>'montonio',
 			    'log_entry_id'=>$log->id
 			];	
 			
-			
-			
-			
-			if($log->test_ipn || (float)$log->received_amount != (float)$received_amount)
+			if($log->test_ipn || (float)$log->received_amount != (float)$mark_amount || $is_root_test_cent_payment)
 				$args['paytest']=1;
 
 			
 			
-			if($this->app->user && $this->app->user->isRoot()){
+			if($this->app->user && $this->app->user->isRoot() && isset($_GET['debugconfirm'])){
 				
 				if(!$this->confirm(json_encode(['received'=>$received_amount,'payload'=>$pay,'markasPaydSystem'=>$args], JSON_PRETTY_PRINT)))
 					return false;
@@ -304,153 +345,12 @@ if (
 	
 	function doMontonioAccept()
 	{
-		$cfg = $this->montonioCfg();
-		if($cfg->version == 2){
-			$this->doMontonioAcceptV2();
-		}else{
-			$this->doMontonioAcceptV1();
-		}		
+		$this->doMontonioAcceptV2();
 	}
 	
 	function doMontonioPay($args){
-		$cfg = $this->montonioCfg();
-		if($cfg->version == 2){
-			$this->doMontonioPayV2($args);
-		}else{
-			$this->doMontonioPayV1($args);
-		}
+		$this->doMontonioPayV2($args);
 	}
-
-	function doMontonioPayV1($args) 
-	{		
-		if(isset($args->user)){
-			$user = $args->user;
-		}else{
-			$user = $this->app->user;
-		}
-		
-		//if($user->id == 9)
-		//	$args->payprice= 0.01;	
-				
-
-		$cfg = $this->montonioCfg();
-		
-		
-		$this->checkSellerCfg($args->order, $cfg);
-				
-	
-		$api = new GW_PayMontonio_Api($cfg);
-		
-		$return_args="&id={$args->order->id}&orderid={$args->order->id}&key={$args->order->secret}";
-		
-		if($cfg->sandbox)
-			$return_args.="&sandbox=1";
-		
-		$payment_data = [
-			'amount'                           => $args->payprice,
-			'currency'                         => 'EUR',
-			'access_key'                       => $api->access_key,
-			'merchant_reference'               => ($args->order->seller_id ? $args->order->seller_id.'-':'').$args->order->id,
-			'merchant_return_url'              => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=return".$return_args,
-			'merchant_notification_url'        => $args->base.$this->app->ln."/direct/orders/orders?act=doMontonioAccept&action=notify".$return_args,
-			'payment_information_unstructured' => $args->paytext,
-			//'preselected_aspsp'                => 'LHVBEE22',
-			'preselected_locale'               => 'lt',
-			//'checkout_email'                   => 'vidmantas.work@gmail.com',
-			'exp'                              => time() + (60 * 10), 
-		];
-		
-		if($user->email)
-			$payment_data['checkout_email'] = $user->email;
-			
-		
-		if($args->paytype=='montonio_cc'){
-			$payment_data['preselected_aspsp'] = "CARD";
-		}
-		
-		if($args->method ?? false){
-			$payment_data['preselected_aspsp'] = $args->method;
-		}
-		
-		if($this->app->user && $this->app->user->isRoot() || GW::ip()=='90.131.42.149'){
-			
-			$payment_data = $this->rootConfirmJson($payment_data);
-			if(!$payment_data)
-				return false;
-			
-		}
-		
-		$url = $api->getRedirectLink($payment_data);
-		
-		Navigator::jump($url);
-	}
-	
-	function doMontonioAcceptV1()
-	{
-		
-		$orderid = $_GET['orderid'];
-		$order = GW_Order_Group::singleton()->find(['id=?', $orderid]);	
-		
-		//default
-		$cfg = $this->montonioCfg();
-
-		//other seller
-		$this->checkSellerCfg($order, $cfg);
-		
-		$api = new GW_PayMontonio_Api($cfg);
-		$token = $api->decodeToken($_GET['payment_token']);
-		$pay = $token['payload'];
-		
-		$log = new gw_payuniversal_log;
-		$log->method = 'montonio';
-		$log->order_id = $pay['merchant_reference'];
-		$log->data = json_encode($pay);
-		$log->received_amount = $pay['amount'];
-		$log->insert();	
-		
-		$order = $this->getOrder(true);
-		
-		if($this->app->user && $this->app->user->isRoot()){
-					
-			$this->confirm("<pre>".json_encode($pay, JSON_PRETTY_PRINT).'</pre>');
-		}
-		
-		if($pay['access_key']==$api->access_key && $pay['status'] == 'finalized'){
-			
-			if(!$order)
-				d::dumpas("MONTONIO ERROR NO ORDERID RECEIVED");
-			
-			$received_amount = $pay['amount'];
-			
-			$args = [
-			    'id'=>$order->id,
-			    'rcv_amount'=>$order->amount_total,
-			    'pay_type'=>'montonio',
-			    'log_entry_id'=>$log->id
-			];	
-			
-			if($log->test_ipn || (float)$log->received_amount != (float)$received_amount)
-				$args['paytest']=1;
-
-			if($this->app->user && $this->app->user->isRoot()){
-				
-				if(!$this->confirm(json_encode(['received'=>$received_amount,'payload'=>$pay,'markasPaydSystem'=>$args], JSON_PRETTY_PRINT)))
-					return false;
-			}
-			
-			$this->markAsPaydSystem($args);	
-			
-			$log->processed = 1;
-			$log->updateChanged();
-			
-		}
-		
-		if($_GET['action']=='notify')
-			exit;
-		
-
-		$this->redirectAfterPaymentAccept($order);
-	}	
 	
 	
 	function doMontonioRetryProcess($log=false)
@@ -462,15 +362,30 @@ if (
 			return d::ldump("Skip $log->id. paymentStatus!=PAID");
 		
 		$order = GW_Order_Group::singleton()->find(['id=?', $log->order_id]);	
+		$received_amount = (float)$log->received_amount;
+		$mark_amount = $received_amount;
+		$is_root_test_cent_payment = $this->app->user && $this->app->user->isRoot() && $received_amount == 0.01;
+		
+		if($is_root_test_cent_payment){
+			if(method_exists($order, 'recalcPaymentLedger'))
+				$order->recalcPaymentLedger(false);
+			
+			$mark_amount = (float)$order->balance_amount > 0
+				? (float)$order->balance_amount
+				: (float)$order->amount_total;
+		}
 		
 		$args = [
 			    'id'=>$order->id,
-			    'rcv_amount'=>$log->received_amount,
+			    'rcv_amount'=>$mark_amount,
 			    'pay_type'=>'montonio',
 			    'log_entry_id'=>$log->id
 			];
 		
-		$this->setMessage("Order {$order->id} retry {$log->received_amount} Eur");
+		if($is_root_test_cent_payment)
+			$args['paytest'] = 1;
+		
+		$this->setMessage("Order {$order->id} retry {$log->received_amount} Eur".($mark_amount != $received_amount ? " as $mark_amount Eur test payment" : ""));
 		
 		$markaspayd = $this->markAsPaydSystem($args);	
 			

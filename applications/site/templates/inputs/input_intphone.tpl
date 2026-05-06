@@ -37,7 +37,7 @@
 		{if $app->ln == 'lt'}
 			intlTelInput.preferredCountries= ["lt"]
 		{else}
-			intlTelInput.preferredCountries= []
+			intlTelInput.preferredCountries= ["{GW::countryByIp()}"]
 		{/if}
 	{/if}
 			

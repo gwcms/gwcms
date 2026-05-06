@@ -456,55 +456,62 @@ function initSelect2Sorting(obj)
 		}, 500)
 	});
 
-	var container = select.data('select2').$container;
+	try{
+		//ant site nepagauna $container
+		var container = select.data('select2').$container;
+
+		select.on("select2:select", function (evt) {
+			var id = evt.params.data.id;
+			var $element = $(evt.target).children('[value='+id+']');				
+			$element.detach();
+			$(this).append($element);
+			$(this).trigger("change");
+		});	
+
+
+
+		//allow ordering			
+		$.fn.select2.amd.require([
+			'select2/utils',
+			'select2/dropdown',
+			'select2/dropdown/attachBody'
+		], function (Utils, Dropdown, AttachBody) {
+			container.find('ul').sortable({
+				placeholder: 'ui-state-highlight',						
+				start: function(){ container.addClass('sortstarted'); },
+				helper: function(event, ui)
+				{
+					var $clone =  $(ui).clone();
+					$(ui).css({ 'opacity': '0.1' });
+					$clone.css('position','absolute');
+					return $clone.get(0);
+				},	
+				beforeStop: function(event, ui)
+				{
+					$(ui.item).css({ 'opacity': '1' });
+					animateChanged(ui.item)
+					console.log(ui.item)
+				}, 
+				containment: 'parent',
+				update: function(event, ui) 
+				{ 
+
+					//container.removeClass('sortstarted');
+					animateChanged(ui.item[0])
+					//try{ animateChanged(ui.item[0]) }catch(err){}
+					console.log($(ui.item[0]).parent().find('.select2-selection__choice'))
+					fixOriginalSelect($(ui.item[0]).parent().find('.select2-selection__choice'), select)
+
+					console.log(select.html());
+				}
+			});
+			container.find('ul').disableSelection();
+		})	
 	
-	select.on("select2:select", function (evt) {
-		var id = evt.params.data.id;
-		var $element = $(evt.target).children('[value='+id+']');				
-		$element.detach();
-		$(this).append($element);
-		$(this).trigger("change");
-	});	
-			
-			
-
-	//allow ordering			
-	$.fn.select2.amd.require([
-		'select2/utils',
-		'select2/dropdown',
-		'select2/dropdown/attachBody'
-	], function (Utils, Dropdown, AttachBody) {
-		container.find('ul').sortable({
-			placeholder: 'ui-state-highlight',						
-			start: function(){ container.addClass('sortstarted'); },
-			helper: function(event, ui)
-			{
-				var $clone =  $(ui).clone();
-				$(ui).css({ 'opacity': '0.1' });
-				$clone.css('position','absolute');
-				return $clone.get(0);
-			},	
-			beforeStop: function(event, ui)
-			{
-				$(ui.item).css({ 'opacity': '1' });
-				animateChanged(ui.item)
-				console.log(ui.item)
-			}, 
-			containment: 'parent',
-			update: function(event, ui) 
-			{ 
-
-				//container.removeClass('sortstarted');
-				animateChanged(ui.item[0])
-				//try{ animateChanged(ui.item[0]) }catch(err){}
-				console.log($(ui.item[0]).parent().find('.select2-selection__choice'))
-				fixOriginalSelect($(ui.item[0]).parent().find('.select2-selection__choice'), select)
-
-				console.log(select.html());
-			}
-		});
-		container.find('ul').disableSelection();
-	})	
+	}catch(err){
+		console.error(err)
+		
+	}
 }
 
 

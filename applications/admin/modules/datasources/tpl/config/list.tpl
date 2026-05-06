@@ -28,6 +28,13 @@
 		value=>truncate,
 		time=>short_time]}	
 		
+	{function name=dl_cell_history}
+		<a class='badge bg-bro iframe-under-tr' href="{$app->buildUri("datasources/config/history",[fullkey=>$item->key,clean=>2])}">
+			<i class='fa fa-pencil'></i>
+			{$m->tpl_vars.change_track_cnt[$item->key]|default:0}
+		</a>
+	{/function}
+
 
 	{$dl_inline_edit=1}	
 	{$dl_checklist_enabled=1}
@@ -37,6 +44,6 @@
 	
 	
 	
-	{$dl_smart_fields=[type,count]}
+	{$dl_smart_fields=[type,count,history]}
 	
 {/block}

@@ -71,8 +71,13 @@ class GW_App_Base
 
 	function setPidFileName()
 	{
+		$temp_dir = GW::s('DIR/TEMP');
+		
+		if (!$temp_dir || !is_dir($temp_dir) || !is_writable($temp_dir))
+			$temp_dir = '/tmp/';
+		
 		//proc_name + md5(path) + 1st argument
-		$this->process_pid_file = '/tmp/gw_app_' . $this->proc_name . '_' . md5($this->path);
+		$this->process_pid_file = rtrim($temp_dir, '/').'/gw_app_' . $this->proc_name . '_' . md5($this->path);
 	}
 
 	//uzregistruoti tameri nurodyti 

@@ -84,10 +84,18 @@ moved to emails module
 			<td>
 				<table style="width:100%">
 					{call e field="sys/VAPID_PRIVATE_KEY" type=textarea height=50px}
+					
 				</table>
 			</td>	
 		<tr>
 	</table>
+					
+
+	<a href="{$m->buildUri(false,[act=>doGenerateVapid])}">
+		<i class="fa fa-refresh"></i> Generate VAPID keys
+	</a>
+				
+										
 {/capture}
 {capture assign=tmp2}		
 <pre>openssl ecparam -genkey -name prime256v1 -out private_key.pem

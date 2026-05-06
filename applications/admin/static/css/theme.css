@@ -8040,3 +8040,16 @@ a.badge:hover{
 
 .debug{ color: orange }
 .nowrap{ white-space: nowrap }
+
+.highlighted.input_td,
+.highlighted.input_label_td {
+	background-color: #fff3bf !important;
+}
+
+.highlighted.input_td .form-control,
+.highlighted.input_td .select2-selection,
+.highlighted.input_td .select2-selection--single,
+.highlighted.input_td .select2-selection--multiple {
+	background-color: #fffdf0 !important;
+	border-color: #e0c24f !important;
+}

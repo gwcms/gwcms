@@ -270,6 +270,74 @@
     <i id="used_amount">Panaudota suma</i>
     <i id="amount_calc">Mokėtina suma</i>
     <i id="pay_month">Metai / mėnuo</i>
+    <i id="payd_amount">
+      <lt>Gauta suma</lt>
+      <en>Paid amount</en>
+    </i>
+    <i id="rcv_amount">
+      <lt>Mokėjimo / grąžinimo suma</lt>
+      <en>Payment / refund amount</en>
+    </i>
+    <i id="balance_amount">
+      <lt>Trūkstama suma</lt>
+      <en>Balance due</en>
+    </i>
+    <i id="ledger_status">
+      <lt>Mokėjimo būklė</lt>
+      <en>Ledger status</en>
+    </i>
+    <i id="ledger_count">
+      <lt>Mokėjimai</lt>
+      <en>Ledger entries</en>
+    </i>
+    <i id="direction">
+      <lt>Kryptis</lt>
+      <en>Direction</en>
+    </i>
+    <i id="source">
+      <lt>Šaltinis</lt>
+      <en>Source</en>
+    </i>
+    <i id="currency">
+      <lt>Valiuta</lt>
+      <en>Currency</en>
+    </i>
+    <i id="received_at">
+      <lt>Gavimo / grąžinimo data</lt>
+      <en>Received / refunded at</en>
+    </i>
+    <i id="bank_account">
+      <lt>Įplaukos sąskaita</lt>
+      <en>Receiving account</en>
+    </i>
+    <i id="reference">
+      <lt>Nuoroda / mokėjimo paskirtis / detalės</lt>
+      <en>Reference / payment purpose / details</en>
+    </i>
+    <i id="payment_comment">
+      <lt>Pastaba</lt>
+      <en>Comment</en>
+    </i>
+    <i id="source_log_table">
+      <lt>Šaltinio log lentelė</lt>
+      <en>Source log table</en>
+    </i>
+    <i id="source_log_id">
+      <lt>Šaltinio log ID</lt>
+      <en>Source log ID</en>
+    </i>
+    <i id="created_by">
+      <lt>Sukūrė</lt>
+      <en>Created by</en>
+    </i>
+    <i id="change_transaction_id">
+      <lt>Pakeitimų transakcija</lt>
+      <en>Change transaction</en>
+    </i>
+    <i id="test">
+      <lt>Testinis</lt>
+      <en>Test</en>
+    </i>
   </i>
   <i id="FIELDS_SHORT">
     <i id="itax_status_ex">Itax</i>
@@ -351,6 +419,18 @@
     </i>
     <i id="obj_id">Prek. id</i>
     <i id="amount_calc"><![CDATA[<span class="material-symbols-outlined">calculate</span><span class="material-symbols-outlined">functions</span>]]></i>
+    <i id="payd_amount"><lt>Gauta</lt><en>Paid</en></i>
+    <i id="balance_amount"><lt>Trūksta</lt><en>Due</en></i>
+    <i id="ledger_status"><lt>Mok.</lt><en>Ledg.</en></i>
+    <i id="ledger_count"><lt>Mok.</lt><en>Ledg.</en></i>
+    <i id="direction"><lt>Krypt.</lt><en>Dir.</en></i>
+    <i id="received_at"><lt>Gauta</lt><en>Received</en></i>
+    <i id="bank_account"><lt>Sąsk.</lt><en>Account</en></i>
+    <i id="reference"><lt>Ref.</lt><en>Ref.</en></i>
+    <i id="source_log_table"><lt>Log lent.</lt><en>Log table</en></i>
+    <i id="source_log_id"><lt>Log ID</lt><en>Log ID</en></i>
+    <i id="created_by"><lt>Sukūrė</lt><en>Created</en></i>
+    <i id="change_transaction_id"><lt>Chg. TX</lt><en>Chg. TX</en></i>
   </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">
@@ -388,8 +468,12 @@
       <en>Pre -invoice</en>
     </i>
     <i id="doMarkAsPayd">
-      <lt>!! Pažymėti kaip apmokėtą.</lt>
-      <en>!! Mark as paid.</en>
+      <lt>Registruoti mokėjimą</lt>
+      <en>Register payment</en>
+    </i>
+    <i id="doRecalcOrderPayments">
+      <lt>Perskaičiuoti sumą ir mokėjimus</lt>
+      <en>Recalculate total and payments</en>
     </i>
     <i id="doMarkAsProcessed">
       <lt>Pažymėti kaip įvykdytus</lt>

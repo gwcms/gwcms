@@ -2,11 +2,8 @@
 
 
 
-class Module_Itax extends GW_Common_Module
+class Module_Itax extends GW_Module_Config_Common
 {	
-
-	public $default_view = 'default';
-	
 	/**
 	 *
 	 * @var Itax 
@@ -36,36 +33,10 @@ class Module_Itax extends GW_Common_Module
 		die($resp);		
 	}
 	
-	
-
-	
-	function viewDefault()
+	protected function notifyConfigSaveSuccess()
 	{
-		return ['item'=>$this->model];
-	}
-
-
-	function doSave()
-	{
-		$vals = $_REQUEST['item'];
-		
-		foreach($vals as $key => $val)
-			if(is_array($val))
-				$vals[$key] = json_encode($val);
-		
-		
-		$this->model->setValues($vals);
-		
-		//jeigu saugome tai reiskia kad validacija praejo
 		$this->app->setMessage($this->app->lang['SAVE_SUCCESS']);
-		
-		
-		
-		$this->__afterSave($vals);
-		
-		
-		$this->jump();
-	}	
+	}
 	
 	
 }

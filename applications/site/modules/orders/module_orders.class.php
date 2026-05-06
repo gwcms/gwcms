@@ -124,6 +124,7 @@ class Module_Orders extends GW_Public_Module
 			return false;
 		
 		$this->prepareOrderForPay($order);
+		$pay_amount = $this->getOrderPayAmount($order);
 		
 		
 		$citems = $order->items;
@@ -160,9 +161,9 @@ class Module_Orders extends GW_Public_Module
 			'succ_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCompletePay','id'=>$order->id,'key'=>$order->secret])),
 			'cancel_url'=>'redirect_url=' . urlencode($this->buildURI('', ['absolute' => 1,'act'=>'doCancelPay','id'=>$order->id])),
 			'base'=> Navigator::getBase(true),
-			'orderid'=>'order-'.$order->id,
+			'orderid'=>'order-'.$order->id.($pay_amount != (float)$order->amount_total ? '-balance-'.str_replace('.', '', number_format($pay_amount, 2, '.', '')) : ''),
 			'paytext'=> GW::ln('/g/CART_PAY',['v'=>['id'=>$order->id]]),
-			'payprice'=>$order->amount_total,
+			'payprice'=>$pay_amount,
 			'items_number'=>count($citems),
 			'order'=>$order,
 			'paytype'=>$type
@@ -207,14 +208,14 @@ class Module_Orders extends GW_Public_Module
 			$this->app->jump('direct/orders/orders/paybanktransfer',['id'=>$order->id,'orderid'=>$order->id]);
 			
 		}elseif($type=='zeroprice'){			
-			if($order->amount_total>0){
+			if($pay_amount>0){
 				$this->setError(GW::ln('/m/ERROR_COUPON_AMOUNT_NOT_SUFFICIENT'));
 				header('Location:'.$this->buildURI('', ['absolute' => 1,'id'=>$order->id,'key'=>$order->secret]));
 				return true;
 			}
 			if($order->amount_coupon){
 				$args = ['id'=>$order->id];
-				$args['rcv_amount'] = $order->amount_total;
+				$args['rcv_amount'] = $pay_amount;
 				$args['pay_type'] = 'couponpay';
 						
 				$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
@@ -227,6 +228,20 @@ class Module_Orders extends GW_Public_Module
 		}else{
 			d::dumpas("Unknown method $type");
 		}
+	}
+	
+	function getOrderPayAmount($order)
+	{
+		if(!$order)
+			return 0;
+		
+		if(method_exists($order, 'recalcPaymentLedger'))
+			$order->recalcPaymentLedger(false);
+		
+		if((float)$order->balance_amount > 0 && (float)$order->payd_amount > 0)
+			return round((float)$order->balance_amount, 2);
+		
+		return round((float)$order->amount_total, 2);
 	}
 	
 	
@@ -267,7 +282,7 @@ class Module_Orders extends GW_Public_Module
 
 		$args = ['id'=>$order->id];		
 		$args['paytest']=1;
-		$args['rcv_amount'] = $order->amount_total;
+		$args['rcv_amount'] = $this->getOrderPayAmount($order);
 
 
 		$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?act=doMarkAsPaydSystem&sys_call=1&'. http_build_query($args));
@@ -848,7 +863,7 @@ class Module_Orders extends GW_Public_Module
 		if($this->feat('vat'))
 			$vars['VAT']=1;
 		
-		if(isset($_GET['vars']) && $this->app->user->isRoot())
+		if(isset($_GET['vars']) && (($this->app->user && $this->app->user->isRoot()) || GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV))
 			d::dumpas(['response'=>$response]);		
 		
 		$html = GW_Mail_Helper::prepareSmartyCode($response['tpl'], $vars);
@@ -859,7 +874,7 @@ class Module_Orders extends GW_Public_Module
 		if(isset($_GET['head'])){
 			//enable ln trans
 			echo $this->smarty->fetch('head.tpl');
-			echo $this->smarty->fetch('foot.tpl');
+			echo $this->smarty->fetch('gw/foot_includes.tpl');
 		}
 		
 		if(isset($_GET['html']))

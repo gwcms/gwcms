@@ -63,7 +63,6 @@
 		<button class="btn btn-sm copyBnt" type="button"><i class="fa fa-clipboard" aria-hidden="true"></i></button>	
 		
 	{/if}	
-
 </span>
 			
 {if !isset($GLOBALS.init_addEdit_input_done)}		
@@ -77,4 +76,3 @@
 		}) });
 	</script>
 {/if}
-

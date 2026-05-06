@@ -30,6 +30,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 		//$paypal_email = $cfg->paypal_email;
 		
 		$amount = $args->payprice;
+		$reference = 'order-'.$order->id.'-a'.date('YmdHis').mt_rand(100, 999);
 		
 		
 		if($this->app->user->id==9){
@@ -48,6 +49,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 		    'charset' => 'utf-8', //kazkodel neveikia, ir json neissaugo pareina windows-1252
 		    //'cpp_header_image' => "{$args->base}application/site/assets/img/site_trans_400.png",
 		    'item_name' => $args->paytext,
+		    'custom' => $reference,
 		);
 		    
 		if($this->app->user && $this->app->user->isRoot()){
@@ -187,6 +189,11 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			$logvals['extra'] = $extra;
 			$logvals['action'] = $_GET['action'];
 
+			if(($logvals['txn_id'] ?? false) && GW_Paypal_Log::singleton()->find(['txn_id=? AND payment_status=?', $logvals['txn_id'], 'Completed'])){
+				$this->log("KILLED - duplicate PayPal txn_id ".$logvals['txn_id']);
+				die('OK');
+			}
+			
 			
 			$log_entry=GW_Paypal_Log::singleton()->createNewObject($logvals);
 			$log_entry->insert();
@@ -210,9 +217,10 @@ class pay_paypal_module_ext extends GW_Module_Extension
 			}			
 			
 			$received_amount = $logvals['mc_gross'];
+			$expected_amount = method_exists($this, 'getOrderPayAmount') ? $this->getOrderPayAmount($order) : $order->amount_total;
 			
 			
-			if($logvals['payer_email']!='laiskonoriu@gmail.com' && ($order->amount_total != $received_amount || $logvals['mc_currency']!='EUR')){
+			if($logvals['payer_email']!='laiskonoriu@gmail.com' && ((float)$expected_amount != (float)$received_amount || $logvals['mc_currency']!='EUR')){
 				$debugdata = ['response'=>$logvals,'paylog'=>$log_entry->toArray()];
 				$mail=[
 					'subject'=>'Payment error amount_total in cart does not match revolut response',
@@ -225,7 +233,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 
 			$args = [
 			    'id'=>$order->id,
-			    'rcv_amount'=>$order->amount_total,
+			    'rcv_amount'=>$received_amount,
 			    'pay_type'=>'paypal',
 			    'log_entry_id'=>$log_entry->id
 			];	
@@ -233,7 +241,7 @@ class pay_paypal_module_ext extends GW_Module_Extension
 						
 			
 			
-			if($log_entry->test_ipn || $order->amount_total != $received_amount)
+			if($log_entry->test_ipn || (float)$expected_amount != (float)$received_amount)
 				$args['paytest']=1;
 
 			$this->markAsPaydSystem($args);

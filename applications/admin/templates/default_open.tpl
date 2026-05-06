@@ -45,10 +45,17 @@
 						
 						{$app->processHook("NAVBAR_LEFT_1")}
 
-			{if $app->user && $app->user->isRoot()}
-				{include "notifications.tpl"}
+			{if $app->user}
+											
+				{include "tools/notifications.tpl"}
+				{$app->innerProcess('users/chat/chatbubble')}
 			{/if}
 			
+			{if $app->user->is_admin}
+				{*include "notifications.tpl"*}
+			{/if}
+			
+                        {include "envselect.tpl"}
                         {include "langselect.tpl"}
                         {include "do_userdropdown.tpl"}
 
@@ -74,7 +81,8 @@
 
             <!--CONTENT CONTAINER-->
             <!--===================================================-->
-            <div id="content-container">	
+            <div id="content-container" >	
+				
 				
 				{*
                 <div id="page-title">
@@ -104,12 +112,13 @@
 				{if $app->user}
 					{include file="breadcrumbs.tpl"}
 				{/if}
+
 		
 			
 
                 <!--Page content-->
                 <!--===================================================-->
-                <div id="page-content">	
+                <div id="page-content" style="position:relative; z-index:1;">	
 				{else}
 					<body class="gwBodyClean {if $smarty.get.clean==2}gwBodyClean2{/if}"   data-clean="1" id="container">
 				{/if}	
@@ -124,4 +133,3 @@
 		{d::ldump($item)}
 	{/if}
 {/foreach}
-

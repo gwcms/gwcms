@@ -86,7 +86,7 @@ class GW_Bot_Detect
 
 			initEnviroment(GW_ENV_TEST);
 			$t = new GW_Timer;
-			GW_Proxy_Site::redirect(GW::s('SITE_URL'));
+			GW_Proxy_Site::redirect($_SERVER["HTTP_HOST"].'.1.voro.lt');
 			
 			
 			
@@ -177,12 +177,15 @@ class GW_Bot_Detect
 			$state=1;
 		}
 		
+		
+		/*
+		 * negerai nes gali but vidines uzklausos api uzklausos visas reik tikrinti daryt isimtis
 		if(GW::s('CLOUDFLARE') && GW::s('PROJECT_ENVIRONMENT') == GW_ENV_PROD && !isset($_SERVER['HTTP_CF_CONNECTING_IP']) && GW::ip()!='127.0.0.1'){
 			header('HTTP/1.1 505 Service unavailable skip cloudflare ns ');
 			header('Status: 505 Service unavailable skip cloudflare ns');
 			exit;			
 		}
-		
+		*/
 		
 		if(isset($_GET['debugbotdetect']))
 		{
@@ -259,7 +262,7 @@ class GW_Bot_Detect
 			$vals['ua'] = self::getUserAgentId();
 		}
 		
-		if($opts['ua']){
+		if(($opts['ua'] ?? false)){
 			$vals['ua'] = $opts['ua'];
 		}
 		
@@ -582,6 +585,9 @@ class GW_Bot_Detect
 		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD)
 			return false;
 		
+		if (preg_match('#^/tools/chat_store(?:\?|$)#', $_SERVER['REQUEST_URI'] ?? ''))
+			return false;
+
 		//if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_PROD || GW::s('CLOUDFLARE'))
 		//	return false;
 
@@ -605,6 +611,12 @@ class GW_Bot_Detect
 		
 		if(!GW::s('SOLVE_RECAPTCHA_PUBLIC_PRIVATE'))
 			return false;
+
+		if(isset($_GET['temp_access']) && $_GET['temp_access']){
+			GW::db();
+			if(GW_Temp_Access::singleton()->testToken($_GET['temp_access']))
+				return false;
+		}
 		
 		if (empty($_SESSION['human_verified'])) {
 			$_SESSION['redirect_after_captcha'] = $_SERVER['REQUEST_URI'];
