@@ -17,9 +17,13 @@ class GW_WebSocket_Helper2
 			'host' => (string)(GW::s('CHATWS/HOST') ?: '127.0.0.1'),
 			'port' => (int)(GW::s('CHATWS/PORT') ?: 9051),
 			'path' => (string)(GW::s('CHATWS/PATH') ?: '/ws'),
-			'health_port' => (int)(GW::s('CHATWS/HEALTH_PORT') ?: 9052),
-			'health_url' => (string)(GW::s('CHATWS/HEALTH_URL') ?: 'http://127.0.0.1:9052/healthz'),
 		];
+	}
+
+	static function healthUrl()
+	{
+		$cfg = self::cfg();
+		return 'http://' . ($cfg['host'] ?: '127.0.0.1') . ':' . (($cfg['port'] ?: 9051) + 1) . '/healthz';
 	}
 
 	static function enabled()
@@ -66,9 +70,7 @@ class GW_WebSocket_Helper2
 
 	static function controlUrl($path)
 	{
-		$cfg = self::cfg();
-		$healthUrl = $cfg['health_url'] ?: 'http://127.0.0.1:' . ($cfg['health_port'] ?: 9052) . '/healthz';
-		$parts = parse_url($healthUrl);
+		$parts = parse_url(self::healthUrl());
 
 		if (empty($parts['scheme']) || empty($parts['host']))
 			return '';

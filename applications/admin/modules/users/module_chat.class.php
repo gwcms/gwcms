@@ -820,7 +820,7 @@ class Module_Chat extends GW_Common_Module
 
 	function reactHealthUrl()
 	{
-		return GW::s('CHATWS/HEALTH_URL') ?: GW::s('REACTPHP_WS/HEALTH_URL') ?: 'http://127.0.0.1:9052/healthz';
+		return GW_WebSocket_Helper2::healthUrl();
 	}
 
 	function reactServiceName()

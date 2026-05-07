@@ -876,7 +876,7 @@ $debugEnabled = in_array('--debug', $argv, true)
 	|| (int)GW_Config::singleton()->get('users__chat/full_chat_debug');
 $wsHost = GW::s('CHATWS/HOST') ?: '127.0.0.1';
 $wsPort = (int)(GW::s('CHATWS/PORT') ?: 9051);
-$healthPort = (int)(GW::s('CHATWS/HEALTH_PORT') ?: ($wsPort + 1));
+$healthPort = $wsPort + 1;
 $chatServer = new GW_ReactPHP_Chat_Server([
 	'debug' => $debugEnabled,
 	'log_file' => GW::s('DIR/LOGS') . 'reactphpserver.log',
