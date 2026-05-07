@@ -10,26 +10,48 @@ class GW_WebSocket_Helper2
 	static function cfg()
 	{
 		$enabledOverride = self::chatConfigValue('chatws_enabled');
+		$enabled = $enabledOverride === null || $enabledOverride === '' ? (int)GW::s('CHATWS/ENABLED') : (int)$enabledOverride;
+		$host = (string)GW::s('CHATWS/HOST');
+		$port = GW::s('CHATWS/PORT');
+		$path = (string)(GW::s('CHATWS/PATH') ?: '/ws');
 
 		return [
-			'enabled' => $enabledOverride === null || $enabledOverride === '' ? (int)GW::s('CHATWS/ENABLED') : (int)$enabledOverride,
+			'enabled' => $enabled,
 			'transport' => (string)(GW::s('CHATWS/TRANSPORT') ?: 'reactphp'),
-			'host' => (string)(GW::s('CHATWS/HOST') ?: '127.0.0.1'),
-			'port' => (int)(GW::s('CHATWS/PORT') ?: 9051),
-			'path' => (string)(GW::s('CHATWS/PATH') ?: '/ws'),
+			'host' => $host,
+			'port' => (int)$port,
+			'path' => $path,
 		];
+	}
+
+	static function configError()
+	{
+		$cfg = self::cfg();
+		if (empty($cfg['enabled']))
+			return '';
+
+		if ($cfg['host'] === '')
+			return 'CHATWS/HOST is required when CHATWS is enabled';
+
+		if (empty($cfg['port']))
+			return 'CHATWS/PORT is required when CHATWS is enabled';
+
+		return '';
 	}
 
 	static function healthUrl()
 	{
 		$cfg = self::cfg();
-		return 'http://' . ($cfg['host'] ?: '127.0.0.1') . ':' . (($cfg['port'] ?: 9051) + 1) . '/healthz';
+		if (empty($cfg['enabled']) || self::configError())
+			return '';
+
+		return 'http://' . $cfg['host'] . ':' . ($cfg['port'] + 1) . '/healthz';
 	}
 
 	static function enabled()
 	{
 		$cfg = self::cfg();
-		return !empty($cfg['enabled']);
+		return !empty($cfg['enabled']) && !self::configError();
 	}
 
 	static function getFrontConfig()

@@ -410,6 +410,11 @@ class GW_User extends GW_Composite_Data_Object
 	{
 		return GW_Outg_SMS::singleton()->count(['number=?', $this->phone]);
 	}	
+
+	function calcChangeTrack()
+	{
+		return GW_Change_Track::singleton()->count(['user_id=?', $this->id]);
+	}
 	
 	function __toString(){
 		return $this->title;

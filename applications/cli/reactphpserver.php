@@ -611,6 +611,12 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 			throw new Exception('Missing HTTP request context');
 
 		$queryParams = method_exists($request, 'getQueryParams') ? (array)$request->getQueryParams() : [];
+
+		if (!$queryParams && method_exists($request, 'getUri')) {
+			parse_str((string)$request->getUri()->getQuery(), $queryParams);
+			$queryParams = (array)$queryParams;
+		}
+
 		$sessionId = trim((string)($queryParams['GWSESSID'] ?? ''));
 		$sessionPath = trim((string)($queryParams['GWSESSPATH'] ?? ''));
 
@@ -874,8 +880,20 @@ $loop = Loop::get();
 $debugEnabled = in_array('--debug', $argv, true)
 	|| (bool)(GW::s('REACTPHP_WS/DEBUG') ?: 0)
 	|| (int)GW_Config::singleton()->get('users__chat/full_chat_debug');
-$wsHost = GW::s('CHATWS/HOST') ?: '127.0.0.1';
-$wsPort = (int)(GW::s('CHATWS/PORT') ?: 9051);
+$wsHost = (string)GW::s('CHATWS/HOST');
+$wsPort = GW::s('CHATWS/PORT');
+
+if ($wsHost === '') {
+	fwrite(STDERR, "CHATWS/HOST is required; refusing to fall back to a default websocket host.\n");
+	exit(3);
+}
+
+if ($wsPort === null || $wsPort === '' || (int)$wsPort <= 0) {
+	fwrite(STDERR, "CHATWS/PORT is required; refusing to fall back to a default websocket port.\n");
+	exit(3);
+}
+
+$wsPort = (int)$wsPort;
 $healthPort = $wsPort + 1;
 $chatServer = new GW_ReactPHP_Chat_Server([
 	'debug' => $debugEnabled,

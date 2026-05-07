@@ -842,13 +842,24 @@ class Module_Chat extends GW_Common_Module
 
 	function getReactHealthStatus($full = false)
 	{
+		$configError = GW_WebSocket_Helper2::configError();
+		if ($configError) {
+			return [
+				'ok' => false,
+				'disabled' => 0,
+				'status_line' => $configError,
+				'body' => '',
+				'url' => '',
+			];
+		}
+
 		if (!$this->isReactServiceEnabled()) {
 			return [
 				'ok' => false,
 				'disabled' => 1,
 				'status_line' => 'disabled by users/chat config',
 				'body' => '',
-				'url' => $this->reactHealthUrl() . ($full ? '?full=1' : ''),
+				'url' => '',
 			];
 		}
 

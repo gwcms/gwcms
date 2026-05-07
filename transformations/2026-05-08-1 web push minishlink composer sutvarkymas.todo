@@ -1,0 +1,178 @@
+Tikslas
+- Sutvarkyti Web Push / VAPID palaikymą projektuose taip, kad `Minishlink\WebPush\VAPID` klase būtų įkeliama per Composer autoload.
+- Sutvarkyti ReactPHP / Ratchet chat WebSocket serverio priklausomybes.
+- Išvalyti seną Composer betvarkę, kuri trukdo diegti naujus paketus su dabartine PHP versija.
+
+Problema
+- Admin `system/cfg` veiksmas kviečia:
+  - `VAPID::createVapidKeys()`
+- Jeigu projekte nėra `minishlink/web-push`, gaunama klaida:
+  - `Class "Minishlink\WebPush\VAPID" not found`
+- ReactPHP chat serveris gali nekristi per DB/config, o tiesiog nestartuoti dėl trūkstamų Composer klasių:
+  - `React\EventLoop\Loop`
+  - `React\Socket\SocketServer`
+  - `React\Http\HttpServer`
+  - `React\Http\Message\Response`
+  - `Ratchet\MessageComponentInterface`
+  - `Ratchet\Server\IoServer`
+  - `Ratchet\Http\HttpServer`
+  - `Ratchet\WebSocket\WsServer`
+- Chat UI gali strigti arba veikti keistai, jei SQL importas dalinai sugadino chat lenteles:
+  - `gw_chat_rooms.id` neturi `PRIMARY KEY`
+  - `gw_chat_rooms.id` neturi `AUTO_INCREMENT`
+  - yra kambarys su `id=0`
+  - `gw_chat_room_users` referencina neegzistuojančius `room_id`
+- Senuose projektuose Composer gali nesudiegti paketo dėl senų `facebook/*` paketų:
+  - `facebook/php-sdk-v4`
+  - `facebook/graph-sdk`
+- Šie paketai užrakinti senoms PHP versijoms ir su PHP 8.5 blokuoja `composer2 require`.
+
+Apimtis
+- `composer.json`
+- `composer.lock`
+- `vendor/`
+- Admin config modulis, kuris generuoja VAPID raktus
+- `applications/cli/reactphpserver.php`
+- `repository/.sys/logs/reactphpserver.log`
+- `config/environment.php` CHATWS reikšmės
+- `gw_chat_rooms`
+- `gw_chat_room_users`
+- `gw_chat_messages`
+- kitos `gw_chat%` lentelės
+- Bendras projekto autoload/init sluoksnis
+
+Veiksmų seka naujame projekte
+- Projekto root kataloge patikrinti ar naudojamas Composer autoload:
+  - `vendor/autoload.php`
+- Patikrinti ar `minishlink/web-push` jau įdiegtas:
+  - `composer2 show minishlink/web-push`
+- Jei nėra, diegti:
+  - `composer2 require minishlink/web-push --with-all-dependencies`
+- Jei Composer atsitrenkia į senus Facebook paketus, o auth jau eina per GW/Voro, pašalinti senus Facebook paketus:
+  - `composer2 remove facebook/php-sdk-v4 facebook/graph-sdk --with-all-dependencies`
+- Jei projekte yra tik vienas Facebook paketas:
+  - `composer2 remove facebook/php-sdk-v4 --with-all-dependencies`
+  - arba `composer2 remove facebook/graph-sdk --with-all-dependencies`
+- Po to dar kartą paleisti:
+  - `composer2 require minishlink/web-push --with-all-dependencies`
+- Įdiegti ReactPHP / Ratchet priklausomybes chat WebSocket serveriui:
+  - `composer2 require react/event-loop:^1.6 react/socket:^1.17 react/http:^1.11 cboden/ratchet:^0.4.4 --with-all-dependencies`
+- Patikrinti ar `composer.json` turi:
+  - `react/event-loop`
+  - `react/socket`
+  - `react/http`
+  - `cboden/ratchet`
+
+Laikinas apeinamasis variantas
+- Jei reikia greitai sudiegti paketą, bet Composer vis dar blokuoja dėl seno locked paketo:
+  - `composer2 require minishlink/web-push --with-all-dependencies --ignore-platform-req=php`
+- Šitą laikyti laikinu sprendimu.
+- Po to vis tiek išvalyti senus Composer paketus, kad ateityje nereikėtų `--ignore-platform-req=php`.
+
+Kodo reikalavimai
+- Modulyje turi būti namespace importas:
+  - `use Minishlink\WebPush\VAPID;`
+- Raktų generavimas:
+  - `$keys = VAPID::createVapidKeys();`
+- Saugomi raktai:
+  - `$keys['publicKey']`
+  - `$keys['privateKey']`
+- Jei `sys/VAPID_PUBLIC_KEY` jau yra, generatorius neturi tyliai perrašyti esamų raktų.
+
+Patikrinimas
+- Paleisti projekto root kataloge:
+  - `php -r 'require "vendor/autoload.php"; var_export(class_exists("Minishlink\\WebPush\\VAPID")); echo PHP_EOL;'`
+- Turi grąžinti:
+  - `true`
+- Patikrinti ReactPHP / Ratchet klases:
+  - `php -r 'require "vendor/autoload.php"; foreach(["React\\\\EventLoop\\\\Loop","React\\\\Socket\\\\SocketServer","React\\\\Http\\\\HttpServer","React\\\\Http\\\\Message\\\\Response","Ratchet\\\\MessageComponentInterface","Ratchet\\\\Server\\\\IoServer","Ratchet\\\\Http\\\\HttpServer","Ratchet\\\\WebSocket\\\\WsServer"] as $c){ echo $c.":".(class_exists($c)||interface_exists($c)?"OK":"MISSING").PHP_EOL; }'`
+- Jei `repository/.sys/logs/reactphpserver.log` rodo `Missing ReactPHP / Ratchet dependencies`, problema yra Composer priklausomybėse.
+- Trumpam paleisti serverį:
+  - `php applications/cli/reactphpserver.php`
+- DEV aplinkoje nebeturi būti `9051` / `9052` fallbackų.
+- Jei chat WebSocket įjungtas, privaloma aiškiai nustatyti:
+  - `CHATWS/HOST`
+  - `CHATWS/PORT`
+- Jei šių reikšmių nėra, kodas turi mesti klaidą arba serveris turi nestartuoti, o ne tyliai naudoti defaultinį portą.
+- Admin helperis neturi fatališkai nulaužti puslapio vien dėl trūkstamo DEV configo; jis turi rodyti misconfigured būseną ir negeneruoti WS path.
+- Health endpoint visada yra:
+  - `CHATWS/PORT + 1`
+- TEST/PROD, jei `CHATWS/PORT = 9061`, tikrinti:
+  - `http://127.0.0.1:9062/healthz`
+- Health endpoint turi grąžinti:
+  - `OK`
+- Patikrinti chat schema:
+  - `SHOW CREATE TABLE gw_chat_rooms;`
+  - `SHOW TABLES LIKE 'gw_chat%';`
+- `gw_chat_rooms.id` turi būti:
+  - `PRIMARY KEY`
+  - `AUTO_INCREMENT`
+- Jei po importo `gw_chat_rooms` turi `id=0` arba neturi indeksų, pritaikyti:
+  - `sql/2026-05-08-1 chat_rooms_schema_repair.sql`
+- Admin dalyje patikrinti veiksmą, kuris kviečia `doGenerateVapid()`.
+
+Kas jau padaryta events.ltf.lt
+- Įdiegtas `minishlink/web-push`:
+  - `v10.0.3`
+- Įdiegtos ReactPHP / Ratchet priklausomybės:
+  - `react/event-loop` `v1.6.0`
+  - `react/socket` `v1.17.0`
+  - `react/http` `v1.11.0`
+  - `cboden/ratchet` `v0.4.4`
+- Pergeneruotas Composer autoload.
+- Pašalinti seni Composer paketai:
+  - `facebook/php-sdk-v4`
+  - `facebook/graph-sdk`
+- Patikrinta, kad:
+  - `class_exists("Minishlink\\WebPush\\VAPID") === true`
+- Patikrinta, kad ReactPHP / Ratchet klasės užsikrauna per Composer autoload.
+- Lokaliai `applications/cli/reactphpserver.php` startuoja ir health endpoint grąžina `OK`.
+- Sutvarkyta lokali chat DB schema:
+  - `gw_chat_rooms.id` perkeltas iš `0` į normalų teigiamą ID
+  - `gw_chat_rooms.id` turi `PRIMARY KEY`
+  - `gw_chat_rooms.id` turi `AUTO_INCREMENT`
+  - zero datetime reikšmės `last_message_time` / `last_event_time` pakeistos į `NULL`
+- Pridėta SQL migracija:
+  - `sql/2026-05-08-1 chat_rooms_schema_repair.sql`
+- Lokaliai patikrinta:
+  - `GW_Chat_Service::getMyRooms(9)` grąžina kambarius
+  - `GW_Chat_Service::getOrCreatePrivateRoom(9,7)` sukuria normalų private room su teigiamu ID
+
+Kas jau padaryta badminton.lt
+- Įdiegtas `minishlink/web-push`:
+  - `v10.0.3`
+- Pergeneruotas Composer autoload.
+- Pašalintas senas Composer paketas:
+  - `facebook/php-sdk-v4`
+- Patikrinta, kad:
+  - `class_exists("Minishlink\\WebPush\\VAPID") === true`
+
+Papildomai sutvarkyti vėliau
+- Paleisti:
+  - `composer2 audit`
+- Įvertinti security advisories dėl senų paketų.
+- Peržiūrėti ar galima kelti seną `dompdf/dompdf` versiją.
+- Peržiūrėti ar kiti seni Composer paketai dar reikalingi.
+- Jei productione serveris nestartuoja, pirmiausia žiūrėti:
+  - `repository/.sys/logs/reactphpserver.log`
+  - ar procesas klauso `CHATWS/PORT`
+  - ar health port yra `CHATWS/PORT + 1`
+  - ar Apache/Nginx proxy į `/ws` nukreiptas į teisingą portą
+- Jei productione chat puslapis stringa arba meta SQL klaidas, tikrinti `repository/.sys/logs/MySQL.log`.
+- Klaida `Table '...gw_chat_rooms' doesn't exist` reiškia, kad chat SQL migracijos nebuvo pritaikytos.
+- Jei lentelės egzistuoja, bet `gw_chat_rooms` be `PRIMARY KEY` / `AUTO_INCREMENT`, taikyti schema repair migraciją.
+- Jei vendor yra committinamas į repo, po Composer keitimų sužiūrėti visus `vendor/` pakeitimus ir commitinti sąmoningai.
+
+Baigtumo kriterijai
+- `composer2 require minishlink/web-push --with-all-dependencies` praeina be fatal Composer konfliktų.
+- `composer2 require react/event-loop:^1.6 react/socket:^1.17 react/http:^1.11 cboden/ratchet:^0.4.4 --with-all-dependencies` praeina be fatal Composer konfliktų.
+- `minishlink/web-push` yra `composer.json` ir `composer.lock`.
+- ReactPHP / Ratchet paketai yra `composer.json` ir `composer.lock`.
+- `vendor/minishlink/web-push` egzistuoja.
+- `VAPID` klasė užsikrauna per `vendor/autoload.php`.
+- ReactPHP / Ratchet klasės užsikrauna per `vendor/autoload.php`.
+- `applications/cli/reactphpserver.php` nebekrenta su `Missing ReactPHP / Ratchet dependencies`.
+- `healthz` endpoint grąžina `OK`.
+- `gw_chat_rooms.id` yra `PRIMARY KEY AUTO_INCREMENT`.
+- Chat service metodai `getMyRooms()` ir `getOrCreatePrivateRoom()` veikia be SQL klaidų.
+- Admin VAPID generatorius nebekrenta su `Class "Minishlink\WebPush\VAPID" not found`.
