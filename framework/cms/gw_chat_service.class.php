@@ -8,6 +8,10 @@ class GW_Chat_Service
 	const DEFAULT_ATTACHMENT_SIZE_MB = 10;
 	const ATTACHMENT_STORAGE_LOCAL = 'local';
 	const ATTACHMENT_STORAGE_VORO1 = 'voro1';
+	const PUSH_QUEUE_GROUP = 'chat_push_queue';
+	const PUSH_SENT_GROUP = 'chat_push_sent';
+
+	protected $reactOnlineUserIdsCache = null;
 
 	public static function singleton()
 	{
@@ -20,6 +24,24 @@ class GW_Chat_Service
 	function now()
 	{
 		return date('Y-m-d H:i:s');
+	}
+
+	function chatConfig($key, $default = null)
+	{
+		$value = GW_Config::singleton()->get('users__chat/' . $key);
+		return ($value === null || $value === '') ? $default : $value;
+	}
+
+	function chatConfigInt($key, $default = 0)
+	{
+		$value = $this->chatConfig($key, $default);
+		return is_numeric($value) ? (int)$value : (int)$default;
+	}
+
+	function chatConfigBool($key, $default = false)
+	{
+		$value = $this->chatConfig($key, $default ? 1 : 0);
+		return in_array(strtolower((string)$value), ['1', 'true', 'yes', 'on'], true);
 	}
 
 	function normalizeEventPayload($payload)
@@ -823,6 +845,331 @@ class GW_Chat_Service
 		$this->notifyUsers($userIds, $packet);
 	}
 
+	function getReactOnlineUserIds()
+	{
+		if ($this->reactOnlineUserIdsCache !== null)
+			return $this->reactOnlineUserIdsCache;
+
+		$this->reactOnlineUserIdsCache = [];
+
+		if (!GW_WebSocket_Helper2::enabled())
+			return $this->reactOnlineUserIdsCache;
+
+		$url = GW_WebSocket_Helper2::controlUrl('/healthz') . '?full=1';
+		if (!$url)
+			return $this->reactOnlineUserIdsCache;
+
+		$ctx = stream_context_create([
+			'http' => [
+				'timeout' => 0.25,
+				'ignore_errors' => true,
+			],
+		]);
+		$body = @file_get_contents($url, false, $ctx);
+		$data = is_string($body) ? json_decode($body, true) : null;
+		$list = is_array($data) ? ($data['online_users'] ?? []) : [];
+
+		foreach ((array)$list as $item) {
+			$userId = (int)($item['id'] ?? 0);
+			if ($userId > 0)
+				$this->reactOnlineUserIdsCache[$userId] = 1;
+		}
+
+		return $this->reactOnlineUserIdsCache;
+	}
+
+	function isUserWsOnline($userId)
+	{
+		$userId = (int)$userId;
+		$ids = $this->getReactOnlineUserIds();
+		return !empty($ids[$userId]);
+	}
+
+	function isQuietHoursNow()
+	{
+		if (!$this->chatConfigBool('push_private_quiet_hours_enabled', false))
+			return false;
+
+		$from = trim((string)$this->chatConfig('push_private_quiet_hours_from', '22:00'));
+		$to = trim((string)$this->chatConfig('push_private_quiet_hours_to', '08:00'));
+		if (!preg_match('/^\d{1,2}:\d{2}$/', $from) || !preg_match('/^\d{1,2}:\d{2}$/', $to))
+			return false;
+
+		$now = (int)date('Hi');
+		$fromInt = (int)str_replace(':', '', $from);
+		$toInt = (int)str_replace(':', '', $to);
+
+		if ($fromInt === $toInt)
+			return false;
+
+		return $fromInt < $toInt ? ($now >= $fromInt && $now < $toInt) : ($now >= $fromInt || $now < $toInt);
+	}
+
+	function pushCooldownName($roomId)
+	{
+		return 'room:' . (int)$roomId . ':last_sent_at';
+	}
+
+	function pushQueueName($roomId)
+	{
+		return 'room:' . (int)$roomId;
+	}
+
+	function getUserImageId($userId)
+	{
+		$userId = (int)$userId;
+		if (!$userId)
+			return 0;
+
+		try {
+			return (int)GW::db()->fetch_result("SELECT id FROM gw_images WHERE owner='GW_User_{$userId}_image' ORDER BY id DESC LIMIT 1");
+		} catch (Throwable $e) {
+			return 0;
+		}
+	}
+
+	function getRecipientUnreadMessageCount($recipientId, $roomId)
+	{
+		$recipientId = (int)$recipientId;
+		$roomId = (int)$roomId;
+		if (!$recipientId || !$roomId)
+			return 0;
+
+		try {
+			$lastSeen = (int)GW::db()->fetch_result("SELECT last_seen_message_id FROM gw_chat_room_users WHERE room_id={$roomId} AND user_id={$recipientId} LIMIT 1");
+			return (int)GW::db()->fetch_result("
+				SELECT COUNT(*)
+				FROM gw_chat_messages
+				WHERE room_id={$roomId}
+				  AND sender_id!={$recipientId}
+				  AND is_deleted=0
+				  AND id>{$lastSeen}
+			");
+		} catch (Throwable $e) {
+			return 0;
+		}
+	}
+
+	function parseImportantPushMessage($message)
+	{
+		$message = trim((string)$message);
+		if (!preg_match('/^!important\b[\s:;-]*/i', $message, $match))
+			return [false, $message];
+
+		$pushMessage = trim(substr($message, strlen($match[0])));
+		return [true, $pushMessage !== '' ? $pushMessage : $message];
+	}
+
+	function getPrivatePushCooldownRemaining($recipientId, $roomId)
+	{
+		$cooldown = max(0, $this->chatConfigInt('push_private_room_cooldown_seconds', 180));
+		if (!$cooldown)
+			return 0;
+
+		$lastSent = GW_Temp_Data::singleton()->readValue((int)$recipientId, self::PUSH_SENT_GROUP, $this->pushCooldownName($roomId));
+		if (!$lastSent)
+			return 0;
+
+		$remaining = strtotime((string)$lastSent) + $cooldown - time();
+		return max(0, (int)$remaining);
+	}
+
+	function canQueuePrivatePush($recipient, $roomId, $force = false, $checkCooldown = true)
+	{
+		if (!$recipient || !$recipient->id)
+			return false;
+
+		if ($force)
+			return true;
+
+		$offlineAfter = max(1, $this->chatConfigInt('push_private_offline_after_seconds', 90));
+		$lastRequestTs = $recipient->last_request_time ? strtotime($recipient->last_request_time) : 0;
+		if ($lastRequestTs && $lastRequestTs > time() - $offlineAfter)
+			return false;
+
+		if ($this->isUserWsOnline((int)$recipient->id))
+			return false;
+
+		if ($checkCooldown && $this->getPrivatePushCooldownRemaining((int)$recipient->id, $roomId))
+			return false;
+
+		return true;
+	}
+
+	function queuePrivatePushNotifications($room, $sender, array $packet)
+	{
+		if (!$room || (string)$room->type !== 'private' || !$sender)
+			return;
+
+		list($important, $pushMessage) = $this->parseImportantPushMessage($packet['message'] ?? '');
+
+		if (!$important && !$this->chatConfigBool('push_private_enabled', false))
+			return;
+
+		if (!$important && $this->isQuietHoursNow())
+			return;
+
+		$memberIds = $this->getRoomUserIds($room->id, true);
+		$users = $this->getUsersIndexed($memberIds);
+		$temp = GW_Temp_Data::singleton();
+		$queued = 0;
+
+		foreach ($memberIds as $recipientId) {
+			$recipientId = (int)$recipientId;
+			if (!$recipientId || $recipientId === (int)$sender->id)
+				continue;
+
+			$recipient = $users[$recipientId] ?? null;
+			if (!$this->canQueuePrivatePush($recipient, (int)$room->id, $important, false))
+				continue;
+
+			$name = $important ? ($this->pushQueueName((int)$room->id) . ':important:' . (int)($packet['message_id'] ?? 0)) : $this->pushQueueName((int)$room->id);
+			$existing = $temp->readValue($recipientId, self::PUSH_QUEUE_GROUP, $name);
+			$existingData = $existing ? json_decode((string)$existing, true) : [];
+			$count = $important ? 1 : max(((int)($existingData['count'] ?? 0) + 1), $this->getRecipientUnreadMessageCount($recipientId, (int)$room->id), 1);
+
+			$payload = [
+				'recipient_user_id' => $recipientId,
+				'room_id' => (int)$room->id,
+				'message_id' => (int)($packet['message_id'] ?? 0),
+				'sender_id' => (int)$sender->id,
+				'sender_name' => $this->getUserDisplayName($sender),
+				'sender_image_id' => $this->getUserImageId((int)$sender->id),
+				'message' => $pushMessage,
+				'count' => $count,
+				'important' => $important ? 1 : 0,
+				'insert_time' => $this->now(),
+				'last_update_time' => $this->now(),
+			];
+
+			$temp->store($recipientId, self::PUSH_QUEUE_GROUP, $name, json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '1 hour');
+			$queued++;
+		}
+
+		if (!$queued)
+			return;
+
+		try {
+			GW_Task::singleton()->addSingle('chat_push_queue');
+		} catch (Throwable $e) {
+			error_log('GW_Chat_Service chat_push_queue task add failed: '.$e->getMessage());
+		}
+	}
+
+	function getPushBaseUrl()
+	{
+		$base = rtrim((string)GW::s('SITE_URL'), '/');
+		if ($base)
+			return $base;
+
+		$host = trim((string)GW::s('MAIN_HOST'));
+		return $host ? ('https://' . $host) : '';
+	}
+
+	function getPrivatePushIcon(array $job)
+	{
+		$base = $this->getPushBaseUrl();
+		if (!$base)
+			return '';
+
+		$senderImageId = (int)($job['sender_image_id'] ?? 0);
+		if ($senderImageId)
+			return $base . '/tools/imga/' . $senderImageId . '?size=128x128&method=crop';
+
+		try {
+			$favicoId = (int)GW::db()->fetch_result("SELECT id FROM gw_images WHERE owner='GW_Site_1_favico' ORDER BY id DESC LIMIT 1");
+			if ($favicoId)
+				return $base . '/tools/imga/' . $favicoId . '?size=128x128&method=crop';
+		} catch (Throwable $e) {}
+
+		return '';
+	}
+
+	function buildPrivatePushPayload(array $job)
+	{
+		$senderName = trim((string)($job['sender_name'] ?? ''));
+		$count = max(1, (int)($job['count'] ?? 1));
+		$message = trim((string)($job['message'] ?? ''));
+		$previewEnabled = $this->chatConfigBool('push_private_preview_enabled', true);
+		$previewMax = max(20, $this->chatConfigInt('push_private_preview_max_length', 120));
+		$title = $senderName ? ('New message from ' . $senderName) : 'New private chat message';
+		$body = $count > 1 ? ($count . ' new messages') : 'New message';
+
+		if ($previewEnabled && $message !== '') {
+			if (function_exists('mb_strlen') && mb_strlen($message, 'UTF-8') > $previewMax)
+				$message = mb_substr($message, 0, $previewMax - 1, 'UTF-8') . '...';
+			elseif (strlen($message) > $previewMax)
+				$message = substr($message, 0, $previewMax - 1) . '...';
+
+			$body = $count > 1 ? ($count . ' new messages: ' . $message) : $message;
+		}
+
+		$ln = strtolower(GW::$context->app->ln ?? 'lt');
+		$base = $this->getPushBaseUrl();
+		$url = $base . '/admin/' . $ln . '/users/chat/room?id=' . (int)($job['room_id'] ?? 0) . '&room_type=private';
+
+		$payload = [
+			'title' => $title,
+			'body' => $body,
+			'tag' => 'gw-chat-private-' . (int)($job['room_id'] ?? 0),
+			'data' => ['url' => $url],
+		];
+
+		$icon = $this->getPrivatePushIcon($job);
+		if ($icon)
+			$payload['icon'] = $icon;
+
+		return $payload;
+	}
+
+	function processPrivatePushQueue($limit = 50)
+	{
+		$list = GW_Temp_Data::singleton()->findAll("`group`='".GW::db()->escape(self::PUSH_QUEUE_GROUP)."' AND expires > '".date('Y-m-d H:i:s')."'", ['limit' => max(1, (int)$limit)]);
+		$sent = 0;
+
+		foreach ($list as $item) {
+			$job = json_decode((string)$item->value, true);
+			if (!is_array($job) || empty($job['recipient_user_id']) || empty($job['room_id'])) {
+				$item->delete();
+				continue;
+			}
+
+			$recipientId = (int)$job['recipient_user_id'];
+			$recipient = GW_User::singleton()->find(['id=? AND active=1 AND removed=0', $recipientId]);
+
+			$important = !empty($job['important']);
+			if ((!$important && !$this->chatConfigBool('push_private_enabled', false)) || !$this->canQueuePrivatePush($recipient, (int)$job['room_id'], $important, false)) {
+				$item->delete();
+				continue;
+			}
+
+			if (!$important && ($this->isQuietHoursNow() || $this->getPrivatePushCooldownRemaining($recipientId, (int)$job['room_id'])))
+				continue;
+
+			try {
+				$result = GW_Android_Push_Notif::pushWeb($recipientId, $this->buildPrivatePushPayload($job));
+			} catch (Throwable $e) {
+				error_log('GW_Chat_Service private push failed for user '.$recipientId.': '.$e->getMessage());
+				$item->delete();
+				continue;
+			}
+			if (!$important)
+				GW_Temp_Data::singleton()->store($recipientId, self::PUSH_SENT_GROUP, $this->pushCooldownName((int)$job['room_id']), date('Y-m-d H:i:s'), '30 day');
+			$item->delete();
+			$success = false;
+			foreach ((array)$result as $report) {
+				if (!empty($report['success'])) {
+					$success = true;
+					break;
+				}
+			}
+			if ($success)
+				$sent++;
+		}
+
+		return ['processed' => count($list), 'sent' => $sent];
+	}
+
 	function getChatFileConfig($key, $default = null)
 	{
 		$key = strtolower((string)$key);
@@ -970,7 +1317,7 @@ class GW_Chat_Service
 		if (!$host || strpos($host, '.1.voro.lt') !== false)
 			return '';
 
-		return 'https://' . $host . '.1.voro.lt/tools/chat_store';
+		return 'https://' . str_replace('.', '-', $host) . '.1.voro.lt/tools/chat_store';
 	}
 
 	function normalizeUploadFiles($files)
@@ -1292,6 +1639,7 @@ class GW_Chat_Service
 		];
 
 		$this->notifyRoom($roomId, $packet);
+		$this->queuePrivatePushNotifications($room, $sender, $packet);
 
 		return $packet;
 	}

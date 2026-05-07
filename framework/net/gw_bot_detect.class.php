@@ -86,7 +86,7 @@ class GW_Bot_Detect
 
 			initEnviroment(GW_ENV_TEST);
 			$t = new GW_Timer;
-			GW_Proxy_Site::redirect($_SERVER["HTTP_HOST"].'.1.voro.lt');
+			GW_Proxy_Site::redirect(str_replace('.', '-', $_SERVER["HTTP_HOST"]).'.1.voro.lt');
 			
 			
 			

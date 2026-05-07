@@ -120,7 +120,7 @@ class GW_App_Base
 
 	//parametru pavyzdziai --bananu_skaicius=5 -rodyti_bananus
 
-	function parseParams()
+	static function parseParams()
 	{
 		$params = array();
 		foreach ($GLOBALS['argv'] as $arg)

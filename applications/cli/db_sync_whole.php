@@ -29,7 +29,6 @@ function out($str){
 	echo $str."\n";
 }
 
-
 $params = parseParams();
 
 $myenv = GW::s('PROJECT_ENVIRONMENT');
@@ -78,7 +77,7 @@ if($params['recoverdb'] ?? false){
 	$localfile=$remotefile;
 	$unziped="/tmp/$database";
 
-	$extra = "";
+	$extra = " --no-tablespaces ";
 
 	if(isset($params['exclude']))
 	{

@@ -19,6 +19,22 @@ class Module_Sites extends GW_Common_Module
 	{
 		
 	}
+
+	function doUpdateHttpConfAndSsl()
+	{
+		if (!$this->app->user->isRoot())
+			return $this->jump();
+		
+		$path = GW::s('DIR/ROOT') . "applications/cli/sudogate.php";
+		$sudouser = GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV ? 'wdm' : 'root';
+		$logfile = GW::s('DIR/LOGS') . 'sudogate_http_conf_ssl_' . date('Ymd_His') . '.log';
+		$cmd = "sudo -S -u $sudouser /usr/bin/php " . escapeshellarg($path) . " update-http-conf-and-ssl --notify-user=" . (int)$this->app->user->id;
+		
+		shell_exec($cmd . " > " . escapeshellarg($logfile) . " 2>&1 &");
+		
+		$this->setMessage("http.conf && SSL update started in background. Push notification will be sent when finished.<br><pre>" . htmlspecialchars($cmd . "\nlog: " . $logfile, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</pre>");
+		$this->jump();
+	}
 	
 	
 	

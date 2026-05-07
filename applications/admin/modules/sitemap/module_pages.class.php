@@ -293,7 +293,7 @@ class Module_Pages extends GW_Common_Module_Tree_Data
 			return $host . '.localhost';
 
 		if (strpos($current_host, '.1.voro.lt') !== false)
-			return $host . '.1.voro.lt';
+			return str_replace('.', '-', $host) . '.1.voro.lt';
 
 		return $host;
 	}

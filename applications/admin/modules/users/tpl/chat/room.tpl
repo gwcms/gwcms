@@ -41,6 +41,8 @@
 .chat-room-message-name{font-size:12px;color:#475467;margin:0 0 4px}
 .chat-room-message-body{display:flex;align-items:flex-end;gap:3px}
 .chat-room-message-bubble{background:#fff;border:1px solid #d8e0e8;border-radius:16px;padding:12px 13px;color:#101828;word-break:break-word;box-shadow:0 1px 2px rgba(16,24,40,.04);line-height:1.45}
+.chat-room-message .chat-room-message-bubble{transition:background-color .65s ease,border-color .65s ease,box-shadow .65s ease}
+.chat-room-message.is-unread .chat-room-message-bubble{background:#fff4b8;border-color:#f2c94c;box-shadow:0 1px 8px rgba(242,201,76,.32)}
 .chat-room-message.is-me .chat-room-message-bubble{background:#dbeafe;border-color:#bfdbfe;border-bottom-right-radius:4px}
 .chat-room-message.is-other .chat-room-message-bubble{border-bottom-left-radius:4px}
 .chat-room-message:hover .chat-room-reaction-launcher,.chat-room-message.is-reaction-open .chat-room-reaction-launcher{opacity:1;pointer-events:auto}
@@ -459,8 +461,25 @@ require(['js/gwchat_app'], function(GWChatApp){
 
 		try {
 			await GWChatApp.markSeen(activeRoom.id, messageId);
+			setTimeout(function(){
+				clearUnreadHighlights(messageId);
+			}, 650);
 		} catch (err) {
 			pendingSeenMessageId = Math.max(pendingSeenMessageId, messageId);
+		}
+	}
+
+	function clearUnreadHighlights(messageId)
+	{
+		messageId = parseInt(messageId || '0', 10) || 0;
+		if (!messageId)
+			return;
+
+		var nodes = roomMessages.querySelectorAll('.chat-room-message.is-unread[data-message-id]');
+		for (var i = 0; i < nodes.length; i++) {
+			var id = parseInt(nodes[i].getAttribute('data-message-id') || '0', 10) || 0;
+			if (id && id <= messageId)
+				nodes[i].classList.remove('is-unread');
 		}
 	}
 
@@ -611,7 +630,7 @@ require(['js/gwchat_app'], function(GWChatApp){
 		var isMe = currentUser && parseInt(currentUser.id || '0', 10) === message.sender_id;
 		var hideSenderName = !!(activeRoom && activeRoom.type === 'private');
 		var node = document.createElement('div');
-		node.className = 'chat-room-message ' + (isMe ? 'is-me' : 'is-other');
+		node.className = 'chat-room-message ' + (isMe ? 'is-me' : 'is-other') + (message._highlight_unread ? ' is-unread' : '');
 		node.setAttribute('data-message-id', String(message.id || 0));
 		node.setAttribute('data-entry-key', String(message.entry_key || ''));
 
@@ -718,8 +737,12 @@ require(['js/gwchat_app'], function(GWChatApp){
 			if (!key || messageIds[key])
 				continue;
 			messageIds[key] = 1;
-			if (msg.entry_type === 'message' && msg.id)
+			if (msg.entry_type === 'message' && msg.id) {
+				var ownId = currentUser ? parseInt(currentUser.id || '0', 10) : 0;
+				if (mode === 'append' && ownId && msg.sender_id !== ownId && !msg.is_seen)
+					msg._highlight_unread = 1;
 				lastKnownMessageId = Math.max(lastKnownMessageId, msg.id);
+			}
 			frag.appendChild(createMessageNode(msg));
 		}
 

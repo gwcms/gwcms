@@ -62,8 +62,8 @@
 	
 	{$order_enabled_fields = array_keys($display_fields)}
 	
-		{capture append=footer_hidden}
-			<script>gwcms.initImagePreview();</script>
+	{capture append=footer_hidden}
+			<script>require(['gwcms'], function(){ gwcms.initImagePreview(); });</script>
 		{/capture}	
 	
 {/block}

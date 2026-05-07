@@ -22,7 +22,20 @@ class GW_Android_Push_Notif
 		if (!$user)
 			return [];
 
-		$list = $user->get('ext')->get(self::WEBPUSH_KEY_PREFIX . '%', true);
+		$list = [];
+
+		try {
+			$prefix = GW::db()->escape(self::WEBPUSH_KEY_PREFIX . '%');
+			$listRows = GW::db()->fetch_rows("SELECT `key`, `value` FROM gw_generic_extended WHERE own_table='gw_users' AND owner_id=".(int)$user->id." AND `key` LIKE '$prefix' ORDER BY id ASC");
+			foreach ($listRows as $row) {
+				$data = json_decode($row['value'], true);
+				if (is_array($data) && !empty($data['endpoint']))
+					$list[$row['key']] = $row['value'];
+			}
+		} catch (Throwable $e) {
+			$list = $user->get('ext')->get(self::WEBPUSH_KEY_PREFIX . '%', true);
+		}
+
 		$result = [];
 
 		foreach ($list as $key => $json) {
@@ -43,6 +56,33 @@ class GW_Android_Push_Notif
 		return self::WEBPUSH_KEY_PREFIX . md5($endpoint);
 	}
 
+	static function cleanupWebPushKeyOwnership($user, $key)
+	{
+		$user = self::userFromUserid($user);
+
+		if (!$user || !$key)
+			return;
+
+		$db = GW::db();
+		$keyEsc = $db->escape($key);
+		$userId = (int)$user->id;
+
+		// One browser push endpoint must belong to only one account.
+		$db->query("DELETE FROM gw_generic_extended WHERE own_table='gw_users' AND `key`='$keyEsc' AND owner_id!=$userId");
+		$db->query("
+			DELETE ge
+			FROM gw_generic_extended ge
+			JOIN (
+				SELECT MIN(id) keep_id, owner_id, `key`
+				FROM gw_generic_extended
+				WHERE own_table='gw_users' AND owner_id=$userId AND `key`='$keyEsc'
+				GROUP BY owner_id, `key`
+				HAVING COUNT(*) > 1
+			) dup ON dup.owner_id=ge.owner_id AND dup.`key`=ge.`key` AND ge.id!=dup.keep_id
+			WHERE ge.own_table='gw_users'
+		");
+	}
+
 	// Išsaugo arba atnaujina konkretaus vartotojo Web Push prenumeratą.
 	static function saveWebPushSubscription($user, $subscription)
 	{
@@ -57,6 +97,7 @@ class GW_Android_Push_Notif
 		$subscription['insert_time'] = date('Y-m-d H:i:s');
 		$key = self::makeWebPushKey($subscription['endpoint']);
 
+		self::cleanupWebPushKeyOwnership($user, $key);
 		$user->get('ext')->replace($key, json_encode($subscription));
 
 		return $key;
@@ -133,13 +174,20 @@ class GW_Android_Push_Notif
 	{
 		$public = trim((string) GW_Config::singleton()->get('sys/VAPID_PUBLIC_KEY'));
 		$private = trim((string) GW_Config::singleton()->get('sys/VAPID_PRIVATE_KEY'));
+		$subject = trim((string) GW::s('SITE_URL'));
 
-		if (!$public || !$private)
+		if (!$subject) {
+			$host = trim((string) GW::s('MAIN_HOST'));
+			if ($host)
+				$subject = 'https://' . $host . '/';
+		}
+
+		if (!$public || !$private || !$subject)
 			return false;
 
 		return new WebPush([
 			'VAPID' => [
-				'subject' => GW::s('SITE_URL'),
+				'subject' => $subject,
 				'publicKey' => $public,
 				'privateKey' => $private,
 			],

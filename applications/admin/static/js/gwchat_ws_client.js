@@ -17,6 +17,8 @@ function GWChatWSClient(opts)
 	this.manualClose = false;
 	this.disableReconnect = false;
 	this.resolvedUrl = null;
+	this.connectStartedAt = 0;
+	this.openedAt = 0;
 }
 
 GWChatWSClient.prototype.resolveUrl = function(url)
@@ -83,12 +85,18 @@ GWChatWSClient.prototype.connect = function(url)
 
 	this.manualClose = false;
 	this.disableReconnect = false;
+	this.connectStartedAt = Date.now();
+	this.openedAt = 0;
 	this.log('connect_attempt', { url: this.opts.url, attempt: this.reconnectAttempts + 1 });
 	this.socket = new WebSocket(this.opts.url);
 
 	this.socket.onopen = function() {
+		client.openedAt = Date.now();
 		client.reconnectAttempts = 0;
-		client.log('connect', client.opts.url);
+		client.log('connect', {
+			url: client.opts.url,
+			elapsed_ms: client.openedAt - client.connectStartedAt
+		});
 		client.emit('connect');
 	};
 
@@ -169,6 +177,13 @@ GWChatWSClient.prototype.handlePacket = function(packet)
 		return;
 
 	this.log('packet', packet);
+	if (packet && packet.action === 'hello') {
+		this.log('hello_timing', {
+			connect_to_open_ms: this.openedAt && this.connectStartedAt ? this.openedAt - this.connectStartedAt : null,
+			connect_to_hello_ms: this.connectStartedAt ? Date.now() - this.connectStartedAt : null,
+			open_to_hello_ms: this.openedAt ? Date.now() - this.openedAt : null
+		});
+	}
 
 	if (packet && packet.action === 'error' && this.isFatalAuthError(packet))
 		this.disableReconnect = true;

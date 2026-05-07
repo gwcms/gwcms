@@ -26,7 +26,7 @@ class GW_Tasks_App extends GW_App_Base
 
 
 		$this->timer = new GW_Timer;
-		$this->debug = $this->data->arguments['debug'];
+		$this->debug = $this->data->arguments['debug'] ?? false;
 	}
 
 	function init()

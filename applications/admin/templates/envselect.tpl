@@ -17,7 +17,7 @@
 								{$env_item.key|escape}
 							</span>
 							<span class="lang-name">
-								{if $env_item.key == 'DEV'}{$env_switcher.domain|escape}.localhost{elseif $env_item.key == 'TEST'}{$env_switcher.domain|escape}.1.voro.lt{else}{$env_switcher.domain|escape}{/if}
+								{$env_item.display_host|escape}
 							</span>
 						</a>
 					</li>

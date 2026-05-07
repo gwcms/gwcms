@@ -26,7 +26,7 @@ class Module_UsersWidgets extends GW_Module
 
 		$this->tpl_vars['chat_endpoint'] = $this->app->buildUri('users/chat');
 		$this->tpl_vars['ws_path'] = GW_WebSocket_Helper2::enabled() ? GW_WebSocket_Helper2::buildWsPath() : '';
-		$this->tpl_vars['wss_log_to_console'] = (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console') ? 1 : 0;
+		$this->tpl_vars['wss_log_to_console'] = ((int)GW_WebSocket_Helper2::chatConfigValue('full_chat_debug') || (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console')) ? 1 : 0;
 		$this->tpl_vars['chat_list_url'] = $this->app->buildUri('users/chat');
 		$this->tpl_vars['new_private_url'] = $this->app->buildUri('users/chat', ['act' => 'doNewPrivate']);
 		$this->tpl_vars['show_ws_protocol_link'] = $this->app->user && $this->app->user->isRoot() ? 1 : 0;

@@ -10,6 +10,9 @@
 		
 	{$do_toolbar_buttons[] = dialogconf}	
 	{$do_toolbar_buttons[] = hidden}
+	{if $app->user->isRoot()}
+		{$do_toolbar_buttons[] = update_http_conf_ssl}
+	{/if}
 	{$do_toolbar_buttons_hidden=[]}	
 	
 	{$dl_actions=[invert_active_ajax,edit,ext_actions]}
@@ -25,6 +28,10 @@
 			{$item->rel_compositions}</a>
 		*}
 	{/function}	
+
+	{function name=do_toolbar_buttons_update_http_conf_ssl}
+		{toolbar_button title="Atnaujinti http.conf && ssl certs" iconclass="fa fa-server" href=$m->buildUri(false,[act=>doUpdateHttpConfAndSsl]) confirm=1}
+	{/function}
 	
 	{*
 	custom toolbar button:

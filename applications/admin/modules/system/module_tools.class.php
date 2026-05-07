@@ -731,9 +731,10 @@ class Module_Tools extends GW_Common_Module
 		$host = str_replace('.localhost', '', $_SERVER["HTTP_HOST"]);
 		
 		if(strpos($host, '.1.voro.lt')!==false){
-			$newurl = "https://".str_replace('.1.voro.lt','',$host);
+			$base = str_replace('.1.voro.lt','',$host);
+			$newurl = "https://".str_replace('-', '.', $base);
 		}else{
-			$newurl = "http://".$host.'.1.voro.lt';
+			$newurl = "https://".str_replace('.', '-', $host).'.1.voro.lt';
 		}
 		
 		

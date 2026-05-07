@@ -94,17 +94,14 @@ class GW_Application
 			}
 			 * 
 			 */
-			$host = $_SERVER["HTTP_HOST"];
-			$host = str_replace('.localhost','', $host);
-			$host = str_replace('.1.voro.lt','', $host);
-
-			
-			$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $host ]);
-			
-			if($tmp)
-			{
-				$this->site = $tmp;
-				return true;
+			foreach ($this->getHostLookupCandidates($_SERVER["HTTP_HOST"]) as $host) {
+				$tmp = GW_Site::singleton()->find(['FIND_IN_SET(?, hosts)', $host ]);
+				
+				if($tmp)
+				{
+					$this->site = $tmp;
+					return true;
+				}
 			}
 			
 		
@@ -119,6 +116,31 @@ class GW_Application
 			}
 
 		}
+	}
+
+	function getHostLookupCandidates($host)
+	{
+		$host = strtolower((string)$host);
+		$host = preg_replace('/:\d+$/', '', $host);
+		$out = [];
+		$add = function ($value) use (&$out) {
+			$value = trim((string)$value);
+			if ($value !== '' && !in_array($value, $out, true))
+				$out[] = $value;
+		};
+		
+		$add($host);
+		
+		if (substr($host, -10) === '.localhost')
+			$add(substr($host, 0, -10));
+		
+		if (substr($host, -10) === '.1.voro.lt') {
+			$base = substr($host, 0, -10);
+			$add($base);
+			$add(str_replace('-', '.', $base));
+		}
+		
+		return $out;
 	}
 	
 	function initTimeZone()
@@ -438,7 +460,10 @@ class GW_Application
 
 		$host = preg_replace('/:\d+$/', '', $host);
 		$domain = preg_replace('/\.localhost$/', '', $host);
-		$domain = preg_replace('/\.1\.voro\.lt$/', '', $domain);
+		if (substr($domain, -10) === '.1.voro.lt') {
+			$domain = substr($domain, 0, -10);
+			$domain = str_replace('-', '.', $domain);
+		}
 
 		if ($domain === '')
 			return [];
@@ -458,7 +483,8 @@ class GW_Application
 			$items[GW_ENV_TEST] = [
 				'key' => 'TEST',
 				'title' => 'TEST',
-				'url' => 'https://' . $domain . '.1.voro.lt' . $requestUri,
+				'url' => 'https://' . str_replace('.', '-', $domain) . '.1.voro.lt' . $requestUri,
+				'display_host' => str_replace('.', '-', $domain) . '.1.voro.lt',
 				'enabled' => true,
 			];
 		}
@@ -468,6 +494,7 @@ class GW_Application
 				'key' => 'DEV',
 				'title' => 'DEV',
 				'url' => 'http://' . $domain . '.localhost' . $requestUri,
+				'display_host' => $domain . '.localhost',
 				'enabled' => true,
 			];
 		}
@@ -476,7 +503,7 @@ class GW_Application
 		$ordered = [];
 		foreach ($order as $envId) {
 			if (isset($items[$envId]))
-				$ordered[$envId] = $items[$envId] + ['active' => $currentEnv === $envId];
+				$ordered[$envId] = $items[$envId] + ['active' => $currentEnv === $envId, 'display_host' => $domain];
 		}
 
 		$currentKey = 'ENV ' . $currentEnv;

@@ -108,7 +108,7 @@ class GW_Proc_Ctrl
 
 	static function startDaemon($cmd, $logfile)
 	{
-		shell_exec($cmd = "$cmd >> $logfile 2>&1 &");
+		shell_exec($cmd = "nohup $cmd >> $logfile 2>&1 &");
 
 		//dump($cmd);
 	}

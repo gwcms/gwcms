@@ -5,6 +5,34 @@ class Tasks_Health_Task extends GW_Tasks_App
 	
 	var $max_execution_time=500;
 	
+	function cleanupPickedTasks()
+	{
+		$task0 = new GW_Task;
+		$olderThan = date('Y-m-d H:i:s', strtotime('-15 minute'));
+		$list = $task0->findAll("running=-2 AND `time` < '".GW::db()->escape($olderThan)."'", ['limit' => 200]);
+
+		foreach ($list as $item) {
+			$this->msg("Reset stale picked task {$item->id}:{$item->name}");
+			$item->running = 0;
+			$item->error_code = 604;
+			$item->error_msg = 'Stale picked task reset by tasks_health';
+			$item->finish_time = date('Y-m-d H:i:s');
+			$item->update(Array('running', 'error_code', 'error_msg', 'finish_time'));
+		}
+	}
+
+	function cleanupHistory()
+	{
+		$task0 = new GW_Task;
+		$olderThan = date('Y-m-d H:i:s', strtotime('-30 day'));
+		$list = $task0->findAll("running=0 AND newest=0 AND finish_time!='0000-00-00 00:00:00' AND finish_time < '".GW::db()->escape($olderThan)."'", ['limit' => 1000]);
+
+		foreach ($list as $item)
+			$item->delete();
+
+		if (count($list))
+			$this->msg('Removed old finished tasks: '.count($list));
+	}
 	
 	function checkTimeLimits()
 	{
@@ -14,7 +42,6 @@ class Tasks_Health_Task extends GW_Tasks_App
 		if(!count($list))
 			return true;
 			
-		$errors=0;
 		
 		foreach($list as $item)
 		{
@@ -23,7 +50,7 @@ class Tasks_Health_Task extends GW_Tasks_App
 			if(!$item->checkRunning())
 			{
 				$this->msg("System error. Not closed task {$item->id}:{$item->running}:{$item->name}");
-				$errors++;
+				$this->error_code++;
 				
 				$item->running=0;
 				$item->update(Array('running'));
@@ -47,38 +74,19 @@ class Tasks_Health_Task extends GW_Tasks_App
 				continue;
 			
 			$this->msg("Fail to kill");
-			$this->error_code='601';
+			$this->error_code++;
 		}
-		
-		if($errors)
-			$this->msg("Found problems $errors");
 	
-	}
-	
-	
-	function cleanUpHistory()
-	{
-		$max = (int)GW_Config::singleton()->get('sys/max_tasks_history_length');
-		
-		if(!$max)
-			return false;
-		
-		$rows = GW::db()->fetch_rows("SELECT count(*) as `cnt`, `name`, `error_code` FROM `gw_tasks` GROUP BY `name`, error_code HAVING `cnt` > $max");
-		
-		
-		foreach($rows as $row)
-		{
-			$del = $row['cnt']-$max;
-			$q = "DELETE FROM `gw_tasks` WHERE `name`=? AND `error_code`=? ORDER BY `insert_time` ASC LIMIT $del";
-			GW::db()->query(GW_DB::prepare_query([$q, $row['name'],$row['error_code']]));
-		}
-		
-		$this->msg($rows);
 	}
 	
 	function process()
 	{
+		$this->cleanupPickedTasks();
+		$this->cleanupHistory();
 		$this->checkTimeLimits();
-		$this->cleanUpHistory();		
+		
+		if(!$this->error_code)
+			$this->msg("Smooth we go! No errors!");
+		
 	}
 }

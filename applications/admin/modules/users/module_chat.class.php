@@ -5,6 +5,7 @@ class Module_Chat extends GW_Common_Module
 	public $default_view = 'list';
 	protected $roomListMeta = [];
 	protected $pendingMemberIds = [];
+	protected $reactFullStatusCache = null;
 
 	function init()
 	{
@@ -48,6 +49,19 @@ class Module_Chat extends GW_Common_Module
 	function currentUser()
 	{
 		return $this->app->user ?: null;
+	}
+
+	function chatDebugEnabled()
+	{
+		return !empty($_REQUEST['gwchat_debug'])
+			|| (int)GW_WebSocket_Helper2::chatConfigValue('full_chat_debug')
+			|| (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console');
+	}
+
+	function chatConsoleDebugEnabled()
+	{
+		return (int)GW_WebSocket_Helper2::chatConfigValue('full_chat_debug')
+			|| (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console');
 	}
 
 	function userAvatarUrl($user, $size = '40x40')
@@ -342,11 +356,11 @@ class Module_Chat extends GW_Common_Module
 		return $out;
 	}
 
-	function getSidebarOnlineUsers($limit = 25)
+	function getSidebarOnlineUsers($limit = 25, $rooms = null)
 	{
 		$currentUserId = (int)$this->app->user->id;
 		$onlineTs = strtotime('-5 minutes');
-		$rooms = $this->getRoomsForBubble();
+		$rooms = is_array($rooms) ? $rooms : $this->getRoomsForBubble();
 		$privateRooms = $this->getRecentPrivateRoomIndex($rooms);
 		$wsUsers = $this->getWsOnlineUsers();
 		$out = [];
@@ -540,13 +554,16 @@ class Module_Chat extends GW_Common_Module
 
 	function getReactFullStatus()
 	{
+		if ($this->reactFullStatusCache !== null)
+			return $this->reactFullStatusCache;
+
 		$status = $this->getReactHealthStatus(true);
 
 		if (empty($status['ok']))
-			return [];
+			return $this->reactFullStatusCache = [];
 
 		$data = json_decode((string)$status['body'], true);
-		return is_array($data) ? $data : [];
+		return $this->reactFullStatusCache = (is_array($data) ? $data : []);
 	}
 
 	function getRoomPresenceUsers($roomId)
@@ -736,7 +753,7 @@ class Module_Chat extends GW_Common_Module
 
 		$this->tpl_vars['ws_path'] = $this->buildWsPath();
 		$this->tpl_vars['http_endpoint'] = $this->app->app_base . $this->app->ln . '/users/chat';
-		$this->tpl_vars['wss_log_to_console'] = (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console') ? 1 : 0;
+		$this->tpl_vars['wss_log_to_console'] = $this->chatConsoleDebugEnabled() ? 1 : 0;
 		$this->tpl_vars['chat_list_url'] = $this->roomLink(0);
 		$this->tpl_vars['new_private_url'] = $this->app->buildUri($this->module_path_clean, ['act' => 'doNewPrivate']);
 		$this->tpl_vars['new_room_url'] = $this->app->buildUri($this->module_path_clean, ['act' => 'doNewRoom']);
@@ -751,7 +768,7 @@ class Module_Chat extends GW_Common_Module
 		$this->tpl_vars['current_username'] = $this->app->user->username;
 		$this->tpl_vars['current_user_id'] = (int)$this->app->user->id;
 		$this->tpl_vars['requested_room_id'] = (int)($_GET['room_id'] ?? 0);
-		$this->tpl_vars['wss_log_to_console'] = (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console') ? 1 : 0;
+		$this->tpl_vars['wss_log_to_console'] = $this->chatConsoleDebugEnabled() ? 1 : 0;
 		$this->tpl_vars['uses_secure_ws'] = $isHttps ? 1 : 0;
 	}
 
@@ -783,7 +800,7 @@ class Module_Chat extends GW_Common_Module
 		$this->tpl_vars['current_user_id'] = (int)$this->app->user->id;
 		$this->tpl_vars['requested_room_id'] = $roomId;
 		$this->tpl_vars['requested_room_type'] = $roomType;
-		$this->tpl_vars['wss_log_to_console'] = (int)GW_WebSocket_Helper2::chatConfigValue('wss_log_to_console') ? 1 : 0;
+		$this->tpl_vars['wss_log_to_console'] = $this->chatConsoleDebugEnabled() ? 1 : 0;
 		$this->tpl_vars['uses_secure_ws'] = $isHttps ? 1 : 0;
 	}
 
@@ -836,14 +853,17 @@ class Module_Chat extends GW_Common_Module
 		}
 
 		$url = $this->reactHealthUrl() . ($full ? '?full=1' : '');
+		$timeout = $full ? 0.45 : 0.25;
 		$ctx = stream_context_create([
 			'http' => [
-				'timeout' => 3,
+				'timeout' => $timeout,
 				'ignore_errors' => true,
 			],
 		]);
 
+		$started = microtime(true);
 		$body = @file_get_contents($url, false, $ctx);
+		$elapsedMs = (int)round((microtime(true) - $started) * 1000);
 		$headers = $http_response_header ?? [];
 		$statusLine = $headers[0] ?? '';
 
@@ -852,6 +872,8 @@ class Module_Chat extends GW_Common_Module
 			'status_line' => $statusLine,
 			'body' => is_string($body) ? trim($body) : '',
 			'url' => $url,
+			'elapsed_ms' => $elapsedMs,
+			'timeout' => $timeout,
 		];
 	}
 
@@ -1391,8 +1413,20 @@ class Module_Chat extends GW_Common_Module
 	function doChatBubbleData()
 	{
 		try {
+			$timing = [];
+			$startedAll = microtime(true);
+			$mark = function ($label, $started) use (&$timing) {
+				$timing[$label . '_ms'] = (int)round((microtime(true) - $started) * 1000);
+			};
+
+			$started = microtime(true);
 			$rooms = $this->getRoomsForBubble();
-			$onlineUsers = $this->getSidebarOnlineUsers(25);
+			$mark('rooms', $started);
+
+			$started = microtime(true);
+			$onlineUsers = $this->getSidebarOnlineUsers(25, $rooms);
+			$mark('online_users', $started);
+
 			$unreadTotal = 0;
 			$onlineCount = 0;
 			$reactWsStatus = null;
@@ -1405,17 +1439,30 @@ class Module_Chat extends GW_Common_Module
 					$onlineCount++;
 			}
 
-			if ($this->app->user && $this->app->user->isRoot())
+			if ($this->app->user && $this->app->user->isRoot()) {
+				$started = microtime(true);
 				$reactWsStatus = $this->getReactWsWidgetStatus();
+				$mark('react_status', $started);
+			}
 
-			$this->jsonResponse([
+			$timing['total_ms'] = (int)round((microtime(true) - $startedAll) * 1000);
+
+			if ($this->chatDebugEnabled())
+				error_log('GWChatBubbleData timing user_id='.(int)$this->app->user->id.' '.json_encode($timing, JSON_UNESCAPED_SLASHES));
+
+			$response = [
 				'ok' => 1,
 				'rooms' => $rooms,
 				'online_users' => $onlineUsers,
 				'online_count' => $onlineCount,
 				'react_ws_status' => $reactWsStatus,
 				'unread_total' => $unreadTotal,
-			]);
+			];
+
+			if ($this->chatDebugEnabled())
+				$response['_debug_timing'] = $timing;
+
+			$this->jsonResponse($response);
 		} catch (Exception $e) {
 			$this->jsonError($e->getMessage(), 400);
 		}

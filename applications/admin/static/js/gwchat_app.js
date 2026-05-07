@@ -133,7 +133,8 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 			is_seen: parseInt(message.is_seen || '0', 10) || 0,
 			reactions: $.isArray(message.reactions) ? message.reactions : [],
 			attachments: $.isArray(message.attachments) ? message.attachments : [],
-			insert_time: message.insert_time || ''
+			insert_time: message.insert_time || '',
+			_highlight_unread: message._highlight_unread ? 1 : 0
 		};
 	}
 
@@ -182,11 +183,29 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 
 	function http(action, data)
 	{
+		var started = Date.now();
+		var payload = $.extend({ act: action }, data || {});
+		if (App.isWsDebugEnabled())
+			payload.gwchat_debug = 1;
+
 		return $.ajax({
 			url: App.opts.httpEndpoint,
 			method: 'GET',
 			dataType: 'json',
-			data: $.extend({ act: action }, data || {})
+			data: payload
+		}).done(function(resp){
+			App.debugLog('http_done', {
+				action: action,
+				elapsed_ms: Date.now() - started,
+				server_timing: resp && resp._debug_timing ? resp._debug_timing : null
+			});
+		}).fail(function(xhr, status, err){
+			App.debugLog('http_fail', {
+				action: action,
+				elapsed_ms: Date.now() - started,
+				status: status,
+				error: err || ''
+			});
 		});
 	}
 
@@ -305,8 +324,10 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 		};
 
 		window.addEventListener('pagehide', function(){
-			if (app.isLeader)
+			if (app.isLeader) {
 				app.postChannel({ type: 'leader_leaving' });
+				app.clearLeader(app.tabId);
+			}
 		});
 
 		this.claimLeadershipIfNeeded();
@@ -334,6 +355,18 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 		} catch (e) {}
 	};
 
+	App.clearLeader = function(tabId)
+	{
+		try {
+			var leader = this.readLeader();
+			if (!tabId || !leader.tabId || leader.tabId === tabId)
+				localStorage.removeItem(leaderKey);
+		} catch (e) {}
+
+		if (!tabId || this.leaderId === tabId)
+			this.leaderId = '';
+	};
+
 	App.claimLeadershipIfNeeded = function(force)
 	{
 		if (!this.crossTabEnabled)
@@ -354,6 +387,19 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 
 		if (leader.tabId === this.tabId)
 			this.becomeLeader();
+	};
+
+	App.hasFreshLeader = function()
+	{
+		if (!this.crossTabEnabled)
+			return false;
+
+		var leader = this.readLeader();
+		var fresh = !!(leader.tabId && leader.expiresAt && leader.expiresAt > Date.now());
+		if (fresh)
+			this.leaderId = leader.tabId;
+
+		return fresh;
 	};
 
 	App.becomeLeader = function()
@@ -414,7 +460,7 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 
 		if (message.type === 'leader_leaving') {
 			if (!this.isLeader && (!this.leaderId || this.leaderId === message.from)) {
-				this.leaderId = '';
+				this.clearLeader(message.from);
 				setTimeout(this.claimLeadershipIfNeeded.bind(this, true), 80 + Math.floor(Math.random() * 220));
 			}
 			return;
@@ -491,28 +537,20 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 	{
 		var app = this;
 		var reqId = ++this.proxyReqId;
+		var leaderFresh = this.hasFreshLeader();
 		this.debugLog('proxy_command', {
 			command: command,
 			args: args || [],
 			isLeader: this.isLeader,
-			leaderId: this.leaderId
+			leaderId: this.leaderId,
+			leaderFresh: leaderFresh
 		});
 
-		if (!this.leaderId)
+		if (!leaderFresh || !this.leaderId)
 			this.claimLeadershipIfNeeded(true);
 
-		if (this.isLeader) {
-			if (command === 'loadBubbleData')
-				return this.loadBubbleData();
-			if (command === 'openPrivateHttp')
-				return http('doOpenPrivateRoom', { user_id: (args || [])[0] });
-			if (command === 'markSeen')
-				return this.markSeen((args || [])[0], (args || [])[1]);
-
-			var leaderClient = this.createRealClient();
-			if (leaderClient && typeof leaderClient[command] === 'function')
-				return Promise.resolve(leaderClient[command].apply(leaderClient, args || []));
-		}
+		if (this.isLeader)
+			return this.runLocalCommand(command, args || []);
 
 		return new Promise(function(resolve, reject){
 			app.pendingProxy[reqId] = { resolve: resolve, reject: reject };
@@ -529,9 +567,59 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 					return;
 
 				delete app.pendingProxy[reqId];
+				app.debugLog('proxy_timeout_takeover', {
+					command: command,
+					leaderId: app.leaderId
+				});
+				app.claimLeadershipIfNeeded(true);
+				if (app.isLeader) {
+					Promise.resolve(app.runLocalCommand(command, args || [])).then(resolve).catch(reject);
+					return;
+				}
 				reject({ ok: 0, error: 'Chat leader timeout' });
-			}, 5000);
+			}, 1200);
 		});
+	};
+
+	App.runLocalCommand = function(command, args)
+	{
+		args = args || [];
+
+		if (command === 'loadBubbleData')
+			return this.loadBubbleData();
+		if (command === 'openPrivateHttp')
+			return http('doOpenPrivateRoom', { user_id: args[0] });
+		if (command === 'markSeen')
+			return this.markSeen(args[0], args[1]);
+		if (command === 'sendMessage') {
+			var client = this.createRealClient();
+			if (client && client.socket && client.socket.readyState === 1)
+				return client.sendMessage(args[0], args[1], args[2] || {});
+
+			return http('doSendMessage', { room_id: args[0], message: args[1] });
+		}
+		if (command === 'typing') {
+			var typingClient = this.createRealClient();
+			if (typingClient && typingClient.socket && typingClient.socket.readyState === 1)
+				return typingClient.typing(args[0], args[1]);
+
+			return Promise.resolve({ ok: 1, skipped: 1 });
+		}
+		if (command === 'joinRoom') {
+			this.pendingJoinRooms = this.pendingJoinRooms || {};
+			this.pendingJoinRooms[parseInt(args[0] || '0', 10) || 0] = 1;
+			var joinClient = this.createRealClient();
+			if (joinClient && joinClient.socket && joinClient.socket.readyState === 1)
+				return joinClient.joinRoom(args[0]);
+
+			return Promise.resolve({ ok: 1, pending: 1 });
+		}
+
+		var leaderClient = this.createRealClient();
+		if (leaderClient && leaderClient.socket && leaderClient.socket.readyState === 1 && typeof leaderClient[command] === 'function')
+			return leaderClient[command].apply(leaderClient, args);
+
+		return Promise.reject({ ok: 0, error: 'WebSocket not connected' });
 	};
 
 	App.handleProxyRequest = function(message)
@@ -655,6 +743,12 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 			app.debugLog('ws_connect', { url: app.client ? app.client.getResolvedUrl() : '' });
 			app.emit('connect');
 			app.postChannel({ type: 'chat_packet', event: 'connect', payload: {} });
+			if (app.pendingJoinRooms) {
+				Object.keys(app.pendingJoinRooms).forEach(function(roomId){
+					delete app.pendingJoinRooms[roomId];
+					app.joinRoom(roomId);
+				});
+			}
 		});
 
 		this.client.on('disconnect', function(info){
@@ -736,18 +830,35 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 	App.loadBubbleData = function()
 	{
 		var app = this;
+		var started = Date.now();
 
 		if (this.crossTabEnabled && !this.isLeader)
 			return this.proxyCommand('loadBubbleData', []);
 
-		if (this.bubbleRequest)
+		if (this.bubbleRequest) {
+			this.debugLog('bubble_data_reuse_inflight', {});
 			return this.bubbleRequest;
+		}
 
+		this.debugLog('bubble_data_start', {});
 		this.bubbleRequest = http('doChatBubbleData').done(function(resp){
+			app.debugLog('bubble_data_done', {
+				elapsed_ms: Date.now() - started,
+				rooms: resp && resp.rooms ? resp.rooms.length : 0,
+				online_users: resp && resp.online_users ? resp.online_users.length : 0,
+				unread_total: resp ? resp.unread_total : null,
+				server_timing: resp && resp._debug_timing ? resp._debug_timing : null
+			});
 			app.ingestRooms(resp.rooms || []);
 			app.emit('bubbleData', resp);
 			app.emit('rooms', resp);
 			app.postChannel({ type: 'bubble_data', data: resp });
+		}).fail(function(xhr, status, err){
+			app.debugLog('bubble_data_fail', {
+				elapsed_ms: Date.now() - started,
+				status: status,
+				error: err || ''
+			});
 		}).always(function(){
 			app.bubbleRequest = null;
 		});
@@ -995,6 +1106,25 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 			return;
 
 		this.dockReady = true;
+		if (!this.focusSeenReady) {
+			this.focusSeenReady = true;
+			var app = this;
+			var scheduleVisibleSeen = function(){
+				if (document.visibilityState && document.visibilityState !== 'visible')
+					return;
+
+				Object.keys(app.windows || {}).forEach(function(roomId){
+					var win = app.windows[roomId];
+					if (!win || win.closed)
+						return;
+
+					win.seenInteraction = true;
+					win.scheduleMarkSeen();
+				});
+			};
+			window.addEventListener('focus', scheduleVisibleSeen);
+			document.addEventListener('visibilitychange', scheduleVisibleSeen);
+		}
 		if (!document.getElementById('gwchatDock')) {
 			$('body').append(
 				'<div id="gwchatDock" class="gwchat-dock"></div>' +
@@ -1019,6 +1149,8 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 				'.gwchat-msg-main{max-width:78%;position:relative;padding-bottom:2px}' +
 				'.gwchat-msg-name{font-size:10px;color:#667085;margin:0 0 2px}' +
 				'.gwchat-bubble{background:#fff;border:1px solid #d8e0e8;border-radius:14px;padding:7px 9px;line-height:1.35;font-size:12px;color:#111827;word-break:break-word}' +
+				'.gwchat-msg .gwchat-bubble{transition:background-color .65s ease,border-color .65s ease,box-shadow .65s ease}' +
+				'.gwchat-msg.is-unread .gwchat-bubble{background:#fff4b8;border-color:#f2c94c;box-shadow:0 1px 6px rgba(242,201,76,.32)}' +
 				'.gwchat-link{color:#1d4ed8;text-decoration:underline;text-underline-offset:2px}' +
 				'.gwchat-attachments{display:flex;flex-direction:column;gap:5px;margin-top:6px}' +
 				'.gwchat-attachment-image{display:block;max-width:180px;border-radius:8px;overflow:hidden;border:1px solid rgba(15,23,42,.12);background:#fff}' +
@@ -1255,7 +1387,7 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 		}).join('');
 
 		return $(
-			'<div class="gwchat-msg ' + (isMe ? 'is-me' : 'is-other') + '" data-message-id="' + escapeHtml(entry.id) + '" data-entry-key="' + escapeHtml(entry.entry_key) + '">' +
+			'<div class="gwchat-msg ' + (isMe ? 'is-me' : 'is-other') + (entry._highlight_unread ? ' is-unread' : '') + '" data-message-id="' + escapeHtml(entry.id) + '" data-entry-key="' + escapeHtml(entry.entry_key) + '">' +
 				'<div class="gwchat-msg-main">' +
 					(isMe ? '' : '<div class="gwchat-msg-name">' + escapeHtml(entry.sender_title) + '</div>') +
 					'<div class="gwchat-bubble">' +
@@ -1318,8 +1450,12 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 			if (!entry.entry_key || this.messageKeys[entry.entry_key])
 				continue;
 			this.messageKeys[entry.entry_key] = 1;
-			if (entry.entry_type === 'message' && entry.id)
+			if (entry.entry_type === 'message' && entry.id) {
+				var ownId = App.currentUser ? parseInt(App.currentUser.id || '0', 10) : 0;
+				if (mode === 'append' && ownId && entry.sender_id !== ownId && !entry.is_seen)
+					entry._highlight_unread = 1;
 				this.lastKnownMessageId = Math.max(this.lastKnownMessageId, entry.id);
+			}
 			frag.appendChild(this.entryNode(entry));
 		}
 
@@ -1538,16 +1674,38 @@ define(['jquery', 'js/gwchat_ws_client'], function($){
 
 	ChatDockWindow.prototype.markSeen = function(messageId)
 	{
+		var win = this;
 		messageId = parseInt(messageId || '0', 10) || 0;
-		if (!messageId || !this.canMarkSeen() || messageId <= this.lastSeenSent)
+		if (!messageId || !this.canMarkSeen())
 			return;
+
+		if (messageId <= this.lastSeenSent) {
+			this.clearUnreadHighlights(messageId);
+			return;
+		}
 
 		this.lastSeenSent = messageId;
 		var req = App.markSeen(this.roomId, messageId);
 
 		Promise.resolve(req).then(function(){
+			setTimeout(function(){
+				win.clearUnreadHighlights(messageId);
+			}, 650);
 			App.loadBubbleData();
 		}).catch(function(){});
+	};
+
+	ChatDockWindow.prototype.clearUnreadHighlights = function(messageId)
+	{
+		messageId = parseInt(messageId || '0', 10) || 0;
+		if (!messageId)
+			return;
+
+		this.node.find('.gwchat-msg.is-unread[data-message-id]').each(function(){
+			var id = parseInt(this.getAttribute('data-message-id') || '0', 10) || 0;
+			if (id && id <= messageId)
+				$(this).removeClass('is-unread');
+		});
 	};
 
 	ChatDockWindow.prototype.scheduleMarkSeen = function()

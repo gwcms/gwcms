@@ -87,17 +87,29 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 	function onOpen(ConnectionInterface $conn)
 	{
 		try {
+			$timing = [];
+			$startedAll = microtime(true);
+			$mark = function ($label, $started) use (&$timing) {
+				$timing[$label . '_ms'] = (int)round((microtime(true) - $started) * 1000);
+			};
+
 			$request = $conn->httpRequest ?? null;
+			$started = microtime(true);
 			$sessionCtx = $this->extractSessionContext($request);
+			$mark('extract_session', $started);
 			$sessionId = $sessionCtx['id'];
+			$started = microtime(true);
 			$session = $this->loadSession($sessionId, $sessionCtx);
+			$mark('load_session', $started);
 			$authSessionKey = GW::s('ADMIN/AUTH_SESSION_KEY') ?: 'cms_auth';
 			$userId = (int)($session[$authSessionKey]['user_id'] ?? 0);
 
 			if (!$userId)
 				throw new Exception('Unauthorised');
 
+			$started = microtime(true);
 			$user = GW_User::singleton()->find(['id=?', $userId]);
+			$mark('load_user', $started);
 
 			if (!$user)
 				throw new Exception('User not found');
@@ -121,10 +133,12 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 				'transport' => 'reactphp',
 			]);
 
+			$timing['total_ms'] = (int)round((microtime(true) - $startedAll) * 1000);
 			$this->log('connect', [
 				'resourceId' => $conn->resourceId,
 				'user_id' => $userId,
 				'username' => $user->username,
+				'timing' => $timing,
 			]);
 
 			$this->broadcastPresence($this->connUser[$conn->resourceId], 'user_connected', $conn);
@@ -141,6 +155,7 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 				'auth_session_key' => $authSessionKey,
 				'session_keys' => is_array($session) ? array_keys($session) : [],
 				'auth_payload' => is_array($session) ? ($session[$authSessionKey] ?? null) : null,
+				'timing' => $timing ?? null,
 			]);
 			try {
 				$conn->send(json_encode([
@@ -633,6 +648,18 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 		if (!$sessionId)
 			throw new Exception('Empty session id');
 
+		if ((string)ini_get('session.save_handler') === 'files' && (string)ini_get('session.serialize_handler') === 'php') {
+			$file = $this->resolveSessionFileForId($sessionId, $sessionCtx);
+			if (!$file)
+				throw new Exception('Session file not found');
+
+			$raw = @file_get_contents($file);
+			if (!is_string($raw))
+				throw new Exception('Session file unreadable');
+
+			return $this->decodePhpSessionData($raw);
+		}
+
 		if (session_status() === PHP_SESSION_ACTIVE)
 			session_write_close();
 
@@ -648,6 +675,75 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 		$_SESSION = [];
 
 		return $data;
+	}
+
+	protected function resolveSessionFileForId($sessionId, array $sessionCtx = [])
+	{
+		if (!preg_match('/^[A-Za-z0-9,-]+$/', (string)$sessionId))
+			return '';
+
+		$current = (string)session_save_path();
+		$hintPath = trim((string)($sessionCtx['path'] ?? ''));
+		$candidates = array_filter(array_unique([
+			$hintPath,
+			$current,
+			'/tmp',
+			sys_get_temp_dir(),
+			'/var/lib/php/sessions',
+		]));
+
+		foreach ($candidates as $path) {
+			$file = rtrim($path, '/').'/sess_'.$sessionId;
+			if (is_file($file))
+				return $file;
+		}
+
+		return '';
+	}
+
+	protected function decodePhpSessionData($raw)
+	{
+		$out = [];
+		$offset = 0;
+		$length = strlen($raw);
+
+		while ($offset < $length) {
+			$pipe = strpos($raw, '|', $offset);
+			if ($pipe === false)
+				break;
+
+			$key = substr($raw, $offset, $pipe - $offset);
+			$valueInfo = $this->unserializeSessionValueAt($raw, $pipe + 1);
+			if (!$key || !$valueInfo)
+				break;
+
+			$out[$key] = $valueInfo['value'];
+			$offset = $valueInfo['next_offset'];
+		}
+
+		return $out;
+	}
+
+	protected function unserializeSessionValueAt($raw, $offset)
+	{
+		$length = strlen($raw);
+
+		for ($end = $offset + 1; $end <= $length; $end++) {
+			$lastChar = $raw[$end - 1] ?? '';
+			if ($lastChar !== ';' && $lastChar !== '}')
+				continue;
+
+			$candidate = substr($raw, $offset, $end - $offset);
+			$value = @unserialize($candidate);
+			if ($value !== false || $candidate === 'b:0;') {
+				return [
+					'value' => $value,
+					'next_offset' => $end,
+				];
+			}
+		}
+
+		return null;
 	}
 
 	protected function applySessionStorageForId($sessionId, array $sessionCtx = [])
@@ -775,7 +871,9 @@ function gwReactphpAutorestartOnVersionChangeEnabled()
 }
 
 $loop = Loop::get();
-$debugEnabled = in_array('--debug', $argv, true) || (bool)(GW::s('REACTPHP_WS/DEBUG') ?: 0);
+$debugEnabled = in_array('--debug', $argv, true)
+	|| (bool)(GW::s('REACTPHP_WS/DEBUG') ?: 0)
+	|| (int)GW_Config::singleton()->get('users__chat/full_chat_debug');
 $wsHost = GW::s('CHATWS/HOST') ?: '127.0.0.1';
 $wsPort = (int)(GW::s('CHATWS/PORT') ?: 9051);
 $healthPort = (int)(GW::s('CHATWS/HEALTH_PORT') ?: ($wsPort + 1));

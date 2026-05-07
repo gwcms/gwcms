@@ -164,6 +164,7 @@ class GW_Site_Application extends GW_Application
 	
 	function geoIpLang($avail_lns)
 	{
+		$avail_lns = array_values(array_filter((array)$avail_lns));
 
 		
 		$country = GW::countryByIp(GW::ip());
@@ -180,9 +181,13 @@ class GW_Site_Application extends GW_Application
 		}
 
 		if($map){
-			$rez = isset($map[$country]) && in_array($map[$country], $avail_lns) ? $map[$country] : $map['default'];
+			$rez = $map[$country] ?? ($map['default'] ?? false);
+			
+			if(!$rez || !in_array($rez, $avail_lns)){
+				$rez = $avail_lns[0] ?? false;
+			}
 		}else{
-			$rez = $avail_lns[0];
+			$rez = $avail_lns[0] ?? false;
 		}		
 
 		if(isset($_GET['debug_lang_pick']))
