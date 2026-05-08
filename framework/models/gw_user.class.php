@@ -9,12 +9,12 @@ class GW_User extends GW_Composite_Data_Object
 	public $validators = Array();
 	
 	public $calculate_fields = [
-		'group_ids_cached'=>1, 
-		'title' => 1, 
-		'api_key' => 1, 
-		'online' => 1, 
-		'ext'=>1,
-		'i18next_lns'=>1	
+	    'group_ids_cached'=>1, 
+	    'title' => 1, 
+	    'api_key' => 1, 
+	    'online' => 1, 
+	    'ext'=>1,
+	    'i18next_lns'=>1
 	];
 	
 	public $ignore_fields = Array('pass_old' => 1, 'pass_new' => 1, 'pass_new_repeat' => 1, 'ext' => 1);
@@ -94,7 +94,8 @@ class GW_User extends GW_Composite_Data_Object
 		
 		if($this->last_ip!=$ip || $this->last_user_agent!=$user_agent)
 		{
-			GW_User_Ip_Log::singleton()->createNewObject(['user_id'=>$this->id, 'ip'=>$ip, 'user_agent'=>$user_agent])->insert();
+			$user_agent_id = GW_Bot_Detect::getUserAgentId();
+			GW_User_Ip_Log::singleton()->createNewObject(['user_id'=>$this->id, 'ip'=>$ip, 'user_agent'=>$user_agent_id])->insert();
 		}
 			
 		$this->set('last_ip', $ip);
@@ -107,14 +108,38 @@ class GW_User extends GW_Composite_Data_Object
 
 	function onRequest($db_update = true)
 	{
+		$requestUri = $_SERVER['REQUEST_URI'] ?? '';
 
 		$this->set('last_request_time', date('Y-m-d H:i:s'));
+
+		if ($this->shouldTrackLastRequestUri($requestUri))
+			$this->set('keyval/last_request_uri', $requestUri);
 
 		if ($db_update){
 			$this->auto_fields = false;
 			$this->update(['last_request_time']);
 			$this->auto_fields = true;
 		}
+	}
+
+	function shouldTrackLastRequestUri($uri)
+	{
+		$uri = (string)$uri;
+
+		if ($uri === '')
+			return false;
+
+		$parts = parse_url($uri);
+		$path = (string)($parts['path'] ?? '');
+		$query = [];
+
+		if (!empty($parts['query']))
+			parse_str($parts['query'], $query);
+
+		if (in_array(($query['act'] ?? ''), ['doChatBubbleData', 'doMarkSeen'], true) && preg_match('#/users/chat$#', $path))
+			return false;
+
+		return true;
 	}
 
 	function canAccess($key)
@@ -157,7 +182,7 @@ class GW_User extends GW_Composite_Data_Object
 				if (isset($this->content_base['pass_new']) && $this->content_base['pass_new']){
 					$new = $this->get('pass_new');
 					$oldc = $this->get('pass');
-
+					
 					
 					
 					$this->set('pass', $newc=$this->cryptPass($new));
@@ -171,7 +196,7 @@ class GW_User extends GW_Composite_Data_Object
 					//d::ldump($this->toArray());
 					//d::dumpas($this->changed_fields);
 				}
-				break;
+			break;
 		}
 
 		parent::eventHandler($event, $context_data);
@@ -297,10 +322,11 @@ class GW_User extends GW_Composite_Data_Object
 				$arr = array_filter((array)$arr);
 				
 				return $arr ?: [];
-			break;				
+			break;
 						
 		}
 	}
+
 
 
 	/**
@@ -419,4 +445,5 @@ class GW_User extends GW_Composite_Data_Object
 	function __toString(){
 		return $this->title;
 	}
+	
 }

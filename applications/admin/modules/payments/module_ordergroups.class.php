@@ -486,6 +486,12 @@ class Module_OrderGroups extends GW_Common_Module
 	
 	function initInvoiceVars($item, $opts=[])
 	{
+		if(method_exists($item, 'recalcPaymentLedger'))
+			$item->recalcPaymentLedger(false);
+		
+		$fmtAmount = function($amount) {
+			return number_format((float)$amount, 2, '.', '');
+		};
 		
 		$user =  $item->user;
 		
@@ -569,8 +575,35 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['PAY_TEST']=1;
 		
 		
+		$order_amount_total = round((float)$item->amount_total, 2);
+		$payd_amount = round((float)$item->payd_amount, 2);
+		$balance_amount = round((float)$item->balance_amount, 2);
+		
+		if($payd_amount < 0)
+			$payd_amount = 0;
+		
+		if($balance_amount < 0)
+			$balance_amount = 0;
+		
+		$is_partial_payment = $payd_amount > 0 && $balance_amount > 0;
+		$invoice_amount = $is_partial_payment ? $payd_amount : $order_amount_total;
+		$payable_amount = $balance_amount > 0 ? $balance_amount : $order_amount_total;
+		
 		$v['PRICE'] = $item->amount_total;
 		$v['PRICE_TEXT'] = GW_Sum_To_Text_Helper::sum2text($v['PRICE'], $ln);
+		$v['ORDER_AMOUNT_TOTAL'] = $order_amount_total;
+		$v['ORDER_AMOUNT_TOTAL_FMT'] = $fmtAmount($order_amount_total);
+		$v['PAYD_AMOUNT'] = $payd_amount;
+		$v['PAYD_AMOUNT_FMT'] = $fmtAmount($payd_amount);
+		$v['BALANCE_AMOUNT'] = $balance_amount;
+		$v['BALANCE_AMOUNT_FMT'] = $fmtAmount($balance_amount);
+		$v['INVOICE_AMOUNT'] = $invoice_amount;
+		$v['INVOICE_AMOUNT_FMT'] = $fmtAmount($invoice_amount);
+		$v['INVOICE_AMOUNT_TEXT'] = GW_Sum_To_Text_Helper::sum2text($invoice_amount, $ln);
+		$v['PAYABLE_AMOUNT'] = $payable_amount;
+		$v['PAYABLE_AMOUNT_FMT'] = $fmtAmount($payable_amount);
+		$v['PAYABLE_AMOUNT_TEXT'] = GW_Sum_To_Text_Helper::sum2text($payable_amount, $ln);
+		$v['PARTIAL_PAYMENT'] = $is_partial_payment ? 1 : 0;
 		$v['PAYD'] = $item->payd;
 
 		$v['COMPANY'] = $item->company;
