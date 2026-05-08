@@ -825,7 +825,7 @@ class Module_Chat extends GW_Common_Module
 
 	function reactServiceName()
 	{
-		return GW::s('REACTPHP_WS/SYSTEMD_SERVICE') ?: 'artistdb-reactphp-ws.service';
+		return (string)(GW::s('REACTPHP_WS/SYSTEMD_SERVICE') ?: '');
 	}
 
 	function reactFallbackStartCmd()
@@ -833,11 +833,14 @@ class Module_Chat extends GW_Common_Module
 		$phpCli = GW::s('PHP_CLI_LOCATION') ?: '/usr/bin/php';
 		$script = GW::s('DIR/ROOT') . 'applications/cli/reactphpserver.php';
 		$logFile = GW::s('DIR/LOGS') . 'reactphpserver.log';
+		$rootDir = GW::s('DIR/ROOT');
 
-		return escapeshellcmd($phpCli)
+		return 'cd ' . escapeshellarg($rootDir)
+			. ' && /usr/bin/setsid /usr/bin/nohup '
+			. escapeshellcmd($phpCli)
 			. ' -d display_startup_errors=0 -d display_errors=0 -d log_errors=1 -d html_errors=0 '
 			. escapeshellarg($script)
-			. ' >>' . escapeshellarg($logFile) . ' 2>&1 &';
+			. ' </dev/null >>' . escapeshellarg($logFile) . ' 2>&1 & echo $!';
 	}
 
 	function getReactHealthStatus($full = false)
@@ -864,7 +867,7 @@ class Module_Chat extends GW_Common_Module
 		}
 
 		$url = $this->reactHealthUrl() . ($full ? '?full=1' : '');
-		$timeout = $full ? 0.45 : 0.25;
+		$timeout = $full ? 2.0 : 1.0;
 		$ctx = stream_context_create([
 			'http' => [
 				'timeout' => $timeout,
@@ -886,6 +889,17 @@ class Module_Chat extends GW_Common_Module
 			'elapsed_ms' => $elapsedMs,
 			'timeout' => $timeout,
 		];
+	}
+
+	function reactLogLine($label, array $data = [])
+	{
+		$record = [
+			'time' => date('Y-m-d H:i:s'),
+			'label' => $label,
+			'data' => $data,
+		];
+
+		@file_put_contents(GW::s('DIR/LOGS') . 'reactphpserver.log', json_encode($record, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n", FILE_APPEND);
 	}
 
 	function notifyReactHealthAdmins($subject, $message)
@@ -913,6 +927,11 @@ class Module_Chat extends GW_Common_Module
 	function restartReactPhpServer()
 	{
 		$currentHealth = $this->getReactHealthStatus(false);
+		$this->reactLogLine('admin_restart_check', [
+			'user_id' => (int)($this->app->user->id ?? 0),
+			'act' => (string)($_REQUEST['act'] ?? ''),
+			'health' => $currentHealth,
+		]);
 
 		if (!empty($currentHealth['ok'])) {
 			return [
@@ -928,6 +947,7 @@ class Module_Chat extends GW_Common_Module
 
 		$allowSystemctl = (bool)(GW::s('REACTPHP_WS/ALLOW_SYSTEMCTL_RESTART') ?: 0);
 		$canUseSystemctl = $allowSystemctl
+			&& $serviceName !== ''
 			&& function_exists('posix_geteuid')
 			&& (int)@posix_geteuid() === 0
 			&& trim((string)@shell_exec('command -v systemctl 2>/dev/null'));
@@ -935,6 +955,11 @@ class Module_Chat extends GW_Common_Module
 		if ($canUseSystemctl) {
 			$systemctlPath = trim((string)@shell_exec('command -v systemctl 2>/dev/null'));
 			$cmd = $systemctlPath . ' restart ' . escapeshellarg($serviceName) . ' 2>&1';
+			$this->reactLogLine('admin_restart_systemctl', [
+				'user_id' => (int)($this->app->user->id ?? 0),
+				'act' => (string)($_REQUEST['act'] ?? ''),
+				'cmd' => $cmd,
+			]);
 			$output = [];
 			$exitCode = 0;
 			exec($cmd, $output, $exitCode);
@@ -951,9 +976,20 @@ class Module_Chat extends GW_Common_Module
 		}
 
 		$cmd = $this->reactFallbackStartCmd();
+		$this->reactLogLine('admin_restart_fallback_start', [
+			'user_id' => (int)($this->app->user->id ?? 0),
+			'act' => (string)($_REQUEST['act'] ?? ''),
+			'cmd' => $cmd,
+		]);
 		$output = [];
 		$exitCode = 0;
 		exec($cmd, $output, $exitCode);
+		$this->reactLogLine('admin_restart_fallback_done', [
+			'user_id' => (int)($this->app->user->id ?? 0),
+			'act' => (string)($_REQUEST['act'] ?? ''),
+			'output' => trim(implode("\n", $output)),
+			'exit_code' => $exitCode,
+		]);
 
 		return [
 			'method' => 'fallback_cli',
@@ -963,7 +999,7 @@ class Module_Chat extends GW_Common_Module
 		];
 	}
 
-	function killReactPhpServer()
+	function killReactPhpServer($reason = 'unknown')
 	{
 		$pkillPath = trim((string)@shell_exec('command -v pkill 2>/dev/null'));
 
@@ -976,9 +1012,22 @@ class Module_Chat extends GW_Common_Module
 		}
 
 		$killCmd = $pkillPath . ' -f ' . escapeshellarg('applications/cli/reactphpserver.php') . ' 2>&1';
+		$this->reactLogLine('admin_kill_reactphp_start', [
+			'user_id' => (int)($this->app->user->id ?? 0),
+			'act' => (string)($_REQUEST['act'] ?? ''),
+			'reason' => $reason,
+			'cmd' => $killCmd,
+		]);
 		$killOutput = [];
 		$killExit = 0;
 		exec($killCmd, $killOutput, $killExit);
+		$this->reactLogLine('admin_kill_reactphp_done', [
+			'user_id' => (int)($this->app->user->id ?? 0),
+			'act' => (string)($_REQUEST['act'] ?? ''),
+			'reason' => $reason,
+			'output' => trim(implode("\n", $killOutput)),
+			'exit_code' => $killExit,
+		]);
 
 		return [
 			'cmd' => $killCmd,
@@ -993,7 +1042,7 @@ class Module_Chat extends GW_Common_Module
 			if (!$this->isReactServiceEnabled())
 				$this->jsonError('ReactPHP websocket is disabled in users config', 409);
 
-			$killed = $this->killReactPhpServer();
+			$killed = $this->killReactPhpServer('manual_restart');
 			usleep(500000);
 
 			$restart = $this->restartReactPhpServer();
@@ -1034,7 +1083,7 @@ class Module_Chat extends GW_Common_Module
 	function doReactStopNow()
 	{
 		try {
-			$killed = $this->killReactPhpServer();
+			$killed = $this->killReactPhpServer('manual_stop');
 			usleep(500000);
 			$health = $this->getReactHealthStatus(false);
 
@@ -1088,7 +1137,7 @@ class Module_Chat extends GW_Common_Module
 				'2 day'
 			);
 
-			$killed = $this->killReactPhpServer();
+			$killed = $this->killReactPhpServer('heal_check_failed_health');
 			usleep(500000);
 			$restart = $this->restartReactPhpServer();
 			sleep(2);

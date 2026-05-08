@@ -158,6 +158,14 @@ Papildomai sutvarkyti vėliau
   - ar procesas klauso `CHATWS/PORT`
   - ar health port yra `CHATWS/PORT + 1`
   - ar Apache/Nginx proxy į `/ws` nukreiptas į teisingą portą
+- Jei ReactPHP procesas paleidžiamas per admin fallback mygtuką, naudoti `setsid` + `nohup`, o ne paprastą `php ... &`.
+- Paprastas background startas iš web requesto gali mirti pasibaigus requestui / proceso grupei.
+- ReactPHP loge turi būti `process_start`, `process_signal` ir `process_shutdown` diagnostika, kad būtų aišku ar procesą nužudė signalas, ar įvyko fatalas.
+- Jei browser `wss://.../ws` jungtis nutrūksta po 60-120 s, bet `healthz` veikia ir ReactPHP procesas gyvas, tai greičiausiai proxy idle timeout.
+- Tam pridėtas keepalive:
+  - browser klientas siunčia `ping` kas 25 s
+  - ReactPHP serveris siunčia `server_ping` visiems klientams kas 25 s
+- Po šio pakeitimo productione būtina restartinti ReactPHP procesą, nes server-side keepalive įsigalioja tik naujame procese.
 - Jei productione chat puslapis stringa arba meta SQL klaidas, tikrinti `repository/.sys/logs/MySQL.log`.
 - Klaida `Table '...gw_chat_rooms' doesn't exist` reiškia, kad chat SQL migracijos nebuvo pritaikytos.
 - Jei lentelės egzistuoja, bet `gw_chat_rooms` be `PRIMARY KEY` / `AUTO_INCREMENT`, taikyti schema repair migraciją.

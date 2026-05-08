@@ -4,7 +4,8 @@ function GWChatWSClient(opts)
 		url: null,
 		debug: true,
 		autoReconnect: true,
-		reconnectDelayMs: 1500
+		reconnectDelayMs: 1500,
+		keepAliveMs: 25000
 	}, opts || {});
 
 	this.socket = null;
@@ -19,6 +20,7 @@ function GWChatWSClient(opts)
 	this.resolvedUrl = null;
 	this.connectStartedAt = 0;
 	this.openedAt = 0;
+	this.keepAliveTimer = 0;
 }
 
 GWChatWSClient.prototype.resolveUrl = function(url)
@@ -97,6 +99,7 @@ GWChatWSClient.prototype.connect = function(url)
 			url: client.opts.url,
 			elapsed_ms: client.openedAt - client.connectStartedAt
 		});
+		client.startKeepAlive();
 		client.emit('connect');
 	};
 
@@ -120,6 +123,8 @@ GWChatWSClient.prototype.connect = function(url)
 			wasClean: e && typeof e.wasClean !== 'undefined' ? e.wasClean : null
 		};
 		client.log('disconnect', info);
+		client.stopKeepAlive();
+		client.rejectPending('WebSocket disconnected');
 		client.emit('disconnect', info);
 
 		if (!client.manualClose && !client.disableReconnect && client.opts.autoReconnect) {
@@ -157,6 +162,34 @@ GWChatWSClient.prototype.connect = function(url)
 	return this;
 };
 
+GWChatWSClient.prototype.startKeepAlive = function()
+{
+	var client = this;
+	var interval = parseInt(this.opts.keepAliveMs, 10) || 0;
+
+	this.stopKeepAlive();
+
+	if (interval <= 0)
+		return;
+
+	this.keepAliveTimer = setInterval(function(){
+		if (!client.socket || client.socket.readyState !== 1)
+			return;
+
+		client.ping().catch(function(err){
+			client.log('keepalive_failed', err && err.message ? err.message : err);
+		});
+	}, interval);
+};
+
+GWChatWSClient.prototype.stopKeepAlive = function()
+{
+	if (this.keepAliveTimer) {
+		clearInterval(this.keepAliveTimer);
+		this.keepAliveTimer = 0;
+	}
+};
+
 GWChatWSClient.prototype.getResolvedUrl = function()
 {
 	return this.resolvedUrl || this.resolveUrl(this.opts.url);
@@ -166,9 +199,23 @@ GWChatWSClient.prototype.close = function()
 {
 	this.manualClose = true;
 	clearTimeout(this.reconnectTimer);
+	this.stopKeepAlive();
 
 	if (this.socket)
 		this.socket.close();
+};
+
+GWChatWSClient.prototype.rejectPending = function(message)
+{
+	var pending = this.pending || {};
+	this.pending = {};
+
+	for (var reqId in pending) {
+		if (!Object.prototype.hasOwnProperty.call(pending, reqId))
+			continue;
+
+		pending[reqId].reject(new Error(message || 'WebSocket request failed'));
+	}
 };
 
 GWChatWSClient.prototype.handlePacket = function(packet)

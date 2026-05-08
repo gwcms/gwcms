@@ -498,6 +498,22 @@ class GW_ReactPHP_Chat_Server implements MessageComponentInterface
 		return $sent;
 	}
 
+	function sendKeepAlive()
+	{
+		foreach ($this->clients as $conn) {
+			try {
+				$this->push($conn, 'server_ping', [
+					'time' => date('Y-m-d H:i:s'),
+				]);
+			} catch (Exception $e) {
+				$this->log('keepalive_failed', [
+					'resourceId' => $conn->resourceId ?? null,
+					'error' => $e->getMessage(),
+				]);
+			}
+		}
+	}
+
 	protected function broadcastPresence(array $user, $action, ConnectionInterface $excludeConn = null)
 	{
 		foreach ($this->clients as $conn) {
@@ -836,10 +852,11 @@ function gwReactphpScheduleSelfRestart()
 	$phpCli = PHP_BINARY ?: (GW::s('PHP_CLI_LOCATION') ?: '/usr/bin/php');
 	$script = __FILE__;
 	$logFile = GW::s('DIR/LOGS') . 'reactphpserver.log';
+	$rootDir = GW::s('DIR/ROOT');
 	$args = $_SERVER['argv'] ?? [];
 	array_shift($args);
 
-	$cmd = 'sleep 1; '
+	$cmd = 'sleep 1; cd ' . escapeshellarg($rootDir) . ' && /usr/bin/setsid /usr/bin/nohup '
 		. escapeshellcmd($phpCli)
 		. ' -d display_startup_errors=0 -d display_errors=0 '
 		. escapeshellarg($script);
@@ -847,7 +864,7 @@ function gwReactphpScheduleSelfRestart()
 	foreach ($args as $arg)
 		$cmd .= ' ' . escapeshellarg($arg);
 
-	$cmd .= ' >>' . escapeshellarg($logFile) . ' 2>&1 &';
+	$cmd .= ' </dev/null >>' . escapeshellarg($logFile) . ' 2>&1 &';
 
 	@exec('/bin/sh -c ' . escapeshellarg($cmd));
 
@@ -876,6 +893,31 @@ function gwReactphpAutorestartOnVersionChangeEnabled()
 	return (bool)(GW::s('REACTPHP_WS/AUTORESTART_ON_VERSION_CHANGE') ?: 0);
 }
 
+register_shutdown_function(function () {
+	$error = error_get_last();
+	gwReactphpLogLine('process_shutdown', [
+		'pid' => function_exists('getmypid') ? getmypid() : null,
+		'exit_status' => function_exists('connection_status') ? connection_status() : null,
+		'last_error' => $error,
+	]);
+});
+
+if (function_exists('pcntl_signal')) {
+	if (function_exists('pcntl_async_signals'))
+		pcntl_async_signals(true);
+
+	$signalHandler = function ($signal) {
+		gwReactphpLogLine('process_signal', [
+			'pid' => function_exists('getmypid') ? getmypid() : null,
+			'signal' => $signal,
+		]);
+		exit(128 + (int)$signal);
+	};
+
+	foreach ([SIGTERM, SIGINT, SIGQUIT] as $signal)
+		pcntl_signal($signal, $signalHandler);
+}
+
 $loop = Loop::get();
 $debugEnabled = in_array('--debug', $argv, true)
 	|| (bool)(GW::s('REACTPHP_WS/DEBUG') ?: 0)
@@ -899,6 +941,21 @@ $chatServer = new GW_ReactPHP_Chat_Server([
 	'debug' => $debugEnabled,
 	'log_file' => GW::s('DIR/LOGS') . 'reactphpserver.log',
 ]);
+
+gwReactphpLogLine('process_start', [
+	'pid' => function_exists('getmypid') ? getmypid() : null,
+	'host' => $wsHost,
+	'ws_port' => $wsPort,
+	'health_port' => $healthPort,
+	'systemd_managed' => gwReactphpIsSystemdManaged() ? 1 : 0,
+]);
+
+$keepAliveInterval = (float)(GW::s('REACTPHP_WS/KEEPALIVE_INTERVAL') ?: 25);
+if ($keepAliveInterval > 0) {
+	$loop->addPeriodicTimer($keepAliveInterval, function () use ($chatServer) {
+		$chatServer->sendKeepAlive();
+	});
+}
 
 $healthServer = new ReactHttpServer(function (ServerRequestInterface $request) use ($chatServer) {
 	$path = $request->getUri()->getPath();
