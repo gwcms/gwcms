@@ -41,7 +41,7 @@ function initEnviroment($environmentid)
 			GW::s("SITE_URL",'https://cms.gw.lt/');
 			
 			//db_sync tool ant others
-			GW::s("SSH_USERHOST",'root@gw.lt');
+			
 			
 			//reset css,js caches
 			GW::$globals['version'] = trim(file_get_contents(GW::s('DIR/ROOT').'version'));
