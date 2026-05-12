@@ -101,10 +101,29 @@
 
 {function dl_output_filters_image_sm}
 	{$image=$item->$field}
+	{$size=$dl_output_filters_args[$field].size|default:'16x16'}
+	{$method=$dl_output_filters_args[$field].method|default:'crop'}
 	{if $image}
-		<a href="{$app->sys_base}tools/imga/{$image->id}" target="_blank">
-			<img src="{$app->sys_base}tools/imga/{$image->id}?size=16x16" align="absmiddle" vspace="2" />
+		<a href="{$app->sys_base}tools/img/{$image->key}" target="_blank">
+			<img src="{$app->sys_base}tools/img/{$image->key}?size={$size}&method={$method}&v={$image->v}&x=file.jpg" align="absmiddle" vspace="2" />
 		</a>
+	{else}
+		-
+	{/if}
+{/function}
+
+{function dl_output_filters_file}
+	{$file=$item->$field}
+	{if $file}
+		{$filename=pathinfo($file->original_filename)}
+		{$title=$filename.filename|truncate:36}
+		{if $filename.extension}
+			{$title="`$title`.`$filename.extension`"}
+		{/if}
+		<a href="{$app->sys_base}tools/download/{$file->key}" title="{$file->original_filename|escape}">
+			<i class="fa fa-file-o"></i> {$title|escape}
+		</a>
+		<small>({GW_Math_Helper::cfilesize($file->size)})</small>
 	{else}
 		-
 	{/if}

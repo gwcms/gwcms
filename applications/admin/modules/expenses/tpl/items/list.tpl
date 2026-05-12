@@ -3,6 +3,9 @@
 {block name="init"}
 	{$dl_inline_edit=1}
 	{$dl_fields=[image,file,parent_id,expense_date,expense_month,title,amount,type,coefficient,child_amount,status,note]}
+	{$dl_output_filters.image=image_sm}
+	{$dl_output_filters_args.image=[size=>'30x30']}
+	{$dl_output_filters.file=file}
 	{$dl_actions=[reprocess,edit,delete]}
 
 	{if $m->write_permission}
@@ -10,18 +13,6 @@
 		{$do_toolbar_buttons_hidden=[dialogconf,print,dialogconf2]}
 		{include file="`$m->tpl_dir`/upload_inlist.tpl"}
 	{/if}
-
-	{function dl_cell_image}
-		{if $item->image}
-			{include file="tools/image_preview.tpl" image=$item->image width=55 height=55 fancybox=1}
-		{/if}
-	{/function}
-
-	{function dl_cell_file}
-		{if $item->file}
-			<i class="fa fa-file-o"></i> {$item->file->original_filename|escape}
-		{/if}
-	{/function}
 
 	{function dl_cell_type}
 		{$options.type[$item->type]|default:$item->type}
