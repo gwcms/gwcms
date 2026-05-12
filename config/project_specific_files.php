@@ -10,6 +10,7 @@ test/*
 applications/admin/modules/customers/*
 applications/admin/modules/diary/*
 applications/admin/modules/movies/*
+applications/admin/modules/expenses/*
 pullupdates.php
 update.php
 config/db_prod.php
