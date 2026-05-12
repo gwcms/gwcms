@@ -104,6 +104,24 @@ class Module_Items extends GW_Common_Module
 		$this->jump();
 	}
 
+	function doProcessNow()
+	{
+		$item = $this->getDataObjectById();
+		$item->set('status', GW_Expense::STATUS_PROCESSING);
+		$item->updateChanged();
+
+		$this->processItem($item);
+		$item->load();
+
+		if ($item->status == GW_Expense::STATUS_FAILED) {
+			$this->setError('Apdorojimo klaida: ' . $item->note);
+		} else {
+			$this->setMessage('Apdorojimas baigtas: ' . $item->status);
+		}
+
+		$this->jump();
+	}
+
 	function processItem($item)
 	{
 		try {

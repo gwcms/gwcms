@@ -4,7 +4,7 @@
 	<tr>
 	<td>
 <a href="{$app->sys_base}tools/img/{$image->key}?{$item->v}&x=file.jpg" {if $fancybox}class="fancybox-thumbs" data-fancybox-group="{$fancybox_group}"{/if} target="_blank">
-	<img title="{$smarty.capture.info|escape}" src="{$app->sys_base}tools/img/{$image->key}?size={$width}x{$height}&v={$image->v}&x=file.jpg" border="{$border|default:0}" />
+	<img title="{$smarty.capture.info|escape}" src="{$app->sys_base}tools/img/{$image->key}?size={$width}x{$height}&v={$image->v}&x=file.jpg" border="{$border|default:0}" style="max-width:{$width}px;max-height:{$height}px;" />
 </a>	</td>
 {if $in_form}
 <td valign="top">{include "elements/zz_remove_composite.tpl"}</td>

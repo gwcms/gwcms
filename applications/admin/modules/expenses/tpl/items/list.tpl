@@ -6,7 +6,7 @@
 	{$dl_output_filters.image=image_sm}
 	{$dl_output_filters_args.image=[size=>'30x30']}
 	{$dl_output_filters.file=file}
-	{$dl_actions=[reprocess,edit,delete]}
+	{$dl_actions=[reprocess,edit,delete,ext_actions]}
 
 	{if $m->write_permission}
 		{$do_toolbar_buttons=[upload,addnew,filters,hidden,search]}
