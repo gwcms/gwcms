@@ -10,8 +10,8 @@ class GW_Expense extends GW_Composite_Data_Object
 	public $table = 'gw_expenses';
 	public $default_order = 'expense_date DESC, id DESC';
 	public $encode_fields = [
-		'extra' => 'JSON',
-		'api_response' => 'JSON',
+		'extra' => 'json',
+		'api_response' => 'json',
 	];
 
 	public $composite_map = [
