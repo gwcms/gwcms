@@ -1,11 +1,11 @@
 {function name=do_toolbar_buttons_upload}
-	{toolbar_button title="Įkelti čekius" iconclass='fa fa-upload' btnclass="select_expenses_btn11" onclick="$('.select_expenses_btn').click()" }
+	{toolbar_button title="Įkelti čekius" iconclass='fa fa-upload' btnclass="select_attachments_btn11" onclick="$('.select_attachments_btn').click()" }
 
 	<div class="attachments_container" style="display:none">
-		<button class="select_expenses_btn"></button>
+		<button class="select_attachments_btn"></button>
 		<span style="display:inline-block;">
-			<input style="display:none" class="gwexpensefileinput" type="file" multiple
-				data-url="{$m->buildUri(false,[act=>doUpload])}"
+			<input style="display:none" class="gwfileinput" type="file" multiple
+				data-url="{$m->buildUri(false)}"
 				data-name="files[]">
 		</span>
 	</div>
@@ -14,20 +14,27 @@
 		{$GLOBALS.html_inp_expenses_upload=1}
 		{capture append=footer_hidden}
 			<script type="text/javascript">
-				require(['gwcms'], function(){ require(['pack/upload_input/js'], function(){ initExpenseUploadInput() }) });
 
-				function initExpenseUploadInput()
+				require(['gwcms'], function(){  require(['pack/upload_input/js'], function(){ initUploadInput() }) });
+
+				function initUploadInput()
 				{
-					$('.gwexpensefileinput').each(function(){
+					$('.gwfileinput').each(function(){		
 						var upload = new Upload($(this));
-						$(this).data('upload', upload);
-						upload.status_display = $('.select_expenses_btn11');
+						$(this).data('upload', upload)
+						
+						upload.status_display=$('.select_attachments_btn11')
 						upload.init();
+						
 						upload.onUpload = function(){
+							console.log('upload successfull!');
 							location.href = location.href;
 						}
-					});
+						
+					})
+					
 				}
+
 			</script>
 		{/capture}
 	{/if}

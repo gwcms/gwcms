@@ -19,6 +19,12 @@ class Module_Items extends GW_Common_Module
 
 	function doUpload()
 	{
+		$this->doStore();
+		die('OK');
+	}
+
+	function doStore()
+	{
 		$files = GW_File_Helper::reorderFilesArray('files');
 		$ids = [];
 
@@ -38,8 +44,6 @@ class Module_Items extends GW_Common_Module
 				['background' => 1]
 			);
 		}
-
-		die('OK');
 	}
 
 	function createExpenseFromUpload($file)
