@@ -24,6 +24,36 @@
 	&nbsp;&nbsp;&nbsp;
 {/function}
 
+{function "select2_setting"}
+	{$GLOBALS.pgsett.$key=$smarty.get.$key|default:$default}
+	{$select_id="settings_select2_`$key`"}
+	{$select_id=str_replace(["[","]","/"],'_', $select_id)}
+	<span class="settlab">{$title}:</span> 
+		
+		<select id="{$select_id}" class="settings-select2" onchange="gw_navigator.jump(false,{ '{$key}':this.value })" style="width:{$width|default:'180px'}">
+			{if !$skip_empty_opt}<option value=""> --- </option>{/if}
+			{html_options selected=$GLOBALS.pgsett.$key options=$options}
+		</select>
+
+	{if !$gwcms_settings_select2_loaded}
+		<link rel="stylesheet" href="{$app_root}static/vendor/select2/css.css?v={$GLOBALS.version_short}" type="text/css"/>
+		<script type="text/javascript">
+			require(['vendor/select2/js'], function() {
+				$('#{$select_id}').select2({ width: 'style' });
+			});
+		</script>
+		{assign var=gwcms_settings_select2_loaded value=1 scope=global}
+	{else}
+		<script type="text/javascript">
+			require(['vendor/select2/js'], function() {
+				$('#{$select_id}').select2({ width: 'style' });
+			});
+		</script>
+	{/if}
+	
+	&nbsp;&nbsp;&nbsp;
+{/function}
+
 {function "txt_setting"}
 	{$GLOBALS.pgsett.$key=$smarty.get.$key|default:$default}
 	<span class="settlab">{$title}:</span> 

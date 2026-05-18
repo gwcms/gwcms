@@ -13,6 +13,36 @@
 {/function}
 
 
+{function order_discount_code}
+	{if $m->feat('discountcode') && $order->payment_status!=7 && $order->active}
+		<div class="g-mt-10">
+			{if $order->discount_id}
+				<div class="g-font-size-12">
+					<span class="g-color-gray-dark-v4">{GW::ln('/m/DISCOUNT_CODE')}:</span>
+					<strong>{$order->discountcode->code|escape}</strong>
+					<a href="{$m->buildUri(false, [act=>doUnsetDiscount,id=>$order->id])}" class="g-ml-5" title="{GW::ln('/g/CANCEL')}">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			{else}
+				<button type="button" class="btn btn-link g-font-size-12 g-color-gray-dark-v4 g-pa-0 g-text-underline--none--hover" onclick="$(this).next('.js-order-discount-form').stop(true, true).slideToggle(120); return false;">
+					<i class="fa fa-tag g-mr-2"></i>{GW::ln('/m/APPLY_DISCOUNT_CODE')}
+					<span class="ml-2 fa fa-angle-down"></span>
+				</button>
+				<div class="js-order-discount-form" style="display:none">
+					<form method="post" action="{$m->buildUri(false, [act=>doApplyDiscount,id=>$order->id])}" class="input-group input-group-sm g-mt-2">
+						<input name="discountcode" class="form-control rounded-0" type="text" placeholder="{GW::ln('/m/ENTER_DISCOUNT_CODE')}" required>
+						<span class="input-group-append">
+							<button class="btn u-btn-primary rounded-0" type="submit">{GW::ln('/m/APPLY')}</button>
+						</span>
+					</form>
+				</div>
+			{/if}
+		</div>
+	{/if}
+{/function}
+
+
 {function orderactions}
 	
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
@@ -43,6 +73,8 @@
 					
 
 		{/if}
+
+		{call order_discount_code}
 					
 					
 					
@@ -180,6 +212,19 @@
 			<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
 				<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/DISCOUNT')}</h4>
 				<span class="g-color-lightred g-font-weight-300 g-font-size-13">-{$order->amount_discount} &euro;</span>
+				{if $order->discount_id}
+					<br><small class="g-color-gray-dark-v4">{$order->discountcode->code|escape}</small>
+				{/if}
+			</div>
+			{/if}
+
+			{if $order->amount_coupon}
+			<div class="col-sm-3 col-md-1 g-mb-20 g-mb-0--sm">
+				<h4 class="g-color-gray-dark-v4 g-font-weight-400 g-font-size-12 text-uppercase g-mb-2">{GW::ln('/m/COUPON')}</h4>
+				<span class="g-color-lightred g-font-weight-300 g-font-size-13">-{$order->amount_coupon} &euro;</span>
+				{if $order->discount_id}
+					<br><small class="g-color-gray-dark-v4">{$order->discountcode->code|escape}</small>
+				{/if}
 			</div>
 			{/if}
 			

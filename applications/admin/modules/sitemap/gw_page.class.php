@@ -138,6 +138,36 @@ class GW_Page extends GW_i18n_Data_Object
 			}
 		}
 	}
+
+	function pathnameExists($pathname)
+	{
+		$cond = [
+			'id != ? AND parent_id = ? AND site_id = ? AND pathname = ?',
+			(int)$this->id,
+			(int)$this->parent_id,
+			(int)$this->site_id,
+			$pathname
+		];
+
+		return $this->count($cond) > 0;
+	}
+
+	function fixUniquePathname()
+	{
+		$base = $this->pathname ?: 'page';
+		$pathname = $base;
+		$idx = 1;
+
+		while($this->pathnameExists($pathname)){
+			$pathname = $base.'-'.$idx;
+			$idx++;
+		}
+
+		$this->pathname = $pathname;
+
+		if($pathname != $base && GW::$context->app)
+			GW::$context->app->setMessage('Page path originally "'.$base.'" was replaced to "'.$pathname.'" cause "'.$base.'" was already in sitemap');
+	}
 	
 	function fixPath()
 	{
@@ -153,6 +183,7 @@ class GW_Page extends GW_i18n_Data_Object
 			$this->pathname = $this->title;
 
 		$this->pathname = GW_Validation_Helper::pagePathName($this->pathname);
+		$this->fixUniquePathname();
 		$this->fixPath();
 		$this->fixUniqPathId();
 	}

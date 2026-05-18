@@ -47,7 +47,11 @@
 	
 	{$display_fields=['tour_part_id'=>0]}
 	
-	{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
+	{if $m->feat(discountcode)}
+		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,discount_id,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
+	{else}
+		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
+	{/if}
 
 	
 	{$dl_actions=[preview,items,invoice,editshift,ext_actions]}
@@ -64,6 +68,15 @@
 	{function dl_cell_ledger_count}
 		{$cnt=$ledger_counts[$item->id]|default:0}
 		<a class="badge badge-violet iframe-under-tr" style="background-color:violet;color:white" href="{$m->buildUri("`$item->id`/orderledger", [clean=>2,order_id=>$item->id,filters=>[order_id=>$item->id]])}" title="Order ledger">{$cnt}</a>
+	{/function}
+	{function dl_cell_discount_id}
+		{if $item->discount_id}
+			<a class="iframeopen" href="{$app->buildUri("payments/discountcode/`$item->discount_id`/form",[clean=>2])}" title="{$item->discount_code|escape}">
+				{$item->discount_code|default:$item->discount_id|escape}
+			</a>
+		{else}
+			-
+		{/if}
 	{/function}
 	{function dl_cell_item_lines}
 		{foreach $item->items as $sitem}

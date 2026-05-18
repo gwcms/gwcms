@@ -10,9 +10,12 @@
 	{$dl_output_filters=[]}	
 		
 	{$do_toolbar_buttons[] = dialogconf}	
+	{$do_toolbar_buttons[] = createcodes}
 	{$do_toolbar_buttons[] = hidden}
 	{$do_toolbar_buttons_hidden=[]}	
+	
 	{$do_toolbar_buttons[] = search}
+
 	
 	{$dl_actions=[invert_active_ajax,editshift,ext_actions]}
 	
@@ -28,6 +31,11 @@
 	
 	{*
 	custom toolbar button:
+	*}
+	{function name=do_toolbar_buttons_createcodes}
+		{toolbar_button title="Generuoti kodus" iconclass='fa fa-plus-square' href=$m->buildUri(false,[act=>doCreateMultipleCodes])}
+	{/function}
+	{*
 	{function name=do_toolbar_buttons_exportphotos}
 		{toolbar_button title=GW::l('/A/VIEWS/doExportPhotos') iconclass='gwico-Export' href=$m->buildUri(false,[act=>doExportPhotos])}	
 	{/function}	

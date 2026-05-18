@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+  <i id="FIELDS">
+    <i id="pay_time">
+      <lt>Apmokėjimo laikas</lt>
+      <en>Payment time</en>
+    </i>
+    <i id="email">
+      <lt>El. paštas</lt>
+      <en>Email</en>
+    </i>
+    <i id="phone">
+      <lt>Telefonas</lt>
+      <en>Phone</en>
+    </i>
+    <i id="ordered_by">
+      <lt>Užsakė</lt>
+      <en>Ordered by</en>
+    </i>
+    <i id="city">
+      <lt>Miestas</lt>
+      <en>City</en>
+    </i>
+    <i id="country">
+      <lt>Šalis</lt>
+      <en>Country</en>
+    </i>
+    <i id="address_l1">
+      <lt>Adresas</lt>
+      <en>Address</en>
+    </i>
+    <i id="code">
+      <lt>Kodas</lt>
+      <en>Code</en>
+    </i>
+    <i id="delivery_type">
+      <lt>Pristatymo tipas</lt>
+      <en>Delivery type</en>
+    </i>
+  </i>
+
+  <i id="ORDER_PLACED">
+    <lt>Užsakymo data</lt>
+    <en>Order placed</en>
+  </i>
+  <i id="SHIPPING_TO">
+    <lt>Pristatymas</lt>
+    <en>Shipping to</en>
+  </i>
+  <i id="SUBTOTAL">
+    <lt>Tarpinė suma</lt>
+    <en>Subtotal</en>
+  </i>
+  <i id="SHIPPING">
+    <lt>Pristatymas</lt>
+    <en>Shipping</en>
+  </i>
+  <i id="DISCOUNT">
+    <lt>Nuolaida</lt>
+    <en>Discount</en>
+  </i>
+  <i id="DISCOUNT_CODE">
+    <lt>Nuolaidos kodas</lt>
+    <en>Discount code</en>
+  </i>
+  <i id="COUPON">
+    <lt>Kuponas</lt>
+    <en>Coupon</en>
+  </i>
+  <i id="ORDER_TOTAL">
+    <lt>Užsakymo suma</lt>
+    <en>Order total</en>
+  </i>
+  <i id="AMOUNT_BEFORE_DISCOUNT">
+    <lt>Suma prieš nuolaidą</lt>
+    <en>Amount before discount</en>
+  </i>
+  <i id="SELLER">
+    <lt>Pardavėjas</lt>
+    <en>Seller</en>
+  </i>
+  <i id="PAY_METHOD">
+    <lt>Apmokėjimo būdas</lt>
+    <en>Payment method</en>
+  </i>
+  <i id="ORDERED_ITEMS">
+    <lt>Užsakytos prekės / paslaugos</lt>
+    <en>Ordered items / services</en>
+  </i>
+  <i id="VAT_TARIFF">
+    <lt>PVM tarifas</lt>
+    <en>VAT rate</en>
+  </i>
+  <i id="VAT_PART">
+    <lt>PVM dalis</lt>
+    <en>VAT part</en>
+  </i>
+  <i id="APPLY_DISCOUNT_CODE">
+    <lt>Pritaikyti nuolaidos kodą</lt>
+    <en>Apply discount code</en>
+  </i>
+  <i id="ENTER_DISCOUNT_CODE">
+    <lt>Įveskite nuolaidos kodą</lt>
+    <en>Enter discount code</en>
+  </i>
+  <i id="APPLY">
+    <lt>Pritaikyti</lt>
+    <en>Apply</en>
+  </i>
+  <i id="EXPIRED">
+    <lt>Baigėsi galiojimas</lt>
+    <en>Expired</en>
+  </i>
+</xml>

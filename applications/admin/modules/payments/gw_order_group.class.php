@@ -275,15 +275,19 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		if(!$coupon)
 			$coupon = $this->discountcode;
 		
-
-		
-		
 		$this->discount_id = $coupon->id;
-		$this->amount_coupon = (float)$coupon->limit_amount - (float)$coupon->used_amount;
+		$amount_total = (float)$this->amount_shipping + (float)$this->amount_items;
+		$coupon_used_by_this_order = $coupon->singleuse && $this->id && (int)$coupon->last_use_order_id === (int)$this->id && (float)$coupon->used_amount > 0;
 		
-		
-		
-		
+		if($coupon_used_by_this_order){
+			$this->amount_coupon = (float)$this->amount_coupon > 0
+				? (float)$this->amount_coupon
+				: min((float)$coupon->used_amount, (float)$coupon->limit_amount, $amount_total);
+		}elseif($coupon->singleuse){
+			$this->amount_coupon = (float)$coupon->limit_amount - (float)$coupon->used_amount;
+		}else{
+			$this->amount_coupon = (float)$coupon->limit_amount;
+		}
 		
 		if($this->amount_coupon < 0){
 			$this->amount_coupon = 0;
@@ -296,8 +300,6 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			return false;
 		
 		
-		$amount_total = (float)$this->amount_shipping + (float)$this->amount_items;
-		
 		//panaudot ne daugiau negu krepselio suma
 		if($amount_total < $this->amount_coupon)
 			$this->amount_coupon = $amount_total;
@@ -308,10 +310,12 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		$this->updateTotal();
 
 		
-		if($markAsUsed)
+		if($markAsUsed && !$coupon_used_by_this_order)
 		{
 			$coupon->fireEvent('BEFORE_CHANGES');
-			$coupon->used_amount = (float)$coupon->used_amount + (float)$this->amount_coupon;
+			if($coupon->singleuse)
+				$coupon->used_amount = (float)$coupon->used_amount + (float)$this->amount_coupon;
+			$coupon->use_count = (int)$coupon->use_count + 1;
 			$coupon->last_use_order_id = $this->id;
 			$coupon->updateChanged();
 		}
