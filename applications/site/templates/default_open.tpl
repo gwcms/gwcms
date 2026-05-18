@@ -87,7 +87,7 @@
                         <div class="input-group">
                             <input id="searchquery" type="text" class="form-control" placeholder="{GW::ln('/g/SEARCH')}..."  onkeydown="if(event.keyCode==13)$('#searchquerybtn').click();">
                             <span class="input-group-btn">
-                                <button id="searchquerybtn" class="btn btn-ar btn-primary" type="button" onclick="window.open('https://www.google.lt/search?q='+escape('site:ipmc.lt/artistdb ')+$('#searchquery').val());">Go!</button>
+                                <button id="searchquerybtn" class="btn btn-ar btn-primary" type="button" onclick="window.open('https://www.google.lt/search?q='+escape('site:{$smarty.server.HTTP_HOST} ')+$('#searchquery').val());">Go!</button>
                             </span>
                         </div><!-- /input-group -->
                     </form>
