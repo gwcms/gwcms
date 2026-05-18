@@ -60,7 +60,7 @@
 	
 	{function dl_actions_items}
 		
-		<a title="Cart items {$item->items_count}" class='gwcmsAction iframe-under-tr' href="{$m->buildUri("`$item->id`/orderitems", [clean=>2])}">
+		<a title="Cart items {$item->items_count}" class='gwcmsAction iframe-under-tr' href="{$m->buildUri("`$item->id`/orderitems", [clean=>2,nopview=>1,pageby=>-1])}">
 			<i class="fa fa-shopping-basket"></i> <span style='color:red;position:relative;left:-6px'>{$item->itmcnt}</span>
 		</a>	
 		

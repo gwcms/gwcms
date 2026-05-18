@@ -654,7 +654,7 @@ class Module_Shop extends GW_Public_Module
 			exit;
 		}
 			
-			
+		$type_deliverable = $item->typeObj ? (int)$item->typeObj->deliverable : 1;
 		
 		
 		$vals = [
@@ -665,7 +665,7 @@ class Module_Shop extends GW_Public_Module
 			//'context_obj_id'=>$user->id,
 			//'context_obj_type'=>'gw_customer'
 			
-			'deliverable'=>$this->feat('delivery') ? 10 : 0, //real item
+			'deliverable'=>($this->feat('delivery') && $type_deliverable) ? 10 : 0, //real item
 			'vat_group'=>$item->vat_group ? $item->vat_group : $this->config->vatgroup,
 			'link' =>$url
 		];
