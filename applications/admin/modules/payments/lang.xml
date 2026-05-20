@@ -432,6 +432,22 @@
     <i id="created_by"><lt>Sukūrė</lt><en>Created</en></i>
     <i id="change_transaction_id"><lt>Chg. TX</lt><en>Chg. TX</en></i>
   </i>
+  <i id="AMOUNT_BEFORE_DISCOUNT">
+    <lt>Suma prieš nuolaidą</lt>
+    <en>Amount before discount</en>
+  </i>
+  <i id="DISCOUNT">
+    <lt>Nuolaida</lt>
+    <en>Discount</en>
+  </i>
+  <i id="DISCOUNT_CODE">
+    <lt>Nuolaidos kodas</lt>
+    <en>Discount code</en>
+  </i>
+  <i id="COUPON">
+    <lt>Kuponas</lt>
+    <en>Coupon</en>
+  </i>
   <i id="FIELD_NOTE">
     <i id="import_buyer">
       <lt>Pirma būtina paieškoti PIRKĖJAS stulpelyje ar neturime jau egzistuojančio</lt>

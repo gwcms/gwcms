@@ -192,7 +192,7 @@
 	{include file="list/output_filters.tpl"}	
 
 
-	{if !$smarty.get.print_view && !$smarty.get.noPViews}
+	{if !$smarty.get.print_view && !$smarty.get.noPViews && !$smarty.get.nopview}
 		<div class="row gwViewsOrdersCont">
 			<div>
 				{if $views && count($views) > 1}

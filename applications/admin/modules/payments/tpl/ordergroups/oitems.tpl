@@ -75,14 +75,19 @@
 				<tr><th>{GW::ln('/M/orders/SHIPPING')}</th><td>{$order->amount_shipping} &euro;</td></tr>
 			{/if}
 			
+			{if $order->amount_discount || $order->amount_coupon}
+				{$amount_before_discount=$order->amount_total+$order->amount_discount+$order->amount_coupon}
+				<tr><th>{GW::l('/m/AMOUNT_BEFORE_DISCOUNT')}</th><td>{$amount_before_discount} &euro;</td></tr>
+			{/if}
+
 			{if $order->amount_discount}
-				<tr><th>{GW::ln('/M/orders/DISCOUNT')}</th><td>-{$order->amount_discount} &euro;</td></tr>
-				<tr><th>{GW::ln('/M/orders/DISCOUNT_CODE')}</th><td>{$order->discountcode->code} </td></tr>
+				<tr><th>{GW::l('/m/DISCOUNT')}</th><td>-{$order->amount_discount} &euro;</td></tr>
+				<tr><th>{GW::l('/m/DISCOUNT_CODE')}</th><td>{$order->discountcode->code} </td></tr>
 			{/if}
 			
 			{if $order->amount_coupon}
-				<tr><th>{GW::ln('/M/orders/COUPON')}</th><td>-{$order->amount_coupon} &euro;</td></tr>
-				<tr><th>{GW::ln('/M/orders/FIELDS/code')}</th><td>{$order->discountcode->code} </td></tr>
+				<tr><th>{GW::l('/m/COUPON')}</th><td>-{$order->amount_coupon} &euro;</td></tr>
+				<tr><th>{GW::l('/m/FIELDS/code')}</th><td>{$order->discountcode->code} </td></tr>
 			{/if}
 			
 			<tr><th>{GW::ln('/M/orders/ORDER_TOTAL')}</th><td>{$order->amount_total} &euro;</td></tr>

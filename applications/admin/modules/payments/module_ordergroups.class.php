@@ -29,12 +29,18 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$this->config =  new GW_Config($this->module_path[0].'/');	
 		
-		$this->addRedirRule('/^doMail|^viewMail/i',['mails','Module_Ordergroups_Mails']);	
+		$this->addRedirRule('/^doMail|^viewMail/i',['mails','Module_Ordergroups_Mails']);
 		$this->initFeatures();
-		
+
+		foreach(['user_username', 'user_name', 'user_surname', 'user_email'] as $field)
+			$this->extra_cols[$field] = 1;
+
+		if($this->feat('discountcode'))
+			$this->extra_cols['discount_code'] = 1;
+
 
 		if($this->feat('itax'))
-			$this->addRedirRule('/^doItax|^viewItax/i','itax');		
+			$this->addRedirRule('/^doItax|^viewItax/i','itax');
 		
 		if($this->feat('rivile'))
 			$this->addRedirRule('/^doRivile|^viewRivile/i','rivile');	
@@ -88,7 +94,10 @@ class Module_OrderGroups extends GW_Common_Module
 		$cfg['fields']['changetrack'] = 'L';
 		$cfg['fields']['item_lines'] = 'l';
 		$cfg['fields']['ledger_count'] = 'L';
-		
+
+		if($this->feat('discountcode'))
+			$cfg['fields']['discount_id'] = 'Lof';
+
 		if($this->feat('itax')){
 			$cfg["fields"]['itax_status_ex'] = 'Lof';
 		}
@@ -102,7 +111,21 @@ class Module_OrderGroups extends GW_Common_Module
 					
 		return $cfg;
 	}
-	
+
+	function __eventBeforeListParams(&$params)
+	{
+		$params['select'] = $params['select'] ?? 'a.*';
+		$params['select'] .= ', usr.username AS user_username, usr.name AS user_name, usr.surname AS user_surname, usr.email AS user_email';
+		$params['joins'] = $params['joins'] ?? [];
+		$params['joins'][] = ['left', 'gw_users AS usr', 'a.user_id = usr.id'];
+
+		if($this->feat('discountcode')){
+			$params['select'] .= ', dc.code AS discount_code';
+			$params['joins'][] = ['left', 'shop_discountcode AS dc', 'a.discount_id = dc.id'];
+		}
+	}
+
+
 	protected function buildPaymentTrackContext($order)
 	{
 		$user = $this->app->user;
@@ -453,9 +476,23 @@ class Module_OrderGroups extends GW_Common_Module
 		if($addusername){
 			$opts['select'] = 'a.*, user.username as username';
 			$opts['joins'][] = ['left', 'gw_users AS user', 'a.user_id = user.id'];
-			$opts['search_fields'][] = 'user.username';
+		}else{
+			$opts['joins'][] = ['left', 'gw_users AS user', 'a.user_id = user.id'];
 		}
-		
+
+		$opts['search_fields'][] = 'user.username';
+		$opts['search_fields'][] = 'user.name';
+		$opts['search_fields'][] = 'user.surname';
+		$opts['search_fields'][] = 'user.email';
+
+		if($this->feat('discountcode')){
+			$opts['select'] = isset($opts['select'])
+				? $opts['select'].', dc.code AS discount_code'
+				: 'a.*, dc.code AS discount_code';
+			$opts['joins'][] = ['left', 'shop_discountcode AS dc', 'a.discount_id = dc.id'];
+			$opts['search_fields'][] = 'dc.code';
+		}
+
 		return $opts;
 	}
 	
@@ -1000,7 +1037,11 @@ class Module_OrderGroups extends GW_Common_Module
 		
 		$log_entry_id = $_GET['log_entry_id'] ?? false;
 		$rcv_amount = $_GET['rcv_amount'] ?? false;
-		
+
+		if($order->discount_id && $order->discountcode && (int)$order->discountcode->last_use_order_id === (int)$order->id){
+			$order->setCoupon();
+		}
+
 		if($log_entry_id || isset($_GET['pay_type'])){
 			$order->pay_type = $_GET['pay_type'];
 		}
@@ -1012,6 +1053,18 @@ class Module_OrderGroups extends GW_Common_Module
 		}else{
 			$order->payment_status = 7;
 			$order->status = 4;// status for delivery tracking 4 - is accepted and processing
+		}
+
+		if((int)$order->payment_status === 7 && (float)$order->amount_coupon > 0 && $order->discount_id && $order->discountcode){
+			$coupon = $order->discountcode;
+			if((int)$coupon->last_use_order_id !== (int)$order->id){
+				$coupon->fireEvent('BEFORE_CHANGES');
+				if($coupon->singleuse)
+					$coupon->used_amount = (float)$coupon->used_amount + (float)$order->amount_coupon;
+				$coupon->use_count = (int)$coupon->use_count + 1;
+				$coupon->last_use_order_id = $order->id;
+				$coupon->updateChanged();
+			}
 		}
 
 		if(isset($_GET['paytest']))

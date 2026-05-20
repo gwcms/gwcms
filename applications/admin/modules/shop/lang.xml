@@ -44,6 +44,7 @@
     <i id="count">
       <lt>Produktų skaičius</lt>
     </i>
+    <i id="deliverable"><lt>Fizinė prekė</lt><en>Physical product</en></i>
     <i id="fields">Laukeliai</i>
     <i id="oldprice"><lt>Priešnuolaidinė kaina</lt><en>Price before discount</en></i>
     <i id="site_itemspp">Prekių per puslapį</i>

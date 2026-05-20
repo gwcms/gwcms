@@ -590,32 +590,25 @@ class GW_Debug_Helper
 				
 				if ($counter > 1) 
 				{
-					$MAX_LEN = 1000;
+					$MAX_LEN = 10000;
 					$fp = fopen($file, 'r');
 					$preview = fread($fp, $MAX_LEN);
 					fclose($fp);
 
-						// Trim for email body
-					
-					
 					if (filesize($file) >= $MAX_LEN) {
-					    $displayBody = $preview . "\n\n[... TRIMMED ... see attachment for full content ...]";
-				
-					    
-						$zip = new ZipArchive();
-						$zipFile = $file. '.zip';
-						$zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+						$displayBody = $preview . "\n\n[... TRIMMED ... see attachment for full content ...]";
 
+						$zip = new ZipArchive();
+						$zipFile = $file . '.zip';
+						$zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 						$zip->addFile($file, 'errors.html');
-						$zip->close();	
+						$zip->close();
 
 						$attachment = file_get_contents($zipFile);
 						unlink($zipFile);
-					    
-					    
 					} else {
-					    $displayBody = $preview;
-					}					
+						$displayBody = $preview;
+					}
 						
 
 					echo "flushing errors: $counter | ";
@@ -630,9 +623,9 @@ class GW_Debug_Helper
 					    'noAdminCopy' => 1,
 					    'noStoreDB' => 1
 					];
-					
+
 					if(isset($attachment))
-						$opts['attachments'] = ['errors.html.gz' => $attachment];
+						$opts['attachments'] = ['errors.html.zip' => $attachment];
 
 					GW_Mail_Helper::sendMail($opts);
 				}

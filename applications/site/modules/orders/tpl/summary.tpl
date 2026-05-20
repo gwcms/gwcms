@@ -233,25 +233,22 @@
 					{GW::ln('/m/DISCOUNT_CODE')}: {$order->discountcode->code} <a class="gwUrlMod" data-args='{ "act": "doUnsetDiscount" }'><i class="fa fa-times"></i></a>
 				</div>
 			{else}
-                  <!-- Accordion -->
-                  <div id="accordion-02" role="tablist" aria-multiselectable="true">
-                    <div id="accordion-02-heading-02" role="tab">
-                      <h5 class="g-font-weight-400 g-font-size-default mb-0">
-                        <a class="g-color-black g-text-underline--none--hover" href="#accordion-02-body-02" data-toggle="collapse" data-parent="#accordion-02" aria-expanded="false" aria-controls="accordion-02-body-02">{GW::ln('/m/APPLY_DISCOUNT_CODE')}
-                          <span class="ml-3 fa fa-angle-down"></span></a>
-                      </h5>
-                    </div>
-                    <div id="accordion-02-body-02" {if !$smarty.get.discountcode}class="collapse"{/if} role="tabpanel" aria-labelledby="accordion-02-heading-02">
-                      <div class="input-group rounded g-pt-15">
-                        <input id="discountCode" name="discountcode" 
-			       class="form-control g-brd-gray-light-v1 g-brd-right-none g-color-gray-dark-v3 g-placeholder-gray-dark-v3" 
-			       type="text" placeholder="{GW::ln('/m/ENTER_DISCOUNT_CODE')}" value="{$smarty.get.discountcode}">
-                        <span class="input-group-append g-brd-gray-light-v1 g-bg-white">
-				<button class="btn u-btn-primary" id="applyDiscount" disabled="disabled">{GW::ln('/m/APPLY')}</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+				<div>
+					<button type="button" class="btn btn-link g-color-black g-pa-0 g-text-underline--none--hover" onclick="$(this).next('.js-cart-discount-form').stop(true, true).slideToggle(120); return false;">
+						{GW::ln('/m/APPLY_DISCOUNT_CODE')}
+						<span class="ml-3 fa fa-angle-down"></span>
+					</button>
+					<div class="js-cart-discount-form" style="{if !$smarty.get.discountcode}display:none{/if}">
+						<div class="input-group rounded g-pt-15">
+							<input id="discountCode" name="discountcode"
+							       class="form-control g-brd-gray-light-v1 g-brd-right-none g-color-gray-dark-v3 g-placeholder-gray-dark-v3"
+							       type="text" placeholder="{GW::ln('/m/ENTER_DISCOUNT_CODE')}" value="{$smarty.get.discountcode}">
+							<span class="input-group-append g-brd-gray-light-v1 g-bg-white">
+								<button class="btn u-btn-primary" id="applyDiscount" disabled="disabled">{GW::ln('/m/APPLY')}</button>
+							</span>
+						</div>
+					</div>
+				</div>
 			
 	<script>
 

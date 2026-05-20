@@ -77,6 +77,7 @@ class Module_prodtypes extends Module_GenericClassificator
 		
 		$cfg['inputs']['title']=['type'=>'text'];	
 		$cfg['inputs']['aka']=['type'=>'text'];	
+		$cfg['inputs']['deliverable']=['type'=>'bool'];	
 		$cfg['inputs']['fields']=['type'=>'multiselect', 'options'=>$this->options['fields']];	
 		
 		

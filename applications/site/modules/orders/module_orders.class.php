@@ -1,4 +1,6 @@
 <?php
+if(!class_exists('Shop_DiscountCode', false))
+	require_once __DIR__.'/../../../admin/modules/payments/shop_discountcode.class.php';
 
 class Module_Orders extends GW_Public_Module
 {
@@ -1278,6 +1280,10 @@ class Module_Orders extends GW_Public_Module
 		if($discode = $_POST['discountcode'] ?? false){
 			
 			$curdate = date('Y-m-d');
+			$applicatable_prods = [];
+			//dovanu kuponai
+			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND (singleuse=0 OR limit_amount-used_amount > 0) ', $discode]);
+
 			//nuolaidu kuponai
 			$dc = Shop_DiscountCode::singleton()->find([
 			    'code=? AND active=1 AND user_id=0 AND used=0 AND valid_from<=? AND expires>=?', $discode, $curdate, $curdate
@@ -1296,7 +1302,8 @@ class Module_Orders extends GW_Public_Module
 				
 				
 				if(!$applicatable_prods){
-					$this->setError(GW::ln('/m/DISCOUNT_CODE_IS_CORRECT_BUT_NO_PRODS_APPLICATABLE'));
+					if(!$coupon)
+						$this->setError(GW::ln('/m/DISCOUNT_CODE_IS_CORRECT_BUT_NO_PRODS_APPLICATABLE'));
 				}else{
 					$order->discount_id = $dc->id;
 					$order->updateChanged();
@@ -1311,11 +1318,6 @@ class Module_Orders extends GW_Public_Module
 				}				
 			}
 			
-			
-			//dovanu kuponai 
-			$coupon = Shop_DiscountCode::singleton()->find(['code=? AND active=1 AND products="" AND limit_amount-used_amount > 0 ', $discode]);
-
-
 			if($coupon){
 				$order->setCoupon($coupon);
 			}
@@ -1365,7 +1367,7 @@ class Module_Orders extends GW_Public_Module
 			*/
 							
 			
-			if(!isset($applicatable_prods[$order_itm->obj_id]) || $order_itm->obj_type!=$discountcode->obj_type){
+			if(!$discountcode || !isset($applicatable_prods[$order_itm->obj_id]) || $order_itm->obj_type!=$discountcode->obj_type){
 				
 				//reset discounts
 				$order_itm->discount = 0;
@@ -1389,17 +1391,129 @@ class Module_Orders extends GW_Public_Module
 		$order->updateChanged();
 	}	
 	
+	function redirectAfterDiscountChange($order)
+	{
+		$return_url = $_POST['return_url'] ?? $_GET['return_url'] ?? false;
+		if($return_url && substr($return_url, 0, 1) == '/' && substr($return_url, 0, 2) != '//')
+			Navigator::jump($return_url);
+
+		if(!$order || !$order->id)
+			$this->app->jump('direct/orders/orders');
+
+		$args = ['orderid'=>$order->id, 'id'=>$order->id];
+
+		if(isset($_GET['payselect']))
+			$args['payselect'] = $_GET['payselect'];
+
+		$this->app->jump('direct/orders/orders', $args);
+	}
+
+	function canChangeOrderDiscount($order)
+	{
+		if(!$this->feat('discountcode')){
+			$this->setError('Discount code feature is disabled');
+			return false;
+		}
+
+		if(!$order || !$order->id)
+			return false;
+
+		if(!$order->active){
+			$this->setError('Order is canceled');
+			return false;
+		}
+
+		if($order->payment_status==7){
+			$this->setError('Discount code can not be changed for paid orders');
+			return false;
+		}
+
+		return true;
+	}
+
+	function recalcOrderAfterDiscountChange($order)
+	{
+		$order->updateTotal();
+
+		if(method_exists($order, 'recalcPaymentLedger'))
+			$order->recalcPaymentLedger();
+		else
+			$order->updateChanged();
+	}
+
+	function finalizeCouponIfBalanceCovered($order)
+	{
+		if(!$order->amount_coupon || !$order->discount_id)
+			return false;
+
+		if((float)$order->payd_amount <= 0)
+			return false;
+
+		if((float)$order->balance_amount > 0)
+			return false;
+
+		if((float)$order->balance_amount < 0)
+			$order->amount_coupon = round((float)$order->amount_coupon + (float)$order->balance_amount, 2);
+
+		if($order->amount_coupon < 0)
+			$order->amount_coupon = 0;
+
+		$this->recalcOrderAfterDiscountChange($order);
+
+		if((float)$order->balance_amount > 0)
+			return false;
+
+		$coupon = $order->discountcode;
+		$coupon->fireEvent('BEFORE_CHANGES');
+		if($coupon->singleuse)
+			$coupon->used_amount = (float)$coupon->used_amount + (float)$order->amount_coupon;
+		$coupon->use_count = (int)$coupon->use_count + 1;
+		$coupon->last_use_order_id = $order->id;
+		$coupon->updateChanged();
+
+		return true;
+	}
 	
+	function doApplyDiscount()
+	{
+		$this->userRequired();
+		$order = $this->getOrder(true);
+
+		if(!$this->canChangeOrderDiscount($order))
+			return $this->redirectAfterDiscountChange($order);
+
+		if($order->discount_id){
+			$this->setError('Discount code is already set');
+			return $this->redirectAfterDiscountChange($order);
+		}
+
+		$this->recalcOrderAfterDiscountChange($order);
+		$this->applyDiscountCode($order);
+		$this->recalcOrderAfterDiscountChange($order);
+		$this->finalizeCouponIfBalanceCovered($order);
+
+		$this->redirectAfterDiscountChange($order);
+	}
+
+
 	function doUnsetDiscount()
 	{
 		$this->userRequired();
-		$order = $this->doInitCart();
-		
+		$order = ($_GET['id'] ?? false) ? $this->getOrder(true) : $this->doInitCart();
+
+		if(!$order || !$order->id)
+			return $this->redirectAfterDiscountChange($order);
+
 		if(!$order->discount_id){
-			
+
 			$this->setError("Discount not set");
-			$this->app->jump();
-		}elseif(!$order->open){
+			if($_GET['id'] ?? false)
+				$this->redirectAfterDiscountChange($order);
+			else
+				$this->app->jump();
+		}elseif(!$this->canChangeOrderDiscount($order)){
+			$this->redirectAfterDiscountChange($order);
+		}elseif(!$order->open && !($_GET['id'] ?? false)){
 			$this->setError("Cant unset discount order is closed");
 			$this->app->jump();
 		}else{
@@ -1410,7 +1524,7 @@ class Module_Orders extends GW_Public_Module
 			
 			$this->setOrderedItemPrices($order);
 			
-			$order->updateTotal();
+			$this->recalcOrderAfterDiscountChange($order);
 			
 			$dc->user_id = 0;
 			$dc->used = 0;
@@ -1419,7 +1533,10 @@ class Module_Orders extends GW_Public_Module
 			
 			
 			$this->setMessage(GW::ln('/m/DISCOUNT_CODE_UNSET_SUCCESS'));
-			$this->app->jump();
+			if($_GET['id'] ?? false)
+				$this->redirectAfterDiscountChange($order);
+			else
+				$this->app->jump();
 		}
 	}	
 	

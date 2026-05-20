@@ -51,22 +51,59 @@ class Module_GGLogin extends GW_Public_Module
 	
 	function viewLoginAuthGw()
 	{
-		$req_id = $_SESSION['auth_gw_req_id'];
-		$dat = file_get_contents(GW::s('GW_GG_SERVICE').'?get_response='.$req_id);
-		$dat = json_decode($dat);
+		$req_id = $_SESSION['auth_gw_req_id'] ?? '';
+		if (!$req_id)
+			return $this->authGwUnexpectedReply('missing request id', $req_id, '');
+
+		$url = GW::s('GW_GG_SERVICE').'?get_response='.$req_id;
+		$raw = @file_get_contents($url);
+		if ($raw === false)
+			return $this->authGwUnexpectedReply('empty or unreadable response', $req_id, '', $url);
+
+		$dat = json_decode($raw);
+		if (!$dat || !is_object($dat))
+			return $this->authGwUnexpectedReply('invalid json: '.json_last_error_msg(), $req_id, $raw, $url);
 		
-		if($dat->error){
+		if($dat->error ?? false){
 			$this->setError(GW::ln("/M/users/LOGIN_FAILED"). ': '. $dat->error);
 			unset($_SESSION['3rdAuthUser']);
 			
 			$this->app->jump('direct/users/users/login');
-		}else{
-			$dat->type='google';
-			$_SESSION['3rdAuthUser'] = $dat;
-		
-		
-			$this->app->jump('direct/users/users/signInOrRegister');
 		}
+
+		if (empty($dat->id))
+			return $this->authGwUnexpectedReply('missing user id in response', $req_id, $raw, $url);
+
+		$dat->type='google';
+		$_SESSION['3rdAuthUser'] = $dat;
+	
+	
+		$this->app->jump('direct/users/users/signInOrRegister');
+	}
+
+	function authGwUnexpectedReply($reason, $req_id, $raw, $url='')
+	{
+		unset($_SESSION['3rdAuthUser']);
+
+		$mail = [
+			'subject' => GW::s('PROJECT_NAME').' google authorisation reply unexpected format',
+			'body' => print_r([
+				'reason' => $reason,
+				'request_id' => $req_id,
+				'url' => $url,
+				'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+				'referer' => $_SERVER['HTTP_REFERER'] ?? '',
+				'ip' => GW::ip(),
+				'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+				'raw_response' => mb_substr((string)$raw, 0, 20000),
+			], true),
+			'noAdminCopy' => 1,
+			'noStoreDB' => 1,
+		];
+		GW_Mail_Helper::sendMailDeveloper($mail);
+
+		$this->setError(GW::ln("/M/users/LOGIN_FAILED"));
+		$this->app->jump('direct/users/users/login');
 	}
 
 

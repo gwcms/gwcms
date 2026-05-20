@@ -157,7 +157,8 @@ class Module_Usr extends GW_Common_Module
 	function getEnabledFields()
 	{
 		$availfields = explode(',',$this->config->available_fields);
-		$enabled =  array_flip(json_decode($this->config->fields_enabled));
+		$fieldsEnabled = json_decode($this->config->fields_enabled, true);
+		$enabled = is_array($fieldsEnabled) ? array_flip($fieldsEnabled) : [];
 		
 		foreach($availfields as $field)
 			$enabled[$field] = isset($enabled[$field]);

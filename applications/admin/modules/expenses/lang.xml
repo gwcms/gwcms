@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+	<i id="ROOT">Šakninis</i>
+	<i id="FIELDS">
+		<i id="apikey">OpenAI API raktas</i>
+		<i id="model">OpenAI modelis</i>
+		<i id="food_coefficient">Maisto koeficientas</i>
+		<i id="housing_coefficient">Būsto koeficientas</i>
+		<i id="other_coefficient">Kitų išlaidų koeficientas</i>
+		<i id="prompt">API užklausa</i>
+		<i id="image">Čekis</i>
+		<i id="file">Failas</i>
+		<i id="parent_id">Pirminis įrašas</i>
+		<i id="source_id">Šaltinio įrašas</i>
+		<i id="expense_date">Išlaidų data</i>
+		<i id="expense_month">Mėnuo</i>
+		<i id="title">Antraštė</i>
+		<i id="amount">Suma</i>
+		<i id="type">Tipas</i>
+		<i id="coefficient">Koeficientas</i>
+		<i id="child_amount">Vaiko suma</i>
+		<i id="status">Statusas</i>
+		<i id="note">Pastaba</i>
+		<i id="extra">Extra</i>
+		<i id="api_response">API atsakymas</i>
+	</i>
+	<i id="MAP">
+		<i id="title">Išlaidos</i>
+		<i id="info">
+			<i id="icon"><![CDATA[<i class="fa fa-money"></i>]]></i>
+		</i>
+		<i id="childs">
+			<i id="items">
+				<i id="title">Išlaidos</i>
+				<i id="info">
+					<i id="icon"><![CDATA[<i class="fa fa-list"></i>]]></i>
+					<i id="model">GW_Expense</i>
+				</i>
+			</i>
+			<i id="config">
+				<i id="title">Nustatymai</i>
+				<i id="info">
+					<i id="icon"><![CDATA[<i class="fa fa-cog"></i>]]></i>
+				</i>
+			</i>
+		</i>
+	</i>
+</xml>

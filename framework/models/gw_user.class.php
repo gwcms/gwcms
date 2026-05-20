@@ -129,6 +129,9 @@ class GW_User extends GW_Composite_Data_Object
 		if ($uri === '')
 			return false;
 
+		if (strpos($uri, 'doLoadMessages') !== false)
+			return false;
+
 		$parts = parse_url($uri);
 		$path = (string)($parts['path'] ?? '');
 		$query = [];
