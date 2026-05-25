@@ -1,1 +1,0 @@
-ALTER TABLE `gw_site_blocks` ADD `admnote` VARCHAR(50) NOT NULL AFTER `name`;

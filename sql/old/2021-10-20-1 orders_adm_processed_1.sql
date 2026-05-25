@@ -1,1 +1,0 @@
-ALTER TABLE `gw_order_item` ADD `processed` TINYINT NOT NULL AFTER `payd`;

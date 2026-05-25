@@ -1,21 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.1deb3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 08, 2026 at 01:52 AM
--- Server version: 8.0.45-0ubuntu0.22.04.1
--- PHP Version: 8.2.30
+-- Host: localhost:3306
+-- Generation Time: May 25, 2026 at 11:59 PM
+-- Server version: 8.0.45-0ubuntu0.24.04.1
+-- PHP Version: 8.4.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `artistdb`
@@ -27,21 +21,20 @@ SET time_zone = "+00:00";
 -- Table structure for table `gw_chat_attachments`
 --
 
-DROP TABLE IF EXISTS `gw_chat_attachments`;
 CREATE TABLE `gw_chat_attachments` (
   `id` bigint NOT NULL,
   `message_id` bigint NOT NULL DEFAULT '0',
   `room_id` int NOT NULL DEFAULT '0',
   `uploader_id` int NOT NULL DEFAULT '0',
-  `storage` enum('local','remote') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'local',
-  `kind` enum('image','file') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'file',
-  `original_filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `stored_filename` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `relpath` varchar(700) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mime` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `storage` enum('local','remote') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'local',
+  `kind` enum('image','file') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'file',
+  `original_filename` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `stored_filename` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `relpath` varchar(700) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `mime` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `size` int UNSIGNED NOT NULL DEFAULT '0',
-  `public_url` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `thumb_url` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `public_url` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `thumb_url` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
   `insert_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -53,7 +46,6 @@ CREATE TABLE `gw_chat_attachments` (
 -- Table structure for table `gw_chat_events`
 --
 
-DROP TABLE IF EXISTS `gw_chat_events`;
 CREATE TABLE `gw_chat_events` (
   `id` bigint NOT NULL,
   `room_id` int NOT NULL,
@@ -70,13 +62,12 @@ CREATE TABLE `gw_chat_events` (
 -- Table structure for table `gw_chat_messages`
 --
 
-DROP TABLE IF EXISTS `gw_chat_messages`;
 CREATE TABLE `gw_chat_messages` (
   `id` bigint NOT NULL,
   `room_id` int NOT NULL,
   `sender_id` int NOT NULL DEFAULT '0',
   `message` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `source` enum('web','backend','system','ai') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'web',
+  `source` enum('web','backend','system','ai') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'web',
   `mentions_json` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `reply_to_message_id` bigint NOT NULL DEFAULT '0',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
@@ -90,7 +81,6 @@ CREATE TABLE `gw_chat_messages` (
 -- Table structure for table `gw_chat_message_reactions`
 --
 
-DROP TABLE IF EXISTS `gw_chat_message_reactions`;
 CREATE TABLE `gw_chat_message_reactions` (
   `id` bigint NOT NULL,
   `message_id` bigint NOT NULL,
@@ -107,7 +97,6 @@ CREATE TABLE `gw_chat_message_reactions` (
 -- Table structure for table `gw_chat_rooms`
 --
 
-DROP TABLE IF EXISTS `gw_chat_rooms`;
 CREATE TABLE `gw_chat_rooms` (
   `id` int NOT NULL,
   `type` enum('private','group') NOT NULL,
@@ -130,7 +119,6 @@ CREATE TABLE `gw_chat_rooms` (
 -- Table structure for table `gw_chat_room_users`
 --
 
-DROP TABLE IF EXISTS `gw_chat_room_users`;
 CREATE TABLE `gw_chat_room_users` (
   `id` int NOT NULL,
   `room_id` int NOT NULL,
@@ -249,7 +237,3 @@ ALTER TABLE `gw_chat_rooms`
 ALTER TABLE `gw_chat_room_users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

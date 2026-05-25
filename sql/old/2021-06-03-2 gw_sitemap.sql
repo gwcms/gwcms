@@ -1,1 +1,0 @@
-ALTER TABLE `gw_sitemap` ADD `icon` VARCHAR(70) NOT NULL AFTER `access`;

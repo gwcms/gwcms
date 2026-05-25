@@ -1,1 +1,0 @@
-ALTER TABLE  `gw_adm_sitemap` ADD  `orders` TEXT NOT NULL AFTER  `views` ;

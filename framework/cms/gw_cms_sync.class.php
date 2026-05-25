@@ -311,6 +311,15 @@ class GW_CMS_Sync
 	{
 		$t= new GW_Timer;
 
+		if($this->params['type']=='remove'){
+			$this->filterConfirmedRemoves($changed_files);
+			
+			if(!$changed_files['remove']){
+				$this->out("No files selected for removal. Sync time was not updated.");
+				return $this->destDir;
+			}
+		}
+
 		$destdir = $this->destDir;
 		$sourcedir = $this->sourceDir;
 		
@@ -347,6 +356,11 @@ class GW_CMS_Sync
 		if($this->params['type']=='remove'){
 			$rm_cmds = '';
 			foreach($changed_files['remove'] as $rmfile){
+				if(!is_file($destdir.$rmfile)){
+					echo "Skip missing file: $rmfile\n";
+					continue;
+				}
+				
 				unlink($destdir.$rmfile);
 				$rm_cmds.="rm $rmfile\n";
 			}
@@ -375,6 +389,38 @@ class GW_CMS_Sync
 		$this->storeSyncTime();
 
 		return $destdir;
+	}
+
+	function filterConfirmedRemoves(&$changed_files)
+	{
+		if(empty($this->params['confirm_remove'])){
+			$changed_files['remove'] = [];
+			$this->out("No remove confirmation received. No files will be removed.");
+			return;
+		}
+		
+		$confirmed = $this->params['remove_files'] ?? [];
+		
+		if(is_string($confirmed))
+			$confirmed = [$confirmed];
+		
+		if(!is_array($confirmed))
+			$confirmed = [];
+		
+		$allowed = array_flip($changed_files['remove']);
+		$filtered = [];
+		
+		foreach($confirmed as $file){
+			$file = (string)$file;
+			
+			if(isset($allowed[$file]))
+				$filtered[] = $file;
+			else
+				$this->out("Skip unlisted remove confirmation: $file");
+		}
+		
+		$changed_files['remove'] = array_values(array_unique($filtered));
+		$this->out("Confirmed removes: ".count($changed_files['remove']));
 	}
 
 
@@ -545,6 +591,8 @@ class GW_CMS_Sync
 			$this->params['proj'] = $res->proj;
 			$this->params['s'] = true;
 			$this->params['type'] = $res->type;
+			$this->params['confirm_remove'] = $res->confirm_remove ?? null;
+			$this->params['remove_files'] = $res->remove_files ?? [];
 			
 			$this->setDirection($res->dir == '1');
 			$this->actSync();			
@@ -579,5 +627,39 @@ class GW_CMS_Sync
 			$url = Navigator::buildURI(false, ['filediff'=>$path]+$addpathopt+$_GET);
 			$path = "<a href='$url'>$path</a>";
 		}
+	}
+
+	function removeConfirmForm($proj, $dir, $files)
+	{
+		$cnt = count($files);
+		
+		if(!$cnt)
+			return;
+		
+		$uid = 'sync_rm_'.md5($proj.'_'.$dir.'_'.implode('|', $files));
+		$projEsc = htmlspecialchars($proj, ENT_QUOTES, 'UTF-8');
+		$action = htmlspecialchars(Navigator::buildURI(false, ['proj'=>$proj, 'dir'=>$dir, 'act'=>'doSync', 'type'=>'remove']), ENT_QUOTES, 'UTF-8');
+		
+		echo "
+			<form id='{$uid}' method='post' action='{$action}' style='margin:8px 0 0 0; padding:8px; border:1px solid #ccc; display:inline-block'>
+				<input type='hidden' name='proj' value='{$projEsc}'>
+				<input type='hidden' name='dir' value='".(int)$dir."'>
+				<input type='hidden' name='act' value='doSync'>
+				<input type='hidden' name='type' value='remove'>
+				<input type='hidden' name='confirm_remove' value='1'>
+				<b>remove($cnt)</b>
+				<button type='button' onclick=\"document.querySelectorAll('#{$uid} input[type=checkbox]').forEach(function(el){el.checked=true})\">select all</button>
+				<button type='button' onclick=\"document.querySelectorAll('#{$uid} input[type=checkbox]').forEach(function(el){el.checked=false})\">clear</button>
+				<button type='submit'>remove selected</button>
+				<div style='margin-top:6px; max-height:260px; overflow:auto; font-family:monospace; white-space:nowrap'>";
+		
+		foreach($files as $file){
+			$fileEsc = htmlspecialchars($file, ENT_QUOTES, 'UTF-8');
+			echo "<label style='display:block'><input type='checkbox' name='remove_files[]' value='{$fileEsc}'> {$fileEsc}</label>";
+		}
+		
+		echo "
+				</div>
+			</form>";
 	}
 }

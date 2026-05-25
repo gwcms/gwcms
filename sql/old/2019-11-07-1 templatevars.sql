@@ -1,1 +1,0 @@
-ALTER TABLE `gw_template_vars` ADD `multilang` TINYINT NOT NULL DEFAULT '1' AFTER `params`;

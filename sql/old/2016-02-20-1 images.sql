@@ -1,1 +1,0 @@
-ALTER TABLE `gw_images` ADD `v` INT NOT NULL COMMENT 'file modification version' AFTER `size`;

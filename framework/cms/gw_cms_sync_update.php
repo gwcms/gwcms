@@ -43,12 +43,12 @@ if(isset($_SERVER['HTTP_HOST'])){
 		exit;
 	}
 	
-	if(isset($_GET['act']) && $_GET['act']=='doSync'){
+	if(isset($_REQUEST['act']) && $_REQUEST['act']=='doSync'){
 		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
 		$sudouser = 'wdm';
 		
 	
-		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_GET));
+		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_REQUEST));
 		
 		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
 		d::ldump("$cmd\n:$res");
@@ -87,16 +87,18 @@ if(isset($_SERVER['HTTP_HOST'])){
 		
 		$core = GW::s('SYNC_MODULE') ? GW::s('SYNC_MODULE') : 'gwcms';
 		
-		if($iCp || $iRm)
+		if($iCp || $iRm){
 			echo "<br><br><b>{$_GET['proj']}</b> &raquo;&raquo;&raquo; <b>$core</b> 
-				<a href='?proj={$_GET['proj']}&dir=1&act=doSync&type=copy'>copy($iCp)</a> 
-				<a href='?proj={$_GET['proj']}&dir=1&act=doSync&type=remove'>remove($iRm)</a>";
+				<a href='?proj={$_GET['proj']}&dir=1&act=doSync&type=copy'>copy($iCp)</a>";
+			$sync->removeConfirmForm($_GET['proj'], 1, $list['imp']['remove']);
+		}
 	
 		
-		if($eCp || $eRm)
-		echo "<br><br><b>$core</b> &raquo;&raquo;&raquo; <b>{$_GET['proj']}</b> 
-			<a href='?proj={$_GET['proj']}&dir=0&act=doSync&type=copy'>copy($eCp)</a> 
-				<a href='?proj={$_GET['proj']}&dir=0&act=doSync&type=remove'>remove($eRm)</a>";
+		if($eCp || $eRm){
+			echo "<br><br><b>$core</b> &raquo;&raquo;&raquo; <b>{$_GET['proj']}</b> 
+				<a href='?proj={$_GET['proj']}&dir=0&act=doSync&type=copy'>copy($eCp)</a>";
+			$sync->removeConfirmForm($_GET['proj'], 0, $list['exp']['remove']);
+		}
 		
 		exit;
 	}
@@ -121,4 +123,3 @@ if(!isset($argv[1]))
 
 $sync = new GW_CMS_Sync();
 $sync->process($argv);
-

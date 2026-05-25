@@ -1,2 +1,0 @@
-ALTER TABLE `gw_files` ADD PRIMARY KEY ( `id` ) ;
-ALTER TABLE `gw_files` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ;

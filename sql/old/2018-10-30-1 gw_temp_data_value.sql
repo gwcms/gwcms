@@ -1,1 +1,0 @@
-ALTER TABLE `gw_temp_data` CHANGE `value` `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

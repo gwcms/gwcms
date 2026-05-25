@@ -1,1 +1,0 @@
-ALTER TABLE `gw_template_vars` ADD `params` TEXT NOT NULL AFTER `note` ;

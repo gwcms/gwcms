@@ -1,1 +1,0 @@
-ALTER TABLE `gw_sites` ADD `admin_host` VARCHAR(100) NOT NULL AFTER `hosts`;

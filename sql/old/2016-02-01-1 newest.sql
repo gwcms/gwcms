@@ -1,1 +1,0 @@
-ALTER TABLE  `gw_tasks` ADD  `newest` TINYINT NOT NULL AFTER  `finish_time` ;
