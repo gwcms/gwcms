@@ -285,11 +285,13 @@ function gw_deploy_http_conf_sites()
 	$mainHost = gw_deploy_http_conf_main_host();
 	$isTestEnv = gw_deploy_http_conf_is_test_env();
 	$isDevEnv = gw_deploy_http_conf_is_dev_env();
+	$isDevSsl = $isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/DEV_SSL', false);
+	$isLocalDevEnv = $isDevEnv && !$isDevSsl;
 	$documentRoot = rtrim(GW::s('DEPLOY_DIR') ?: GW::s('DIR/ROOT'), '/');
 	$wsHost = GW::s('CHATWS/HOST') ?: '127.0.0.1';
 	$wsPort = (int)(GW::s('CHATWS/PORT') ?: 9051);
 	$wsPath = GW::s('CHATWS/PATH') ?: '/ws';
-	$wildcardEnabled = !$isTestEnv && !$isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/WILDCARD_ENABLED', false);
+	$wildcardEnabled = !$isTestEnv && !$isLocalDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/WILDCARD_ENABLED', false);
 	$mainCertName = $isTestEnv
 		? gw_deploy_http_conf_setting('DEPLOY_HTTP/TEST_CERT_NAME', 'voro1wildcard')
 		: gw_deploy_http_conf_setting('DEPLOY_HTTP/MAIN_CERT_NAME', $mainHost);
@@ -327,7 +329,7 @@ function gw_deploy_http_conf_sites()
 		$serverName = gw_deploy_http_conf_test_host($mainHost);
 		$mainHosts = array_merge(gw_deploy_http_conf_add_test_aliases($originalHosts), gw_deploy_http_conf_add_only_localhost_aliases($originalHosts));
 		$mainSslHosts = gw_deploy_http_conf_add_test_aliases($originalHosts);
-	} elseif ($isDevEnv) {
+	} elseif ($isLocalDevEnv) {
 		$serverName = $mainHost . '.localhost';
 		$mainHosts = gw_deploy_http_conf_add_only_localhost_aliases($originalHosts);
 		$mainSslHosts = [];
@@ -377,7 +379,7 @@ function gw_deploy_http_conf_sites()
 			'aliases' => $mainHosts,
 			'ssl_aliases' => $mainSslHosts,
 			'log_prefix' => GW::s('PROJECT_NAME'),
-			'ports' => $isDevEnv ? [80] : [443, 80],
+			'ports' => $isLocalDevEnv ? [80] : [443, 80],
 			'ssl' => [
 				'cert' => gw_deploy_http_conf_cert_file($mainCertName, 'cert.pem'),
 				'key' => gw_deploy_http_conf_cert_file($mainCertName, 'privkey.pem'),
@@ -402,8 +404,9 @@ function gw_deploy_http_conf_certbot_configs()
 	$mainHost = gw_deploy_http_conf_main_host();
 	$isTestEnv = gw_deploy_http_conf_is_test_env();
 	$isDevEnv = gw_deploy_http_conf_is_dev_env();
+	$isDevSsl = $isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/DEV_SSL', false);
 
-	if ($isDevEnv)
+	if ($isDevEnv && !$isDevSsl)
 		return [];
 	
 	$mainCertName = $isTestEnv

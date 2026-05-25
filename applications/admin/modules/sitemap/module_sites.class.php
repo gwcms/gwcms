@@ -25,10 +25,24 @@ class Module_Sites extends GW_Common_Module
 		if (!$this->app->user->isRoot())
 			return $this->jump();
 		
+		$form = [
+			'fields' => [
+				'ssl' => [
+					'type' => 'select',
+					'options' => ['no' => 'No', 'yes' => 'Yes'],
+					'empty_option' => 1,
+					'required' => 1,
+				],
+			],
+		];
+		
+		if (!($answers = $this->prompt($form, 'Kurti / atnaujinti SSL certifikatus?', ['method' => 'post'])))
+			return false;
+		
 		$path = GW::s('DIR/ROOT') . "applications/cli/sudogate.php";
-		$sudouser = GW::s('PROJECT_ENVIRONMENT') == GW_ENV_DEV ? 'wdm' : 'root';
+		$sudouser = 'root';
 		$logfile = GW::s('DIR/LOGS') . 'sudogate_http_conf_ssl_' . date('Ymd_His') . '.log';
-		$cmd = "sudo -S -u $sudouser /usr/bin/php " . escapeshellarg($path) . " update-http-conf-and-ssl --notify-user=" . (int)$this->app->user->id;
+		$cmd = "sudo -S -u $sudouser /usr/bin/php " . escapeshellarg($path) . " update-http-conf-and-ssl --notify-user=" . (int)$this->app->user->id . " --ssl=" . escapeshellarg($answers['ssl']);
 		
 		shell_exec($cmd . " > " . escapeshellarg($logfile) . " 2>&1 &");
 		

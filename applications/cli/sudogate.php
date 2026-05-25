@@ -122,6 +122,9 @@ register_shutdown_function(function () {
 
 function sudogate_update_http_conf($args)
 {
+	if (sudogate_arg_value($args, '--ssl') === 'yes')
+		GW::s('DEPLOY_HTTP/DEV_SSL', 1);
+	
 	$root = rtrim(GW::s('DIR/ROOT'), '/') . '/';
 	$source = $root . 'deploy/http.conf';
 	$builder = $root . 'deploy/http_conf.php';
@@ -213,6 +216,9 @@ function sudogate_update_http_conf($args)
 
 function sudogate_setup_ssl($args)
 {
+	if (sudogate_arg_value($args, '--ssl') === 'yes')
+		GW::s('DEPLOY_HTTP/DEV_SSL', 1);
+	
 	$root = rtrim(GW::s('DIR/ROOT'), '/') . '/';
 	$builder = $root . 'deploy/http_conf.php';
 	$only = sudogate_arg_value($args, '--cert');
@@ -285,11 +291,13 @@ function sudogate_setup_ssl($args)
 function sudogate_update_http_conf_and_ssl($args)
 {
 	$notifyUserId = (int)sudogate_arg_value($args, '--notify-user', 0);
+	$ssl = sudogate_arg_value($args, '--ssl', 'no');
+	$sslArg = ' --ssl=' . escapeshellarg($ssl);
 	$self = __FILE__;
 	$php = GW::s('PHP_CLI_LOCATION') ?: '/usr/bin/php';
 	$commands = [
-		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' setup-ssl',
-		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' update-http-conf',
+		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' setup-ssl' . $sslArg,
+		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' update-http-conf' . $sslArg,
 	];
 	
 	$ok = true;
