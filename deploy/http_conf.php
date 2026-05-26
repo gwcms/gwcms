@@ -135,6 +135,18 @@ function gw_deploy_http_conf_test_suffix()
 	return trim((string)gw_deploy_http_conf_setting('DEPLOY_HTTP/TEST_SUFFIX', '1.voro.lt'), '.');
 }
 
+function gw_deploy_http_conf_xweb_suffix()
+{
+	return trim((string)gw_deploy_http_conf_setting('DEPLOY_HTTP/XWEB_SUFFIX', '1.xweb.lt'), '.');
+}
+
+function gw_deploy_http_conf_is_xweb_host($host)
+{
+	$suffix = gw_deploy_http_conf_xweb_suffix();
+
+	return $host === $suffix || substr($host, -(strlen($suffix) + 1)) === '.' . $suffix;
+}
+
 function gw_deploy_http_conf_test_host($host)
 {
 	$host = strtolower(trim((string)$host));
@@ -193,6 +205,23 @@ function gw_deploy_http_conf_multisite_hosts()
 		$hosts = gw_deploy_http_conf_fallback_site_hosts();
 	
 	return $hosts;
+}
+
+function gw_deploy_http_conf_localhost_hosts()
+{
+	$hosts = [gw_deploy_http_conf_main_host()];
+
+	foreach (gw_deploy_http_conf_multisite_hosts() as $host) {
+		if (gw_deploy_http_conf_is_dev_host($host))
+			continue;
+
+		gw_deploy_http_conf_add_host($hosts, $host);
+
+		if (gw_deploy_http_conf_is_apex_host($host))
+			gw_deploy_http_conf_add_host($hosts, 'www.' . $host);
+	}
+
+	return gw_deploy_http_conf_add_localhost_aliases($hosts);
 }
 
 function gw_deploy_http_conf_cert_file($certName, $file)
@@ -285,13 +314,11 @@ function gw_deploy_http_conf_sites()
 	$mainHost = gw_deploy_http_conf_main_host();
 	$isTestEnv = gw_deploy_http_conf_is_test_env();
 	$isDevEnv = gw_deploy_http_conf_is_dev_env();
-	$isDevSsl = $isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/DEV_SSL', false);
-	$isLocalDevEnv = $isDevEnv && !$isDevSsl;
 	$documentRoot = rtrim(GW::s('DEPLOY_DIR') ?: GW::s('DIR/ROOT'), '/');
 	$wsHost = GW::s('CHATWS/HOST') ?: '127.0.0.1';
 	$wsPort = (int)(GW::s('CHATWS/PORT') ?: 9051);
 	$wsPath = GW::s('CHATWS/PATH') ?: '/ws';
-	$wildcardEnabled = !$isTestEnv && !$isLocalDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/WILDCARD_ENABLED', false);
+	$wildcardEnabled = !$isTestEnv && !$isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/WILDCARD_ENABLED', false);
 	$mainCertName = $isTestEnv
 		? gw_deploy_http_conf_setting('DEPLOY_HTTP/TEST_CERT_NAME', 'voro1wildcard')
 		: gw_deploy_http_conf_setting('DEPLOY_HTTP/MAIN_CERT_NAME', $mainHost);
@@ -299,6 +326,7 @@ function gw_deploy_http_conf_sites()
 	$dbHosts = gw_deploy_http_conf_multisite_hosts();
 	$mainHosts = [];
 	$mainSslHosts = [];
+	$xwebHosts = [];
 	$originalHosts = [$mainHost];
 	
 	foreach ($dbHosts as $host) {
@@ -310,7 +338,13 @@ function gw_deploy_http_conf_sites()
 		
 		if (gw_deploy_http_conf_is_dev_host($host))
 			continue;
-		
+
+		if (gw_deploy_http_conf_is_xweb_host($host)) {
+			gw_deploy_http_conf_add_host($xwebHosts, $host);
+			gw_deploy_http_conf_add_host($originalHosts, $host);
+			continue;
+		}
+
 		if ($wildcardEnabled && gw_deploy_http_conf_is_main_host_domain($host, $mainHost))
 			continue;
 		
@@ -329,9 +363,9 @@ function gw_deploy_http_conf_sites()
 		$serverName = gw_deploy_http_conf_test_host($mainHost);
 		$mainHosts = array_merge(gw_deploy_http_conf_add_test_aliases($originalHosts), gw_deploy_http_conf_add_only_localhost_aliases($originalHosts));
 		$mainSslHosts = gw_deploy_http_conf_add_test_aliases($originalHosts);
-	} elseif ($isLocalDevEnv) {
+	} elseif ($isDevEnv) {
 		$serverName = $mainHost . '.localhost';
-		$mainHosts = gw_deploy_http_conf_add_only_localhost_aliases($originalHosts);
+		$mainHosts = gw_deploy_http_conf_add_localhost_aliases($originalHosts);
 		$mainSslHosts = [];
 	} else {
 		$serverName = $mainHost;
@@ -379,7 +413,7 @@ function gw_deploy_http_conf_sites()
 			'aliases' => $mainHosts,
 			'ssl_aliases' => $mainSslHosts,
 			'log_prefix' => GW::s('PROJECT_NAME'),
-			'ports' => $isLocalDevEnv ? [80] : [443, 80],
+			'ports' => $isDevEnv ? [80] : [443, 80],
 			'ssl' => [
 				'cert' => gw_deploy_http_conf_cert_file($mainCertName, 'cert.pem'),
 				'key' => gw_deploy_http_conf_cert_file($mainCertName, 'privkey.pem'),
@@ -395,6 +429,35 @@ function gw_deploy_http_conf_sites()
 			],
 		] + $common;
 	
+	if (!$isDevEnv && $xwebHosts) {
+		$xwebCertName = gw_deploy_http_conf_setting('DEPLOY_HTTP/XWEB_CERT_NAME', gw_deploy_http_conf_xweb_suffix());
+		$xwebServerName = $xwebHosts[0];
+		$xwebCertFile = gw_deploy_http_conf_cert_file($xwebCertName, 'cert.pem');
+
+		if (is_file($xwebCertFile)) {
+			$sites[] = [
+				'server_name' => $xwebServerName,
+				'aliases' => $xwebHosts,
+				'ssl_aliases' => $xwebHosts,
+				'log_prefix' => GW::s('PROJECT_NAME') . '-xweb',
+				'ports' => [443, 80],
+				'ssl' => [
+					'cert' => $xwebCertFile,
+					'key' => gw_deploy_http_conf_cert_file($xwebCertName, 'privkey.pem'),
+					'chain' => gw_deploy_http_conf_cert_file($xwebCertName, 'chain.pem'),
+				],
+				'ws' => [
+					'http' => true,
+					'https' => true,
+					'host' => $wsHost,
+					'port' => $wsPort,
+					'path' => $wsPath,
+					'target_path' => '/',
+				],
+			] + $common;
+		}
+	}
+
 	return $sites;
 }
 
@@ -404,9 +467,8 @@ function gw_deploy_http_conf_certbot_configs()
 	$mainHost = gw_deploy_http_conf_main_host();
 	$isTestEnv = gw_deploy_http_conf_is_test_env();
 	$isDevEnv = gw_deploy_http_conf_is_dev_env();
-	$isDevSsl = $isDevEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/DEV_SSL', false);
 
-	if ($isDevEnv && !$isDevSsl)
+	if ($isDevEnv)
 		return [];
 	
 	$mainCertName = $isTestEnv
@@ -414,6 +476,7 @@ function gw_deploy_http_conf_certbot_configs()
 		: gw_deploy_http_conf_setting('DEPLOY_HTTP/MAIN_CERT_NAME', $mainHost);
 	$wildcardCertName = gw_deploy_http_conf_setting('DEPLOY_HTTP/WILDCARD_CERT_NAME', str_replace('.', '', $mainHost) . 'wildcard');
 	$wildcardEnabled = !$isTestEnv && gw_deploy_http_conf_bool_setting('DEPLOY_HTTP/WILDCARD_ENABLED', false);
+	$xwebCertName = gw_deploy_http_conf_setting('DEPLOY_HTTP/XWEB_CERT_NAME', gw_deploy_http_conf_xweb_suffix());
 	
 	if ($isTestEnv) {
 		$suffix = gw_deploy_http_conf_test_suffix();
@@ -438,6 +501,17 @@ function gw_deploy_http_conf_certbot_configs()
 	}
 	
 	foreach (gw_deploy_http_conf_sites() as $site) {
+		if (gw_deploy_http_conf_is_xweb_host($site['server_name'] ?? '')) {
+			$out[] = [
+				'name' => $xwebCertName,
+				'domains' => [gw_deploy_http_conf_xweb_suffix(), '*.' . gw_deploy_http_conf_xweb_suffix()],
+				'manual_dns' => true,
+				'cert_file' => gw_deploy_http_conf_cert_file($xwebCertName, 'cert.pem'),
+				'key_file' => gw_deploy_http_conf_cert_file($xwebCertName, 'privkey.pem'),
+			];
+			continue;
+		}
+
 		if (($site['server_name'] ?? '') !== $mainHost)
 			continue;
 		

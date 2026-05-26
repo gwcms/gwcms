@@ -105,6 +105,37 @@ function sudogate_exec_capture($cmd)
 	];
 }
 
+function sudogate_update_hosts_file($hosts)
+{
+	if (GW::s('PROJECT_ENVIRONMENT') != GW_ENV_DEV)
+		return;
+
+	$hosts = array_values(array_unique(array_filter((array)$hosts)));
+
+	if (!$hosts)
+		return;
+
+	$path = '/etc/hosts';
+	$begin = '# BEGIN ' . GW::s('PROJECT_NAME') . ' dev hosts';
+	$end = '# END ' . GW::s('PROJECT_NAME') . ' dev hosts';
+	$current = is_file($path) ? file_get_contents($path) : '';
+	$block = $begin . "\n127.0.0.1 " . implode(' ', $hosts) . "\n" . $end;
+
+	if (strpos($current, $begin) !== false && strpos($current, $end) !== false) {
+		$new = preg_replace('~' . preg_quote($begin, '~') . '.*?' . preg_quote($end, '~') . '~s', $block, $current);
+	} else {
+		$new = rtrim($current) . "\n\n" . $block . "\n";
+	}
+
+	if ($new === $current)
+		return;
+
+	if (file_put_contents($path, $new) === false)
+		sudogate_fail("Hosts file update failed: $path");
+
+	echo "Updated: $path\n";
+}
+
 register_shutdown_function(function () {
 	$error = error_get_last();
 	
@@ -163,7 +194,10 @@ function sudogate_update_http_conf($args)
 		$source = GW::s('DIR/TEMP') . 'deploy_http.conf';
 		if (file_put_contents($source, $generated) === false)
 			sudogate_fail("Generated config write failed: $source");
-		
+
+		if (function_exists('gw_deploy_http_conf_localhost_hosts'))
+			sudogate_update_hosts_file(gw_deploy_http_conf_localhost_hosts());
+
 		echo "Generated: $source\n";
 	} else {
 		if (!is_file($source))
@@ -224,6 +258,8 @@ function sudogate_setup_ssl($args)
 	$only = sudogate_arg_value($args, '--cert');
 	$force = sudogate_has_flag($args, '--force');
 	$dryRun = sudogate_has_flag($args, '--dry-run');
+	$cfCredentials = sudogate_arg_value($args, '--cloudflare-credentials', GW::s('DEPLOY_HTTP/CLOUDFLARE_CREDENTIALS') ?: '/root/.secrets/certbot/cloudflare.ini');
+	$cfPropagation = sudogate_arg_value($args, '--cloudflare-propagation-seconds', GW::s('DEPLOY_HTTP/CLOUDFLARE_PROPAGATION_SECONDS') ?: 60);
 	
 	if (!is_file($builder))
 		sudogate_fail("HTTP config builder not found: $builder");
@@ -261,13 +297,11 @@ function sudogate_setup_ssl($args)
 		$cmd = [
 			'certbot',
 			'certonly',
-			'--manual',
-			'--preferred-challenges',
-			'dns',
-			'--manual-auth-hook',
-			'php8.4 /root/.iv-le/iv-certbot.php auth',
-			'--manual-cleanup-hook',
-			'php8.4 /root/.iv-le/iv-certbot.php cleanup',
+			'--dns-cloudflare',
+			'--dns-cloudflare-credentials',
+			$cfCredentials,
+			'--dns-cloudflare-propagation-seconds',
+			$cfPropagation,
 			'--non-interactive',
 			'--agree-tos',
 			'--register-unsafely-without-email',

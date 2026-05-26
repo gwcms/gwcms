@@ -383,6 +383,7 @@ class GW_Application
 		$this->initSession(); // debug or not to debug?
 		$this->initDB();
 		$this->initDBcfg($this->app_name);
+		$this->autoImportSqlUpdatesDev();
 
 		$this->initSite();
 		
@@ -404,7 +405,25 @@ class GW_Application
 		
 		$this->langEditMode();
 	}
-	
+
+	function autoImportSqlUpdatesDev()
+	{
+		if(GW::s('PROJECT_ENVIRONMENT') != GW_ENV_DEV)
+			return;
+
+		if(GW::s('DEV/AUTO_IMPORT_SQL_UPDATES') === false)
+			return;
+
+		list($lastupdates, $imported) = GW_SQL_Updates::importPending($this->db);
+
+		if(!$imported)
+			return;
+
+		$GLOBALS['gw_auto_imported_sql_updates'] = array_map(function($row){
+			return basename($row['file']);
+		}, $imported);
+	}
+
 	function langEditMode()
 	{
 		if(isset($_GET['toggle-lang-results-active']))
