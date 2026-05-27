@@ -2048,7 +2048,8 @@ class Module_Orders extends GW_Public_Module
 	
 
 		$this->tpl_vars['item'] = $order;
-		$this->tpl_vars['order'] = $order;		
+		$this->tpl_vars['order'] = $order;
+		$this->tpl_vars['discountcode_enabled'] = (bool)($this->args['discountcodes'] ?? false);
 	}
 	
 	function userRequired() {
