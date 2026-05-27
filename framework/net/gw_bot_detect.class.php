@@ -593,6 +593,10 @@ class GW_Bot_Detect
 
 		
 		self::initSession();
+		
+		if(self::hasSuspiciousRepeatedPath($_SERVER['REQUEST_URI'] ?? ''))
+			self::redirectIfNotVerified();
+		
 		self::ipStats();
 
 
@@ -623,6 +627,38 @@ class GW_Bot_Detect
 			header('Location: /humancheck.php');
 			exit;
 		    }		
+	}
+	
+	static function hasSuspiciousRepeatedPath($uri)
+	{
+		$path = parse_url($uri, PHP_URL_PATH);
+		
+		if(!$path || strlen($path) < 140)
+			return false;
+		
+		$segments = array_values(array_filter(explode('/', strtolower($path)), 'strlen'));
+		$total = count($segments);
+		
+		if($total < 16)
+			return false;
+		
+		$counts = array_count_values($segments);
+		$maxSegmentCount = max($counts);
+		
+		if($total >= 18 && $maxSegmentCount >= 6)
+			return true;
+		
+		if(strlen($path) >= 240 && (count($counts) / $total) <= 0.45 && $maxSegmentCount >= 4)
+			return true;
+		
+		$pairs = [];
+		
+		for($i = 0; $i < $total - 1; $i++){
+			$key = $segments[$i].'/'.$segments[$i + 1];
+			$pairs[$key] = ($pairs[$key] ?? 0) + 1;
+		}
+		
+		return max($pairs) >= 4;
 	}
 	
 	
