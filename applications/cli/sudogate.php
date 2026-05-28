@@ -153,8 +153,10 @@ register_shutdown_function(function () {
 
 function sudogate_update_http_conf($args)
 {
-	if (sudogate_arg_value($args, '--ssl') === 'yes')
+	if (sudogate_arg_value($args, '--ssl') === 'yes') {
 		GW::s('DEPLOY_HTTP/DEV_SSL', 1);
+		sudogate_setup_ssl($args);
+	}
 	
 	$root = rtrim(GW::s('DIR/ROOT'), '/') . '/';
 	$source = $root . 'deploy/http.conf';
@@ -258,7 +260,7 @@ function sudogate_setup_ssl($args)
 	$only = sudogate_arg_value($args, '--cert');
 	$force = sudogate_has_flag($args, '--force');
 	$dryRun = sudogate_has_flag($args, '--dry-run');
-	$cfCredentials = sudogate_arg_value($args, '--cloudflare-credentials', GW::s('DEPLOY_HTTP/CLOUDFLARE_CREDENTIALS') ?: '/root/.secrets/certbot/cloudflare.ini');
+	$cfCredentials = sudogate_arg_value($args, '--cloudflare-credentials', GW::s('DEPLOY_HTTP/CLOUDFLARE_CREDENTIALS') ?: '/etc/apache2/cloudflare.ini');
 	$cfPropagation = sudogate_arg_value($args, '--cloudflare-propagation-seconds', GW::s('DEPLOY_HTTP/CLOUDFLARE_PROPAGATION_SECONDS') ?: 60);
 	
 	if (!is_file($builder))
