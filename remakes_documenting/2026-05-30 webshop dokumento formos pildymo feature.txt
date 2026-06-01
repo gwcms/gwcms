@@ -3,7 +3,7 @@
 Kontekstas
 - Tikslas buvo prie webshop produkto prijungti dokumenta/formos pildyma taip, kad pries idedant preke i krepseli vartotojas uzpildytu tik pirma forma.
 - Pilnas dokumento pasirasymas turi likti dokumentu modulio logikoje ir gali buti atliekamas po apmokejimo.
-- Sprendimas darytas TMC Volley vasaros grupiu produktui:
+- Sprendimas darytas produktui:
   - parent produktas: shop_products id=130
   - modifikacijos: 131, 132, 133, 134
   - dokumentas: docs/docs id=24
@@ -76,13 +76,7 @@ DB ir SQL migracijos
   - `max_price=90`
   - `mod_count=4`
   - `active=1`
-- Sukuria arba atnaujina modifikacijas:
-  - 131: `birzelio 15 - liepos 14 d., 9-13 m. vaikams`
-  - 132: `birzelio 15 - liepos 14 d., 12-17 m. vaikams`
-  - 133: `Liepos 15 - rugpjucio 14 d., 9-13 m. vaikams`
-  - 134: `Liepos 15 - rugpjucio 14 d., 12-17 m. vaikams`
-- Kaina visoms modifikacijoms: 90 EUR.
-- `ON DUPLICATE KEY UPDATE` specialiai neatnaujina `qty`, kad pakartotinai paleidus SQL nebutu atstatytas kiekis po realiu pirkimu.
+
 
 `sql/2026-05-30-5 order_accept_contract_sign_buttons.sql`
 - Atnaujina `gw_mail_templates` irasa id=48 (`order_accept`).
@@ -320,7 +314,7 @@ Poapmokejiminis email
   - `ORDER_DETAILS_HTML`
 - Jei mail sablonas naudoja `ORDER_DETAILS_HTML`, contract mygtukai atsiras automatiškai po prekiu/paslaugu lentele.
 - Jei sablonas naudoja atskira `CONTRACT_SIGN_BUTTON`, jis irgi gaus sugeneruota mygtuku HTML.
-- Konkreciame TMC order accept sablone id=48 iterptas:
+- Konkreciame order accept sablone id=48 iterptas:
   - `{$CONTRACT_SIGN_BUTTONS}`
   - vieta: po `Uzsakymo identifikacija`
 - Jei order item neturi answer, mygtukai negeneruojami.
@@ -388,8 +382,7 @@ Patikros, kurios buvo darytos
   - `applications/site/modules/orders/module_orders.class.php`
   - `applications/admin/modules/forms/gw_forms.class.php`
   - `applications/admin/modules/forms/module_forms.class.php`
-- Product render patikra per curl:
-  - `http://mano.tmcvolley.lt.localhost/lt/direct/shop/shop/p?id=130&modid=131`
+
 - Tikrinta, kad HTML yra:
   - `data-contract-dialog-url`
   - `clean=2`
