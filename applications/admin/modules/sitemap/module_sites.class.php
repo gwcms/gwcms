@@ -46,7 +46,8 @@ class Module_Sites extends GW_Common_Module
 		
 		shell_exec($cmd . " > " . escapeshellarg($logfile) . " 2>&1 &");
 		
-		$this->setMessage("http.conf && SSL update started in background. Push notification will be sent when finished.<br><pre>" . htmlspecialchars($cmd . "\nlog: " . $logfile, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</pre>");
+		$logid = rawurlencode(basename($logfile));
+		$this->setMessage("http.conf && SSL update started in background. Push notification will be sent when finished.<br><iframe src='/admin/".$this->app->ln."/system/logwatch/iframe?id={$logid}&padding=1' style='width:100%;height:240px;'></iframe>");
 		$this->jump();
 	}
 	

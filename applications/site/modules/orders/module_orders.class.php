@@ -2184,7 +2184,7 @@ class Module_Orders extends GW_Public_Module
 			if($order->changed_fields['status'] ?? false){
 		
 				if($this->config->statuschange_email_tpl){
-					$lang = $order->user->use_lang ?: $order->use_lang;
+					$lang = ($order->user ? $order->user->use_lang : false) ?: $order->use_lang ?: $this->app->ln ?: 'lt';
 					$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderStatusChangeNotifyUser&cron=1");	
 
 					if($this->app->user->isRoot()){

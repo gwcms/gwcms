@@ -43,18 +43,25 @@ if(isset($_SERVER['HTTP_HOST'])){
 		exit;
 	}
 	
-	if(isset($_REQUEST['act']) && $_REQUEST['act']=='doSync'){
-		$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
-		$sudouser = 'wdm';
+		if(isset($_REQUEST['act']) && $_REQUEST['act']=='doSync'){
+			$path = GW::s('DIR/ROOT')."applications/cli/sudogate.php";
+			$sudouser = 'wdm';
+			
 		
-	
-		file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_REQUEST));
-		
-		$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
-		d::ldump("$cmd\n:$res");
-		
-		exit;			
-	}
+			file_put_contents(GW::s('DIR/SYS_REPOSITORY').'sync_opts', json_encode($_REQUEST));
+			
+			$res=shell_exec($cmd="sudo -S -u $sudouser /usr/bin/php $path sync 2>&1");
+			$resultid = date('Ymd_His') . '_' . substr(md5($cmd . $res . microtime(true)), 0, 8);
+			file_put_contents(GW::s('DIR/SYS_REPOSITORY') . 'sync_result_' . $resultid . '.log', "$cmd\n$res");
+			
+			$jump = $_GET;
+			unset($jump['act'], $jump['type'], $jump['dir'], $jump['confirm_remove'], $jump['remove_files']);
+			$jump['sync_result'] = $resultid;
+			
+			header('Location: ?' . http_build_query($jump));
+			
+			exit;			
+		}
 	
 	if(!isset($_GET['proj'])){
 
@@ -64,13 +71,23 @@ if(isset($_SERVER['HTTP_HOST'])){
 			echo "<li><a href='?proj=$proj'>$proj</a></li>";
 		}
 		exit;
-	}else{
-		
-		$sync = new GW_CMS_Sync();
-		
-		
-		
-		
+		}else{
+			
+			$sync = new GW_CMS_Sync();
+			
+			if(isset($_GET['sync_result'])){
+				$resultid = preg_replace('/[^a-zA-Z0-9_\\-]/', '', $_GET['sync_result']);
+				$resultfile = GW::s('DIR/SYS_REPOSITORY') . 'sync_result_' . $resultid . '.log';
+				
+				if(is_file($resultfile)){
+					echo "<h3>Last sync result</h3>";
+					echo "<pre>" . htmlspecialchars(file_get_contents($resultfile), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</pre>";
+				}
+			}
+			
+			
+			
+			
 		$list = $sync->checkOne($_GET['proj']);
 		
 		

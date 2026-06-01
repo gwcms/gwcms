@@ -16,6 +16,85 @@ function sudogate_arg_value($args, $name, $default = null)
 	return $default;
 }
 
+function sudogate_ssl_enabled($args)
+{
+	return in_array(strtolower((string)sudogate_arg_value($args, '--ssl', 'no')), ['1', 'yes', 'true', 'on'], true);
+}
+
+function sudogate_runtime_identity()
+{
+	$euid = function_exists('posix_geteuid') ? posix_geteuid() : null;
+	$egid = function_exists('posix_getegid') ? posix_getegid() : null;
+	$user = ($euid !== null && function_exists('posix_getpwuid')) ? (posix_getpwuid($euid)['name'] ?? null) : null;
+	$group = ($egid !== null && function_exists('posix_getgrgid')) ? (posix_getgrgid($egid)['name'] ?? null) : null;
+	$parts = [];
+	
+	if ($user !== null)
+		$parts[] = 'user=' . $user;
+	if ($euid !== null)
+		$parts[] = 'euid=' . $euid;
+	if ($group !== null)
+		$parts[] = 'group=' . $group;
+	if ($egid !== null)
+		$parts[] = 'egid=' . $egid;
+	if (isset($_SERVER['SUDO_USER']))
+		$parts[] = 'sudo_user=' . $_SERVER['SUDO_USER'];
+	if (isset($_SERVER['SUDO_UID']))
+		$parts[] = 'sudo_uid=' . $_SERVER['SUDO_UID'];
+	if (isset($_SERVER['SUDO_GID']))
+		$parts[] = 'sudo_gid=' . $_SERVER['SUDO_GID'];
+	if (is_readable('/proc/self/cgroup'))
+		$parts[] = 'cgroup=' . trim(str_replace("\n", '|', file_get_contents('/proc/self/cgroup')));
+	
+	return implode(' ', $parts);
+}
+
+function sudogate_print_runtime_identity()
+{
+	echo "Runtime: " . sudogate_runtime_identity() . "\n";
+}
+
+function sudogate_current_systemd_service()
+{
+	if (!is_readable('/proc/self/cgroup'))
+		return null;
+	
+	$cgroup = file_get_contents('/proc/self/cgroup');
+	if (preg_match('~(?:^|/)([^/]+\.service)(?:/|$)~m', $cgroup, $m))
+		return $m[1];
+	
+	return null;
+}
+
+function sudogate_readwritepaths_fix_commands($targetDir)
+{
+	$service = sudogate_current_systemd_service();
+	if (!$service)
+		$service = 'php8.4-fpm.service';
+	
+	$confDir = '/etc/systemd/system/' . $service . '.d';
+	$confFile = $confDir . '/gwcms-apache-write.conf';
+	$paths = array_values(array_unique([
+		$targetDir,
+		'/etc/apache2/sites-enabled',
+		'/etc/apache2/sites-available',
+		'/etc/letsencrypt',
+		'/var/lib/letsencrypt',
+		'/var/log/letsencrypt',
+	]));
+	
+	return implode("\n", [
+		'Run this on server console:',
+		'sudo mkdir -p ' . escapeshellarg($confDir),
+		'sudo tee ' . escapeshellarg($confFile) . ' >/dev/null <<\'EOF\'',
+		'[Service]',
+		'ReadWritePaths=' . implode(' ', $paths),
+		'EOF',
+		'sudo systemctl daemon-reload',
+		'sudo systemctl restart ' . escapeshellarg($service),
+	]);
+}
+
 function sudogate_notify_error($message, $context = [])
 {
 	static $sent = false;
@@ -153,7 +232,7 @@ register_shutdown_function(function () {
 
 function sudogate_update_http_conf($args)
 {
-	if (sudogate_arg_value($args, '--ssl') === 'yes') {
+	if (sudogate_ssl_enabled($args)) {
 		GW::s('DEPLOY_HTTP/DEV_SSL', 1);
 		sudogate_setup_ssl($args);
 	}
@@ -197,9 +276,6 @@ function sudogate_update_http_conf($args)
 		if (file_put_contents($source, $generated) === false)
 			sudogate_fail("Generated config write failed: $source");
 
-		if (function_exists('gw_deploy_http_conf_localhost_hosts'))
-			sudogate_update_hosts_file(gw_deploy_http_conf_localhost_hosts());
-
 		echo "Generated: $source\n";
 	} else {
 		if (!is_file($source))
@@ -212,6 +288,9 @@ function sudogate_update_http_conf($args)
 	$targetDir = dirname($target);
 	if (!is_dir($targetDir))
 		sudogate_fail("Target directory does not exist: $targetDir");
+
+	if (!is_writable($targetDir))
+		sudogate_fail("Target directory is not writable: $targetDir\n\n" . sudogate_readwritepaths_fix_commands($targetDir), ['runtime' => sudogate_runtime_identity(), 'hint' => 'If this runs from php-fpm, check systemd ProtectSystem/ReadWritePaths.']);
 	
 	$oldHash = is_file($target) ? sha1_file($target) : null;
 	$newHash = sha1_file($source);
@@ -224,14 +303,14 @@ function sudogate_update_http_conf($args)
 	$backup = null;
 	if (is_file($target)) {
 		$backup = $target . '.bak-' . date('Ymd-His');
-		if (!copy($target, $backup))
+		if (!@copy($target, $backup))
 			sudogate_fail("Backup failed: $backup");
 		echo "Backup: $backup\n";
 	}
 	
-	if (!copy($source, $target)) {
+	if (!@copy($source, $target)) {
 		if ($backup)
-			copy($backup, $target);
+			@copy($backup, $target);
 		
 		sudogate_fail("Copy failed: $source -> $target");
 	}
@@ -243,16 +322,23 @@ function sudogate_update_http_conf($args)
 	echo $testCmd . "\n" . $out;
 	
 	if (strpos((string)$out, 'Syntax OK') === false) {
-		if ($backup && copy($backup, $target))
+		if ($backup && @copy($backup, $target))
 			echo "Restored backup: $backup\n";
 		
 		sudogate_fail("Apache configtest failed", ['output' => trim((string)$out)]);
 	}
+
+	$reloadCmd = 'service apache2 reload';
+	$reload = sudogate_exec_capture($reloadCmd);
+	echo $reloadCmd . "\n" . $reload['output'] . "\n";
+
+	if ($reload['code'] !== 0)
+		sudogate_fail("Apache reload failed", $reload);
 }
 
 function sudogate_setup_ssl($args)
 {
-	if (sudogate_arg_value($args, '--ssl') === 'yes')
+	if (sudogate_ssl_enabled($args))
 		GW::s('DEPLOY_HTTP/DEV_SSL', 1);
 	
 	$root = rtrim(GW::s('DIR/ROOT'), '/') . '/';
@@ -331,10 +417,10 @@ function sudogate_update_http_conf_and_ssl($args)
 	$sslArg = ' --ssl=' . escapeshellarg($ssl);
 	$self = __FILE__;
 	$php = GW::s('PHP_CLI_LOCATION') ?: '/usr/bin/php';
-	$commands = [
-		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' setup-ssl' . $sslArg,
-		escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' update-http-conf' . $sslArg,
-	];
+	$commands = [];
+	if (sudogate_ssl_enabled($args))
+		$commands[] = escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' setup-ssl' . $sslArg;
+	$commands[] = escapeshellcmd($php) . ' ' . escapeshellarg($self) . ' update-http-conf' . $sslArg;
 	
 	$ok = true;
 	$chunks = [];
@@ -376,14 +462,17 @@ function sudogate_update_http_conf_and_ssl($args)
 
 switch($argv[1]){
 	case 'update-http-conf-and-ssl':
+		sudogate_print_runtime_identity();
 		sudogate_update_http_conf_and_ssl(array_slice($argv, 2));
 	break;
 	
 	case 'update-http-conf':
+		sudogate_print_runtime_identity();
 		sudogate_update_http_conf(array_slice($argv, 2));
 	break;
 	
 	case 'setup-ssl':
+		sudogate_print_runtime_identity();
 		sudogate_setup_ssl(array_slice($argv, 2));
 	break;
 	

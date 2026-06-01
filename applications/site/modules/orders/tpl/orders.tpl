@@ -44,6 +44,15 @@
 
 
 {function orderactions}
+	{$contract_links=$order->contract_links}
+	
+	{if $contract_links}
+		{foreach $contract_links as $contract_link}
+			<a href="{$contract_link.url}" class="btn u-btn-primary btn-md rounded-0 g-mb-5">
+				<i class="fa {if $contract_link.signed}fa-file-text-o{else}fa-pencil-square-o{/if} g-mr-2"></i> {$contract_link.caption|escape}
+			</a>
+		{/foreach}
+	{/if}
 	
 	{if $order->payment_status!=7 && $order->amount_total && $order->active}
 		{$pay_amount=$order->amount_total}
@@ -392,7 +401,7 @@
 				
 				
 				{if !$smarty.get.paywait || !$smarty.get.id}
-					{$buttons = !$smarty.get.payselect && ($order->payment_status!=7 || $order->downloadable)}
+					{$buttons = !$smarty.get.payselect && ($order->payment_status!=7 || $order->downloadable || $order->contract_links)}
 				{/if}
 				
 				{if !$smarty.get.summary}

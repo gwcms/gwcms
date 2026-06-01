@@ -63,6 +63,9 @@ class GW_Debug_Helper
 	{
 		if(!isset($error['file']) || $error['file']=="Unknown")
 			return false;
+
+		if (!is_file($error['file']))
+			return "Code cut unavailable: {$error['file']}";
 		
 		$code = str_replace("\r", "", file_get_contents($error['file']));
 		
@@ -82,6 +85,9 @@ class GW_Debug_Helper
 			
 		$code = implode("\n",$res);
 		
+		if (!self::isHTMLerror())
+			return $code;
+
 		$code = highlight_string("<?php ".$code."?>", true);
 		$code = str_replace('<span style="color: #0000BB">&lt;?php&nbsp;</span>', '', $code);
 		$code = str_replace('<span style="color: #0000BB">?&gt;</span>', '', $code);
@@ -200,7 +206,8 @@ class GW_Debug_Helper
 			
 			unset($_GET['url']);
 			
-			echo '<pre>'. GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10).'</pre>';
+			$codeCut = GW_Debug_Helper::getCodeCut(['line'=>$errline,'file'=>$errfile], 10);
+			echo self::isHTMLerror() ? '<pre>'. $codeCut .'</pre>' : $codeCut . "\n";
 			
 			if(isset($_GET['backtrace_request']) && $_GET['backtrace_request']==$erroridx){
 				$url= Navigator::buildURI(false, ['backtrace_request'=>null]+$_GET);
@@ -266,10 +273,7 @@ class GW_Debug_Helper
 		    "line"=>$errline,
 		    "erroridx"=>$erroridx
 		]);
-	
 		
-		self::warningHandler($errno, $errstr, $errfile, $errline);
-
 		/* Don't execute PHP internal error handler */
 		return true;
 	}
@@ -465,19 +469,19 @@ class GW_Debug_Helper
 				echo $error_publ;
 			}
 			
-		}else{
-			if(GW_Bot_Detect::isBot())
+			}else{
+				if(GW_Bot_Detect::isBot())
 				{
 					//echo('ad5f1s6f5gb41fg65ngh4fa16s5d1fasd21f65st1hb6s5f21b3s2f6d4gre1');
 					
 					if(GW::s('DEVELOPER_PRESENT'))
 						self::outputToScreen($e);
 				}else{
-					echo "error report turned off<br/>\n";
+					echo self::isHTMLerror() ? "error report turned off<br/>\n" : "error report turned off\n";
 			
 					self::outputToScreen($e);
 				}
-		}		
+			}		
 	}
 	
 	function stringVerbose($str)

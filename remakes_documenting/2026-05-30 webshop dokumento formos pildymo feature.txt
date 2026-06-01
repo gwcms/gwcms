@@ -1,0 +1,430 @@
+2026-05-30 webshop dokumento formos pildymo feature
+
+Kontekstas
+- Tikslas buvo prie webshop produkto prijungti dokumenta/formos pildyma taip, kad pries idedant preke i krepseli vartotojas uzpildytu tik pirma forma.
+- Pilnas dokumento pasirasymas turi likti dokumentu modulio logikoje ir gali buti atliekamas po apmokejimo.
+- Sprendimas darytas TMC Volley vasaros grupiu produktui:
+  - parent produktas: shop_products id=130
+  - modifikacijos: 131, 132, 133, 134
+  - dokumentas: docs/docs id=24
+  - forma: forms/forms id=31
+- Svarbus architekturinis sprendimas: nenaudoti seno `contracts` lauko, nes jis jau egzistavo kitiems klientams ir pakeitimas galetu sugadinti esama elgesi.
+- Vietoje to ivestas atskiras `shop_products.contract_id`, kuris rodo i `docs/docs` dokumenta.
+
+Bendra naudotojo eiga
+- Vartotojas produkto puslapyje pasirenka modifikacija ir spaudzia "ideti i krepseli".
+- Jei produktas arba jo modifikacija turi `contract_id`, vietoje tiesioginio idejimo atidaroma dokumento formos dalis.
+- Forma atidaroma per dialoga, naudojant dokumentu modulio URL su:
+  - `s=form`
+  - `hidehead=1`
+  - `returnafterform=1`
+  - `dialog=1`
+  - `clean=2`
+- Vartotojas uzpildo tik forma.
+- Po submit dokumentu modulis grazina `answer_id` ir `answer_secret` i parent langa.
+- Shop forma pakartotinai submitinama jau su:
+  - `contract_answer_id`
+  - `contract_answer_secret`
+- Tada preke idedama i krepseli.
+- Prie order item prisegiamas:
+  - `keyval/answers_id`
+  - `keyval/contract_doc_id`
+- Pats `GW_Form_Answers` perrisamas nuo produkto konteksto prie order item konteksto:
+  - `obj_type = payments_orderitems`
+  - `obj_id = order item id`
+
+DB ir SQL migracijos
+- Pasalintas ankstesnis blogas migration failas:
+  - `sql/2026-05-29-1 shop_product_contract_docs.sql`
+- Prideti aktualus migration failai:
+  - `sql/2026-05-30-1 shop_product_contract_id.sql`
+  - `sql/2026-05-30-2 form_element_default_value_src.sql`
+  - `sql/2026-05-30-3 form_keyfields.sql`
+  - `sql/2026-05-30-4 shop_product_130_modifications.sql`
+  - `sql/2026-05-30-5 order_accept_contract_sign_buttons.sql`
+
+`sql/2026-05-30-1 shop_product_contract_id.sql`
+- Grazina sena `contracts` lauka i neutralesni tipa:
+  - `TINYINT NULL`
+- Prideda nauja lauka:
+  - `shop_products.contract_id INT NULL`
+- Admin lauku konfiguracijoje:
+  - senas `contracts` paliekamas neaktyvus
+  - naujas `contract_id` rodomas kaip `select_ajax`
+  - `modpath=docs/docs`
+
+`sql/2026-05-30-2 form_element_default_value_src.sql`
+- Formos 31 tevelio laukams uzdeda default saltinius per field config JSON:
+  - `client_title` -> `{"default_value_src":"user_title"}`
+  - `client_phone` -> `{"default_value_src":"user_phone"}`
+  - `client_email` -> `{"default_value_src":"user_email"}`
+- Tai yra tik pradinis uzpildymas, ne linked fields.
+- Svarbu: linked fields cia specialiai nenaudojami, nes jie gali perrasyti vartotojo profilio duomenis, pvz. kai mama perka draugei ir jos vaikui.
+
+`sql/2026-05-30-3 form_keyfields.sql`
+- Formai 31 i `gw_generic_extended` idedamas `keyfields` irasas:
+  - `own_table = gw_forms`
+  - `owner_id = 31`
+  - `key = keyfields`
+  - `value = ["child_title"]`
+- Tai naudojama formos raktiniu lauku isvedimui prie invoice/order item eilutes.
+
+`sql/2026-05-30-4 shop_product_130_modifications.sql`
+- Parent produktui 130 nustato:
+  - `contract_id=24`
+  - `min_price=90`
+  - `max_price=90`
+  - `mod_count=4`
+  - `active=1`
+- Sukuria arba atnaujina modifikacijas:
+  - 131: `birzelio 15 - liepos 14 d., 9-13 m. vaikams`
+  - 132: `birzelio 15 - liepos 14 d., 12-17 m. vaikams`
+  - 133: `Liepos 15 - rugpjucio 14 d., 9-13 m. vaikams`
+  - 134: `Liepos 15 - rugpjucio 14 d., 12-17 m. vaikams`
+- Kaina visoms modifikacijoms: 90 EUR.
+- `ON DUPLICATE KEY UPDATE` specialiai neatnaujina `qty`, kad pakartotinai paleidus SQL nebutu atstatytas kiekis po realiu pirkimu.
+
+`sql/2026-05-30-5 order_accept_contract_sign_buttons.sql`
+- Atnaujina `gw_mail_templates` irasa id=48 (`order_accept`).
+- Po uzsakymo identifikacijos iterpia:
+  - `{$CONTRACT_SIGN_BUTTONS}`
+- Migration idempotentinis:
+  - jei `{$CONTRACT_SIGN_BUTTONS}` jau yra, antra karta jo neideda.
+- Sitas kintamasis rodomas tik tada, kai backend randa prie order item prisegta contract answer.
+
+Produkto contract logika
+- Pagrindinis laukas dabar yra tik:
+  - `shop_products.contract_id`
+- `contracts` laukas sio feature nebeturi valdyti.
+- `Shop_Products` jau turi parent fallback logika: jei modifikacijos lauko verte yra 0/tuscia, imama parent produkto reiksme.
+- Todel modifikacijoms 131-134 nereikia atskirai rasyti `contract_id=24`; jos gali paveldeti is produkto 130.
+- Shop kode contract dokumentas paimamas per:
+  - `Module_Shop::getProductContractDoc($item)`
+- Si funkcija ziuri tik i `$item->contract_id`.
+
+Shop modulio failai
+- Paliestas pagrindinis failas:
+  - `applications/site/modules/shop/module_shop.class.php`
+- Prideta contract formos eiga i `doAdd2Cart()`.
+- Jei produktas turi contract dokumenta ir request'e dar nera validziu answer duomenu, shop nukreipia i formos pildyma arba atidaro dialoga.
+- Jei grizta `contract_answer_id` ir `contract_answer_secret`, answer validuojamas.
+- Po sekmingo item idejimo i krepseli:
+  - prie order item irasomas `keyval/answers_id`
+  - prie order item irasomas `keyval/contract_doc_id`
+  - answer perrisamas prie order item
+  - i `invoice_line2` pridedami formos raktiniai laukai, pvz. vaiko vardas/pavarde
+
+Svarbios shop helper funkcijos
+- `getProductContractDoc($item)`
+  - grazina `GW_Doc` pagal produkto `contract_id`
+- `getContractDialogUrl($item)`
+  - suformuoja URL dialogui
+  - prideda `clean=2`, kad nebutu pilnos svetaines galvos/footerio
+  - prideda `prefill[service_title]`
+- `redirectToContractForm($doc, $item, $cartvals)`
+  - server side fallback, jei dialogo mechanizmas neveikia
+- `buildContractReturnUrl($cartvals)`
+  - suformuoja return URL i `doAdd2Cart`
+- `getContractAnswer($doc, $item, $auser)`
+  - validuoja answer id, secret, owner ir doc id
+- `getContractServiceTitle($item)`
+  - modifikacijai grazina `modif_title`
+  - parent produktui grazina `title`
+- `getContractInvoiceLineSuffix($answer)`
+  - pagal formos `keyval/keyfields` is answer paima svarbius laukus ir prideda prie invoice/order item eilutes
+
+Service title prefill
+- Pries atidarant forma paduodamas:
+  - `prefill[service_title]`
+- Vasaros grupiu atveju sis laukas turi buti modifikacijos pavadinimas, pvz.:
+  - `birzelio 15 - liepos 14 d., 9-13 m. vaikams`
+- Kadangi forma atidaroma jau pagal pasirinkta item/modification, `$item->modif_title` naudojamas kaip paslaugos pavadinimas.
+- `service_title` formoje yra pasleptas/neaktyvus laukas, bet naudojamas dokumento tekste.
+
+Dialogo integracija produkto sablonuose
+- Pridetas failas:
+  - `applications/site/modules/shop/tpl/contract_dialog.tpl`
+- Sis sablonas:
+  - uzdeda JS guard `window.gwShopContractDialogInit`
+  - interceptina submit'us formoms su `data-contract-dialog-url`
+  - bando naudoti `GW.open_dialog2` arba `gwcms.open_dialog2`
+  - dialoga atidaro kaip iframe
+  - apibriezia `window.returnAnswer(answerId, secret)`
+  - gavus answer, i forma ideda hidden inputus ir pakartotinai submitina forma
+- Dialogo fallback:
+  - jei `open_dialog2` nera, forma submitinama iprastai ir serveris gali redirectinti i dokumentu forma.
+- `contract_dialog.tpl` itrauktas i produkto sablonus:
+  - `applications/site/modules/shop/tpl/p.tpl`
+  - `applications/site/modules/shop/tpl/p_default.tpl`
+  - `applications/site/modules/shop/tpl/p_cover.tpl`
+  - `applications/site/modules/shop/tpl/p_1.tpl`
+- Produktu formoms pridetas:
+  - `data-contract-dialog-url="..."`
+
+Docs modulio pakeitimai
+- Paliestas failas:
+  - `applications/site/modules/docs/module_docs.class.php`
+- Dokumentu modulis papildytas parametru pernesimu:
+  - `after_submit`
+  - `hidehead`
+  - `returnafterform`
+- `viewItem()` issaugo `after_submit` i session:
+  - `docs_after_submit`
+  - saugomas doc id ir URL
+- `doSubmitForm()` po answer issaugojimo:
+  - patikrina `docs_after_submit`
+  - jei doc id sutampa, redirectina i after_submit URL
+  - prideda:
+    - `contract_answer_id`
+    - `contract_answer_secret`
+- Tai leidzia shop moduliui saugiai gauti answer reference po formos submit.
+
+Docs callback dialogui
+- `Module_Docs::doReturnAnswer()` sugeneruoja JS atsakyma dialogui.
+- Endpoint gauna:
+  - `contract_answer_id`
+  - `contract_answer_secret`
+- Isvedamas JS:
+  - `window.parent.returnAnswer(answerid, secret)`
+  - po to bandoma uzdaryti dialoga per:
+    - `GW.close_dialog2`
+    - `gwcms.close_dialog2`
+    - `rootgwcms().close_dialog2`
+- Sis callback naudojamas tada, kai forma buvo atidaryta per dialoga.
+
+Docs template pakeitimai
+- Paliestas failas:
+  - `applications/site/modules/docs/tpl/item.tpl`
+- `steps_block` ir `colorgraph` apgaubti salyga:
+  - `{if !$smarty.get.hidehead}`
+- Taip dialoge galima rodyti tik formos turini, be wizard header dalies.
+- `clean=2` papildomai nuima pilna puslapio layout'a.
+
+Formos default values
+- Vietoje linked fields padarytas vienkryptis default uzpildymas per element config.
+- Paliestas docs site modulis:
+  - `applications/site/modules/docs/module_docs.class.php`
+- `getAnswer()`:
+  - sukuria arba paima answer
+  - uzpildo default values is field config
+  - tada pritaiko URL `prefill[...]`
+- Eiliskumas svarbus:
+  - field config default'ai pildomi pirmi
+  - URL prefill turi prioriteta ir gali perrasyti default'a
+- Palaikomi `default_value_src` saltiniai:
+  - `user_name`
+  - `user_surname`
+  - `user_title`
+  - `user_fullname`
+  - `user_phone`
+  - `user_email`
+- Pritaikyta formos 31 laukams:
+  - tevelio vardas/pavarde
+  - telefonas
+  - el. pastas
+
+Formos keyfields
+- Paliesti forms admin failai:
+  - `applications/admin/modules/forms/gw_forms.class.php`
+  - `applications/admin/modules/forms/module_forms.class.php`
+  - `applications/admin/modules/forms/tpl/forms/form.tpl`
+- `gw_forms.class.php` papildytas keyval support:
+  - `$extensions = ['keyval'=>1]`
+  - `$keyval_use_generic_table = 1`
+- `Module_Forms::getFormElementOptions($form)` grazina tos pacios formos elementus kaip pasirinkimus.
+- Formos admin sablone pridetas laukas:
+  - `keyval/keyfields`
+  - tipas: `multiselect`
+  - `sorting=1`
+  - `value_format=json1`
+  - title: `Raktiniai laukai`
+- Naudojamas paprastas local multiselect, ne `multiselect_ajax`, nes pasirinkimai ateina is tos pacios formos lauku.
+- Formai 31 nustatyta:
+  - `["child_title"]`
+- Shop pusėje sitas laukas naudojamas, kad prie `invoice_line2` butu prirasomas vaiko vardas/pavarde.
+
+Admin order items dinaminiai answer laukai
+- Paliestas failas:
+  - `applications/admin/modules/payments/module_orderitems.class.php`
+- Prideta:
+  - `attachContractAnswerFields(&$list)`
+- Funkcija kvieciama is `__eventAfterList`.
+- Logika:
+  - perziurimi order item'ai
+  - ieskoma `keyval/answers_id`
+  - uzkraunamas `GW_Form_Answers`
+  - pagal atsakymo forma uzkraunami aktyvus `GW_Form_Elements`
+  - i list config dinamiskai pridedami laukai:
+    - `answer_<fieldname>`
+  - i item content sudedamos answer `keyval/<fieldname>` reiksmes
+- Rezultatas: admin order items lenteleje galima matyti formos atsakymu laukus prie uzsakytu produktu.
+
+Order group contract links
+- Paliestas failas:
+  - `applications/admin/modules/payments/gw_order_group.class.php`
+- Prideti calculated laukai:
+  - `contract_answer`
+  - `contract_answers`
+  - `contract_sign_url`
+  - `contract_links`
+- `getContractAnswers()`:
+  - pereina per visus order item'us
+  - renka unikalius `keyval/answers_id`
+  - uzkrauna `GW_Form_Answers`
+- `getContractAnswer()` paliktas backward compatibility principu ir grazina pirma answer.
+- `getContractSignUrl($ln=false)` grazina pirmo answer pasirasymo/perziuros URL.
+- `getContractLinks($ln=false)` grazina visu answer linkus.
+- Kiekvienas linkas turi:
+  - `answer_id`
+  - `title`
+  - `signed`
+  - `caption`
+  - `url`
+- Caption priklauso nuo pasirasymo busenos:
+  - jei nepasirasyta: `<vaikas> - pasirasyti paslaugu sutarti`
+  - jei pasirasyta: `<vaikas> - perziureti paslaugu sutarti`
+- Vaiko vardas imamas is:
+  - `keyval/child_title`
+  - jei nera, fallback i dokumento pavadinima
+- Svarbu: pradinis variantas su vienu mygtuku buvo pakeistas i keliu linku sarasa, nes viename uzsakyme gali buti du vaikai / du order item'ai.
+
+Mano uzsakymai puslapis
+- Paliesti failai:
+  - `applications/site/modules/orders/module_orders.class.php`
+  - `applications/site/modules/orders/tpl/orders.tpl`
+- Order actions stulpelyje dabar gali atsirasti keli contract mygtukai.
+- Mygtukai rodomi tik tada, jei order item turi prisegta answer.
+- Jei answer dar nepasirasytas:
+  - icon: `fa-pencil-square-o`
+  - tekstas: pasirasyti paslaugu sutarti
+- Jei answer jau pasirasytas:
+  - icon: `fa-file-text-o`
+  - tekstas: perziureti paslaugu sutarti
+- Stulpelis rodomas, jei yra:
+  - neapmoketos order actions
+  - downloadable
+  - contract_links
+
+Poapmokejiminis email
+- Paliestas failas:
+  - `applications/admin/modules/payments/module_ordergroups.class.php`
+- Paliestas DB sablonas:
+  - `gw_mail_templates.id=48`
+  - `idname=order_accept`
+- `initInvoiceVars()` papildytas contract button kintamaisiais:
+  - `CONTRACT_SIGN_URL`
+  - `CONTRACT_SIGN_BUTTON`
+  - `CONTRACT_SIGN_BUTTONS`
+- `CONTRACT_SIGN_BUTTONS` sugeneruoja po viena dideli mygtuka kiekvienam answer.
+- Mygtukai dedami po uzsakymo detaliu HTML:
+  - `ORDER_DETAILS_HTML`
+- Jei mail sablonas naudoja `ORDER_DETAILS_HTML`, contract mygtukai atsiras automatiškai po prekiu/paslaugu lentele.
+- Jei sablonas naudoja atskira `CONTRACT_SIGN_BUTTON`, jis irgi gaus sugeneruota mygtuku HTML.
+- Konkreciame TMC order accept sablone id=48 iterptas:
+  - `{$CONTRACT_SIGN_BUTTONS}`
+  - vieta: po `Uzsakymo identifikacija`
+- Jei order item neturi answer, mygtukai negeneruojami.
+
+Email background request klaidos taisymas
+- Buvo klaida:
+  - `Call to undefined method Module_Default::doorderpaydnotifyuser()`
+- Request URL buvo:
+  - `admin//payments/ordergroups?...`
+- Priezastis:
+  - orderio kalba kartais buvo tuscia
+  - del to susiformavo URL su `admin//payments`
+  - admin routeris pataike i neteisinga moduli
+- Pataisyta failuose:
+  - `applications/admin/modules/payments/module_ordergroups.class.php`
+  - `applications/site/modules/orders/module_orders.class.php`
+- Nauja kalbos fallback logika:
+  - user language
+  - order language
+  - app language
+  - `lt`
+
+Seller mismatch klaidos taisymas
+- Problema: idejus viena modifikacija, kita modifikacija kartais nebesidejo i krepseli su klaida apie kita pardaveja.
+- Patikrinta, kad user id=9 krepselyje ir apmoketame orderyje seller realiai buvo tas pats:
+  - seller_id=1
+- Bug buvo kode:
+  - buvo lyginama su `$item->seller_id->seller_id`
+  - bet `$item->seller_id` yra scalar, ne objektas
+- Pataisyta `applications/site/modules/shop/module_shop.class.php`:
+  - seller imamas kaip `(int)$item->seller_id`
+  - lyginama su `(int)$cart->seller_id`
+  - jei seller yra, jis irasomas i cart
+- Svarbus niuansas:
+  - nereikia atskiros parent seller helper funkcijos
+  - `Shop_Products` jau turi parent fallback logika, kai modifikacijos verte yra 0
+
+Dokumentas ir forma
+- Sukurtas / paruostas docs dokumentas:
+  - `gw_docs.id=24`
+  - `form_id=31`
+  - key buvo naudojamas URL'uose, pvz. `c79b459ecfb1036b70e319f506d108`
+- Dokumento HTML supaprastintas pagal DOCX:
+  - maziau lauku
+  - minimalus formatavimas
+  - headingai ir centravimas palikti paprastai
+  - vengta sudetingo HTML, kad html2pdf maziau strigtu
+- Forma 31 turi pagrindinius laukus:
+  - `service_title`
+  - `client_title`
+  - `client_phone`
+  - `client_email`
+  - `child_title`
+  - `birthdate`
+  - `child_phone`
+- `service_title` naudojamas paslaugos/modifikacijos pavadinimui dokumente.
+
+Patikros, kurios buvo darytos
+- PHP syntax check:
+  - `applications/site/modules/shop/module_shop.class.php`
+  - `applications/site/modules/docs/module_docs.class.php`
+  - `applications/admin/modules/payments/module_orderitems.class.php`
+  - `applications/admin/modules/payments/gw_order_group.class.php`
+  - `applications/admin/modules/payments/module_ordergroups.class.php`
+  - `applications/site/modules/orders/module_orders.class.php`
+  - `applications/admin/modules/forms/gw_forms.class.php`
+  - `applications/admin/modules/forms/module_forms.class.php`
+- Product render patikra per curl:
+  - `http://mano.tmcvolley.lt.localhost/lt/direct/shop/shop/p?id=130&modid=131`
+- Tikrinta, kad HTML yra:
+  - `data-contract-dialog-url`
+  - `clean=2`
+  - `prefill[service_title]`
+- Tikrintas docs callback endpoint:
+  - `direct/docs/docs?act=doReturnAnswer&contract_answer_id=123&contract_answer_secret=abc`
+  - grazino laukta JS su `returnAnswer(...)`
+- Tikrintas user id=9 krepselis/orderiai:
+  - aktyvus cart/order su modifikacija
+  - apmoketas order su kita modifikacija
+  - abiem atvejais seller buvo tas pats
+- Tikrinta formos keyfields ir answer reiksmes:
+  - form 31 `keyfields=["child_title"]`
+  - answer vaiko vardas buvo paimamas i invoice/order item eilute
+
+Zinomi niuansai
+- `invoice_line2` keyfield priedas pridedamas tik naujai idedamiems order item'ams.
+- Seni jau sukurti order item'ai automatiskai neperskaiciuojami.
+- Dialogo flow priklauso nuo esamos `open_dialog2` infrastrukturos:
+  - pirmiausia bandoma `GW.open_dialog2`
+  - tada `gwcms.open_dialog2`
+  - jei nera, veikia server redirect fallback
+- `clean=2` yra svarbus dialogui, kad nebutu pilno svetaines header/footer.
+- `hidehead=1` yra svarbus docs template viduje, kad nerodytu wizard heading/colorgraph.
+- `linkedfields` nenaudoti tevelio default duomenims, nes gali perrasyti profilio duomenis netinkamu atveju.
+- `contract_id` yra nauja logika ir neturi buti maisoma su senu `contracts`.
+- Modifikacijos paveldi `contract_id`, seller ir kitus laukus per `Shop_Products` modelio fallback, kai vaiko reiksme yra 0/tuscia.
+
+Jei reikes testi darba
+- Jei atsiras daugiau formu, rekomenduojama naudoti ta pacia schema:
+  - prie produkto nustatyti `contract_id`
+  - prie formos nustatyti `keyval/keyfields`
+  - laukams, kuriuos reikia uzpildyti is profilio, naudoti `config.default_value_src`
+- Jei reikia daugiau default saltiniu, juos deti i `getDefaultValueBySource()`.
+- Jei reikia kitokiu raktiniu lauku invoice eiluteje, keisti formos `Raktiniai laukai`, o ne shop koda.
+- Jei reikia kitokio pasirasymo mygtuko teksto, ziureti `GW_Order_Group::getContractLinks()`.
+- Jei reikia keisti poapmokejiminio email vaizda, ziureti `Module_OrderGroups::initInvoiceVars()`.
+- Jei dialogas neveikia konkrečiame frontend'e, pirmiausia tikrinti ar puslapyje egzistuoja `GW.open_dialog2` arba `gwcms.open_dialog2`.

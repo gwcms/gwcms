@@ -1,6 +1,7 @@
 {$img = $item->image}
 {$og_image="{$app_base}tools/img/{$img->key}&v={$img->v}"}
 {include "default_open.tpl"}
+{include "`$smarty.current_dir`/contract_dialog.tpl"}
 
 
 
@@ -40,7 +41,8 @@
 {function action_buttons}
 
 	<!-- Buttons -->
-	<form action="{$smarty.server.REQUEST_URI}" method="post">
+	{$contract_dialog_url=$m->getContractDialogUrl($item)}
+	<form action="{$smarty.server.REQUEST_URI}" method="post"{if $contract_dialog_url} data-contract-dialog-url="{$contract_dialog_url|escape:'html'}"{/if}>
 		<input name="act" value="doAdd2Cart" type="hidden">
 		<input name="item[id]" value="{$item->id}" type="hidden">
 		

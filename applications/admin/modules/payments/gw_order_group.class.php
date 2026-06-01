@@ -24,6 +24,10 @@ class GW_Order_Group extends GW_Composite_Data_Object
 		'payd'=>1,
 		'payment_confirmations'=>1,
 		'change_transactions_count'=>1,
+		'contract_answer'=>1,
+		'contract_answers'=>1,
+		'contract_sign_url'=>1,
+		'contract_links'=>1,
 	];
 	
 	
@@ -80,6 +84,84 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			['order_id=?', $this->id],
 			['order'=>'received_at ASC, id ASC']
 		);
+	}
+	
+	function getContractAnswer()
+	{
+		$answers = $this->getContractAnswers();
+		return $answers ? reset($answers) : false;
+	}
+	
+	function getContractAnswers()
+	{
+		$answers = [];
+		$seen = [];
+		
+		foreach($this->items as $item){
+			$answer_id = (int)$item->get('keyval/answers_id');
+			
+			if(!$answer_id || isset($seen[$answer_id]))
+				continue;
+			
+			$seen[$answer_id] = 1;
+			$answer = GW_Form_Answers::singleton()->find(['id=?', $answer_id]);
+			
+			if($answer)
+				$answers[$answer_id] = $answer;
+		}
+		
+		return $answers;
+	}
+	
+	function getContractSignUrl($ln=false)
+	{
+		$answer = $this->getContractAnswer();
+		
+		if(!$answer || !$answer->doc)
+			return false;
+		
+		if(!$ln)
+			$ln = $this->use_lang ?: ($this->user ? $this->user->use_lang : false) ?: 'lt';
+		
+		return GW::s('SITE_URL').$ln.'/direct/docs/docs/item?'.http_build_query([
+			'id' => $answer->doc->key,
+			'answerid' => $answer->id,
+			'answerverif' => $answer->secret,
+			's' => 'preview',
+		]);
+	}
+	
+	function getContractLinks($ln=false)
+	{
+		$links = [];
+		
+		foreach($this->getContractAnswers() as $answer){
+			if(!$answer->doc)
+				continue;
+			
+			if(!$ln)
+				$ln = $this->use_lang ?: ($this->user ? $this->user->use_lang : false) ?: 'lt';
+			
+			$title = trim((string)$answer->get('keyval/child_title'));
+			
+			if(!$title)
+				$title = $answer->doc->title ?: ('Sutartis #'.$answer->id);
+			
+			$links[] = [
+				'answer_id' => $answer->id,
+				'title' => $title,
+				'signed' => $answer->isSigned(),
+				'caption' => $title.' - '.($answer->isSigned() ? 'peržiūrėti paslaugų sutartį' : 'pasirašyti paslaugų sutartį'),
+				'url' => GW::s('SITE_URL').$ln.'/direct/docs/docs/item?'.http_build_query([
+					'id' => $answer->doc->key,
+					'answerid' => $answer->id,
+					'answerverif' => $answer->secret,
+					's' => 'preview',
+				]),
+			];
+		}
+		
+		return $links;
 	}
 	
 	function recalcPaymentLedger($update_changed=true)
@@ -258,6 +340,18 @@ class GW_Order_Group extends GW_Composite_Data_Object
 			break;
 			case 'change_transactions_count':
 				return GW_Change_Transaction::singleton()->count(['order_id=?', $this->id]);
+			break;
+			case 'contract_answer':
+				return $this->getContractAnswer();
+			break;
+			case 'contract_answers':
+				return $this->getContractAnswers();
+			break;
+			case 'contract_sign_url':
+				return $this->getContractSignUrl();
+			break;
+			case 'contract_links':
+				return $this->getContractLinks();
 			break;
 		}
 		

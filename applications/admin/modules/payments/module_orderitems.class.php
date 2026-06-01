@@ -262,6 +262,69 @@ class Module_OrderItems  extends GW_Common_Module
 			
 			$this->tpl_vars['contract_counts'] = $counts;
 		}
+
+		$this->attachContractAnswerFields($list);
+	}
+
+	function attachContractAnswerFields(&$list)
+	{
+		$answer_ids = [];
+		
+		foreach($list as $item){
+			if($answer_id = (int)$item->get('keyval/answers_id'))
+				$answer_ids[$answer_id] = $answer_id;
+		}
+		
+		if(!$answer_ids)
+			return false;
+		
+		$answers = GW_Form_Answers::singleton()->findAll(GW_DB::inCondition('id', $answer_ids), ['key_field'=>'id']);
+		
+		if(!$answers)
+			return false;
+		
+		$form_ids = [];
+		foreach($answers as $answer)
+			if($answer->owner_id)
+				$form_ids[$answer->owner_id] = $answer->owner_id;
+		
+		if(!$form_ids)
+			return false;
+		
+		$elements = GW_Form_Elements::singleton()->findAll(
+			GW_DB::inCondition('owner_id', $form_ids).' AND active=1',
+			['order'=>'owner_id ASC, priority ASC, id ASC']
+		);
+		
+		if(!$elements)
+			return false;
+		
+		$fields_by_form = [];
+		foreach($elements as $element){
+			$field = 'answer_'.$element->fieldname;
+			$fields_by_form[$element->owner_id][] = [$field, $element->fieldname];
+			
+			$this->dynamicFieldTitles[$field] = $element->title;
+			$this->list_config['display_fields'][$field] = 1;
+			
+			if(!in_array($field, $this->list_config['dl_fields']))
+				$this->list_config['dl_fields'][] = $field;
+		}
+		
+		$this->tpl_vars['dl_fields'] = $this->list_config['dl_fields'];
+		
+		foreach($list as $item){
+			$answer_id = (int)$item->get('keyval/answers_id');
+			$answer = $answers[$answer_id] ?? false;
+			
+			if(!$answer)
+				continue;
+			
+			foreach(($fields_by_form[$answer->owner_id] ?? []) as $field_info){
+				list($field, $key) = $field_info;
+				$item->content_base[$field] = $answer->get('keyval/'.$key);
+			}
+		}
 	}
 
 	

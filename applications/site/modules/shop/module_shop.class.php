@@ -537,6 +537,149 @@ class Module_Shop extends GW_Public_Module
 	{
 		return isset(GW::$globals['GW_SHOP_wishlist'][$id]);
 	}
+
+	function getProductContractDoc($item)
+	{
+		$docid = (int)$item->contract_id;
+		
+		if(!$docid && $item->parent_id){
+			$parent = Shop_Products::singleton()->find(['id=?', $item->parent_id]);
+			$docid = $parent ? (int)$parent->contract_id : 0;
+		}
+
+		if(!$docid)
+			return false;
+
+		$doc = GW_Doc::singleton()->find(['id=? AND form_id > 0', $docid]);
+
+		if(!$doc)
+			$this->setError("Product contract document #{$docid} was not found or has no form_id");
+
+		return $doc;
+	}
+
+	function buildContractReturnUrl($cartvals)
+	{
+		return $this->app->buildUri($this->app->path, [
+			'act' => 'doAdd2Cart',
+			'item' => [
+				'id' => (int)$cartvals['id'],
+				'qty' => max(1, (int)($cartvals['qty'] ?? 1)),
+			],
+		]);
+	}
+
+	function redirectToContractForm($doc, $item, $cartvals)
+	{
+		$returnUrl = $this->buildContractReturnUrl($cartvals);
+		$url = $this->app->buildUri('direct/docs/docs/item', [
+			'id' => $doc->key,
+			's' => 'form',
+			'obj' => 'shop_products~'.$item->id,
+			'hidehead' => 1,
+			'returnafterform' => 1,
+			'prefill' => [
+				'service_title' => $this->getContractServiceTitle($item),
+			],
+			'after_submit' => gw_url_crypt_helper::singleton()->encode($returnUrl),
+		]);
+
+		Navigator::jump($url);
+	}
+	
+	function getContractDialogUrl($item)
+	{
+		$doc = $this->getProductContractDoc($item);
+		
+		if(!$doc)
+			return false;
+		
+		$returnUrl = $this->app->buildUri('direct/docs/docs', [
+			'act' => 'doReturnAnswer',
+		]);
+		
+		return $this->app->buildUri('direct/docs/docs/item', [
+			'id' => $doc->key,
+			's' => 'form',
+			'obj' => 'shop_products~'.$item->id,
+			'hidehead' => 1,
+			'returnafterform' => 1,
+			'dialog' => 1,
+			'clean' => 2,
+			'prefill' => [
+				'service_title' => $this->getContractServiceTitle($item),
+			],
+			'after_submit' => gw_url_crypt_helper::singleton()->encode($returnUrl),
+		]);
+	}
+	
+	function getContractServiceTitle($item)
+	{
+		if($item->parent_id && $item->modif_title)
+			return trim((string)$item->modif_title);
+		
+		return trim((string)($item->title ?: $item->modif_title));
+	}
+
+	function getContractAnswer($doc, $item, $auser=false)
+	{
+		$answerid = (int)($_REQUEST['contract_answer_id'] ?? 0);
+		$secret = $_REQUEST['contract_answer_secret'] ?? false;
+
+		if(!$answerid || !$secret)
+			return false;
+
+		$answer = GW_Form_Answers::singleton()->find([
+			'id=? AND secret=? AND owner_id=? AND doc_id=?',
+			$answerid,
+			$secret,
+			$doc->form_id,
+			$doc->id,
+		]);
+
+		if(!$answer)
+			return false;
+
+		if($this->app->user && (int)$answer->user_id !== (int)$this->app->user->id)
+			return false;
+
+		if($auser && (int)$answer->auid !== (int)$auser->id)
+			return false;
+
+		return $answer;
+	}
+	
+	function getContractInvoiceLineSuffix($answer)
+	{
+		if(!$answer || !$answer->form)
+			return '';
+		
+		$keyfields = $answer->form->get('keyval/keyfields');
+		
+		if(!$keyfields)
+			return '';
+		
+		if(!is_array($keyfields)){
+			$decoded = json_decode($keyfields, true);
+			$keyfields = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode(',', $keyfields)));
+		}
+		
+		$vals = [];
+		
+		foreach($keyfields as $fieldname){
+			$val = $answer->get('keyval/'.$fieldname);
+			
+			if(is_array($val))
+				$val = implode(', ', array_filter($val));
+			
+			$val = trim((string)$val);
+			
+			if($val !== '')
+				$vals[] = $val;
+		}
+		
+		return $vals ? implode(', ', $vals) : '';
+	}
 	
 	
 
@@ -575,6 +718,11 @@ class Module_Shop extends GW_Public_Module
 			$this->setError("Item not available");
 			$this->app->jump();
 		}
+
+		$contractDoc = $this->getProductContractDoc($item);
+
+		if($contractDoc && !($_REQUEST['contract_answer_id'] ?? false))
+			$this->redirectToContractForm($contractDoc, $item, $cartvals);
 				
 		
 		if($this->feat('anonymous_cart') && !$this->app->user){
@@ -587,6 +735,13 @@ class Module_Shop extends GW_Public_Module
 			$this->userRequired();
 			$cart = $this->app->user->getCart(true);
 		}
+
+		$contractAnswer = $contractDoc ? $this->getContractAnswer($contractDoc, $item, $auser) : false;
+
+		if($contractDoc && !$contractAnswer){
+			$this->setError("Please fill the required form before adding this item to cart");
+			$this->redirectToContractForm($contractDoc, $item, $cartvals);
+		}
 		
 		
 			//if(GW::ip()=='84.15.236.87'){
@@ -598,7 +753,9 @@ class Module_Shop extends GW_Public_Module
 		//	
 		////// KITAS SELLERIS-------------------------------------------
 		
-		if($cart->items && ($cart->seller_id || $item->seller_id) && $cart->seller_id!=$item->seller_id->seller_id){
+		$seller_id = (int)$item->seller_id;
+		
+		if($cart->items && ($cart->seller_id || $seller_id) && (int)$cart->seller_id !== (int)$seller_id){
 			$caption = GW::ln('/M/ORDERS/VIEWS/doCloseOrder');
 			$url = $this->app->buildUri('direct/orders/orders', ['act'=>"doCloseOrder",'id'=>$cart->id]);
 		
@@ -614,8 +771,8 @@ class Module_Shop extends GW_Public_Module
 			return false;
 		}
 		
-		if($item->seller_id){
-			$cart->seller_id = $item->seller_id;
+		if($seller_id){
+			$cart->seller_id = $seller_id;
 			$cart->updateChanged();
 		}
 		////// KITAS SELLERIS-------------------------------------------
@@ -684,9 +841,22 @@ class Module_Shop extends GW_Public_Module
 			$vals['invoice_line2'] = $item->title; //nes is admin kitaip title prideda
 		}
 		
+		if($contractAnswer && ($suffix = $this->getContractInvoiceLineSuffix($contractAnswer))){
+			$vals['invoice_line2'] = trim(($vals['invoice_line2'] ?? $item->title).' - '.$suffix);
+		}
+		
 		$cartitem->setValues($vals);
 		
 		$cart->addItem($cartitem);
+
+		if($contractAnswer){
+			$cartitem->set('keyval/answers_id', $contractAnswer->id);
+			$cartitem->set('keyval/contract_doc_id', $contractDoc->id);
+
+			$contractAnswer->obj_type = $cartitem->table;
+			$contractAnswer->obj_id = $cartitem->id;
+			$contractAnswer->updateChanged();
+		}
 		
 		
 		if($this->feat('jump2cartafteradd')){

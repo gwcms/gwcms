@@ -685,8 +685,24 @@ class Module_OrderGroups extends GW_Common_Module
 		$orderlink = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['orderid'=>$item->id,'id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
 		$v['ORDER_LINK'] = "<a href='$orderlink'>".GW_String_Helper::truncate($orderlink,50)."</a>";
 		
+		$v['CONTRACT_SIGN_URL'] = $item->contract_sign_url;
+		$v['CONTRACT_SIGN_BUTTON'] = '';
+		$v['CONTRACT_SIGN_BUTTONS'] = '';
+		
+		foreach($item->contract_links as $contract_link){
+			$v['CONTRACT_SIGN_BUTTONS'] .=
+				'<div style="text-align:center;margin:12px 0;">'.
+				'<a href="'.htmlspecialchars($contract_link['url'], ENT_QUOTES, 'UTF-8').'" '.
+				'style="display:inline-block;background:#f6a800;color:#111;text-decoration:none;padding:14px 26px;font-weight:bold;border-radius:3px;">'.
+				htmlspecialchars($contract_link['caption'], ENT_QUOTES, 'UTF-8').
+				'</a>'.
+				'</div>';
+		}
+		
+		$v['CONTRACT_SIGN_BUTTON'] = $v['CONTRACT_SIGN_BUTTONS'];
+		
 		if($opts['ORDER_DETAILS_HTML'] ?? false){
-			$v['ORDER_DETAILS_HTML'] = $this->getOrderItems($item,true);
+			$v['ORDER_DETAILS_HTML'] = $this->getOrderItems($item,true).$v['CONTRACT_SIGN_BUTTONS'];
 		}
 		
 		
@@ -1099,7 +1115,7 @@ class Module_OrderGroups extends GW_Common_Module
 		//$url=Navigator::backgroundRequest('admin/lt/payments/ordergroups?id='.$order->id.'&act=doSaveInvoice&cron=1');	
 		
 		if($this->config->confirm_email_tpl && (int)$order->payment_status === 7){
-			$lang = $order->user->use_lang ?: $order->use_lang;
+			$lang = ($order->user ? $order->user->use_lang : false) ?: $order->use_lang ?: $this->app->ln ?: 'lt';
 			$url=Navigator::backgroundRequest("admin/$lang/payments/ordergroups?id={$order->id}&act=doOrderPaydNotifyUser&cron=1");	
 			
 			if($this->app->user->isRoot()){
