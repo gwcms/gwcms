@@ -1,6 +1,7 @@
 
 
 {call e field="invoice_template" type=select_ajax modpath="emails/email_templates" preload=1 options=[]}
+{call e field="default_send_mail_tpl_id" type=select_ajax modpath="emails/email_templates" preload=1 options=[]}
 {call e field="invoice_directory_name" type=text }
 
 {*

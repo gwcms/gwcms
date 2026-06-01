@@ -153,10 +153,15 @@ class Module_OrderGroups_Mails extends GW_Module_Extension
 	
 	function viewMailS1()
 	{
-		return ['item' => $this->getDataObjectById()];
+		$item = $this->getDataObjectById();
+
+		return [
+			'item' => $item,
+			'mail_template_default_id' => $item->get('keyval/lastmail_tpl_id') ?: $this->modconfig->default_send_mail_tpl_id,
+		];
 		//d::dumpas($this->tpl_vars['item']->recipient);
-		
-	}	
+
+	}
 	
 	function prepareMail($order, $to, $ln, $template_id)
 	{				
@@ -164,7 +169,12 @@ class Module_OrderGroups_Mails extends GW_Module_Extension
 		$from = '';
 		
 		if($template_id){
-			$vars = $this->getMailVars($order, $ln);
+			$vars = method_exists($this->mod, 'getMailVars') ? $this->getMailVars($order, $ln) : [];
+
+			if(method_exists($this->mod, 'initInvoiceVars')){
+				list($_invoice_tpl, $invoice_vars) = $this->mod->initInvoiceVars($order, ['ln' => $ln]);
+				$vars = array_merge((array)$vars, (array)$invoice_vars);
+			}
 
 			$tpl = is_object($template_id) ? $template_id :  GW_Mail_Template::singleton()->find(['id=?', $template_id]);
 			
@@ -197,10 +207,39 @@ class Module_OrderGroups_Mails extends GW_Module_Extension
 		$ln = $data["use_lang"];
 		$to =  $data["recipient"];
 		$order = $this->getDataObjectById();
-		
-		$this->app->sess['item']= $this->prepareMail($order, $to, $ln, $data['template_id']);
-		
-		$this->app->jump('emails/email_queue/form?id=0');
+
+		if($data['template_id'] ?? false){
+			$order->set('keyval/lastmail_tpl_id', (int)$data['template_id']);
+			$order->updateChanged();
+		}
+
+		$mail = $this->prepareMail($order, $to, $ln, $data['template_id']);
+		$include_invoice = !isset($data['include_invoice']) || (string)$data['include_invoice'] !== '0';
+		$save_attachments = !isset($data['save_attachments']) || (string)$data['save_attachments'] !== '0';
+
+		if($include_invoice){
+			$mail['args'] = json_encode([
+				'invoice_attachment_order_id' => (int)$order->id,
+				'invoice_attachment_preinvoice' => 1,
+				'save_attachments' => $save_attachments,
+			]);
+		}
+
+		$mail_item = GW_Mail_Queue::singleton()->createNewObject($mail);
+		$mail_item->insert();
+
+		if($include_invoice && $save_attachments){
+			if(!class_exists('Module_Email_Queue'))
+				require_once GW::s('DIR/APPLICATIONS').'admin/modules/emails/module_email_queue.class.php';
+
+			$email_queue_module = new Module_Email_Queue();
+			$email_queue_module->app = $this->app;
+
+			if($attachments = $email_queue_module->getGeneratedAttachments($mail_item))
+				$email_queue_module->storeGeneratedAttachments($mail_item, $attachments);
+		}
+
+		$this->app->jump('emails/email_queue/form', ['id'=>$mail_item->id]);
 		
 		/*
 		d::ldump($tpl);

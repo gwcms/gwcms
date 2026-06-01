@@ -10,6 +10,13 @@
 {call e field=from hidden_note=GW::l('/m/email_note') default=$m->config->default_sender}
 {call e field=to hidden_note=GW::l('/m/email_note')  default=$m->config->default_replyto}
 {call e field=subject}
+<input type="hidden" name="item[args]" value="{$item->args|escape}" />
+
+{call e field=attachments
+	type=attachments
+	valid=[image=>[storewh=>'2000x1500',minwh=>'1x1',maxwh=>'6000x6000'],limit=>20]
+	preview=[thumb=>'50x50']
+}
 
 {if $item->plain}
 	{call e field=body type=textarea height=100px}
@@ -31,4 +38,3 @@
 
 
 {include file="default_form_close.tpl"}
-	

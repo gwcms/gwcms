@@ -647,12 +647,16 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['COMPANY_ID'] = $item->company_code;
 		$v['COMPANY_VAT_ID'] = $item->vat_code;
 		$v['COMPANY_ADDR'] = $item->company_addr;
+		$v['CLIENT_NAME'] = trim($item->company ?: trim($item->name.' '.$item->surname));
 		
 		$v['INVOICE_NUM'] = trim(GW::ln('/g/PAYMENT_BANKTRANSFER_DETAILS_PREFIX')).'-'.$item->id;
-		$v['DATE'] = explode(' ',$item->pay_time)[0];
+		$v['EPC_REFERENCE'] = $v['INVOICE_NUM'];
+		$v['DATE'] = $item->invoice_date ?: explode(' ',$item->pay_time)[0];
 		
-		if($v['DATE']=='0000-00-00')
+		if($v['DATE']=='0000-00-00' || !$v['DATE'])
 			$v['DATE'] = explode(' ',$item->insert_time)[0];
+		
+		$v['DUE_DATE'] = $item->due_date;
 		
 		
 		$v['EMAIL'] = isset($payconfirm->p_email) ? $payconfirm->p_email : $item->email;
@@ -671,6 +675,8 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['AMOUNT_ITEMS'] = $item->amount_items;
 		$v['SELLER_REKVIZITAI_VATINVOICE'] = GW::ln("/M/orders/TKPC_MENUTURAS_PVM_REKVIZITAI");
 		$v['SELLER_REKVIZITAI_PREINVOICE'] = $v['SELLER_REKVIZITAI_VATINVOICE'];
+		$v['EPC_QR_URL'] = '';
+		$v['EPC_QR_URL_HTML'] = '';
 		
 		if(GW::s('PROJECT_NAME') == 'artistdb'){
 			$v['SELLER_REKVIZITAI_VATINVOICE'] = $translateKeyval(
@@ -680,6 +686,19 @@ class Module_OrderGroups extends GW_Common_Module
 			$v['SELLER_REKVIZITAI_PREINVOICE'] = $item->get('keyval/artistdbseller_preinvoice')
 				? $translateKeyval($item->get('keyval/artistdbseller_preinvoice'), "/M/orders/TKPC_MENUTURAS_PVM_REKVIZITAI")
 				: $v['SELLER_REKVIZITAI_VATINVOICE'];
+		}
+
+		$recipient_iban = trim((string)GW::ln('/g/CONTACTS_IBAN'));
+		$recipient_name = trim((string)GW::ln('/g/CONTACTS_COMPANY_NAME'));
+
+		if($recipient_iban && $recipient_iban !== '&nbsp;' && $recipient_name){
+			$v['EPC_QR_URL'] = rtrim(GW::s('SITE_URL'), '/').'/tools/epc_generator?'.http_build_query([
+				'recipient_iban' => $recipient_iban,
+				'recipient_name' => $recipient_name,
+				'amount' => $v['PAYABLE_AMOUNT_FMT'],
+				'reference' => $v['EPC_REFERENCE'],
+			]);
+			$v['EPC_QR_URL_HTML'] = htmlspecialchars($v['EPC_QR_URL'], ENT_QUOTES, 'UTF-8');
 		}
 		
 		$orderlink = GW::s('SITE_URL').$this->app->buildURI('direct/orders/orders', ['orderid'=>$item->id,'id'=>$item->id,'key'=>$item->secret],['app'=>"site"]);
@@ -803,7 +822,11 @@ class Module_OrderGroups extends GW_Common_Module
 		if(isset($_GET['html']))
 			die($html);
 		
-		$pdf=GW_html2pdf_Helper::convert($html, false);
+		$pdf_opts = [];
+		if(isset($_GET['test_dpi']) && (int)$_GET['test_dpi'] > 0)
+			$pdf_opts['params']['dpi'] = (int)$_GET['test_dpi'];
+		
+		$pdf=GW_html2pdf_Helper::convert($html, false, $pdf_opts);
 		$this->mute_errors=$tmp;
 
 		header('Content-type: application/pdf');
@@ -815,6 +838,178 @@ class Module_OrderGroups extends GW_Common_Module
 	{
 		$_GET['preinvoice']=1;
 		$this->viewInvoice();
+	}
+
+	function doCreateInvoice()
+	{
+		$form = [
+			'fields' => [
+				
+				    'client_id' => [
+					'type' => 'select_ajax',
+					'title' => 'Klientas',
+					'modpath' => 'customers/users',
+					'preload' => 1,
+					'options' => [],
+					'required' => 1,
+					'colspan'=>6
+				],
+				'invoice_date' => [
+					'type' => 'date',
+					'title' => 'Sąskaitos data',
+					'default' => date('Y-m-d'),
+					'required' => 1,
+				],
+				'payment_days' => [
+					'type' => 'number',
+					'title' => 'Mok. term. d.',
+					'default' => 7,
+					'min' => 0,
+				],
+			    
+				'obj_type' => [
+					'type' => 'select',
+					'title' => 'Tipas',
+					'options' => [
+						'gw_oi_service' => 'Paslauga',
+					],
+					'default' => 'gw_oi_service',
+					'required' => 1,
+					'size'=>1,
+				],
+				'unit_price' => [
+					'type' => 'number',
+					'title' => 'Kaina',
+					'step' => '0.01',
+					'required' => 1,
+				    'size'=>1,
+				],
+				'qty' => [
+					'type' => 'number',
+					'title' => 'Kiekis',
+					'default' => 1,
+					'required' => 1,
+				    'size'=>1,
+				],
+				'invoice_line2' => [
+					'type' => 'text',
+					'title' => 'Eilutė',
+					'required' => 1,
+				    'size'=>1,
+				],
+				'obj_type2' => [
+					'type' => 'select',
+					'title' => 'Tipas 2',
+					'options' => [
+						'gw_oi_service' => 'Paslauga',
+					],
+					'default' => 'gw_oi_service',
+				],
+				'unit_price2' => [
+					'type' => 'number',
+					'title' => 'Kaina 2',
+					'step' => '0.01',
+				],
+				'qty2' => [
+					'type' => 'number',
+					'title' => 'Kiekis 2',
+				],
+				'invoice_line22' => [
+					'type' => 'text',
+					'title' => 'Eilutė 2',
+				],
+			    
+
+			],
+			'cols' => 4,
+		];
+
+		foreach($form['fields'] as &$field)
+			$field += ['notr' => 1, 'width_title' => '1%', 'width' => '100%'];
+		unset($field);
+
+		if(!($answers = $this->prompt($form, 'Pasirinkite klientą', ['method' => 'post', 'width' => '100%'])))
+			return false;
+
+		$client = GW_Customer::singleton()->find(['id=?', (int)$answers['client_id']]);
+
+		if(!$client)
+			return $this->setError('Klientas nerastas');
+
+		$company = trim((string)$client->company_name);
+		if(!$company)
+			$company = trim($client->name.' '.$client->surname);
+
+		$line2_vals = [
+			'unit_price2' => trim((string)($answers['unit_price2'] ?? '')),
+			'qty2' => trim((string)($answers['qty2'] ?? '')),
+			'invoice_line22' => trim((string)($answers['invoice_line22'] ?? '')),
+		];
+		$line2_started = $line2_vals['unit_price2'] !== '' || $line2_vals['invoice_line22'] !== '';
+		$line2_filled = count(array_filter($line2_vals, 'strlen')) == count($line2_vals);
+
+		if($line2_started && !$line2_filled)
+			return $this->setError('Antrai paslaugai reikia užpildyti kainą, kiekį ir sąskaitos eilutę');
+
+		$order = GW_Order_Group::singleton()->createNewObject();
+		$invoice_date = $answers['invoice_date'] ?: date('Y-m-d');
+		$payment_days = trim((string)($answers['payment_days'] ?? ''));
+		$due_date = $payment_days === '' ? null : date('Y-m-d', strtotime($invoice_date.' +'.(int)$payment_days.' days'));
+		
+		$order->setValues([
+			'user_id' => (int)$client->id,
+			'company' => $company,
+			'need_invoice' => 1,
+			'company_code' => $client->company_code,
+			'company_addr' => $client->address,
+			'name' => $client->name,
+			'surname' => $client->surname,
+			'email' => $client->email,
+			'country' => $client->country,
+			'city' => $client->city,
+			'address_l1' => $client->address,
+			'phone' => $client->phone,
+			'delivery_opt' => 3,
+			'use_lang' => $client->use_lang ?: $this->app->ln,
+			'open' => 0,
+			'active' => 1,
+			'payment_status' => 0,
+			'placed_time' => date('Y-m-d H:i:s'),
+			'invoice_date' => $invoice_date,
+			'due_date' => $due_date,
+			'extra' => [
+				'customer_id' => (int)$client->id,
+				'business_vat_group' => $client->business_vat_group,
+				'bank_account' => $client->bank_account,
+			],
+		]);
+		$order->insert();
+
+		$add_service = function($obj_type, $unit_price, $qty, $invoice_line2) use ($order) {
+			$order_item = new GW_Order_Item();
+			$order_item->setValues([
+				'obj_type' => $obj_type,
+				'obj_id' => 0,
+				'qty' => (int)$qty,
+				'qty_range' => $qty.';'.$qty,
+				'unit_price' => (float)$unit_price,
+				'invoice_line2' => $invoice_line2,
+				'deliverable' => 0,
+				'link' => '',
+				'insert_change_track_context' => [
+					'note' => 'Invoice service line created',
+				],
+			]);
+			$order->addItem($order_item);
+		};
+
+		$add_service($answers['obj_type'], $answers['unit_price'], $answers['qty'], $answers['invoice_line2']);
+
+		if($line2_filled)
+			$add_service($answers['obj_type2'], $answers['unit_price2'], $answers['qty2'], $answers['invoice_line22']);
+
+		$this->setMessage("Sukurtas užsakymas #{$order->id}: {$company}");
+		$this->jump("payments/ordergroups/{$order->id}/form");
 	}
 
 	function doSaveInvoice($item=false)

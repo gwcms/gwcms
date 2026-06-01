@@ -436,7 +436,7 @@ class GW_Mail_Helper
 	static function add2db(&$opts, $m_queue_item=false)
 	{
 		$vals=[];
-		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status']);
+		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status','args']);
 
 		
 		if($m_queue_item){

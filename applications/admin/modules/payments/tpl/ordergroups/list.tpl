@@ -14,11 +14,9 @@
 
 
 	{function name=do_toolbar_buttons_orderacts} 		
-		{*
 		{toolbar_button iconclass="fa fa-money"
-				title=GW::ln('/m/VIEWS/doCreateInvoices')
-				href=$m->buildUri(false, [act=>doCreateInvoices])}
-		*}
+				title="Sukurti sąskaitą"
+				href=$m->buildUri(false, [act=>doCreateInvoice])}
 		{toolbar_button iconclass="fa fa-money"
 				title=GW::l('/m/VIEWS/paymentsummary')
 				href=$m->buildUri(paymentsummary)}

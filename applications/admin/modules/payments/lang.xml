@@ -85,6 +85,14 @@
       <lt>Apmokėjimo laikas</lt>
       <en>Payment Time</en>
     </i>
+    <i id="invoice_date">
+      <lt>Sąskaitos data</lt>
+      <en>Invoice date</en>
+    </i>
+    <i id="due_date">
+      <lt>Apmokėti iki</lt>
+      <en>Due date</en>
+    </i>
     <i id="group_id">
       <lt>Užsakymo id</lt>
       <en>Order ID</en>

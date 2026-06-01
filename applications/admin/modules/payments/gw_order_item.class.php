@@ -211,6 +211,12 @@ class GW_Order_Item extends GW_Composite_Data_Object
 		switch ($name)
 		{
 			case "obj":
+				if($this->obj_type == 'gw_oi_service')
+					return (object)[
+						'title' => $this->invoice_line2,
+						'invoice_line' => $this->invoice_line2,
+					];
+
 				$class = $this->obj_type;
 				
 				if(!$class)
@@ -231,6 +237,9 @@ class GW_Order_Item extends GW_Composite_Data_Object
 					return $this->type. ' - '.$this->obj->title;
 			break;
 			case 'type':
+				if($this->obj_type == 'gw_oi_service')
+					return 'Paslauga';
+
 				return GW::ln("/g/CART_ITM_{$this->obj_type}");
 			break;
 			case  'invoice_line':

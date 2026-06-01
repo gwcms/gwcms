@@ -13,6 +13,8 @@
 	fields=>[
 		pay_type=>[type=>text],
 		user_id=>[type=>select_ajax,modpath=>"users/usr", preload=>1,options=>[],default=>$app->user->id],
+		invoice_date=>[type=>date],
+		due_date=>[type=>date],
 		amount_total=>[type=>number,step=>0.01],
 		amount_items=>[type=>text],
 		adm_processed=>[type=>bool],
