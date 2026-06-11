@@ -65,7 +65,7 @@
 			if (!el)
 				return;
 
-			el.value = '{if $testserver}https://{$smarty.server.HTTP_HOST}.1.voro.lt{/if}'+data.value || '';
+			el.value = data.value ? '{if $testserver}https://{$smarty.server.HTTP_HOST}.1.voro.lt{/if}' + data.value : '';
 
 			// trigger change
 			try

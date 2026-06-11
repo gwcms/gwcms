@@ -537,12 +537,15 @@ $(function () {
 
 	if (gw_lang_results_active)
 		$(".lnresult").toggleClass('lnresulthighl');
+	if (gw_lang_results_active)
+		document.body.classList.add('pagecontent-highlight-active');
 
 	$("body").keydown(function (event) {
             console.log(event.which);
 
 		if (event.which == 81 && event.ctrlKey) {
 			$(".lnresult").toggleClass('lnresulthighl');
+			document.body.classList.toggle('pagecontent-highlight-active');
 
 			location.href = gw_navigator.url(location.href, {"toggle-lang-results-active": 1});
 
@@ -607,36 +610,12 @@ $(function () {
 ///---------------------------CKEDIT inline------------------------------------------------------------------------------
 function starInlineEditing(el)
 {
-	const dataId = el.dataset.pageid || '';
-	const dataKey = el.dataset.contentkey || '';
+	const field = el._gwPageField;
+	if(!field)
+		return;
 
-	fetch('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form?json=1&inpname=' + dataKey)
-		.then(res => res.text())
-		.then(response => {
-			try{
-				var pagedata = JSON.parse(response)
-				var inpdata = pagedata['input_data'][dataKey];
-
-				el.data_parent_id = pagedata.parent_id;
-
-				startEdit(el, inpdata['value'], inpdata['multilang']);
-			}catch(err){
-				console.log(err)
-
-
-				if (confirm("Admin authorisation required. Do you want to open the admin window?")) {
-				    // Open a new window with specific size
-				    window.open(
-					"/admin",           // URL to open
-					"AdminWindow",      // Window name
-					"width=500,height=500" // Window features
-				    );
-				}								
-
-				//GW.open_dialog2({ url: '/admin', iframe:1, title:"Login is required" })
-			}
-			//inlineEditNotification(el, ' response received! ');
-		})
+	el.data_parent_id = field.parentid;
+	startEdit(el, field.value, field.multilang);
 }
 
 function initProtected(id)	
@@ -645,47 +624,34 @@ function initProtected(id)
 
 }			
 
-function findContainer(el) 
-{
-	while(el) {
-	  if(el.classList && el.classList.contains('ckedit-container')) return el;
-	  el = el.parentNode;
-	}
-	return null;
-}
-
 function inlineEditNotification(el, str)
 {
-	const container =findContainer(el) 
-	if(!container)
-		alert(str)
-
 	const msg = document.createElement('div');
 	msg.className = 'save-message';
 	msg.textContent = str;
-	container.appendChild(msg);
+	document.body.appendChild(msg);
+
+	const rect = el.getBoundingClientRect();
+	msg.style.top = (window.scrollY + rect.top + 5) + 'px';
+	msg.style.left = (window.scrollX + rect.right - msg.offsetWidth - 5) + 'px';
 
 	// Remove after animation
 	msg.addEventListener('animationend', () => msg.remove());
 }
 
-function cancelInlineEditing(el)
-{
-	var editor = CKEDITOR.instances[el.id];
-	editor.destroy();
-	el.innerHTML = el.originalHTML; // restore old content
-	inlineEditNotification(el, 'Editing canceled');	
-	el.setAttribute('contenteditable', 'false');
-	changeEditBtnText(el,"Edit")
-}
-
 function changeEditBtnText(el, str)
 {
-	var c = findContainer(el)
+	if(el._gwEditButton)
+		el._gwEditButton.textContent = str;
+}
 
-	const editbtn = c.querySelector('.edit-inline-btn');
-	console.log(editbtn)
-	editbtn.textContent = str;
+function getContentAdminUrl(el)
+{
+	const pageId = el.dataset.pageid || '';
+	const parentId = el.dataset.parentid || '';
+	const contentKey = el.dataset.contentkey || '';
+	return '/admin/' + GW.ln + '/sitemap/pages/' + pageId + '/form?pid=' +
+		encodeURIComponent(parentId) + '&hightligtfield=' + encodeURIComponent(contentKey);
 }
 
 
@@ -785,8 +751,17 @@ function startEdit(el, content, multilang, index) {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: formData.toString()
 			})
-				.then(res => res.text())
+				.then(res => {
+					if(res.status === 401 || res.status === 403)
+						throw new Error('ADMIN_AUTH_REQUIRED');
+					if(!res.ok)
+						throw new Error('SAVE_FAILED_' + res.status);
+					return res.text();
+				})
 				.then(response => {
+					if(/<form[^>]+(?:login|auth)|name=["'](?:username|password)["']/i.test(response) ||
+						/admin\/(?:[^/]+\/)?login/i.test(response))
+						throw new Error('ADMIN_AUTH_REQUIRED');
 					console.log('Server response:', response);
 					clearUnloadWarning();
 					editor.destroy();
@@ -796,6 +771,11 @@ function startEdit(el, content, multilang, index) {
 				})
 				.catch(err => {
 					console.error('Save error:', err);
+					if(err.message === 'ADMIN_AUTH_REQUIRED') {
+						if(confirm('Admin authorisation required. Do you want to open the admin window?'))
+							window.open('/admin', 'AdminWindow', 'width=500,height=500');
+						return;
+					}
 					alert('Failed to save content!');
 				});
 		}
@@ -804,8 +784,7 @@ function startEdit(el, content, multilang, index) {
 	// --- EDIT IN ADMIN COMMAND ---
 	editor.addCommand('EditInAdminCmd', {
 		exec: function () {
-			var dataId = el.dataset.pageid || '';
-			window.open('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form');
+			window.open(getContentAdminUrl(el));
 		}
 	});
 
@@ -851,50 +830,53 @@ function cancelInlineEditing(el, editor = null, clearUnloadWarning = null) {
 	if (clearUnloadWarning)
 		clearUnloadWarning();
 
+	changeEditBtnText(el, 'Edit');
 	inlineEditNotification(el, 'Editing canceled');
 }
 
-// --- INLINE EDITOR INITIALIZATION ---
+document.querySelectorAll('.pagecontent').forEach((el) => {
+	el.addEventListener('click', function(event) {
+		if(!document.body.classList.contains('pagecontent-highlight-active'))
+			return;
+		event.preventDefault();
+		event.stopPropagation();
+		window.open(getContentAdminUrl(el));
+	});
+});
+
+const fieldsByKey = {};
+(window.gw_page_content_fields || []).forEach((field) => fieldsByKey[field.key] = field);
+
 document.querySelectorAll('.ckedit').forEach((el, index) => {
+	const field = fieldsByKey[el.dataset.contentkey];
+	if(field)
+		el._gwPageField = field;
 
 	const container = document.createElement('div');
-	container.classList.add('ckedit-container');
+	container.className = 'ckedit-container';
 	el.parentNode.insertBefore(container, el);
 	container.appendChild(el);
-
 	container.insertAdjacentHTML('beforeend',
-		`<div class="edit-inline-btn-contain">
-			<button class="edit-inline-btn0 edit-inline-btn">Edit</button>
-			<button class="edit-inline-btn0 edit-inline-btn-inadm">Adm</button>
-		</div>`);
+		'<div class="edit-inline-btn-contain">' +
+			'<button type="button" class="edit-inline-btn0 edit-inline-btn">Edit</button>' +
+			'<button type="button" class="edit-inline-btn0 edit-inline-btn-inadm">Adm</button>' +
+		'</div>');
 
 	el.id = 'inlineeditor_' + index;
-
-	container.querySelector('.edit-inline-btn').addEventListener('click', (e) => {
-		if (el.getAttribute('contenteditable') === 'true') {
+	el._gwEditButton = container.querySelector('.edit-inline-btn');
+	el._gwEditButton.addEventListener('click', () => {
+		if(el.getAttribute('contenteditable') === 'true')
 			cancelInlineEditing(el);
-		} else {
+		else
 			starInlineEditing(el);
-		}
 	});
-
-	container.querySelector('.edit-inline-btn-inadm').addEventListener('click', (e) => {
-		const elBtn = e.currentTarget;
-		const dataId = findContainer(elBtn).querySelector('.ckedit').dataset.pageid;
-		window.open('/admin/' + GW.ln + '/sitemap/pages/' + dataId + '/form');
+	container.querySelector('.edit-inline-btn-inadm').addEventListener('click', () => {
+		window.open(getContentAdminUrl(el));
 	});
-
-	el.addEventListener('click', (e) => {
-		const dataId = el.dataset.pageid || '';
-		const dataKey = el.dataset.contentkey || '';
-
-		if (!e.shiftKey)
+	el.addEventListener('click', (event) => {
+		if(!event.shiftKey || el.getAttribute('contenteditable') === 'true')
 			return;
-
-		if (el.getAttribute('contenteditable') === 'true')
-			return;
-
-		e.preventDefault();
+		event.preventDefault();
 		starInlineEditing(el);
 	});
 });

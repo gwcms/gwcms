@@ -234,11 +234,13 @@ class GW_Page extends GW_i18n_Data_Object
 	{
 		if(! $tpl_id=$this->get('template_id'))
 			return [];
-		
+
+		if(isset($this->cache['template_inputs']))
+			return $this->cache['template_inputs'];
+
 		$list = GW_TplVar::singleton()->findAll(['template_id=?', $tpl_id], ['key_field'=>'name', 'order'=>'priority ASC']);
 
-		
-		return $list;
+		return $this->cache['template_inputs'] = $list;
 	}
 
 	
@@ -282,25 +284,90 @@ class GW_Page extends GW_i18n_Data_Object
 		return $cache[$key] ?? null;
 	}
 	
-	function getContent($key=null, $ln=false)
+	function getContent($key=null, $ln=false, $decorate=true)
 	{
-		
 		$val = $this->__getContent($key, $ln);
-		
-		//if(GW::$context->app->user && GW::$context->app->user->isRoot()){
-				
-		if(GW::s('DEVELOPER_PRESENT') && GW::$context->app->app_name == 'SITE' && !is_numeric($val) && self::__is_html($val)){
-			return "<div class='ckedit' data-siteid='".$this->site_id."' data-app='".GW::$context->app->app_name."' data-pageid='{$this->id}' data-contentkey='{$key}' data-ln='{$ln}'>".$val."</div>";
+
+		if($decorate && $key !== null && $this->isFrontendContentEditingEnabled()){
+			$input = $this->getInputs()[$key] ?? null;
+			$type = $input ? $input->get('type') : '';
+			$contentLn = $ln ?: $this->lang();
+			$attrs = "data-pageid='".(int)$this->id."' data-parentid='".(int)$this->parent_id.
+				"' data-siteid='".(int)$this->site_id."' data-contentkey='".htmlspecialchars($key, ENT_QUOTES).
+				"' data-ln='".htmlspecialchars($contentLn, ENT_QUOTES)."'";
+
+			if($type == 'text' || $type == 'textarea'){
+				$instanceKey = $key.'/'.$contentLn;
+				$instance = ($this->cache['frontend_content_instances'][$instanceKey] ?? 0) + 1;
+				$this->cache['frontend_content_instances'][$instanceKey] = $instance;
+				$identifier = 'pagecontent-'.(int)$this->id.'-'.preg_replace('/[^a-zA-Z0-9_-]/', '-', $key).'-'.preg_replace('/[^a-zA-Z0-9_-]/', '-', $contentLn).'-'.$instance;
+				return "<span id='".$identifier."' class='pagecontent' ".$attrs.">".$val."</span>";
+			}elseif($type == 'htmlarea' && !is_numeric($val) && self::__is_html($val)){
+				$this->registerFrontendContentField($key, $ln, $val, $input, $type);
+				return "<div class='ckedit' ".$attrs.">".$val."</div>";
+			}
 		}
-		
+
 		return $val;
 	}
-	static function __is_html($string) {
-	    return $string != strip_tags($string) || $string != html_entity_decode($string);
-	}		
-				
-		
-	
+
+	static function __is_html($string)
+	{
+		return $string != strip_tags($string) || $string != html_entity_decode($string);
+	}
+
+	function getFrontendContentFields()
+	{
+		return array_values($this->cache['frontend_content_fields'] ?? []);
+	}
+
+	protected function registerFrontendContentField($key, $ln, $value, $input, $type)
+	{
+		if(!$ln)
+			$ln = $this->lang();
+
+		$value = is_scalar($value) ? (string)$value : '';
+
+		$this->cache['frontend_content_fields'][$key.'/'.$ln] = [
+			'pageid'=>(int)$this->id,
+			'parentid'=>(int)$this->parent_id,
+			'siteid'=>(int)$this->site_id,
+			'key'=>$key,
+			'ln'=>$ln,
+			'type'=>$type,
+			'value'=>$value,
+			'multilang'=>(int)$input->get('multilang')
+		];
+	}
+
+	function isFrontendContentEditingEnabled()
+	{
+		if(!GW::$context->app || GW::$context->app->app_name != 'SITE')
+			return false;
+
+		$user = GW::$context->app->user;
+		if(GW::s('DEVELOPER_PRESENT') || ($user && ($user->is_admin || $user->isRoot())))
+			return true;
+
+		$adminUserId = $this->getFrontendAdminUserId();
+		if(!$adminUserId)
+			return false;
+
+		$adminUser = GW_User::singleton()->find(['id=? AND active=1 AND banned=0', $adminUserId]);
+		if(!$adminUser)
+			return false;
+
+		$adminSessionKey = GW::s('ADMIN/AUTH_SESSION_KEY') ?: 'cms_auth';
+		$lastRequest = $_SESSION[$adminSessionKey]['last_request'] ?? -1;
+		return $adminUser->isSessionNotExpired($lastRequest);
+	}
+
+	function getFrontendAdminUserId()
+	{
+		$adminSessionKey = GW::s('ADMIN/AUTH_SESSION_KEY') ?: 'cms_auth';
+		return (int)($_SESSION[$adminSessionKey]['user_id'] ?? 0);
+	}
+
 	function exportContent($opts=[])
 	{
 		$extra = "";

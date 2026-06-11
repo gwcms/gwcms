@@ -18,6 +18,8 @@
 		       user_id:"{$app->user->id}",
 		       pageid: "{$app->page->id}",
 		       pagepid: "{$app->page->parent_id}",
+		       admin_authenticated: {if $app->page->isFrontendContentEditingEnabled()}1{else}0{/if},
+		       admin_user_id: "{$app->page->getFrontendAdminUserId()}",
 		       assets_root: "{$assets}"
 			{if $app->site},site_id: "{$app->site->id}"{/if}
 	       {foreach $js_vars as $key => $val}

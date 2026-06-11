@@ -1,5 +1,5 @@
 
-{if ($app->user && $app->user->is_admin) || GW::s('DEVELOPER_PRESENT')}	
+{if $app->page->isFrontendContentEditingEnabled()}
         <style>
                 .lnresulthighl{
 			background-color: brown !important;
@@ -12,9 +12,10 @@
         <script>
 		var gw_lang_results_active = {intval($app->sess['lang-results-active'])};
 		var gw_ln = "{$app->ln}";
+		var gw_page_content_fields = {json_encode($app->page->getFrontendContentFields())};
         </script>
-        <script src="{$app_root}assets/js/admin.js?v={$GLOBALS.version_short}"></script>
-	<link href="{$app_root}assets/css/admin.css?v={$GLOBALS.version_short}" rel="stylesheet" />
+	<script src="{$app_root}assets/js/admin.js?v={GW::$globals.version_short}"></script>
+	<link href="{$app_root}assets/css/admin.css?v={GW::$globals.version_short}" rel="stylesheet" />
 	<script src="/vendor/ckeditor422/ckeditor.js"></script>
 
 

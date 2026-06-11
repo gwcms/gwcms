@@ -33,31 +33,33 @@
 	position: absolute;
 	top: 2px;
 	right: 2px;
-	
-	
 	font-size: 11px;
-	
-	
 	transition: border 0.2s;
 	z-index: 10;
 	line-height: 10px;
 }
-.edit-inline-btn0{
+.edit-inline-btn0 {
 	color: orange;
-	background:transparent;
+	background: transparent;
 	cursor: pointer;
-	padding: 1px 1px;
+	padding: 1px;
 	border: 1px solid orange;
-	border-radius: 0px;
-}
-
-.edit-inline-btn:hover {
-
+	border-radius: 0;
 }
 .ckedit-container {
-	position: relative; /* for button positioning */
+	position: relative;
 }
 
+.pagecontent {
+	color: inherit;
+	background: transparent;
+}
+.pagecontent-highlight-active .pagecontent {
+	background: #ff9800 !important;
+	color: #111 !important;
+	cursor: pointer;
+	box-shadow: 0 0 0 1px #111;
+}
 @keyframes fadeOut {
 	to {
 		opacity: 0;

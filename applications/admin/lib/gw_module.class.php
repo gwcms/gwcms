@@ -851,6 +851,7 @@ class GW_Module
 		}
 		
 		$title= GW::l($fkey = '/A/FIELDS/' . $field);
+		
 		return $title != $fkey ? $title : $field;
 	}
 	
@@ -863,7 +864,12 @@ class GW_Module
 		if(isset($this->dynamicFieldTitles[$field]))
 			return $this->dynamicFieldTitles[$field];	
 		
-		return $this->app->FH()->shortFieldTitle($field);
+		$rez = $this->app->FH()->shortFieldTitle($field);
+				
+		if($rez==$field)
+			return $this->fieldTitle($field);
+		
+		return $rez;
 	}
 	
 	function runActInBackground()

@@ -47,7 +47,7 @@
 
 {function name=input_content}
 	{$rowclass="`$rowclass` inp_{$type}"}
-	{if $smarty.get.highlightinput|default:'' == $name}
+	{if $smarty.get.hightligtfield|default:'' == $name}
 		{$rowclass="`$rowclass` highlighted"}
 	{/if}
 

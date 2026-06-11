@@ -69,6 +69,43 @@
 	
 </style>	
 
+{if $smarty.get.hightligtfield}
+<script>
+	require(['gwcms'], function(){
+		setTimeout(function(){
+			var field = document.querySelector('.input_td.highlighted');
+			if(!field) return;
+			var row = field.closest('tr');
+			var label = row ? row.querySelector('.input_label_td') : null;
+			if(label) label.classList.add('highlighted');
+
+			function revealField(){
+				setTimeout(function(){
+					field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					var input = field.querySelector('input, textarea, select, [contenteditable="true"]');
+					if(input) input.focus({ preventScroll: true });
+				}, 50);
+			}
+
+			var tabPane = field.closest('.tab-pane');
+			if(tabPane && tabPane.id) {
+				var target = '#' + tabPane.id;
+				var tabLink = $('[data-toggle="tab"], [data-toggle="pill"]').filter(function(){
+					return $(this).attr('href') === target || $(this).attr('data-target') === target;
+				}).first();
+				if(tabLink.length && !tabLink.parent().hasClass('active')) {
+					tabLink.one('shown.bs.tab', revealField);
+					tabLink.tab('show');
+					return;
+				}
+			}
+
+			revealField();
+		}, 250);
+	});
+</script>
+{/if}
+
 {$width_title=100px}
 
 
