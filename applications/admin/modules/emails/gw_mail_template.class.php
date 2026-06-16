@@ -29,6 +29,24 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 	function validate()
 	{
 		parent::validate();
+
+		if($this->custom_sender){
+			foreach($this->content_base as $field => $value){
+				if(strpos($field, 'sender_') !== 0)
+					continue;
+
+				$sender = trim((string)$value);
+				$lang = substr($field, strlen('sender_'));
+				$lang_enabled = !empty($this->content_base['ln_enabled_'.$lang]);
+
+				if($sender === '' && !$lang_enabled)
+					continue;
+
+				if(!self::isValidSender($sender)){
+					$this->errors[$field] = 'Siuntėjas turi būti nurodytas formatu: Vardas &lt;email@example.com&gt;';
+				}
+			}
+		}
 		
 		$config=json_decode($this->config);
 		
@@ -47,6 +65,17 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 		
 		return $this->errors ? false : true;	
 	}		
+
+	static function isValidSender($sender)
+	{
+		if(!preg_match('/^([^<>\r\n]+?)\s*<([^<>\s]+)>$/u', $sender, $matches))
+			return false;
+
+		$name = trim($matches[1]);
+		$email = trim($matches[2]);
+
+		return $name !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+	}
 	
 	
 	function calculateField($name) {
@@ -132,4 +161,4 @@ class GW_Mail_Template extends GW_i18n_Data_Object
 		return $this->find(['idname=?', $idname]);
 	}
 	
-}			
+}
