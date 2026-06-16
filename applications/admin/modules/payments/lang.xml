@@ -93,6 +93,10 @@
       <lt>Apmokėti iki</lt>
       <en>Due date</en>
     </i>
+    <i id="invoice_tpl_id">
+      <lt>Sąskaitos šablonas</lt>
+      <en>Invoice template</en>
+    </i>
     <i id="group_id">
       <lt>Užsakymo id</lt>
       <en>Order ID</en>

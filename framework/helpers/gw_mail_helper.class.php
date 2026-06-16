@@ -121,6 +121,7 @@ class GW_Mail_Helper
 		//$s->security_policy = false;
 		$s->force_compile = true;
 		//$compiler->known_modifier_type
+		$s->registerPlugin('modifier', 'nl2br', 'nl2br');
 
 		$s->security_policy =  new class($s) extends Smarty_Security{
 			public function isTrustedPhpFunction($function_name, $compiler){ 
@@ -139,7 +140,7 @@ class GW_Mail_Helper
 				//to debug use this line
 				//d::ldump($function_name);return true; 
 
-			} 
+			}
 			public function isTrustedResourceDir($filepath, $isConfig = null){ return true; } 
 			public function isTrustedTag($tag_name, $compiler){ 
 				//private_print_expression example: $user->title
@@ -149,17 +150,21 @@ class GW_Mail_Helper
 				
 				return false;
 
-			} 
+			}
 			public function isTrustedStaticClassAccess($class_name, $params, $compiler){ 
 				//vertimai ir tt
 				//reiktu galimybes ideti prie projekto
 				if(in_array($class_name, ['GW','FH','GW_Sum_To_Text_Helper','Adb_Event_Helper'])) return true; 
 				
 				return false; 
-			} 
-			public function isTrustedPhpModifier($modifier_name, $compiler){ return false; } 
+			}
+			public function isTrustedPhpModifier($modifier_name, $compiler){
+				return in_array($modifier_name, ['nl2br'], true);
+			}
 			public function isTrustedConstant($const, $compiler){ return false; } 
-			public function isTrustedModifier($modifier_name, $compiler){ return false; } 
+			public function isTrustedModifier($modifier_name, $compiler){
+				return in_array($modifier_name, ['escape', 'nl2br'], true);
+			}
 			public function isTrustedSpecialSmartyVar($var_name, $compiler){ return false; } 
 		};
 			

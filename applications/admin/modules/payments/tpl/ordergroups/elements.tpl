@@ -31,8 +31,18 @@
 		pay_test=>[type=>bool],
 		active=>[type=>bool],
 		secret=>[type=>read],
-		adm_message=>[type=>text]
+		adm_message=>[type=>textarea]
 	]
+]}
+
+{$fields_config.fields["keyval/invoice_tpl_id"] = [
+	type=>select_ajax,
+	title=>GW::l('/m/FIELDS/invoice_tpl_id'),
+	modpath=>"emails/email_templates",
+	preload=>1,
+	options=>[],
+	source_args=>[byid=>1],
+	empty_option=>1
 ]}
 
 {if $m->feat(discountcode)}

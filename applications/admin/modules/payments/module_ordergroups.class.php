@@ -549,7 +549,7 @@ class Module_OrderGroups extends GW_Common_Module
 		if($_GET['offset'] ?? false)
 			$list = [$list[$_GET['offset']]];
 		
-		$idname = $this->modconfig->invoice_template;
+		$idname = $item->get('keyval/invoice_tpl_id') ?: $this->modconfig->invoice_template;
 		
 		$tpl = GW_Mail_Template::singleton()->find(['`'.(is_numeric($idname) ? 'id' : 'idname').'`=?', $idname]);
 		
@@ -659,6 +659,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$v['DUE_DATE'] = $item->due_date;
 		
 		
+		$v['ADM_MESSAGE'] = $item->adm_message;
 		$v['EMAIL'] = isset($payconfirm->p_email) ? $payconfirm->p_email : $item->email;
 		$v['ITEMS'] = [];
 		$v['ORDERID'] = $item->id;
@@ -888,6 +889,7 @@ class Module_OrderGroups extends GW_Common_Module
 					'type' => 'number',
 					'title' => 'Kiekis',
 					'default' => 1,
+					'step' => '0.01',
 					'required' => 1,
 				    'size'=>1,
 				],
@@ -913,6 +915,7 @@ class Module_OrderGroups extends GW_Common_Module
 				'qty2' => [
 					'type' => 'number',
 					'title' => 'Kiekis 2',
+					'step' => '0.01',
 				],
 				'invoice_line22' => [
 					'type' => 'text',
@@ -990,7 +993,7 @@ class Module_OrderGroups extends GW_Common_Module
 			$order_item->setValues([
 				'obj_type' => $obj_type,
 				'obj_id' => 0,
-				'qty' => (int)$qty,
+				'qty' => (float)$qty,
 				'qty_range' => $qty.';'.$qty,
 				'unit_price' => (float)$unit_price,
 				'invoice_line2' => $invoice_line2,

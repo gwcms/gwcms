@@ -11,7 +11,7 @@
 		obj_type=>[type=>text],
 		invoice_line2=>[type=>text],
 		unit_price=>[type=>number,step=>"0.01"],
-		qty=>[type=>number],
+		qty=>[type=>number,step=>"0.01"],
 		link=>[type=>text],
 		processed=>[type=>bool],
 		vat_group=>[type=>select_ajax,options=>[],modpath=>'payments/vatgroups',empty_option=>1,preload=>1]
