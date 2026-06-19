@@ -49,6 +49,12 @@ class GW_SQL_Updates
 		foreach($updates as $updatefile)
 		{
 			$queries = self::executeSql(file_get_contents($updatefile), $db);
+			$failed = array_filter($queries, function($query){
+				return !empty($query['error']);
+			});
+
+			if($failed)
+				break;
 
 			GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
 

@@ -14,37 +14,31 @@ class d
 			    }
 		</style>
 		<script>
-		document.addEventListener('DOMContentLoaded', function(event) { 
-			jQueryCode = function(){
-			    $('.debugblock').dblclick(function(){
-				$(this).toggleClass('hiddendebug');
-			    
-			    })
+		document.addEventListener('dblclick', function(event) {
+			var debugBlock = event.target.closest('.debugblock');
+			if (debugBlock) {
+				debugBlock.classList.toggle('hiddendebug');
 			}
-
-			if(window.jQuery)  jQueryCode();
-			else{   
-			    var script = document.createElement('script'); 
-			    document.head.appendChild(script);  
-			    script.type = 'text/javascript';
-			    script.src = '//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js';
-
-			    script.onload = jQueryCode;
-			}			
-			
-		});</script>";
+		});
+		</script>";
 	
-	static $initHideAll = "<script>$(function(){ $('.debugblock').addClass('hiddendebug'); })</script>";
+	static $initHideAll = "<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('.debugblock').forEach(function(debugBlock) {
+				debugBlock.classList.add('hiddendebug');
+			});
+		});
+		</script>";
 		
 	
 	static function setAllHide()
 	{
 		self::setHide();
 			
-		if(self::$inithideAll)
+		if(self::$initHideAll)
 		{
-			echo self::$inithideAll;
-			self::$inithideAll = null;
+			echo self::$initHideAll;
+			self::$initHideAll = null;
 		}	
 	}
 	

@@ -171,13 +171,19 @@ class Module_Tools extends GW_Common_Module
 	
 	function __executeQuery($sql)
 	{
+		$success = true;
+
 		foreach(GW_SQL_Updates::executeSql($sql, $this->app->db) as $result)
 		{
-			if($result['error'])
+			if($result['error']){
 				$this->app->setError($result['error'] .' Query: '.$result['error_query']);
+				$success = false;
+			}
 
 			$this->setPlainMessage("<pre>".htmlspecialchars($result['sql']).";\n<b># Affected rows:</b> ".$result['affected']."</pre>");
 		}
+
+		return $success;
 	}
 
 
@@ -191,13 +197,14 @@ class Module_Tools extends GW_Common_Module
 	{
 		list($lastupdates, $updates) = $this->__doImportSqlUpdates_list2update();
 		
-		foreach($updates as $updatefile)
-		{
-			$sqls = file_get_contents($updatefile);
-			$this->__executeQuery($sqls);
-			
-			GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
-		}
+			foreach($updates as $updatefile)
+			{
+				$sqls = file_get_contents($updatefile);
+				if(!$this->__executeQuery($sqls))
+					break;
+				
+				GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
+			}
 		
 		$this->jump();
 	}

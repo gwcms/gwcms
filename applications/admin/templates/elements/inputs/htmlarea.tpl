@@ -82,9 +82,12 @@ require(["ckeditor"], function() {
 		config.enterMode=CKEDITOR.ENTER_BR;
 	
 	CKEDITOR.replace( '{$id}', config); 
- 
- 
+
 	CKEDITOR.instances['{$id}'].on('instanceReady', function (ev) {
+		// Newer link plugin definitions use a tel input, which this CKEditor build does not register.
+		if (!CKEDITOR.dialog._.uiElementBuilders.tel) {
+			CKEDITOR.dialog.addUIElement('tel', CKEDITOR.dialog._.uiElementBuilders.text);
+		}
 
 		//$(CKEDITOR.instances['{$input_name}'].element.$).attr('id',"{$id}")
 
@@ -128,6 +131,7 @@ require(["ckeditor"], function() {
 {/if}
 
 
+
 {if $ck_set==medium}
 <style>
 	#{$id}_containerck .cke_toolbar{ padding: 0px; margin:0px; height: 24px !important; }
@@ -137,4 +141,3 @@ require(["ckeditor"], function() {
 	#{$id}_containerck .cke_top{ padding: 0px 3px 6px 3px !important; }
 </style>
 {/if}
-
