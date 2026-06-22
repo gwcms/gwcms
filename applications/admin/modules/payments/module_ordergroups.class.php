@@ -94,6 +94,7 @@ class Module_OrderGroups extends GW_Common_Module
 		$cfg['fields']['changetrack'] = 'L';
 		$cfg['fields']['item_lines'] = 'l';
 		$cfg['fields']['ledger_count'] = 'L';
+		$cfg['fields']['invoice_tpl_id'] = 'lof';
 
 		if($this->feat('discountcode'))
 			$cfg['fields']['discount_id'] = 'Lof';
@@ -104,6 +105,13 @@ class Module_OrderGroups extends GW_Common_Module
 		//d::dumpas($cfg);
 		
 		$cfg['filters']['user_id'] = ['type'=>'select_ajax', 'options'=>[], 'preload'=>1,'modpath'=>'customers/users'];
+		$cfg['filters']['invoice_tpl_id'] = [
+			'type'=>'select_ajax',
+			'options'=>[],
+			'preload'=>1,
+			'modpath'=>'emails/email_templates',
+			'source_args'=>['byid'=>1],
+		];
 		
 		
 		if($this->sellers_enabled)
@@ -116,13 +124,57 @@ class Module_OrderGroups extends GW_Common_Module
 	{
 		$params['select'] = $params['select'] ?? 'a.*';
 		$params['select'] .= ', usr.username AS user_username, usr.name AS user_name, usr.surname AS user_surname, usr.email AS user_email';
+		$params['select'] .= ', invoice_tpl_kv.value AS invoice_tpl_id, invoice_tpl.admin_title AS invoice_tpl_title, invoice_tpl.idname AS invoice_tpl_idname';
 		$params['joins'] = $params['joins'] ?? [];
 		$params['joins'][] = ['left', 'gw_users AS usr', 'a.user_id = usr.id'];
+		$params['joins'][] = ['left', 'gw_generic_extended AS invoice_tpl_kv', "invoice_tpl_kv.own_table='gw_order_group' AND invoice_tpl_kv.owner_id=a.id AND invoice_tpl_kv.`key`='invoice_tpl_id'"];
+		$params['joins'][] = ['left', 'gw_mail_templates AS invoice_tpl', 'invoice_tpl.id = CAST(invoice_tpl_kv.value AS UNSIGNED)'];
 
 		if($this->feat('discountcode')){
 			$params['select'] .= ', dc.code AS discount_code';
 			$params['joins'][] = ['left', 'shop_discountcode AS dc', 'a.discount_id = dc.id'];
 		}
+	}
+
+	function overrideFilterInvoice_tpl_id($value, $compare_type)
+	{
+		if($compare_type == 'LIKE'){
+			return "(
+				invoice_tpl_kv.value LIKE '%$value%'
+				OR invoice_tpl.admin_title LIKE '%$value%'
+				OR invoice_tpl.idname LIKE '%$value%'
+			)";
+		}
+
+		return $this->buildCond('invoice_tpl_kv.value', $compare_type, $value, true, false);
+	}
+
+	function eventHandler($event, &$context)
+	{
+		switch($event){
+			case 'AFTER_SEARCH_COND_BUILD':
+				$search = GW_DB::escape($this->list_params['search'] ?? '');
+				
+				if($search !== ''){
+					$context .= ($context ? ' OR ' : '')."
+						a.id IN (
+							SELECT ge.owner_id
+							FROM gw_generic_extended AS ge
+							LEFT JOIN gw_mail_templates AS mt ON mt.id = CAST(ge.value AS UNSIGNED)
+							WHERE ge.own_table = 'gw_order_group'
+								AND ge.`key` = 'invoice_tpl_id'
+								AND (
+									ge.value LIKE '%$search%'
+									OR mt.admin_title LIKE '%$search%'
+									OR mt.idname LIKE '%$search%'
+								)
+						)
+					";
+				}
+			break;
+		}
+		
+		return parent::eventHandler($event, $context);
 	}
 
 

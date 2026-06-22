@@ -46,9 +46,9 @@
 	{$display_fields=['tour_part_id'=>0]}
 	
 	{if $m->feat(discountcode)}
-		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,discount_id,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
+		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,discount_id,invoice_tpl_id,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
 	{else}
-		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
+		{$dl_smart_fields=[user_title,relations,user_id,admin_id,status,pay_type,invoice_tpl_id,itax_status_ex,delivery_opt,seller_id,item_lines,ledger_count]}
 	{/if}
 
 	
@@ -71,6 +71,15 @@
 		{if $item->discount_id}
 			<a class="iframeopen" href="{$app->buildUri("payments/discountcode/`$item->discount_id`/form",[clean=>2])}" title="{$item->discount_code|escape}">
 				{$item->discount_code|default:$item->discount_id|escape}
+			</a>
+		{else}
+			-
+		{/if}
+	{/function}
+	{function dl_cell_invoice_tpl_id}
+		{if $item->invoice_tpl_id}
+			<a class="iframeopen" href="{$app->buildUri("emails/email_templates/`$item->invoice_tpl_id`/form",[clean=>2])}" title="{$item->invoice_tpl_idname|escape}">
+				{$item->invoice_tpl_title|default:$item->invoice_tpl_id|escape}
 			</a>
 		{else}
 			-
