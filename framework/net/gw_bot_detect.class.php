@@ -345,9 +345,9 @@ class GW_Bot_Detect
 
 		// ---- DEVICE detection (mobile/tablet/desktop) ----
 		$device = 'desktop';
-		if (preg_match('/mobile|iphone|ipod|android .*mobile|crios\/|fennec|phone|opera mini|bb10/i', $u))
+		if (preg_match('~mobile|iphone|ipod|android .*mobile|crios/|fennec|phone|opera mini|bb10~i', $u))
 			$device = 'mobile';
-		if (preg_match('/ipad|tablet|nexus 7|nexus 9|kindle|silk|playbook/i', $u))
+		if (preg_match('~ipad|tablet|nexus 7|nexus 9|kindle|silk|playbook~i', $u))
 			$device = 'tablet';
 		if (strpos($u, 'tv') !== false || strpos($u, 'smarttv') !== false || strpos($u, 'googletv') !== false || strpos($u, 'appletv') !== false)
 			$device = 'tv';
@@ -355,7 +355,7 @@ class GW_Bot_Detect
 		// ---- OS detection ----
 		$os = 'unknown';
 		$os_ver = '0';
-		if (preg_match('/windows nt\s*([0-9\.]+)/i', $u, $m)) {
+		if (preg_match('~windows nt\s*([0-9.]+)~i', $u, $m)) {
 			$os = 'windows';
 			// map nt numbers to friendly major (optional coarse)
 			$nt = $m[1];
@@ -364,19 +364,19 @@ class GW_Bot_Detect
 			    '10.0' => '10', '6.3' => '8.1', '6.2' => '8', '6.1' => '7', '6.0' => 'vista',
 			];
 			$os_ver = $map[$nt] ?? explode('.', $nt)[0];
-		} elseif (preg_match('/android\s*([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~android\s*([0-9.]+)~i', $u, $m)) {
 			$os = 'android';
 			$os_ver = explode('.', $m[1])[0];
-		} elseif (preg_match('/cpu (?:iphone )?os\s*([0-9_]+)/i', $u, $m)) {
+		} elseif (preg_match('~cpu (?:iphone )?os\s*([0-9_]+)~i', $u, $m)) {
 			$os = 'ios';
 			$os_ver = str_replace('_', '.', explode('_', $m[1])[0]);
-		} elseif (preg_match('/iphone|ipad|ipod/i', $u)) {
+		} elseif (preg_match('~iphone|ipad|ipod~i', $u)) {
 			$os = 'ios';
 			$os_ver = '0';
-		} elseif (preg_match('/mac os x\s*([0-9_]+)/i', $u, $m)) {
+		} elseif (preg_match('~mac os x\s*([0-9_]+)~i', $u, $m)) {
 			$os = 'macos';
 			$os_ver = str_replace('_', '.', explode('_', $m[1])[0]);
-		} elseif (preg_match('/harmonyos|huawei/i', $u)) {
+		} elseif (preg_match('~harmonyos|huawei~i', $u)) {
 			$os = 'harmonyos';
 			$os_ver = '0';
 		} elseif (strpos($u, 'linux') !== false) {
@@ -400,54 +400,54 @@ class GW_Bot_Detect
 			if (!$v)
 				return '0';
 			$v = trim($v);
-			$v = preg_replace('/[^0-9\.]/', '', $v);
+			$v = preg_replace('~[^0-9.]~', '', $v);
 			$parts = explode('.', $v);
 			return $parts[0] ?? '0';
 		};
 
-		if (preg_match('/samsungbrowser\/([0-9\.]+)/i', $u, $m)) {
+		if (preg_match('~samsungbrowser/([0-9.]+)~i', $u, $m)) {
 			$family = 'samsung';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/edg[a|b|ios]*\/([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~edg(?:a|b|ios)*/([0-9.]+)~i', $u, $m)) {
 			$family = 'edge';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/opr\/([0-9\.]+)|opera\/([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~opr/([0-9.]+)|opera/([0-9.]+)~i', $u, $m)) {
 			$v = $m[1] ?: $m[2] ?? '';
 			$family = 'opera';
 			$family_ver = $get_major($v);
-		} elseif (preg_match('/crios\/([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~crios/([0-9.]+)~i', $u, $m)) {
 			$family = 'chrome_ios';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/chrome\/([0-9\.]+)/i', $u, $m) && strpos($u, 'safari') !== false) {
+		} elseif (preg_match('~chrome/([0-9.]+)~i', $u, $m) && strpos($u, 'safari') !== false) {
 			// treat as chrome if chrome/ present (many webviews)
 			$family = 'chrome';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/firefox\/([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~firefox/([0-9.]+)~i', $u, $m)) {
 			$family = 'firefox';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/version\/([0-9\.]+).*safari/i', $u, $m) || preg_match('/safari\/([0-9\.]+)$/i', $u, $m)) {
+		} elseif (preg_match('~version/([0-9.]+).*safari~i', $u, $m) || preg_match('~safari/([0-9.]+)$~i', $u, $m)) {
 			// Version/xx Safari/xxx -> use Version for major
 			$ver = $m[1] ?? '';
-			if (preg_match('/version\/([0-9\.]+)/i', $u, $m2))
+			if (preg_match('~version/([0-9.]+)~i', $u, $m2))
 				$ver = $m2[1];
 			$family = 'safari';
 			$family_ver = $get_major($ver);
-		} elseif (preg_match('/ucbrowser\/([0-9\.]+)/i', $u, $m)) {
+		} elseif (preg_match('~ucbrowser/([0-9.]+)~i', $u, $m)) {
 			$family = 'uc';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/mozilla\/[0-9\.]+ .*rv:([0-9\.]+).*gecko/i', $u, $m)) {
+		} elseif (preg_match('~mozilla/[0-9.]+ .*rv:([0-9.]+).*gecko~i', $u, $m)) {
 			// fallback for old Firefox-like
 			$family = 'firefox';
 			$family_ver = $get_major($m[1]);
-		} elseif (preg_match('/applewebkit\/[0-9\.]+.*chrome/i', $u) && preg_match('/safari/i', $u)) {
+		} elseif (preg_match('~applewebkit/[0-9.]+.*chrome~i', $u) && preg_match('~safari~i', $u)) {
 			// fallback to chrome
-			if (preg_match('/chrome\/([0-9\.]+)/i', $u, $m)) {
+			if (preg_match('~chrome/([0-9.]+)~i', $u, $m)) {
 				$family = 'chrome';
 				$family_ver = $get_major($m[1]);
 			}
 		} else {
 			// extra tries: MSIE, Trident
-			if (preg_match('/msie\s*([0-9\.]+)/i', $u, $m) || preg_match('/trident\/.*rv:([0-9\.]+)/i', $u, $m)) {
+			if (preg_match('~msie\s*([0-9.]+)~i', $u, $m) || preg_match('~trident/.*rv:([0-9.]+)~i', $u, $m)) {
 				$family = 'ie';
 				$family_ver = $get_major($m[1]);
 			} else {

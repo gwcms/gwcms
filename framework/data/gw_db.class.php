@@ -222,7 +222,10 @@ class GW_DB
 		$this->error_query = $cmd;
 
 		if (!$soft_error){
-			if(GW::$context->app->user->id == 9 && !isset($_GET['syscall']))
+			$app = GW::$context->app ?? null;
+			$user = $app->user ?? null;
+
+			if(($user->id ?? null) == 9 && !isset($_GET['syscall']))
 			{
 				d::dumpas("ERROR: $msg \nCMD: $cmd");
 			}else{
@@ -801,8 +804,15 @@ class GW_DB
 		$query = array_shift($params);
 
 		$ho = new db_query_prep_helper($params);
+		$offset = 0;
 
-		return preg_replace_callback('/(\?)/', Array(&$ho, 'replace'), $query);
+		while (($position = strpos($query, '?', $offset)) !== false) {
+			$replacement = $ho->replace(null);
+			$query = substr_replace($query, $replacement, $position, 1);
+			$offset = $position + strlen($replacement);
+		}
+
+		return $query;
 	}
 
 	static function buidConditions($conds, $operator = 'AND')

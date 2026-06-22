@@ -539,7 +539,11 @@ class GW_Site_Application extends GW_Application
 	function preloadBlocks()
 	{
 		if($this->site){
-			$blocks = GW_Site_Block::singleton()->findAll(['site_id=? AND (ln=? OR ln="*") AND preload=1', $this->site->id, $this->ln]);
+			$blocks = GW_Site_Block::singleton()->findAll([
+				'`site_id`=? AND (`ln`=? OR `ln`="*") AND `preload`=1',
+				$this->site->id,
+				$this->ln
+			]);
 
 			foreach($blocks as $block)
 				$this->block_preload[ $block->name ] = $block;
