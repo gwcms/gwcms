@@ -9,6 +9,7 @@
 class GW_ADM_Page extends GW_i18n_Data_Object
 {
 	public $table = 'gw_adm_sitemap';
+	
 	public $i18n_fields = ['title'=>1];
 	public $validators = ['views'=>'gw_json','orders'=>'gw_json'];
 
