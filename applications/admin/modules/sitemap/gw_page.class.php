@@ -345,6 +345,9 @@ class GW_Page extends GW_i18n_Data_Object
 		if(!GW::$context->app || GW::$context->app->app_name != 'SITE')
 			return false;
 
+		if(!GW_Lang::__highlightActive())
+			return false;
+
 		$user = GW::$context->app->user;
 		if(GW::s('DEVELOPER_PRESENT') || ($user && ($user->is_admin || $user->isRoot())))
 			return true;
