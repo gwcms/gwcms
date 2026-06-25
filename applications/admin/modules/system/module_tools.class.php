@@ -196,16 +196,27 @@ class Module_Tools extends GW_Common_Module
 	function doImportSqlUpdates()
 	{
 		list($lastupdates, $updates) = $this->__doImportSqlUpdates_list2update();
-		
+		$failedFiles = [];
+
 			foreach($updates as $updatefile)
 			{
 				$sqls = file_get_contents($updatefile);
-				if(!$this->__executeQuery($sqls))
-					break;
+				if(!$this->__executeQuery($sqls)){
+					$failedFiles[] = basename($updatefile);
+					$this->setError('!!! SQL IMPORT FAILED !!! File: '.basename($updatefile).' !!!');
+				}
 				
 				GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
 			}
-		
+
+		if($failedFiles){
+			$this->setError(
+				'!!! SQL IMPORT COMPLETED WITH ERRORS !!! Failed files: '.
+				implode(', ', $failedFiles).
+				' !!!'
+			);
+		}
+
 		$this->jump();
 	}
 	

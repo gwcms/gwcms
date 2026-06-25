@@ -53,14 +53,12 @@ class GW_SQL_Updates
 				return !empty($query['error']);
 			});
 
-			if($failed)
-				break;
-
 			GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
 
 			$imported[] = [
 				'file' => $updatefile,
-				'queries' => $queries
+				'queries' => $queries,
+				'failed' => !empty($failed)
 			];
 		}
 
