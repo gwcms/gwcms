@@ -294,10 +294,17 @@ class GW_Mail_Helper
 			$mailer->addAddress($to, $toname);
 		}
 		
-		if(isset($opts['cc'])){
-			$to = $opts['cc'];
-			$splitAddr($to, $toname);
-			$mailer->addCC($to, $toname);
+		if(isset($opts['cc']) && $opts['cc']){
+			if(!is_array($opts['cc']))
+				$opts['cc'] = self::explodeMultipleEmails($opts['cc']);
+
+			foreach($opts['cc'] as $cc){
+				if(!$cc)
+					continue;
+
+				$splitAddr($cc, $toname);
+				$mailer->addCC($cc, $toname);
+			}
 		}
 		
 		if(isset($opts['replyto'])){
@@ -441,7 +448,7 @@ class GW_Mail_Helper
 	static function add2db(&$opts, $m_queue_item=false)
 	{
 		$vals=[];
-		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','plain','error','scheduled','status','args']);
+		GW_Array_Helper::copy($opts, $vals, ['id','body','subject','from','to','cc','plain','error','scheduled','status','args']);
 
 		
 		if($m_queue_item){

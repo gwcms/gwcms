@@ -197,7 +197,7 @@ class Module_Tools extends GW_Common_Module
 	{
 		list($lastupdates, $updates) = $this->__doImportSqlUpdates_list2update();
 		$failedFiles = [];
-
+		
 			foreach($updates as $updatefile)
 			{
 				$sqls = file_get_contents($updatefile);
@@ -208,7 +208,7 @@ class Module_Tools extends GW_Common_Module
 				
 				GW::getInstance('GW_Config')->set('gwcms/last_sql_updates', basename($updatefile));
 			}
-
+		
 		if($failedFiles){
 			$this->setError(
 				'!!! SQL IMPORT COMPLETED WITH ERRORS !!! Failed files: '.
